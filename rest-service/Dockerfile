@@ -3,7 +3,7 @@
 #   Build Service & Dependencies
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM veupathdb/alpine-dev-base:latest AS prep
+FROM veupathdb/alpine-dev-base:jdk-15 AS prep
 
 LABEL service="demo-service"
 
@@ -19,7 +19,7 @@ COPY makefile .
 
 RUN make install-dev-env
 
-COPY . .
+COPY .. .
 
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
