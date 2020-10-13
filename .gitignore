@@ -6,7 +6,9 @@
 /bin/
 /tmp/
 /.settings/
-generated/
+/gradle/
+/gradlew
+/gradlew.bat
 
 *.tmp
 *.bak
@@ -17,7 +19,6 @@ local.properties
 .loadpath
 .recommenders
 
-!gradle-wrapper.jar
 /run.sh
 *.env
 
