@@ -1,30 +1,172 @@
 #%RAML 1.0 Library
 
 types:
-  # Type name determines the name of the Java class that will be generated.
-  HelloResponse:
+  BlastPostRequest:
+    type: object
     additionalProperties: false
     properties:
-      greeting:
+      query:
+        description: |
+          Search query.
+
+          Accession, GI, or FASTA.
+        type: string
+      database:
+        description: |
+          BLAST database.
+        type: string
+      program:
+        description: |
+          BLAST program.
         type: string
         enum:
-          - Hello World
-      anotherType: AnotherType
-
-  HelloPostRequest:
-    properties:
-      greet:
-        description: Who do you want to say hello to?
+          - blastn
+          - blastp
+          - blastx
+      enableMegablast?: boolean
+      filter?: Filter
+      expect?:
+        description: |
+          Expect value.
+        type: number
+        format: double
+        minimum: 0.000000000000001
+      nuclReward?:
+        description: |
+          Reward for matching bases (BLASTN and megaBLAST).
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 2147483647
+      nuclPenalty?:
+        description: |
+          Cost for mismatched bases (BLASTN and megaBLAST).
+        type: integer
+        format: int32
+        maximum: -1
+        minimum: -2147483648
+      gapCosts?: GapCosts
+      matrix?:
+        description: |
+          Scoring matrix name.
         type: string
-    additionalProperties: false
+        enum:
+          - BLOSUM45
+          - BLOSUM50
+          - BLOSUM62
+          - BLOSUM80
+          - BLOSUM90
+          - PAM250
+          - PAM30
+          - PAM70
+        default: BLOSUM62
+      hitlistSize?:
+        description: |
+          Number of databases sequences to keep.
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 2147483647
+      descriptions?:
+        description: |
+          Number of descriptions to print (applies to HTML and Text).
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 2147483647
+      alignments?:
+        description: |
+          Number of alignments to print (applies to HTML and Text).
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 2147483647
+      ncbiGi?:
+        description: |
+          Show NCBI GIs in report.
+        type: boolean
+      rid:
+        description: |
+          BLAST search request identifier.
 
-  HelloPostResponse:
-    properties:
-      message:
-        description: Generated greeting
+          The Request ID (RID) returned when the search was submitted.
         type: string
-    additionalProperties: false
+      threshold?:
+        description: |
+          Neighboring score for initial words.
 
-  AnotherType:
+          Positive integer (BLASTP default is 11). Does not apply to BLASTN or
+          MegaBLAST).
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 2147483647
+      wordSize?:
+        description: |
+          Size of word for initial matches.
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 2147483647
+      compositionBasedStatistics?:
+        description: |
+          Composition based statistics algorithm to use.
+
+          From the blastp app documentation:
+
+          0. no composition-based statistics
+          1. Composition-based statistics as in NAR 29:2994-3005, 2001
+          2. Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+          3.  Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 3
+      formatObject?:
+        description: |
+          Object type
+        type: string
+        enum:
+          - search-info
+          - alignment
+      numThreads?:
+        description: |
+          Number of virtual CPUs to use
+
+          Integer greater than zero and less than the maximum number of cores on
+          the instance (default is the maximum number of cores on the instance).
+        type: integer
+        format: int8
+        minimum: 1
+        maximum: 8
+
+  GapCosts:
+    description: |
+      Gap existence and extension costs.
+    type: object
+    additionalProperties: false
     properties:
-      something?: string
+      existence:
+        type: number
+        format: int32
+        minimum: 0
+        maximum: 2147483647
+      extension:
+        type: number
+        format: int32
+        minimum: 0
+        maximum: 2147483647
+
+  Filter:
+    description: |
+      Low complexity filtering.
+    type: object
+    additionalProperties: false
+    properties:
+      enable: boolean
+      type:
+        type: string
+        enum:
+          - L
+          - T
+      mask: boolean
