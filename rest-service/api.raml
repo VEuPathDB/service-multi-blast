@@ -1,16 +1,16 @@
-#%RAML 1.0 Extension
+#%RAML 1.0
+##%RAML 1.0 Extension
+#
+#extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/base-service.raml
 
-extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/base-service.raml
-
-title: Example JaxRS Container Service
+title: Diff
 version: v1.0.0
 mediaType: application/json
 
 uses:
-  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
+#  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
   lib: schema/library.raml
 
-# TODO: THIS SHOULD BE HEADER
 securitySchemes:
   header-auth:
     description: Authentication based on a WDK auth cookie.
@@ -27,29 +27,10 @@ securitySchemes:
 # Example Endpoints
 #
 
-/hello:
-  displayName: Hello World
+/tmp:
   get:
     responses:
       200:
         body:
           application/json:
-            type: lib.HelloResponse
-  post:
-    securedBy: header-auth
-    body:
-      application/json:
-        type: lib.HelloPostRequest
-    responses:
-      200:
-        body:
-          application/json:
-            type: lib.HelloPostResponse
-      401:
-        body:
-          application/json:
-            type: error.UnauthorizedError
-      500:
-        body:
-          application/json:
-            type: error.ServerError
+            type: lib.PostBlastRequest
