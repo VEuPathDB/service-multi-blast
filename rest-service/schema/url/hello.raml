@@ -5,32 +5,32 @@ types:
     type: object
     additionalProperties: false
     properties:
-      query:
-        description: |
-          Search query.
-
-          Accession, GI, or FASTA.
-        type: string
-      database:
-        description: |
-          BLAST database.
-        type: string
-      program:
-        description: |
-          BLAST program.
-        type: string
-        enum:
-          - blastn
-          - blastp
-          - blastx
+#      query:
+#        description: |
+#          Search query.
+#
+#          Accession, GI, or FASTA.
+#        type: string
+#      database:
+#        description: |
+#          BLAST database.
+#        type: string
+#      program:
+#        description: |
+#          BLAST program.
+#        type: string
+#        enum:
+#          - blastn
+#          - blastp
+#          - blastx
       enableMegablast?: boolean
-      filter?: Filter
-      expect?:
-        description: |
-          Expect value.
-        type: number
-        format: double
-        minimum: 0.000000000000001
+#      filter?: Filter
+#      expect?:
+#        description: |
+#          Expect value.
+#        type: number
+#        format: double
+#        minimum: 0.000000000000001
       nuclReward?:
         description: |
           Reward for matching bases (BLASTN and megaBLAST).
@@ -46,20 +46,20 @@ types:
         maximum: -1
         minimum: -2147483648
       gapCosts?: GapCosts
-      matrix?:
-        description: |
-          Scoring matrix name.
-        type: string
-        enum:
-          - BLOSUM45
-          - BLOSUM50
-          - BLOSUM62
-          - BLOSUM80
-          - BLOSUM90
-          - PAM250
-          - PAM30
-          - PAM70
-        default: BLOSUM62
+#      matrix?:
+#        description: |
+#          Scoring matrix name.
+#        type: string
+#        enum:
+#          - BLOSUM45
+#          - BLOSUM50
+#          - BLOSUM62
+#          - BLOSUM80
+#          - BLOSUM90
+#          - PAM250
+#          - PAM30
+#          - PAM70
+#        default: BLOSUM62
       hitlistSize?:
         description: |
           Number of databases sequences to keep.
@@ -101,13 +101,13 @@ types:
         format: int32
         minimum: 0
         maximum: 2147483647
-      wordSize?:
-        description: |
-          Size of word for initial matches.
-        type: integer
-        format: int32
-        minimum: 0
-        maximum: 2147483647
+#      wordSize?:
+#        description: |
+#          Size of word for initial matches.
+#        type: integer
+#        format: int32
+#        minimum: 0
+#        maximum: 2147483647
       compositionBasedStatistics?:
         description: |
           Composition based statistics algorithm to use.
@@ -117,7 +117,7 @@ types:
           0. no composition-based statistics
           1. Composition-based statistics as in NAR 29:2994-3005, 2001
           2. Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-          3.  Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+          3. Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
         type: integer
         format: int32
         minimum: 0
@@ -147,26 +147,21 @@ types:
     additionalProperties: false
     properties:
       existence:
-        type: number
+        type: integer
         format: int32
         minimum: 0
         maximum: 2147483647
       extension:
-        type: number
+        type: integer
         format: int32
         minimum: 0
         maximum: 2147483647
 
-  Filter:
-    description: |
-      Low complexity filtering.
-    type: object
-    additionalProperties: false
-    properties:
-      enable: boolean
-      type:
-        type: string
-        enum:
-          - L
-          - T
-      mask: boolean
+#  Filter:
+#    description: |
+#      Low complexity filtering.
+#    type: object
+#    additionalProperties: false
+#    properties:
+#      enable: boolean
+#      mask: boolean
