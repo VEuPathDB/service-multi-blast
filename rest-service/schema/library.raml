@@ -18,38 +18,28 @@ types:
         description: |
           Reward for matching bases (BLASTN and megaBLAST).
         type: integer
-        format: int32
         minimum: 1
-        maximum: 2147483647
       nuclPenalty?:
         description: |
           Cost for mismatched bases (BLASTN and megaBLAST).
         type: integer
-        format: int32
-        minimum: -2147483648
         maximum: -1
       gapCosts?: GapCosts
       hitlistSize?:
         description: |
           Number of databases sequences to keep.
         type: integer
-        format: int32
         minimum: 1
-        maximum: 2147483647
       descriptions?:
         description: |
           Number of descriptions to print (applies to HTML and Text).
         type: integer
-        format: int32
         minimum: 1
-        maximum: 2147483647
       alignments?:
         description: |
           Number of alignments to print (applies to HTML and Text).
         type: integer
-        format: int32
         minimum: 1
-        maximum: 2147483647
       ncbiGi?:
         description: |
           Show NCBI GIs in report.
@@ -103,12 +93,8 @@ types:
     properties:
       existence:
         type: integer
-        format: int32
         minimum: 0
-        maximum: 2147483647
       extension:
         type: integer
-        format: int32
         minimum: 0
-        maximum: 2147483647
 
