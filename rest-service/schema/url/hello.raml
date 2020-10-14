@@ -93,9 +93,7 @@ types:
 #        description: |
 #          Size of word for initial matches.
 #        type: integer
-#        format: int32
 #        minimum: 0
-#        maximum: 2147483647
       compositionBasedStatistics?:
         description: |
           Composition based statistics algorithm to use.
@@ -123,7 +121,6 @@ types:
           Integer greater than zero and less than the maximum number of cores on
           the instance (default is the maximum number of cores on the instance).
         type: integer
-        format: int8
         minimum: 1
         maximum: 8
 
