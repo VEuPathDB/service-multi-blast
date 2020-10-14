@@ -51,9 +51,7 @@ types:
           Positive integer (BLASTP default is 11). Does not apply to BLASTN or
           MegaBLAST).
         type: integer
-        format: int32
         minimum: 0
-        maximum: 2147483647
       compositionBasedStatistics?:
         description: |
           Composition based statistics algorithm to use.
@@ -65,7 +63,6 @@ types:
           2. Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
           3. Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
         type: integer
-        format: int32
         minimum: 0
         maximum: 3
       formatObject?:
