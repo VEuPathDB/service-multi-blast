@@ -27,26 +27,32 @@ securitySchemes:
 #
 
 /:
+  displayName: Job Management
   post:
+    displayName: Create Jobs
     body:
       application/json: lib.NewJobPostRequestJSON
       multipart/form-data: lib.NewJobPostRequestMultipart
 
 /meta:
+  displayName: Service Information
   get:
+    displayName: Get Service Meta
     responses:
       200:
-        body: MetaGetResponse
+        body: lib.MetaGetResponse
       401:
         body: error.UnauthorizedError
       500:
         body: error.ServerError
 
 /{job-id}:
+  displayName: Job Lookup
   uriParameters:
     job-id: lib.JobId
 
   get:
+    displayName: Get Job
     responses:
       200:
         body:
@@ -56,6 +62,7 @@ securitySchemes:
         body: error.ServerError
 
   /report:
+    displayName: Get Job Report
     get:
       responses:
         200:
