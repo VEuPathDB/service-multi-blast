@@ -83,6 +83,13 @@ securitySchemes:
           body: error.ServerError
 
 types:
+
+  ##############################################################################
+  #
+  #     I/O Types
+  #
+  ##############################################################################
+
   JobGetResponse:
     type: object
     additionalProperties: false
@@ -93,6 +100,8 @@ types:
       expiresOn:
         type: datetime-only
       expiresIn: JobExpiration
+
+  ##########################################################
 
   JobExpiration:
     type: object
@@ -111,12 +120,16 @@ types:
         type: integer
         format: int8
 
+  ##########################################################
+
   MetaGetResponse:
     type: object
     additionalProperties: false
     properties:
       blastFiles:
         type: MetaResponseBlastFile[]
+
+  ##########################################################
 
   MetaResponseBlastFile:
     type: object
@@ -126,6 +139,8 @@ types:
         type: string
       fileType:
         type: string
+
+  ##########################################################
 
   NewJobPostRequestJSON:
     type: object
@@ -141,8 +156,20 @@ types:
         type: string
       description: string
       tool: InputTool
-      defaults: NewJobConfigFormat
+      defaultReport?:
+        description: |
+          Default report configuration.  This defines the default type of the
+          report to be returned when using the `.../{job-id}/report` endpoint.
+
+          This config can be overridden in the request to that endpoint to
+          return different report formats if desired.
+        type: NewJobConfigFormat
+        default:
+          format: pairwise
+
       options: NewJobToolOptions
+
+  ##########################################################
 
   NewJobPostRequestMultipart:
     type: object
@@ -150,6 +177,8 @@ types:
     properties:
       file: file
       jsonParams: NewJobPostRequestJSON
+
+  ##########################################################
 
   NewJobToolOptions:
     type: object
@@ -180,6 +209,8 @@ types:
         items: InputPeptideOpt
         uniqueItems: true
 
+  ##########################################################
+
   NewJobConfigFormat:
     description: Job report configuration options.
     type: object
@@ -201,7 +232,7 @@ types:
         type: string
         maxLength: 1
         minLength: 1
-      fields:
+      fields?:
         description: |
           Custom field selection for the `csv`, `tabular` and
           `tabular-with-comments` output formats.
