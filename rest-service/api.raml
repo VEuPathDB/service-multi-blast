@@ -8,7 +8,6 @@ mediaType: application/json
 
 uses:
   error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
-#  lib: schema/url/root.raml
 
 securitySchemes:
   header-auth:
@@ -146,6 +145,7 @@ types:
     type: object
     additionalProperties: false
     properties:
+      tool: InputTool
       query?:
         description: |
           Gene sequences or gene ID lookup.
@@ -154,8 +154,7 @@ types:
 
           If a search file is **not** uploaded, this field will be required.
         type: string
-      description: string
-      tool: InputTool
+      description?: string
       defaultReport?:
         description: |
           Default report configuration.  This defines the default type of the
@@ -168,6 +167,14 @@ types:
           format: pairwise
 
       options: NewJobToolOptions
+    examples:
+      simple:
+        query: "TODO: QUERY STRING FORMAT"
+        tool: blastn
+        options:
+          maxEValue: "1e-5"
+          wordSize: 8
+
 
   ##########################################################
 
@@ -184,7 +191,10 @@ types:
     type: object
     additionalProperties: false
     properties:
-      useComplexityMasking: boolean
+      useComplexityMasking?:
+        description: "TODO: what does this map to in the CLI?"
+        type: boolean
+        default: false
       resultsPerQueryPerDatabase?:
         type: integer
         format: int32
@@ -201,10 +211,14 @@ types:
         maximum: 60
         default: 11
       nucleotide?:
+        description: |
+          TODO: This appears in the Vectorbase form, but i'm not sure what it maps to in the CLI.
         type: array
         items: InputNucleotideOpt
         uniqueItems: true
       peptide?:
+        description: |
+          TODO: This appears in the Vectorbase form, but i'm not sure what it maps to in the CLI.
         type: array
         items: InputPeptideOpt
         uniqueItems: true
