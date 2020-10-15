@@ -1,14 +1,13 @@
-#%RAML 1.0
-##%RAML 1.0 Extension
-#
-#extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/base-service.raml
+#%RAML 1.0 Extension
+
+extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/base-service.raml
 
 title: Diff
 version: v1.0.0
 mediaType: application/json
 
 uses:
-#  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
+  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
   lib: schema/library.raml
 
 securitySchemes:
@@ -27,10 +26,49 @@ securitySchemes:
 # Example Endpoints
 #
 
-/tmp:
+/:
+  post:
+    body:
+      application/json: lib.NewJobPostRequestJSON
+      multipart/form-data: lib.NewJobPostRequestMultipart
+
+/meta:
+  get:
+    responses:
+      200:
+        body: MetaGetResponse
+      401:
+        body: error.UnauthorizedError
+      500:
+        body: error.ServerError
+
+/{job-id}:
+  uriParameters:
+    job-id: lib.JobId
+
   get:
     responses:
       200:
         body:
-          application/json:
-            type: lib.BlastPostRequest
+      401:
+        body: error.UnauthorizedError
+      500:
+        body: error.ServerError
+
+  /report:
+    get:
+      responses:
+        200:
+          headers:
+            Content-Disposition:
+              type: string
+              pattern: 'attachment; filename="([^"]+)"'
+          body:
+            text/plain: object
+            application/json: object
+            application/xml: object
+            application/octet-stream: object
+        401:
+          body: error.UnauthorizedError
+        500:
+          body: error.ServerError
