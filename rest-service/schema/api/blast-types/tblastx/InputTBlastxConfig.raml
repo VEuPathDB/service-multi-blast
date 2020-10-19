@@ -1,0 +1,108 @@
+#%RAML 1.0 DataType
+
+uses:
+  blastp: ../blastp/index.raml
+  blast:  ../blast/index.raml
+  ext:    index.raml
+  com:    ../blast-common/index.raml
+
+type: blast.InputBlastConfig
+discriminatorValue: tblastx
+additionalProperties: false
+properties:
+
+  wordSize?:
+    description: |
+      Word size for initial match.
+    type: integer
+    format: int8
+    default: 3
+    minimum: 2
+    maximum: 7
+
+  matrix?:
+    description: |
+      Scoring matrix name.
+
+      Default value: `BLOSUM62`
+    type: com.InputBlastScoringMatrix
+
+  threshold?:
+    description: |
+      Minimum score to add a word to the BLAST lookup table.
+    type: integer
+    format: int8
+    minimum: 1
+    default: 13
+
+  seg?:
+    description: |
+      Filter query sequence with SEG.
+    type: com.InputBlastSegMask
+    default:
+      enabled: true
+      window: 12
+      locut: 2.2
+      hicut: 2.5
+
+  softMasking?:
+    description: |
+      Apply filtering locations as soft masks (i.e., only for finding initial
+      matches).
+    type: boolean
+    default: false
+
+  lcaseMasking?:
+    description: |
+      Use lower case filtering in query and subject sequence(s).
+    type: boolean
+    default: false
+
+  strand?:
+    description: |
+      Query strand(s) to search against database subject sequences.
+
+      Default value: `both`
+    type: com.InputBlastStrand
+
+  dbSoftMask?:
+    description: |
+      Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+      only for finding initial matches).
+    type: integer
+    format: int64
+
+  dbHardMask?:
+    description: |
+      Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+      sequence is masked for all phases of search).
+    type: integer
+    format: int64
+
+  queryGeneticCode:
+    description: |
+      Genetic code to translate query, see
+      ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+    type: integer
+    format: int8
+    default: 1
+    minimum: 1
+
+  dbGenCode:
+    description: |
+      Genetic code to translate subject sequences, see
+      ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+    type: integer
+    format: int8
+    default: 1
+    minimum: 1
+
+
+  maxIntronLength:
+    description: |
+      Length of the largest intron allowed in a translated nucleotide sequence
+      when linking multiple distinct alignments (a negative value disables
+      linking).
+    type: integer
+    default: 0
+    format: int32

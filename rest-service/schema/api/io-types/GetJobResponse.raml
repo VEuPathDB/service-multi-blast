@@ -1,0 +1,12 @@
+#%RAML 1.0 DataType
+
+uses:
+  com:   ../common/index.raml
+  blast: ../blast-types/blast/index.raml
+
+type: object
+additionalProperties: false
+properties:
+  id:     com.JobID
+  status: com.JobStatus
+  config: blast.InputBlastConfig

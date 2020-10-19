@@ -1,0 +1,11 @@
+#%RAML 1.0 DataType
+
+description: |
+   | Task           | Use Case                                                 |
+   |----------------|----------------------------------------------------------|
+   | `tblastn`      | for a standard protein-translated nucleotide comparison  |
+   | `tblastn-fast` | for a faster version with a larger word-size based on https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
+type: string
+enum:
+  - tblastn
+  - tblastn-fast
