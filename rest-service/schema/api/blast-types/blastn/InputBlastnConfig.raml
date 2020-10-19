@@ -1,0 +1,264 @@
+#%RAML 1.0 DataType
+
+uses:
+  blast: ../blast/index.raml
+  ext:   index.raml
+  com:   ../blast-common/index.raml
+
+type: blast.InputBlastConfig
+discriminatorValue: blastn
+additionalProperties: false
+properties:
+  task?:
+    description: |
+      Default value: `blastn`
+    type: ext.InputBlastnTask
+  wordSize?:
+    description: |
+      Default value by task:
+
+      | Task           | Value | Notes                          |
+      |----------------|-------|--------------------------------|
+      | `megablast`    | 28    | Length of initial exact match. |
+      | `dc-megablast` | 11    | Number of matching nucleotides in initial match. dc-megablast allows non-consecutive letters to match. |
+      | `blastn`       | 11    | Length of initial exact match. |
+      | `blastn-short` | 7     | Length of initial exact match. |
+
+      Applies to task(s): all
+    type: integer
+    format: int16
+    minimum: 1
+  gapOpen?:
+    description: |
+      Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
+      NCBI blast docs.
+
+      Default value by task:
+
+      | Task           | Value |
+      |----------------|-------|
+      | `megablast`    | 0     |
+      | `dc-megablast` | 5     |
+      | `blastn`       | 5     |
+      | `blastn-short` | 5     |
+
+      Applies to task(s): all
+
+    type: integer
+    format: int8
+    minimum: 0
+  gapExtend?:
+    description: |
+      Cost to extend a gap. This default is a function of reward/penalty value.
+      See appendix “BLASTN reward/penalty values” in the NCBI blast docs.
+
+      Default value by task:
+
+      | Task           | Value | Notes                                               |
+      |----------------|-------|-----------------------------------------------------|
+      | `megablast`    | *     | This default is a function of reward/penalty value. |
+      | `dc-megablast` | 2     |                                                     |
+      | `blastn`       | 2     |                                                     |
+      | `blastn-short` | 2     |                                                     |
+
+      Applies to task(s): all
+    type: integer
+    format: int8
+    minimum: 1
+  reward?:
+    description: |
+      Reward for a nucleotide match.
+
+      Default value by task:
+
+      | Task           | Value |
+      |----------------|-------|
+      | `megablast`    | 1     |
+      | `dc-megablast` | 2     |
+      | `blastn`       | 2     |
+      | `blastn-short` | 1     |
+
+      Applies to task(s): all
+    type: integer
+    format: int8
+    minimum: 1
+  penalty?:
+    description: |
+      Penalty for a nucleotide mismatch.
+
+      Default value by task:
+
+      | Task           | Value |
+      |----------------|-------|
+      | `megablast`    | -2    |
+      | `dc-megablast` | -3    |
+      | `blastn`       | -3    |
+      | `blastn-short` | -3    |
+
+      Applies to task(s): all
+    type: integer
+    format: int8
+    maximum: -1
+  strand?:
+    description: |
+      Query strand(s) to search against database/subject. Choice of both, minus,
+      or plus.
+
+      Applies to task(s): all
+
+      Default value: `both`
+    type: com.InputBlastStrand
+  dust?:
+    description: |
+      Filter query sequence with dust.
+
+      Applies to task(s): all
+    type: ext.InputBlastnDust
+    default:
+      enabled: true
+      level: 20
+      window: 64
+      linker: 1
+  filteringDb?:
+    description: |
+      Mask query using the sequences in this database.
+
+      Applies to task(s): all
+    type: string
+  windowMaskerTaxid?:
+    description: |
+      Enable WindowMasker filtering using a Taxonomic ID.
+
+      Applies to task(s): all
+    type: integer
+    format: int64
+    minimum: 1
+  windowMaskerDb?:
+    description: |
+      Enable WindowMasker filtering using this file.
+
+      Applies to task(s): all
+    type: string
+  softMasking?:
+    description: |
+      Apply filtering locations as soft masks (i.e., only for finding initial
+      matches).
+
+      Applies to task(s): all
+    type: boolean
+    default: true
+  lcaseMasking?:
+    description: |
+      Use lower case filtering in query and subject sequence(s).
+
+      Applies to task(s): all
+    type: boolean
+    default: false
+  dbSoftMask?:
+    description: |
+      Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+      only for finding initial matches).
+
+      Applies to task(s): all
+    type: integer
+    default: none
+  dbHardMask?:
+    description: |
+      Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+      sequence is masked for all phases of search).
+
+      Applies to task(s): all
+    type: integer
+    minimum: 1
+    format: int64
+  percIdentity?:
+    description: |
+      Percent identity cutoff.
+
+      Applies to task(s): all
+    type: integer
+    default: 0
+    minimum: 0
+  templateType?:
+    description: |
+      Discontiguous MegaBLAST template type.
+
+      Applies to task(s): dc-megablast
+
+      Default value: `coding`
+    type: ext.InputBlastDcTemplateType
+  templateLength?:
+    description: |
+      Discontiguous MegaBLAST template length.
+
+      Applies to task(s): dc-megablast
+    type: integer
+    default: 18
+  useIndex?:
+    description: |
+      Use MegaBLAST database index. Indices may be created with the makembindex application.
+
+      Applies to task(s): megablast
+    type: boolean
+    default: false
+  indexName?:
+    description: |
+      MegaBLAST database index name.
+
+      Applies to task(s): megablast
+    type: string
+  xdropUngap?:
+    description: |
+      Heuristic value (in bits) for ungapped extensions.
+
+      Applies to task(s): all
+    type: number
+    format: double
+    default: 20.0
+  xdropGap?:
+    description: |
+      Heuristic value (in bits) for preliminary gapped extensions.
+
+      Applies to task(s): all
+    type: number
+    format: double
+    default: 30.0
+  xdropGapFinal?:
+    description: |
+      Heuristic value (in bits) for final gapped alignment.
+
+      Applies to task(s): all
+    type: number
+    format: double
+    default: 100.0
+  noGreedy?:
+    description: |
+      Use non-greedy dynamic programming extension.
+
+      Applies to task(s): megablast
+    type: boolean
+    default: false
+  minRawGappedScore?:
+    description: |
+      Minimum raw gapped score to keep an alignment in the preliminary gapped
+      and trace-back stages. Normally set based upon expect value.
+
+      Applies to task(s): all
+    type: integer
+    format: int32
+    minimum: 1
+  ungapped?:
+    description: |
+      Perform ungapped alignment.
+
+      Applies to task(s): all
+    type: boolean
+    default: false
+  windowSize?:
+    description: |
+      Multiple hits window size, use 0 to specify 1-hit algorithm
+
+      Applies to task(s): dc-megablast
+    type: integer
+    format: int16
+    default: 40

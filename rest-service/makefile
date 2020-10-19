@@ -81,6 +81,10 @@ gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
 
 gen-docs: api.raml merge-raml
+	# Performing hack to make doc-gen work...
+	@grep -n '# BEGIN HACK #' api.raml | cut -d: -f1 | xargs -I'{}' head -n{} api.raml > api2.raml
+	@tail -n+3 schema/library.raml >> api2.raml
+	@mv api2.raml api.raml
 	@$(BIN_DIR)/generate-docs.sh
 
 merge-raml:

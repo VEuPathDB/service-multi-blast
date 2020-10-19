@@ -1,0 +1,162 @@
+#%RAML 1.0 DataType
+
+uses:
+  ext: index.raml
+
+type: object
+additionalProperties: false
+discriminator:
+properties:
+  tool: ext.InputBlastTool
+  db:
+    description: |
+      BLAST database name.
+    type: string
+  query:
+    type: string
+  query_loc?:
+    description: |
+      Location on the query sequence.
+    type: ext.InputBlastLocation
+#  out?:
+#    description: |
+#      Output file name.
+#    type: string
+#    default: stdout
+  eValue?:
+    description: |
+      Expect value (E) for saving hits.
+    type: number
+    format: double
+    default: 10.0
+  subject?:
+    description: |
+      File with subject sequence(s) to search.
+    type: string
+  subjectLoc?:
+    description: |
+      Location on the subject sequence.
+    type: ext.InputBlastLocation
+  showGIs?:
+    description: |
+      Show NCBI GIs in report.
+    type: boolean
+    default: false
+  numDescriptions?:
+    description: |
+      Show one-line descriptions for this number of database sequences.
+    type: integer
+    format: int16
+    default: 500
+  numAlignments?:
+    description: |
+      Show alignments for this number of database sequences.
+    type: integer
+    default: 250
+  maxTargetSeqs?:
+    description: |
+      Number of aligned sequences to keep. Use with report formats that do not
+      have separate definition line and alignment sections such as tabular (all
+      outfmt > 4). Not compatible with num_descriptions or num_alignments. Ties
+      are broken by order of sequences in the database.
+    type: integer
+    default: 500
+  maxHSPs?:
+    description: |
+      Maximum number of HSPs (alignments) to keep for any single query-subject
+      pair. The HSPs shown will be the best as judged by expect value. This
+      number should be an integer that is one or greater. If this option is not
+      set, BLAST shows all HSPs meeting the expect value criteria. Setting it
+      to one will show only the best HSP for every query-subject pair
+    type: integer
+    format: int16
+    minimum: 1
+  html?:
+    description: |
+      Produce HTML output
+    type: boolean
+    default: false
+  giList?:
+    description: |
+      Restrict search of database to GI’s listed in this file. Local searches
+      only.
+    type: string
+  negativeGIList?:
+    description: |
+      Restrict search of database to everything except the GI’s listed in this
+      file. Local searches only.
+    type: string
+  entrezQuery?:
+    description: |
+      Restrict search with the given Entrez query. Remote searches only.
+    type: string
+  cullingLimit?:
+    description: |
+      Delete a hit that is enveloped by at least this many higher-scoring hits.
+    type: integer
+  bestHitOverhang?:
+    description: |
+      Best Hit algorithm overhang value (recommended value: 0.1)
+    type: number
+    format: double
+  bestHitScoreEdge?:
+    description: |
+      Best Hit algorithm score edge value (recommended value: 0.1)
+    type: number
+    format: double
+  dbSize?:
+    description: |
+      Effective size of the database
+    type: integer
+    format: int64
+    minimum: 0
+  searchSpace?:
+    description: |
+      Effective length of the search space
+    type: integer
+    format: int64
+    minimum: 0
+  importSearchStrategy?:
+    description: |
+      Search strategy file to read.
+    type: string
+  exportSearchStrategy?:
+    description: |
+      Record search strategy to this file.
+    type: string
+  parseDefLines?:
+    description: |
+      Parse query and subject bar delimited sequence identifiers (e.g.,
+      gi|129295).
+    type: boolean
+    default: false
+  numThreads?:
+    description: |
+      Number of threads (CPUs) to use in blast search.
+    type: integer
+    format: int8
+    default: 1
+    minimum: 1
+  remote?:
+    description: |
+      Execute search on NCBI servers?
+    type: boolean
+    default: false
+  outFmt?:
+    type: ext.InputBlastOutFmt
+    examples:
+      defaultValue:
+        format: pairwise
+        fields:
+          - qseqid
+          - sseqid
+          - pident
+          - length
+          - mismatch
+          - gapopen
+          - qstart
+          - qend
+          - sstart
+          - send
+          - evalue
+          - bitscore

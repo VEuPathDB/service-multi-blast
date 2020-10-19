@@ -1,0 +1,21 @@
+#%RAML 1.0 DataType
+
+uses:
+  blast: ../blast-types/blast/index.raml
+
+type: object
+additionalProperties: false
+properties:
+  config:
+    description: |
+      Blast tool configuration.
+
+      May be one of the following implementation types:
+
+      - [InputBlastnConfig](#type:InputBlastnConfig)
+      - [InputBlastpConfig](#type:InputBlastpConfig)
+      - [InputBlastxConfig](#type:InputBlastxConfig)
+      - [InputRpsBlastConfig](#type:InputRpsBlastConfig)
+      - [InputTBlastnConfig](#type:InputTBlastnConfig)
+      - [InputTBlastxConfig](#type:InputTBlastxConfig)
+    type: blast.InputBlastConfig
