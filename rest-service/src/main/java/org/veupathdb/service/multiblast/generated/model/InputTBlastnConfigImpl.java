@@ -53,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 })
 public class InputTBlastnConfigImpl implements InputTBlastnConfig {
   @JsonProperty("tool")
-  private InputBlastTool tool;
+  private final InputBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
   @JsonProperty("query")
   private String query;
@@ -240,11 +240,6 @@ public class InputTBlastnConfigImpl implements InputTBlastnConfig {
   @JsonProperty("tool")
   public InputBlastTool getTool() {
     return this.tool;
-  }
-
-  @JsonProperty("tool")
-  public void setTool(InputBlastTool tool) {
-    this.tool = tool;
   }
 
   @JsonProperty("query")
