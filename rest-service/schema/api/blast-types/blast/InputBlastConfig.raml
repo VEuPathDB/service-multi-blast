@@ -12,7 +12,12 @@ properties:
 #    description: |
 #      BLAST database name.
 #    type: string
-  query:
+  query?:
+    description: |
+      When posting a job using `application/json` this field is required.
+
+      When posting a job using `multipart/form-data` either this field _or_ the
+      query file field must be specified.
     type: string
   query_loc?:
     description: |
