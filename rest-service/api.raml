@@ -28,27 +28,27 @@ securitySchemes:
     body:
       application/json:
         type: NewJobPostRequestJSON
-        examples:
-          Simple:
-            site: PlasmoDB
-            target: some-file-name
-            config:
-              tool: blastn
-              query: "TODO: What do these queries even look like?"
-          Custom Default Format:
-            site: PlasmoDB
-            target: some-file-name
-            config:
-              tool: blastp
-              query: "TODO: What do these queries even look like?"
-              outFmt:
-                format: csv
-                fields:
-                  - qseqid
-                  - qacc
-                  - sseqid
-                  - score
-                  - length
+#        examples:
+#          Simple:
+#            site: PlasmoDB
+#            target: some-file-name
+#            config:
+#              tool: blastn
+#              query: "TODO: What do these queries even look like?"
+#          Custom Default Format:
+#            site: PlasmoDB
+#            target: some-file-name
+#            config:
+#              tool: blastp
+#              query: "TODO: What do these queries even look like?"
+#              outFmt:
+#                format: csv
+#                fields:
+#                  - qseqid
+#                  - qacc
+#                  - sseqid
+#                  - score
+#                  - length
       multipart/form-data:
         type: NewJobPostRequestMultipart
     responses:
