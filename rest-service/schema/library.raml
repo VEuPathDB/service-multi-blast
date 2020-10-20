@@ -9,6 +9,178 @@
 ################################################################################
 
 types:
+  InputBlastxConfig:
+    type: InputBlastConfig
+    discriminatorValue: blastx
+    additionalProperties: false
+    properties:
+      task?:
+        description: |
+          Default value: `blastx`
+        type: InputBlastxTask
+      wordSize?:
+        description: |
+          Word size for initial match. Valid word sizes are 2-7.
+
+          Default value by task:
+
+          | Task          | Value |
+          |---------------|-------|
+          | `blastx`      | 3     |
+          | `blastx-fast` | 6     |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 2
+        maximum: 7
+      gapOpen?:
+        description: |
+          Cost to open a gap.
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        default: 11
+        minimum: 1
+      gapExtend?:
+        description: |
+          Cost to extend a gap.
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+        default: 1
+      matrix?:
+        description: |
+          Scoring matrix name.
+
+          Applies to task(s): all
+
+          Default value: `BLOSUM62`
+        type: InputBlastScoringMatrix
+      threshold?:
+        description: |
+          Minimum score to add a word to the BLAST lookup table.
+
+          Default value by task:
+
+          | Task          | Value |
+          |---------------|-------|
+          | `blastx`      | 12    |
+          | `blastx-fast` | 21    |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+      seg?:
+        description: |
+          Filter query sequence with SEG.
+
+          Applies to task(s): all
+        type: InputBlastSegMask
+        default:
+          enabled: false
+          window: 12
+          locut: 2.2
+          hicut: 2.5
+      softMasking?:
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+      lcaseMasking?:
+        description: |
+          Use lower case filtering in query and subject sequence(s).
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+      dbSoftMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+        type: integer
+        format: int64
+      dbHardMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+        type: integer
+        format: int64
+      xdropGapFinal?:
+        description: |
+          Heuristic value (in bits) for final gapped alignment.
+
+          Applies to task(s): all
+        type: number
+        format: double
+        default: 25.0
+      windowSize?:
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm.
+
+          Applies to task(s): all
+        type: integer
+        format: int16
+        minimum: 0
+        default: 40
+      strand?:
+        description: |
+          Query strand(s) to search against database/subject. Choice of both, minus,
+          or plus.
+
+          Applies to task(s): all
+
+          Default value: `both`
+        type: InputBlastStrand
+      queryGeneticCode:
+        description: |
+          Genetic code to translate query, see
+          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        default: 1
+        minimum: 1
+      maxIntronLength:
+        description: |
+          Length of the largest intron allowed in a translated nucleotide sequence
+          when linking multiple distinct alignments (a negative value disables
+          linking).
+
+          Applies to task(s): all
+        type: integer
+        default: 0
+        format: int32
+      compBasedStats?:
+        description: |
+          Use composition-based statistics.
+
+          Applies to task(s): all
+
+          Default value: `conditional-comp-based-score-adjustment`
+        type: InputBlastCompBasedStats
+  InputBlastxTask:
+    description: |
+      | Task           | Use Case                                                 |
+      |----------------|----------------------------------------------------------|
+      | `blastx`       | for standard translated nucleotide-protein comparison    |
+      | `blastx-fast`  | a faster version that uses a larger word-size based on https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
+    type: string
+    enum:
+      - blastx
+      - blastx-fast
   JobID:
     description: Base62 encoded UUID
     type: string
@@ -22,94 +194,69 @@ types:
       - in-progress
       - completed
       - errored
-  InputTBlastxConfig:
-    type: InputBlastConfig
-    discriminatorValue: tblastx
+  NewJobPostRequestJSON:
+    type: object
     additionalProperties: false
     properties:
-      wordSize?:
+      site:
+        type: string
+      target:
         description: |
-          Word size for initial match.
-        type: integer
-        format: int8
-        default: 3
-        minimum: 2
-        maximum: 7
-      matrix?:
+          Target file name.  Maps to the `--db` flag for the blast tools.
+        type: string
+      config:
         description: |
-          Scoring matrix name.
+          Blast tool configuration.
 
-          Default value: `BLOSUM62`
-        type: InputBlastScoringMatrix
-      threshold?:
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-        type: integer
-        format: int8
-        minimum: 1
-        default: 13
-      seg?:
-        description: |
-          Filter query sequence with SEG.
-        type: InputBlastSegMask
-        default:
-          enabled: true
-          window: 12
-          locut: 2.2
-          hicut: 2.5
-      softMasking?:
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-        type: boolean
-        default: false
-      lcaseMasking?:
-        description: |
-          Use lower case filtering in query and subject sequence(s).
-        type: boolean
-        default: false
-      strand?:
-        description: |
-          Query strand(s) to search against database subject sequences.
+          Must be one of the following implementation types:
 
-          Default value: `both`
-        type: InputBlastStrand
-      dbSoftMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-        type: integer
-        format: int64
-      dbHardMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-        type: integer
-        format: int64
-      queryGeneticCode:
-        description: |
-          Genetic code to translate query, see
-          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
-        type: integer
-        format: int8
-        default: 1
-        minimum: 1
-      dbGenCode:
-        description: |
-          Genetic code to translate subject sequences, see
-          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
-        type: integer
-        format: int8
-        default: 1
-        minimum: 1
-      maxIntronLength:
-        description: |
-          Length of the largest intron allowed in a translated nucleotide sequence
-          when linking multiple distinct alignments (a negative value disables
-          linking).
-        type: integer
-        default: 0
-        format: int32
+          - [InputBlastnConfig](#type:InputBlastnConfig)
+          - [InputBlastpConfig](#type:InputBlastpConfig)
+          - [InputBlastxConfig](#type:InputBlastxConfig)
+          - [InputRpsBlastConfig](#type:InputRpsBlastConfig)
+          - [InputTBlastnConfig](#type:InputTBlastnConfig)
+          - [InputTBlastxConfig](#type:InputTBlastxConfig)
+        type: InputBlastConfig
+  NewJobPostRequestMultipart:
+    type: object
+    additionalProperties: false
+    properties:
+      file: file
+      properties: NewJobPostRequestJSON
+  NewJobPostResponse:
+    type: object
+    additionalProperties: false
+    properties:
+      jobId: JobID
+  MetaResponse:
+    type: object
+    additionalProperties: false
+    properties:
+      targets: OutputSiteListing
+  GetJobResponse:
+    type: object
+    additionalProperties: false
+    properties:
+      id: JobID
+      status: JobStatus
+      config: InputBlastConfig
+  OutputSiteListing:
+    type: object
+    additionalProperties: false
+    properties:
+      "^[A-Za-z0-9_- ]+$":
+        type: array
+        items: OutputListOrganism
+  OutputListOrganism:
+    type: object
+    additionalProperties: false
+    properties:
+      name: string
+      blast:
+        type: array
+        items: string
+        minItems: 1
+        uniqueItems: true
   InputTBlastnConfig:
     type: InputBlastConfig
     discriminatorValue: tblastn
@@ -273,6 +420,580 @@ types:
     enum:
       - tblastn
       - tblastn-fast
+  InputBlastnConfig:
+    type: InputBlastConfig
+    discriminatorValue: blastn
+    additionalProperties: false
+    properties:
+      task?:
+        description: |
+          Default value: `blastn`
+        type: InputBlastnTask
+      wordSize?:
+        description: |
+          Default value by task:
+
+          | Task           | Value | Notes                          |
+          |----------------|-------|--------------------------------|
+          | `megablast`    | 28    | Length of initial exact match. |
+          | `dc-megablast` | 11    | Number of matching nucleotides in initial match. dc-megablast allows non-consecutive letters to match. |
+          | `blastn`       | 11    | Length of initial exact match. |
+          | `blastn-short` | 7     | Length of initial exact match. |
+
+          Applies to task(s): all
+        type: integer
+        format: int16
+        minimum: 1
+      gapOpen?:
+        description: |
+          Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
+          NCBI blast docs.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `megablast`    | 0     |
+          | `dc-megablast` | 5     |
+          | `blastn`       | 5     |
+          | `blastn-short` | 5     |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 0
+      gapExtend?:
+        description: |
+          Cost to extend a gap. This default is a function of reward/penalty value.
+          See appendix “BLASTN reward/penalty values” in the NCBI blast docs.
+
+          Default value by task:
+
+          | Task           | Value | Notes                                               |
+          |----------------|-------|-----------------------------------------------------|
+          | `megablast`    | *     | This default is a function of reward/penalty value. |
+          | `dc-megablast` | 2     |                                                     |
+          | `blastn`       | 2     |                                                     |
+          | `blastn-short` | 2     |                                                     |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+      reward?:
+        description: |
+          Reward for a nucleotide match.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `megablast`    | 1     |
+          | `dc-megablast` | 2     |
+          | `blastn`       | 2     |
+          | `blastn-short` | 1     |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+      penalty?:
+        description: |
+          Penalty for a nucleotide mismatch.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `megablast`    | -2    |
+          | `dc-megablast` | -3    |
+          | `blastn`       | -3    |
+          | `blastn-short` | -3    |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        maximum: -1
+      strand?:
+        description: |
+          Query strand(s) to search against database/subject. Choice of both, minus,
+          or plus.
+
+          Applies to task(s): all
+
+          Default value: `both`
+        type: InputBlastStrand
+      dust?:
+        description: |
+          Filter query sequence with dust.
+
+          Applies to task(s): all
+        type: InputBlastnDust
+        default:
+          enable: true
+          level: 20
+          window: 64
+          linker: 1
+      filteringDb?:
+        description: |
+          Mask query using the sequences in this database.
+
+          Applies to task(s): all
+        type: string
+      windowMaskerTaxid?:
+        description: |
+          Enable WindowMasker filtering using a Taxonomic ID.
+
+          Applies to task(s): all
+        type: integer
+        format: int64
+        minimum: 1
+      windowMaskerDb?:
+        description: |
+          Enable WindowMasker filtering using this file.
+
+          Applies to task(s): all
+        type: string
+      softMasking?:
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Applies to task(s): all
+        type: boolean
+        default: true
+      lcaseMasking?:
+        description: |
+          Use lower case filtering in query and subject sequence(s).
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+      dbSoftMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+        type: integer
+      dbHardMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+        type: integer
+        minimum: 1
+        format: int64
+      percIdentity?:
+        description: |
+          Percent identity cutoff.
+
+          Applies to task(s): all
+        type: integer
+        default: 0
+        minimum: 0
+      templateType?:
+        description: |
+          Discontiguous MegaBLAST template type.
+
+          Applies to task(s): dc-megablast
+
+          Default value: `coding`
+        type: InputBlastDcTemplateType
+      templateLength?:
+        description: |
+          Discontiguous MegaBLAST template length.
+
+          Applies to task(s): dc-megablast
+        type: integer
+        default: 18
+      useIndex?:
+        description: |
+          Use MegaBLAST database index. Indices may be created with the makembindex application.
+
+          Applies to task(s): megablast
+        type: boolean
+        default: false
+      indexName?:
+        description: |
+          MegaBLAST database index name.
+
+          Applies to task(s): megablast
+        type: string
+      xdropUngap?:
+        description: |
+          Heuristic value (in bits) for ungapped extensions.
+
+          Applies to task(s): all
+        type: number
+        format: double
+        default: 20.0
+      xdropGap?:
+        description: |
+          Heuristic value (in bits) for preliminary gapped extensions.
+
+          Applies to task(s): all
+        type: number
+        format: double
+        default: 30.0
+      xdropGapFinal?:
+        description: |
+          Heuristic value (in bits) for final gapped alignment.
+
+          Applies to task(s): all
+        type: number
+        format: double
+        default: 100.0
+      noGreedy?:
+        description: |
+          Use non-greedy dynamic programming extension.
+
+          Applies to task(s): megablast
+        type: boolean
+        default: false
+      minRawGappedScore?:
+        description: |
+          Minimum raw gapped score to keep an alignment in the preliminary gapped
+          and trace-back stages. Normally set based upon expect value.
+
+          Applies to task(s): all
+        type: integer
+        format: int32
+        minimum: 1
+      ungapped?:
+        description: |
+          Perform ungapped alignment.
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+      windowSize?:
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm
+
+          Applies to task(s): dc-megablast
+        type: integer
+        format: int16
+        default: 40
+  InputBlastnDust:
+    type: object
+    additionalProperties: false
+    properties:
+      enable?:
+        type: boolean
+        default: true
+      level?:
+        description: |
+          DUST level (score threshold for subwindows).
+        type: integer
+        format: int16
+        default: 20
+      window?:
+        description: |
+          DUST window length.
+        type: integer
+        format: int16
+        default: 64
+      linker?:
+        description: |
+          DUST linker (how close masked intervals should be to get merged together).
+        type: integer
+        format: int16
+        default: 1
+  InputBlastnTask:
+    description: |
+      | Task           | Use Case                                                   |
+      |----------------|------------------------------------------------------------|
+      | `megablast`    | for very similar sequences (e.g, sequencing errors)        |
+      | `dc-megablast` | typically used for inter-species comparisons               |
+      | `blastn`       | the traditional program used for inter-species comparisons |
+      | `blastn-short` | optimized for sequences less than 30 nucleotides           |
+    type: string
+    enum:
+      - megablast
+      - dc-megablast
+      - blastn
+      - blastn-short
+  InputBlastDcTemplateType:
+    type: string
+    enum:
+      - coding
+      - optimal
+      - both
+  InputBlastpConfig:
+    type: InputBlastConfig
+    discriminatorValue: blastp
+    additionalProperties: false
+    properties:
+      task?:
+        description: |
+          Default value: `blastp`
+        type: InputBlastpTask
+      wordSize?:
+        description: |
+          Word size of initial match. Valid word sizes are 2-7.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 3     |
+          | `blastp-short` | 2     |
+          | `blastp-fast`  | 6     |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 2
+        maximum: 7
+      gapOpen?:
+        description: |
+          Cost to open a gap.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 11    |
+          | `blastp-short` | 9     |
+
+          Applies to task(s): `blastp`, `blastp-short`
+        type: integer
+        format: int8
+        minimum: 1
+      gapExtend?:
+        description: |
+          Cost to extend a gap.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 1     |
+          | `blastp-short` | 1     |
+
+          Applies to task(s): `blastp`, `blastp-short`
+        type: integer
+        format: int8
+        default: 1
+        minimum: 1
+      matrix?:
+        description: |
+          Scoring matrix name.
+
+          Default value by task:
+
+          | Task           | Value    |
+          |----------------|----------|
+          | `blastp`       | BLOSUM62 |
+          | `blastp-short` | PAM30    |
+
+          Applies to task(s): `blastp`, `blastp-short`
+        type: InputBlastScoringMatrix
+      threshold?:
+        description: |
+          Minimum score to add a word to the BLAST lookup table.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 11    |
+          | `blastp-short` | 16    |
+          | `blastp-fast`  | 21    |
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+      compBasedStats?:
+        description: |
+          Use composition-based statistics.
+
+          Default value by task:
+
+          | Task           | Value                                     |
+          |----------------|-------------------------------------------|
+          | `blastp`       | `conditional-comp-based-score-adjustment` |
+          | `blastp-short` | `none`                                    |
+          | `blastp-fast`  | `conditional-comp-based-score-adjustment` |
+
+          Applies to task(s): all
+        type: InputBlastCompBasedStats
+      seg?:
+        description: |
+          Filter query sequence with SEG.
+
+          Applies to task(s): all
+        type: InputBlastSegMask
+        default:
+          enabled: false
+          window: 12
+          locut: 2.2
+          hicut: 2.5
+      softMasking?:
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Applies to task(s): blastp
+        type: boolean
+        default: false
+      lcaseMasking?:
+        description: |
+          Use lower case filtering in query and subject sequence(s).
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+      dbSoftMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+        type: integer
+        format: int64
+      dbHardMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+        type: integer
+        format: int64
+      xdropGapFinal?:
+        description: |
+          Heuristic value (in bits) for final gapped alignment.
+
+          Applies to task(s): all
+        type: number
+        format: double
+        default: 25.0
+      windowSize?:
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 40    |
+          | `blastp-short` | 15    |
+          | `blastp-fast`  | 40    |
+
+          Applies to task(s): all
+        type: integer
+        format: int16
+        minimum: 0
+      useSwTBack?:
+        description: |
+          Compute locally optimal Smith-Waterman alignments?
+
+          Applies to task(s): all
+        type: boolean
+        default: false
+  InputBlastpTask:
+    description: |
+      | Task           | Use Case                                                 |
+      |----------------|----------------------------------------------------------|
+      | `blastp`       |  for standard protein-protein comparisons                |
+      | `blastp-short` | optimized for query sequences shorter than 30 residues   |
+      | `blastp-fast`  | a faster version that uses a larger word-size per https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
+    type: string
+    enum:
+      - blastp
+      - blastp-short
+      - blastp-fast
+  InputTBlastxConfig:
+    type: InputBlastConfig
+    discriminatorValue: tblastx
+    additionalProperties: false
+    properties:
+      wordSize?:
+        description: |
+          Word size for initial match.
+        type: integer
+        format: int8
+        default: 3
+        minimum: 2
+        maximum: 7
+      matrix?:
+        description: |
+          Scoring matrix name.
+
+          Default value: `BLOSUM62`
+        type: InputBlastScoringMatrix
+      threshold?:
+        description: |
+          Minimum score to add a word to the BLAST lookup table.
+        type: integer
+        format: int8
+        minimum: 1
+        default: 13
+      seg?:
+        description: |
+          Filter query sequence with SEG.
+        type: InputBlastSegMask
+        default:
+          enabled: true
+          window: 12
+          locut: 2.2
+          hicut: 2.5
+      softMasking?:
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+        type: boolean
+        default: false
+      lcaseMasking?:
+        description: |
+          Use lower case filtering in query and subject sequence(s).
+        type: boolean
+        default: false
+      strand?:
+        description: |
+          Query strand(s) to search against database subject sequences.
+
+          Default value: `both`
+        type: InputBlastStrand
+      dbSoftMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+        type: integer
+        format: int64
+      dbHardMask?:
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+        type: integer
+        format: int64
+      queryGeneticCode:
+        description: |
+          Genetic code to translate query, see
+          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+        type: integer
+        format: int8
+        default: 1
+        minimum: 1
+      dbGenCode:
+        description: |
+          Genetic code to translate subject sequences, see
+          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+        type: integer
+        format: int8
+        default: 1
+        minimum: 1
+      maxIntronLength:
+        description: |
+          Length of the largest intron allowed in a translated nucleotide sequence
+          when linking multiple distinct alignments (a negative value disables
+          linking).
+        type: integer
+        default: 0
+        format: int32
   InputBlastConfig:
     type: object
     additionalProperties: false
@@ -629,481 +1350,6 @@ types:
       - blastx
       - tblastn
       - tblastx
-      - rpsblast
-      - rpstblastn
-  InputBlastnConfig:
-    type: InputBlastConfig
-    discriminatorValue: blastn
-    additionalProperties: false
-    properties:
-      task?:
-        description: |
-          Default value: `blastn`
-        type: InputBlastnTask
-      wordSize?:
-        description: |
-          Default value by task:
-
-          | Task           | Value | Notes                          |
-          |----------------|-------|--------------------------------|
-          | `megablast`    | 28    | Length of initial exact match. |
-          | `dc-megablast` | 11    | Number of matching nucleotides in initial match. dc-megablast allows non-consecutive letters to match. |
-          | `blastn`       | 11    | Length of initial exact match. |
-          | `blastn-short` | 7     | Length of initial exact match. |
-
-          Applies to task(s): all
-        type: integer
-        format: int16
-        minimum: 1
-      gapOpen?:
-        description: |
-          Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
-          NCBI blast docs.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `megablast`    | 0     |
-          | `dc-megablast` | 5     |
-          | `blastn`       | 5     |
-          | `blastn-short` | 5     |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 0
-      gapExtend?:
-        description: |
-          Cost to extend a gap. This default is a function of reward/penalty value.
-          See appendix “BLASTN reward/penalty values” in the NCBI blast docs.
-
-          Default value by task:
-
-          | Task           | Value | Notes                                               |
-          |----------------|-------|-----------------------------------------------------|
-          | `megablast`    | *     | This default is a function of reward/penalty value. |
-          | `dc-megablast` | 2     |                                                     |
-          | `blastn`       | 2     |                                                     |
-          | `blastn-short` | 2     |                                                     |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-      reward?:
-        description: |
-          Reward for a nucleotide match.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `megablast`    | 1     |
-          | `dc-megablast` | 2     |
-          | `blastn`       | 2     |
-          | `blastn-short` | 1     |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-      penalty?:
-        description: |
-          Penalty for a nucleotide mismatch.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `megablast`    | -2    |
-          | `dc-megablast` | -3    |
-          | `blastn`       | -3    |
-          | `blastn-short` | -3    |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        maximum: -1
-      strand?:
-        description: |
-          Query strand(s) to search against database/subject. Choice of both, minus,
-          or plus.
-
-          Applies to task(s): all
-
-          Default value: `both`
-        type: InputBlastStrand
-      dust?:
-        description: |
-          Filter query sequence with dust.
-
-          Applies to task(s): all
-        type: InputBlastnDust
-        default:
-          enable: true
-          level: 20
-          window: 64
-          linker: 1
-      filteringDb?:
-        description: |
-          Mask query using the sequences in this database.
-
-          Applies to task(s): all
-        type: string
-      windowMaskerTaxid?:
-        description: |
-          Enable WindowMasker filtering using a Taxonomic ID.
-
-          Applies to task(s): all
-        type: integer
-        format: int64
-        minimum: 1
-      windowMaskerDb?:
-        description: |
-          Enable WindowMasker filtering using this file.
-
-          Applies to task(s): all
-        type: string
-      softMasking?:
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Applies to task(s): all
-        type: boolean
-        default: true
-      lcaseMasking?:
-        description: |
-          Use lower case filtering in query and subject sequence(s).
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-      dbSoftMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-        type: integer
-      dbHardMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-        type: integer
-        minimum: 1
-        format: int64
-      percIdentity?:
-        description: |
-          Percent identity cutoff.
-
-          Applies to task(s): all
-        type: integer
-        default: 0
-        minimum: 0
-      templateType?:
-        description: |
-          Discontiguous MegaBLAST template type.
-
-          Applies to task(s): dc-megablast
-
-          Default value: `coding`
-        type: InputBlastDcTemplateType
-      templateLength?:
-        description: |
-          Discontiguous MegaBLAST template length.
-
-          Applies to task(s): dc-megablast
-        type: integer
-        default: 18
-      useIndex?:
-        description: |
-          Use MegaBLAST database index. Indices may be created with the makembindex application.
-
-          Applies to task(s): megablast
-        type: boolean
-        default: false
-      indexName?:
-        description: |
-          MegaBLAST database index name.
-
-          Applies to task(s): megablast
-        type: string
-      xdropUngap?:
-        description: |
-          Heuristic value (in bits) for ungapped extensions.
-
-          Applies to task(s): all
-        type: number
-        format: double
-        default: 20.0
-      xdropGap?:
-        description: |
-          Heuristic value (in bits) for preliminary gapped extensions.
-
-          Applies to task(s): all
-        type: number
-        format: double
-        default: 30.0
-      xdropGapFinal?:
-        description: |
-          Heuristic value (in bits) for final gapped alignment.
-
-          Applies to task(s): all
-        type: number
-        format: double
-        default: 100.0
-      noGreedy?:
-        description: |
-          Use non-greedy dynamic programming extension.
-
-          Applies to task(s): megablast
-        type: boolean
-        default: false
-      minRawGappedScore?:
-        description: |
-          Minimum raw gapped score to keep an alignment in the preliminary gapped
-          and trace-back stages. Normally set based upon expect value.
-
-          Applies to task(s): all
-        type: integer
-        format: int32
-        minimum: 1
-      ungapped?:
-        description: |
-          Perform ungapped alignment.
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-      windowSize?:
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm
-
-          Applies to task(s): dc-megablast
-        type: integer
-        format: int16
-        default: 40
-  InputBlastnDust:
-    type: object
-    additionalProperties: false
-    properties:
-      enable?:
-        type: boolean
-        default: true
-      level?:
-        description: |
-          DUST level (score threshold for subwindows).
-        type: integer
-        format: int16
-        default: 20
-      window?:
-        description: |
-          DUST window length.
-        type: integer
-        format: int16
-        default: 64
-      linker?:
-        description: |
-          DUST linker (how close masked intervals should be to get merged together).
-        type: integer
-        format: int16
-        default: 1
-  InputBlastnTask:
-    description: |
-      | Task           | Use Case                                                   |
-      |----------------|------------------------------------------------------------|
-      | `megablast`    | for very similar sequences (e.g, sequencing errors)        |
-      | `dc-megablast` | typically used for inter-species comparisons               |
-      | `blastn`       | the traditional program used for inter-species comparisons |
-      | `blastn-short` | optimized for sequences less than 30 nucleotides           |
-    type: string
-    enum:
-      - megablast
-      - dc-megablast
-      - blastn
-      - blastn-short
-  InputBlastDcTemplateType:
-    type: string
-    enum:
-      - coding
-      - optimal
-      - both
-  InputBlastxConfig:
-    type: InputBlastConfig
-    discriminatorValue: blastx
-    additionalProperties: false
-    properties:
-      task?:
-        description: |
-          Default value: `blastx`
-        type: InputBlastxTask
-      wordSize?:
-        description: |
-          Word size for initial match. Valid word sizes are 2-7.
-
-          Default value by task:
-
-          | Task          | Value |
-          |---------------|-------|
-          | `blastx`      | 3     |
-          | `blastx-fast` | 6     |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 2
-        maximum: 7
-      gapOpen?:
-        description: |
-          Cost to open a gap.
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        default: 11
-        minimum: 1
-      gapExtend?:
-        description: |
-          Cost to extend a gap.
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-        default: 1
-      matrix?:
-        description: |
-          Scoring matrix name.
-
-          Applies to task(s): all
-
-          Default value: `BLOSUM62`
-        type: InputBlastScoringMatrix
-      threshold?:
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-
-          Default value by task:
-
-          | Task          | Value |
-          |---------------|-------|
-          | `blastx`      | 12    |
-          | `blastx-fast` | 21    |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-      seg?:
-        description: |
-          Filter query sequence with SEG.
-
-          Applies to task(s): all
-        type: InputBlastSegMask
-        default:
-          enabled: false
-          window: 12
-          locut: 2.2
-          hicut: 2.5
-      softMasking?:
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-      lcaseMasking?:
-        description: |
-          Use lower case filtering in query and subject sequence(s).
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-      dbSoftMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-        type: integer
-        format: int64
-      dbHardMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-        type: integer
-        format: int64
-      xdropGapFinal?:
-        description: |
-          Heuristic value (in bits) for final gapped alignment.
-
-          Applies to task(s): all
-        type: number
-        format: double
-        default: 25.0
-      windowSize?:
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm.
-
-          Applies to task(s): all
-        type: integer
-        format: int16
-        minimum: 0
-        default: 40
-      strand?:
-        description: |
-          Query strand(s) to search against database/subject. Choice of both, minus,
-          or plus.
-
-          Applies to task(s): all
-
-          Default value: `both`
-        type: InputBlastStrand
-      queryGeneticCode:
-        description: |
-          Genetic code to translate query, see
-          ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        default: 1
-        minimum: 1
-      maxIntronLength:
-        description: |
-          Length of the largest intron allowed in a translated nucleotide sequence
-          when linking multiple distinct alignments (a negative value disables
-          linking).
-
-          Applies to task(s): all
-        type: integer
-        default: 0
-        format: int32
-      compBasedStats?:
-        description: |
-          Use composition-based statistics.
-
-          Applies to task(s): all
-
-          Default value: `conditional-comp-based-score-adjustment`
-        type: InputBlastCompBasedStats
-  InputBlastxTask:
-    description: |
-      | Task           | Use Case                                                 |
-      |----------------|----------------------------------------------------------|
-      | `blastx`       | for standard translated nucleotide-protein comparison    |
-      | `blastx-fast`  | a faster version that uses a larger word-size based on https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
-    type: string
-    enum:
-      - blastx
-      - blastx-fast
   InputBlastCompBasedStats:
     description: |
       | Value                                     | Description                    |
@@ -1160,252 +1406,4 @@ types:
       - plus
       - minus
       - both
-  InputBlastpConfig:
-    type: InputBlastConfig
-    discriminatorValue: blastp
-    additionalProperties: false
-    properties:
-      task?:
-        description: |
-          Default value: `blastp`
-        type: InputBlastpTask
-      wordSize?:
-        description: |
-          Word size of initial match. Valid word sizes are 2-7.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 3     |
-          | `blastp-short` | 2     |
-          | `blastp-fast`  | 6     |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 2
-        maximum: 7
-      gapOpen?:
-        description: |
-          Cost to open a gap.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 11    |
-          | `blastp-short` | 9     |
-
-          Applies to task(s): `blastp`, `blastp-short`
-        type: integer
-        format: int8
-        minimum: 1
-      gapExtend?:
-        description: |
-          Cost to extend a gap.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 1     |
-          | `blastp-short` | 1     |
-
-          Applies to task(s): `blastp`, `blastp-short`
-        type: integer
-        format: int8
-        default: 1
-        minimum: 1
-      matrix?:
-        description: |
-          Scoring matrix name.
-
-          Default value by task:
-
-          | Task           | Value    |
-          |----------------|----------|
-          | `blastp`       | BLOSUM62 |
-          | `blastp-short` | PAM30    |
-
-          Applies to task(s): `blastp`, `blastp-short`
-        type: InputBlastScoringMatrix
-      threshold?:
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 11    |
-          | `blastp-short` | 16    |
-          | `blastp-fast`  | 21    |
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-      compBasedStats?:
-        description: |
-          Use composition-based statistics.
-
-          Default value by task:
-
-          | Task           | Value                                     |
-          |----------------|-------------------------------------------|
-          | `blastp`       | `conditional-comp-based-score-adjustment` |
-          | `blastp-short` | `none`                                    |
-          | `blastp-fast`  | `conditional-comp-based-score-adjustment` |
-
-          Applies to task(s): all
-        type: InputBlastCompBasedStats
-      seg?:
-        description: |
-          Filter query sequence with SEG.
-
-          Applies to task(s): all
-        type: InputBlastSegMask
-        default:
-          enabled: false
-          window: 12
-          locut: 2.2
-          hicut: 2.5
-      softMasking?:
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Applies to task(s): blastp
-        type: boolean
-        default: false
-      lcaseMasking?:
-        description: |
-          Use lower case filtering in query and subject sequence(s).
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-      dbSoftMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-        type: integer
-        format: int64
-      dbHardMask?:
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-        type: integer
-        format: int64
-      xdropGapFinal?:
-        description: |
-          Heuristic value (in bits) for final gapped alignment.
-
-          Applies to task(s): all
-        type: number
-        format: double
-        default: 25.0
-      windowSize?:
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 40    |
-          | `blastp-short` | 15    |
-          | `blastp-fast`  | 40    |
-
-          Applies to task(s): all
-        type: integer
-        format: int16
-        minimum: 0
-      useSwTBack?:
-        description: |
-          Compute locally optimal Smith-Waterman alignments?
-
-          Applies to task(s): all
-        type: boolean
-        default: false
-  InputBlastpTask:
-    description: |
-      | Task           | Use Case                                                 |
-      |----------------|----------------------------------------------------------|
-      | `blastp`       |  for standard protein-protein comparisons                |
-      | `blastp-short` | optimized for query sequences shorter than 30 residues   |
-      | `blastp-fast`  | a faster version that uses a larger word-size per https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
-    type: string
-    enum:
-      - blastp
-      - blastp-short
-      - blastp-fast
-  NewJobPostRequestJSON:
-    type: object
-    additionalProperties: false
-    properties:
-      site:
-        type: string
-      target:
-        description: |
-          Target file name.  Maps to the `--db` flag for the blast tools.
-        type: string
-      config:
-        description: |
-          Blast tool configuration.
-
-          Must be one of the following implementation types:
-
-          - [InputBlastnConfig](#type:InputBlastnConfig)
-          - [InputBlastpConfig](#type:InputBlastpConfig)
-          - [InputBlastxConfig](#type:InputBlastxConfig)
-          - [InputRpsBlastConfig](#type:InputRpsBlastConfig)
-          - [InputTBlastnConfig](#type:InputTBlastnConfig)
-          - [InputTBlastxConfig](#type:InputTBlastxConfig)
-        type: InputBlastConfig
-  NewJobPostRequestMultipart:
-    type: object
-    additionalProperties: false
-    properties:
-      file: file
-      properties: NewJobPostRequestJSON
-  NewJobPostResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      jobId: JobID
-  MetaResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      targets: OutputSiteListing
-  GetJobResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      id: JobID
-      status: JobStatus
-      config: InputBlastConfig
-  OutputSiteListing:
-    type: object
-    additionalProperties: false
-    properties:
-      "^[A-Za-z0-9_- ]+$":
-        type: array
-        items: OutputListOrganism
-  OutputListOrganism:
-    type: object
-    additionalProperties: false
-    properties:
-      name: string
-      blast:
-        type: array
-        items: string
-        minItems: 1
-        uniqueItems: true
 
