@@ -88,7 +88,7 @@ gen-docs: api.raml merge-raml
 	@$(BIN_DIR)/generate-docs.sh
 
 merge-raml:
-	@$(BIN_DIR)/merge-raml schema > schema/library.raml
+	@$(BIN_DIR)/merge-raml -vv schema > schema/library.raml
 
 #
 # File based targets
