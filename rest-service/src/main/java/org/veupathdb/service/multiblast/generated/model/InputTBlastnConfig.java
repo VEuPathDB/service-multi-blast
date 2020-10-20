@@ -9,11 +9,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
     as = InputTBlastnConfigImpl.class
 )
 public interface InputTBlastnConfig extends InputBlastConfig {
-  @JsonProperty("tool")
-  InputBlastTool getTool();
+  String _DISCRIMINATOR_TYPE_NAME = "tblastn";
 
   @JsonProperty("tool")
-  void setTool(InputBlastTool tool);
+  InputBlastTool getTool();
 
   @JsonProperty("query")
   String getQuery();
