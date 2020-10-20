@@ -6,6 +6,12 @@ uses:
 type: object
 additionalProperties: false
 properties:
+  site:
+    type: string
+  target:
+    description: |
+      Target file name.  Maps to the `--db` flag for the blast tools.
+    type: string
   config:
     description: |
       Blast tool configuration.

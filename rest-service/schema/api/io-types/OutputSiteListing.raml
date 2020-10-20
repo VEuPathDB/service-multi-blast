@@ -6,4 +6,7 @@ uses:
 type: object
 additionalProperties: false
 properties:
-  targets: io.OutputSiteListing
+  "^[A-Za-z0-9_- ]+$":
+    type: array
+    items: io.OutputListOrganism
+
