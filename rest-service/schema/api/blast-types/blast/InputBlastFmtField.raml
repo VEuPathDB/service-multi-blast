@@ -46,6 +46,11 @@ description: |
   | `qcovs`       | Query Coverage Per Subject (for all HSPs) |
   | `qcovhsp`     | Query Coverage Per HSP |
   | `qcovus`      | a measure of Query Coverage that counts a position in a subject sequence for this measure only once. The second time the position is aligned to the query is not counted towards this measure. |
+
+  Special fields (only applicable to output type SAM):
+
+  - SQ = Include sequence data
+  - SR = Subject as reference seq
 type: string
 enum:
   - qseqid

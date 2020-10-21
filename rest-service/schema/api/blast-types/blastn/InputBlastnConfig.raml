@@ -81,7 +81,7 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    minimum: 1
+    minimum: 0
   penalty?:
     description: |
       Penalty for a nucleotide mismatch.
@@ -98,7 +98,7 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    maximum: -1
+    maximum: 0
   strand?:
     description: |
       Query strand(s) to search against database/subject. Choice of both, minus,
@@ -175,9 +175,10 @@ properties:
       Percent identity cutoff.
 
       Applies to task(s): all
-    type: integer
-    default: 0
-    minimum: 0
+    type: number
+    default: 0.0
+    minimum: 0.0
+    maximum: 100.0
   templateType?:
     description: |
       Discontiguous MegaBLAST template type.

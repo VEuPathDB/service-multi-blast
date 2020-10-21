@@ -2,6 +2,7 @@
 
 uses:
   ext: index.raml
+  com: ../blast-common/index.raml
 
 type: object
 additionalProperties: false
@@ -19,7 +20,7 @@ properties:
       When posting a job using `multipart/form-data` either this field _or_ the
       query file field must be specified.
     type: string
-  query_loc?:
+  queryLoc?:
     description: |
       Location on the query sequence.
     type: ext.InputBlastLocation
@@ -47,22 +48,88 @@ properties:
 #      Show NCBI GIs in report.
 #    type: boolean
 #    default: false
+
+  # TODO: does this apply to all?
+  lineLength?:
+    description: |
+      Line length for formatting alignments Not applicable for outfmt > 4.
+    type: integer
+    minimum: 1
+    default: 60
+
+  # TODO: does this apply to all?
+  sortHits?:
+    description: |
+      Only applies to output formats 0-4.
+
+      TODO: translate this
+    type: com.InputHitSorting
+
+  # TODO: does this apply to all?
+  seqIdList?:
+    description: |
+      Restrict search of database to list of SeqIDs
+    type: string
+  # TODO: does this apply to all?
+  negativeSeqIdList?:
+    description: |
+      Restrict search of database to everything except the specified SeqIDs.
+    type: string
+
+  # TODO: does this apply to all?
+  taxIds?:
+    description: |
+      Restrict search of database to include only the specified taxonomy IDs
+      (multiple IDs delimited by ',').
+    type: string
+  # TODO: does this apply to all?
+  negativeTaxIds?:
+    description: |
+       Restrict search of database to everything except the specified taxonomy
+       IDs (multiple IDs delimited by ',').
+    type: string
+
+  # TODO: does this apply to all?
+  taxIdList?:
+    description: |
+      Restrict search of database to include only the specified taxonomy IDs.
+    type: string
+  # TODO: does this apply to all?
+  negativeTaxIdList?:
+    description: |
+       Restrict search of database to everything except the specified taxonomy
+       IDs.
+    type: string
+
+  # TODO: does this apply to all?
+  sortHSPs?:
+    description: Only applies to pairwise output format.
+    type: com.InputHSPScoring
+  # TODO: does this apply to all?
+  qCovHSPPerc?:
+    description: Percent query coverage per hsp.
+    type: number
+    minimum: 0.0
+    maximum: 100.0
+
   numDescriptions?:
     description: |
       Show one-line descriptions for this number of database sequences.
     type: integer
     format: int16
     default: 500
+    minimum: 0
   numAlignments?:
     description: |
       Show alignments for this number of database sequences.
     type: integer
     default: 250
+    minimum: 0
   maxTargetSeqs?:
     description: |
       Number of aligned sequences to keep. Use with report formats that do not
       have separate definition line and alignment sections such as tabular (all
-      outfmt > 4). Not compatible with num_descriptions or num_alignments. Ties
+      outfmt > 4). Not compatible with numDescriptions or numAlignments. Ties
       are broken by order of sequences in the database.
     type: integer
     default: 500
