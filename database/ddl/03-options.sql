@@ -1,11 +1,11 @@
-CREATE TABLE tool_options
+CREATE TABLE multi_blast.tool_options
 (
   option_id SMALLSERIAL PRIMARY KEY NOT NULL
-  , name      VARCHAR(16) NOT NULL UNIQUE
+, name      VARCHAR(26) NOT NULL UNIQUE
 );
 
 INSERT INTO
-  tool_options (name)
+  multi_blast.tool_options (name)
 VALUES
   ('best_hit_overhang')
 , ('best_hit_score_edge')
