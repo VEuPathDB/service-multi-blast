@@ -1,11 +1,11 @@
-CREATE TABLE tools
+CREATE TABLE multi_blast.tools
 (
-  tool_id SMALLINT   PRIMARY KEY NOT NULL
-  , name    VARCHAR(8) NOT NULL UNIQUE
+  tool_id SMALLINT    PRIMARY KEY NOT NULL
+, name    VARCHAR(10) NOT NULL UNIQUE
 );
 
 INSERT INTO
-  tools (tool_id, name)
+  multi_blast.tools (tool_id, name)
 VALUES
   (1, 'blastn')
 , (2, 'blastp')
