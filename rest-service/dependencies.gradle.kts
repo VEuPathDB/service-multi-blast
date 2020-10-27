@@ -78,6 +78,7 @@ dependencies {
   // Utils
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
+  implementation("io.vulpine.lib", "lib-query-util", "2.0.2")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")

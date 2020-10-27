@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 @JsonSubTypes({
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.InputTBlastnConfig.class),
-    @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.InputRpsBlastConfig.class),
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.InputTBlastxConfig.class),
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.InputBlastpConfig.class),
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.InputBlastxConfig.class),
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
     as = InputBlastConfigImpl.class
 )
 public interface InputBlastConfig {
-  String _DISCRIMINATOR_TYPE_NAME = "InputBlastConfig";
+  InputBlastTool _DISCRIMINATOR_TYPE_NAME = null;
 
   @JsonProperty("tool")
   InputBlastTool getTool();
@@ -51,30 +50,6 @@ public interface InputBlastConfig {
       defaultValue = "10.0"
   )
   void setEValue(double eValue);
-
-  @JsonProperty("subject")
-  String getSubject();
-
-  @JsonProperty("subject")
-  void setSubject(String subject);
-
-  @JsonProperty("subjectLoc")
-  InputBlastLocation getSubjectLoc();
-
-  @JsonProperty("subjectLoc")
-  void setSubjectLoc(InputBlastLocation subjectLoc);
-
-  @JsonProperty(
-      value = "showGIs",
-      defaultValue = "false"
-  )
-  boolean getShowGIs();
-
-  @JsonProperty(
-      value = "showGIs",
-      defaultValue = "false"
-  )
-  void setShowGIs(boolean showGIs);
 
   @JsonProperty(
       value = "numDescriptions",
@@ -118,36 +93,6 @@ public interface InputBlastConfig {
   @JsonProperty("maxHSPs")
   void setMaxHSPs(short maxHSPs);
 
-  @JsonProperty(
-      value = "html",
-      defaultValue = "false"
-  )
-  boolean getHtml();
-
-  @JsonProperty(
-      value = "html",
-      defaultValue = "false"
-  )
-  void setHtml(boolean html);
-
-  @JsonProperty("giList")
-  String getGiList();
-
-  @JsonProperty("giList")
-  void setGiList(String giList);
-
-  @JsonProperty("negativeGIList")
-  String getNegativeGIList();
-
-  @JsonProperty("negativeGIList")
-  void setNegativeGIList(String negativeGIList);
-
-  @JsonProperty("entrezQuery")
-  String getEntrezQuery();
-
-  @JsonProperty("entrezQuery")
-  void setEntrezQuery(String entrezQuery);
-
   @JsonProperty("cullingLimit")
   int getCullingLimit();
 
@@ -178,18 +123,6 @@ public interface InputBlastConfig {
   @JsonProperty("searchSpace")
   void setSearchSpace(long searchSpace);
 
-  @JsonProperty("importSearchStrategy")
-  String getImportSearchStrategy();
-
-  @JsonProperty("importSearchStrategy")
-  void setImportSearchStrategy(String importSearchStrategy);
-
-  @JsonProperty("exportSearchStrategy")
-  String getExportSearchStrategy();
-
-  @JsonProperty("exportSearchStrategy")
-  void setExportSearchStrategy(String exportSearchStrategy);
-
   @JsonProperty(
       value = "parseDefLines",
       defaultValue = "false"
@@ -201,30 +134,6 @@ public interface InputBlastConfig {
       defaultValue = "false"
   )
   void setParseDefLines(boolean parseDefLines);
-
-  @JsonProperty(
-      value = "numThreads",
-      defaultValue = "1"
-  )
-  byte getNumThreads();
-
-  @JsonProperty(
-      value = "numThreads",
-      defaultValue = "1"
-  )
-  void setNumThreads(byte numThreads);
-
-  @JsonProperty(
-      value = "remote",
-      defaultValue = "false"
-  )
-  boolean getRemote();
-
-  @JsonProperty(
-      value = "remote",
-      defaultValue = "false"
-  )
-  void setRemote(boolean remote);
 
   @JsonProperty("outFmt")
   InputBlastOutFmt getOutFmt();

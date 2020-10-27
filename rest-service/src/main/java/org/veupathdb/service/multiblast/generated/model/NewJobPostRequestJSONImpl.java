@@ -7,15 +7,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "site",
-    "target",
+    "organism",
+    "target-type",
     "config"
 })
 public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
   @JsonProperty("site")
   private String site;
 
-  @JsonProperty("target")
-  private String target;
+  @JsonProperty("organism")
+  private String organism;
+
+  @JsonProperty("target-type")
+  private String targetType;
 
   @JsonProperty("config")
   private InputBlastConfig config;
@@ -30,14 +34,24 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
     this.site = site;
   }
 
-  @JsonProperty("target")
-  public String getTarget() {
-    return this.target;
+  @JsonProperty("organism")
+  public String getOrganism() {
+    return this.organism;
   }
 
-  @JsonProperty("target")
-  public void setTarget(String target) {
-    this.target = target;
+  @JsonProperty("organism")
+  public void setOrganism(String organism) {
+    this.organism = organism;
+  }
+
+  @JsonProperty("target-type")
+  public String getTargetType() {
+    return this.targetType;
+  }
+
+  @JsonProperty("target-type")
+  public void setTargetType(String targetType) {
+    this.targetType = targetType;
   }
 
   @JsonProperty("config")
