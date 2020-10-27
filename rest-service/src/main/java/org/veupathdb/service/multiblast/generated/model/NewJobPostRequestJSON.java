@@ -13,11 +13,17 @@ public interface NewJobPostRequestJSON {
   @JsonProperty("site")
   void setSite(String site);
 
-  @JsonProperty("target")
-  String getTarget();
+  @JsonProperty("organism")
+  String getOrganism();
 
-  @JsonProperty("target")
-  void setTarget(String target);
+  @JsonProperty("organism")
+  void setOrganism(String organism);
+
+  @JsonProperty("target-type")
+  String getTargetType();
+
+  @JsonProperty("target-type")
+  void setTargetType(String targetType);
 
   @JsonProperty("config")
   InputBlastConfig getConfig();

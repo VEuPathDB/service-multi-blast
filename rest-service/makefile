@@ -79,6 +79,7 @@ fix-path:
 
 gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
+	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
 
 gen-docs: api.raml merge-raml
 	# Performing hack to make doc-gen work...

@@ -12,27 +12,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
     "query",
     "query_loc",
     "eValue",
-    "subject",
-    "subjectLoc",
-    "showGIs",
     "numDescriptions",
     "numAlignments",
     "maxTargetSeqs",
     "maxHSPs",
-    "html",
-    "giList",
-    "negativeGIList",
-    "entrezQuery",
     "cullingLimit",
     "bestHitOverhang",
     "bestHitScoreEdge",
     "dbSize",
     "searchSpace",
-    "importSearchStrategy",
-    "exportSearchStrategy",
     "parseDefLines",
-    "numThreads",
-    "remote",
     "outFmt",
     "task",
     "wordSize",
@@ -66,18 +55,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   )
   private double eValue;
 
-  @JsonProperty("subject")
-  private String subject;
-
-  @JsonProperty("subjectLoc")
-  private InputBlastLocation subjectLoc;
-
-  @JsonProperty(
-      value = "showGIs",
-      defaultValue = "false"
-  )
-  private boolean showGIs;
-
   @JsonProperty(
       value = "numDescriptions",
       defaultValue = "500"
@@ -99,21 +76,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("maxHSPs")
   private short maxHSPs;
 
-  @JsonProperty(
-      value = "html",
-      defaultValue = "false"
-  )
-  private boolean html;
-
-  @JsonProperty("giList")
-  private String giList;
-
-  @JsonProperty("negativeGIList")
-  private String negativeGIList;
-
-  @JsonProperty("entrezQuery")
-  private String entrezQuery;
-
   @JsonProperty("cullingLimit")
   private int cullingLimit;
 
@@ -129,29 +91,11 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("searchSpace")
   private long searchSpace;
 
-  @JsonProperty("importSearchStrategy")
-  private String importSearchStrategy;
-
-  @JsonProperty("exportSearchStrategy")
-  private String exportSearchStrategy;
-
   @JsonProperty(
       value = "parseDefLines",
       defaultValue = "false"
   )
   private boolean parseDefLines;
-
-  @JsonProperty(
-      value = "numThreads",
-      defaultValue = "1"
-  )
-  private byte numThreads;
-
-  @JsonProperty(
-      value = "remote",
-      defaultValue = "false"
-  )
-  private boolean remote;
 
   @JsonProperty("outFmt")
   private InputBlastOutFmt outFmt;
@@ -265,42 +209,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.eValue = eValue;
   }
 
-  @JsonProperty("subject")
-  public String getSubject() {
-    return this.subject;
-  }
-
-  @JsonProperty("subject")
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
-
-  @JsonProperty("subjectLoc")
-  public InputBlastLocation getSubjectLoc() {
-    return this.subjectLoc;
-  }
-
-  @JsonProperty("subjectLoc")
-  public void setSubjectLoc(InputBlastLocation subjectLoc) {
-    this.subjectLoc = subjectLoc;
-  }
-
-  @JsonProperty(
-      value = "showGIs",
-      defaultValue = "false"
-  )
-  public boolean getShowGIs() {
-    return this.showGIs;
-  }
-
-  @JsonProperty(
-      value = "showGIs",
-      defaultValue = "false"
-  )
-  public void setShowGIs(boolean showGIs) {
-    this.showGIs = showGIs;
-  }
-
   @JsonProperty(
       value = "numDescriptions",
       defaultValue = "500"
@@ -359,52 +267,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.maxHSPs = maxHSPs;
   }
 
-  @JsonProperty(
-      value = "html",
-      defaultValue = "false"
-  )
-  public boolean getHtml() {
-    return this.html;
-  }
-
-  @JsonProperty(
-      value = "html",
-      defaultValue = "false"
-  )
-  public void setHtml(boolean html) {
-    this.html = html;
-  }
-
-  @JsonProperty("giList")
-  public String getGiList() {
-    return this.giList;
-  }
-
-  @JsonProperty("giList")
-  public void setGiList(String giList) {
-    this.giList = giList;
-  }
-
-  @JsonProperty("negativeGIList")
-  public String getNegativeGIList() {
-    return this.negativeGIList;
-  }
-
-  @JsonProperty("negativeGIList")
-  public void setNegativeGIList(String negativeGIList) {
-    this.negativeGIList = negativeGIList;
-  }
-
-  @JsonProperty("entrezQuery")
-  public String getEntrezQuery() {
-    return this.entrezQuery;
-  }
-
-  @JsonProperty("entrezQuery")
-  public void setEntrezQuery(String entrezQuery) {
-    this.entrezQuery = entrezQuery;
-  }
-
   @JsonProperty("cullingLimit")
   public int getCullingLimit() {
     return this.cullingLimit;
@@ -455,26 +317,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.searchSpace = searchSpace;
   }
 
-  @JsonProperty("importSearchStrategy")
-  public String getImportSearchStrategy() {
-    return this.importSearchStrategy;
-  }
-
-  @JsonProperty("importSearchStrategy")
-  public void setImportSearchStrategy(String importSearchStrategy) {
-    this.importSearchStrategy = importSearchStrategy;
-  }
-
-  @JsonProperty("exportSearchStrategy")
-  public String getExportSearchStrategy() {
-    return this.exportSearchStrategy;
-  }
-
-  @JsonProperty("exportSearchStrategy")
-  public void setExportSearchStrategy(String exportSearchStrategy) {
-    this.exportSearchStrategy = exportSearchStrategy;
-  }
-
   @JsonProperty(
       value = "parseDefLines",
       defaultValue = "false"
@@ -489,38 +331,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   )
   public void setParseDefLines(boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
-  }
-
-  @JsonProperty(
-      value = "numThreads",
-      defaultValue = "1"
-  )
-  public byte getNumThreads() {
-    return this.numThreads;
-  }
-
-  @JsonProperty(
-      value = "numThreads",
-      defaultValue = "1"
-  )
-  public void setNumThreads(byte numThreads) {
-    this.numThreads = numThreads;
-  }
-
-  @JsonProperty(
-      value = "remote",
-      defaultValue = "false"
-  )
-  public boolean getRemote() {
-    return this.remote;
-  }
-
-  @JsonProperty(
-      value = "remote",
-      defaultValue = "false"
-  )
-  public void setRemote(boolean remote) {
-    this.remote = remote;
   }
 
   @JsonProperty("outFmt")

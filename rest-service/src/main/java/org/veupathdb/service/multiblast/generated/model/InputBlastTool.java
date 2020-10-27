@@ -16,10 +16,7 @@ public enum InputBlastTool {
   TBLASTN("tblastn"),
 
   @JsonProperty("tblastx")
-  TBLASTX("tblastx"),
-
-  @JsonProperty("rpsblast")
-  RPSBLAST("rpsblast");
+  TBLASTX("tblastx");
 
   private String name;
 
