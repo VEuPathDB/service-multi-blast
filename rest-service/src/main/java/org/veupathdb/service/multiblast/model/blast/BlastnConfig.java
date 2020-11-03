@@ -5,13 +5,10 @@ import java.io.File;
 import org.veupathdb.service.multiblast.model.CLISerializable;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.Validatable;
-import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.jobs.BlastnValidator;
 
 public class BlastnConfig extends BlastConfig implements CLISerializable, Validatable
 {
-
-
   private QueryStrand   strand = QueryStrand.BOTH;
   private BlastnTask    task   = BlastnTask.MEGABLAST;
   // TODO: Database fields
