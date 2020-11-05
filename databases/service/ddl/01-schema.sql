@@ -1,0 +1,2 @@
+CREATE SCHEMA blast;
+CREATE SCHEMA job;

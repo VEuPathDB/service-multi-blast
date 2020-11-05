@@ -1,0 +1,97 @@
+version: "3.5"
+
+services:
+  service-db:
+    build:
+      context: ../databases/service/
+      dockerfile: ./Dockerfile
+    environment:
+      # Postgres root user password
+      POSTGRES_PASSWORD:
+      # Service user username
+      SVC_DB_USER: service
+      # Service user password
+      SVC_DB_PASS:
+    networks:
+      - serviceInternal
+    ports:
+    - 5432:5432
+
+  service:
+    build:
+      dockerfile: Dockerfile
+      context: ../rest-service
+    volumes:
+      - type: volume
+        source: job-data
+        target: /jobs
+    networks:
+      - serviceInternal
+      - serviceShared
+    depends_on:
+      - queue
+      - service-db
+
+  blast:
+    build:
+      dockerfile: ../blast/Dockerfile
+      context: .
+    volumes:
+      - type: volume
+        source: job-data
+        target: /out
+      - type: volume
+        source: blast-data
+        target: /db
+    networks:
+      - blastInternal
+
+  queue-db:
+    build:
+      dockerfile: ../databases/queue/Dockerfile
+      context: .
+    environment:
+      # Root user password (IT'S A SECRET TO EVERYBODY)
+      MYSQL_ROOT_PASSWORD:
+      # Service user username
+      SVC_DB_USER: queue
+      # Service user password
+      SVC_DB_PASS:
+    networks:
+      - queueInternal
+
+  queue:
+    image: fireworq/fireworq:1.4
+    environment:
+      # REQUIRED!
+      # Specifies a data source name for the job queue and the repository
+      # database in a form user:password@tcp(mysql_host:mysql_port)/database?options
+      #
+      # The password value here must match the `MYSQL_PASSWORD` value for
+      # the queue-db container.
+      FIREWORQ_MYSQL_DSN: # queue:<some password here>@tcp(queue-db:3306)/queue
+
+      # Configures the number of simultaneous blast jobs that can be run
+      FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: 2
+
+      FIREWORQ_BIND: 0.0.0.0:80
+      FIREWORQ_DRIVER: mysql
+      FIREWORQ_QUEUE_DEFAULT: blast
+
+    networks:
+      - queueInternal
+      - blastInternal
+      - serviceShared
+    depends_on:
+      - queue-db
+      - blast
+
+networks:
+  blastInternal:
+  queueInternal:
+  serviceInternal:
+  serviceShared:
+
+volumes:
+  blast-data:
+  job-data:
