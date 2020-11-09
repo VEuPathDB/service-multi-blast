@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.model.blast;
 
-public enum  BlastnTask
+import java.util.Optional;
+
+public enum BlastnTask
 {
   BLASTN("blastn"),
   BLASTN_SHORT("blastn-short"),
@@ -22,6 +24,14 @@ public enum  BlastnTask
 
   public static BlastnTask getDefault() {
     return def;
+  }
+
+  public static Optional<BlastnTask> fromString(String value) {
+    for (var e : values())
+      if (e.value.equals(value))
+        return Optional.of(e);
+
+    return Optional.empty();
   }
 
   @Override

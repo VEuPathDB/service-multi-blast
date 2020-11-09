@@ -1,10 +1,10 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
-public interface EnumMapping<I, V>
+public interface EnumMapping<I, V extends Enum<V>>
 {
   @NotNull
   Optional<V> getValue(I id);
@@ -25,5 +25,10 @@ public interface EnumMapping<I, V>
   @NotNull
   EnumMapping<I, V> put(@NotNull I id, @NotNull V value);
 
+  @NotNull
+  EnumMapping<I, V> putRaw(@NotNull I id, @NotNull String value);
+
   int size();
+
+  void forEach(@NotNull BiConsumer<I,V> fn);
 }

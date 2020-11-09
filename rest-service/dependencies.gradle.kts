@@ -1,7 +1,7 @@
 //
 // Version Numbers
 //
-val coreLib = "2.7.0" // Container core lib version
+val coreLib = "3.0.0" // Container core lib version
 
 val jersey  = "2.+"   // Jersey/JaxRS version
 val jackson = "2.+"   // FasterXML Jackson version
@@ -78,6 +78,12 @@ dependencies {
   // Utils
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
+  implementation("info.picocli", "picocli", "4.5.2")
+
+  // Database
+  implementation("com.zaxxer", "HikariCP", "3.4.5")
+  implementation("org.postgresql", "postgresql", "42.2.18")
+  implementation("io.vulpine.lib", "sql-import", "0.2.1")
   implementation("io.vulpine.lib", "lib-query-util", "2.0.2")
 
   // Unit Testing
