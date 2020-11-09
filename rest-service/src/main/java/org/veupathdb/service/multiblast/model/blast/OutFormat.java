@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.veupathdb.service.multiblast.model.CLISerializable;
 import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 import static java.util.Collections.singletonList;
 
@@ -95,7 +96,7 @@ public class OutFormat implements Validatable, CLISerializable
     return errors;
   }
 
-  public void toArgs(StringBuilder args) {
+  public void toArgs(CliBuilder args) {
     var hasFmt = format != null;
     var hasDel = delim != null;
     var hasFel = !fields.isEmpty();

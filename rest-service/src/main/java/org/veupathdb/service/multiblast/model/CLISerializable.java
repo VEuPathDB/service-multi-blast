@@ -1,8 +1,8 @@
 package org.veupathdb.service.multiblast.model;
 
-import javax.validation.constraints.NotNull;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 public interface CLISerializable
 {
-  void toArgs(@NotNull StringBuilder args);
+  void toArgs(CliBuilder args);
 }

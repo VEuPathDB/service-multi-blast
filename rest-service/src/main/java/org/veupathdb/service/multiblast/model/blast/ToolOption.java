@@ -104,5 +104,8 @@ public enum ToolOption
     return this.flag;
   }
 
-
+  @Override
+  public String toString() {
+    return flag;
+  }
 }
