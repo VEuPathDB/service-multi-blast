@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.model.blast;
 
 import java.util.Objects;
+import java.util.Optional;
+import javax.validation.constraints.NotNull;
 
 public enum ReportFormatType
 {
@@ -40,9 +42,7 @@ public enum ReportFormatType
     return value;
   }
 
-  public boolean isValidFor(BlastTool tool) {
-    Objects.requireNonNull(tool);
-
+  public boolean isValidFor(@NotNull BlastTool tool) {
     return this != SAM || tool == BlastTool.BLASTN;
   }
 
@@ -51,7 +51,28 @@ public enum ReportFormatType
     return String.valueOf(value);
   }
 
+  @NotNull
   public String ioName() {
-    return name().toLowerCase().replaceAll("-", "-");
+    return name().toLowerCase().replace('_', '-');
+  }
+
+  @NotNull
+  public static Optional<ReportFormatType> fromInt(int value) {
+    for (var e : values())
+      if (e.value == value)
+        return Optional.of(e);
+
+    return Optional.empty();
+  }
+
+  @NotNull
+  public static Optional<ReportFormatType> fromIoName(@NotNull String value) {
+    value = value.toUpperCase().replace('-', '_');
+
+    for (var e : values())
+      if (e.name().equals(value))
+        return Optional.of(e);
+
+    return Optional.empty();
   }
 }

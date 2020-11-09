@@ -1,6 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public enum BlastReportField
 {
@@ -279,7 +280,7 @@ public enum BlastReportField
     Objects.requireNonNull(fmt);
 
     return switch (this) {
-      case SQ, SR -> fmt == ReportFormatType.SEQ_ALIGN_MAP;
+      case SQ, SR -> fmt == ReportFormatType.SAM;
       default -> true;
     };
   }
@@ -287,5 +288,13 @@ public enum BlastReportField
   @Override
   public String toString() {
     return value;
+  }
+
+  public static Optional<BlastReportField> fromString(String value) {
+    for (var e : values())
+      if (e.value.equals(value))
+        return Optional.of(e);
+
+    return Optional.empty();
   }
 }

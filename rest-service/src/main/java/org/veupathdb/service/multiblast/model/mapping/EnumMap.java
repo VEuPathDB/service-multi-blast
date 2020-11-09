@@ -4,9 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import javax.validation.constraints.NotNull;
 
-class EnumMap<I, V> implements EnumMapping<I, V>
+abstract class EnumMap<I, V extends Enum<V>> implements EnumMapping<I, V>
 {
   private final Map<V, I> by_value;
   private final Map<I, V> by_id;
@@ -56,5 +57,10 @@ class EnumMap<I, V> implements EnumMapping<I, V>
   @Override
   public int size() {
     return by_id.size();
+  }
+
+  @Override
+  public void forEach(@NotNull BiConsumer<I, V> fn) {
+    by_id.forEach(fn);
   }
 }

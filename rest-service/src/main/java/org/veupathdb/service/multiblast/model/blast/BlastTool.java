@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast;
 
+import java.util.Optional;
+
 public enum BlastTool
 {
   BLASTN,
@@ -18,5 +20,18 @@ public enum BlastTool
   @Override
   public String toString() {
     return value();
+  }
+
+  public static Optional<BlastTool> fromString(String value) {
+    if (value == null)
+      return Optional.empty();
+
+    var up = value.toUpperCase();
+
+    for (var e : values())
+      if (e.name().equals(up))
+        return Optional.of(e);
+
+    return Optional.empty();
   }
 }

@@ -142,7 +142,7 @@ public class BlastnValidator extends BlastValidator
 
 
   public ErrorMap validateConfig(BlastnConfig config) {
-    var out = super.validateConfig(config);
+    var errors = super.validateConfig(config);
 
     if (config.getWordSize() < 4)
       errors.putError(JsonKeys.WORD_SIZE, "word size must be 4 or greater");
@@ -153,17 +153,17 @@ public class BlastnValidator extends BlastValidator
     if (config.getReward() < 0)
       errors.putError(JsonKeys.REWARD, "reward cannot be less than 0");
 
-    if (config.getSubject() != null && forbidSubject())
+    if (config.getSubject() != null && forbidSubject(config))
       errors.putError(JsonKeys.SUBJECT, ErrSubjectCompatibility);
 
-    if (config.getSubjectLoc() != null && forbidSubject())
+    if (config.getSubjectLoc() != null && forbidSubject(config))
       errors.putError(JsonKeys.SUBJECT, ErrSubjectCompatibility);
 
     if (config.getNumDescriptions() != null) {
       if (config.getNumDescriptions() < 0)
         errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrLessThanZero);
 
-      if (config.getOutFmt().hasFormat() && outFmt.getFormat().getValue() > 4)
+      if (config.getOutFmt().hasFormat() && config.getOutFmt().getFormat().getValue() > 4)
         errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrOnlyForFmtLte4);
 
       if (config.getMaxTargetSeqs() != null)
@@ -178,34 +178,38 @@ public class BlastnValidator extends BlastValidator
         errors.putError(JsonKeys.NUM_ALIGNMENTS, ErrForbidWithMaxTargetSeqs);
     }
 
-    if (config.getSortHits() != null && outFmt.hasFormat() && outFmt.getFormat().getValue() > 4)
+    if (config.getSortHits() != null
+      && config.getOutFmt().hasFormat()
+      && config.getOutFmt().getFormat().getValue() > 4)
       errors.putError(JsonKeys.SORT_HITS, ErrOnlyForFmtLte4);
 
-    if (config.getSortHsps() != null && outFmt.hasFormat() && outFmt.getFormat().getValue() > 1)
+    if (config.getSortHsps() != null
+      && config.getOutFmt().hasFormat()
+      && config.getOutFmt().getFormat().getValue() > 1)
       errors.putError(JsonKeys.SORT_HSPS, ErrOnlyForPairwise);
 
-    if (config.getGiList() != null && forbidGiList())
+    if (config.getGiList() != null && forbidGiList(config))
       errors.putError(JsonKeys.GI_LIST, ErrForbidGiList);
 
-    if (config.getSeqIdList() != null && forbidSeqIdList())
+    if (config.getSeqIdList() != null && forbidSeqIdList(config))
       errors.putError(JsonKeys.SEQ_ID_LIST, ErrForbidSeqIdList);
 
-    if (config.getNegativeGiList() != null && forbidNegGiList())
+    if (config.getNegativeGiList() != null && forbidNegGiList(config))
       errors.putError(JsonKeys.NEGATIVE_GI_LIST, ErrForbidNegativeGiList);
 
-    if (config.getNegativeSeqIdList() != null && forbidNegSeqIdList())
+    if (config.getNegativeSeqIdList() != null && forbidNegSeqIdList(config))
       errors.putError(JsonKeys.NEGATIVE_SEQ_ID_LIST, ErrForbidNegativeSeqIdList);
 
-    if (config.getTaxIds() != null && forbidTaxIds())
+    if (config.getTaxIds() != null && forbidTaxIds(config))
       errors.putError(JsonKeys.TAX_IDS, ErrForbidTaxIds);
 
-    if (config.getNegativeTaxIds() != null && forbidNegativeTaxIds())
+    if (config.getNegativeTaxIds() != null && forbidNegativeTaxIds(config))
       errors.putError(JsonKeys.TAX_IDS, ErrForbidNegativeTaxIds);
 
-    if (config.getTaxIdList() != null && forbidTaxIdList())
+    if (config.getTaxIdList() != null && forbidTaxIdList(config))
       errors.putError(JsonKeys.TAX_IDS, ErrForbidTaxIdList);
 
-    if (config.getNegativeTaxIdList() != null && forbidNegativeTaxIdList())
+    if (config.getNegativeTaxIdList() != null && forbidNegativeTaxIdList(config))
       errors.putError(JsonKeys.TAX_IDS, ErrForbidNegativeTaxIdList);
 
     if (config.getEntrezQuery() != null && remote == null || !remote)
@@ -232,126 +236,126 @@ public class BlastnValidator extends BlastValidator
   static boolean forbidGiList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getSeqIdList(),
-      taxIds,
-      taxIdList,
-      negativeGiList,
-      negativeSeqIdList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidSeqIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
-      taxIds,
-      taxIdList,
-      negativeGiList,
-      negativeSeqIdList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getGiList(),
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidNegGiList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIds,
-      taxIdList,
-      negativeSeqIdList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidTaxIds(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIdList,
-      negativeSeqIdList,
-      negativeGiList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIdList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidNegativeTaxIds(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIds,
-      taxIdList,
-      negativeSeqIdList,
-      negativeGiList,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidTaxIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIds,
-      negativeSeqIdList,
-      negativeGiList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidNegativeTaxIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIds,
-      taxIdList,
-      negativeSeqIdList,
-      negativeGiList,
-      negativeTaxIds,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeSeqIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeTaxIds(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidNegSeqIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      taxIds,
-      taxIdList,
-      negativeGiList,
-      negativeTaxIds,
-      negativeTaxIdList,
-      subject,
-      subjectLoc
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeGiList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
+      config.getSubject(),
+      config.getSubjectLoc()
     );
   }
 
   static boolean forbidSubject(BlastnConfig config) {
     // FIXME: DB is not actually used
     return db != null || forbidList(
-      giList,
+      config.getGiList(),
       config.getSeqIdList(),
-      negativeGiList,
-      negativeSeqIdList,
-      taxIds,
-      taxIdList,
-      negativeTaxIds,
-      negativeTaxIdList,
+      config.getNegativeGiList(),
+      config.getNegativeSeqIdList(),
+      config.getTaxIds(),
+      config.getTaxIdList(),
+      config.getNegativeTaxIds(),
+      config.getNegativeTaxIdList(),
       dbSoftMask,
       dbHardMask
     );

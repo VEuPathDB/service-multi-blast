@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast;
 
+import java.util.Optional;
+
 public enum BlastxTask
 {
   BLASTX("blastx"),
@@ -19,6 +21,14 @@ public enum BlastxTask
 
   public static BlastxTask getDefault() {
     return def;
+  }
+
+  public static Optional<BlastxTask> fromString(String value) {
+    for (var e : values())
+      if (e.value.equals(value))
+        return Optional.of(e);
+
+    return Optional.empty();
   }
 
   @Override
