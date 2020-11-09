@@ -1,9 +1,13 @@
 package org.veupathdb.service.multiblast;
 
 import org.veupathdb.lib.container.jaxrs.config.Options;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.lib.container.jaxrs.server.Server;
 import org.veupathdb.service.multiblast.db.PgDbMan;
+import org.veupathdb.service.multiblast.model.mapping.BlastTools;
+import org.veupathdb.service.multiblast.service.repo.SelectTasks;
+import org.veupathdb.service.multiblast.service.repo.SelectTools;
 
 public class Main extends Server {
   public static final Config config = new Config();
@@ -29,7 +33,19 @@ public class Main extends Server {
 
   @Override
   protected void postCliParse(Options opts) {
+    var log = LogProvider.logger(getClass());
+
+    log.info("Initializing service DB connection.");
     PgDbMan.initialize((Config) opts);
+
+    log.info("Populating blast config cache.");
+    try {
+      new SelectTools().execute();
+      new SelectTasks(BlastTools.getInstance()).execute();
+    } catch (Exception e) {
+      log.fatal("Failed to load blast config cache.", e);
+      Runtime.getRuntime().exit(1);
+    }
   }
 
   @Override

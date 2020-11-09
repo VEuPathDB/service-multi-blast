@@ -20,8 +20,10 @@ public enum QueryStrand
     return value();
   }
 
-  @NotNull
-  public static Optional<QueryStrand> fromString(@NotNull String value) {
+  public static Optional<QueryStrand> fromString(String value) {
+    if (value == null)
+      return Optional.empty();
+
     value = value.toUpperCase();
 
     for (var e : values())
@@ -30,5 +32,4 @@ public enum QueryStrand
 
     return Optional.empty();
   }
-
 }
