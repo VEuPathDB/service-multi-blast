@@ -40,6 +40,13 @@ class Column
         ToolID = "tool_id",
         Name   = "name";
     }
+
+    static class Tools
+    {
+      static final String
+        ToolID = "tool_id",
+        Name   = "name";
+    }
   }
 }
 
@@ -102,7 +109,7 @@ class SQL
     return loader.udpate(path).orElseThrow(makeError("update", path));
   }
 
-  private static Supplier< RuntimeException > makeError(String mode, String path) {
+  private static Supplier<RuntimeException> makeError(String mode, String path) {
     return () -> new RuntimeException(String.format(
       "Failed to load query main/resources/sql/%s/%s.sql",
       mode,

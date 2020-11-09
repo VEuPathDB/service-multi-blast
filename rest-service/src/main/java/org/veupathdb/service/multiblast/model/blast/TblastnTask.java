@@ -23,16 +23,16 @@ public enum TblastnTask
     return def;
   }
 
+  @Override
+  public String toString() {
+    return value;
+  }
+
   public static Optional<TblastnTask> fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))
         return Optional.of(e);
 
     return Optional.empty();
-  }
-
-  @Override
-  public String toString() {
-    return value;
   }
 }
