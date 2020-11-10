@@ -22,4 +22,12 @@ public class QueryLocation
   public String toString() {
     return start + "-" + stop;
   }
+
+  public static QueryLocation fromString(String value) {
+    var pos = value.indexOf('-');
+    return new QueryLocation(
+      Integer.parseInt(value.substring(0, pos)),
+      Integer.parseInt(value.substring(pos+1))
+    );
+  }
 }

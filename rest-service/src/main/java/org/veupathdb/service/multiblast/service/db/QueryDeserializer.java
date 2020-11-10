@@ -45,7 +45,6 @@ public class QueryDeserializer
   @Target({ METHOD })
   @Retention(RUNTIME)
   public @interface DbColumn {
-    @NotNull
     String name();
     Converter converter = null;
   }

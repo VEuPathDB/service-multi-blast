@@ -117,6 +117,10 @@ public class OutFormat implements Validatable, CLISerializable
 //      args.append(DEFAULT_FIELDS).append(' ');
   }
 
+  public static OutFormat fromString(String value) {
+    throw new RuntimeException("lol");
+  }
+
   private boolean isCustomizableFormat() {
     return switch (format) {
       case TABULAR, TABULAR_WITH_COMMENTS, CSV, SAM -> true;
@@ -134,4 +138,5 @@ public class OutFormat implements Validatable, CLISerializable
   private String jsonKey(String field) {
     return JsonKeys.OUT_FMT + "." + field;
   }
+
 }

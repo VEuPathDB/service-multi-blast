@@ -30,4 +30,8 @@ public enum HitSorting
   public String toString() {
     return String.valueOf(value);
   }
+
+  public static HitSorting fromString(String value) {
+    return HitSorting.values()[Integer.parseInt(value)];
+  }
 }
