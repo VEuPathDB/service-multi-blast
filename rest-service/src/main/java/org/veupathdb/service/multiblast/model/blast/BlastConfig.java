@@ -12,12 +12,12 @@ public class BlastConfig implements CLISerializable, Validatable
   private String        dbName;
   private Byte          dbSize;
   private String        entrezQuery;
-  private Double        eValue;
+  private Double        expectValue;
   private File          exportSearchStrategy;
   private Boolean       html;
   private File          importSearchStrategy;
   private Integer       lineLength;
-  private Boolean       lowerCaseMasking;
+  private Boolean       lowercaseMasking;
   private Integer       maxHSPs;
   private Integer       maxTargetSequences;
   private Integer       numDescriptions;
@@ -43,232 +43,261 @@ public class BlastConfig implements CLISerializable, Validatable
     return dbName;
   }
 
-  public void setDbName(String dbName) {
+  public BlastConfig setDbName(String dbName) {
     this.dbName = dbName;
+    return this;
   }
 
   public Byte getDbSize() {
     return dbSize;
   }
 
-  public void setDbSize(Byte dbSize) {
+  public BlastConfig setDbSize(Byte dbSize) {
     this.dbSize = dbSize;
+    return this;
   }
 
   public String getEntrezQuery() {
     return entrezQuery;
   }
 
-  public void setEntrezQuery(String entrezQuery) {
+  public BlastConfig setEntrezQuery(String entrezQuery) {
     this.entrezQuery = entrezQuery;
+    return this;
   }
 
-  public Double geteValue() {
-    return eValue;
+  public Double getExpectValue() {
+    return expectValue;
   }
 
-  public void seteValue(Double eValue) {
-    this.eValue = eValue;
+  public BlastConfig setExpectValue(Double expectValue) {
+    this.expectValue = expectValue;
+    return this;
   }
 
   public File getExportSearchStrategy() {
     return exportSearchStrategy;
   }
 
-  public void setExportSearchStrategy(File exportSearchStrategy) {
+  public BlastConfig setExportSearchStrategy(File exportSearchStrategy) {
     this.exportSearchStrategy = exportSearchStrategy;
+    return this;
   }
 
   public Boolean getHtml() {
     return html;
   }
 
-  public void setHtml(Boolean html) {
+  public BlastConfig setHtml(Boolean html) {
     this.html = html;
+    return this;
   }
 
   public File getImportSearchStrategy() {
     return importSearchStrategy;
   }
 
-  public void setImportSearchStrategy(File importSearchStrategy) {
+  public BlastConfig setImportSearchStrategy(File importSearchStrategy) {
     this.importSearchStrategy = importSearchStrategy;
+    return this;
   }
 
   public Integer getLineLength() {
     return lineLength;
   }
 
-  public void setLineLength(Integer lineLength) {
+  public BlastConfig setLineLength(Integer lineLength) {
     this.lineLength = lineLength;
+    return this;
   }
 
-  public Boolean getLowerCaseMasking() {
-    return lowerCaseMasking;
+  public Boolean getLowercaseMasking() {
+    return lowercaseMasking;
   }
 
-  public void setLowerCaseMasking(Boolean lowerCaseMasking) {
-    this.lowerCaseMasking = lowerCaseMasking;
+  public BlastConfig setLowercaseMasking(Boolean lowercaseMasking) {
+    this.lowercaseMasking = lowercaseMasking;
+    return this;
   }
 
   public Integer getMaxHSPs() {
     return maxHSPs;
   }
 
-  public void setMaxHSPs(Integer maxHSPs) {
+  public BlastConfig setMaxHSPs(Integer maxHSPs) {
     this.maxHSPs = maxHSPs;
+    return this;
   }
 
   public Integer getMaxTargetSequences() {
     return maxTargetSequences;
   }
 
-  public void setMaxTargetSequences(Integer maxTargetSequences) {
+  public BlastConfig setMaxTargetSequences(Integer maxTargetSequences) {
     this.maxTargetSequences = maxTargetSequences;
+    return this;
   }
 
   public Integer getNumDescriptions() {
     return numDescriptions;
   }
 
-  public void setNumDescriptions(Integer numDescriptions) {
+  public BlastConfig setNumDescriptions(Integer numDescriptions) {
     this.numDescriptions = numDescriptions;
+    return this;
   }
 
   public Integer getNumAlignments() {
     return numAlignments;
   }
 
-  public void setNumAlignments(Integer numAlignments) {
+  public BlastConfig setNumAlignments(Integer numAlignments) {
     this.numAlignments = numAlignments;
+    return this;
   }
 
   public Byte getNumThreads() {
     return numThreads;
   }
 
-  public void setNumThreads(Byte numThreads) {
+  public BlastConfig setNumThreads(Byte numThreads) {
     this.numThreads = numThreads;
+    return this;
   }
 
   public File getOut() {
     return out;
   }
 
-  public void setOut(File out) {
+  public BlastConfig setOut(File out) {
     this.out = out;
+    return this;
   }
 
   public File getQuery() {
     return query;
   }
 
-  public void setQuery(File query) {
+  public BlastConfig setQuery(File query) {
     this.query = query;
+    return this;
   }
 
   public QueryLocation getQueryLoc() {
     return queryLoc;
   }
 
-  public void setQueryLoc(QueryLocation queryLoc) {
+  public BlastConfig setQueryLoc(QueryLocation queryLoc) {
     this.queryLoc = queryLoc;
+    return this;
   }
 
   public Boolean getRemote() {
     return remote;
   }
 
-  public void setRemote(Boolean remote) {
+  public BlastConfig setRemote(Boolean remote) {
     this.remote = remote;
+    return this;
   }
 
   public Integer getSearchSpace() {
     return searchSpace;
   }
 
-  public void setSearchSpace(Integer searchSpace) {
+  public BlastConfig setSearchSpace(Integer searchSpace) {
     this.searchSpace = searchSpace;
+    return this;
   }
 
   public Boolean getShowGIs() {
     return showGIs;
   }
 
-  public void setShowGIs(Boolean showGIs) {
+  public BlastConfig setShowGIs(Boolean showGIs) {
     this.showGIs = showGIs;
+    return this;
   }
 
   public Boolean getSoftMasking() {
     return softMasking;
   }
 
-  public void setSoftMasking(Boolean softMasking) {
+  public BlastConfig setSoftMasking(Boolean softMasking) {
     this.softMasking = softMasking;
+    return this;
   }
 
   public HitSorting getSortHits() {
     return sortHits;
   }
 
-  public void setSortHits(HitSorting sortHits) {
+  public BlastConfig setSortHits(HitSorting sortHits) {
     this.sortHits = sortHits;
+    return this;
   }
 
   public HspSorting getSortHsps() {
     return sortHsps;
   }
 
-  public void setSortHsps(HspSorting sortHsps) {
+  public BlastConfig setSortHsps(HspSorting sortHsps) {
     this.sortHsps = sortHsps;
+    return this;
   }
 
   public Integer getWindowSize() {
     return windowSize;
   }
 
-  public void setWindowSize(Integer windowSize) {
+  public BlastConfig setWindowSize(Integer windowSize) {
     this.windowSize = windowSize;
+    return this;
   }
 
   public Boolean getVersion() {
     return version;
   }
 
-  public void setVersion(Boolean version) {
+  public BlastConfig setVersion(Boolean version) {
     this.version = version;
+    return this;
   }
 
   public Double getxDropUngap() {
     return xDropUngap;
   }
 
-  public void setxDropUngap(Double xDropUngap) {
+  public BlastConfig setxDropUngap(Double xDropUngap) {
     this.xDropUngap = xDropUngap;
+    return this;
   }
 
   public OutFormat getOutFormat() {
     return outFormat;
   }
 
-  public void setOutFormat(OutFormat outFormat) {
+  public BlastConfig setOutFormat(OutFormat outFormat) {
     this.outFormat = outFormat;
+    return this;
   }
 
   public Double getQueryCoverageHSPPercent() {
     return queryCoverageHSPPercent;
   }
 
-  public void setQueryCoverageHSPPercent(Double queryCoverageHSPPercent) {
+  public BlastConfig setQueryCoverageHSPPercent(Double queryCoverageHSPPercent) {
     this.queryCoverageHSPPercent = queryCoverageHSPPercent;
+    return this;
   }
 
   public Boolean getParseDefLines() {
     return parseDefLines;
   }
 
-  public void setParseDefLines(Boolean parseDefLines) {
+  public BlastConfig setParseDefLines(Boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
+    return this;
   }
 
   @Override

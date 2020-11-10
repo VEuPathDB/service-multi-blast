@@ -48,6 +48,12 @@ class Column
         Name   = "name";
     }
   }
+
+  class Misc
+  {
+    static final String
+      ConfigValues = "config_values";
+  }
 }
 
 class SQL

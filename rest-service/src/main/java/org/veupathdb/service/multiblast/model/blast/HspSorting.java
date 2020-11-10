@@ -30,4 +30,8 @@ public enum HspSorting
   public String toString() {
     return String.valueOf(value);
   }
+
+  public static HspSorting fromString(String value) {
+    return HspSorting.values()[Integer.parseInt(value)];
+  }
 }

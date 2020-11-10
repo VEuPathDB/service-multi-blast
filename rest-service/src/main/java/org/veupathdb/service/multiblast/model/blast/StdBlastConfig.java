@@ -2,7 +2,7 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.io.File;
 
-class StdBlastConfig extends BlastConfig
+public class StdBlastConfig extends BlastConfig
 {
   private String        dbSoftMask;
   private String        dbHardMask;
@@ -22,103 +22,116 @@ class StdBlastConfig extends BlastConfig
     return dbSoftMask;
   }
 
-  public void setDbSoftMask(String dbSoftMask) {
+  public StdBlastConfig setDbSoftMask(String dbSoftMask) {
     this.dbSoftMask = dbSoftMask;
+    return this;
   }
 
   public String getDbHardMask() {
     return dbHardMask;
   }
 
-  public void setDbHardMask(String dbHardMask) {
+  public StdBlastConfig setDbHardMask(String dbHardMask) {
     this.dbHardMask = dbHardMask;
+    return this;
   }
 
   public File getGiList() {
     return giList;
   }
 
-  public void setGiList(File giList) {
+  public StdBlastConfig setGiList(File giList) {
     this.giList = giList;
+    return this;
   }
 
   public File getNegativeGiList() {
     return negativeGiList;
   }
 
-  public void setNegativeGiList(File negativeGiList) {
+  public StdBlastConfig setNegativeGiList(File negativeGiList) {
     this.negativeGiList = negativeGiList;
+    return this;
   }
 
   public File getSequenceIdList() {
     return sequenceIdList;
   }
 
-  public void setSequenceIdList(File sequenceIdList) {
+  public StdBlastConfig setSequenceIdList(File sequenceIdList) {
     this.sequenceIdList = sequenceIdList;
+    return this;
   }
 
   public File getNegativeSequenceIdList() {
     return negativeSequenceIdList;
   }
 
-  public void setNegativeSequenceIdList(File negativeSequenceIdList) {
+  public StdBlastConfig setNegativeSequenceIdList(File negativeSequenceIdList) {
     this.negativeSequenceIdList = negativeSequenceIdList;
+    return this;
   }
 
   public File getTaxIdList() {
     return taxIdList;
   }
 
-  public void setTaxIdList(File taxIdList) {
+  public StdBlastConfig setTaxIdList(File taxIdList) {
     this.taxIdList = taxIdList;
+    return this;
   }
 
   public File getNegativeTaxIdList() {
     return negativeTaxIdList;
   }
 
-  public void setNegativeTaxIdList(File negativeTaxIdList) {
+  public StdBlastConfig setNegativeTaxIdList(File negativeTaxIdList) {
     this.negativeTaxIdList = negativeTaxIdList;
+    return this;
   }
 
   public File getSubject() {
     return subject;
   }
 
-  public void setSubject(File subject) {
+  public StdBlastConfig setSubject(File subject) {
     this.subject = subject;
+    return this;
   }
 
   public QueryLocation getSubjectLocation() {
     return subjectLocation;
   }
 
-  public void setSubjectLocation(QueryLocation subjectLocation) {
+  public StdBlastConfig setSubjectLocation(QueryLocation subjectLocation) {
     this.subjectLocation = subjectLocation;
+    return this;
   }
 
   public Integer getWordSize() {
     return wordSize;
   }
 
-  public void setWordSize(Integer wordSize) {
+  public StdBlastConfig setWordSize(Integer wordSize) {
     this.wordSize = wordSize;
+    return this;
   }
 
   public String[] getTaxIds() {
     return taxIds;
   }
 
-  public void setTaxIds(String[] taxIds) {
+  public StdBlastConfig setTaxIds(String[] taxIds) {
     this.taxIds = taxIds;
+    return this;
   }
 
   public String[] getNegativeTaxIds() {
     return negativeTaxIds;
   }
 
-  public void setNegativeTaxIds(String[] negativeTaxIds) {
+  public StdBlastConfig setNegativeTaxIds(String[] negativeTaxIds) {
     this.negativeTaxIds = negativeTaxIds;
+    return this;
   }
 }
