@@ -32,7 +32,7 @@ public class BlastConfig implements CLISerializable, Validatable
   private Boolean       softMasking;
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
-  private Integer       windowsSize;
+  private Integer       windowSize;
   private Boolean       version;
   private Double        xDropUngap;
   private OutFormat     outFormat;
@@ -223,12 +223,12 @@ public class BlastConfig implements CLISerializable, Validatable
     this.sortHsps = sortHsps;
   }
 
-  public Integer getWindowsSize() {
-    return windowsSize;
+  public Integer getWindowSize() {
+    return windowSize;
   }
 
-  public void setWindowsSize(Integer windowsSize) {
-    this.windowsSize = windowsSize;
+  public void setWindowSize(Integer windowSize) {
+    this.windowSize = windowSize;
   }
 
   public Boolean getVersion() {

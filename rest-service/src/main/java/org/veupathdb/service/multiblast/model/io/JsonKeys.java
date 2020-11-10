@@ -17,6 +17,7 @@ public final class JsonKeys
     DUST                       = "dust",
     E_VALUE                    = "eValue",
     ENABLED                    = "enabled",
+    EntrezQuery                = "entrezQuery",
     FIELDS                     = "fields",
     FILTERING_DB               = "filteringDb",
     FORMAT                     = "format",

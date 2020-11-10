@@ -22,7 +22,6 @@ public class Resources extends ContainerResources {
   @Override
   protected Object[] resources() {
     return new Object[] {
-      HelloWorld.class,
     };
   }
 }

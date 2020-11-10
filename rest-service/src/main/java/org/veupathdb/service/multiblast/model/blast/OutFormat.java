@@ -5,6 +5,7 @@ import java.util.*;
 import javax.validation.constraints.NotNull;
 
 import org.veupathdb.service.multiblast.model.CLISerializable;
+import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
@@ -85,8 +86,8 @@ public class OutFormat implements Validatable, CLISerializable
   }
 
   @NotNull
-  public Map<String, List<String>> validate() {
-    var errors = new HashMap<String, List<String>>();
+  public ErrorMap validate() {
+    var errors = new ErrorMap();
 
     if (format != null && !fields.isEmpty() && !isCustomizableFormat())
       errors.put(jsonKey(JsonKeys.FORMAT), singletonList(ERR_FIELDS_WRONG_FORMAT));
@@ -97,24 +98,23 @@ public class OutFormat implements Validatable, CLISerializable
   }
 
   public void toArgs(CliBuilder args) {
-    var hasFmt = format != null;
-    var hasDel = delim != null;
-    var hasFel = !fields.isEmpty();
-
-    if (!hasFmt && !hasDel && !hasFel)
-      return;
-
-    args.append(OptionName.OUT_FORMAT)
-      .append("='")
-      .append((hasFmt ? format : ReportFormatType.PAIRWISE).toString())
-      .append(' ');
-    if (hasDel)
-      args.append(DELIM_PREFIX).append(delim).append(' ');
-    if (hasFel)
-      for (var field : fields)
-        args.append(field.getValue()).append(' ');
-    else
-      args.append(DEFAULT_FIELDS).append(' ');
+//    var hasFmt = format != null;
+//    var hasDel = delim != null;
+//    var hasFel = !fields.isEmpty();
+//
+//    if (!hasFmt && !hasDel && !hasFel)
+//      return;
+//
+//    args.setNonNull(ToolOption.OutputFormat, format)
+//      .setNonNull(ToolOption);
+//
+//    if (hasDel)
+//      args.append(DELIM_PREFIX).append(delim).append(' ');
+//    if (hasFel)
+//      for (var field : fields)
+//        args.append(field.getValue()).append(' ');
+//    else
+//      args.append(DEFAULT_FIELDS).append(' ');
   }
 
   private boolean isCustomizableFormat() {
