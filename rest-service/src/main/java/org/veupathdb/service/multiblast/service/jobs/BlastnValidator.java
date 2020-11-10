@@ -9,20 +9,6 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 public class BlastnValidator extends BlastValidator
 {
   private static final String
-    ErrSubjectCompatibility    = "is incompatible with "
-    + JsonKeys.DB + ", "
-    + JsonKeys.GI_LIST + ", "
-    + JsonKeys.SEQ_ID_LIST + ", "
-    + JsonKeys.NEGATIVE_GI_LIST + ", "
-    + JsonKeys.NEGATIVE_SEQ_ID_LIST + ", "
-    + JsonKeys.TAX_IDS + ", "
-    + JsonKeys.TAX_ID_LIST + ", "
-    + JsonKeys.NEGATIVE_TAX_IDS + ", "
-    + JsonKeys.NEGATIVE_TAX_ID_LIST + ", "
-    + JsonKeys.DB_SOFT_MASK + ", and "
-    + JsonKeys.DB_HARD_MASK,
-    ErrLessThanZero            = "must be >= 0",
-    ErrLessThan1               = "must be >= 1",
     ErrForbidWithMaxTargetSeqs = "is incompatible with "
       + JsonKeys.MAX_TARGET_SEQS,
     ErrOnlyForFmtLte4          = "is incompatible with output formats other than "
@@ -32,114 +18,9 @@ public class BlastnValidator extends BlastValidator
       + ReportFormatType.FLAT_QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", or "
       + ReportFormatType.FLAT_QUERY_ANCHORED_WITHOUT_IDENTITIES,
     ErrOnlyForPairwise         = "is incompatible with formats other than "
-      + ReportFormatType.PAIRWISE.ioName(),
-    ErrForbidGiList            = makeListError(
-      "is incompatible with",
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidSeqIdList         = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidNegativeGiList    = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidNegativeSeqIdList = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidTaxIds            = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidNegativeTaxIds    = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidTaxIdList         = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.NEGATIVE_TAX_ID_LIST,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    ),
-    ErrForbidNegativeTaxIdList = makeListError(
-      "is incompatible with",
-      JsonKeys.GI_LIST,
-      JsonKeys.SEQ_ID_LIST,
-      JsonKeys.TAX_IDS,
-      JsonKeys.TAX_ID_LIST,
-      JsonKeys.NEGATIVE_GI_LIST,
-      JsonKeys.NEGATIVE_SEQ_ID_LIST,
-      JsonKeys.NEGATIVE_TAX_IDS,
-      JsonKeys.REMOTE,
-      JsonKeys.SUBJECT,
-      JsonKeys.SUBJECT_LOC
-    );
+      + ReportFormatType.PAIRWISE.ioName();
 
   private static BlastnValidator instance;
-
 
   public ErrorMap validateConfig(BlastnConfig config) {
     var errors = super.validateConfig(config);
@@ -154,72 +35,80 @@ public class BlastnValidator extends BlastValidator
       errors.putError(JsonKeys.REWARD, "reward cannot be less than 0");
 
     if (config.getSubject() != null && forbidSubject(config))
-      errors.putError(JsonKeys.SUBJECT, ErrSubjectCompatibility);
+      errors.putError(JsonKeys.SUBJECT, Err.SubjectCompatibility);
 
-    if (config.getSubjectLoc() != null && forbidSubject(config))
-      errors.putError(JsonKeys.SUBJECT, ErrSubjectCompatibility);
+    if (config.getSubjectLocation() != null && forbidSubject(config))
+      errors.putError(JsonKeys.SUBJECT, Err.SubjectCompatibility);
 
     if (config.getNumDescriptions() != null) {
       if (config.getNumDescriptions() < 0)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrLessThanZero);
+        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.LessThanZero);
 
-      if (config.getOutFmt().hasFormat() && config.getOutFmt().getFormat().getValue() > 4)
+      if (config.getOutFormat().hasFormat() && config.getOutFormat().getFormat().getValue() > 4)
         errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrOnlyForFmtLte4);
 
-      if (config.getMaxTargetSeqs() != null)
+      if (config.getMaxTargetSequences() != null)
         errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrForbidWithMaxTargetSeqs);
     }
 
     if (config.getNumAlignments() != null) {
       if (config.getNumAlignments() < 0)
-        errors.putError(JsonKeys.NUM_ALIGNMENTS, ErrLessThanZero);
+        errors.putError(JsonKeys.NUM_ALIGNMENTS, Err.LessThanZero);
 
-      if (config.getMaxTargetSeqs() != null)
+      if (config.getMaxTargetSequences() != null)
         errors.putError(JsonKeys.NUM_ALIGNMENTS, ErrForbidWithMaxTargetSeqs);
     }
 
     if (config.getSortHits() != null
-      && config.getOutFmt().hasFormat()
-      && config.getOutFmt().getFormat().getValue() > 4)
+      && config.getOutFormat().hasFormat()
+      && config.getOutFormat().getFormat().getValue() > 4)
       errors.putError(JsonKeys.SORT_HITS, ErrOnlyForFmtLte4);
 
     if (config.getSortHsps() != null
-      && config.getOutFmt().hasFormat()
-      && config.getOutFmt().getFormat().getValue() > 1)
+      && config.getOutFormat().hasFormat()
+      && config.getOutFormat().getFormat().getValue() > 1)
       errors.putError(JsonKeys.SORT_HSPS, ErrOnlyForPairwise);
 
     if (config.getGiList() != null && forbidGiList(config))
-      errors.putError(JsonKeys.GI_LIST, ErrForbidGiList);
+      errors.putError(JsonKeys.GI_LIST, Err.ForbidGiList);
 
-    if (config.getSeqIdList() != null && forbidSeqIdList(config))
-      errors.putError(JsonKeys.SEQ_ID_LIST, ErrForbidSeqIdList);
+    if (config.getSequenceIdList() != null && forbidSeqIdList(config))
+      errors.putError(JsonKeys.SEQ_ID_LIST, Err.ForbidSeqIdList);
 
     if (config.getNegativeGiList() != null && forbidNegGiList(config))
-      errors.putError(JsonKeys.NEGATIVE_GI_LIST, ErrForbidNegativeGiList);
+      errors.putError(JsonKeys.NEGATIVE_GI_LIST, Err.ForbidNegativeGiList);
 
-    if (config.getNegativeSeqIdList() != null && forbidNegSeqIdList(config))
-      errors.putError(JsonKeys.NEGATIVE_SEQ_ID_LIST, ErrForbidNegativeSeqIdList);
+    if (config.getNegativeSequenceIdList() != null && forbidNegSeqIdList(config))
+      errors.putError(JsonKeys.NEGATIVE_SEQ_ID_LIST, Err.ForbidNegativeSeqIdList);
 
     if (config.getTaxIds() != null && forbidTaxIds(config))
-      errors.putError(JsonKeys.TAX_IDS, ErrForbidTaxIds);
+      errors.putError(JsonKeys.TAX_IDS, Err.ForbidTaxIds);
 
     if (config.getNegativeTaxIds() != null && forbidNegativeTaxIds(config))
-      errors.putError(JsonKeys.TAX_IDS, ErrForbidNegativeTaxIds);
+      errors.putError(JsonKeys.TAX_IDS, Err.ForbidNegativeTaxIds);
 
     if (config.getTaxIdList() != null && forbidTaxIdList(config))
-      errors.putError(JsonKeys.TAX_IDS, ErrForbidTaxIdList);
+      errors.putError(JsonKeys.TAX_IDS, Err.ForbidTaxIdList);
 
     if (config.getNegativeTaxIdList() != null && forbidNegativeTaxIdList(config))
-      errors.putError(JsonKeys.TAX_IDS, ErrForbidNegativeTaxIdList);
+      errors.putError(JsonKeys.TAX_IDS, Err.ForbidNegativeTaxIdList);
 
-    if (config.getEntrezQuery() != null && remote == null || !remote)
-      errors.putError(OptionName.ENTREZ_QUERY, ErrRequireRemote);
+    // The remote field must be present and set to "true" to use the entrezQuery
+    // field.
+    //
+    // You may ask something like "why not just default it to true when using
+    // this field?"  The remote flag is significant and requiring it forces the
+    // client to acknowledge that they actually want to run a remote query.
+    if (config.getEntrezQuery() != null && config.getRemote() == null || !config.getRemote())
+      errors.putError(OptionName.REMOTE, Err.RequireRemote);
 
-    if (config.getDbSoftMask() != null && forbidDbSoftMask())
-      errors.putError(OptionName.DB_SOFT_MASK, ErrForbidDbSoftMask);
+//    if (config.getDbSoftMask() != null && forbidDbSoftMask())
+//      errors.putError(OptionName.DB_SOFT_MASK, Err.ForbidDbSoftMask);
+//
+//    if (config.getDbHardMask() != null && forbidDbHardMask())
+//      errors.putError(OptionName.DB_HARD_MASK, Err.ForbidDbHardMask);
 
-    if (config.getDbHardMask() != null && forbidDbHardMask())
-      errors.putError(OptionName.DB_HARD_MASK, ErrForbidDbHardMask);
+    return null;
   }
 
   public static BlastnValidator getInstance() {
@@ -235,15 +124,15 @@ public class BlastnValidator extends BlastValidator
 
   static boolean forbidGiList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
       config.getNegativeGiList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
@@ -253,137 +142,119 @@ public class BlastnValidator extends BlastValidator
       config.getTaxIds(),
       config.getTaxIdList(),
       config.getNegativeGiList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidNegGiList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidTaxIds(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIdList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeGiList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidNegativeTaxIds(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeGiList(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidTaxIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeGiList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidNegativeTaxIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getNegativeGiList(),
       config.getNegativeTaxIds(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidNegSeqIdList(BlastnConfig config) {
     return (config.getRemote() != null && config.getRemote()) || forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
       config.getNegativeGiList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
       config.getSubject(),
-      config.getSubjectLoc()
+      config.getSubjectLocation()
     );
   }
 
   static boolean forbidSubject(BlastnConfig config) {
     // FIXME: DB is not actually used
-    return db != null || forbidList(
+    return /*db != null ||*/ forbidList(
       config.getGiList(),
-      config.getSeqIdList(),
+      config.getSequenceIdList(),
       config.getNegativeGiList(),
-      config.getNegativeSeqIdList(),
+      config.getNegativeSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
       config.getNegativeTaxIds(),
       config.getNegativeTaxIdList(),
-      dbSoftMask,
-      dbHardMask
+      config.getDbSoftMask(),
+      config.getDbHardMask()
     );
   }
 
-  static boolean forbidList(Object... vals) {
-    for (var obj : vals)
+  static boolean forbidList(Object... values) {
+    for (var obj : values)
       if (obj != null)
         return true;
 
     return false;
-  }
-
-  static String makeListError(String prefix, String... fields) {
-    var out  = new StringBuilder(prefix).append(' ');
-    var and  = fields.length - 2;
-    var last = fields.length - 1;
-
-    for (int i = 0; i < fields.length; i++) {
-      out.append(fields[i]);
-
-      if (i == and) {
-        out.append(", and ");
-      } else if (i < last) {
-        out.append(", ");
-      }
-    }
-
-    return out.toString();
   }
 }

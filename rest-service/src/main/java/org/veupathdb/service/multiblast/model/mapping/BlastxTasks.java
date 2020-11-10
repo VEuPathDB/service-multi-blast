@@ -1,5 +1,8 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
+import java.util.Objects;
+import javax.validation.constraints.NotNull;
+
 import org.veupathdb.service.multiblast.model.blast.BlastxTask;
 
 public class BlastxTasks extends EnumMap<Byte, BlastxTask>
@@ -15,5 +18,13 @@ public class BlastxTasks extends EnumMap<Byte, BlastxTask>
       instance = new BlastxTasks();
 
     return instance;
+  }
+
+  @Override
+  public EnumMapping<Byte, BlastxTask> putRaw(Byte id, String value) {
+    Objects.requireNonNull(id);
+    Objects.requireNonNull(value);
+
+    return put(id, BlastxTask.fromString(value).orElseThrow());
   }
 }

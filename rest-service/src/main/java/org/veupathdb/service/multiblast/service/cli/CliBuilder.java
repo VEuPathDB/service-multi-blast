@@ -1,33 +1,39 @@
 package org.veupathdb.service.multiblast.service.cli;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
 public class CliBuilder
 {
+  private static final Pattern SingleQuotes = Pattern.compile("('+)");
+
   private final Map<ToolOption, Object[]> params;
 
   public CliBuilder() {
-    params = new HashMap<>();
+    params = new LinkedHashMap<>();
   }
 
-  public CliBuilder set(ToolOption key, Object value) {
-    params.put(key, new Object[]{value});
+  public CliBuilder set(ToolOption key, Object... values) {
+    params.put(key, values);
     return this;
   }
 
-  public CliBuilder append(ToolOption key, Object value) {
+  public CliBuilder append(ToolOption key, Object... values) {
     var tmp = params.get(key);
 
     if (tmp != null) {
-      var t2 = Arrays.copyOf(tmp, tmp.length + 1);
-      t2[tmp.length] = value;
+      var t2 = new Object[tmp.length + values.length];
+      System.arraycopy(tmp, 0, t2, 0, tmp.length);
+      System.arraycopy(values, 0, t2, tmp.length, values.length);
       params.put(key, t2);
     } else {
-      params.put(key, new Object[]{value});
+      params.put(key, values);
     }
 
     return this;
@@ -45,5 +51,71 @@ public class CliBuilder
       return this.append(key, value);
 
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return toComponentStream().collect(Collectors.joining(" "));
+  }
+
+  public String[] toArgArray() {
+    return toComponentStream().toArray(String[]::new);
+  }
+
+  public Stream<String> toComponentStream() {
+    return params.entrySet()
+      .stream()
+      .map(e -> e.getKey().getFlag() + '=' + Arrays.stream(e.getValue())
+        .map(Object::toString)
+        .map(CliBuilder::escape)
+        .collect(Collectors.joining(",", "'", "'")));
+  }
+
+  public static String escape(String in) {
+    if (in == null || in.isBlank())
+      return "";
+
+    var out   = new StringBuilder();
+    var match = SingleQuotes.matcher(in);
+    var last  = 0;
+
+    while (match.find()) {
+      out.append(in, last, match.start());
+      last = match.end();
+      out.append("'\"").append(match.group(1)).append("\"'");
+    }
+    out.append(in.substring(last));
+
+    return out.toString();
+  }
+
+  public static String joinArgs(Object[] vals) {
+    if (vals == null || vals.length == 0)
+      return "";
+
+    if (vals.length == 1 && vals[0] == null)
+      return "";
+
+    var out = new StringBuilder();
+    var started = false;
+
+    for (var i = 0; i < vals.length; i++) {
+      if (vals[i] == null)
+        continue;
+
+      if (out.length() == 0)
+        out.append("='");
+
+      if (i > 0 && started)
+        out.append(',');
+
+      out.append(escape(vals[i].toString().trim()));
+      started = true;
+    }
+
+    if (out.length() > 0)
+      out.append('\'');
+
+    return out.toString();
   }
 }
