@@ -1,5 +1,6 @@
 package org.veupathdb.service.multiblast.service.jobs;
 
+import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 class Err
@@ -9,7 +10,7 @@ class Err
     LessThanOne  = "must be >= 1",
 
   // Base Blast
-  RequireRemote = "this field must be 'true' when using the \""+ JsonKeys.EntrezQuery +"\" field",
+  RequireRemote = "this field must be 'true' when using the \"" + JsonKeys.EntrezQuery + "\" field",
 
   // Std Blast
   SubjectCompatibility = makeListError(
@@ -137,7 +138,19 @@ class Err
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
     JsonKeys.SUBJECT_LOC
-  );
+  ),
+
+  OnlyForFmtLte4 = "is incompatible with output formats other than "
+    + ReportFormatType.PAIRWISE.ioName() + ", "
+    + ReportFormatType.QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", "
+    + ReportFormatType.QUERY_ANCHORED_WITHOUT_IDENTITIES.ioName() + ", "
+    + ReportFormatType.FLAT_QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", or "
+    + ReportFormatType.FLAT_QUERY_ANCHORED_WITHOUT_IDENTITIES,
+
+  ForbidWithMaxTargetSeqs = "is incompatible with " + JsonKeys.MAX_TARGET_SEQS,
+
+  OnlyForPairwise = "is incompatible with formats other than "
+    + ReportFormatType.PAIRWISE.ioName();
 
 
   static String makeListError(String prefix, String... fields) {
