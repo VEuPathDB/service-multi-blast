@@ -3,23 +3,10 @@ package org.veupathdb.service.multiblast.service.jobs;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.OptionName;
-import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 public class BlastnValidator extends BlastValidator
 {
-  private static final String
-    ErrForbidWithMaxTargetSeqs = "is incompatible with "
-      + JsonKeys.MAX_TARGET_SEQS,
-    ErrOnlyForFmtLte4          = "is incompatible with output formats other than "
-      + ReportFormatType.PAIRWISE.ioName() + ", "
-      + ReportFormatType.QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", "
-      + ReportFormatType.QUERY_ANCHORED_WITHOUT_IDENTITIES.ioName() + ", "
-      + ReportFormatType.FLAT_QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", or "
-      + ReportFormatType.FLAT_QUERY_ANCHORED_WITHOUT_IDENTITIES,
-    ErrOnlyForPairwise         = "is incompatible with formats other than "
-      + ReportFormatType.PAIRWISE.ioName();
-
   private static BlastnValidator instance;
 
   public ErrorMap validateConfig(BlastnConfig config) {
@@ -45,10 +32,10 @@ public class BlastnValidator extends BlastValidator
         errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.LessThanZero);
 
       if (config.getOutFormat().hasFormat() && config.getOutFormat().getFormat().getValue() > 4)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrOnlyForFmtLte4);
+        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.OnlyForFmtLte4);
 
       if (config.getMaxTargetSequences() != null)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, ErrForbidWithMaxTargetSeqs);
+        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.ForbidWithMaxTargetSeqs);
     }
 
     if (config.getNumAlignments() != null) {
@@ -56,18 +43,18 @@ public class BlastnValidator extends BlastValidator
         errors.putError(JsonKeys.NUM_ALIGNMENTS, Err.LessThanZero);
 
       if (config.getMaxTargetSequences() != null)
-        errors.putError(JsonKeys.NUM_ALIGNMENTS, ErrForbidWithMaxTargetSeqs);
+        errors.putError(JsonKeys.NUM_ALIGNMENTS, Err.ForbidWithMaxTargetSeqs);
     }
 
     if (config.getSortHits() != null
       && config.getOutFormat().hasFormat()
       && config.getOutFormat().getFormat().getValue() > 4)
-      errors.putError(JsonKeys.SORT_HITS, ErrOnlyForFmtLte4);
+      errors.putError(JsonKeys.SORT_HITS, Err.OnlyForFmtLte4);
 
     if (config.getSortHsps() != null
       && config.getOutFormat().hasFormat()
       && config.getOutFormat().getFormat().getValue() > 1)
-      errors.putError(JsonKeys.SORT_HSPS, ErrOnlyForPairwise);
+      errors.putError(JsonKeys.SORT_HSPS, Err.OnlyForPairwise);
 
     if (config.getGiList() != null && forbidGiList(config))
       errors.putError(JsonKeys.GI_LIST, Err.ForbidGiList);
@@ -236,7 +223,7 @@ public class BlastnValidator extends BlastValidator
 
   static boolean forbidSubject(BlastnConfig config) {
     // FIXME: DB is not actually used
-    return /*db != null ||*/ forbidList(
+    return config.getDbName() != null || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getNegativeGiList(),

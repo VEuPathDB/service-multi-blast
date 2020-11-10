@@ -39,6 +39,7 @@ public class CliBuilder
     return this;
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public CliBuilder setNonNull(ToolOption key, Object value) {
     if (value != null)
       params.put(key, new Object[]{value});
@@ -46,6 +47,7 @@ public class CliBuilder
     return this;
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public CliBuilder appendNonNull(ToolOption key, Object value) {
     if (value != null)
       return this.append(key, value);
@@ -89,18 +91,18 @@ public class CliBuilder
     return out.toString();
   }
 
-  public static String joinArgs(Object[] vals) {
-    if (vals == null || vals.length == 0)
+  public static String joinArgs(Object[] values) {
+    if (values == null || values.length == 0)
       return "";
 
-    if (vals.length == 1 && vals[0] == null)
+    if (values.length == 1 && values[0] == null)
       return "";
 
     var out = new StringBuilder();
     var started = false;
 
-    for (var i = 0; i < vals.length; i++) {
-      if (vals[i] == null)
+    for (var i = 0; i < values.length; i++) {
+      if (values[i] == null)
         continue;
 
       if (out.length() == 0)
@@ -109,7 +111,7 @@ public class CliBuilder
       if (i > 0 && started)
         out.append(',');
 
-      out.append(escape(vals[i].toString().trim()));
+      out.append(escape(values[i].toString().trim()));
       started = true;
     }
 
