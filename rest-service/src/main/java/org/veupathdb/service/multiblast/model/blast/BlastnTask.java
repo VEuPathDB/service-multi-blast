@@ -34,6 +34,10 @@ public enum BlastnTask
     return Optional.empty();
   }
 
+  public static BlastnTask unsafeFromString(String value) {
+    return fromString(value).orElseThrow(IllegalArgumentException::new);
+  }
+
   @Override
   public String toString() {
     return value;

@@ -1,4 +1,5 @@
-/FgpUtil
+/build/
+/FgpUtil/
 .tools
 !/gradle/
 !/gradlew
