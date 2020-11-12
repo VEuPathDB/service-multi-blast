@@ -84,7 +84,7 @@ dependencies {
   implementation("com.zaxxer", "HikariCP", "3.4.5")
   implementation("org.postgresql", "postgresql", "42.2.18")
   implementation("io.vulpine.lib", "sql-import", "0.2.1")
-  implementation("io.vulpine.lib", "lib-query-util", "2.0.2")
+  implementation("io.vulpine.lib", "lib-query-util", "2.1.0")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")

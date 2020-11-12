@@ -23,4 +23,21 @@ public class Dust
   public short getLinker() {
     return linker;
   }
+
+  /**
+   * This method parses the input value, performing no validation checks.
+   *
+   * @param value Value to parse
+   *
+   * @return New Dust instance.
+   */
+  public static Dust unsafeFromString(String value) {
+    var split = value.split(" +");
+
+    return new Dust(
+      Short.parseShort(split[0]),
+      Short.parseShort(split[1]),
+      Short.parseShort(split[2])
+    );
+  }
 }

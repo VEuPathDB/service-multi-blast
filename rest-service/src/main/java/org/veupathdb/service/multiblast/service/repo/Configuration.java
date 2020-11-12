@@ -24,6 +24,7 @@ class Table
   static class Jobs
   {
     static final String
+      Config = "config",
       Jobs   = "jobs",
       Status = "status";
   }
@@ -49,7 +50,18 @@ class Column
     }
   }
 
-  class Misc
+  static class Job
+  {
+    static class Config
+    {
+      static final String
+        JobID    = "job_id",
+        OptionID = "option_id",
+        Value    = "value";
+    }
+  }
+
+  static class Misc
   {
     static final String
       ConfigValues = "config_values";
@@ -85,6 +97,8 @@ class SQL
 
     static class Job
     {
+      static final String
+        ConfigById = select(join(Schema.Jobs, Table.Jobs.Config, "by-id"));
     }
   }
 

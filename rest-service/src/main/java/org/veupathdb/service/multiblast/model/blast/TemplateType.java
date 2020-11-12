@@ -26,4 +26,8 @@ public enum TemplateType
 
     return Optional.empty();
   }
+
+  public static TemplateType unsafeFromString(String name) {
+    return fromString(name).orElseThrow(IllegalArgumentException::new);
+  }
 }

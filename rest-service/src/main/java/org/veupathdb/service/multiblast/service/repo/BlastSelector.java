@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.mapping.BlastOptions;
 
 abstract class BlastSelector<T extends BlastConfig>
 {
@@ -158,21 +159,13 @@ abstract class BlastSelector<T extends BlastConfig>
   protected T parseBlastConfig(ResultSet rs) throws Exception {
     var out = newBlastConfig();
 
-    // Unpack Normalized Config Options
-    var allConf = rs.getArray(Column.Misc.ConfigValues);
-
-    try(var ars1 = allConf.getResultSet()) {
-      while (ars1.next()) {
-        var confLine = ars1.getArray(1);
-        try (var ars2 = confLine.getResultSet()) {
-          ars2.next();
-          var key = ToolOption.unsafeFromString(ars2.getString(1));
-          ars2.next();
-          var val = ars2.getString(1);
-
-          parseBlastConfig(out, key, val);
-        }
-      }
+    while (rs.next()) {
+      parseBlastConfig(
+        out,
+        BlastOptions.getInstance()
+          .requireValue(rs.getShort(Column.Job.Config.OptionID)),
+        rs.getString(Column.Job.Config.Value)
+      );
     }
 
     return out;
