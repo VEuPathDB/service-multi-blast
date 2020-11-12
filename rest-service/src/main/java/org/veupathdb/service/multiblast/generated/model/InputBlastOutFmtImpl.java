@@ -8,11 +8,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "format",
+    "delim",
     "fields"
 })
 public class InputBlastOutFmtImpl implements InputBlastOutFmt {
   @JsonProperty("format")
   private InputBlastFormat format;
+
+  @JsonProperty("delim")
+  private String delim;
 
   @JsonProperty("fields")
   private List<InputBlastFmtField> fields;
@@ -25,6 +29,16 @@ public class InputBlastOutFmtImpl implements InputBlastOutFmt {
   @JsonProperty("format")
   public void setFormat(InputBlastFormat format) {
     this.format = format;
+  }
+
+  @JsonProperty("delim")
+  public String getDelim() {
+    return this.delim;
+  }
+
+  @JsonProperty("delim")
+  public void setDelim(String delim) {
+    this.delim = delim;
   }
 
   @JsonProperty("fields")

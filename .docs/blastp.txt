@@ -1,24 +1,9 @@
 USAGE
   blastp [-task task_name] 
-    
-    
-    
-    
-    
-    
-    
-    
     [-ipglist filename]
     [-negative_ipglist filename] 
-    
-    
-    
-    
-    
     [-gapopen open_penalty]
     [-gapextend extend_penalty]
-    
-    
     [-xdrop_gap float_value]
     [-xdrop_gap_final float_value]
     [-seg SEG_options]
@@ -28,8 +13,6 @@ USAGE
     [-best_hit_overhang float_value]
     [-best_hit_score_edge float_value]
     [-subject_besthit]  
-    
-    
     [-ungapped]
     [-comp_based_stats compo]
     [-use_sw_tback] 
