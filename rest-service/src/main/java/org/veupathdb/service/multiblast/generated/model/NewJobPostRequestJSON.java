@@ -30,4 +30,10 @@ public interface NewJobPostRequestJSON {
 
   @JsonProperty("config")
   void setConfig(InputBlastConfig config);
+
+  @JsonProperty("description")
+  String getDescription();
+
+  @JsonProperty("description")
+  void setDescription(String description);
 }

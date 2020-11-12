@@ -14,6 +14,12 @@ public interface InputBlastOutFmt {
   @JsonProperty("format")
   void setFormat(InputBlastFormat format);
 
+  @JsonProperty("delim")
+  String getDelim();
+
+  @JsonProperty("delim")
+  void setDelim(String delim);
+
   @JsonProperty("fields")
   List<InputBlastFmtField> getFields();
 

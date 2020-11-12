@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "site",
     "organism",
     "target-type",
-    "config"
+    "config",
+    "description"
 })
 public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
   @JsonProperty("site")
@@ -23,6 +24,9 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
 
   @JsonProperty("config")
   private InputBlastConfig config;
+
+  @JsonProperty("description")
+  private String description;
 
   @JsonProperty("site")
   public String getSite() {
@@ -62,5 +66,15 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
   @JsonProperty("config")
   public void setConfig(InputBlastConfig config) {
     this.config = config;
+  }
+
+  @JsonProperty("description")
+  public String getDescription() {
+    return this.description;
+  }
+
+  @JsonProperty("description")
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

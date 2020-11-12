@@ -10,8 +10,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
     "tool",
     "query",
-    "query_loc",
+    "queryLoc",
     "eValue",
+    "lineLength",
+    "sortHits",
+    "seqIdList",
+    "negativeSeqIdList",
+    "taxIds",
+    "negativeTaxIds",
+    "taxIdList",
+    "negativeTaxIdList",
+    "sortHSPs",
+    "qCovHSPPerc",
     "numDescriptions",
     "numAlignments",
     "maxTargetSeqs",
@@ -46,7 +56,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("query")
   private String query;
 
-  @JsonProperty("query_loc")
+  @JsonProperty("queryLoc")
   private InputBlastLocation queryLoc;
 
   @JsonProperty(
@@ -54,6 +64,39 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
       defaultValue = "10.0"
   )
   private double eValue;
+
+  @JsonProperty(
+      value = "lineLength",
+      defaultValue = "60"
+  )
+  private int lineLength;
+
+  @JsonProperty("sortHits")
+  private InputHitSorting sortHits;
+
+  @JsonProperty("seqIdList")
+  private String seqIdList;
+
+  @JsonProperty("negativeSeqIdList")
+  private String negativeSeqIdList;
+
+  @JsonProperty("taxIds")
+  private String taxIds;
+
+  @JsonProperty("negativeTaxIds")
+  private String negativeTaxIds;
+
+  @JsonProperty("taxIdList")
+  private String taxIdList;
+
+  @JsonProperty("negativeTaxIdList")
+  private String negativeTaxIdList;
+
+  @JsonProperty("sortHSPs")
+  private InputHSPSorting sortHSPs;
+
+  @JsonProperty("qCovHSPPerc")
+  private Number qCovHSPPerc;
 
   @JsonProperty(
       value = "numDescriptions",
@@ -183,12 +226,12 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.query = query;
   }
 
-  @JsonProperty("query_loc")
+  @JsonProperty("queryLoc")
   public InputBlastLocation getQueryLoc() {
     return this.queryLoc;
   }
 
-  @JsonProperty("query_loc")
+  @JsonProperty("queryLoc")
   public void setQueryLoc(InputBlastLocation queryLoc) {
     this.queryLoc = queryLoc;
   }
@@ -207,6 +250,112 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   )
   public void setEValue(double eValue) {
     this.eValue = eValue;
+  }
+
+  @JsonProperty(
+      value = "lineLength",
+      defaultValue = "60"
+  )
+  public int getLineLength() {
+    return this.lineLength;
+  }
+
+  @JsonProperty(
+      value = "lineLength",
+      defaultValue = "60"
+  )
+  public void setLineLength(int lineLength) {
+    this.lineLength = lineLength;
+  }
+
+  @JsonProperty("sortHits")
+  public InputHitSorting getSortHits() {
+    return this.sortHits;
+  }
+
+  @JsonProperty("sortHits")
+  public void setSortHits(InputHitSorting sortHits) {
+    this.sortHits = sortHits;
+  }
+
+  @JsonProperty("seqIdList")
+  public String getSeqIdList() {
+    return this.seqIdList;
+  }
+
+  @JsonProperty("seqIdList")
+  public void setSeqIdList(String seqIdList) {
+    this.seqIdList = seqIdList;
+  }
+
+  @JsonProperty("negativeSeqIdList")
+  public String getNegativeSeqIdList() {
+    return this.negativeSeqIdList;
+  }
+
+  @JsonProperty("negativeSeqIdList")
+  public void setNegativeSeqIdList(String negativeSeqIdList) {
+    this.negativeSeqIdList = negativeSeqIdList;
+  }
+
+  @JsonProperty("taxIds")
+  public String getTaxIds() {
+    return this.taxIds;
+  }
+
+  @JsonProperty("taxIds")
+  public void setTaxIds(String taxIds) {
+    this.taxIds = taxIds;
+  }
+
+  @JsonProperty("negativeTaxIds")
+  public String getNegativeTaxIds() {
+    return this.negativeTaxIds;
+  }
+
+  @JsonProperty("negativeTaxIds")
+  public void setNegativeTaxIds(String negativeTaxIds) {
+    this.negativeTaxIds = negativeTaxIds;
+  }
+
+  @JsonProperty("taxIdList")
+  public String getTaxIdList() {
+    return this.taxIdList;
+  }
+
+  @JsonProperty("taxIdList")
+  public void setTaxIdList(String taxIdList) {
+    this.taxIdList = taxIdList;
+  }
+
+  @JsonProperty("negativeTaxIdList")
+  public String getNegativeTaxIdList() {
+    return this.negativeTaxIdList;
+  }
+
+  @JsonProperty("negativeTaxIdList")
+  public void setNegativeTaxIdList(String negativeTaxIdList) {
+    this.negativeTaxIdList = negativeTaxIdList;
+  }
+
+  @JsonProperty("sortHSPs")
+  public InputHSPSorting getSortHSPs() {
+    return this.sortHSPs;
+  }
+
+  @JsonProperty("sortHSPs")
+  public void setSortHSPs(InputHSPSorting sortHSPs) {
+    this.sortHSPs = sortHSPs;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public Number getQCovHSPPerc() {
+    return this.qCovHSPPerc;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public void setQCovHSPPerc(Number qCovHSPPerc) {
+    this.qCovHSPPerc = qCovHSPPerc;
   }
 
   @JsonProperty(
