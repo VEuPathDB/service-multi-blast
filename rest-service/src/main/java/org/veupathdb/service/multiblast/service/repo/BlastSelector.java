@@ -20,7 +20,7 @@ abstract class BlastSelector<T extends BlastConfig>
     try {
       setters.put(
         ToolOption.BlastDatabase,
-        new Setter<>(cls.getDeclaredMethod("setDbName", String.class), Function.identity())
+        new Setter<>(cls.getDeclaredMethod("setBlastDatabase", String.class), Function.identity())
       );
       setters.put(
         ToolOption.DatabaseEffectiveSize,
@@ -40,7 +40,7 @@ abstract class BlastSelector<T extends BlastConfig>
       );
       setters.put(
         ToolOption.HTMLOutput,
-        new Setter<>(cls.getDeclaredMethod("setHtml", Boolean.class), Boolean::parseBoolean)
+        new Setter<>(cls.getDeclaredMethod("setHtmlOutputEnabled", Boolean.class), Boolean::parseBoolean)
       );
       setters.put(
         ToolOption.ImportSearchStrategy,
@@ -53,7 +53,7 @@ abstract class BlastSelector<T extends BlastConfig>
       setters.put(
         ToolOption.LowercaseMasking,
         new Setter<>(
-          cls.getDeclaredMethod("setLowercaseMasking", Boolean.class),
+          cls.getDeclaredMethod("setLowercaseMaskingEnabled", Boolean.class),
           Boolean::parseBoolean
         )
       );
@@ -97,7 +97,7 @@ abstract class BlastSelector<T extends BlastConfig>
       );
       setters.put(
         ToolOption.Remote,
-        new Setter<>(cls.getDeclaredMethod("setRemote", Boolean.class), Boolean::parseBoolean)
+        new Setter<>(cls.getDeclaredMethod("setRemoteEnabled", Boolean.class), Boolean::parseBoolean)
       );
       setters.put(
         ToolOption.SearchSpaceEffectiveLength,
@@ -105,7 +105,7 @@ abstract class BlastSelector<T extends BlastConfig>
       );
       setters.put(
         ToolOption.ShowNCBIGIs,
-        new Setter<>(cls.getDeclaredMethod("setShowGIs", Boolean.class), Boolean::parseBoolean)
+        new Setter<>(cls.getDeclaredMethod("setShowGIsEnabled", Boolean.class), Boolean::parseBoolean)
       );
       setters.put(
         ToolOption.SoftMasking,
@@ -125,7 +125,7 @@ abstract class BlastSelector<T extends BlastConfig>
       );
       setters.put(
         ToolOption.Version,
-        new Setter<>(cls.getDeclaredMethod("setVersion", Boolean.class), Boolean::parseBoolean)
+        new Setter<>(cls.getDeclaredMethod("setVersionEnabled", Boolean.class), Boolean::parseBoolean)
       );
       setters.put(
         ToolOption.XDropoffUngappedExtensions,
@@ -145,7 +145,7 @@ abstract class BlastSelector<T extends BlastConfig>
       setters.put(
         ToolOption.ParseDefLines,
         new Setter<>(
-          cls.getDeclaredMethod("setParseDefLines", Boolean.class),
+          cls.getDeclaredMethod("setParseDefLinesEnabled", Boolean.class),
           Boolean::parseBoolean
         )
       );

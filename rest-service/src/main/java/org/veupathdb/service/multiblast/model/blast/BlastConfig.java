@@ -7,19 +7,25 @@ import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
+/**
+ * Base blast configuration.
+ *
+ * The fields in this class are common to all blast tools available in the NCBI
+ * blast toolset.
+ */
 public class BlastConfig implements CLISerializable, Validatable
 {
-  private boolean       help;
-  private boolean       version;
-  private String        dbName;
+  private boolean       helpEnabled;
+  private boolean       versionEnabled;
+  private String        blastDatabase;
   private Byte          dbSize;
   private String        entrezQuery;
   private Double        expectValue;
   private File          exportSearchStrategy;
-  private boolean       html;
+  private boolean       htmlOutputEnabled;
   private File          importSearchStrategy;
   private Integer       lineLength;
-  private boolean       lowercaseMasking;
+  private boolean       lowercaseMaskingEnabled;
   private Integer       maxHSPs;
   private Integer       maxTargetSequences;
   private Integer       numDescriptions;
@@ -28,9 +34,9 @@ public class BlastConfig implements CLISerializable, Validatable
   private File          out;
   private File          query;
   private QueryLocation queryLoc;
-  private boolean       remote;
+  private boolean       remoteEnabled;
   private Byte          searchSpace;
-  private boolean       showGIs;
+  private boolean       showGIsEnabled;
   private Boolean       softMasking;
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
@@ -38,14 +44,14 @@ public class BlastConfig implements CLISerializable, Validatable
   private Double        xDropUngap;
   private OutFormat     outFormat;
   private Double        queryCoveragePercentHSP;
-  private boolean       parseDefLines;
+  private boolean       parseDefLinesEnabled;
 
-  public String getDbName() {
-    return dbName;
+  public String getBlastDatabase() {
+    return blastDatabase;
   }
 
-  public BlastConfig setDbName(String dbName) {
-    this.dbName = dbName;
+  public BlastConfig setBlastDatabase(String blastDatabase) {
+    this.blastDatabase = blastDatabase;
     return this;
   }
 
@@ -85,12 +91,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getHtml() {
-    return html;
+  public boolean isHtmlOutputEnabled() {
+    return htmlOutputEnabled;
   }
 
-  public BlastConfig setHtml(boolean html) {
-    this.html = html;
+  public BlastConfig setHtmlOutputEnabled(boolean htmlOutputEnabled) {
+    this.htmlOutputEnabled = htmlOutputEnabled;
     return this;
   }
 
@@ -112,12 +118,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getLowercaseMasking() {
-    return lowercaseMasking;
+  public boolean isLowercaseMaskingEnabled() {
+    return lowercaseMaskingEnabled;
   }
 
-  public BlastConfig setLowercaseMasking(boolean lowercaseMasking) {
-    this.lowercaseMasking = lowercaseMasking;
+  public BlastConfig setLowercaseMaskingEnabled(boolean lowercaseMaskingEnabled) {
+    this.lowercaseMaskingEnabled = lowercaseMaskingEnabled;
     return this;
   }
 
@@ -193,12 +199,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getRemote() {
-    return remote;
+  public boolean isRemoteEnabled() {
+    return remoteEnabled;
   }
 
-  public BlastConfig setRemote(boolean remote) {
-    this.remote = remote;
+  public BlastConfig setRemoteEnabled(boolean remoteEnabled) {
+    this.remoteEnabled = remoteEnabled;
     return this;
   }
 
@@ -211,12 +217,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getShowGIs() {
-    return showGIs;
+  public boolean isShowGIsEnabled() {
+    return showGIsEnabled;
   }
 
-  public BlastConfig setShowGIs(boolean showGIs) {
-    this.showGIs = showGIs;
+  public BlastConfig setShowGIsEnabled(boolean showGIsEnabled) {
+    this.showGIsEnabled = showGIsEnabled;
     return this;
   }
 
@@ -256,12 +262,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getVersion() {
-    return version;
+  public boolean isVersionEnabled() {
+    return versionEnabled;
   }
 
-  public BlastConfig setVersion(boolean version) {
-    this.version = version;
+  public BlastConfig setVersionEnabled(boolean versionEnabled) {
+    this.versionEnabled = versionEnabled;
     return this;
   }
 
@@ -292,27 +298,27 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getParseDefLines() {
-    return parseDefLines;
+  public boolean isParseDefLinesEnabled() {
+    return parseDefLinesEnabled;
   }
 
-  public BlastConfig setParseDefLines(boolean parseDefLines) {
-    this.parseDefLines = parseDefLines;
+  public BlastConfig setParseDefLinesEnabled(boolean parseDefLinesEnabled) {
+    this.parseDefLinesEnabled = parseDefLinesEnabled;
     return this;
   }
 
-  public boolean getHelp() {
-    return help;
+  public boolean isHelpEnabled() {
+    return helpEnabled;
   }
 
-  public BlastConfig setHelp(boolean help) {
-    this.help = help;
+  public BlastConfig setHelpEnabled(boolean helpEnabled) {
+    this.helpEnabled = helpEnabled;
     return this;
   }
 
   @Override
   public void toArgs(CliBuilder args) {
-    args.appendNonNull(ToolOption.BlastDatabase, dbName)
+    args.appendNonNull(ToolOption.BlastDatabase, blastDatabase)
       .appendNonNull(ToolOption.DatabaseEffectiveSize, dbSize)
       .appendNonNull(ToolOption.EntrezQuery, entrezQuery)
       .appendNonNull(ToolOption.ExpectationValue, expectValue)
@@ -337,19 +343,19 @@ public class BlastConfig implements CLISerializable, Validatable
       .appendNonNull(ToolOption.SoftMasking, softMasking)
     ;
 
-    if (html)
+    if (htmlOutputEnabled)
       args.append(ToolOption.HTMLOutput);
-    if (lowercaseMasking)
+    if (lowercaseMaskingEnabled)
       args.append(ToolOption.LowercaseMasking);
-    if (version)
+    if (versionEnabled)
       args.append(ToolOption.Version);
-    if (help)
+    if (helpEnabled)
       args.append(ToolOption.Help);
-    if (showGIs)
+    if (showGIsEnabled)
       args.append(ToolOption.ShowNCBIGIs);
-    if (parseDefLines)
+    if (parseDefLinesEnabled)
       args.append(ToolOption.ParseDefLines);
-    if (remote)
+    if (remoteEnabled)
       args.append(ToolOption.Remote);
   }
 

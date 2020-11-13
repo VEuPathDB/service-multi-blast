@@ -31,7 +31,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setHelp(true);
+      target.setHelpEnabled(true);
       target.toArgs(build);
       assertEquals("-help", build.toString());
     }
@@ -42,7 +42,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setVersion(true);
+      target.setVersionEnabled(true);
       target.toArgs(build);
       assertEquals("-version", build.toString());
     }
@@ -53,7 +53,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setDbName("foo");
+      target.setBlastDatabase("foo");
       target.toArgs(build);
       assertEquals("-db='foo'", build.toString());
     }
@@ -108,7 +108,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setHtml(true);
+      target.setHtmlOutputEnabled(true);
       target.toArgs(build);
       assertEquals("-html", build.toString());
     }
@@ -141,7 +141,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setLowercaseMasking(true);
+      target.setLowercaseMaskingEnabled(true);
       target.toArgs(build);
       assertEquals("-lcase_masking", build.toString());
     }
@@ -240,7 +240,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setRemote(true);
+      target.setRemoteEnabled(true);
       target.toArgs(build);
       assertEquals("-remote", build.toString());
     }
@@ -262,7 +262,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setShowGIs(true);
+      target.setShowGIsEnabled(true);
       target.toArgs(build);
       assertEquals("-show_gis", build.toString());
     }
@@ -353,7 +353,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setParseDefLines(true);
+      target.setParseDefLinesEnabled(true);
       target.toArgs(build);
       assertEquals("-parse_deflines", build.toString());
     }
@@ -735,7 +735,7 @@ class BlastnConfigTest
     void test2() {
       var target = new BlastnConfig();
 
-      target.setHelp(true);
+      target.setHelpEnabled(true);
       assertEquals("-help", target.toString());
     }
 
@@ -744,7 +744,7 @@ class BlastnConfigTest
     void test3() {
       var target = new BlastnConfig();
 
-      target.setVersion(true);
+      target.setVersionEnabled(true);
       assertEquals("-version", target.toString());
     }
 
@@ -753,7 +753,7 @@ class BlastnConfigTest
     void test4() {
       var target = new BlastnConfig();
 
-      target.setDbName("foo");
+      target.setBlastDatabase("foo");
       assertEquals("-db='foo'", target.toString());
     }
 
@@ -798,7 +798,7 @@ class BlastnConfigTest
     void test9() {
       var target = new BlastnConfig();
 
-      target.setHtml(true);
+      target.setHtmlOutputEnabled(true);
       assertEquals("-html", target.toString());
     }
 
@@ -825,7 +825,7 @@ class BlastnConfigTest
     void test12() {
       var target = new BlastnConfig();
 
-      target.setLowercaseMasking(true);
+      target.setLowercaseMaskingEnabled(true);
       assertEquals("-lcase_masking", target.toString());
     }
 
@@ -906,7 +906,7 @@ class BlastnConfigTest
     void test21() {
       var target = new BlastnConfig();
 
-      target.setRemote(true);
+      target.setRemoteEnabled(true);
       assertEquals("-remote", target.toString());
     }
 
@@ -924,7 +924,7 @@ class BlastnConfigTest
     void test23() {
       var target = new BlastnConfig();
 
-      target.setShowGIs(true);
+      target.setShowGIsEnabled(true);
       assertEquals("-show_gis", target.toString());
     }
 
@@ -999,7 +999,7 @@ class BlastnConfigTest
     void test31() {
       var target = new BlastnConfig();
 
-      target.setParseDefLines(true);
+      target.setParseDefLinesEnabled(true);
       assertEquals("-parse_deflines", target.toString());
     }
 

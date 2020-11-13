@@ -47,7 +47,7 @@ public class StdBlastValidator extends BlastValidator
     if (conf.getSubject() == null)
       return;
 
-    if (conf.getDbName() != null) {
+    if (conf.getBlastDatabase() != null) {
       err.putError(
         Util.key(ToolOption.SubjectFile, ext),
         String.format(ErrIncompatibleWith, Util.key(ToolOption.BlastDatabase, ext))
@@ -59,14 +59,14 @@ public class StdBlastValidator extends BlastValidator
     if (conf.getSubjectLocation() == null)
       return;
 
-    if (conf.getDbName() != null) {
+    if (conf.getBlastDatabase() != null) {
       err.putError(
         Util.key(ToolOption.SubjectLocation, ext),
         String.format(ErrIncompatibleWith, Util.key(ToolOption.BlastDatabase, ext))
       );
     }
 
-    if (conf.getRemote())
+    if (conf.isRemoteEnabled())
       err.putError(
         Util.key(ToolOption.Remote, ext),
         String.format(ErrIncompatibleWith, Util.key(ToolOption.Remote, ext))
@@ -74,7 +74,7 @@ public class StdBlastValidator extends BlastValidator
   }
 
   static void validateRemote(ErrorMap err, StdBlastConfig conf, boolean ext) {
-    if (!conf.getRemote())
+    if (!conf.isRemoteEnabled())
       return;
 
     if (conf.getGiList() != null)

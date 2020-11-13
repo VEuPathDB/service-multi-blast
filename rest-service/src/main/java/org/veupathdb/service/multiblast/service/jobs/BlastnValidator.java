@@ -86,7 +86,7 @@ public class BlastnValidator extends BlastValidator
     // You may ask something like "why not just default it to true when using
     // this field?"  The remote flag is significant and requiring it forces the
     // client to acknowledge that they actually want to run a remote query.
-    if (config.getEntrezQuery() != null && config.getRemote())
+    if (config.getEntrezQuery() != null && config.isRemoteEnabled())
       errors.putError(OptionName.REMOTE, Err.RequireRemote);
 
 //    if (config.getDbSoftMask() != null && forbidDbSoftMask())
@@ -110,7 +110,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidGiList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getSequenceIdList(),
       config.getTaxIds(),
       config.getTaxIdList(),
@@ -124,7 +124,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidSeqIdList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getTaxIds(),
       config.getTaxIdList(),
@@ -138,7 +138,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidNegGiList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -152,7 +152,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidTaxIds(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIdList(),
@@ -166,7 +166,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidNegativeTaxIds(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -180,7 +180,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidTaxIdList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -194,7 +194,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidNegativeTaxIdList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -208,7 +208,7 @@ public class BlastnValidator extends BlastValidator
   }
 
   static boolean forbidNegSeqIdList(BlastnConfig config) {
-    return config.getRemote() || forbidList(
+    return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -223,7 +223,7 @@ public class BlastnValidator extends BlastValidator
 
   static boolean forbidSubject(BlastnConfig config) {
     // FIXME: DB is not actually used
-    return config.getDbName() != null || forbidList(
+    return config.getBlastDatabase() != null || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
       config.getNegativeGiList(),
