@@ -27,27 +27,27 @@ abstract class StdBlastSelector<T extends StdBlastConfig> extends BlastSelector<
         new Setter<>(cls.getDeclaredMethod("setDbHardMask", String.class), Function.identity())
       );
       setters.put(
-        ToolOption.GIList,
+        ToolOption.GIListFile,
         new Setter<>(cls.getDeclaredMethod("setGiList", File.class), File::new)
       );
       setters.put(
-        ToolOption.NegativeGIList,
+        ToolOption.NegativeGIListFile,
         new Setter<>(cls.getDeclaredMethod("setNegativeGiList", File.class), File::new)
       );
       setters.put(
-        ToolOption.SequenceIDList,
+        ToolOption.SequenceIDListFile,
         new Setter<>(cls.getDeclaredMethod("setSequenceIdList", File.class), File::new)
       );
       setters.put(
-        ToolOption.NegativeSequenceIDList,
+        ToolOption.NegativeSequenceIDListFile,
         new Setter<>(cls.getDeclaredMethod("setNegativeSequenceIdList", File.class), File::new)
       );
       setters.put(
-        ToolOption.TaxonomyIDList,
+        ToolOption.TaxonomyIDListFile,
         new Setter<>(cls.getDeclaredMethod("setTaxIdList", File.class), File::new)
       );
       setters.put(
-        ToolOption.NegativeTaxonomyIDList,
+        ToolOption.NegativeTaxonomyIDListFile,
         new Setter<>(cls.getDeclaredMethod("setNegativeTaxIdList", File.class), File::new)
       );
       setters.put(

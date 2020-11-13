@@ -9,15 +9,17 @@ import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 public class BlastConfig implements CLISerializable, Validatable
 {
+  private boolean       help;
+  private boolean       version;
   private String        dbName;
   private Byte          dbSize;
   private String        entrezQuery;
   private Double        expectValue;
   private File          exportSearchStrategy;
-  private Boolean       html;
+  private boolean       html;
   private File          importSearchStrategy;
   private Integer       lineLength;
-  private Boolean       lowercaseMasking;
+  private boolean       lowercaseMasking;
   private Integer       maxHSPs;
   private Integer       maxTargetSequences;
   private Integer       numDescriptions;
@@ -26,18 +28,17 @@ public class BlastConfig implements CLISerializable, Validatable
   private File          out;
   private File          query;
   private QueryLocation queryLoc;
-  private Boolean       remote;
+  private boolean       remote;
   private Integer       searchSpace;
-  private Boolean       showGIs;
-  private Boolean       softMasking;
+  private boolean       showGIs;
+  private boolean       softMasking;
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
   private Integer       windowSize;
-  private Boolean       version;
   private Double        xDropUngap;
   private OutFormat     outFormat;
-  private Double        queryCoverageHSPPercent;
-  private Boolean       parseDefLines;
+  private Double        queryCoveragePerHSP;
+  private boolean       parseDefLines;
 
   public String getDbName() {
     return dbName;
@@ -84,11 +85,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Boolean getHtml() {
+  public boolean getHtml() {
     return html;
   }
 
-  public BlastConfig setHtml(Boolean html) {
+  public BlastConfig setHtml(boolean html) {
     this.html = html;
     return this;
   }
@@ -111,11 +112,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Boolean getLowercaseMasking() {
+  public boolean getLowercaseMasking() {
     return lowercaseMasking;
   }
 
-  public BlastConfig setLowercaseMasking(Boolean lowercaseMasking) {
+  public BlastConfig setLowercaseMasking(boolean lowercaseMasking) {
     this.lowercaseMasking = lowercaseMasking;
     return this;
   }
@@ -192,11 +193,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Boolean getRemote() {
+  public boolean getRemote() {
     return remote;
   }
 
-  public BlastConfig setRemote(Boolean remote) {
+  public BlastConfig setRemote(boolean remote) {
     this.remote = remote;
     return this;
   }
@@ -210,20 +211,20 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Boolean getShowGIs() {
+  public boolean getShowGIs() {
     return showGIs;
   }
 
-  public BlastConfig setShowGIs(Boolean showGIs) {
+  public BlastConfig setShowGIs(boolean showGIs) {
     this.showGIs = showGIs;
     return this;
   }
 
-  public Boolean getSoftMasking() {
+  public boolean getSoftMasking() {
     return softMasking;
   }
 
-  public BlastConfig setSoftMasking(Boolean softMasking) {
+  public BlastConfig setSoftMasking(boolean softMasking) {
     this.softMasking = softMasking;
     return this;
   }
@@ -255,20 +256,20 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Boolean getVersion() {
+  public boolean getVersion() {
     return version;
   }
 
-  public BlastConfig setVersion(Boolean version) {
+  public BlastConfig setVersion(boolean version) {
     this.version = version;
     return this;
   }
 
-  public Double getxDropUngap() {
+  public Double getXDropUngap() {
     return xDropUngap;
   }
 
-  public BlastConfig setxDropUngap(Double xDropUngap) {
+  public BlastConfig setXDropUngap(Double xDropUngap) {
     this.xDropUngap = xDropUngap;
     return this;
   }
@@ -282,36 +283,90 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Double getQueryCoverageHSPPercent() {
-    return queryCoverageHSPPercent;
+  public Double getQueryCoveragePerHSP() {
+    return queryCoveragePerHSP;
   }
 
-  public BlastConfig setQueryCoverageHSPPercent(Double queryCoverageHSPPercent) {
-    this.queryCoverageHSPPercent = queryCoverageHSPPercent;
+  public BlastConfig setQueryCoveragePerHSP(Double queryCoveragePerHSP) {
+    this.queryCoveragePerHSP = queryCoveragePerHSP;
     return this;
   }
 
-  public Boolean getParseDefLines() {
+  public boolean getParseDefLines() {
     return parseDefLines;
   }
 
-  public BlastConfig setParseDefLines(Boolean parseDefLines) {
+  public BlastConfig setParseDefLines(boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
+    return this;
+  }
+
+  public boolean getHelp() {
+    return help;
+  }
+
+  public BlastConfig setHelp(boolean help) {
+    this.help = help;
     return this;
   }
 
   @Override
   public void toArgs(CliBuilder args) {
-    args.append(ToolOption.Query, query.getAbsolutePath())
-      .appendNonNull(ToolOption.QueryLocation, queryLoc);
+    args.appendNonNull(ToolOption.BlastDatabase, dbName)
+      .appendNonNull(ToolOption.DatabaseEffectiveSize, dbSize)
+      .appendNonNull(ToolOption.EntrezQuery, entrezQuery)
+      .appendNonNull(ToolOption.ExpectationValue, expectValue)
+      .appendNonNull(ToolOption.ExportSearchStrategy, exportSearchStrategy)
+      .appendNonNull(ToolOption.ImportSearchStrategy, importSearchStrategy)
+      .appendNonNull(ToolOption.LineLength, lineLength)
+      .appendNonNull(ToolOption.MaxHSPs, maxHSPs)
+      .appendNonNull(ToolOption.MaxTargetSequences, maxTargetSequences)
+      .appendNonNull(ToolOption.NumDescriptions, numDescriptions)
+      .appendNonNull(ToolOption.NumAlignments, numAlignments)
+      .appendNonNull(ToolOption.NumberOfThreads, numThreads)
+      .appendNonNull(ToolOption.OutputFile, out)
+      .appendNonNull(ToolOption.Query, query)
+      .appendNonNull(ToolOption.QueryLocation, queryLoc)
+      .appendNonNull(ToolOption.SearchSpaceEffectiveLength, searchSpace)
+      .appendNonNull(ToolOption.SortHits, sortHits)
+      .appendNonNull(ToolOption.SortHSPs, sortHsps)
+      .appendNonNull(ToolOption.MultiHitWindowSize, windowSize)
+      .appendNonNull(ToolOption.XDropoffUngappedExtensions, xDropUngap)
+      .appendNonNull(ToolOption.OutputFormat, outFormat)
+      .appendNonNull(ToolOption.QueryCoveragePerHSP, queryCoveragePerHSP)
+    ;
+
+    if (html)
+      args.append(ToolOption.HTMLOutput);
+    if (lowercaseMasking)
+      args.append(ToolOption.LowercaseMasking);
+    if (softMasking)
+      args.append(ToolOption.SoftMasking, true);
+    if (version)
+      args.append(ToolOption.Version);
+    if (help)
+      args.append(ToolOption.Help);
+    if (showGIs)
+      args.append(ToolOption.ShowNCBIGIs);
+    if (parseDefLines)
+      args.append(ToolOption.ParseDefLines);
+    if (remote)
+      args.append(ToolOption.Remote);
+  }
+
+  @Override
+  public String toString() {
+    var args = new CliBuilder();
+
+    toArgs(args);
+
+    return args.toString();
   }
 
   @Override
   public ErrorMap validate() {
     var out = new ErrorMap();
 
-
     return out;
   }
-
 }

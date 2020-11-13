@@ -2,20 +2,20 @@ package org.veupathdb.service.multiblast.model.mapping;
 
 import javax.validation.constraints.NotNull;
 
-import org.veupathdb.service.multiblast.model.blast.TblastnTask;
+import org.veupathdb.service.multiblast.model.blast.TBlastnTask;
 
-public class TblastnTasks extends EnumMap<Byte, TblastnTask>
+public class TblastnTasks extends EnumMap<Byte, TBlastnTask>
 {
   private static TblastnTasks instance;
 
   private TblastnTasks() {
-    super(TblastnTask.values().length);
+    super(TBlastnTask.values().length);
   }
 
   @NotNull
   @Override
-  public EnumMapping<Byte, TblastnTask> putRaw(@NotNull Byte id, @NotNull String value) {
-    return put(id, TblastnTask.fromString(value).orElseThrow());
+  public EnumMapping<Byte, TBlastnTask> putRaw(@NotNull Byte id, @NotNull String value) {
+    return put(id, TBlastnTask.fromString(value).orElseThrow());
   }
 
   public static TblastnTasks getInstance() {

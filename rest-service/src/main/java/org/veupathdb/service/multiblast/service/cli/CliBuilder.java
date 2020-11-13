@@ -40,17 +40,17 @@ public class CliBuilder
   }
 
   @SuppressWarnings("UnusedReturnValue")
-  public CliBuilder setNonNull(ToolOption key, Object value) {
-    if (value != null)
-      params.put(key, new Object[]{value});
+  public CliBuilder setNonNull(ToolOption key, Object... values) {
+    if (hasValues(values))
+      params.put(key, values);
 
     return this;
   }
 
   @SuppressWarnings("UnusedReturnValue")
-  public CliBuilder appendNonNull(ToolOption key, Object value) {
-    if (value != null)
-      return this.append(key, value);
+  public CliBuilder appendNonNull(ToolOption key, Object... values) {
+    if (hasValues(values))
+      return this.append(key, values);
 
     return this;
   }
@@ -67,10 +67,14 @@ public class CliBuilder
   public Stream<String> toComponentStream() {
     return params.entrySet()
       .stream()
-      .map(e -> e.getKey().getFlag() + '=' + Arrays.stream(e.getValue())
-        .map(Object::toString)
-        .map(CliBuilder::escape)
-        .collect(Collectors.joining(",", "'", "'")));
+      .map(e -> e.getKey().getFlag() + (
+        e.getValue() == null || e.getValue().length == 0
+          ? ""
+          : '=' + Arrays.stream(e.getValue())
+            .map(Object::toString)
+            .map(CliBuilder::escape)
+            .collect(Collectors.joining(",", "'", "'"))
+      ));
   }
 
   public static String escape(String in) {
@@ -98,7 +102,7 @@ public class CliBuilder
     if (values.length == 1 && values[0] == null)
       return "";
 
-    var out = new StringBuilder();
+    var out     = new StringBuilder();
     var started = false;
 
     for (var i = 0; i < values.length; i++) {
@@ -119,5 +123,17 @@ public class CliBuilder
       out.append('\'');
 
     return out.toString();
+  }
+
+  protected static boolean hasValues(Object[] values) {
+    if (values == null || values.length == 0)
+      return false;
+
+    for (var value : values) {
+      if (value != null)
+        return true;
+    }
+
+    return false;
   }
 }

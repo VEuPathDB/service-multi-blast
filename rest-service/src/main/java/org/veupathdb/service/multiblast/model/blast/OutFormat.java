@@ -12,19 +12,23 @@ import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 import static java.util.Collections.singletonList;
 
-public class OutFormat implements Validatable, CLISerializable
+public class OutFormat implements Validatable
 {
   private static final String
-    DELIM_PREFIX = "delim=",
+    DELIM_PREFIX   = "delim=",
     DEFAULT_FIELDS = "std";
 
   private static final String
     ERR_FIELDS_WRONG_FORMAT = "the selected " + JsonKeys.FORMAT + " does not allow defining custom"
-      + " report fields.",
-    ERR_DELIM_FORBIDDEN = "the selected " + JsonKeys.FORMAT + " does not allow custom delimiters.";
+    + " report fields.",
+    ERR_DELIM_FORBIDDEN     = "the selected "
+      + JsonKeys.FORMAT
+      + " does not allow custom delimiters.";
 
-  private ReportFormatType       format;
-  private Character              delim;
+  private ReportFormatType format;
+
+  private Character delim;
+
   private final List<BlastReportField> fields;
 
   public OutFormat() {
@@ -97,28 +101,21 @@ public class OutFormat implements Validatable, CLISerializable
     return errors;
   }
 
-  public void toArgs(CliBuilder args) {
-//    var hasFmt = format != null;
-//    var hasDel = delim != null;
-//    var hasFel = !fields.isEmpty();
-//
-//    if (!hasFmt && !hasDel && !hasFel)
-//      return;
-//
-//    args.setNonNull(ToolOption.OutputFormat, format)
-//      .setNonNull(ToolOption);
-//
-//    if (hasDel)
-//      args.append(DELIM_PREFIX).append(delim).append(' ');
-//    if (hasFel)
-//      for (var field : fields)
-//        args.append(field.getValue()).append(' ');
-//    else
-//      args.append(DEFAULT_FIELDS).append(' ');
-  }
-
   public static OutFormat fromString(String value) {
     throw new RuntimeException("lol");
+  }
+
+  @Override
+  public String toString() {
+    var out = new StringBuilder();
+    out.append(format);
+
+    if (delim != null)
+      out.append(' ').append(DELIM_PREFIX).append(delim);
+    for (var f : fields)
+      out.append(' ').append(f);
+
+    return out.toString();
   }
 
   private boolean isCustomizableFormat() {

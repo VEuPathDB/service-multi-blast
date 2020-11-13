@@ -2,6 +2,8 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.io.File;
 
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
+
 public class StdBlastConfig extends BlastConfig
 {
   private String        dbSoftMask;
@@ -133,5 +135,35 @@ public class StdBlastConfig extends BlastConfig
   public StdBlastConfig setNegativeTaxIds(String[] negativeTaxIds) {
     this.negativeTaxIds = negativeTaxIds;
     return this;
+  }
+
+  @Override
+  public void toArgs(CliBuilder args) {
+    super.toArgs(args);
+
+    args.appendNonNull(ToolOption.DatabaseSoftMask, dbSoftMask)
+      .appendNonNull(ToolOption.DatabaseHardMask, dbHardMask)
+      .appendNonNull(ToolOption.GIListFile, giList)
+      .appendNonNull(ToolOption.NegativeGIListFile, negativeGiList)
+      .appendNonNull(ToolOption.SequenceIDListFile, sequenceIdList)
+      .appendNonNull(ToolOption.NegativeSequenceIDListFile, negativeSequenceIdList)
+      .appendNonNull(ToolOption.TaxonomyIDListFile, taxIdList)
+      .appendNonNull(ToolOption.NegativeTaxonomyIDListFile, negativeTaxIdList)
+      .appendNonNull(ToolOption.SubjectFile, subject)
+      .appendNonNull(ToolOption.SubjectLocation, subjectLocation)
+      .appendNonNull(ToolOption.WordSize, wordSize)
+      .appendNonNull(ToolOption.TaxonomyIDs, str2obj(taxIds))
+      .appendNonNull(ToolOption.NegativeTaxonomyIDs, str2obj(negativeTaxIds));
+  }
+
+  protected static Object[] str2obj(String[] arr) {
+    if (arr == null)
+      return null;
+
+    var out = new Object[arr.length];
+
+    System.arraycopy(arr, 0, out, 0, arr.length);
+
+    return out;
   }
 }
