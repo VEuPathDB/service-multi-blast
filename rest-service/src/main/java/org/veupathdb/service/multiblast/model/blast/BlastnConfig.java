@@ -194,4 +194,6 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
   public void setSumStats(Boolean sumStats) {
     this.sumStats = sumStats;
   }
+
+
 }

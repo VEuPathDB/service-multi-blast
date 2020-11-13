@@ -20,6 +20,11 @@ public class JobController implements Jobs
   }
 
   @Override
+  public GetJobsResponse getJobs() {
+    return null;
+  }
+
+  @Override
   public PostJobsResponse postJobs(NewJobPostRequestJSON entity) {
     return null;
   }

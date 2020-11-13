@@ -138,7 +138,7 @@ abstract class BlastSelector<T extends BlastConfig>
       setters.put(
         ToolOption.QueryCoveragePerHSP,
         new Setter<>(
-          cls.getDeclaredMethod("setQueryCoverageHSPPercent", Double.class),
+          cls.getDeclaredMethod("setQueryCoveragePerHSP", Double.class),
           Double::parseDouble
         )
       );

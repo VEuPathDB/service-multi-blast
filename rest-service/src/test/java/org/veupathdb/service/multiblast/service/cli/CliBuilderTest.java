@@ -169,7 +169,7 @@ class CliBuilderTest
 
         assertEquals("", target.toString());
 
-        target.setNonNull(ToolOption.CullingLimit, null);
+        target.setNonNull(ToolOption.CullingLimit, (Object) null);
 
         assertEquals("", target.toString());
       }
@@ -182,7 +182,7 @@ class CliBuilderTest
 
         assertEquals("-culling_limit='123'", target.toString());
 
-        target.setNonNull(ToolOption.CullingLimit, null);
+        target.setNonNull(ToolOption.CullingLimit, (Object) null);
 
         assertEquals("-culling_limit='123'", target.toString());
       }
@@ -235,7 +235,7 @@ class CliBuilderTest
 
         assertEquals("", target.toString());
 
-        target.appendNonNull(ToolOption.CullingLimit, null);
+        target.appendNonNull(ToolOption.CullingLimit, (Object) null);
 
         assertEquals("", target.toString());
       }
