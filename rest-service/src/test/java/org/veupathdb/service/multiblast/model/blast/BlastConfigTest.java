@@ -344,7 +344,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setQueryCoveragePerHSP(55.5);
+      target.setQueryCoveragePercentHSP(55.5);
       target.toArgs(build);
       assertEquals("-qcov_hsp_perc='55.5'", build.toString());
     }
@@ -633,7 +633,7 @@ class BlastConfigTest
     void test30() {
       var target = new BlastConfig();
 
-      target.setQueryCoveragePerHSP(55.5);
+      target.setQueryCoveragePercentHSP(55.5);
       assertEquals("-qcov_hsp_perc='55.5'", target.toString());
     }
 

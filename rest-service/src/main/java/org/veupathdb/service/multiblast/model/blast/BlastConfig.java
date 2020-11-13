@@ -29,15 +29,15 @@ public class BlastConfig implements CLISerializable, Validatable
   private File          query;
   private QueryLocation queryLoc;
   private boolean       remote;
-  private Integer       searchSpace;
+  private Byte          searchSpace;
   private boolean       showGIs;
-  private boolean       softMasking;
+  private Boolean       softMasking;
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
   private Integer       windowSize;
   private Double        xDropUngap;
   private OutFormat     outFormat;
-  private Double        queryCoveragePerHSP;
+  private Double        queryCoveragePercentHSP;
   private boolean       parseDefLines;
 
   public String getDbName() {
@@ -202,11 +202,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Integer getSearchSpace() {
+  public Byte getSearchSpace() {
     return searchSpace;
   }
 
-  public BlastConfig setSearchSpace(Integer searchSpace) {
+  public BlastConfig setSearchSpace(Byte searchSpace) {
     this.searchSpace = searchSpace;
     return this;
   }
@@ -220,11 +220,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public boolean getSoftMasking() {
+  public Boolean getSoftMasking() {
     return softMasking;
   }
 
-  public BlastConfig setSoftMasking(boolean softMasking) {
+  public BlastConfig setSoftMasking(Boolean softMasking) {
     this.softMasking = softMasking;
     return this;
   }
@@ -283,12 +283,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Double getQueryCoveragePerHSP() {
-    return queryCoveragePerHSP;
+  public Double getQueryCoveragePercentHSP() {
+    return queryCoveragePercentHSP;
   }
 
-  public BlastConfig setQueryCoveragePerHSP(Double queryCoveragePerHSP) {
-    this.queryCoveragePerHSP = queryCoveragePerHSP;
+  public BlastConfig setQueryCoveragePercentHSP(Double queryCoveragePercentHSP) {
+    this.queryCoveragePercentHSP = queryCoveragePercentHSP;
     return this;
   }
 
@@ -333,15 +333,14 @@ public class BlastConfig implements CLISerializable, Validatable
       .appendNonNull(ToolOption.MultiHitWindowSize, windowSize)
       .appendNonNull(ToolOption.XDropoffUngappedExtensions, xDropUngap)
       .appendNonNull(ToolOption.OutputFormat, outFormat)
-      .appendNonNull(ToolOption.QueryCoveragePerHSP, queryCoveragePerHSP)
+      .appendNonNull(ToolOption.QueryCoveragePercentHSP, queryCoveragePercentHSP)
+      .appendNonNull(ToolOption.SoftMasking, softMasking)
     ;
 
     if (html)
       args.append(ToolOption.HTMLOutput);
     if (lowercaseMasking)
       args.append(ToolOption.LowercaseMasking);
-    if (softMasking)
-      args.append(ToolOption.SoftMasking, true);
     if (version)
       args.append(ToolOption.Version);
     if (help)

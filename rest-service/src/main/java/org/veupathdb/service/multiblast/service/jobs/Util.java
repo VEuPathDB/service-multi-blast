@@ -1,0 +1,139 @@
+package org.veupathdb.service.multiblast.service.jobs;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.veupathdb.service.multiblast.model.blast.ToolOption;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
+
+class Util
+{
+  private static Util instance;
+
+  private final Map<ToolOption, String> mapping;
+
+  private Util() {
+  }
+
+  public String toolOptionToJsonKey(ToolOption opt) {
+    return mapping.get(opt);
+  }
+
+  public String getKey(ToolOption opt, boolean external) {
+    return external ? toolOptionToJsonKey(opt) : opt.toString();
+  }
+
+  public static String key(ToolOption opt, boolean external) {
+    return getInstance().getKey(opt, external);
+  }
+
+  public static Util getInstance() {
+    if (instance == null)
+      instance = new Util();
+
+    return instance;
+  }
+
+  {
+    mapping = new HashMap<>();
+    mapping.put(ToolOption.BestHitOverhang, JsonKeys.BestHitOverhang);
+    mapping.put(ToolOption.BestHitScoreEdge, JsonKeys.BestHitScoreEdge);
+    mapping.put(ToolOption.BlastDatabase, JsonKeys.BlastDatabase);
+    mapping.put(ToolOption.CompositionBasedStats, JsonKeys.CompositionBasedStats);
+    mapping.put(ToolOption.CullingLimit, JsonKeys.CullingLimit);
+    mapping.put(ToolOption.DatabaseEffectiveSize, JsonKeys.DB_SIZE);
+    mapping.put(ToolOption.DatabaseHardMask, JsonKeys.DB_HARD_MASK);
+    mapping.put(ToolOption.DatabaseSoftMask, JsonKeys.SOFT_MASKING);
+    mapping.put(ToolOption.Dust, JsonKeys.DUST);
+    mapping.put(ToolOption.EntrezQuery, JsonKeys.EntrezQuery);
+    mapping.put(ToolOption.ExpectationValue, JsonKeys.E_VALUE);
+    mapping.put(ToolOption.ExportSearchStrategy, JsonKeys.ExportSearchStrategy);
+    mapping.put(ToolOption.FilteringDatabase, JsonKeys.FILTERING_DB);
+    mapping.put(ToolOption.GapExtendCost, JsonKeys.GAP_EXTEND);
+    mapping.put(ToolOption.GapOpenCost, JsonKeys.GAP_OPEN);
+    mapping.put(ToolOption.GIListFile, JsonKeys.GI_LIST);
+    mapping.put(ToolOption.Help, JsonKeys.Help);
+    mapping.put(ToolOption.HTMLOutput, JsonKeys.Html);
+    mapping.put(
+      ToolOption.IgnoreMultiSequenceAlignmentMaster,
+      JsonKeys.IgnoreMultiSequenceAlignmentMaster
+    );
+    mapping.put(ToolOption.ImportSearchStrategy, JsonKeys.ImportSearchStrategy);
+    mapping.put(ToolOption.InclusionEValueThreshold, JsonKeys.InclusionEValueThreshold);
+    mapping.put(ToolOption.InputMultiSequenceAlignmentFile, JsonKeys.InputMultiSequenceAlignment);
+    mapping.put(ToolOption.InputPsiBlastCheckpointFile, JsonKeys.InputPsiBlastCheckpointFile);
+    mapping.put(ToolOption.IPGList, JsonKeys.IPGList);
+    mapping.put(ToolOption.LineLength, JsonKeys.LINE_LENGTH);
+    mapping.put(ToolOption.LowercaseMasking, JsonKeys.LOWERCASE_MASKING);
+    mapping.put(ToolOption.MatchReward, JsonKeys.REWARD);
+    mapping.put(ToolOption.MaxHSPs, JsonKeys.MAX_HSPS);
+    mapping.put(ToolOption.MaxTargetSequences, JsonKeys.MAX_TARGET_SEQS);
+    mapping.put(ToolOption.MegablastIndexName, JsonKeys.INDEX_NAME);
+    mapping.put(ToolOption.MegablastTemplateLength, JsonKeys.TEMPLATE_LENGTH);
+    mapping.put(ToolOption.MegablastTemplateType, JsonKeys.TEMPLATE_TYPE);
+    mapping.put(ToolOption.MaxIntronLength, JsonKeys.MAX_INTRON_LENGTH);
+    mapping.put(ToolOption.MinRawGappedScore, JsonKeys.MIN_RAW_GAPPED_SCORE);
+    mapping.put(ToolOption.MismatchPenalty, JsonKeys.PENALTY);
+    mapping.put(ToolOption.MultiHitWindowSize, JsonKeys.WINDOW_SIZE);
+    mapping.put(
+      ToolOption.MultiSequenceAlignmentMasterIndex,
+      JsonKeys.MultiSequenceAlignmentMasterIndex
+    );
+    mapping.put(ToolOption.NegativeGIListFile, JsonKeys.NEGATIVE_GI_LIST);
+    mapping.put(ToolOption.NegativeIPGList, JsonKeys.NegativeIPGList);
+    mapping.put(ToolOption.NegativeSequenceIDListFile, JsonKeys.NEGATIVE_SEQ_ID_LIST);
+    mapping.put(ToolOption.NegativeTaxonomyIDs, JsonKeys.NEGATIVE_TAX_IDS);
+    mapping.put(ToolOption.NegativeTaxonomyIDListFile, JsonKeys.NEGATIVE_TAX_ID_LIST);
+    mapping.put(ToolOption.NonGreedyExtension, JsonKeys.NO_GREEDY);
+    mapping.put(ToolOption.NumAlignments, JsonKeys.NUM_ALIGNMENTS);
+    mapping.put(ToolOption.NumberOfThreads, JsonKeys.NumThreads);
+    mapping.put(ToolOption.NumDescriptions, JsonKeys.NUM_DESCRIPTIONS);
+    mapping.put(ToolOption.NumIterations, JsonKeys.NumIterations);
+    mapping.put(ToolOption.OffDiagonalRange, JsonKeys.OffDiagonalRange);
+    mapping.put(ToolOption.OutputFile, JsonKeys.OutputFile);
+    mapping.put(ToolOption.OutAsciiPsiBlastCheckpointFile, JsonKeys.OutAsciiPsiBlastCheckpointFile);
+    mapping.put(ToolOption.OutPsiBlastCheckpointFile, JsonKeys.OutPsiBlastCheckpointFile);
+    mapping.put(ToolOption.OutputFormat, JsonKeys.OUT_FMT);
+    mapping.put(ToolOption.ParseDefLines, JsonKeys.PARSE_DEF_LINES);
+    mapping.put(ToolOption.PercentIdentity, JsonKeys.PERCENT_IDENTITY);
+    mapping.put(ToolOption.PhiBlastPatternFile, JsonKeys.PhiBlastPatternFile);
+    mapping.put(ToolOption.PseudoCount, JsonKeys.PseudoCount);
+    mapping.put(ToolOption.Query, JsonKeys.QUERY);
+    mapping.put(ToolOption.QueryCoveragePercentHSP, JsonKeys.QUERY_COVERAGE_HSP_PERCENT);
+    mapping.put(ToolOption.QueryGeneticCode, JsonKeys.QUERY_GENETIC_CODE);
+    mapping.put(ToolOption.QueryLocation, JsonKeys.QUERY_LOC);
+    mapping.put(ToolOption.Remote, JsonKeys.REMOTE);
+    mapping.put(ToolOption.SaveEachPsiBlastCheckpoint, JsonKeys.SaveEachPsiBlastCheckpoint);
+    mapping.put(
+      ToolOption.SavePsiBlastCheckpointAfterLastRound,
+      JsonKeys.SavePsiBlastCheckpointAfterLastRound
+    );
+    mapping.put(ToolOption.ScoringMatrix, JsonKeys.MATRIX);
+    mapping.put(ToolOption.SearchSpaceEffectiveLength, JsonKeys.SEARCH_SPACE);
+    mapping.put(ToolOption.SEGFilter, JsonKeys.SEG);
+    mapping.put(ToolOption.SequenceIDListFile, JsonKeys.SEQ_ID_LIST);
+    mapping.put(ToolOption.ShowNCBIGIs, JsonKeys.ShowNCBIGIs);
+    mapping.put(ToolOption.SoftMasking, JsonKeys.SOFT_MASKING);
+    mapping.put(ToolOption.SortHits, JsonKeys.SORT_HITS);
+    mapping.put(ToolOption.SortHSPs, JsonKeys.SORT_HSPS);
+    mapping.put(ToolOption.Strand, JsonKeys.STRAND);
+    mapping.put(ToolOption.SubjectBestHit, JsonKeys.SubjectBestHit);
+    mapping.put(ToolOption.SubjectFile, JsonKeys.SUBJECT);
+    mapping.put(ToolOption.SubjectLocation, JsonKeys.SUBJECT_LOC);
+    mapping.put(ToolOption.SumStats, JsonKeys.SumStats);
+    mapping.put(ToolOption.Task, JsonKeys.TASK);
+    mapping.put(ToolOption.TaxonomyIDs, JsonKeys.TAX_IDS);
+    mapping.put(ToolOption.TaxonomyIDListFile, JsonKeys.TAX_ID_LIST);
+    mapping.put(ToolOption.Threshold, JsonKeys.THRESHOLD);
+    mapping.put(ToolOption.UngappedAlignmentOnly, JsonKeys.UNGAPPED);
+    mapping.put(ToolOption.UseMegablastIndex, JsonKeys.USE_INDEX);
+    mapping.put(ToolOption.UseSmithWatermanAlignments, JsonKeys.USE_SMITH_WATERMAN_ALIGNS);
+    mapping.put(ToolOption.Version, JsonKeys.Version);
+    mapping.put(ToolOption.WindowMaskerDatabase, JsonKeys.WINDOW_MASKER_DB);
+    mapping.put(ToolOption.WindowMaskerTaxonomicID, JsonKeys.WINDOW_MASKER_TAX_ID);
+    mapping.put(ToolOption.WordSize, JsonKeys.WORD_SIZE);
+    mapping.put(ToolOption.XDropoffFinalGappedExtensions, JsonKeys.XDROP_GAP_FINAL);
+    mapping.put(ToolOption.XDropoffPrelimGappedExtensions, JsonKeys.XDROP_GAP);
+    mapping.put(ToolOption.XDropoffUngappedExtensions, JsonKeys.XDROP_UNGAP);
+  }
+}
