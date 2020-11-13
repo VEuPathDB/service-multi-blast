@@ -54,10 +54,10 @@ public class BlastValidator
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   static void validateDbName(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getDbName() == null)
+    if (conf.getBlastDatabase() == null)
       return;
 
-    if (conf.getDbName().isBlank())
+    if (conf.getBlastDatabase().isBlank())
       err.putError(Util.key(ToolOption.BlastDatabase, ext), ErrNoEmpty);
   }
 
@@ -79,7 +79,7 @@ public class BlastValidator
     if (conf.getEntrezQuery() == null)
       return;
 
-    if (!conf.getRemote())
+    if (!conf.isRemoteEnabled())
       err.putError(Util.key(ToolOption.EntrezQuery, ext), "remote must be true to use this field");
   }
 
@@ -176,7 +176,7 @@ public class BlastValidator
     if (conf.getNumThreads() < 1)
       err.putError(Util.key(ToolOption.NumberOfThreads, ext), String.format(ErrGtEq, 1));
 
-    if (conf.getRemote())
+    if (conf.isRemoteEnabled())
       err.putError(
         Util.key(ToolOption.NumberOfThreads, ext),
         String.format(ErrIncompatibleWith, ToolOption.Remote)
