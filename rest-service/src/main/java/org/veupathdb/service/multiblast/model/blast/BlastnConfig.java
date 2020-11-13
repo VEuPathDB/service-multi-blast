@@ -3,12 +3,9 @@ package org.veupathdb.service.multiblast.model.blast;
 import java.io.File;
 
 import org.veupathdb.service.multiblast.model.CLISerializable;
-import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
-import org.veupathdb.service.multiblast.service.jobs.BlastnValidator;
 
-public class BlastnConfig extends StdBlastConfig implements CLISerializable, Validatable
+public class BlastnConfig extends StdBlastConfig implements CLISerializable
 {
   private QueryStrand   strand;
   private BlastnTask    task;
@@ -30,11 +27,6 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
   private TemplateType  templateType;
   private Integer       templateLength;
   private Boolean       sumStats;
-
-  @Override
-  public ErrorMap validate() {
-    return BlastnValidator.validate(this);
-  }
 
   public QueryStrand getStrand() {
     return strand;

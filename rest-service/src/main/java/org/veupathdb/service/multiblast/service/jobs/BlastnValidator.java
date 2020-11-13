@@ -87,7 +87,7 @@ public class BlastnValidator extends BlastValidator
     // this field?"  The remote flag is significant and requiring it forces the
     // client to acknowledge that they actually want to run a remote query.
     if (config.getEntrezQuery() != null && config.isRemoteEnabled())
-      errors.putError(OptionName.REMOTE, Err.RequireRemote);
+      errors.putError(ToolOption.Remote, Err.RequireRemote);
 
 //    if (config.getDbSoftMask() != null && forbidDbSoftMask())
 //      errors.putError(OptionName.DB_SOFT_MASK, Err.ForbidDbSoftMask);
@@ -105,8 +105,8 @@ public class BlastnValidator extends BlastValidator
     return instance;
   }
 
-  public static ErrorMap validate(BlastnConfig config) {
-    return getInstance().validateConfig(config);
+  public static ErrorMap validate(BlastnConfig config, boolean ext) {
+    return getInstance().validateConfig(config, ext);
   }
 
   static boolean forbidGiList(BlastnConfig config) {

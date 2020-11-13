@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 public class BlastValidator
 {
   static final String
-    ErrNoQuery = "is required.",
+    ErrRequired = "is required.",
     ErrNoEmpty = "cannot be empty",
     ErrGt = "must be greater than %d",
     ErrGtEq = "must be greater than or equal to %d",
@@ -55,15 +55,14 @@ public class BlastValidator
 
   static void validateDbName(ErrorMap err, BlastConfig conf, boolean ext) {
     if (conf.getBlastDatabase() == null)
-      return;
-
-    if (conf.getBlastDatabase().isBlank())
+      err.putError(Util.key(ToolOption.BlastDatabase, ext), ErrRequired);
+    else if (conf.getBlastDatabase().isBlank())
       err.putError(Util.key(ToolOption.BlastDatabase, ext), ErrNoEmpty);
   }
 
   static void validateQuery(ErrorMap err, BlastConfig conf, boolean ext) {
     if (conf.getQuery() == null)
-      err.putError(Util.key(ToolOption.Query, ext), ErrNoQuery);
+      err.putError(Util.key(ToolOption.Query, ext), ErrRequired);
   }
 
   static final String ErrQueryLoc = "start position must be less than stop position";

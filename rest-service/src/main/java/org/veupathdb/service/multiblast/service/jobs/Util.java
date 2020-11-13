@@ -98,10 +98,10 @@ class Util
     mapping.put(ToolOption.PercentIdentity, JsonKeys.PERCENT_IDENTITY);
     mapping.put(ToolOption.PhiBlastPatternFile, JsonKeys.PhiBlastPatternFile);
     mapping.put(ToolOption.PseudoCount, JsonKeys.PseudoCount);
-    mapping.put(ToolOption.Query, JsonKeys.QUERY);
+    mapping.put(ToolOption.Query, JsonKeys.Query);
     mapping.put(ToolOption.QueryCoveragePercentHSP, JsonKeys.QUERY_COVERAGE_HSP_PERCENT);
     mapping.put(ToolOption.QueryGeneticCode, JsonKeys.QUERY_GENETIC_CODE);
-    mapping.put(ToolOption.QueryLocation, JsonKeys.QUERY_LOC);
+    mapping.put(ToolOption.QueryLocation, JsonKeys.QueryLocation);
     mapping.put(ToolOption.Remote, JsonKeys.REMOTE);
     mapping.put(ToolOption.SaveEachPsiBlastCheckpoint, JsonKeys.SaveEachPsiBlastCheckpoint);
     mapping.put(
