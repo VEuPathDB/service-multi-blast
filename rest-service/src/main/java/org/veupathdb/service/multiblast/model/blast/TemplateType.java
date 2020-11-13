@@ -30,4 +30,9 @@ public enum TemplateType
   public static TemplateType unsafeFromString(String name) {
     return fromString(name).orElseThrow(IllegalArgumentException::new);
   }
+
+  @Override
+  public String toString() {
+    return value;
+  }
 }

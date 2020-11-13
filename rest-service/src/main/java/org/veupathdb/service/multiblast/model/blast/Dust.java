@@ -24,6 +24,11 @@ public class Dust
     return linker;
   }
 
+  @Override
+  public String toString() {
+    return String.format("%d %d %d", level, window, linker);
+  }
+
   /**
    * This method parses the input value, performing no validation checks.
    *
@@ -39,5 +44,7 @@ public class Dust
       Short.parseShort(split[1]),
       Short.parseShort(split[2])
     );
+
+
   }
 }

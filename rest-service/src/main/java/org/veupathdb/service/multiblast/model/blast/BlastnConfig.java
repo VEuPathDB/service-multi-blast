@@ -5,6 +5,7 @@ import java.io.File;
 import org.veupathdb.service.multiblast.model.CLISerializable;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.Validatable;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.service.jobs.BlastnValidator;
 
 public class BlastnConfig extends StdBlastConfig implements CLISerializable, Validatable
@@ -15,7 +16,7 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
   private Integer       gapExtend;
   private Integer       penalty;
   private Integer       reward;
-  private Boolean       useIndex;
+  private boolean       useIndex;
   private String        indexName;
   private Dust          dust;
   private File          filteringDb;
@@ -25,7 +26,7 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
   private Integer       cullingLimit;
   private Double        bestHitOverhang;
   private Double        bestHitScoreEdge;
-  private Boolean       subjectBestHit;
+  private boolean       subjectBestHit;
   private TemplateType  templateType;
   private Integer       templateLength;
   private Boolean       sumStats;
@@ -83,11 +84,11 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
     this.reward = reward;
   }
 
-  public Boolean getUseIndex() {
+  public boolean getUseIndex() {
     return useIndex;
   }
 
-  public void setUseIndex(Boolean useIndex) {
+  public void setUseIndex(boolean useIndex) {
     this.useIndex = useIndex;
   }
 
@@ -163,11 +164,11 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
-  public Boolean getSubjectBestHit() {
+  public boolean getSubjectBestHit() {
     return subjectBestHit;
   }
 
-  public void setSubjectBestHit(Boolean subjectBestHit) {
+  public void setSubjectBestHit(boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
   }
 
@@ -195,5 +196,32 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable, Val
     this.sumStats = sumStats;
   }
 
+  @Override
+  public void toArgs(CliBuilder args) {
+    super.toArgs(args);
 
+    args.appendNonNull(ToolOption.Strand, strand)
+      .appendNonNull(ToolOption.Task, task)
+      .appendNonNull(ToolOption.GapOpenCost, gapOpen)
+      .appendNonNull(ToolOption.GapExtendCost, gapExtend)
+      .appendNonNull(ToolOption.MismatchPenalty, penalty)
+      .appendNonNull(ToolOption.MatchReward, reward)
+      .appendNonNull(ToolOption.MegablastIndexName, indexName)
+      .appendNonNull(ToolOption.Dust, dust)
+      .appendNonNull(ToolOption.FilteringDatabase, filteringDb)
+      .appendNonNull(ToolOption.WindowMaskerTaxonomicID, windowMaskerTaxID)
+      .appendNonNull(ToolOption.WindowMaskerDatabase, windowMaskerDB)
+      .appendNonNull(ToolOption.PercentIdentity, percIdentity)
+      .appendNonNull(ToolOption.CullingLimit, cullingLimit)
+      .appendNonNull(ToolOption.BestHitOverhang, bestHitOverhang)
+      .appendNonNull(ToolOption.BestHitScoreEdge, bestHitScoreEdge)
+      .appendNonNull(ToolOption.MegablastTemplateType, templateType)
+      .appendNonNull(ToolOption.MegablastTemplateLength, templateLength)
+      .appendNonNull(ToolOption.SumStats, sumStats);
+
+    if (useIndex)
+      args.set(ToolOption.UseMegablastIndex, true);
+    if (subjectBestHit)
+      args.set(ToolOption.SubjectBestHit);
+  }
 }
