@@ -2,15 +2,15 @@ package org.veupathdb.service.multiblast.service.jobs;
 
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.BlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.OptionName;
+import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 public class BlastnValidator extends BlastValidator
 {
   private static BlastnValidator instance;
 
-  public ErrorMap validateConfig(BlastnConfig config) {
-    var errors = super.validateConfig(config);
+  public ErrorMap validateConfig(BlastnConfig config, boolean ext) {
+    var errors = super.validate(config, ext);
 
     if (config.getWordSize() < 4)
       errors.putError(JsonKeys.WORD_SIZE, "word size must be 4 or greater");
@@ -244,4 +244,13 @@ public class BlastnValidator extends BlastValidator
 
     return false;
   }
+
+  static void validateWordSize(ErrorMap err, BlastnConfig conf) {
+    if (conf.getWordSize() == null)
+      return;
+
+    if (conf.getWordSize() < 4)
+      err.putError(ToolOption.WordSize, "must be greater than or equal to 4");
+  }
+
 }

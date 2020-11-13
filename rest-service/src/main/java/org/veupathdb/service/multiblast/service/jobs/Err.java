@@ -15,7 +15,7 @@ class Err
   // Std Blast
   SubjectCompatibility = makeListError(
     "is incompatible with ",
-    JsonKeys.DB,
+    JsonKeys.BlastDatabase,
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,

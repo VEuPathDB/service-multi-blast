@@ -2,28 +2,11 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.util.*;
 
-import javax.validation.constraints.NotNull;
-
-import org.veupathdb.service.multiblast.model.CLISerializable;
-import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
-import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
-import static java.util.Collections.singletonList;
-
-public class OutFormat implements Validatable
+public class OutFormat
 {
-  private static final String
-    DELIM_PREFIX   = "delim=",
-    DEFAULT_FIELDS = "std";
-
-  private static final String
-    ERR_FIELDS_WRONG_FORMAT = "the selected " + JsonKeys.FORMAT + " does not allow defining custom"
-    + " report fields.",
-    ERR_DELIM_FORBIDDEN     = "the selected "
-      + JsonKeys.FORMAT
-      + " does not allow custom delimiters.";
+  private static final String DELIM_PREFIX = "delim=";
 
   private ReportFormatType format;
 
@@ -35,11 +18,7 @@ public class OutFormat implements Validatable
     fields = new ArrayList<>();
   }
 
-  public OutFormat(
-    ReportFormatType format,
-    Character delim,
-    @NotNull List<BlastReportField> fields
-  ) {
+  public OutFormat(ReportFormatType format, Character delim, List<BlastReportField> fields) {
     this.format = format;
     this.delim  = delim;
     this.fields = fields;
@@ -53,7 +32,6 @@ public class OutFormat implements Validatable
     return format != null;
   }
 
-  @NotNull
   public OutFormat setFormat(ReportFormatType format) {
     this.format = format;
     return this;
@@ -67,13 +45,11 @@ public class OutFormat implements Validatable
     return delim != null;
   }
 
-  @NotNull
   public OutFormat setDelim(Character delim) {
     this.delim = delim;
     return this;
   }
 
-  @NotNull
   public List<BlastReportField> getFields() {
     return fields;
   }
@@ -82,23 +58,10 @@ public class OutFormat implements Validatable
     return !fields.isEmpty();
   }
 
-  @NotNull
-  public OutFormat setFields(@NotNull List<BlastReportField> fields) {
+  public OutFormat setFields(List<BlastReportField> fields) {
     this.fields.clear();
     this.fields.addAll(fields);
     return this;
-  }
-
-  @NotNull
-  public ErrorMap validate() {
-    var errors = new ErrorMap();
-
-    if (format != null && !fields.isEmpty() && !isCustomizableFormat())
-      errors.put(jsonKey(JsonKeys.FORMAT), singletonList(ERR_FIELDS_WRONG_FORMAT));
-    if (delim != null && !allowsDelimiters())
-      errors.put(jsonKey(JsonKeys.DELIMITER), singletonList(ERR_DELIM_FORBIDDEN));
-
-    return errors;
   }
 
   public static OutFormat fromString(String value) {
@@ -118,14 +81,14 @@ public class OutFormat implements Validatable
     return out.toString();
   }
 
-  private boolean isCustomizableFormat() {
+  public boolean isCustomizableFormat() {
     return switch (format) {
       case TABULAR, TABULAR_WITH_COMMENTS, CSV, SAM -> true;
       default -> false;
     };
   }
 
-  private boolean allowsDelimiters() {
+  public boolean allowsDelimiters() {
     return switch (format) {
       case TABULAR, TABULAR_WITH_COMMENTS, CSV -> true;
       default -> false;
