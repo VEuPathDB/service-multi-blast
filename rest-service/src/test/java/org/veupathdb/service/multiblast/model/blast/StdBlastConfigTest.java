@@ -251,7 +251,7 @@ class StdBlastConfigTest
       var target = new StdBlastConfig();
       var build  = new CliBuilder();
 
-      target.setSearchSpace(55);
+      target.setSearchSpace((byte) 55);
       target.toArgs(build);
       assertEquals("-searchsp='55'", build.toString());
     }
@@ -700,7 +700,7 @@ class StdBlastConfigTest
     void test22() {
       var target = new StdBlastConfig();
 
-      target.setSearchSpace(55);
+      target.setSearchSpace((byte) 55);
       assertEquals("-searchsp='55'", target.toString());
     }
 

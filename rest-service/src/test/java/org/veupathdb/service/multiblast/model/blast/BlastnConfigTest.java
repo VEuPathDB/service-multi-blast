@@ -251,7 +251,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setSearchSpace(55);
+      target.setSearchSpace((byte) 55);
       target.toArgs(build);
       assertEquals("-searchsp='55'", build.toString());
     }
@@ -915,7 +915,7 @@ class BlastnConfigTest
     void test22() {
       var target = new BlastnConfig();
 
-      target.setSearchSpace(55);
+      target.setSearchSpace((byte) 55);
       assertEquals("-searchsp='55'", target.toString());
     }
 
