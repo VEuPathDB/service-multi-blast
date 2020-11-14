@@ -58,7 +58,7 @@ abstract class StdBlastSelector<T extends StdBlastConfig> extends BlastSelector<
         ToolOption.SubjectLocation,
         new Setter<>(
           cls.getDeclaredMethod("setSubjectLocation", QueryLocation.class),
-          QueryLocation::fromString
+          QueryLocation::unsafeFromString
         )
       );
       setters.put(

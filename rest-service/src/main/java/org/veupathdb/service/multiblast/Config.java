@@ -45,7 +45,6 @@ public class Config extends Options
 
   @Option(
     names = "--svc-db-name",
-    required = false,
     arity = "1",
     defaultValue = "${env:SVC_DB_NAME}",
     description = "Postgres database name.  Defaults to \"postgres\""

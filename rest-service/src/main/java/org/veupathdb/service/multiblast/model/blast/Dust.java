@@ -7,9 +7,13 @@ public class Dust
   private final short linker;
 
   public Dust(int level, int window, int linker) {
-    this.level  = (short) level;
-    this.window = (short) window;
-    this.linker = (short) linker;
+    this((short) level, (short) window, (short) linker);
+  }
+
+  public Dust(short level, short window, short linker) {
+    this.level  = level;
+    this.window = window;
+    this.linker = linker;
   }
 
   public short getLevel() {
