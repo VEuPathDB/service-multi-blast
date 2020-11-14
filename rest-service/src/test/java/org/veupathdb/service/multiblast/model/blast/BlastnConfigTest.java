@@ -519,7 +519,7 @@ class BlastnConfigTest
       var target = new BlastnConfig();
       var build  = new CliBuilder();
 
-      target.setTask(BlastnTask.DC_MEGABLAST);
+      target.setTask(BlastnTask.DiscontiguousMegablast);
       target.toArgs(build);
       assertEquals("-task='dc-megablast'", build.toString());
     }
@@ -1135,7 +1135,7 @@ class BlastnConfigTest
     void test45() {
       var target = new BlastnConfig();
 
-      target.setTask(BlastnTask.DC_MEGABLAST);
+      target.setTask(BlastnTask.DiscontiguousMegablast);
       assertEquals("-task='dc-megablast'", target.toString());
     }
 
