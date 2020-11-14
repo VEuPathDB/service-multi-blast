@@ -4,13 +4,11 @@ import java.util.Optional;
 
 public enum BlastnTask
 {
-  BLASTN("blastn"),
-  BLASTN_SHORT("blastn-short"),
-  DC_MEGABLAST("dc-megablast"),
-  MEGABLAST("megablast"),
-  RMBLASTN("rmblast");
-
-  private static final BlastnTask def = MEGABLAST;
+  BlastN("blastn"),
+  BlastNShort("blastn-short"),
+  DiscontiguousMegablast("dc-megablast"),
+  Megablast("megablast"),
+  RMBlastN("rmblastn");
 
   private final String value;
 
@@ -20,10 +18,6 @@ public enum BlastnTask
 
   public String getValue() {
     return value;
-  }
-
-  public static BlastnTask getDefault() {
-    return def;
   }
 
   public static Optional<BlastnTask> fromString(String value) {
