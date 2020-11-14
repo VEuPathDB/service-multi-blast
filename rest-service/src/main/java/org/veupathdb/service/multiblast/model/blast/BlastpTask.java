@@ -4,11 +4,9 @@ import java.util.Optional;
 
 public enum BlastpTask
 {
-  BLASTP("blastp"),
-  BLASTP_FAST("blastp-fast"),
-  BLASTP_SHORT("blastp-short");
-
-  private static final BlastpTask def = BLASTP;
+  BlastP("blastp"),
+  BlastPFast("blastp-fast"),
+  BlastPShort("blastp-short");
 
   private final String value;
 
@@ -18,10 +16,6 @@ public enum BlastpTask
 
   public String getValue() {
     return value;
-  }
-
-  public static BlastpTask getDefault() {
-    return def;
   }
 
   @Override
@@ -35,5 +29,9 @@ public enum BlastpTask
         return Optional.of(e);
 
     return Optional.empty();
+  }
+
+  public static BlastpTask unsafeFromString(String value) {
+    return fromString(value).orElseThrow(IllegalArgumentException::new);
   }
 }
