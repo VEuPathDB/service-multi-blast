@@ -92,7 +92,7 @@ abstract class BlastSelector<T extends BlastConfig>
         ToolOption.QueryLocation,
         new Setter<>(
           cls.getDeclaredMethod("setQueryLoc", QueryLocation.class),
-          QueryLocation::fromString
+          QueryLocation::unsafeFromString
         )
       );
       setters.put(

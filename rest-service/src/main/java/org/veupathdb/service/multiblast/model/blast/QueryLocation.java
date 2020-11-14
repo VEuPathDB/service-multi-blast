@@ -23,7 +23,7 @@ public class QueryLocation
     return start + "-" + stop;
   }
 
-  public static QueryLocation fromString(String value) {
+  public static QueryLocation unsafeFromString(String value) {
     var pos = value.indexOf('-');
     return new QueryLocation(
       Integer.parseInt(value.substring(0, pos)),

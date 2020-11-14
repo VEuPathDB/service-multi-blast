@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast;
 
+import org.veupathdb.service.multiblast.util.Format;
+
 public class Seg
 {
   private final int    window;
@@ -22,6 +24,16 @@ public class Seg
 
   public double getHiCut() {
     return hiCut;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+      "%d %s %s",
+      window,
+      Format.Decimals.format(loCut),
+      Format.Decimals.format(hiCut)
+    );
   }
 
   public static Seg unsafeFromString(String value) {

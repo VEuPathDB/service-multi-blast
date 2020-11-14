@@ -5,6 +5,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
   java
+  jacoco
 }
 
 apply(from = "dependencies.gradle.kts")
@@ -72,4 +73,20 @@ tasks.withType<Test> {
 val test by tasks.getting(Test::class) {
   // Use junit platform for unit tests
   useJUnitPlatform()
+}
+
+tasks.test {
+  exclude("org/veupathdb/service/multiblast/generated")
+  finalizedBy(tasks.jacocoTestReport)
+}
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+  reports {
+    xml.isEnabled = true
+    csv.isEnabled = false
+    html.isEnabled = true
+  }
+}
+jacoco {
+  toolVersion = "0.8.6"
 }
