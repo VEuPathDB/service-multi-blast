@@ -1,10 +1,6 @@
 package org.veupathdb.service.multiblast.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
@@ -21,6 +17,7 @@ import org.veupathdb.service.multiblast.service.http.JobService;
 @Authenticated
 public class JobController implements Jobs
 {
+  private static final String AttachmentPat = "attachment; filename=\"%s.%s\"";
 
   private final Request     request;
   private final UserProfile user;
@@ -61,31 +58,55 @@ public class JobController implements Jobs
     List<InputBlastFmtField> fields
   ) {
     var wrap = service.getReport(jobId, format, fields, user, request);
-    var head = GetJobsReportByJobIdResponse.headersFor200()
-      .withContentDisposition("Attachment");
+    var head = GetJobsReportByJobIdResponse.headersFor200();
 
     return switch (wrap.format) {
+      case TABULAR, TABULARWITHCOMMENTS -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "tsv"))
+      );
+
+      case CSV -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "csv"))
+      );
+
+      case TEXTASN_1 -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "asn"))
+      );
+
       case PAIRWISE
         , QUERYANCHOREDWITHIDENTITIES
         , QUERYANCHOREDWITHOUTIDENTITIES
         , FLATQUERYANCHOREDWITHIDENTITIES
         , FLATQUERYANCHOREDWITHOUTIDENTITIES
-        , TABULAR
-        , TABULARWITHCOMMENTS
-        , TEXTASN_1
-        , CSV
         , SAM
         , ORGANISMREPORT
-        -> GetJobsReportByJobIdResponse.respond200WithTextPlain(wrap.stream, head);
+        -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
+          wrap.stream,
+          head.withContentDisposition(String.format(AttachmentPat, jobId, "txt"))
+        );
 
-      case BINARYASN_1, ARCHIVEASN_1
-        -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(wrap.stream, head);
+      case ARCHIVEASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "asna")));
+      case BINARYASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "asnb"))
+      );
 
-      case SEQALIGNJSON, MULTIFILEJSON, SINGLEFILEJSON
-        -> GetJobsReportByJobIdResponse.respond200WithApplicationJson(wrap.stream, head);
+      case SEQALIGNJSON, MULTIFILEJSON, SINGLEFILEJSON -> GetJobsReportByJobIdResponse
+        .respond200WithApplicationJson(
+          wrap.stream,
+          head.withContentDisposition(String.format(AttachmentPat, jobId, "json"))
+        );
 
-      case XML, MULTIFILEXML2, SINGLEFILEXML2
-        -> GetJobsReportByJobIdResponse.respond200WithApplicationXml(wrap.stream, head);
+      case XML, MULTIFILEXML2, SINGLEFILEXML2 -> GetJobsReportByJobIdResponse
+        .respond200WithApplicationXml(
+          wrap.stream,
+          head.withContentDisposition(String.format(AttachmentPat, jobId, "xml"))
+        );
     };
   }
 
