@@ -78,6 +78,10 @@ fix-path:
 	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_TEST_DIR) $(TEST_DIR)
 
 gen-jaxrs: api.raml merge-raml
+	# Performing hack to make doc-gen work...
+	@grep -n '# BEGIN HACK #' api.raml | cut -d: -f1 | xargs -I'{}' head -n{} api.raml > api2.raml
+	@tail -n+3 schema/library.raml >> api2.raml
+	@mv api2.raml api.raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
 

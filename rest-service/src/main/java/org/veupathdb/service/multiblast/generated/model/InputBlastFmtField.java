@@ -3,74 +3,17 @@ package org.veupathdb.service.multiblast.generated.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum InputBlastFmtField {
-  @JsonProperty("qseqid")
-  QSEQID("qseqid"),
+  @JsonProperty("bitscore")
+  BITSCORE("bitscore"),
 
-  @JsonProperty("qgi")
-  QGI("qgi"),
-
-  @JsonProperty("qacc")
-  QACC("qacc"),
-
-  @JsonProperty("sseqid")
-  SSEQID("sseqid"),
-
-  @JsonProperty("sallseqid")
-  SALLSEQID("sallseqid"),
-
-  @JsonProperty("sgi")
-  SGI("sgi"),
-
-  @JsonProperty("sallgi")
-  SALLGI("sallgi"),
-
-  @JsonProperty("sacc")
-  SACC("sacc"),
-
-  @JsonProperty("sallacc")
-  SALLACC("sallacc"),
-
-  @JsonProperty("qstart")
-  QSTART("qstart"),
-
-  @JsonProperty("qend")
-  QEND("qend"),
-
-  @JsonProperty("sstart")
-  SSTART("sstart"),
-
-  @JsonProperty("send")
-  SEND("send"),
-
-  @JsonProperty("qseq")
-  QSEQ("qseq"),
-
-  @JsonProperty("sseq")
-  SSEQ("sseq"),
+  @JsonProperty("btop")
+  BTOP("btop"),
 
   @JsonProperty("evalue")
   EVALUE("evalue"),
 
-  @JsonProperty("bitscore")
-  BITSCORE("bitscore"),
-
-  @JsonProperty("score")
-  SCORE("score"),
-
-  @JsonProperty("length")
-  LENGTH("length"),
-
-  @JsonProperty("pident")
-  PIDENT("pident"),
-
-  @JsonProperty("nident")
-  NIDENT("nident"),
-
-  @JsonProperty("mismatch")
-  MISMATCH("mismatch"),
-
-  @JsonProperty("positive")
-  POSITIVE("positive"),
+  @JsonProperty("frames")
+  FRAMES("frames"),
 
   @JsonProperty("gapopen")
   GAPOPEN("gapopen"),
@@ -78,53 +21,143 @@ public enum InputBlastFmtField {
   @JsonProperty("gaps")
   GAPS("gaps"),
 
+  @JsonProperty("length")
+  LENGTH("length"),
+
+  @JsonProperty("mismatch")
+  MISMATCH("mismatch"),
+
+  @JsonProperty("nident")
+  NIDENT("nident"),
+
+  @JsonProperty("pident")
+  PIDENT("pident"),
+
+  @JsonProperty("positive")
+  POSITIVE("positive"),
+
   @JsonProperty("ppos")
   PPOS("ppos"),
 
-  @JsonProperty("frames")
-  FRAMES("frames"),
+  @JsonProperty("qacc")
+  QACC("qacc"),
 
-  @JsonProperty("qframe")
-  QFRAME("qframe"),
-
-  @JsonProperty("sframe")
-  SFRAME("sframe"),
-
-  @JsonProperty("btop")
-  BTOP("btop"),
-
-  @JsonProperty("staxids")
-  STAXIDS("staxids"),
-
-  @JsonProperty("sscinames")
-  SSCINAMES("sscinames"),
-
-  @JsonProperty("scomnames")
-  SCOMNAMES("scomnames"),
-
-  @JsonProperty("sblastnames")
-  SBLASTNAMES("sblastnames"),
-
-  @JsonProperty("sskingdoms")
-  SSKINGDOMS("sskingdoms"),
-
-  @JsonProperty("stitle")
-  STITLE("stitle"),
-
-  @JsonProperty("salltitles")
-  SALLTITLES("salltitles"),
-
-  @JsonProperty("sstrand")
-  SSTRAND("sstrand"),
-
-  @JsonProperty("qcovs")
-  QCOVS("qcovs"),
+  @JsonProperty("qaccver")
+  QACCVER("qaccver"),
 
   @JsonProperty("qcovhsp")
   QCOVHSP("qcovhsp"),
 
+  @JsonProperty("qcovs")
+  QCOVS("qcovs"),
+
   @JsonProperty("qcovus")
-  QCOVUS("qcovus");
+  QCOVUS("qcovus"),
+
+  @JsonProperty("qend")
+  QEND("qend"),
+
+  @JsonProperty("qframe")
+  QFRAME("qframe"),
+
+  @JsonProperty("qgi")
+  QGI("qgi"),
+
+  @JsonProperty("qlen")
+  QLEN("qlen"),
+
+  @JsonProperty("qseq")
+  QSEQ("qseq"),
+
+  @JsonProperty("qseqid")
+  QSEQID("qseqid"),
+
+  @JsonProperty("qstart")
+  QSTART("qstart"),
+
+  @JsonProperty("sacc")
+  SACC("sacc"),
+
+  @JsonProperty("saccver")
+  SACCVER("saccver"),
+
+  @JsonProperty("sallacc")
+  SALLACC("sallacc"),
+
+  @JsonProperty("sallgi")
+  SALLGI("sallgi"),
+
+  @JsonProperty("sallseqid")
+  SALLSEQID("sallseqid"),
+
+  @JsonProperty("salltitles")
+  SALLTITLES("salltitles"),
+
+  @JsonProperty("sblastname")
+  SBLASTNAME("sblastname"),
+
+  @JsonProperty("sblastnames")
+  SBLASTNAMES("sblastnames"),
+
+  @JsonProperty("scomname")
+  SCOMNAME("scomname"),
+
+  @JsonProperty("scomnames")
+  SCOMNAMES("scomnames"),
+
+  @JsonProperty("score")
+  SCORE("score"),
+
+  @JsonProperty("send")
+  SEND("send"),
+
+  @JsonProperty("sframe")
+  SFRAME("sframe"),
+
+  @JsonProperty("sgi")
+  SGI("sgi"),
+
+  @JsonProperty("slen")
+  SLEN("slen"),
+
+  @JsonProperty("sq")
+  SQ("sq"),
+
+  @JsonProperty("sr")
+  SR("sr"),
+
+  @JsonProperty("ssciname")
+  SSCINAME("ssciname"),
+
+  @JsonProperty("sscinames")
+  SSCINAMES("sscinames"),
+
+  @JsonProperty("sseq")
+  SSEQ("sseq"),
+
+  @JsonProperty("sseqid")
+  SSEQID("sseqid"),
+
+  @JsonProperty("sskingdom")
+  SSKINGDOM("sskingdom"),
+
+  @JsonProperty("sskingdoms")
+  SSKINGDOMS("sskingdoms"),
+
+  @JsonProperty("sstart")
+  SSTART("sstart"),
+
+  @JsonProperty("sstrand")
+  SSTRAND("sstrand"),
+
+  @JsonProperty("staxid")
+  STAXID("staxid"),
+
+  @JsonProperty("staxids")
+  STAXIDS("staxids"),
+
+  @JsonProperty("stitle")
+  STITLE("stitle");
 
   private String name;
 

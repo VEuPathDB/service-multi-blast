@@ -1,7 +1,7 @@
 package org.veupathdb.service.multiblast.service.jobs;
 
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.BlastnConfig;
+import org.veupathdb.service.multiblast.model.blast.BlastNConfig;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
@@ -9,7 +9,7 @@ public class BlastnValidator extends BlastValidator
 {
   private static BlastnValidator instance;
 
-  public ErrorMap validateConfig(BlastnConfig config, boolean ext) {
+  public ErrorMap validateConfig(BlastNConfig config, boolean ext) {
     var errors = super.validate(config, ext);
 
     if (config.getWordSize() < 4)
@@ -105,11 +105,11 @@ public class BlastnValidator extends BlastValidator
     return instance;
   }
 
-  public static ErrorMap validate(BlastnConfig config, boolean ext) {
+  public static ErrorMap validate(BlastNConfig config, boolean ext) {
     return getInstance().validateConfig(config, ext);
   }
 
-  static boolean forbidGiList(BlastnConfig config) {
+  static boolean forbidGiList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getSequenceIdList(),
       config.getTaxIds(),
@@ -123,7 +123,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidSeqIdList(BlastnConfig config) {
+  static boolean forbidSeqIdList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getTaxIds(),
@@ -137,7 +137,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidNegGiList(BlastnConfig config) {
+  static boolean forbidNegGiList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -151,7 +151,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidTaxIds(BlastnConfig config) {
+  static boolean forbidTaxIds(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -165,7 +165,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidNegativeTaxIds(BlastnConfig config) {
+  static boolean forbidNegativeTaxIds(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -179,7 +179,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidTaxIdList(BlastnConfig config) {
+  static boolean forbidTaxIdList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -193,7 +193,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidNegativeTaxIdList(BlastnConfig config) {
+  static boolean forbidNegativeTaxIdList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -207,7 +207,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidNegSeqIdList(BlastnConfig config) {
+  static boolean forbidNegSeqIdList(BlastNConfig config) {
     return config.isRemoteEnabled() || forbidList(
       config.getGiList(),
       config.getSequenceIdList(),
@@ -221,7 +221,7 @@ public class BlastnValidator extends BlastValidator
     );
   }
 
-  static boolean forbidSubject(BlastnConfig config) {
+  static boolean forbidSubject(BlastNConfig config) {
     // FIXME: DB is not actually used
     return config.getBlastDatabase() != null || forbidList(
       config.getGiList(),
@@ -245,7 +245,7 @@ public class BlastnValidator extends BlastValidator
     return false;
   }
 
-  static void validateWordSize(ErrorMap err, BlastnConfig conf) {
+  static void validateWordSize(ErrorMap err, BlastNConfig conf) {
     if (conf.getWordSize() == null)
       return;
 

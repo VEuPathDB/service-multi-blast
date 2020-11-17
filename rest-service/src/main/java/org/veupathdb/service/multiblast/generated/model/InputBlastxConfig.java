@@ -231,10 +231,10 @@ public interface InputBlastxConfig extends InputBlastConfig {
   void setGapExtend(byte gapExtend);
 
   @JsonProperty("matrix")
-  InputBlastScoringMatrix getMatrix();
+  InputBlastxScoringMatrix getMatrix();
 
   @JsonProperty("matrix")
-  void setMatrix(InputBlastScoringMatrix matrix);
+  void setMatrix(InputBlastxScoringMatrix matrix);
 
   @JsonProperty("threshold")
   byte getThreshold();

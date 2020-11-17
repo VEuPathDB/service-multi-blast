@@ -2,7 +2,7 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.io.File;
 
-public class TBlastnConfig extends StdBlastConfig
+public class TBlastNConfig extends StdBlastConfig
 {
   private TBlastnTask          task;
   private Integer              gapOpen;
@@ -28,7 +28,7 @@ public class TBlastnConfig extends StdBlastConfig
     return task;
   }
 
-  public TBlastnConfig setTask(TBlastnTask task) {
+  public TBlastNConfig setTask(TBlastnTask task) {
     this.task = task;
     return this;
   }
@@ -37,7 +37,7 @@ public class TBlastnConfig extends StdBlastConfig
     return gapOpen;
   }
 
-  public TBlastnConfig setGapOpen(Integer gapOpen) {
+  public TBlastNConfig setGapOpen(Integer gapOpen) {
     this.gapOpen = gapOpen;
     return this;
   }
@@ -46,7 +46,7 @@ public class TBlastnConfig extends StdBlastConfig
     return gapExtend;
   }
 
-  public TBlastnConfig setGapExtend(Integer gapExtend) {
+  public TBlastNConfig setGapExtend(Integer gapExtend) {
     this.gapExtend = gapExtend;
     return this;
   }
@@ -55,7 +55,7 @@ public class TBlastnConfig extends StdBlastConfig
     return xDropGap;
   }
 
-  public TBlastnConfig setxDropGap(Double xDropGap) {
+  public TBlastNConfig setxDropGap(Double xDropGap) {
     this.xDropGap = xDropGap;
     return this;
   }
@@ -64,7 +64,7 @@ public class TBlastnConfig extends StdBlastConfig
     return xDropGapFinal;
   }
 
-  public TBlastnConfig setxDropGapFinal(Double xDropGapFinal) {
+  public TBlastNConfig setxDropGapFinal(Double xDropGapFinal) {
     this.xDropGapFinal = xDropGapFinal;
     return this;
   }
@@ -73,7 +73,7 @@ public class TBlastnConfig extends StdBlastConfig
     return sumStats;
   }
 
-  public TBlastnConfig setSumStats(Boolean sumStats) {
+  public TBlastNConfig setSumStats(Boolean sumStats) {
     this.sumStats = sumStats;
     return this;
   }
@@ -82,7 +82,7 @@ public class TBlastnConfig extends StdBlastConfig
     return dbGenCode;
   }
 
-  public TBlastnConfig setDbGenCode(Integer dbGenCode) {
+  public TBlastNConfig setDbGenCode(Integer dbGenCode) {
     this.dbGenCode = dbGenCode;
     return this;
   }
@@ -91,7 +91,7 @@ public class TBlastnConfig extends StdBlastConfig
     return ungapped;
   }
 
-  public TBlastnConfig setUngapped(Boolean ungapped) {
+  public TBlastNConfig setUngapped(Boolean ungapped) {
     this.ungapped = ungapped;
     return this;
   }
@@ -100,7 +100,7 @@ public class TBlastnConfig extends StdBlastConfig
     return maxIntronLength;
   }
 
-  public TBlastnConfig setMaxIntronLength(Integer maxIntronLength) {
+  public TBlastNConfig setMaxIntronLength(Integer maxIntronLength) {
     this.maxIntronLength = maxIntronLength;
     return this;
   }
@@ -109,7 +109,7 @@ public class TBlastnConfig extends StdBlastConfig
     return seg;
   }
 
-  public TBlastnConfig setSeg(Seg seg) {
+  public TBlastNConfig setSeg(Seg seg) {
     this.seg = seg;
     return this;
   }
@@ -118,7 +118,7 @@ public class TBlastnConfig extends StdBlastConfig
     return matrix;
   }
 
-  public TBlastnConfig setMatrix(TBlastnScoringMatrix matrix) {
+  public TBlastNConfig setMatrix(TBlastnScoringMatrix matrix) {
     this.matrix = matrix;
     return this;
   }
@@ -127,7 +127,7 @@ public class TBlastnConfig extends StdBlastConfig
     return threshold;
   }
 
-  public TBlastnConfig setThreshold(Double threshold) {
+  public TBlastNConfig setThreshold(Double threshold) {
     this.threshold = threshold;
     return this;
   }
@@ -136,7 +136,7 @@ public class TBlastnConfig extends StdBlastConfig
     return cullingLimit;
   }
 
-  public TBlastnConfig setCullingLimit(Integer cullingLimit) {
+  public TBlastNConfig setCullingLimit(Integer cullingLimit) {
     this.cullingLimit = cullingLimit;
     return this;
   }
@@ -145,7 +145,7 @@ public class TBlastnConfig extends StdBlastConfig
     return bestHitOverhang;
   }
 
-  public TBlastnConfig setBestHitOverhang(Double bestHitOverhang) {
+  public TBlastNConfig setBestHitOverhang(Double bestHitOverhang) {
     this.bestHitOverhang = bestHitOverhang;
     return this;
   }
@@ -154,7 +154,7 @@ public class TBlastnConfig extends StdBlastConfig
     return bestHitScoreEdge;
   }
 
-  public TBlastnConfig setBestHitScoreEdge(Double bestHitScoreEdge) {
+  public TBlastNConfig setBestHitScoreEdge(Double bestHitScoreEdge) {
     this.bestHitScoreEdge = bestHitScoreEdge;
     return this;
   }
@@ -163,7 +163,7 @@ public class TBlastnConfig extends StdBlastConfig
     return subjectBestHit;
   }
 
-  public TBlastnConfig setSubjectBestHit(Boolean subjectBestHit) {
+  public TBlastNConfig setSubjectBestHit(Boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
     return this;
   }
@@ -172,7 +172,7 @@ public class TBlastnConfig extends StdBlastConfig
     return compBasedStats;
   }
 
-  public TBlastnConfig setCompBasedStats(CompBasedStats compBasedStats) {
+  public TBlastNConfig setCompBasedStats(CompBasedStats compBasedStats) {
     this.compBasedStats = compBasedStats;
     return this;
   }
@@ -181,7 +181,7 @@ public class TBlastnConfig extends StdBlastConfig
     return useSmithWatermanAlignments;
   }
 
-  public TBlastnConfig setUseSmithWatermanAlignments(Boolean useSmithWatermanAlignments) {
+  public TBlastNConfig setUseSmithWatermanAlignments(Boolean useSmithWatermanAlignments) {
     this.useSmithWatermanAlignments = useSmithWatermanAlignments;
     return this;
   }
@@ -190,7 +190,7 @@ public class TBlastnConfig extends StdBlastConfig
     return inPssm;
   }
 
-  public TBlastnConfig setInPssm(File inPssm) {
+  public TBlastNConfig setInPssm(File inPssm) {
     this.inPssm = inPssm;
     return this;
   }

@@ -141,16 +141,16 @@ class Err
   ),
 
   OnlyForFmtLte4 = "is incompatible with output formats other than "
-    + ReportFormatType.PAIRWISE.ioName() + ", "
-    + ReportFormatType.QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", "
-    + ReportFormatType.QUERY_ANCHORED_WITHOUT_IDENTITIES.ioName() + ", "
-    + ReportFormatType.FLAT_QUERY_ANCHORED_WITH_IDENTITIES.ioName() + ", or "
-    + ReportFormatType.FLAT_QUERY_ANCHORED_WITHOUT_IDENTITIES,
+    + ReportFormatType.Pairwise.getIoName() + ", "
+    + ReportFormatType.QueryAnchoredWithIdentities.getIoName() + ", "
+    + ReportFormatType.QueryAnchoredWithoutIdentities.getIoName() + ", "
+    + ReportFormatType.FlatQueryAnchoredWithIdentities.getIoName() + ", or "
+    + ReportFormatType.FlatQueryAnchoredWithoutIdentities.getIoName(),
 
   ForbidWithMaxTargetSeqs = "is incompatible with " + JsonKeys.MAX_TARGET_SEQS,
 
   OnlyForPairwise = "is incompatible with formats other than "
-    + ReportFormatType.PAIRWISE.ioName();
+    + ReportFormatType.Pairwise.getIoName();
 
 
   static String makeListError(String prefix, String... fields) {

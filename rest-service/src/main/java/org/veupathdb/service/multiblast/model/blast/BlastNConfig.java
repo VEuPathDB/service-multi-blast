@@ -5,28 +5,33 @@ import java.io.File;
 import org.veupathdb.service.multiblast.model.CLISerializable;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
-public class BlastnConfig extends StdBlastConfig implements CLISerializable
+public class BlastNConfig extends StdBlastConfig implements CLISerializable
 {
-  private QueryStrand   strand;
-  private BlastnTask    task;
-  private Integer       gapOpen;
-  private Integer       gapExtend;
-  private Integer       penalty;
-  private Integer       reward;
-  private boolean       useIndex;
-  private String        indexName;
-  private Dust          dust;
-  private File          filteringDb;
-  private Integer       windowMaskerTaxID;
-  private File          windowMaskerDB;
-  private Double        percIdentity;
-  private Integer       cullingLimit;
-  private Double        bestHitOverhang;
-  private Double        bestHitScoreEdge;
-  private boolean       subjectBestHit;
-  private TemplateType  templateType;
-  private Integer       templateLength;
-  private Boolean       sumStats;
+  private QueryStrand  strand;
+  private BlastnTask   task;
+  private Byte         gapOpen;
+  private Byte         gapExtend;
+  private Byte         penalty;
+  private Byte         reward;
+  private boolean      useIndex;
+  private String       indexName;
+  private Dust         dust;
+  private File         filteringDb;
+  private Integer      windowMaskerTaxID;
+  private File         windowMaskerDB;
+  private Double       percIdentity;
+  private Integer      cullingLimit;
+  private Double       bestHitOverhang;
+  private Double       bestHitScoreEdge;
+  private boolean      subjectBestHit;
+  private TemplateType templateType;
+  private Integer      templateLength;
+  private Boolean      sumStats;
+  private Double       extDropoffPrelimGapped;
+  private Double       extDropoffFinalGapped;
+  private boolean      nonGreedyProgramExt;
+  private Integer      minRawGappedScore;
+  private boolean      ungappedAlignment;
 
   public QueryStrand getStrand() {
     return strand;
@@ -44,43 +49,43 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable
     this.task = task;
   }
 
-  public Integer getGapOpen() {
+  public Byte getGapOpen() {
     return gapOpen;
   }
 
-  public void setGapOpen(Integer gapOpen) {
+  public void setGapOpen(Byte gapOpen) {
     this.gapOpen = gapOpen;
   }
 
-  public Integer getGapExtend() {
+  public Byte getGapExtend() {
     return gapExtend;
   }
 
-  public void setGapExtend(Integer gapExtend) {
+  public void setGapExtend(Byte gapExtend) {
     this.gapExtend = gapExtend;
   }
 
-  public Integer getPenalty() {
+  public Byte getPenalty() {
     return penalty;
   }
 
-  public void setPenalty(Integer penalty) {
+  public void setPenalty(Byte penalty) {
     this.penalty = penalty;
   }
 
-  public Integer getReward() {
+  public Byte getReward() {
     return reward;
   }
 
-  public void setReward(Integer reward) {
+  public void setReward(Byte reward) {
     this.reward = reward;
   }
 
-  public boolean getUseIndex() {
+  public boolean isUseIndexEnabled() {
     return useIndex;
   }
 
-  public void setUseIndex(boolean useIndex) {
+  public void setUseIndexEnabled(boolean useIndex) {
     this.useIndex = useIndex;
   }
 
@@ -156,11 +161,11 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
-  public boolean getSubjectBestHit() {
+  public boolean isSubjectBestHitEnabled() {
     return subjectBestHit;
   }
 
-  public void setSubjectBestHit(boolean subjectBestHit) {
+  public void setSubjectBestHitEnabled(boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
   }
 
@@ -188,6 +193,51 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable
     this.sumStats = sumStats;
   }
 
+  public Double getExtDropoffPrelimGapped() {
+    return extDropoffPrelimGapped;
+  }
+
+  public BlastNConfig setExtDropoffPrelimGapped(Double extDropoffPrelimGapped) {
+    this.extDropoffPrelimGapped = extDropoffPrelimGapped;
+    return this;
+  }
+
+  public Double getExtDropoffFinalGapped() {
+    return extDropoffFinalGapped;
+  }
+
+  public BlastNConfig setExtDropoffFinalGapped(Double extDropoffFinalGapped) {
+    this.extDropoffFinalGapped = extDropoffFinalGapped;
+    return this;
+  }
+
+  public boolean isNonGreedyProgramExtEnabled() {
+    return nonGreedyProgramExt;
+  }
+
+  public BlastNConfig setNonGreedyProgramExtEnabled(boolean nonGreedyProgramExt) {
+    this.nonGreedyProgramExt = nonGreedyProgramExt;
+    return this;
+  }
+
+  public Integer getMinRawGappedScore() {
+    return minRawGappedScore;
+  }
+
+  public BlastNConfig setMinRawGappedScore(Integer minRawGappedScore) {
+    this.minRawGappedScore = minRawGappedScore;
+    return this;
+  }
+
+  public boolean isUngappedAlignmentEnabled() {
+    return ungappedAlignment;
+  }
+
+  public BlastNConfig setUngappedAlignmentEnabled(boolean ungappedAlignment) {
+    this.ungappedAlignment = ungappedAlignment;
+    return this;
+  }
+
   @Override
   public void toArgs(CliBuilder args) {
     super.toArgs(args);
@@ -209,11 +259,18 @@ public class BlastnConfig extends StdBlastConfig implements CLISerializable
       .appendNonNull(ToolOption.BestHitScoreEdge, bestHitScoreEdge)
       .appendNonNull(ToolOption.MegablastTemplateType, templateType)
       .appendNonNull(ToolOption.MegablastTemplateLength, templateLength)
-      .appendNonNull(ToolOption.SumStats, sumStats);
+      .appendNonNull(ToolOption.SumStats, sumStats)
+      .appendNonNull(ToolOption.XDropoffPrelimGappedExtensions, extDropoffPrelimGapped)
+      .appendNonNull(ToolOption.XDropoffFinalGappedExtensions, extDropoffFinalGapped)
+      .appendNonNull(ToolOption.MinRawGappedScore, minRawGappedScore);
 
     if (useIndex)
       args.set(ToolOption.UseMegablastIndex, true);
     if (subjectBestHit)
       args.set(ToolOption.SubjectBestHit);
+    if (nonGreedyProgramExt)
+      args.set(ToolOption.NonGreedyExtension);
+    if (ungappedAlignment)
+      args.set(ToolOption.UngappedAlignmentOnly);
   }
 }

@@ -9,7 +9,7 @@ import io.vulpine.lib.query.util.StatementPreparer;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.multiblast.model.blast.*;
 
-public class SelectBlastnConfig extends StdBlastSelector<BlastnConfig>
+public class SelectBlastnConfig extends StdBlastSelector<BlastNConfig>
 {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
@@ -23,7 +23,7 @@ public class SelectBlastnConfig extends StdBlastSelector<BlastnConfig>
   // bind arbitrary key/value pairs from the result set to the correct setters
   // in the blast config object.
   static {
-    var cls = BlastnConfig.class;
+    var cls = BlastNConfig.class;
 
     try {
       setters.put(
@@ -102,7 +102,7 @@ public class SelectBlastnConfig extends StdBlastSelector<BlastnConfig>
       setters.put(
         ToolOption.SubjectBestHit,
         new Setter<>(
-          cls.getDeclaredMethod("setSubjectBestHit", Boolean.class),
+          cls.getDeclaredMethod("setSubjectBestHitEnabled", Boolean.class),
           Boolean::parseBoolean
         )
       );
@@ -138,9 +138,9 @@ public class SelectBlastnConfig extends StdBlastSelector<BlastnConfig>
     this.jobId = jobId;
   }
 
-  public BlastnConfig execute() throws Exception {
+  public BlastNConfig execute() throws Exception {
     return new BasicPreparedReadQuery<>(
-      SQL.Select.Job.ConfigById,
+      SQL.Select.Job.ConfigByID,
       Util::getPgConnection,
       this::parseBlastConfig,
       StatementPreparer.singleInt(jobId)
@@ -158,7 +158,7 @@ public class SelectBlastnConfig extends StdBlastSelector<BlastnConfig>
   }
 
   @Override
-  protected BlastnConfig newBlastConfig() {
-    return new BlastnConfig();
+  protected BlastNConfig newBlastConfig() {
+    return new BlastNConfig();
   }
 }

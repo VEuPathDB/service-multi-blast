@@ -3,17 +3,15 @@ package org.veupathdb.service.multiblast.model.blast;
 import java.io.File;
 
 import org.veupathdb.service.multiblast.model.CLISerializable;
-import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.Validatable;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 /**
  * Base blast configuration.
- *
+ * <p>
  * The fields in this class are common to all blast tools available in the NCBI
  * blast toolset.
  */
-public class BlastConfig implements CLISerializable, Validatable
+public class BlastConfig implements CLISerializable
 {
   private boolean       helpEnabled;
   private boolean       versionEnabled;
@@ -28,7 +26,7 @@ public class BlastConfig implements CLISerializable, Validatable
   private boolean       lowercaseMaskingEnabled;
   private Integer       maxHSPs;
   private Integer       maxTargetSequences;
-  private Integer       numDescriptions;
+  private Short         numDescriptions;
   private Integer       numAlignments;
   private Byte          numThreads;
   private File          out;
@@ -41,7 +39,7 @@ public class BlastConfig implements CLISerializable, Validatable
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
   private Integer       windowSize;
-  private Double        xDropUngap;
+  private Double        extDropoffUngapped;
   private OutFormat     outFormat;
   private Double        queryCoveragePercentHSP;
   private boolean       parseDefLinesEnabled;
@@ -145,11 +143,11 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Integer getNumDescriptions() {
+  public Short getNumDescriptions() {
     return numDescriptions;
   }
 
-  public BlastConfig setNumDescriptions(Integer numDescriptions) {
+  public BlastConfig setNumDescriptions(Short numDescriptions) {
     this.numDescriptions = numDescriptions;
     return this;
   }
@@ -271,12 +269,12 @@ public class BlastConfig implements CLISerializable, Validatable
     return this;
   }
 
-  public Double getXDropUngap() {
-    return xDropUngap;
+  public Double getExtDropoffUngapped() {
+    return extDropoffUngapped;
   }
 
-  public BlastConfig setXDropUngap(Double xDropUngap) {
-    this.xDropUngap = xDropUngap;
+  public BlastConfig setExtDropoffUngapped(Double xDropUngap) {
+    this.extDropoffUngapped = xDropUngap;
     return this;
   }
 
@@ -337,7 +335,7 @@ public class BlastConfig implements CLISerializable, Validatable
       .appendNonNull(ToolOption.SortHits, sortHits)
       .appendNonNull(ToolOption.SortHSPs, sortHsps)
       .appendNonNull(ToolOption.MultiHitWindowSize, windowSize)
-      .appendNonNull(ToolOption.XDropoffUngappedExtensions, xDropUngap)
+      .appendNonNull(ToolOption.XDropoffUngappedExtensions, extDropoffUngapped)
       .appendNonNull(ToolOption.OutputFormat, outFormat)
       .appendNonNull(ToolOption.QueryCoveragePercentHSP, queryCoveragePercentHSP)
       .appendNonNull(ToolOption.SoftMasking, softMasking)
@@ -366,12 +364,5 @@ public class BlastConfig implements CLISerializable, Validatable
     toArgs(args);
 
     return args.toString();
-  }
-
-  @Override
-  public ErrorMap validate() {
-    var out = new ErrorMap();
-
-    return out;
   }
 }

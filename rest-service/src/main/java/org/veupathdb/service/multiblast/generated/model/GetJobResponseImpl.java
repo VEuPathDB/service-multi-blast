@@ -12,31 +12,31 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class GetJobResponseImpl implements GetJobResponse {
   @JsonProperty("id")
-  private String id;
+  private int id;
 
   @JsonProperty("status")
-  private JobStatus status;
+  private IOJobStatus status;
 
   @JsonProperty("config")
   private InputBlastConfig config;
 
   @JsonProperty("id")
-  public String getId() {
+  public int getId() {
     return this.id;
   }
 
   @JsonProperty("id")
-  public void setId(String id) {
+  public void setId(int id) {
     this.id = id;
   }
 
   @JsonProperty("status")
-  public JobStatus getStatus() {
+  public IOJobStatus getStatus() {
     return this.status;
   }
 
   @JsonProperty("status")
-  public void setStatus(JobStatus status) {
+  public void setStatus(IOJobStatus status) {
     this.status = status;
   }
 
