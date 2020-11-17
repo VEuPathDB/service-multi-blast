@@ -9,6 +9,9 @@ additionalProperties: false
 description: |
   Details about a specific job, it's configuration, and it's current status.
 properties:
-  id:     com.JobID
-  status: com.JobStatus
+  id:
+    type: integer
+    format: int32
+    minimum: 1
+  status: com.IOJobStatus
   config: blast.InputBlastConfig

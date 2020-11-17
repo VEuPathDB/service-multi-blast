@@ -83,14 +83,14 @@ public class OutFormat
 
   public boolean isCustomizableFormat() {
     return switch (format) {
-      case TABULAR, TABULAR_WITH_COMMENTS, CSV, SAM -> true;
+      case Tabular, TabularWithComments, CSV, SAM -> true;
       default -> false;
     };
   }
 
   public boolean allowsDelimiters() {
     return switch (format) {
-      case TABULAR, TABULAR_WITH_COMMENTS, CSV -> true;
+      case Tabular, TabularWithComments, CSV -> true;
       default -> false;
     };
   }

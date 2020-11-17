@@ -7,7 +7,7 @@ import io.vulpine.lib.sql.load.SqlLoader;
 class Schema
 {
   static final String Blast = "blast";
-  static final String Jobs  = "jobs";
+  static final String Job   = "jobs";
 }
 
 class Table
@@ -21,7 +21,7 @@ class Table
       ToolsToOptions = "tools_to_options";
   }
 
-  static class Jobs
+  static class Job
   {
     static final String
       Config = "config",
@@ -58,6 +58,17 @@ class Column
         JobID    = "job_id",
         OptionID = "option_id",
         Value    = "value";
+    }
+
+    static class Jobs
+    {
+      static final String
+        JobID      = "job_id",
+        UserID     = "user_id",
+        StatusID   = "status_id",
+        CreatedOn  = "created_on",
+        ModifiedOn = "modified_on",
+        ToolID     = "tool_id";
     }
   }
 
@@ -98,7 +109,8 @@ class SQL
     static class Job
     {
       static final String
-        ConfigById = select(join(Schema.Jobs, Table.Jobs.Config, "by-id"));
+        ConfigByID = select(join(Schema.Job, Table.Job.Config, "by-id")),
+        JobByID    = select(join(Schema.Job, Table.Job.Jobs, "by-id"));
     }
   }
 

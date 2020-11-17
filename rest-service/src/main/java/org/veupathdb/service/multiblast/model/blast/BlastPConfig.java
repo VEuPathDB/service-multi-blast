@@ -2,13 +2,13 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.io.File;
 
-public class BlastpConfig extends StdBlastConfig
+public class BlastPConfig extends StdBlastConfig
 {
   private BlastpTask          task;
   private File                ipgList;
   private File                negativeIpgList;
-  private Integer             gapOpen;
-  private Integer             gapExtend;
+  private Byte                gapOpen;
+  private Byte                gapExtend;
   private Double              xDropGap;
   private Double              xDropGapFinal;
   private Seg                 seg;
@@ -26,7 +26,7 @@ public class BlastpConfig extends StdBlastConfig
     return task;
   }
 
-  public BlastpConfig setTask(BlastpTask task) {
+  public BlastPConfig setTask(BlastpTask task) {
     this.task = task;
     return this;
   }
@@ -35,7 +35,7 @@ public class BlastpConfig extends StdBlastConfig
     return ipgList;
   }
 
-  public BlastpConfig setIpgList(File ipgList) {
+  public BlastPConfig setIpgList(File ipgList) {
     this.ipgList = ipgList;
     return this;
   }
@@ -44,25 +44,25 @@ public class BlastpConfig extends StdBlastConfig
     return negativeIpgList;
   }
 
-  public BlastpConfig setNegativeIpgList(File negativeIpgList) {
+  public BlastPConfig setNegativeIpgList(File negativeIpgList) {
     this.negativeIpgList = negativeIpgList;
     return this;
   }
 
-  public Integer getGapOpen() {
+  public Byte getGapOpen() {
     return gapOpen;
   }
 
-  public BlastpConfig setGapOpen(Integer gapOpen) {
+  public BlastPConfig setGapOpen(Byte gapOpen) {
     this.gapOpen = gapOpen;
     return this;
   }
 
-  public Integer getGapExtend() {
+  public Byte getGapExtend() {
     return gapExtend;
   }
 
-  public BlastpConfig setGapExtend(Integer gapExtend) {
+  public BlastPConfig setGapExtend(Byte gapExtend) {
     this.gapExtend = gapExtend;
     return this;
   }
@@ -71,7 +71,7 @@ public class BlastpConfig extends StdBlastConfig
     return xDropGap;
   }
 
-  public BlastpConfig setxDropGap(Double xDropGap) {
+  public BlastPConfig setxDropGap(Double xDropGap) {
     this.xDropGap = xDropGap;
     return this;
   }
@@ -80,7 +80,7 @@ public class BlastpConfig extends StdBlastConfig
     return xDropGapFinal;
   }
 
-  public BlastpConfig setxDropGapFinal(Double xDropGapFinal) {
+  public BlastPConfig setxDropGapFinal(Double xDropGapFinal) {
     this.xDropGapFinal = xDropGapFinal;
     return this;
   }
@@ -89,7 +89,7 @@ public class BlastpConfig extends StdBlastConfig
     return seg;
   }
 
-  public BlastpConfig setSeg(Seg seg) {
+  public BlastPConfig setSeg(Seg seg) {
     this.seg = seg;
     return this;
   }
@@ -98,7 +98,7 @@ public class BlastpConfig extends StdBlastConfig
     return matrix;
   }
 
-  public BlastpConfig setMatrix(BlastpScoringMatrix matrix) {
+  public BlastPConfig setMatrix(BlastpScoringMatrix matrix) {
     this.matrix = matrix;
     return this;
   }
@@ -107,7 +107,7 @@ public class BlastpConfig extends StdBlastConfig
     return threshold;
   }
 
-  public BlastpConfig setThreshold(Double threshold) {
+  public BlastPConfig setThreshold(Double threshold) {
     this.threshold = threshold;
     return this;
   }
@@ -116,7 +116,7 @@ public class BlastpConfig extends StdBlastConfig
     return cullingLimit;
   }
 
-  public BlastpConfig setCullingLimit(Integer cullingLimit) {
+  public BlastPConfig setCullingLimit(Integer cullingLimit) {
     this.cullingLimit = cullingLimit;
     return this;
   }
@@ -125,7 +125,7 @@ public class BlastpConfig extends StdBlastConfig
     return bestHitOverhang;
   }
 
-  public BlastpConfig setBestHitOverhang(Double bestHitOverhang) {
+  public BlastPConfig setBestHitOverhang(Double bestHitOverhang) {
     this.bestHitOverhang = bestHitOverhang;
     return this;
   }
@@ -134,7 +134,7 @@ public class BlastpConfig extends StdBlastConfig
     return bestHitScoreEdge;
   }
 
-  public BlastpConfig setBestHitScoreEdge(Double bestHitScoreEdge) {
+  public BlastPConfig setBestHitScoreEdge(Double bestHitScoreEdge) {
     this.bestHitScoreEdge = bestHitScoreEdge;
     return this;
   }
@@ -143,7 +143,7 @@ public class BlastpConfig extends StdBlastConfig
     return subjectBestHit;
   }
 
-  public BlastpConfig setSubjectBestHit(Boolean subjectBestHit) {
+  public BlastPConfig setSubjectBestHit(Boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
     return this;
   }
@@ -152,7 +152,7 @@ public class BlastpConfig extends StdBlastConfig
     return ungapped;
   }
 
-  public BlastpConfig setUngapped(Boolean ungapped) {
+  public BlastPConfig setUngapped(Boolean ungapped) {
     this.ungapped = ungapped;
     return this;
   }
@@ -161,7 +161,7 @@ public class BlastpConfig extends StdBlastConfig
     return compBasedStats;
   }
 
-  public BlastpConfig setCompBasedStats(CompBasedStats compBasedStats) {
+  public BlastPConfig setCompBasedStats(CompBasedStats compBasedStats) {
     this.compBasedStats = compBasedStats;
     return this;
   }
@@ -170,7 +170,7 @@ public class BlastpConfig extends StdBlastConfig
     return useSmithWatermanAlignments;
   }
 
-  public BlastpConfig setUseSmithWatermanAlignments(Boolean useSmithWatermanAlignments) {
+  public BlastPConfig setUseSmithWatermanAlignments(Boolean useSmithWatermanAlignments) {
     this.useSmithWatermanAlignments = useSmithWatermanAlignments;
     return this;
   }

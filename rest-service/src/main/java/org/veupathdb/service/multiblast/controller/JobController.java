@@ -45,15 +45,28 @@ public class JobController implements Jobs
   }
 
   @Override
-  public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
+  public GetJobsByJobIdResponse getJobsByJobId(int jobId) {
     return GetJobsByJobIdResponse.respond200WithApplicationJson(
       service.getJob(jobId, user, request)
     );
   }
 
   @Override
+  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(int jobId, boolean download) {
+    var head = GetJobsQueryByJobIdResponse.headersFor200();
+
+    if (download)
+      head = head.withContentDisposition(String.format(AttachmentPat, (jobId + "-query"), "txt"));
+
+    return GetJobsQueryByJobIdResponse.respond200WithTextPlain(
+      service.getQuery(jobId, user, request),
+      head
+    );
+  }
+
+  @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
-    String jobId,
+    int jobId,
     InputBlastFormat format,
     List<InputBlastFmtField> fields
   ) {

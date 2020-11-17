@@ -159,7 +159,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   private byte gapExtend;
 
   @JsonProperty("matrix")
-  private InputBlastScoringMatrix matrix;
+  private InputBlastpScoringMatrix matrix;
 
   @JsonProperty("threshold")
   private byte threshold;
@@ -539,12 +539,12 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("matrix")
-  public InputBlastScoringMatrix getMatrix() {
+  public InputBlastpScoringMatrix getMatrix() {
     return this.matrix;
   }
 
   @JsonProperty("matrix")
-  public void setMatrix(InputBlastScoringMatrix matrix) {
+  public void setMatrix(InputBlastpScoringMatrix matrix) {
     this.matrix = matrix;
   }
 

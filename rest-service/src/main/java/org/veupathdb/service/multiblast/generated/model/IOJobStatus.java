@@ -2,7 +2,7 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum JobStatus {
+public enum IOJobStatus {
   @JsonProperty("queued")
   QUEUED("queued"),
 
@@ -17,7 +17,7 @@ public enum JobStatus {
 
   private String name;
 
-  JobStatus(String name) {
+  IOJobStatus(String name) {
     this.name = name;
   }
 }

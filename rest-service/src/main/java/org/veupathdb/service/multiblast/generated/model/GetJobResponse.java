@@ -8,16 +8,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface GetJobResponse {
   @JsonProperty("id")
-  String getId();
+  int getId();
 
   @JsonProperty("id")
-  void setId(String id);
+  void setId(int id);
 
   @JsonProperty("status")
-  JobStatus getStatus();
+  IOJobStatus getStatus();
 
   @JsonProperty("status")
-  void setStatus(JobStatus status);
+  void setStatus(IOJobStatus status);
 
   @JsonProperty("config")
   InputBlastConfig getConfig();

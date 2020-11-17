@@ -329,7 +329,7 @@ class StdBlastConfigTest
       var build  = new CliBuilder();
       var fmt    = new OutFormat();
 
-      fmt.setFormat(ReportFormatType.ARCHIVE_ASN_1);
+      fmt.setFormat(ReportFormatType.ArchiveASN1);
 
       target.setOutFormat(fmt);
       target.toArgs(build);
@@ -764,7 +764,7 @@ class StdBlastConfigTest
       var target = new StdBlastConfig();
       var fmt    = new OutFormat();
 
-      fmt.setFormat(ReportFormatType.ARCHIVE_ASN_1);
+      fmt.setFormat(ReportFormatType.ArchiveASN1);
 
       target.setOutFormat(fmt);
       assertEquals("-outfmt='11'", target.toString());

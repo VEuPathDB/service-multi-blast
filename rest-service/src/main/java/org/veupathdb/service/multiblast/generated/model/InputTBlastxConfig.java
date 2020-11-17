@@ -207,10 +207,10 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   void setWordSize(byte wordSize);
 
   @JsonProperty("matrix")
-  InputBlastScoringMatrix getMatrix();
+  InputTBlastxScoringMatrix getMatrix();
 
   @JsonProperty("matrix")
-  void setMatrix(InputBlastScoringMatrix matrix);
+  void setMatrix(InputTBlastxScoringMatrix matrix);
 
   @JsonProperty(
       value = "threshold",

@@ -2,19 +2,19 @@ package org.veupathdb.service.multiblast.model.blast;
 
 public class QueryLocation
 {
-  private final int start;
-  private final int stop;
+  private final long start;
+  private final long stop;
 
-  public QueryLocation(int start, int stop) {
+  public QueryLocation(long start, long stop) {
     this.start = start;
     this.stop  = stop;
   }
 
-  public int getStart() {
+  public long getStart() {
     return start;
   }
 
-  public int getStop() {
+  public long getStop() {
     return stop;
   }
 

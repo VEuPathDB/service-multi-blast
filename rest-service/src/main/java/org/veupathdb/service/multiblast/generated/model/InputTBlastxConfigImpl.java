@@ -147,7 +147,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   private byte wordSize;
 
   @JsonProperty("matrix")
-  private InputBlastScoringMatrix matrix;
+  private InputTBlastxScoringMatrix matrix;
 
   @JsonProperty(
       value = "threshold",
@@ -503,12 +503,12 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("matrix")
-  public InputBlastScoringMatrix getMatrix() {
+  public InputTBlastxScoringMatrix getMatrix() {
     return this.matrix;
   }
 
   @JsonProperty("matrix")
-  public void setMatrix(InputBlastScoringMatrix matrix) {
+  public void setMatrix(InputTBlastxScoringMatrix matrix) {
     this.matrix = matrix;
   }
 

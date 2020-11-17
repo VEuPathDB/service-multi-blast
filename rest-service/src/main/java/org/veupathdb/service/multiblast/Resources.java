@@ -2,6 +2,7 @@ package org.veupathdb.service.multiblast;
 
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
+import org.veupathdb.service.multiblast.controller.JobController;
 
 /**
  * Service Resource Registration.
@@ -22,6 +23,7 @@ public class Resources extends ContainerResources {
   @Override
   protected Object[] resources() {
     return new Object[] {
+      JobController.class,
     };
   }
 }
