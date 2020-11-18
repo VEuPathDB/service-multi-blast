@@ -8,11 +8,11 @@ import java.io.File;
     as = NewJobPostRequestMultipartImpl.class
 )
 public interface NewJobPostRequestMultipart {
-  @JsonProperty("file")
-  File getFile();
+  @JsonProperty("query")
+  File getQuery();
 
-  @JsonProperty("file")
-  void setFile(File file);
+  @JsonProperty("query")
+  void setQuery(File query);
 
   @JsonProperty("properties")
   NewJobPostRequestJSON getProperties();

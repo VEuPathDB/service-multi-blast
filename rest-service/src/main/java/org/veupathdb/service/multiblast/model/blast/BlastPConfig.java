@@ -9,8 +9,8 @@ public class BlastPConfig extends StdBlastConfig
   private File                negativeIpgList;
   private Byte                gapOpen;
   private Byte                gapExtend;
-  private Double              xDropGap;
-  private Double              xDropGapFinal;
+  private Double              extDropoffPrelimGap;
+  private Double              extDropoffFinalGap;
   private Seg                 seg;
   private BlastpScoringMatrix matrix;
   private Double              threshold;
@@ -21,6 +21,7 @@ public class BlastPConfig extends StdBlastConfig
   private Boolean             ungapped;
   private CompBasedStats      compBasedStats;
   private Boolean             useSmithWatermanAlignments;
+  private Byte                wordSize;
 
   public BlastpTask getTask() {
     return task;
@@ -29,6 +30,10 @@ public class BlastPConfig extends StdBlastConfig
   public BlastPConfig setTask(BlastpTask task) {
     this.task = task;
     return this;
+  }
+
+  public Byte getWordSize() {
+    return wordSize;
   }
 
   public File getIpgList() {
@@ -67,21 +72,21 @@ public class BlastPConfig extends StdBlastConfig
     return this;
   }
 
-  public Double getxDropGap() {
-    return xDropGap;
+  public Double getExtDropoffPrelimGap() {
+    return extDropoffPrelimGap;
   }
 
-  public BlastPConfig setxDropGap(Double xDropGap) {
-    this.xDropGap = xDropGap;
+  public BlastPConfig setExtDropoffPrelimGap(Double extDropoffPrelimGap) {
+    this.extDropoffPrelimGap = extDropoffPrelimGap;
     return this;
   }
 
-  public Double getxDropGapFinal() {
-    return xDropGapFinal;
+  public Double getExtDropoffFinalGap() {
+    return extDropoffFinalGap;
   }
 
-  public BlastPConfig setxDropGapFinal(Double xDropGapFinal) {
-    this.xDropGapFinal = xDropGapFinal;
+  public BlastPConfig setExtDropoffFinalGap(Double extDropoffFinalGap) {
+    this.extDropoffFinalGap = extDropoffFinalGap;
     return this;
   }
 
@@ -172,6 +177,11 @@ public class BlastPConfig extends StdBlastConfig
 
   public BlastPConfig setUseSmithWatermanAlignments(Boolean useSmithWatermanAlignments) {
     this.useSmithWatermanAlignments = useSmithWatermanAlignments;
+    return this;
+  }
+
+  public BlastPConfig setWordSize(Byte wordSize) {
+    this.wordSize = wordSize;
     return this;
   }
 }

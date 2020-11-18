@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("tblastx")
@@ -11,40 +12,42 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
     "tool",
     "query",
     "queryLoc",
+    "strand",
+    "queryGeneticCode",
     "eValue",
-    "lineLength",
-    "sortHits",
-    "seqIdList",
-    "negativeSeqIdList",
-    "taxIds",
-    "negativeTaxIds",
-    "taxIdList",
-    "negativeTaxIdList",
-    "sortHSPs",
-    "qCovHSPPerc",
-    "numDescriptions",
-    "numAlignments",
-    "maxTargetSeqs",
-    "maxHSPs",
-    "cullingLimit",
-    "bestHitOverhang",
-    "bestHitScoreEdge",
-    "dbSize",
-    "searchSpace",
-    "parseDefLines",
-    "outFmt",
     "wordSize",
+    "maxIntronLength",
     "matrix",
     "threshold",
+    "dbGencode",
+    "subjectLoc",
+    "outFormat",
+    "showGIs",
+    "numDescriptions",
+    "numAlignments",
+    "lineLength",
+    "sortHits",
+    "sortHSPs",
     "seg",
     "softMasking",
     "lcaseMasking",
-    "strand",
+    "taxIds",
+    "negativeTaxIds",
     "dbSoftMask",
     "dbHardMask",
-    "queryGeneticCode",
-    "dbGenCode",
-    "maxIntronLength"
+    "qCovHspPerc",
+    "maxHsps",
+    "cullingLimit",
+    "bestHitOverhang",
+    "bestHitScoreEdge",
+    "subjectBesthit",
+    "maxTargetSeqs",
+    "dbSize",
+    "searchSpace",
+    "sumStats",
+    "xDropUngap",
+    "windowSize",
+    "parseDeflines"
 })
 public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("tool")
@@ -56,65 +59,80 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("queryLoc")
   private InputBlastLocation queryLoc;
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  private double eValue;
+  @JsonProperty("strand")
+  private InputBlastStrand strand;
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("queryGeneticCode")
+  private byte queryGeneticCode;
+
+  @JsonProperty("eValue")
+  private String eValue;
+
+  @JsonProperty("wordSize")
+  private byte wordSize;
+
+  @JsonProperty("maxIntronLength")
+  private int maxIntronLength;
+
+  @JsonProperty("matrix")
+  private InputTBlastxScoringMatrix matrix;
+
+  @JsonProperty("threshold")
+  private double threshold;
+
+  @JsonProperty("dbGencode")
+  private byte dbGencode;
+
+  @JsonProperty("subjectLoc")
+  private InputBlastLocation subjectLoc;
+
+  @JsonProperty("outFormat")
+  private InputBlastOutFmt outFormat;
+
+  @JsonProperty("showGIs")
+  private boolean showGIs;
+
+  @JsonProperty("numDescriptions")
+  private int numDescriptions;
+
+  @JsonProperty("numAlignments")
+  private int numAlignments;
+
+  @JsonProperty("lineLength")
   private int lineLength;
 
   @JsonProperty("sortHits")
   private InputHitSorting sortHits;
 
-  @JsonProperty("seqIdList")
-  private String seqIdList;
-
-  @JsonProperty("negativeSeqIdList")
-  private String negativeSeqIdList;
-
-  @JsonProperty("taxIds")
-  private String taxIds;
-
-  @JsonProperty("negativeTaxIds")
-  private String negativeTaxIds;
-
-  @JsonProperty("taxIdList")
-  private String taxIdList;
-
-  @JsonProperty("negativeTaxIdList")
-  private String negativeTaxIdList;
-
   @JsonProperty("sortHSPs")
   private InputHSPSorting sortHSPs;
 
-  @JsonProperty("qCovHSPPerc")
-  private Number qCovHSPPerc;
+  @JsonProperty("seg")
+  private InputBlastSegMask seg;
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  private short numDescriptions;
+  @JsonProperty("softMasking")
+  private boolean softMasking;
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  private int numAlignments;
+  @JsonProperty("lcaseMasking")
+  private boolean lcaseMasking;
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  private int maxTargetSeqs;
+  @JsonProperty("taxIds")
+  private List<String> taxIds;
 
-  @JsonProperty("maxHSPs")
-  private short maxHSPs;
+  @JsonProperty("negativeTaxIds")
+  private List<String> negativeTaxIds;
+
+  @JsonProperty("dbSoftMask")
+  private String dbSoftMask;
+
+  @JsonProperty("dbHardMask")
+  private String dbHardMask;
+
+  @JsonProperty("qCovHspPerc")
+  private double qCovHspPerc;
+
+  @JsonProperty("maxHsps")
+  private int maxHsps;
 
   @JsonProperty("cullingLimit")
   private int cullingLimit;
@@ -125,85 +143,29 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("bestHitScoreEdge")
   private double bestHitScoreEdge;
 
+  @JsonProperty("subjectBesthit")
+  private boolean subjectBesthit;
+
+  @JsonProperty("maxTargetSeqs")
+  private int maxTargetSeqs;
+
   @JsonProperty("dbSize")
-  private long dbSize;
+  private byte dbSize;
 
   @JsonProperty("searchSpace")
-  private long searchSpace;
+  private byte searchSpace;
 
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  private boolean parseDefLines;
+  @JsonProperty("sumStats")
+  private boolean sumStats;
 
-  @JsonProperty("outFmt")
-  private InputBlastOutFmt outFmt;
+  @JsonProperty("xDropUngap")
+  private double xDropUngap;
 
-  @JsonProperty(
-      value = "wordSize",
-      defaultValue = "3"
-  )
-  private byte wordSize;
+  @JsonProperty("windowSize")
+  private int windowSize;
 
-  @JsonProperty("matrix")
-  private InputTBlastxScoringMatrix matrix;
-
-  @JsonProperty(
-      value = "threshold",
-      defaultValue = "13"
-  )
-  private byte threshold;
-
-  @JsonProperty(
-      value = "seg",
-      defaultValue = "{\n"
-              + "\"enabled\" : true,\n"
-              + "\"window\" : 12,\n"
-              + "\"locut\" : 2.2,\n"
-              + "\"hicut\" : 2.5\n"
-              + "}"
-  )
-  private InputBlastSegMask seg;
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "false"
-  )
-  private boolean softMasking;
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  private boolean lcaseMasking;
-
-  @JsonProperty("strand")
-  private InputBlastStrand strand;
-
-  @JsonProperty("dbSoftMask")
-  private long dbSoftMask;
-
-  @JsonProperty("dbHardMask")
-  private long dbHardMask;
-
-  @JsonProperty(
-      value = "queryGeneticCode",
-      defaultValue = "1"
-  )
-  private byte queryGeneticCode;
-
-  @JsonProperty(
-      value = "dbGenCode",
-      defaultValue = "1"
-  )
-  private byte dbGenCode;
-
-  @JsonProperty(
-      value = "maxIntronLength",
-      defaultValue = "0"
-  )
-  private int maxIntronLength;
+  @JsonProperty("parseDeflines")
+  private boolean parseDeflines;
 
   @JsonProperty("tool")
   public InputBlastTool getTool() {
@@ -230,34 +192,142 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.queryLoc = queryLoc;
   }
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  public double getEValue() {
+  @JsonProperty("strand")
+  public InputBlastStrand getStrand() {
+    return this.strand;
+  }
+
+  @JsonProperty("strand")
+  public void setStrand(InputBlastStrand strand) {
+    this.strand = strand;
+  }
+
+  @JsonProperty("queryGeneticCode")
+  public byte getQueryGeneticCode() {
+    return this.queryGeneticCode;
+  }
+
+  @JsonProperty("queryGeneticCode")
+  public void setQueryGeneticCode(byte queryGeneticCode) {
+    this.queryGeneticCode = queryGeneticCode;
+  }
+
+  @JsonProperty("eValue")
+  public String getEValue() {
     return this.eValue;
   }
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  public void setEValue(double eValue) {
+  @JsonProperty("eValue")
+  public void setEValue(String eValue) {
     this.eValue = eValue;
   }
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("wordSize")
+  public byte getWordSize() {
+    return this.wordSize;
+  }
+
+  @JsonProperty("wordSize")
+  public void setWordSize(byte wordSize) {
+    this.wordSize = wordSize;
+  }
+
+  @JsonProperty("maxIntronLength")
+  public int getMaxIntronLength() {
+    return this.maxIntronLength;
+  }
+
+  @JsonProperty("maxIntronLength")
+  public void setMaxIntronLength(int maxIntronLength) {
+    this.maxIntronLength = maxIntronLength;
+  }
+
+  @JsonProperty("matrix")
+  public InputTBlastxScoringMatrix getMatrix() {
+    return this.matrix;
+  }
+
+  @JsonProperty("matrix")
+  public void setMatrix(InputTBlastxScoringMatrix matrix) {
+    this.matrix = matrix;
+  }
+
+  @JsonProperty("threshold")
+  public double getThreshold() {
+    return this.threshold;
+  }
+
+  @JsonProperty("threshold")
+  public void setThreshold(double threshold) {
+    this.threshold = threshold;
+  }
+
+  @JsonProperty("dbGencode")
+  public byte getDbGencode() {
+    return this.dbGencode;
+  }
+
+  @JsonProperty("dbGencode")
+  public void setDbGencode(byte dbGencode) {
+    this.dbGencode = dbGencode;
+  }
+
+  @JsonProperty("subjectLoc")
+  public InputBlastLocation getSubjectLoc() {
+    return this.subjectLoc;
+  }
+
+  @JsonProperty("subjectLoc")
+  public void setSubjectLoc(InputBlastLocation subjectLoc) {
+    this.subjectLoc = subjectLoc;
+  }
+
+  @JsonProperty("outFormat")
+  public InputBlastOutFmt getOutFormat() {
+    return this.outFormat;
+  }
+
+  @JsonProperty("outFormat")
+  public void setOutFormat(InputBlastOutFmt outFormat) {
+    this.outFormat = outFormat;
+  }
+
+  @JsonProperty("showGIs")
+  public boolean getShowGIs() {
+    return this.showGIs;
+  }
+
+  @JsonProperty("showGIs")
+  public void setShowGIs(boolean showGIs) {
+    this.showGIs = showGIs;
+  }
+
+  @JsonProperty("numDescriptions")
+  public int getNumDescriptions() {
+    return this.numDescriptions;
+  }
+
+  @JsonProperty("numDescriptions")
+  public void setNumDescriptions(int numDescriptions) {
+    this.numDescriptions = numDescriptions;
+  }
+
+  @JsonProperty("numAlignments")
+  public int getNumAlignments() {
+    return this.numAlignments;
+  }
+
+  @JsonProperty("numAlignments")
+  public void setNumAlignments(int numAlignments) {
+    this.numAlignments = numAlignments;
+  }
+
+  @JsonProperty("lineLength")
   public int getLineLength() {
     return this.lineLength;
   }
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("lineLength")
   public void setLineLength(int lineLength) {
     this.lineLength = lineLength;
   }
@@ -272,66 +342,6 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.sortHits = sortHits;
   }
 
-  @JsonProperty("seqIdList")
-  public String getSeqIdList() {
-    return this.seqIdList;
-  }
-
-  @JsonProperty("seqIdList")
-  public void setSeqIdList(String seqIdList) {
-    this.seqIdList = seqIdList;
-  }
-
-  @JsonProperty("negativeSeqIdList")
-  public String getNegativeSeqIdList() {
-    return this.negativeSeqIdList;
-  }
-
-  @JsonProperty("negativeSeqIdList")
-  public void setNegativeSeqIdList(String negativeSeqIdList) {
-    this.negativeSeqIdList = negativeSeqIdList;
-  }
-
-  @JsonProperty("taxIds")
-  public String getTaxIds() {
-    return this.taxIds;
-  }
-
-  @JsonProperty("taxIds")
-  public void setTaxIds(String taxIds) {
-    this.taxIds = taxIds;
-  }
-
-  @JsonProperty("negativeTaxIds")
-  public String getNegativeTaxIds() {
-    return this.negativeTaxIds;
-  }
-
-  @JsonProperty("negativeTaxIds")
-  public void setNegativeTaxIds(String negativeTaxIds) {
-    this.negativeTaxIds = negativeTaxIds;
-  }
-
-  @JsonProperty("taxIdList")
-  public String getTaxIdList() {
-    return this.taxIdList;
-  }
-
-  @JsonProperty("taxIdList")
-  public void setTaxIdList(String taxIdList) {
-    this.taxIdList = taxIdList;
-  }
-
-  @JsonProperty("negativeTaxIdList")
-  public String getNegativeTaxIdList() {
-    return this.negativeTaxIdList;
-  }
-
-  @JsonProperty("negativeTaxIdList")
-  public void setNegativeTaxIdList(String negativeTaxIdList) {
-    this.negativeTaxIdList = negativeTaxIdList;
-  }
-
   @JsonProperty("sortHSPs")
   public InputHSPSorting getSortHSPs() {
     return this.sortHSPs;
@@ -342,72 +352,94 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.sortHSPs = sortHSPs;
   }
 
-  @JsonProperty("qCovHSPPerc")
-  public Number getQCovHSPPerc() {
-    return this.qCovHSPPerc;
+  @JsonProperty("seg")
+  public InputBlastSegMask getSeg() {
+    return this.seg;
   }
 
-  @JsonProperty("qCovHSPPerc")
-  public void setQCovHSPPerc(Number qCovHSPPerc) {
-    this.qCovHSPPerc = qCovHSPPerc;
+  @JsonProperty("seg")
+  public void setSeg(InputBlastSegMask seg) {
+    this.seg = seg;
   }
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  public short getNumDescriptions() {
-    return this.numDescriptions;
+  @JsonProperty("softMasking")
+  public boolean getSoftMasking() {
+    return this.softMasking;
   }
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  public void setNumDescriptions(short numDescriptions) {
-    this.numDescriptions = numDescriptions;
+  @JsonProperty("softMasking")
+  public void setSoftMasking(boolean softMasking) {
+    this.softMasking = softMasking;
   }
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  public int getNumAlignments() {
-    return this.numAlignments;
+  @JsonProperty("lcaseMasking")
+  public boolean getLcaseMasking() {
+    return this.lcaseMasking;
   }
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  public void setNumAlignments(int numAlignments) {
-    this.numAlignments = numAlignments;
+  @JsonProperty("lcaseMasking")
+  public void setLcaseMasking(boolean lcaseMasking) {
+    this.lcaseMasking = lcaseMasking;
   }
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs;
+  @JsonProperty("taxIds")
+  public List<String> getTaxIds() {
+    return this.taxIds;
   }
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  public void setMaxTargetSeqs(int maxTargetSeqs) {
-    this.maxTargetSeqs = maxTargetSeqs;
+  @JsonProperty("taxIds")
+  public void setTaxIds(List<String> taxIds) {
+    this.taxIds = taxIds;
   }
 
-  @JsonProperty("maxHSPs")
-  public short getMaxHSPs() {
-    return this.maxHSPs;
+  @JsonProperty("negativeTaxIds")
+  public List<String> getNegativeTaxIds() {
+    return this.negativeTaxIds;
   }
 
-  @JsonProperty("maxHSPs")
-  public void setMaxHSPs(short maxHSPs) {
-    this.maxHSPs = maxHSPs;
+  @JsonProperty("negativeTaxIds")
+  public void setNegativeTaxIds(List<String> negativeTaxIds) {
+    this.negativeTaxIds = negativeTaxIds;
+  }
+
+  @JsonProperty("dbSoftMask")
+  public String getDbSoftMask() {
+    return this.dbSoftMask;
+  }
+
+  @JsonProperty("dbSoftMask")
+  public void setDbSoftMask(String dbSoftMask) {
+    this.dbSoftMask = dbSoftMask;
+  }
+
+  @JsonProperty("dbHardMask")
+  public String getDbHardMask() {
+    return this.dbHardMask;
+  }
+
+  @JsonProperty("dbHardMask")
+  public void setDbHardMask(String dbHardMask) {
+    this.dbHardMask = dbHardMask;
+  }
+
+  @JsonProperty("qCovHspPerc")
+  public double getQCovHspPerc() {
+    return this.qCovHspPerc;
+  }
+
+  @JsonProperty("qCovHspPerc")
+  public void setQCovHspPerc(double qCovHspPerc) {
+    this.qCovHspPerc = qCovHspPerc;
+  }
+
+  @JsonProperty("maxHsps")
+  public int getMaxHsps() {
+    return this.maxHsps;
+  }
+
+  @JsonProperty("maxHsps")
+  public void setMaxHsps(int maxHsps) {
+    this.maxHsps = maxHsps;
   }
 
   @JsonProperty("cullingLimit")
@@ -440,227 +472,83 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
+  @JsonProperty("subjectBesthit")
+  public boolean getSubjectBesthit() {
+    return this.subjectBesthit;
+  }
+
+  @JsonProperty("subjectBesthit")
+  public void setSubjectBesthit(boolean subjectBesthit) {
+    this.subjectBesthit = subjectBesthit;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public int getMaxTargetSeqs() {
+    return this.maxTargetSeqs;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    this.maxTargetSeqs = maxTargetSeqs;
+  }
+
   @JsonProperty("dbSize")
-  public long getDbSize() {
+  public byte getDbSize() {
     return this.dbSize;
   }
 
   @JsonProperty("dbSize")
-  public void setDbSize(long dbSize) {
+  public void setDbSize(byte dbSize) {
     this.dbSize = dbSize;
   }
 
   @JsonProperty("searchSpace")
-  public long getSearchSpace() {
+  public byte getSearchSpace() {
     return this.searchSpace;
   }
 
   @JsonProperty("searchSpace")
-  public void setSearchSpace(long searchSpace) {
+  public void setSearchSpace(byte searchSpace) {
     this.searchSpace = searchSpace;
   }
 
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  public boolean getParseDefLines() {
-    return this.parseDefLines;
+  @JsonProperty("sumStats")
+  public boolean getSumStats() {
+    return this.sumStats;
   }
 
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  public void setParseDefLines(boolean parseDefLines) {
-    this.parseDefLines = parseDefLines;
+  @JsonProperty("sumStats")
+  public void setSumStats(boolean sumStats) {
+    this.sumStats = sumStats;
   }
 
-  @JsonProperty("outFmt")
-  public InputBlastOutFmt getOutFmt() {
-    return this.outFmt;
+  @JsonProperty("xDropUngap")
+  public double getXDropUngap() {
+    return this.xDropUngap;
   }
 
-  @JsonProperty("outFmt")
-  public void setOutFmt(InputBlastOutFmt outFmt) {
-    this.outFmt = outFmt;
+  @JsonProperty("xDropUngap")
+  public void setXDropUngap(double xDropUngap) {
+    this.xDropUngap = xDropUngap;
   }
 
-  @JsonProperty(
-      value = "wordSize",
-      defaultValue = "3"
-  )
-  public byte getWordSize() {
-    return this.wordSize;
+  @JsonProperty("windowSize")
+  public int getWindowSize() {
+    return this.windowSize;
   }
 
-  @JsonProperty(
-      value = "wordSize",
-      defaultValue = "3"
-  )
-  public void setWordSize(byte wordSize) {
-    this.wordSize = wordSize;
+  @JsonProperty("windowSize")
+  public void setWindowSize(int windowSize) {
+    this.windowSize = windowSize;
   }
 
-  @JsonProperty("matrix")
-  public InputTBlastxScoringMatrix getMatrix() {
-    return this.matrix;
+  @JsonProperty("parseDeflines")
+  public boolean getParseDeflines() {
+    return this.parseDeflines;
   }
 
-  @JsonProperty("matrix")
-  public void setMatrix(InputTBlastxScoringMatrix matrix) {
-    this.matrix = matrix;
-  }
-
-  @JsonProperty(
-      value = "threshold",
-      defaultValue = "13"
-  )
-  public byte getThreshold() {
-    return this.threshold;
-  }
-
-  @JsonProperty(
-      value = "threshold",
-      defaultValue = "13"
-  )
-  public void setThreshold(byte threshold) {
-    this.threshold = threshold;
-  }
-
-  @JsonProperty(
-      value = "seg",
-      defaultValue = "{\n"
-              + "\"enabled\" : true,\n"
-              + "\"window\" : 12,\n"
-              + "\"locut\" : 2.2,\n"
-              + "\"hicut\" : 2.5\n"
-              + "}"
-  )
-  public InputBlastSegMask getSeg() {
-    return this.seg;
-  }
-
-  @JsonProperty(
-      value = "seg",
-      defaultValue = "{\n"
-              + "\"enabled\" : true,\n"
-              + "\"window\" : 12,\n"
-              + "\"locut\" : 2.2,\n"
-              + "\"hicut\" : 2.5\n"
-              + "}"
-  )
-  public void setSeg(InputBlastSegMask seg) {
-    this.seg = seg;
-  }
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "false"
-  )
-  public boolean getSoftMasking() {
-    return this.softMasking;
-  }
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "false"
-  )
-  public void setSoftMasking(boolean softMasking) {
-    this.softMasking = softMasking;
-  }
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  public boolean getLcaseMasking() {
-    return this.lcaseMasking;
-  }
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  public void setLcaseMasking(boolean lcaseMasking) {
-    this.lcaseMasking = lcaseMasking;
-  }
-
-  @JsonProperty("strand")
-  public InputBlastStrand getStrand() {
-    return this.strand;
-  }
-
-  @JsonProperty("strand")
-  public void setStrand(InputBlastStrand strand) {
-    this.strand = strand;
-  }
-
-  @JsonProperty("dbSoftMask")
-  public long getDbSoftMask() {
-    return this.dbSoftMask;
-  }
-
-  @JsonProperty("dbSoftMask")
-  public void setDbSoftMask(long dbSoftMask) {
-    this.dbSoftMask = dbSoftMask;
-  }
-
-  @JsonProperty("dbHardMask")
-  public long getDbHardMask() {
-    return this.dbHardMask;
-  }
-
-  @JsonProperty("dbHardMask")
-  public void setDbHardMask(long dbHardMask) {
-    this.dbHardMask = dbHardMask;
-  }
-
-  @JsonProperty(
-      value = "queryGeneticCode",
-      defaultValue = "1"
-  )
-  public byte getQueryGeneticCode() {
-    return this.queryGeneticCode;
-  }
-
-  @JsonProperty(
-      value = "queryGeneticCode",
-      defaultValue = "1"
-  )
-  public void setQueryGeneticCode(byte queryGeneticCode) {
-    this.queryGeneticCode = queryGeneticCode;
-  }
-
-  @JsonProperty(
-      value = "dbGenCode",
-      defaultValue = "1"
-  )
-  public byte getDbGenCode() {
-    return this.dbGenCode;
-  }
-
-  @JsonProperty(
-      value = "dbGenCode",
-      defaultValue = "1"
-  )
-  public void setDbGenCode(byte dbGenCode) {
-    this.dbGenCode = dbGenCode;
-  }
-
-  @JsonProperty(
-      value = "maxIntronLength",
-      defaultValue = "0"
-  )
-  public int getMaxIntronLength() {
-    return this.maxIntronLength;
-  }
-
-  @JsonProperty(
-      value = "maxIntronLength",
-      defaultValue = "0"
-  )
-  public void setMaxIntronLength(int maxIntronLength) {
-    this.maxIntronLength = maxIntronLength;
+  @JsonProperty("parseDeflines")
+  public void setParseDeflines(boolean parseDeflines) {
+    this.parseDeflines = parseDeflines;
   }
 }

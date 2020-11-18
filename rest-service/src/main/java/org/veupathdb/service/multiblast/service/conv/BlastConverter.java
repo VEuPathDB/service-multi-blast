@@ -50,57 +50,111 @@ public class BlastConverter
 
     var out = new InputBlastnConfigImpl();
 
+    // out.setQuery(conf.getQuery()); // Intentionally omitted.
+    out.setQueryLoc(fromInternal(conf.getQueryLoc()));
+    out.setEValue(conf.getExpectValue());
+    out.setLineLength(conf.getLineLength());
+    out.setSortHits(fromInternal(conf.getSortHits()));
+    out.setSeqIdList(conf.getSequenceIdList()); // FIXME: file
+    out.setNegativeSeqIdList(conf.getNegativeSequenceIdList()); // FIXME: file
+    out.setTaxIds(String.join(",", conf.getTaxIds()));
+    out.setNegativeTaxIds(String.join(",", conf.getNegativeTaxIds()));
+    out.setTaxIdList(conf.getTaxIdList()); // FIXME: file
+    out.setNegativeTaxIdList(conf.getNegativeTaxIdList()); // FIXME: file
+    out.setSortHSPs(fromInternal(conf.getSortHSPs()));
+    out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
+    out.setNumDescriptions(conf.getNumDescriptions());
+    out.setNumAlignments(conf.getNumAlignments());
+    out.setMaxTargetSeqs(conf.getMaxTargetSequences());
+    out.setMaxHSPs(conf.getMaxHSPs());
     out.setCullingLimit(conf.getCullingLimit());
     out.setBestHitOverhang(conf.getBestHitOverhang());
     out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
+    out.setDbSize(conf.getDbSize());
+    out.setSearchSpace(conf.getSearchSpace());
+    out.setParseDefLines(conf.isParseDefLinesEnabled());
+    out.setOutFmt(fromInternal(conf.getOutFormat()));
     out.setTask(fromInternal(conf.getTask()));
+    out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapOpen());
     out.setGapExtend(conf.getGapExtend());
     out.setReward(conf.getReward());
     out.setPenalty(conf.getPenalty());
     out.setStrand(fromInternal(conf.getStrand()));
     out.setDust(fromInternal(conf.getDust()));
-    out.setFilteringDb(conf.getFilteringDb()); // FIXME: file
+    out.setFilteringDb(conf.getFilteringDb()); // FIXME: file (is this public?)
     out.setWindowMaskerTaxid(conf.getWindowMaskerTaxID());
-    out.setWindowMaskerDb(conf.getWindowMaskerDB()); // FIXME: file
+    out.setWindowMaskerDb(conf.getWindowMaskerDB()); // FIXME: file (is this public?)
+    out.setSoftMasking(conf.getSoftMasking());
+    out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
+    out.setDbSoftMask(conf.getDbSoftMask());
+    out.setDbHardMask(conf.getDbHardMask());
     out.setPercIdentity(conf.getPercIdentity());
     out.setTemplateType(fromInternal(conf.getTemplateType()));
     out.setTemplateLength(conf.getTemplateLength());
     out.setUseIndex(conf.isUseIndexEnabled());
     out.setIndexName(conf.getIndexName());
-    out.setXdropGap(conf.getExtDropoffPrelimGapped());
-    out.setXdropGapFinal(conf.getExtDropoffFinalGapped());
+    out.setXDropUngap(conf.getExtDropoffUngapped());
+    out.setXDropGap(conf.getExtDropoffPrelimGapped());
+    out.setXDropGapFinal(conf.getExtDropoffFinalGapped());
     out.setNoGreedy(conf.isNonGreedyProgramExtEnabled());
     out.setMinRawGappedScore(conf.getMinRawGappedScore());
     out.setUngapped(conf.isUngappedAlignmentEnabled());
-
-    reflectiveSet(out, conf);
+    out.setWindowSize(conf.getWindowSize());
 
     return out;
   }
 
   InputBlastpConfig _fromInternal(BlastPConfig conf) {
+    log.trace("#_fromInternal(BlastPConfig)");
+
+    if (conf == null)
+      return null;
+
     var out = new InputBlastpConfigImpl();
 
+    // out.setQuery(conf.getQuery()); // Intentionally omitted.
+    out.setQueryLoc(fromInternal(conf.getQueryLoc()));
     out.setTask(fromInternal(conf.getTask()));
-    out.setIpgList(conf.getIpgList()); // FIXME: file, missing prop
-    out.setNegativeIpgList(conf.getNegativeIpgList()); // FIXME: file, missing prop
+    out.setEValue(conf.getExpectValue());
+    out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapOpen());
     out.setGapExtend(conf.getGapExtend());
-    out.setXdropGap(conf.getxDropGap()); // FIXME: missing prop
-    out.setXdropGapFinal(conf.getxDropGapFinal());
-    out.setSeg(fromInternal(conf.getSeg()));
     out.setMatrix(fromInternal(conf.getMatrix()));
     out.setThreshold(conf.getThreshold());
+    out.setCompBasedStats(fromInternal(conf.getCompBasedStats()));
+
+    out.setLineLength(conf.getLineLength());
+    out.setSortHits(fromInternal(conf.getSortHits()));
+    out.setSeqIdList(conf.getSequenceIdList()); // FIXME: file
+    out.setNegativeSeqIdList(conf.getNegativeSequenceIdList()); // FIXME: file
+    out.setTaxIds(String.join(",", conf.getTaxIds()));
+    out.setNegativeTaxIds(String.join(",", conf.getNegativeTaxIds()));
+    out.setTaxIdList(conf.getTaxIdList()); // FIXME: file
+    out.setNegativeTaxIdList(conf.getNegativeTaxIdList()); // FIXME: file
+    out.setSortHSPs(fromInternal(conf.getSortHSPs()));
+    out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
+    out.setNumDescriptions(conf.getNumDescriptions());
+    out.setNumAlignments(conf.getNumAlignments());
+    out.setMaxTargetSeqs(conf.getMaxTargetSequences());
+    out.setMaxHSPs(conf.getMaxHSPs());
     out.setCullingLimit(conf.getCullingLimit());
     out.setBestHitOverhang(conf.getBestHitOverhang());
     out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
-    out.setSubjectBestHit(conf.getSubjectBestHit());
-    out.setUngapped(conf.getUngapped());
-    out.setCompBasedStats(fromInternal(conf.getCompBasedStats()));
+    out.setDbSize(conf.getDbSize());
+    out.setSearchSpace(conf.getSearchSpace());
+    out.setParseDefLines(conf.isParseDefLinesEnabled());
+    out.setOutFmt(fromInternal(conf.getOutFormat()));
+    out.setSeg(fromInternal(conf.getSeg()));
+    out.setSoftMasking(conf.getSoftMasking());
+    out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
+    out.setDbSoftMask(conf.getDbSoftMask());
+    out.setDbHardMask(conf.getDbHardMask());
+    out.setXDropGap(conf.getExtDropoffPrelimGap());
+    out.setXDropGapFinal(conf.getExtDropoffFinalGap());
+    out.setXDropUngap(conf.getExtDropoffUngapped());
+    out.setWindowSize(conf.getWindowSize());
     out.setUseSwTBack(conf.getUseSmithWatermanAlignments());
-
-    reflectiveSet(out, conf);
 
     return out;
   }
@@ -113,6 +167,31 @@ public class BlastConverter
     var out = new InputTBlastnConfigImpl();
   }
 
+  InputBlastSegMask fromInternal(Seg val) {
+    if (val == null)
+      return null;
+
+    var out = new InputBlastSegMaskImpl();
+
+    out.setEnabled(true);
+    out.setWindow(val.getWindow());
+    out.setLocut(val.getLoCut());
+    out.setHicut(val.getHiCut());
+
+    return out;
+  }
+
+  InputBlastCompBasedStats fromInternal(CompBasedStats val) {
+    if (val == null)
+      return null;
+
+    return switch (val) {
+      case None -> InputBlastCompBasedStats.NONE;
+      case CompBasedStats -> InputBlastCompBasedStats.COMPBASEDSTATS;
+      case ConditionalScoreAdjustment -> InputBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT;
+      case UnconditionalScoreAdjustment -> InputBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT;
+    };
+  }
 
   InputBlastnDust fromInternal(Dust val) {
     if (val == null)
@@ -243,7 +322,7 @@ public class BlastConverter
   }
 
   InputBlastpTask fromInternal(BlastpTask val) {
-    return switch(val) {
+    return switch (val) {
       case BlastP -> InputBlastpTask.BLASTP;
       case BlastPFast -> InputBlastpTask.BLASTPFAST;
       case BlastPShort -> InputBlastpTask.BLASTPSHORT;
@@ -251,7 +330,7 @@ public class BlastConverter
   }
 
   InputHitSorting fromInternal(HitSorting val) {
-    return switch(val) {
+    return switch (val) {
       case BY_EXPECT_VALUE -> InputHitSorting.BYEVAL;
       case BY_BIT_SCORE -> InputHitSorting.BYBITSCORE;
       case BY_TOTAL_SCORE -> InputHitSorting.BYTOTALSCORE;
@@ -292,50 +371,20 @@ public class BlastConverter
     };
   }
 
-  void reflectiveSet(Object obj, BlastConfig conf) {
-    try {
-      var meth = Arrays.stream(obj.getClass().getDeclaredMethods())
-        .collect(Collectors.toMap(
-          Method::getName,
-          Function.identity()
-        ));
+  InputBlastpScoringMatrix fromInternal(BlastpScoringMatrix val) {
+    if (val == null)
+      return null;
 
-      if (conf instanceof StdBlastConfig)
-        reflectiveSetStd(obj, meth, (StdBlastConfig) conf);
-      else
-        reflectiveSetBase(obj, meth, conf);
-    } catch (RuntimeException e) {
-      throw e;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  void reflectiveSetStd(Object obj, Map<String, Method> methods, StdBlastConfig conf)
-  throws Exception {
-
-  }
-
-  void reflectiveSetBase(Object obj, Map<String, Method> methods, BlastConfig conf) throws Exception {
-    // methods.get("setQuery").invoke(obj, conf.getQuery()); // Intentionally skipped.
-    methods.get("setQueryLoc").invoke(obj, fromInternal(conf.getQueryLoc()));
-    methods.get("setEValue").invoke(obj, conf.getExpectValue());
-    methods.get("setLineLength").invoke(obj, conf.getLineLength());
-    methods.get("setSortHits").invoke(obj, fromInternal(conf.getSortHits()));
-    methods.get("setSortHSPs").invoke(obj, fromInternal(conf.getSortHsps()));
-    methods.get("setQCovHSPPerc").invoke(obj, conf.getQueryCoveragePercentHSP());
-    methods.get("setNumDescriptions").invoke(obj, conf.getNumDescriptions());
-    methods.get("setNumAlignments").invoke(obj, conf.getNumAlignments());
-    methods.get("setMaxTargetSeqs").invoke(obj, conf.getMaxTargetSequences());
-    methods.get("setMaxHSPs").invoke(obj, conf.getMaxHSPs());
-    methods.get("setMaxHSPs").invoke(obj, conf.getMaxHSPs());
-    methods.get("setDbSize").invoke(obj, conf.getDbSize());
-    methods.get("setSearchSpace").invoke(obj, conf.getSearchSpace());
-    methods.get("setParseDefLines").invoke(obj, conf.isParseDefLinesEnabled());
-    methods.get("setOutFmt").invoke(obj, fromInternal(conf.getOutFormat()));
-    methods.get("setSoftMasking").invoke(obj, conf.getSoftMasking());
-    methods.get("setLcaseMasking").invoke(obj, conf.isLowercaseMaskingEnabled());
-    methods.get("setXdropUngap").invoke(obj, conf.getXDropUngap());
-    methods.get("setWindowSize()").invoke(obj, conf.getWindowSize());
+    return switch (val) {
+      case Blosum45 -> InputBlastpScoringMatrix.BLOSUM45;
+      case Blosum50 -> InputBlastpScoringMatrix.BLOSUM50;
+      case Blosum62 -> InputBlastpScoringMatrix.BLOSUM62;
+      case Blosum80 -> InputBlastpScoringMatrix.BLOSUM80;
+      case Blosum90 -> InputBlastpScoringMatrix.BLOSUM90;
+      case Pam30 -> InputBlastpScoringMatrix.PAM30;
+      case Pam70 -> InputBlastpScoringMatrix.PAM70;
+      case Pam250 -> InputBlastpScoringMatrix.PAM250;
+      case Identity -> InputBlastpScoringMatrix.IDENTITY;
+    };
   }
 }

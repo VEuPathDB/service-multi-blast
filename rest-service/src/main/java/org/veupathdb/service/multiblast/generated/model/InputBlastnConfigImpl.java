@@ -3,63 +3,61 @@ package org.veupathdb.service.multiblast.generated.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonTypeName("blastn")
 @JsonPropertyOrder({
     "tool",
     "query",
     "queryLoc",
-    "eValue",
-    "lineLength",
-    "sortHits",
-    "seqIdList",
-    "negativeSeqIdList",
-    "taxIds",
-    "negativeTaxIds",
-    "taxIdList",
-    "negativeTaxIdList",
-    "sortHSPs",
-    "qCovHSPPerc",
-    "numDescriptions",
-    "numAlignments",
-    "maxTargetSeqs",
-    "maxHSPs",
-    "cullingLimit",
-    "bestHitOverhang",
-    "bestHitScoreEdge",
-    "dbSize",
-    "searchSpace",
-    "parseDefLines",
-    "outFmt",
+    "strand",
     "task",
+    "eValue",
     "wordSize",
     "gapOpen",
     "gapExtend",
-    "reward",
     "penalty",
-    "strand",
+    "reward",
+    "useIndex",
+    "indexName",
+    "subjectLoc",
+    "outFormat",
+    "showGIs",
+    "numDescriptions",
+    "numAlignments",
+    "lineLength",
+    "sortHits",
+    "sortHSPs",
     "dust",
-    "filteringDb",
     "windowMaskerTaxid",
-    "windowMaskerDb",
     "softMasking",
     "lcaseMasking",
+    "taxIds",
+    "negativeTaxIds",
     "dbSoftMask",
     "dbHardMask",
     "percIdentity",
+    "qCovHspPerc",
+    "maxHsps",
+    "cullingLimit",
+    "bestHitOverhang",
+    "bestHitScoreEdge",
+    "subjectBesthit",
+    "maxTargetSeqs",
     "templateType",
     "templateLength",
-    "useIndex",
-    "indexName",
-    "xdropUngap",
-    "xdropGap",
-    "xdropGapFinal",
+    "dbSize",
+    "searchSpace",
+    "sumStats",
+    "xDropUngap",
+    "xDropGap",
+    "xDropGapFinal",
     "noGreedy",
     "minRawGappedScore",
     "ungapped",
-    "windowSize"
+    "windowSize",
+    "offDiagonalRange",
+    "parseDeflines"
 })
 public class InputBlastnConfigImpl implements InputBlastnConfig {
   @JsonProperty("tool")
@@ -71,65 +69,92 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
   @JsonProperty("queryLoc")
   private InputBlastLocation queryLoc;
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  private double eValue;
+  @JsonProperty("strand")
+  private InputBlastStrand strand;
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("task")
+  private InputBlastnTask task;
+
+  @JsonProperty("eValue")
+  private String eValue;
+
+  @JsonProperty("wordSize")
+  private int wordSize;
+
+  @JsonProperty("gapOpen")
+  private int gapOpen;
+
+  @JsonProperty("gapExtend")
+  private int gapExtend;
+
+  @JsonProperty("penalty")
+  private int penalty;
+
+  @JsonProperty("reward")
+  private int reward;
+
+  @JsonProperty("useIndex")
+  private boolean useIndex;
+
+  @JsonProperty("indexName")
+  private String indexName;
+
+  @JsonProperty("subjectLoc")
+  private InputBlastLocation subjectLoc;
+
+  @JsonProperty("outFormat")
+  private InputBlastOutFmt outFormat;
+
+  @JsonProperty("showGIs")
+  private boolean showGIs;
+
+  @JsonProperty("numDescriptions")
+  private int numDescriptions;
+
+  @JsonProperty("numAlignments")
+  private int numAlignments;
+
+  @JsonProperty("lineLength")
   private int lineLength;
 
   @JsonProperty("sortHits")
   private InputHitSorting sortHits;
 
-  @JsonProperty("seqIdList")
-  private String seqIdList;
-
-  @JsonProperty("negativeSeqIdList")
-  private String negativeSeqIdList;
-
-  @JsonProperty("taxIds")
-  private String taxIds;
-
-  @JsonProperty("negativeTaxIds")
-  private String negativeTaxIds;
-
-  @JsonProperty("taxIdList")
-  private String taxIdList;
-
-  @JsonProperty("negativeTaxIdList")
-  private String negativeTaxIdList;
-
   @JsonProperty("sortHSPs")
   private InputHSPSorting sortHSPs;
 
-  @JsonProperty("qCovHSPPerc")
-  private Number qCovHSPPerc;
+  @JsonProperty("dust")
+  private InputBlastnDust dust;
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  private short numDescriptions;
+  @JsonProperty("windowMaskerTaxid")
+  private int windowMaskerTaxid;
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  private int numAlignments;
+  @JsonProperty("softMasking")
+  private boolean softMasking;
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  private int maxTargetSeqs;
+  @JsonProperty("lcaseMasking")
+  private boolean lcaseMasking;
 
-  @JsonProperty("maxHSPs")
-  private short maxHSPs;
+  @JsonProperty("taxIds")
+  private List<String> taxIds;
+
+  @JsonProperty("negativeTaxIds")
+  private List<String> negativeTaxIds;
+
+  @JsonProperty("dbSoftMask")
+  private String dbSoftMask;
+
+  @JsonProperty("dbHardMask")
+  private String dbHardMask;
+
+  @JsonProperty("percIdentity")
+  private double percIdentity;
+
+  @JsonProperty("qCovHspPerc")
+  private double qCovHspPerc;
+
+  @JsonProperty("maxHsps")
+  private int maxHsps;
 
   @JsonProperty("cullingLimit")
   private int cullingLimit;
@@ -140,142 +165,53 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
   @JsonProperty("bestHitScoreEdge")
   private double bestHitScoreEdge;
 
-  @JsonProperty("dbSize")
-  private long dbSize;
+  @JsonProperty("subjectBesthit")
+  private boolean subjectBesthit;
 
-  @JsonProperty("searchSpace")
-  private long searchSpace;
-
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  private boolean parseDefLines;
-
-  @JsonProperty("outFmt")
-  private InputBlastOutFmt outFmt;
-
-  @JsonProperty("task")
-  private InputBlastnTask task;
-
-  @JsonProperty("wordSize")
-  private short wordSize;
-
-  @JsonProperty("gapOpen")
-  private byte gapOpen;
-
-  @JsonProperty("gapExtend")
-  private byte gapExtend;
-
-  @JsonProperty("reward")
-  private byte reward;
-
-  @JsonProperty("penalty")
-  private byte penalty;
-
-  @JsonProperty("strand")
-  private InputBlastStrand strand;
-
-  @JsonProperty(
-      value = "dust",
-      defaultValue = "{\n"
-              + "\"enable\" : true,\n"
-              + "\"level\" : 20,\n"
-              + "\"window\" : 64,\n"
-              + "\"linker\" : 1\n"
-              + "}"
-  )
-  private InputBlastnDust dust;
-
-  @JsonProperty("filteringDb")
-  private String filteringDb;
-
-  @JsonProperty("windowMaskerTaxid")
-  private long windowMaskerTaxid;
-
-  @JsonProperty("windowMaskerDb")
-  private String windowMaskerDb;
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "true"
-  )
-  private boolean softMasking;
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  private boolean lcaseMasking;
-
-  @JsonProperty("dbSoftMask")
-  private int dbSoftMask;
-
-  @JsonProperty("dbHardMask")
-  private long dbHardMask;
-
-  @JsonProperty(
-      value = "percIdentity",
-      defaultValue = "0.0"
-  )
-  private Number percIdentity;
+  @JsonProperty("maxTargetSeqs")
+  private int maxTargetSeqs;
 
   @JsonProperty("templateType")
-  private InputBlastDcTemplateType templateType;
+  private InputBlastnDcTemplateType templateType;
 
-  @JsonProperty(
-      value = "templateLength",
-      defaultValue = "18"
-  )
-  private int templateLength;
+  @JsonProperty("templateLength")
+  private byte templateLength;
 
-  @JsonProperty(
-      value = "useIndex",
-      defaultValue = "false"
-  )
-  private boolean useIndex;
+  @JsonProperty("dbSize")
+  private byte dbSize;
 
-  @JsonProperty("indexName")
-  private String indexName;
+  @JsonProperty("searchSpace")
+  private byte searchSpace;
 
-  @JsonProperty(
-      value = "xdropUngap",
-      defaultValue = "20.0"
-  )
-  private double xdropUngap;
+  @JsonProperty("sumStats")
+  private boolean sumStats;
 
-  @JsonProperty(
-      value = "xdropGap",
-      defaultValue = "30.0"
-  )
-  private double xdropGap;
+  @JsonProperty("xDropUngap")
+  private double xDropUngap;
 
-  @JsonProperty(
-      value = "xdropGapFinal",
-      defaultValue = "100.0"
-  )
-  private double xdropGapFinal;
+  @JsonProperty("xDropGap")
+  private double xDropGap;
 
-  @JsonProperty(
-      value = "noGreedy",
-      defaultValue = "false"
-  )
+  @JsonProperty("xDropGapFinal")
+  private double xDropGapFinal;
+
+  @JsonProperty("noGreedy")
   private boolean noGreedy;
 
   @JsonProperty("minRawGappedScore")
   private int minRawGappedScore;
 
-  @JsonProperty(
-      value = "ungapped",
-      defaultValue = "false"
-  )
+  @JsonProperty("ungapped")
   private boolean ungapped;
 
-  @JsonProperty(
-      value = "windowSize",
-      defaultValue = "40"
-  )
-  private short windowSize;
+  @JsonProperty("windowSize")
+  private int windowSize;
+
+  @JsonProperty("offDiagonalRange")
+  private int offDiagonalRange;
+
+  @JsonProperty("parseDeflines")
+  private boolean parseDeflines;
 
   @JsonProperty("tool")
   public InputBlastTool getTool() {
@@ -302,34 +238,162 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
     this.queryLoc = queryLoc;
   }
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  public double getEValue() {
+  @JsonProperty("strand")
+  public InputBlastStrand getStrand() {
+    return this.strand;
+  }
+
+  @JsonProperty("strand")
+  public void setStrand(InputBlastStrand strand) {
+    this.strand = strand;
+  }
+
+  @JsonProperty("task")
+  public InputBlastnTask getTask() {
+    return this.task;
+  }
+
+  @JsonProperty("task")
+  public void setTask(InputBlastnTask task) {
+    this.task = task;
+  }
+
+  @JsonProperty("eValue")
+  public String getEValue() {
     return this.eValue;
   }
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  public void setEValue(double eValue) {
+  @JsonProperty("eValue")
+  public void setEValue(String eValue) {
     this.eValue = eValue;
   }
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("wordSize")
+  public int getWordSize() {
+    return this.wordSize;
+  }
+
+  @JsonProperty("wordSize")
+  public void setWordSize(int wordSize) {
+    this.wordSize = wordSize;
+  }
+
+  @JsonProperty("gapOpen")
+  public int getGapOpen() {
+    return this.gapOpen;
+  }
+
+  @JsonProperty("gapOpen")
+  public void setGapOpen(int gapOpen) {
+    this.gapOpen = gapOpen;
+  }
+
+  @JsonProperty("gapExtend")
+  public int getGapExtend() {
+    return this.gapExtend;
+  }
+
+  @JsonProperty("gapExtend")
+  public void setGapExtend(int gapExtend) {
+    this.gapExtend = gapExtend;
+  }
+
+  @JsonProperty("penalty")
+  public int getPenalty() {
+    return this.penalty;
+  }
+
+  @JsonProperty("penalty")
+  public void setPenalty(int penalty) {
+    this.penalty = penalty;
+  }
+
+  @JsonProperty("reward")
+  public int getReward() {
+    return this.reward;
+  }
+
+  @JsonProperty("reward")
+  public void setReward(int reward) {
+    this.reward = reward;
+  }
+
+  @JsonProperty("useIndex")
+  public boolean getUseIndex() {
+    return this.useIndex;
+  }
+
+  @JsonProperty("useIndex")
+  public void setUseIndex(boolean useIndex) {
+    this.useIndex = useIndex;
+  }
+
+  @JsonProperty("indexName")
+  public String getIndexName() {
+    return this.indexName;
+  }
+
+  @JsonProperty("indexName")
+  public void setIndexName(String indexName) {
+    this.indexName = indexName;
+  }
+
+  @JsonProperty("subjectLoc")
+  public InputBlastLocation getSubjectLoc() {
+    return this.subjectLoc;
+  }
+
+  @JsonProperty("subjectLoc")
+  public void setSubjectLoc(InputBlastLocation subjectLoc) {
+    this.subjectLoc = subjectLoc;
+  }
+
+  @JsonProperty("outFormat")
+  public InputBlastOutFmt getOutFormat() {
+    return this.outFormat;
+  }
+
+  @JsonProperty("outFormat")
+  public void setOutFormat(InputBlastOutFmt outFormat) {
+    this.outFormat = outFormat;
+  }
+
+  @JsonProperty("showGIs")
+  public boolean getShowGIs() {
+    return this.showGIs;
+  }
+
+  @JsonProperty("showGIs")
+  public void setShowGIs(boolean showGIs) {
+    this.showGIs = showGIs;
+  }
+
+  @JsonProperty("numDescriptions")
+  public int getNumDescriptions() {
+    return this.numDescriptions;
+  }
+
+  @JsonProperty("numDescriptions")
+  public void setNumDescriptions(int numDescriptions) {
+    this.numDescriptions = numDescriptions;
+  }
+
+  @JsonProperty("numAlignments")
+  public int getNumAlignments() {
+    return this.numAlignments;
+  }
+
+  @JsonProperty("numAlignments")
+  public void setNumAlignments(int numAlignments) {
+    this.numAlignments = numAlignments;
+  }
+
+  @JsonProperty("lineLength")
   public int getLineLength() {
     return this.lineLength;
   }
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("lineLength")
   public void setLineLength(int lineLength) {
     this.lineLength = lineLength;
   }
@@ -344,66 +408,6 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
     this.sortHits = sortHits;
   }
 
-  @JsonProperty("seqIdList")
-  public String getSeqIdList() {
-    return this.seqIdList;
-  }
-
-  @JsonProperty("seqIdList")
-  public void setSeqIdList(String seqIdList) {
-    this.seqIdList = seqIdList;
-  }
-
-  @JsonProperty("negativeSeqIdList")
-  public String getNegativeSeqIdList() {
-    return this.negativeSeqIdList;
-  }
-
-  @JsonProperty("negativeSeqIdList")
-  public void setNegativeSeqIdList(String negativeSeqIdList) {
-    this.negativeSeqIdList = negativeSeqIdList;
-  }
-
-  @JsonProperty("taxIds")
-  public String getTaxIds() {
-    return this.taxIds;
-  }
-
-  @JsonProperty("taxIds")
-  public void setTaxIds(String taxIds) {
-    this.taxIds = taxIds;
-  }
-
-  @JsonProperty("negativeTaxIds")
-  public String getNegativeTaxIds() {
-    return this.negativeTaxIds;
-  }
-
-  @JsonProperty("negativeTaxIds")
-  public void setNegativeTaxIds(String negativeTaxIds) {
-    this.negativeTaxIds = negativeTaxIds;
-  }
-
-  @JsonProperty("taxIdList")
-  public String getTaxIdList() {
-    return this.taxIdList;
-  }
-
-  @JsonProperty("taxIdList")
-  public void setTaxIdList(String taxIdList) {
-    this.taxIdList = taxIdList;
-  }
-
-  @JsonProperty("negativeTaxIdList")
-  public String getNegativeTaxIdList() {
-    return this.negativeTaxIdList;
-  }
-
-  @JsonProperty("negativeTaxIdList")
-  public void setNegativeTaxIdList(String negativeTaxIdList) {
-    this.negativeTaxIdList = negativeTaxIdList;
-  }
-
   @JsonProperty("sortHSPs")
   public InputHSPSorting getSortHSPs() {
     return this.sortHSPs;
@@ -414,72 +418,114 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
     this.sortHSPs = sortHSPs;
   }
 
-  @JsonProperty("qCovHSPPerc")
-  public Number getQCovHSPPerc() {
-    return this.qCovHSPPerc;
+  @JsonProperty("dust")
+  public InputBlastnDust getDust() {
+    return this.dust;
   }
 
-  @JsonProperty("qCovHSPPerc")
-  public void setQCovHSPPerc(Number qCovHSPPerc) {
-    this.qCovHSPPerc = qCovHSPPerc;
+  @JsonProperty("dust")
+  public void setDust(InputBlastnDust dust) {
+    this.dust = dust;
   }
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  public short getNumDescriptions() {
-    return this.numDescriptions;
+  @JsonProperty("windowMaskerTaxid")
+  public int getWindowMaskerTaxid() {
+    return this.windowMaskerTaxid;
   }
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  public void setNumDescriptions(short numDescriptions) {
-    this.numDescriptions = numDescriptions;
+  @JsonProperty("windowMaskerTaxid")
+  public void setWindowMaskerTaxid(int windowMaskerTaxid) {
+    this.windowMaskerTaxid = windowMaskerTaxid;
   }
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  public int getNumAlignments() {
-    return this.numAlignments;
+  @JsonProperty("softMasking")
+  public boolean getSoftMasking() {
+    return this.softMasking;
   }
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  public void setNumAlignments(int numAlignments) {
-    this.numAlignments = numAlignments;
+  @JsonProperty("softMasking")
+  public void setSoftMasking(boolean softMasking) {
+    this.softMasking = softMasking;
   }
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs;
+  @JsonProperty("lcaseMasking")
+  public boolean getLcaseMasking() {
+    return this.lcaseMasking;
   }
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  public void setMaxTargetSeqs(int maxTargetSeqs) {
-    this.maxTargetSeqs = maxTargetSeqs;
+  @JsonProperty("lcaseMasking")
+  public void setLcaseMasking(boolean lcaseMasking) {
+    this.lcaseMasking = lcaseMasking;
   }
 
-  @JsonProperty("maxHSPs")
-  public short getMaxHSPs() {
-    return this.maxHSPs;
+  @JsonProperty("taxIds")
+  public List<String> getTaxIds() {
+    return this.taxIds;
   }
 
-  @JsonProperty("maxHSPs")
-  public void setMaxHSPs(short maxHSPs) {
-    this.maxHSPs = maxHSPs;
+  @JsonProperty("taxIds")
+  public void setTaxIds(List<String> taxIds) {
+    this.taxIds = taxIds;
+  }
+
+  @JsonProperty("negativeTaxIds")
+  public List<String> getNegativeTaxIds() {
+    return this.negativeTaxIds;
+  }
+
+  @JsonProperty("negativeTaxIds")
+  public void setNegativeTaxIds(List<String> negativeTaxIds) {
+    this.negativeTaxIds = negativeTaxIds;
+  }
+
+  @JsonProperty("dbSoftMask")
+  public String getDbSoftMask() {
+    return this.dbSoftMask;
+  }
+
+  @JsonProperty("dbSoftMask")
+  public void setDbSoftMask(String dbSoftMask) {
+    this.dbSoftMask = dbSoftMask;
+  }
+
+  @JsonProperty("dbHardMask")
+  public String getDbHardMask() {
+    return this.dbHardMask;
+  }
+
+  @JsonProperty("dbHardMask")
+  public void setDbHardMask(String dbHardMask) {
+    this.dbHardMask = dbHardMask;
+  }
+
+  @JsonProperty("percIdentity")
+  public double getPercIdentity() {
+    return this.percIdentity;
+  }
+
+  @JsonProperty("percIdentity")
+  public void setPercIdentity(double percIdentity) {
+    this.percIdentity = percIdentity;
+  }
+
+  @JsonProperty("qCovHspPerc")
+  public double getQCovHspPerc() {
+    return this.qCovHspPerc;
+  }
+
+  @JsonProperty("qCovHspPerc")
+  public void setQCovHspPerc(double qCovHspPerc) {
+    this.qCovHspPerc = qCovHspPerc;
+  }
+
+  @JsonProperty("maxHsps")
+  public int getMaxHsps() {
+    return this.maxHsps;
+  }
+
+  @JsonProperty("maxHsps")
+  public void setMaxHsps(int maxHsps) {
+    this.maxHsps = maxHsps;
   }
 
   @JsonProperty("cullingLimit")
@@ -512,358 +558,112 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
-  @JsonProperty("dbSize")
-  public long getDbSize() {
-    return this.dbSize;
+  @JsonProperty("subjectBesthit")
+  public boolean getSubjectBesthit() {
+    return this.subjectBesthit;
   }
 
-  @JsonProperty("dbSize")
-  public void setDbSize(long dbSize) {
-    this.dbSize = dbSize;
+  @JsonProperty("subjectBesthit")
+  public void setSubjectBesthit(boolean subjectBesthit) {
+    this.subjectBesthit = subjectBesthit;
   }
 
-  @JsonProperty("searchSpace")
-  public long getSearchSpace() {
-    return this.searchSpace;
+  @JsonProperty("maxTargetSeqs")
+  public int getMaxTargetSeqs() {
+    return this.maxTargetSeqs;
   }
 
-  @JsonProperty("searchSpace")
-  public void setSearchSpace(long searchSpace) {
-    this.searchSpace = searchSpace;
-  }
-
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  public boolean getParseDefLines() {
-    return this.parseDefLines;
-  }
-
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  public void setParseDefLines(boolean parseDefLines) {
-    this.parseDefLines = parseDefLines;
-  }
-
-  @JsonProperty("outFmt")
-  public InputBlastOutFmt getOutFmt() {
-    return this.outFmt;
-  }
-
-  @JsonProperty("outFmt")
-  public void setOutFmt(InputBlastOutFmt outFmt) {
-    this.outFmt = outFmt;
-  }
-
-  @JsonProperty("task")
-  public InputBlastnTask getTask() {
-    return this.task;
-  }
-
-  @JsonProperty("task")
-  public void setTask(InputBlastnTask task) {
-    this.task = task;
-  }
-
-  @JsonProperty("wordSize")
-  public short getWordSize() {
-    return this.wordSize;
-  }
-
-  @JsonProperty("wordSize")
-  public void setWordSize(short wordSize) {
-    this.wordSize = wordSize;
-  }
-
-  @JsonProperty("gapOpen")
-  public byte getGapOpen() {
-    return this.gapOpen;
-  }
-
-  @JsonProperty("gapOpen")
-  public void setGapOpen(byte gapOpen) {
-    this.gapOpen = gapOpen;
-  }
-
-  @JsonProperty("gapExtend")
-  public byte getGapExtend() {
-    return this.gapExtend;
-  }
-
-  @JsonProperty("gapExtend")
-  public void setGapExtend(byte gapExtend) {
-    this.gapExtend = gapExtend;
-  }
-
-  @JsonProperty("reward")
-  public byte getReward() {
-    return this.reward;
-  }
-
-  @JsonProperty("reward")
-  public void setReward(byte reward) {
-    this.reward = reward;
-  }
-
-  @JsonProperty("penalty")
-  public byte getPenalty() {
-    return this.penalty;
-  }
-
-  @JsonProperty("penalty")
-  public void setPenalty(byte penalty) {
-    this.penalty = penalty;
-  }
-
-  @JsonProperty("strand")
-  public InputBlastStrand getStrand() {
-    return this.strand;
-  }
-
-  @JsonProperty("strand")
-  public void setStrand(InputBlastStrand strand) {
-    this.strand = strand;
-  }
-
-  @JsonProperty(
-      value = "dust",
-      defaultValue = "{\n"
-              + "\"enable\" : true,\n"
-              + "\"level\" : 20,\n"
-              + "\"window\" : 64,\n"
-              + "\"linker\" : 1\n"
-              + "}"
-  )
-  public InputBlastnDust getDust() {
-    return this.dust;
-  }
-
-  @JsonProperty(
-      value = "dust",
-      defaultValue = "{\n"
-              + "\"enable\" : true,\n"
-              + "\"level\" : 20,\n"
-              + "\"window\" : 64,\n"
-              + "\"linker\" : 1\n"
-              + "}"
-  )
-  public void setDust(InputBlastnDust dust) {
-    this.dust = dust;
-  }
-
-  @JsonProperty("filteringDb")
-  public String getFilteringDb() {
-    return this.filteringDb;
-  }
-
-  @JsonProperty("filteringDb")
-  public void setFilteringDb(String filteringDb) {
-    this.filteringDb = filteringDb;
-  }
-
-  @JsonProperty("windowMaskerTaxid")
-  public long getWindowMaskerTaxid() {
-    return this.windowMaskerTaxid;
-  }
-
-  @JsonProperty("windowMaskerTaxid")
-  public void setWindowMaskerTaxid(long windowMaskerTaxid) {
-    this.windowMaskerTaxid = windowMaskerTaxid;
-  }
-
-  @JsonProperty("windowMaskerDb")
-  public String getWindowMaskerDb() {
-    return this.windowMaskerDb;
-  }
-
-  @JsonProperty("windowMaskerDb")
-  public void setWindowMaskerDb(String windowMaskerDb) {
-    this.windowMaskerDb = windowMaskerDb;
-  }
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "true"
-  )
-  public boolean getSoftMasking() {
-    return this.softMasking;
-  }
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "true"
-  )
-  public void setSoftMasking(boolean softMasking) {
-    this.softMasking = softMasking;
-  }
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  public boolean getLcaseMasking() {
-    return this.lcaseMasking;
-  }
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  public void setLcaseMasking(boolean lcaseMasking) {
-    this.lcaseMasking = lcaseMasking;
-  }
-
-  @JsonProperty("dbSoftMask")
-  public int getDbSoftMask() {
-    return this.dbSoftMask;
-  }
-
-  @JsonProperty("dbSoftMask")
-  public void setDbSoftMask(int dbSoftMask) {
-    this.dbSoftMask = dbSoftMask;
-  }
-
-  @JsonProperty("dbHardMask")
-  public long getDbHardMask() {
-    return this.dbHardMask;
-  }
-
-  @JsonProperty("dbHardMask")
-  public void setDbHardMask(long dbHardMask) {
-    this.dbHardMask = dbHardMask;
-  }
-
-  @JsonProperty(
-      value = "percIdentity",
-      defaultValue = "0.0"
-  )
-  public Number getPercIdentity() {
-    return this.percIdentity;
-  }
-
-  @JsonProperty(
-      value = "percIdentity",
-      defaultValue = "0.0"
-  )
-  public void setPercIdentity(Number percIdentity) {
-    this.percIdentity = percIdentity;
+  @JsonProperty("maxTargetSeqs")
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    this.maxTargetSeqs = maxTargetSeqs;
   }
 
   @JsonProperty("templateType")
-  public InputBlastDcTemplateType getTemplateType() {
+  public InputBlastnDcTemplateType getTemplateType() {
     return this.templateType;
   }
 
   @JsonProperty("templateType")
-  public void setTemplateType(InputBlastDcTemplateType templateType) {
+  public void setTemplateType(InputBlastnDcTemplateType templateType) {
     this.templateType = templateType;
   }
 
-  @JsonProperty(
-      value = "templateLength",
-      defaultValue = "18"
-  )
-  public int getTemplateLength() {
+  @JsonProperty("templateLength")
+  public byte getTemplateLength() {
     return this.templateLength;
   }
 
-  @JsonProperty(
-      value = "templateLength",
-      defaultValue = "18"
-  )
-  public void setTemplateLength(int templateLength) {
+  @JsonProperty("templateLength")
+  public void setTemplateLength(byte templateLength) {
     this.templateLength = templateLength;
   }
 
-  @JsonProperty(
-      value = "useIndex",
-      defaultValue = "false"
-  )
-  public boolean getUseIndex() {
-    return this.useIndex;
+  @JsonProperty("dbSize")
+  public byte getDbSize() {
+    return this.dbSize;
   }
 
-  @JsonProperty(
-      value = "useIndex",
-      defaultValue = "false"
-  )
-  public void setUseIndex(boolean useIndex) {
-    this.useIndex = useIndex;
+  @JsonProperty("dbSize")
+  public void setDbSize(byte dbSize) {
+    this.dbSize = dbSize;
   }
 
-  @JsonProperty("indexName")
-  public String getIndexName() {
-    return this.indexName;
+  @JsonProperty("searchSpace")
+  public byte getSearchSpace() {
+    return this.searchSpace;
   }
 
-  @JsonProperty("indexName")
-  public void setIndexName(String indexName) {
-    this.indexName = indexName;
+  @JsonProperty("searchSpace")
+  public void setSearchSpace(byte searchSpace) {
+    this.searchSpace = searchSpace;
   }
 
-  @JsonProperty(
-      value = "xdropUngap",
-      defaultValue = "20.0"
-  )
-  public double getXdropUngap() {
-    return this.xdropUngap;
+  @JsonProperty("sumStats")
+  public boolean getSumStats() {
+    return this.sumStats;
   }
 
-  @JsonProperty(
-      value = "xdropUngap",
-      defaultValue = "20.0"
-  )
-  public void setXdropUngap(double xdropUngap) {
-    this.xdropUngap = xdropUngap;
+  @JsonProperty("sumStats")
+  public void setSumStats(boolean sumStats) {
+    this.sumStats = sumStats;
   }
 
-  @JsonProperty(
-      value = "xdropGap",
-      defaultValue = "30.0"
-  )
-  public double getXdropGap() {
-    return this.xdropGap;
+  @JsonProperty("xDropUngap")
+  public double getXDropUngap() {
+    return this.xDropUngap;
   }
 
-  @JsonProperty(
-      value = "xdropGap",
-      defaultValue = "30.0"
-  )
-  public void setXdropGap(double xdropGap) {
-    this.xdropGap = xdropGap;
+  @JsonProperty("xDropUngap")
+  public void setXDropUngap(double xDropUngap) {
+    this.xDropUngap = xDropUngap;
   }
 
-  @JsonProperty(
-      value = "xdropGapFinal",
-      defaultValue = "100.0"
-  )
-  public double getXdropGapFinal() {
-    return this.xdropGapFinal;
+  @JsonProperty("xDropGap")
+  public double getXDropGap() {
+    return this.xDropGap;
   }
 
-  @JsonProperty(
-      value = "xdropGapFinal",
-      defaultValue = "100.0"
-  )
-  public void setXdropGapFinal(double xdropGapFinal) {
-    this.xdropGapFinal = xdropGapFinal;
+  @JsonProperty("xDropGap")
+  public void setXDropGap(double xDropGap) {
+    this.xDropGap = xDropGap;
   }
 
-  @JsonProperty(
-      value = "noGreedy",
-      defaultValue = "false"
-  )
+  @JsonProperty("xDropGapFinal")
+  public double getXDropGapFinal() {
+    return this.xDropGapFinal;
+  }
+
+  @JsonProperty("xDropGapFinal")
+  public void setXDropGapFinal(double xDropGapFinal) {
+    this.xDropGapFinal = xDropGapFinal;
+  }
+
+  @JsonProperty("noGreedy")
   public boolean getNoGreedy() {
     return this.noGreedy;
   }
 
-  @JsonProperty(
-      value = "noGreedy",
-      defaultValue = "false"
-  )
+  @JsonProperty("noGreedy")
   public void setNoGreedy(boolean noGreedy) {
     this.noGreedy = noGreedy;
   }
@@ -878,35 +678,43 @@ public class InputBlastnConfigImpl implements InputBlastnConfig {
     this.minRawGappedScore = minRawGappedScore;
   }
 
-  @JsonProperty(
-      value = "ungapped",
-      defaultValue = "false"
-  )
+  @JsonProperty("ungapped")
   public boolean getUngapped() {
     return this.ungapped;
   }
 
-  @JsonProperty(
-      value = "ungapped",
-      defaultValue = "false"
-  )
+  @JsonProperty("ungapped")
   public void setUngapped(boolean ungapped) {
     this.ungapped = ungapped;
   }
 
-  @JsonProperty(
-      value = "windowSize",
-      defaultValue = "40"
-  )
-  public short getWindowSize() {
+  @JsonProperty("windowSize")
+  public int getWindowSize() {
     return this.windowSize;
   }
 
-  @JsonProperty(
-      value = "windowSize",
-      defaultValue = "40"
-  )
-  public void setWindowSize(short windowSize) {
+  @JsonProperty("windowSize")
+  public void setWindowSize(int windowSize) {
     this.windowSize = windowSize;
+  }
+
+  @JsonProperty("offDiagonalRange")
+  public int getOffDiagonalRange() {
+    return this.offDiagonalRange;
+  }
+
+  @JsonProperty("offDiagonalRange")
+  public void setOffDiagonalRange(int offDiagonalRange) {
+    this.offDiagonalRange = offDiagonalRange;
+  }
+
+  @JsonProperty("parseDeflines")
+  public boolean getParseDeflines() {
+    return this.parseDeflines;
+  }
+
+  @JsonProperty("parseDeflines")
+  public void setParseDeflines(boolean parseDeflines) {
+    this.parseDeflines = parseDeflines;
   }
 }

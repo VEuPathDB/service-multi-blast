@@ -91,6 +91,8 @@ gen-docs: api.raml merge-raml
 	@tail -n+3 schema/library.raml >> api2.raml
 	@mv api2.raml api.raml
 	@$(BIN_DIR)/generate-docs.sh
+	@rm -rf ../docs
+	@mv docs ../docs
 
 merge-raml:
 	@$(BIN_DIR)/merge-raml -vv schema > schema/library.raml

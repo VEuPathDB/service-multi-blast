@@ -1,15 +1,14 @@
 package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.List;
 
-@JsonTypeName("blastn")
 @JsonDeserialize(
     as = InputBlastnConfigImpl.class
 )
 public interface InputBlastnConfig extends InputBlastConfig {
-  InputBlastTool _DISCRIMINATOR_TYPE_NAME = InputBlastTool.BLASTN;
+  InputBlastTool _DISCRIMINATOR_TYPE_NAME = null;
 
   @JsonProperty("tool")
   InputBlastTool getTool();
@@ -26,28 +25,100 @@ public interface InputBlastnConfig extends InputBlastConfig {
   @JsonProperty("queryLoc")
   void setQueryLoc(InputBlastLocation queryLoc);
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  double getEValue();
+  @JsonProperty("strand")
+  InputBlastStrand getStrand();
 
-  @JsonProperty(
-      value = "eValue",
-      defaultValue = "10.0"
-  )
-  void setEValue(double eValue);
+  @JsonProperty("strand")
+  void setStrand(InputBlastStrand strand);
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("task")
+  InputBlastnTask getTask();
+
+  @JsonProperty("task")
+  void setTask(InputBlastnTask task);
+
+  @JsonProperty("eValue")
+  String getEValue();
+
+  @JsonProperty("eValue")
+  void setEValue(String eValue);
+
+  @JsonProperty("wordSize")
+  int getWordSize();
+
+  @JsonProperty("wordSize")
+  void setWordSize(int wordSize);
+
+  @JsonProperty("gapOpen")
+  int getGapOpen();
+
+  @JsonProperty("gapOpen")
+  void setGapOpen(int gapOpen);
+
+  @JsonProperty("gapExtend")
+  int getGapExtend();
+
+  @JsonProperty("gapExtend")
+  void setGapExtend(int gapExtend);
+
+  @JsonProperty("penalty")
+  int getPenalty();
+
+  @JsonProperty("penalty")
+  void setPenalty(int penalty);
+
+  @JsonProperty("reward")
+  int getReward();
+
+  @JsonProperty("reward")
+  void setReward(int reward);
+
+  @JsonProperty("useIndex")
+  boolean getUseIndex();
+
+  @JsonProperty("useIndex")
+  void setUseIndex(boolean useIndex);
+
+  @JsonProperty("indexName")
+  String getIndexName();
+
+  @JsonProperty("indexName")
+  void setIndexName(String indexName);
+
+  @JsonProperty("subjectLoc")
+  InputBlastLocation getSubjectLoc();
+
+  @JsonProperty("subjectLoc")
+  void setSubjectLoc(InputBlastLocation subjectLoc);
+
+  @JsonProperty("outFormat")
+  InputBlastOutFmt getOutFormat();
+
+  @JsonProperty("outFormat")
+  void setOutFormat(InputBlastOutFmt outFormat);
+
+  @JsonProperty("showGIs")
+  boolean getShowGIs();
+
+  @JsonProperty("showGIs")
+  void setShowGIs(boolean showGIs);
+
+  @JsonProperty("numDescriptions")
+  int getNumDescriptions();
+
+  @JsonProperty("numDescriptions")
+  void setNumDescriptions(int numDescriptions);
+
+  @JsonProperty("numAlignments")
+  int getNumAlignments();
+
+  @JsonProperty("numAlignments")
+  void setNumAlignments(int numAlignments);
+
+  @JsonProperty("lineLength")
   int getLineLength();
 
-  @JsonProperty(
-      value = "lineLength",
-      defaultValue = "60"
-  )
+  @JsonProperty("lineLength")
   void setLineLength(int lineLength);
 
   @JsonProperty("sortHits")
@@ -56,95 +127,77 @@ public interface InputBlastnConfig extends InputBlastConfig {
   @JsonProperty("sortHits")
   void setSortHits(InputHitSorting sortHits);
 
-  @JsonProperty("seqIdList")
-  String getSeqIdList();
-
-  @JsonProperty("seqIdList")
-  void setSeqIdList(String seqIdList);
-
-  @JsonProperty("negativeSeqIdList")
-  String getNegativeSeqIdList();
-
-  @JsonProperty("negativeSeqIdList")
-  void setNegativeSeqIdList(String negativeSeqIdList);
-
-  @JsonProperty("taxIds")
-  String getTaxIds();
-
-  @JsonProperty("taxIds")
-  void setTaxIds(String taxIds);
-
-  @JsonProperty("negativeTaxIds")
-  String getNegativeTaxIds();
-
-  @JsonProperty("negativeTaxIds")
-  void setNegativeTaxIds(String negativeTaxIds);
-
-  @JsonProperty("taxIdList")
-  String getTaxIdList();
-
-  @JsonProperty("taxIdList")
-  void setTaxIdList(String taxIdList);
-
-  @JsonProperty("negativeTaxIdList")
-  String getNegativeTaxIdList();
-
-  @JsonProperty("negativeTaxIdList")
-  void setNegativeTaxIdList(String negativeTaxIdList);
-
   @JsonProperty("sortHSPs")
   InputHSPSorting getSortHSPs();
 
   @JsonProperty("sortHSPs")
   void setSortHSPs(InputHSPSorting sortHSPs);
 
-  @JsonProperty("qCovHSPPerc")
-  Number getQCovHSPPerc();
+  @JsonProperty("dust")
+  InputBlastnDust getDust();
 
-  @JsonProperty("qCovHSPPerc")
-  void setQCovHSPPerc(Number qCovHSPPerc);
+  @JsonProperty("dust")
+  void setDust(InputBlastnDust dust);
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  short getNumDescriptions();
+  @JsonProperty("windowMaskerTaxid")
+  int getWindowMaskerTaxid();
 
-  @JsonProperty(
-      value = "numDescriptions",
-      defaultValue = "500"
-  )
-  void setNumDescriptions(short numDescriptions);
+  @JsonProperty("windowMaskerTaxid")
+  void setWindowMaskerTaxid(int windowMaskerTaxid);
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  int getNumAlignments();
+  @JsonProperty("softMasking")
+  boolean getSoftMasking();
 
-  @JsonProperty(
-      value = "numAlignments",
-      defaultValue = "250"
-  )
-  void setNumAlignments(int numAlignments);
+  @JsonProperty("softMasking")
+  void setSoftMasking(boolean softMasking);
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  int getMaxTargetSeqs();
+  @JsonProperty("lcaseMasking")
+  boolean getLcaseMasking();
 
-  @JsonProperty(
-      value = "maxTargetSeqs",
-      defaultValue = "500"
-  )
-  void setMaxTargetSeqs(int maxTargetSeqs);
+  @JsonProperty("lcaseMasking")
+  void setLcaseMasking(boolean lcaseMasking);
 
-  @JsonProperty("maxHSPs")
-  short getMaxHSPs();
+  @JsonProperty("taxIds")
+  List<String> getTaxIds();
 
-  @JsonProperty("maxHSPs")
-  void setMaxHSPs(short maxHSPs);
+  @JsonProperty("taxIds")
+  void setTaxIds(List<String> taxIds);
+
+  @JsonProperty("negativeTaxIds")
+  List<String> getNegativeTaxIds();
+
+  @JsonProperty("negativeTaxIds")
+  void setNegativeTaxIds(List<String> negativeTaxIds);
+
+  @JsonProperty("dbSoftMask")
+  String getDbSoftMask();
+
+  @JsonProperty("dbSoftMask")
+  void setDbSoftMask(String dbSoftMask);
+
+  @JsonProperty("dbHardMask")
+  String getDbHardMask();
+
+  @JsonProperty("dbHardMask")
+  void setDbHardMask(String dbHardMask);
+
+  @JsonProperty("percIdentity")
+  double getPercIdentity();
+
+  @JsonProperty("percIdentity")
+  void setPercIdentity(double percIdentity);
+
+  @JsonProperty("qCovHspPerc")
+  double getQCovHspPerc();
+
+  @JsonProperty("qCovHspPerc")
+  void setQCovHspPerc(double qCovHspPerc);
+
+  @JsonProperty("maxHsps")
+  int getMaxHsps();
+
+  @JsonProperty("maxHsps")
+  void setMaxHsps(int maxHsps);
 
   @JsonProperty("cullingLimit")
   int getCullingLimit();
@@ -164,248 +217,70 @@ public interface InputBlastnConfig extends InputBlastConfig {
   @JsonProperty("bestHitScoreEdge")
   void setBestHitScoreEdge(double bestHitScoreEdge);
 
-  @JsonProperty("dbSize")
-  long getDbSize();
+  @JsonProperty("subjectBesthit")
+  boolean getSubjectBesthit();
 
-  @JsonProperty("dbSize")
-  void setDbSize(long dbSize);
+  @JsonProperty("subjectBesthit")
+  void setSubjectBesthit(boolean subjectBesthit);
 
-  @JsonProperty("searchSpace")
-  long getSearchSpace();
+  @JsonProperty("maxTargetSeqs")
+  int getMaxTargetSeqs();
 
-  @JsonProperty("searchSpace")
-  void setSearchSpace(long searchSpace);
-
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  boolean getParseDefLines();
-
-  @JsonProperty(
-      value = "parseDefLines",
-      defaultValue = "false"
-  )
-  void setParseDefLines(boolean parseDefLines);
-
-  @JsonProperty("outFmt")
-  InputBlastOutFmt getOutFmt();
-
-  @JsonProperty("outFmt")
-  void setOutFmt(InputBlastOutFmt outFmt);
-
-  @JsonProperty("task")
-  InputBlastnTask getTask();
-
-  @JsonProperty("task")
-  void setTask(InputBlastnTask task);
-
-  @JsonProperty("wordSize")
-  short getWordSize();
-
-  @JsonProperty("wordSize")
-  void setWordSize(short wordSize);
-
-  @JsonProperty("gapOpen")
-  byte getGapOpen();
-
-  @JsonProperty("gapOpen")
-  void setGapOpen(byte gapOpen);
-
-  @JsonProperty("gapExtend")
-  byte getGapExtend();
-
-  @JsonProperty("gapExtend")
-  void setGapExtend(byte gapExtend);
-
-  @JsonProperty("reward")
-  byte getReward();
-
-  @JsonProperty("reward")
-  void setReward(byte reward);
-
-  @JsonProperty("penalty")
-  byte getPenalty();
-
-  @JsonProperty("penalty")
-  void setPenalty(byte penalty);
-
-  @JsonProperty("strand")
-  InputBlastStrand getStrand();
-
-  @JsonProperty("strand")
-  void setStrand(InputBlastStrand strand);
-
-  @JsonProperty(
-      value = "dust",
-      defaultValue = "{\n"
-              + "\"enable\" : true,\n"
-              + "\"level\" : 20,\n"
-              + "\"window\" : 64,\n"
-              + "\"linker\" : 1\n"
-              + "}"
-  )
-  InputBlastnDust getDust();
-
-  @JsonProperty(
-      value = "dust",
-      defaultValue = "{\n"
-              + "\"enable\" : true,\n"
-              + "\"level\" : 20,\n"
-              + "\"window\" : 64,\n"
-              + "\"linker\" : 1\n"
-              + "}"
-  )
-  void setDust(InputBlastnDust dust);
-
-  @JsonProperty("filteringDb")
-  String getFilteringDb();
-
-  @JsonProperty("filteringDb")
-  void setFilteringDb(String filteringDb);
-
-  @JsonProperty("windowMaskerTaxid")
-  long getWindowMaskerTaxid();
-
-  @JsonProperty("windowMaskerTaxid")
-  void setWindowMaskerTaxid(long windowMaskerTaxid);
-
-  @JsonProperty("windowMaskerDb")
-  String getWindowMaskerDb();
-
-  @JsonProperty("windowMaskerDb")
-  void setWindowMaskerDb(String windowMaskerDb);
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "true"
-  )
-  boolean getSoftMasking();
-
-  @JsonProperty(
-      value = "softMasking",
-      defaultValue = "true"
-  )
-  void setSoftMasking(boolean softMasking);
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  boolean getLcaseMasking();
-
-  @JsonProperty(
-      value = "lcaseMasking",
-      defaultValue = "false"
-  )
-  void setLcaseMasking(boolean lcaseMasking);
-
-  @JsonProperty("dbSoftMask")
-  int getDbSoftMask();
-
-  @JsonProperty("dbSoftMask")
-  void setDbSoftMask(int dbSoftMask);
-
-  @JsonProperty("dbHardMask")
-  long getDbHardMask();
-
-  @JsonProperty("dbHardMask")
-  void setDbHardMask(long dbHardMask);
-
-  @JsonProperty(
-      value = "percIdentity",
-      defaultValue = "0.0"
-  )
-  Number getPercIdentity();
-
-  @JsonProperty(
-      value = "percIdentity",
-      defaultValue = "0.0"
-  )
-  void setPercIdentity(Number percIdentity);
+  @JsonProperty("maxTargetSeqs")
+  void setMaxTargetSeqs(int maxTargetSeqs);
 
   @JsonProperty("templateType")
-  InputBlastDcTemplateType getTemplateType();
+  InputBlastnDcTemplateType getTemplateType();
 
   @JsonProperty("templateType")
-  void setTemplateType(InputBlastDcTemplateType templateType);
+  void setTemplateType(InputBlastnDcTemplateType templateType);
 
-  @JsonProperty(
-      value = "templateLength",
-      defaultValue = "18"
-  )
-  int getTemplateLength();
+  @JsonProperty("templateLength")
+  byte getTemplateLength();
 
-  @JsonProperty(
-      value = "templateLength",
-      defaultValue = "18"
-  )
-  void setTemplateLength(int templateLength);
+  @JsonProperty("templateLength")
+  void setTemplateLength(byte templateLength);
 
-  @JsonProperty(
-      value = "useIndex",
-      defaultValue = "false"
-  )
-  boolean getUseIndex();
+  @JsonProperty("dbSize")
+  byte getDbSize();
 
-  @JsonProperty(
-      value = "useIndex",
-      defaultValue = "false"
-  )
-  void setUseIndex(boolean useIndex);
+  @JsonProperty("dbSize")
+  void setDbSize(byte dbSize);
 
-  @JsonProperty("indexName")
-  String getIndexName();
+  @JsonProperty("searchSpace")
+  byte getSearchSpace();
 
-  @JsonProperty("indexName")
-  void setIndexName(String indexName);
+  @JsonProperty("searchSpace")
+  void setSearchSpace(byte searchSpace);
 
-  @JsonProperty(
-      value = "xdropUngap",
-      defaultValue = "20.0"
-  )
-  double getXdropUngap();
+  @JsonProperty("sumStats")
+  boolean getSumStats();
 
-  @JsonProperty(
-      value = "xdropUngap",
-      defaultValue = "20.0"
-  )
-  void setXdropUngap(double xdropUngap);
+  @JsonProperty("sumStats")
+  void setSumStats(boolean sumStats);
 
-  @JsonProperty(
-      value = "xdropGap",
-      defaultValue = "30.0"
-  )
-  double getXdropGap();
+  @JsonProperty("xDropUngap")
+  double getXDropUngap();
 
-  @JsonProperty(
-      value = "xdropGap",
-      defaultValue = "30.0"
-  )
-  void setXdropGap(double xdropGap);
+  @JsonProperty("xDropUngap")
+  void setXDropUngap(double xDropUngap);
 
-  @JsonProperty(
-      value = "xdropGapFinal",
-      defaultValue = "100.0"
-  )
-  double getXdropGapFinal();
+  @JsonProperty("xDropGap")
+  double getXDropGap();
 
-  @JsonProperty(
-      value = "xdropGapFinal",
-      defaultValue = "100.0"
-  )
-  void setXdropGapFinal(double xdropGapFinal);
+  @JsonProperty("xDropGap")
+  void setXDropGap(double xDropGap);
 
-  @JsonProperty(
-      value = "noGreedy",
-      defaultValue = "false"
-  )
+  @JsonProperty("xDropGapFinal")
+  double getXDropGapFinal();
+
+  @JsonProperty("xDropGapFinal")
+  void setXDropGapFinal(double xDropGapFinal);
+
+  @JsonProperty("noGreedy")
   boolean getNoGreedy();
 
-  @JsonProperty(
-      value = "noGreedy",
-      defaultValue = "false"
-  )
+  @JsonProperty("noGreedy")
   void setNoGreedy(boolean noGreedy);
 
   @JsonProperty("minRawGappedScore")
@@ -414,27 +289,27 @@ public interface InputBlastnConfig extends InputBlastConfig {
   @JsonProperty("minRawGappedScore")
   void setMinRawGappedScore(int minRawGappedScore);
 
-  @JsonProperty(
-      value = "ungapped",
-      defaultValue = "false"
-  )
+  @JsonProperty("ungapped")
   boolean getUngapped();
 
-  @JsonProperty(
-      value = "ungapped",
-      defaultValue = "false"
-  )
+  @JsonProperty("ungapped")
   void setUngapped(boolean ungapped);
 
-  @JsonProperty(
-      value = "windowSize",
-      defaultValue = "40"
-  )
-  short getWindowSize();
+  @JsonProperty("windowSize")
+  int getWindowSize();
 
-  @JsonProperty(
-      value = "windowSize",
-      defaultValue = "40"
-  )
-  void setWindowSize(short windowSize);
+  @JsonProperty("windowSize")
+  void setWindowSize(int windowSize);
+
+  @JsonProperty("offDiagonalRange")
+  int getOffDiagonalRange();
+
+  @JsonProperty("offDiagonalRange")
+  void setOffDiagonalRange(int offDiagonalRange);
+
+  @JsonProperty("parseDeflines")
+  boolean getParseDeflines();
+
+  @JsonProperty("parseDeflines")
+  void setParseDeflines(boolean parseDeflines);
 }

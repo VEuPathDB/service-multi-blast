@@ -12,90 +12,54 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "linker"
 })
 public class InputBlastnDustImpl implements InputBlastnDust {
-  @JsonProperty(
-      value = "enable",
-      defaultValue = "true"
-  )
+  @JsonProperty("enable")
   private boolean enable;
 
-  @JsonProperty(
-      value = "level",
-      defaultValue = "20"
-  )
+  @JsonProperty("level")
   private short level;
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "64"
-  )
+  @JsonProperty("window")
   private short window;
 
-  @JsonProperty(
-      value = "linker",
-      defaultValue = "1"
-  )
+  @JsonProperty("linker")
   private short linker;
 
-  @JsonProperty(
-      value = "enable",
-      defaultValue = "true"
-  )
+  @JsonProperty("enable")
   public boolean getEnable() {
     return this.enable;
   }
 
-  @JsonProperty(
-      value = "enable",
-      defaultValue = "true"
-  )
+  @JsonProperty("enable")
   public void setEnable(boolean enable) {
     this.enable = enable;
   }
 
-  @JsonProperty(
-      value = "level",
-      defaultValue = "20"
-  )
+  @JsonProperty("level")
   public short getLevel() {
     return this.level;
   }
 
-  @JsonProperty(
-      value = "level",
-      defaultValue = "20"
-  )
+  @JsonProperty("level")
   public void setLevel(short level) {
     this.level = level;
   }
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "64"
-  )
+  @JsonProperty("window")
   public short getWindow() {
     return this.window;
   }
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "64"
-  )
+  @JsonProperty("window")
   public void setWindow(short window) {
     this.window = window;
   }
 
-  @JsonProperty(
-      value = "linker",
-      defaultValue = "1"
-  )
+  @JsonProperty("linker")
   public short getLinker() {
     return this.linker;
   }
 
-  @JsonProperty(
-      value = "linker",
-      defaultValue = "1"
-  )
+  @JsonProperty("linker")
   public void setLinker(short linker) {
     this.linker = linker;
   }
