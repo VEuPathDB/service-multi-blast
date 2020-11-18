@@ -32,9 +32,14 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
   private boolean      nonGreedyProgramExt;
   private Integer      minRawGappedScore;
   private boolean      ungappedAlignment;
+  private Short wordSize;
 
   public QueryStrand getStrand() {
     return strand;
+  }
+
+  public Short getWordSize() {
+    return wordSize;
   }
 
   public void setStrand(QueryStrand strand) {
@@ -235,6 +240,11 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
 
   public BlastNConfig setUngappedAlignmentEnabled(boolean ungappedAlignment) {
     this.ungappedAlignment = ungappedAlignment;
+    return this;
+  }
+
+  public StdBlastConfig setWordSize(Short wordSize) {
+    this.wordSize = wordSize;
     return this;
   }
 

@@ -16,7 +16,6 @@ public class StdBlastConfig extends BlastConfig
   private File          negativeTaxIdList;
   private File          subject;
   private QueryLocation subjectLocation;
-  private Integer       wordSize;
   private String[]      taxIds;
   private String[]      negativeTaxIds;
 
@@ -107,15 +106,6 @@ public class StdBlastConfig extends BlastConfig
 
   public StdBlastConfig setSubjectLocation(QueryLocation subjectLocation) {
     this.subjectLocation = subjectLocation;
-    return this;
-  }
-
-  public Integer getWordSize() {
-    return wordSize;
-  }
-
-  public StdBlastConfig setWordSize(Integer wordSize) {
-    this.wordSize = wordSize;
     return this;
   }
 

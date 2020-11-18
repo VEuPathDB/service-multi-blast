@@ -12,90 +12,54 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "hicut"
 })
 public class InputBlastSegMaskImpl implements InputBlastSegMask {
-  @JsonProperty(
-      value = "enabled",
-      defaultValue = "false"
-  )
+  @JsonProperty("enabled")
   private boolean enabled;
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "12"
-  )
+  @JsonProperty("window")
   private int window;
 
-  @JsonProperty(
-      value = "locut",
-      defaultValue = "2.2"
-  )
+  @JsonProperty("locut")
   private double locut;
 
-  @JsonProperty(
-      value = "hicut",
-      defaultValue = "2.5"
-  )
+  @JsonProperty("hicut")
   private double hicut;
 
-  @JsonProperty(
-      value = "enabled",
-      defaultValue = "false"
-  )
+  @JsonProperty("enabled")
   public boolean getEnabled() {
     return this.enabled;
   }
 
-  @JsonProperty(
-      value = "enabled",
-      defaultValue = "false"
-  )
+  @JsonProperty("enabled")
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "12"
-  )
+  @JsonProperty("window")
   public int getWindow() {
     return this.window;
   }
 
-  @JsonProperty(
-      value = "window",
-      defaultValue = "12"
-  )
+  @JsonProperty("window")
   public void setWindow(int window) {
     this.window = window;
   }
 
-  @JsonProperty(
-      value = "locut",
-      defaultValue = "2.2"
-  )
+  @JsonProperty("locut")
   public double getLocut() {
     return this.locut;
   }
 
-  @JsonProperty(
-      value = "locut",
-      defaultValue = "2.2"
-  )
+  @JsonProperty("locut")
   public void setLocut(double locut) {
     this.locut = locut;
   }
 
-  @JsonProperty(
-      value = "hicut",
-      defaultValue = "2.5"
-  )
+  @JsonProperty("hicut")
   public double getHicut() {
     return this.hicut;
   }
 
-  @JsonProperty(
-      value = "hicut",
-      defaultValue = "2.5"
-  )
+  @JsonProperty("hicut")
   public void setHicut(double hicut) {
     this.hicut = hicut;
   }

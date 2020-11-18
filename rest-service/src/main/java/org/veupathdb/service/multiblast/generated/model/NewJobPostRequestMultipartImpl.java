@@ -7,24 +7,24 @@ import java.io.File;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "file",
+    "query",
     "properties"
 })
 public class NewJobPostRequestMultipartImpl implements NewJobPostRequestMultipart {
-  @JsonProperty("file")
-  private File file;
+  @JsonProperty("query")
+  private File query;
 
   @JsonProperty("properties")
   private NewJobPostRequestJSON properties;
 
-  @JsonProperty("file")
-  public File getFile() {
-    return this.file;
+  @JsonProperty("query")
+  public File getQuery() {
+    return this.query;
   }
 
-  @JsonProperty("file")
-  public void setFile(File file) {
-    this.file = file;
+  @JsonProperty("query")
+  public void setQuery(File query) {
+    this.query = query;
   }
 
   @JsonProperty("properties")

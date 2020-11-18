@@ -5,23 +5,25 @@ additionalProperties: false
 properties:
   enable?:
     type: boolean
-    default: true
   level?:
     description: |
       DUST level (score threshold for subwindows).
+
+      Default: `20`
     type: integer
     format: int16
-    default: 20
   window?:
     description: |
       DUST window length.
+
+      Default: `64`
     type: integer
     format: int16
-    default: 64
   linker?:
     description: |
       DUST linker (how close masked intervals should be to get merged together).
+
+      Default: `1`
     type: integer
     format: int16
-    default: 1
 

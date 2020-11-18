@@ -1,11 +1,7 @@
 package org.veupathdb.service.multiblast.service.conv;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import javax.ws.rs.InternalServerErrorException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -86,7 +82,7 @@ public class JobConverter
     methods.get("setEValue").invoke(obj, conf.getExpectValue());
     methods.get("setLineLength").invoke(obj, conf.getLineLength());
     methods.get("setSortHits").invoke(obj, fromInternal(conf.getSortHits()));
-    methods.get("setSortHSPs").invoke(obj, fromInternal(conf.getSortHsps()));
+    methods.get("setSortHSPs").invoke(obj, fromInternal(conf.getSortHSPs()));
     methods.get("setQCovHSPPerc").invoke(obj, conf.getQueryCoveragePercentHSP());
     methods.get("setNumDescriptions").invoke(obj, conf.getNumDescriptions());
     methods.get("setNumAlignments").invoke(obj, conf.getNumAlignments());

@@ -2,19 +2,109 @@
 
 uses:
   blast: ../blast/index.raml
-  ext:   index.raml
-  com:   ../blast-common/index.raml
+  ext: index.raml
+  com: ../blast-common/index.raml
 
 type: blast.InputBlastConfig
-discriminatorValue: blastn
 additionalProperties: false
+discriminator: tool
+
 properties:
+  # h?:
+  #   displayName: -h
+  #   type: boolean
+  #   description:
+  #     Print USAGE and DESCRIPTION.
+
+  #     Ignore all other parameters
+
+  # help?:
+  #   displayName: -help
+  #   type: boolean
+  #   description:
+  #     Print USAGE, DESCRIPTION and ARGUMENTS.
+
+  #     Ignore all other parameters
+
+  # version?:
+  #   displayName: -version
+  #   type: boolean
+  #   description: |
+  #     Print version number.
+
+  #     Ignore other arguments
+
+  # Input query options
+
+  query?:
+    displayName: -query=<string, filename>
+    type: string
+    description: |
+      When posting a job using `application/json` this field is required.
+
+      When posting a job using `multipart/form-data` either this field _or_ the
+      query file field must be specified.
+
+  queryLoc?:
+    displayName: -query_loc=<string, range>
+    description: |
+      Location on the query sequence.
+    type: blast.InputBlastLocation
+
+  strand?:
+    displayName: -strand=<string, `both|minus|plus`>
+    description: |
+      Query strand(s) to search against database/subject. Choice of both, minus,
+      or plus.
+
+      Applies to task(s): all
+
+      Default value: `both`
+    type: com.InputBlastStrand
+
+  # General search options
+
   task?:
+    displayName: -task=<string>
     description: |
       Default value: `blastn`
     type: ext.InputBlastnTask
-  wordSize?:
+
+  # db?:
+  #   displayName: "-db=<string, dir_name>"
+  #   type: string
+  #   description: |
+  #     BLAST database name
+
+  #     Incompatible with:  subject, subjectLoc
+
+  # out?:
+  #   displayName: "-out=<string, filename>"
+  #   type: string
+  #   description: |
+  #     Output file name
+
+  #     Default = `-`
+
+  eValue?:
+    displayName: -evalue=<real>
+    type: string
+    pattern: /\d+(?:\.\d+)?(?:[eE]-?\d+)?/
     description: |
+      Expectation value (E) threshold for saving hits.
+
+      Values may use scientific notation.
+
+      Default = `10`
+
+  wordSize?:
+    displayName: -word_size=<integer, >=4>
+    type: integer
+    minimum: 4
+
+    description: |
+      Word size for wordfinder algorithm (length of best perfect match).
+
       Default value by task:
 
       | Task           | Value | Notes                          |
@@ -25,10 +115,10 @@ properties:
       | `blastn-short` | 7     | Length of initial exact match. |
 
       Applies to task(s): all
-    type: integer
-    format: int16
-    minimum: 1
+
   gapOpen?:
+    displayName: -gapopen=<integer>
+    type: integer
     description: |
       Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
       NCBI blast docs.
@@ -44,10 +134,9 @@ properties:
 
       Applies to task(s): all
 
-    type: integer
-    format: int8
-    minimum: 0
   gapExtend?:
+    displayName: -gapextend=<integer>
+    type: integer
     description: |
       Cost to extend a gap. This default is a function of reward/penalty value.
       See appendix “BLASTN reward/penalty values” in the NCBI blast docs.
@@ -62,27 +151,11 @@ properties:
       | `blastn-short` | 2     |                                                     |
 
       Applies to task(s): all
-    type: integer
-    format: int8
-    minimum: 1
-  reward?:
-    description: |
-      Reward for a nucleotide match.
 
-      Default value by task:
-
-      | Task           | Value |
-      |----------------|-------|
-      | `megablast`    | 1     |
-      | `dc-megablast` | 2     |
-      | `blastn`       | 2     |
-      | `blastn-short` | 1     |
-
-      Applies to task(s): all
-    type: integer
-    format: int8
-    minimum: 0
   penalty?:
+    displayName: -penalty=<integer, <=0>
+    type: integer
+    maximum: 0
     description: |
       Penalty for a nucleotide mismatch.
 
@@ -96,169 +169,657 @@ properties:
       | `blastn-short` | -3    |
 
       Applies to task(s): all
+
+  reward?:
+    displayName: -reward=<integer, >=0>
     type: integer
-    format: int8
-    maximum: 0
-  strand?:
+    minimum: 0
     description: |
-      Query strand(s) to search against database/subject. Choice of both, minus,
-      or plus.
+      Reward for a nucleotide match.
+
+      Default value by task:
+
+      | Task           | Value |
+      |----------------|-------|
+      | `megablast`    | 1     |
+      | `dc-megablast` | 2     |
+      | `blastn`       | 2     |
+      | `blastn-short` | 1     |
 
       Applies to task(s): all
 
-      Default value: `both`
-    type: com.InputBlastStrand
+  useIndex?:
+    displayName: -use_index=<boolean>
+    type: boolean
+    description: |
+      Use MegaBLAST database index
+
+      Default = `false`
+
+  indexName?:
+    displayName: -index_name=<string>
+    type: string
+    description: |
+      MegaBLAST database index name (deprecated; use only for old style indices)
+
+  # BLAST-2-Sequences options
+
+  # subject?:
+  #   type: file
+  #   description: |
+  #     Subject sequence(s) to search
+
+  #     Incompatible with:
+
+  #     * db
+  #     * giList
+  #     * seqIdList
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * dbSoftMask
+  #     * dbHardMask
+
+  subjectLoc?:
+    displayName: -subject_loc=<string, range>
+    type: blast.InputBlastLocation
+    description: |
+      Location on the subject sequence in 1-based offsets
+
+      Incompatible with:
+
+      * db
+      * giList
+      * seqIdList
+      * negativeGiList
+      * negativeSeqIdList
+      * taxIds
+      * taxIdList
+      * negativeTaxIds
+      * negativeTaxIdList
+      * dbSoftMask
+      * dbHardMask
+      * remote
+
+  # Formatting options
+
+  outFormat?:
+    displayName: -outfmt=<string, format>
+    type: blast.InputBlastOutFmt
+
+  showGIs?:
+    displayName: -show_gis
+    type: boolean
+    description: "Show NCBI GIs in deflines?"
+
+  numDescriptions?:
+    displayName: -num_descriptions=<integer, >=0>
+    type: integer
+    minimum: 0
+    description: |
+      Number of database sequences to show one-line descriptions for
+
+      Not applicable for outFormat > 4
+
+      Default = `500`
+
+      Incompatible with: `maxTargetSeqs`
+
+  numAlignments?:
+    displayName: -num_alignments=<integer, >=0>
+    type: integer
+    minimum: 0
+    description: |
+      Number of database sequences to show alignments for.
+
+      Default = `250`
+
+      Incompatible with: `maxTargetSeqs`
+
+  lineLength?:
+    displayName: -line_length=<integer, >=1>
+    type: integer
+    minimum: 1
+    description: |
+      Line length for formatting alignments
+
+      Not applicable for outFormat > 4
+
+      Default = `60`
+
+#  html?:
+#    displayName: -html
+#    type: boolean
+#    description: "Produce HTML output?"
+
+  sortHits?:
+    displayName: -sorthits=<integer, (>=0 and <=4)>
+    # TODO: translate this
+    description: |
+      Only applies to output formats 0-4.
+    type: com.InputHitSorting
+
+  sortHSPs?:
+    displayName: -sorthsps=<integer, (>=0 and <=4)>
+    description: Only applies to pairwise output format.
+    type: com.InputHSPSorting
+
+  # Query filtering options
+
   dust?:
+    displayName: -dust=<string, dust>
     description: |
       Filter query sequence with dust.
 
       Applies to task(s): all
     type: ext.InputBlastnDust
-    default:
-      enable: true
-      level: 20
-      window: 64
-      linker: 1
-  filteringDb?:
-    description: |
-      Mask query using the sequences in this database.
 
-      Applies to task(s): all
-    type: string
+  # filteringDb?:
+  #   displayName: -filtering_db=<string, dir_name>
+  #   type: string
+  #     Mask query using the sequences in this database.
+
+  #     Applies to task(s): all
+
   windowMaskerTaxid?:
+    displayName: -window_masker_taxid=<integer>
+    type: integer
     description: |
       Enable WindowMasker filtering using a Taxonomic ID.
 
       Applies to task(s): all
-    type: integer
-    format: int64
-    minimum: 1
-  windowMaskerDb?:
-    description: |
-      Enable WindowMasker filtering using this file.
 
-      Applies to task(s): all
-    type: string
+  # windowMaskerDb?:
+  #   displayName: -window_masker_db=<string, filename>
+  #   type: file
+  #   description: |
+  #     Enable WindowMasker filtering using this repeats database.
+
+  #     Applies to task(s): all
+
   softMasking?:
+    displayName: -soft_masking=<boolean>
+    type: boolean
     description: |
       Apply filtering locations as soft masks (i.e., only for finding initial
       matches).
 
       Applies to task(s): all
-    type: boolean
-    default: true
+
+      Default = `true`
+
   lcaseMasking?:
+    displayName: -lcase_masking
+    type: boolean
     description: |
       Use lower case filtering in query and subject sequence(s).
 
       Applies to task(s): all
-    type: boolean
-    default: false
+
+  # Restrict search or results
+
+  # giList?:
+  #   displayName: -gilist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to list of GIs
+
+  #     Incompatible with:
+
+  #     * seqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  # seqIdList?:
+  #   displayName: -seqidlist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to list of SeqIDs
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  # negativeGiList?:
+  #   displayName: negative_gilist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to everything except the specified GIs
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * seqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  # negativeSeqIdList?:
+  #   displayName: negative_seqidlist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to everything except the specified SeqIDs
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * seqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeGiList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  taxIds?:
+    displayName: -taxids=<string>
+    type: string[]
+    description: |
+      Restrict search of database to include only the specified taxonomy IDs
+
+      Incompatible with:
+
+      * giList
+      * seqIdList
+      * taxIdList
+      * negativeGiList
+      * negativeSeqIdList
+      * negativeTaxIds
+      * negativeTaxIdList
+      * remote
+      * subject
+      * subjectLoc
+
+  negativeTaxIds?:
+    displayName: -negative_taxids=<string>
+    type: string[]
+    description: |
+      Restrict search of database to everything except the specified taxonomy IDs
+
+      Incompatible with:
+
+      * giList
+      * seqIdList
+      * taxIds
+      * taxIdList
+      * negativeGiList
+      * negativeSeqIdList
+      * negativeTaxIdList
+      * remote
+      * subject
+      * subjectLoc
+
+  # taxIdList?:
+  #   displayName: taxidlist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to include only the specified taxonomy IDs
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * seqIdList
+  #     * taxIds
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  # negativeTaxIdList?:
+  #   displayName: negative_taxidlist=<string, filename>
+  #   type: file
+  #   description: |
+  #     Restrict search of database to everything except the specified taxonomy IDs
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * seqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * remote
+  #     * subject
+  #     * subjectLoc
+
+  # entrezQuery?:
+  #   displayName: -entrez_query=<string>
+  #   type: string
+  #   description: |
+
+  #     Restrict search with the given Entrez query
+
+  #     Requires: remote
+
   dbSoftMask?:
+    displayName: -db_soft_mask=<string>
+    type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
       only for finding initial matches).
 
       Applies to task(s): all
-    type: integer
+
+      Incompatible with:
+
+      * dbHardMask
+      * subject
+      * subjectLoc
+
   dbHardMask?:
+    displayName: -db_hard_mask=<string>
+    type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
       sequence is masked for all phases of search).
 
       Applies to task(s): all
-    type: integer
-    minimum: 1
-    format: int64
+
+      Incompatible with:
+
+      * dbSoftMask
+      * subject
+      * subjectLoc
+
   percIdentity?:
+    displayName: "-perc_identity=<real, 0..100>"
+    type: number
+    format: double
+    minimum: 0.0
+    maximum: 100.0
     description: |
       Percent identity cutoff.
 
       Applies to task(s): all
+
+  qCovHspPerc?:
+    displayName: -qcov_hsp_perc=<real, 0..100>
     type: number
-    default: 0.0
+    format: double
     minimum: 0.0
     maximum: 100.0
+    description: "Percent query coverage per hsp"
+
+  maxHsps?:
+    displayName: -max_hsps=<integer, >=1>
+    type: integer
+    minimum: 1
+    description: |
+      Maximum number of HSPs (alignments) to keep for any single query-subject
+      pair. The HSPs shown will be the best as judged by expect value. This
+      number should be an integer that is one or greater. If this option is not
+      set, BLAST shows all HSPs meeting the expect value criteria. Setting it
+      to one will show only the best HSP for every query-subject pair
+
+  cullingLimit?:
+    displayName: -culling_limit=<integer, >=0>
+    type: integer
+    minimum: 0
+    description: |
+      If the query range of a hit is enveloped by that of at least this many
+      higher-scoring hits, delete the hit
+
+      Incompatible with:
+
+      * bestHitOverhang
+      * bestHitScoreEdge
+
+  bestHitOverhang?:
+    displayName: -best_hit_overhang=<real, (>0 and <0.5)>
+    type: number
+    format: double
+    minimum: 0.0
+    maximum: 0.5
+    description: |
+      Best Hit algorithm overhang value (recommended value: 0.1)
+
+      Incompatible with: `cullingLimit`
+
+  bestHitScoreEdge?:
+    displayName: -best_hit_score_edge=<real, (>0 and <0.5)>
+    type: number
+    format: double
+    minimum: 0.0
+    maximum: 0.5
+    description: |
+      Best Hit algorithm score edge value (recommended value: 0.1)
+
+      Incompatible with: `cullingLimit`
+
+  subjectBesthit?:
+    displayName: -subject_besthit
+    type: boolean
+    description: "Turn on best hit per subject sequence"
+
+  maxTargetSeqs?:
+    displayName: -max_target_seqs=<integer, >=1>
+    type: integer
+    minimum: 1
+    description: |
+      Number of aligned sequences to keep. Use with report formats that do not
+      have separate definition line and alignment sections such as tabular (all
+      outfmt > 4). Not compatible with numDescriptions or numAlignments. Ties
+      are broken by order of sequences in the database.
+      Default = `500`
+
+      Incompatible with:
+
+      * numDescriptions
+      * numAlignments
+
+  # Discontiguous MegaBLAST options
+
   templateType?:
+    displayName: -template_type=<string, `coding|codingAndOptimal|optimal`>
+    type: ext.InputBlastnDcTemplateType
     description: |
       Discontiguous MegaBLAST template type.
 
       Applies to task(s): dc-megablast
 
       Default value: `coding`
-    type: ext.InputBlastDcTemplateType
+
+      Requires: `templateLength`
+
   templateLength?:
+    displayName: -template_length=<integer, `16|18|21` >
+    type: integer
+    format: int8
+    minimum: 16
+    maximum: 21
     description: |
       Discontiguous MegaBLAST template length.
 
+      Value must be one of `16`, `18`, or `21`
+
       Applies to task(s): dc-megablast
+
+      Requires: `templateType`
+
+      Default: `18`
+
+  # Statistical options
+
+  dbSize?:
+    displayName: -dbsize=<int8>
     type: integer
-    default: 18
-  useIndex?:
-    description: |
-      Use MegaBLAST database index. Indices may be created with the makembindex application.
+    format: int8
+    description: "Effective length of the database."
 
-      Applies to task(s): megablast
+  searchSpace?:
+    displayName: -searchsp=<int8, >=0>
+    type: integer
+    format: int8
+    minimum: 0
+    description: "Effective length of the search space"
+
+  sumStats?:
+    displayName: -sum_stats=<boolean>
     type: boolean
-    default: false
-  indexName?:
-    description: |
-      MegaBLAST database index name.
+    description: "Use sum statistics"
 
-      Applies to task(s): megablast
-    type: string
-  xdropUngap?:
-    description: |
-      Heuristic value (in bits) for ungapped extensions.
+  # Search strategy options
 
-      Applies to task(s): all
+  # importSearchStrategy?:
+  #   displayName: -import_search_strategy=<string, filename>
+  #   type: file
+  #   description: |
+  #     Search strategy to use
+
+  #     Incompatible with: `exportSearchStrategy`
+
+  # exportSearchStrategy?:
+  #   displayName: -export_search_strategy=<string, filename>
+  #   type: string
+  #   description:
+  #     File name to record the search strategy used
+
+  #     Incompatible with: `importSearchStrategy`
+
+  # Extension options
+
+  xDropUngap?:
+    displayName: -xdrop_ungap=<real>
     type: number
     format: double
-    default: 20.0
-  xdropGap?:
     description: |
-      Heuristic value (in bits) for preliminary gapped extensions.
+      X-dropoff value (in bits) for ungapped extensions
 
-      Applies to task(s): all
+      Default: `20.0`
+
+  xDropGap?:
+    displayName: -xdrop_gap=<real>
     type: number
     format: double
-    default: 30.0
-  xdropGapFinal?:
     description: |
-      Heuristic value (in bits) for final gapped alignment.
+      X-dropoff value (in bits) for preliminary gapped extensions
 
-      Applies to task(s): all
+      Default: `30.0`
+
+  xDropGapFinal?:
+    displayName: -xdrop_gap_final=<real>
     type: number
     format: double
-    default: 100.0
+    description: |
+      X-dropoff value (in bits) for final gapped alignment
+
+      Dfault: `100.0`
+
   noGreedy?:
+    displayName: -no_greedy
+    type: boolean
     description: |
       Use non-greedy dynamic programming extension.
 
       Applies to task(s): megablast
-    type: boolean
-    default: false
+
   minRawGappedScore?:
+    displayName: -min_raw_gapped_score=<integer>
+    type: integer
     description: |
       Minimum raw gapped score to keep an alignment in the preliminary gapped
       and trace-back stages. Normally set based upon expect value.
 
       Applies to task(s): all
-    type: integer
-    format: int32
-    minimum: 1
+
   ungapped?:
+    displayName: -ungapped
+    type: boolean
     description: |
-      Perform ungapped alignment.
+      Perform ungapped alignment only.
 
       Applies to task(s): all
-    type: boolean
-    default: false
+
   windowSize?:
+    displayName: -window_size=<integer, >=0>
+    type: integer
+    minimum: 0
     description: |
       Multiple hits window size, use 0 to specify 1-hit algorithm
 
       Applies to task(s): dc-megablast
+
+      Default: `40`
+
+  offDiagonalRange?:
+    displayName: -off_diagonal_range=<integer, >=0>
     type: integer
-    format: int16
-    default: 40
+    minimum: 0
+    description: |
+      Number of off-diagonals to search for the 2nd hit, use 0 to turn off
+
+      Default = `0`
+
+  # Miscellaneous options
+
+  parseDeflines?:
+    displayName: -parse_deflines
+    type: boolean
+    description: |
+      Parse query and subject bar delimited sequence identifiers (e.g.,
+      gi|129295).
+
+      Default: `false`
+
+  # numThreads?:
+  #   displayName: -num_threads=<integer, >=1>
+  #   type: integer
+  #   format: int8
+  #   minimum: 1
+  #   description:
+  #     Number of threads (CPUs) to use in the BLAST search
+
+  #     Default = `1`
+
+  #     Incompatible with: `remote`
+
+  # remote?:
+  #   displayName: -remote
+  #   type: boolean
+  #   description: |
+  #     Execute search remotely?
+
+  #     Incompatible with:
+
+  #     * giList
+  #     * seqIdList
+  #     * taxIds
+  #     * taxIdList
+  #     * negativeGiList
+  #     * negativeSeqIdList
+  #     * negativeTaxIds
+  #     * negativeTaxIdList
+  #     * subjectLoc
+  #     * numThreads
+

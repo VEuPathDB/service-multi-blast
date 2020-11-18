@@ -51,7 +51,7 @@ public class BlastnValidator extends BlastValidator
       && config.getOutFormat().getFormat().getValue() > 4)
       errors.putError(JsonKeys.SORT_HITS, Err.OnlyForFmtLte4);
 
-    if (config.getSortHsps() != null
+    if (config.getSortHSPs() != null
       && config.getOutFormat().hasFormat()
       && config.getOutFormat().getFormat().getValue() > 1)
       errors.putError(JsonKeys.SORT_HSPS, Err.OnlyForPairwise);

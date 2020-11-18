@@ -25,9 +25,14 @@ public class BlastXConfig extends StdBlastConfig
   private Integer             queryGenCode;
   private CompBasedStats      compBasedStats;
   private Boolean             useSmithWatermanAlignment;
+  private Short wordSize;
 
   public BlastxTask getTask() {
     return task;
+  }
+
+  public Short getWordSize() {
+    return wordSize;
   }
 
   public BlastXConfig setTask(BlastxTask task) {
@@ -73,6 +78,11 @@ public class BlastXConfig extends StdBlastConfig
 
   public Double getxDropGap() {
     return xDropGap;
+  }
+
+  public StdBlastConfig setWordSize(Short wordSize) {
+    this.wordSize = wordSize;
+    return this;
   }
 
   public BlastXConfig setxDropGap(Double xDropGap) {

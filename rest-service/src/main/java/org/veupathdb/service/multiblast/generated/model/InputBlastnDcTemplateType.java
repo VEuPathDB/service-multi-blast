@@ -2,7 +2,7 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum InputBlastDcTemplateType {
+public enum InputBlastnDcTemplateType {
   @JsonProperty("coding")
   CODING("coding"),
 
@@ -14,7 +14,7 @@ public enum InputBlastDcTemplateType {
 
   private String name;
 
-  InputBlastDcTemplateType(String name) {
+  InputBlastnDcTemplateType(String name) {
     this.name = name;
   }
 }

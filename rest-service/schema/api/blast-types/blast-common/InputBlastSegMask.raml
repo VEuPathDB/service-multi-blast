@@ -4,23 +4,32 @@ type: object
 additionalProperties: false
 properties:
   enabled?:
+    description: |
+      Enable Seg Mask
+
+      Default: `false`
     type: boolean
-    default: false
   window?:
-    description: SEG window
+    description: |
+      SEG window
+
+      Default: `12`
     type: integer
     format: int32
     minimum: 1
-    default: 12
   locut?:
-    description: SEG locut
+    description: |
+      SEG locut
+
+      Default: `2.2`
     type: number
     format: double
-    minimum: 0
-    default: 2.2
+    minimum: 0.0
   hicut?:
-    description: SEG hicut
+    description: |
+      SEG hicut
+
+      Default: `2.5`
     type: number
     format: double
-    minimum: 0
-    default: 2.5
+    minimum: 0.0

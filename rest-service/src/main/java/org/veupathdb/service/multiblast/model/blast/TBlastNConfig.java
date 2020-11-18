@@ -23,9 +23,14 @@ public class TBlastNConfig extends StdBlastConfig
   private CompBasedStats       compBasedStats;
   private Boolean              useSmithWatermanAlignments;
   private File                 inPssm;
+  private Short wordSize;
 
   public TBlastnTask getTask() {
     return task;
+  }
+
+  public Short getWordSize() {
+    return wordSize;
   }
 
   public TBlastNConfig setTask(TBlastnTask task) {
@@ -53,6 +58,11 @@ public class TBlastNConfig extends StdBlastConfig
 
   public Double getxDropGap() {
     return xDropGap;
+  }
+
+  public StdBlastConfig setWordSize(Short wordSize) {
+    this.wordSize = wordSize;
+    return this;
   }
 
   public TBlastNConfig setxDropGap(Double xDropGap) {
