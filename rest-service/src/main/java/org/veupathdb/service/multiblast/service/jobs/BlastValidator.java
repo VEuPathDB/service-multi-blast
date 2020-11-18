@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.service.jobs;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.InputBlastConfig;
 import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
 import org.veupathdb.service.multiblast.generated.model.InputBlastnConfig;
+import org.veupathdb.service.multiblast.generated.model.InputBlastpConfig;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
@@ -26,27 +29,30 @@ public class BlastValidator
     ErrRequired         = "is required.",
     ErrNoEmpty          = "cannot be empty",
     ErrGt               = "must be greater than %d",
-    ErrGtEq             = "must be greater than or equal to %d",
+    errGtEq             = "must be greater than or equal to %d",
     ErrLtEq             = "must be less than or equal to %d",
     ErrBetweenInc       = "value must be between %d and %d (inclusive)",
     ErrBetweenIncF      = "value must be between %.1f and %.1f (inclusive)",
-    ErrIncompatibleWith = "is incompatible with field %s",
+    ErrBetweenExcF      = "value must be between %.1f and %.1f (exclusive)",
+    errIncompatibleWith = "is incompatible with field %s",
     ErrGenCode          = "must be equal to 33 or in one of the following inclusive ranges: [1..6], [9..16], [21-31]",
     ErrQueryLoc         = "start position must be less than stop position",
     errFmt0             = "only valid for the "
       + ReportFormatType.Pairwise.getIoName()
       + " output format",
-    errNotFmtGt4 = "only valid for the following output format types: "
+    errNotFmtGt4        = "only valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
       .collect(Collectors.joining(", ")),
-    errOnlyFmtGt4 = "not valid for the following output format types: "
+    errOnlyFmtGt4       = "not valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
       .collect(Collectors.joining(", ")),
-    errEValue           = "must be a decimal value (optionally in E notation).";
+    errEValue           = "must be a decimal value (optionally in E notation).",
+    errOnlyTask         = "can only be used with task type %s",
+    errNotTask          = "cannot be used with task type %s";
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
@@ -58,7 +64,7 @@ public class BlastValidator
 
   private final Logger log = LogManager.getLogger(getClass());
 
-  private BlastValidator() {
+  protected BlastValidator() {
   }
 
   public static BlastValidator getInstance() {
@@ -74,28 +80,25 @@ public class BlastValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public ErrorMap validate(InputBlastConfig config) {
+  public ErrorMap validate(InputBlastConfig conf) {
     var errors = new ErrorMap();
 
-    validateQueryLocation(errors, config);
-    validateEValue(errors, config);
-    validateOutFormat(errors, config);
-    validateNumDescriptions(errors, config);
-    validateNumAlignments(errors, config);
-    optGtEq(errors, config.getLineLength(), 1, JsonKeys.LineLength);
-    validateSortHits(errors, config);
-    validateSortHSPs(errors, config);
-    validateQCovHspPerc(errors, config);
-    optGtEq(errors, config.getMaxHSPs(), 1, JsonKeys.MaxHSPs);
-    validateMaxTargetSeqs(errors, config);
-    optGtEq(errors, config.getSearchSpace(), 0, JsonKeys.SearchSpace);
+    validateQueryLocation(errors, conf);
+    validateEValue(errors, conf);
+    validateOutFormat(errors, conf);
+    validateNumDescriptions(errors, conf);
+    validateNumAlignments(errors, conf);
+    optGtEq(errors, conf.getLineLength(), 1, JsonKeys.LineLength);
+    validateSortHits(errors, conf);
+    validateSortHSPs(errors, conf);
+    validateQCovHspPerc(errors, conf);
+    optGtEq(errors, conf.getMaxHSPs(), 1, JsonKeys.MaxHSPs);
+    validateMaxTargetSeqs(errors, conf);
+    optGtEq(errors, conf.getSearchSpace(), 0, JsonKeys.SearchSpace);
 
-    return switch (config.getTool()) {
-      case BLASTN -> BlastnValidator.getInstance().validateConfig(
-        errors,
-        (InputBlastnConfig) config
-      );
-      case BLASTP -> null;
+    return switch (conf.getTool()) {
+      case BLASTN -> BlastNValidator.getInstance().validateConfig(errors, (InputBlastnConfig) conf);
+      case BLASTP -> BlastPValidator.getInstance().validateConfig(errors, (InputBlastpConfig) conf);
       case BLASTX -> null;
       case TBLASTN -> null;
       case TBLASTX -> null;
@@ -112,20 +115,86 @@ public class BlastValidator
   // ┃     General Purpose Validations                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
+  /**
+   * Optional Incompatibility Check
+   * <p>
+   * If {@code targ} is null, does nothing.<br>
+   * If {@code targ} is not null and {@code other} is null, does nothing.<br>
+   * If {@code targ} is not null and {@code other} is not null, appends an error
+   * keyed on {@code tField} for incompatibility with {@code oField}.
+   *
+   * @param err Error collection
+   * @param targ Target/current object
+   * @param other Object that {@code targ} is incompatible with.
+   * @param tField Target/current field name.
+   * @param oField Field name for {@code other}
+   */
+  static void optIncompat(ErrorMap err, Object targ, Object other, String tField, String oField) {
+    if (targ == null)
+      return;
+
+    incompat(err, other, tField, oField);
+  }
+
+  /**
+   * Incompatibility Check
+   * <p>
+   * If {@code other} is null, does nothing.<br>
+   * If {@code other} is not null, appends an error keyed on {@code tField} for
+   * incompatibility with {@code oField}.
+   *
+   * @param err Error collection
+   * @param other Object that the calling context is incompatible with.
+   * @param tField Target/current field name.
+   * @param oField Field name for {@code other}
+   */
+  static void incompat(ErrorMap err, Object other, String tField, String oField) {
+    if (other != null)
+      err.putError(tField, String.format(errIncompatibleWith, oField));
+  }
+
+  /**
+   * Collection Incompatibility Check
+   * <p>
+   * If {@code other} is null, does nothing.<br>
+   * If {@code other} is not null and is empty, does nothing.<br>
+   * If {@code other} is not null and is not empty, appends an error keyed on
+   * {@code tField} for incompatibility with {@code oField}.
+   *
+   * @param err Error collection
+   * @param other Collection that the calling context is incompatible with.
+   * @param tField Target/current field name.
+   * @param oField Field name for {@code other}
+   */
+  static void colIncompat(ErrorMap err, Collection<?> other, String tField, String oField) {
+    if (other != null && !other.isEmpty())
+      err.putError(tField, String.format(errIncompatibleWith, oField));
+  }
+
   static void optLtEq(ErrorMap err, Integer val, int max, String field) {
     if (val == null)
       return;
 
     if (val > max)
-      err.putError(JsonKeys.Penalty, String.format(ErrLtEq, max));
+      err.putError(field, String.format(ErrLtEq, max));
   }
 
-  static void optGtEq(ErrorMap err, Integer val, int min, String field) {
+  static void optGtEq(ErrorMap err, Double val, double min, String field) {
     if (val == null)
       return;
 
     if (val < min)
-      err.putError(field, String.format(ErrGtEq, min));
+      err.putError(field, String.format(errGtEq, min));
+  }
+
+  static void gtEq(ErrorMap err, Integer val, int min, String field) {
+    if (val < min)
+      err.putError(field, String.format(errGtEq, min));
+  }
+
+  static void optGtEq(ErrorMap err, Integer val, int min, String field) {
+    if (val != null)
+      gtEq(err, val, min, field);
   }
 
   static void optGtEq(ErrorMap err, Short val, int min, String field) {
@@ -133,7 +202,7 @@ public class BlastValidator
       return;
 
     if (val < min)
-      err.putError(field, String.format(ErrGtEq, min));
+      err.putError(field, String.format(errGtEq, min));
   }
 
   static void optGtEq(ErrorMap err, Byte val, int min, String field) {
@@ -141,7 +210,7 @@ public class BlastValidator
       return;
 
     if (val < min)
-      err.putError(field, String.format(ErrGtEq, min));
+      err.putError(field, String.format(errGtEq, min));
   }
 
   static void optBetweenInc(ErrorMap err, Double val, double min, double max, String field) {
@@ -152,12 +221,14 @@ public class BlastValidator
       err.putError(field, String.format(ErrBetweenIncF, min, max));
   }
 
-  static void optBetweenExc(ErrorMap err, Double val, double min, double max, String field) {
-    if (val == null)
-      return;
-
+  static void betweenExc(ErrorMap err, Double val, double min, double max, String field) {
     if (val <= min || val >= max)
-      err.putError(field, String.format(ErrBetweenIncF, min, max));
+      err.putError(field, String.format(ErrBetweenExcF, min, max));
+  }
+
+  static void optBetweenExc(ErrorMap err, Double val, double min, double max, String field) {
+    if (val != null)
+      betweenExc(err, val, min, max, field);
   }
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
@@ -214,7 +285,7 @@ public class BlastValidator
       return;
 
     if (conf.getNumDescriptions() < 0)
-      err.putError(JsonKeys.NumDescriptions, String.format(ErrGtEq, 0));
+      err.putError(JsonKeys.NumDescriptions, String.format(errGtEq, 0));
 
     if (conf.getOutFormat() != null &&
       conf.getOutFormat().getFormat() != null &&
@@ -225,7 +296,7 @@ public class BlastValidator
     if (conf.getMaxTargetSeqs() != null)
       err.putError(
         JsonKeys.NumDescriptions,
-        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
+        String.format(errIncompatibleWith, ToolOption.MaxTargetSequences)
       );
   }
 
@@ -234,12 +305,12 @@ public class BlastValidator
       return;
 
     if (conf.getNumAlignments() < 0)
-      err.putError(JsonKeys.NumAlignments, String.format(ErrGtEq, 0));
+      err.putError(JsonKeys.NumAlignments, String.format(errGtEq, 0));
 
     if (conf.getMaxTargetSeqs() != null)
       err.putError(
         JsonKeys.NumAlignments,
-        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
+        String.format(errIncompatibleWith, ToolOption.MaxTargetSequences)
       );
   }
 
@@ -256,18 +327,18 @@ public class BlastValidator
       return;
 
     if (conf.getMaxTargetSeqs() < 1)
-      err.putError(JsonKeys.MaxTargetSequences, String.format(ErrGtEq, 1));
+      err.putError(JsonKeys.MaxTargetSequences, String.format(errGtEq, 1));
 
     if (conf.getNumAlignments() != null)
       err.putError(
         JsonKeys.MaxTargetSequences,
-        String.format(ErrIncompatibleWith, ToolOption.NumAlignments)
+        String.format(errIncompatibleWith, ToolOption.NumAlignments)
       );
 
     if (conf.getNumDescriptions() != null)
       err.putError(
         JsonKeys.MaxTargetSequences,
-        String.format(ErrIncompatibleWith, ToolOption.NumDescriptions)
+        String.format(errIncompatibleWith, ToolOption.NumDescriptions)
       );
 
     if (conf.getOutFormat() == null

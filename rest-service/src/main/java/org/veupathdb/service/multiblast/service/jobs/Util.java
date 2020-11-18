@@ -43,14 +43,14 @@ class Util
     mapping.put(ToolOption.CullingLimit, JsonKeys.CullingLimit);
     mapping.put(ToolOption.DatabaseEffectiveSize, JsonKeys.DB_SIZE);
     mapping.put(ToolOption.DatabaseHardMask, JsonKeys.DBHardMask);
-    mapping.put(ToolOption.DatabaseSoftMask, JsonKeys.SOFT_MASKING);
+    mapping.put(ToolOption.DatabaseSoftMask, JsonKeys.SoftMasking);
     mapping.put(ToolOption.Dust, JsonKeys.DUST);
     mapping.put(ToolOption.EntrezQuery, JsonKeys.EntrezQuery);
     mapping.put(ToolOption.ExpectationValue, JsonKeys.ExpectValue);
     mapping.put(ToolOption.ExportSearchStrategy, JsonKeys.ExportSearchStrategy);
     mapping.put(ToolOption.FilteringDatabase, JsonKeys.FILTERING_DB);
-    mapping.put(ToolOption.GapExtendCost, JsonKeys.GAP_EXTEND);
-    mapping.put(ToolOption.GapOpenCost, JsonKeys.GAP_OPEN);
+    mapping.put(ToolOption.GapExtendCost, JsonKeys.GapExtend);
+    mapping.put(ToolOption.GapOpenCost, JsonKeys.GapOpen);
     mapping.put(ToolOption.GIListFile, JsonKeys.GI_LIST);
     mapping.put(ToolOption.Help, JsonKeys.Help);
     mapping.put(ToolOption.HTMLOutput, JsonKeys.Html);
@@ -69,8 +69,8 @@ class Util
     mapping.put(ToolOption.MaxHSPs, JsonKeys.MaxHSPs);
     mapping.put(ToolOption.MaxTargetSequences, JsonKeys.MaxTargetSequences);
     mapping.put(ToolOption.MegablastIndexName, JsonKeys.INDEX_NAME);
-    mapping.put(ToolOption.MegablastTemplateLength, JsonKeys.TEMPLATE_LENGTH);
-    mapping.put(ToolOption.MegablastTemplateType, JsonKeys.TEMPLATE_TYPE);
+    mapping.put(ToolOption.MegablastTemplateLength, JsonKeys.TemplateLength);
+    mapping.put(ToolOption.MegablastTemplateType, JsonKeys.TemplateType);
     mapping.put(ToolOption.MaxIntronLength, JsonKeys.MaxIntronLength);
     mapping.put(ToolOption.MinRawGappedScore, JsonKeys.MIN_RAW_GAPPED_SCORE);
     mapping.put(ToolOption.MismatchPenalty, JsonKeys.Penalty);
@@ -84,7 +84,7 @@ class Util
     mapping.put(ToolOption.NegativeSequenceIDListFile, JsonKeys.NEGATIVE_SEQ_ID_LIST);
     mapping.put(ToolOption.NegativeTaxonomyIDs, JsonKeys.NegativeTaxIDs);
     mapping.put(ToolOption.NegativeTaxonomyIDListFile, JsonKeys.NEGATIVE_TAX_ID_LIST);
-    mapping.put(ToolOption.NonGreedyExtension, JsonKeys.NO_GREEDY);
+    mapping.put(ToolOption.NonGreedyExtension, JsonKeys.NonGreedy);
     mapping.put(ToolOption.NumAlignments, JsonKeys.NumAlignments);
     mapping.put(ToolOption.NumberOfThreads, JsonKeys.NumThreads);
     mapping.put(ToolOption.NumDescriptions, JsonKeys.NumDescriptions);
@@ -108,12 +108,12 @@ class Util
       ToolOption.SavePsiBlastCheckpointAfterLastRound,
       JsonKeys.SavePsiBlastCheckpointAfterLastRound
     );
-    mapping.put(ToolOption.ScoringMatrix, JsonKeys.MATRIX);
+    mapping.put(ToolOption.ScoringMatrix, JsonKeys.Matrix);
     mapping.put(ToolOption.SearchSpaceEffectiveLength, JsonKeys.SearchSpace);
     mapping.put(ToolOption.SEGFilter, JsonKeys.SEG);
     mapping.put(ToolOption.SequenceIDListFile, JsonKeys.SEQ_ID_LIST);
     mapping.put(ToolOption.ShowNCBIGIs, JsonKeys.ShowNCBIGIs);
-    mapping.put(ToolOption.SoftMasking, JsonKeys.SOFT_MASKING);
+    mapping.put(ToolOption.SoftMasking, JsonKeys.SoftMasking);
     mapping.put(ToolOption.SortHits, JsonKeys.SortHits);
     mapping.put(ToolOption.SortHSPs, JsonKeys.SortHSPs);
     mapping.put(ToolOption.Strand, JsonKeys.STRAND);
@@ -124,7 +124,7 @@ class Util
     mapping.put(ToolOption.Task, JsonKeys.TASK);
     mapping.put(ToolOption.TaxonomyIDs, JsonKeys.TaxIDs);
     mapping.put(ToolOption.TaxonomyIDListFile, JsonKeys.TAX_ID_LIST);
-    mapping.put(ToolOption.Threshold, JsonKeys.THRESHOLD);
+    mapping.put(ToolOption.Threshold, JsonKeys.Threshold);
     mapping.put(ToolOption.UngappedAlignmentOnly, JsonKeys.UNGAPPED);
     mapping.put(ToolOption.UseMegablastIndex, JsonKeys.USE_INDEX);
     mapping.put(ToolOption.UseSmithWatermanAlignments, JsonKeys.USE_SMITH_WATERMAN_ALIGNS);
