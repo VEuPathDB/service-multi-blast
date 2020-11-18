@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.veupathdb.service.multiblast.generated.model.InputBlastOutFmt;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.OutFormat;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -43,7 +44,7 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public List<String> internalUseValidation(OutFormat fmt) {
+  public List<String> internalUseValidation(InputBlastOutFmt fmt) {
     var out = new ArrayList<String>(2);
 
     Optional.ofNullable(validateIntFields(fmt)).ifPresent(out::add);
@@ -52,7 +53,7 @@ public class OutFormatValidator
     return out;
   }
 
-  public ErrorMap externalUseValidation(OutFormat fmt) {
+  public ErrorMap externalUseValidation(InputBlastOutFmt fmt) {
     var errors = new ErrorMap();
 
     validateExtFields(errors, fmt);
@@ -67,11 +68,7 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public static List<String> validateInternal(OutFormat fmt) {
-    return getInstance().internalUseValidation(fmt);
-  }
-
-  public static ErrorMap validateExternal(OutFormat fmt) {
+  public static ErrorMap validateExternal(InputBlastOutFmt fmt) {
     return getInstance().externalUseValidation(fmt);
   }
 
@@ -81,28 +78,28 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  static void validateExtFields(ErrorMap err, OutFormat fmt) {
+  static void validateExtFields(ErrorMap err, InputBlastOutFmt fmt) {
     var tmp = validateIntFields(fmt);
 
     if (tmp != null)
       err.putError(JsonKeys.Fields, tmp);
   }
 
-  static String validateIntFields(OutFormat fmt) {
+  static String validateIntFields(InputBlastOutFmt fmt) {
     if (fmt.getFields().isEmpty())
       return null;
 
     return fmt.isCustomizableFormat() ? null : ErrFields;
   }
 
-  static void validateExtDelim(ErrorMap err, OutFormat fmt) {
+  static void validateExtDelim(ErrorMap err, InputBlastOutFmt fmt) {
     var tmp = validateIntDelim(fmt);
 
     if (tmp != null)
       err.putError(JsonKeys.Delimiter, tmp);
   }
 
-  static String validateIntDelim(OutFormat fmt) {
+  static String validateIntDelim(InputBlastOutFmt fmt) {
     if (fmt.getDelim() == null)
       return null;
 

@@ -20,68 +20,68 @@ class Err
     JsonKeys.SEQ_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
-    JsonKeys.DB_SOFT_MASK,
-    JsonKeys.DB_HARD_MASK
+    JsonKeys.DBSoftMask,
+    JsonKeys.DBHardMask
   ),
 
   ForbidGiList = makeListError(
     "is incompatible with",
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidSeqIdList = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidNegativeGiList = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidNegativeSeqIdList = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidTaxIds = makeListError(
@@ -91,53 +91,53 @@ class Err
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidNegativeTaxIds = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidTaxIdList = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.NEGATIVE_TAX_ID_LIST,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   ForbidNegativeTaxIdList = makeListError(
     "is incompatible with",
     JsonKeys.GI_LIST,
     JsonKeys.SEQ_ID_LIST,
-    JsonKeys.TAX_IDS,
+    JsonKeys.TaxIDs,
     JsonKeys.TAX_ID_LIST,
     JsonKeys.NEGATIVE_GI_LIST,
     JsonKeys.NEGATIVE_SEQ_ID_LIST,
-    JsonKeys.NEGATIVE_TAX_IDS,
+    JsonKeys.NegativeTaxIDs,
     JsonKeys.REMOTE,
     JsonKeys.SUBJECT,
-    JsonKeys.SUBJECT_LOC
+    JsonKeys.SubjectLocation
   ),
 
   OnlyForFmtLte4 = "is incompatible with output formats other than "
@@ -147,7 +147,7 @@ class Err
     + ReportFormatType.FlatQueryAnchoredWithIdentities.getIoName() + ", or "
     + ReportFormatType.FlatQueryAnchoredWithoutIdentities.getIoName(),
 
-  ForbidWithMaxTargetSeqs = "is incompatible with " + JsonKeys.MAX_TARGET_SEQS,
+  ForbidWithMaxTargetSeqs = "is incompatible with " + JsonKeys.MaxTargetSequences,
 
   OnlyForPairwise = "is incompatible with formats other than "
     + ReportFormatType.Pairwise.getIoName();

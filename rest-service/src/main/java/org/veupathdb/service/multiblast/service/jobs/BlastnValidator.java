@@ -1,99 +1,29 @@
 package org.veupathdb.service.multiblast.service.jobs;
 
+import org.veupathdb.service.multiblast.generated.model.InputBlastnConfig;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.BlastNConfig;
-import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 public class BlastnValidator extends BlastValidator
 {
   private static BlastnValidator instance;
 
-  public ErrorMap validateConfig(BlastNConfig config, boolean ext) {
-    var errors = super.validate(config, ext);
+  public ErrorMap validateConfig(ErrorMap errors, InputBlastnConfig config) {
 
-    if (config.getWordSize() < 4)
-      errors.putError(JsonKeys.WORD_SIZE, "word size must be 4 or greater");
-
-    if (config.getPenalty() > 0)
-      errors.putError(JsonKeys.PENALTY, "penalty cannot be grater than 0");
-
-    if (config.getReward() < 0)
-      errors.putError(JsonKeys.REWARD, "reward cannot be less than 0");
-
-    if (config.getSubject() != null && forbidSubject(config))
-      errors.putError(JsonKeys.SUBJECT, Err.SubjectCompatibility);
-
-    if (config.getSubjectLocation() != null && forbidSubject(config))
-      errors.putError(JsonKeys.SUBJECT, Err.SubjectCompatibility);
-
-    if (config.getNumDescriptions() != null) {
-      if (config.getNumDescriptions() < 0)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.LessThanZero);
-
-      if (config.getOutFormat().hasFormat() && config.getOutFormat().getFormat().getValue() > 4)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.OnlyForFmtLte4);
-
-      if (config.getMaxTargetSequences() != null)
-        errors.putError(JsonKeys.NUM_DESCRIPTIONS, Err.ForbidWithMaxTargetSeqs);
-    }
-
-    if (config.getNumAlignments() != null) {
-      if (config.getNumAlignments() < 0)
-        errors.putError(JsonKeys.NUM_ALIGNMENTS, Err.LessThanZero);
-
-      if (config.getMaxTargetSequences() != null)
-        errors.putError(JsonKeys.NUM_ALIGNMENTS, Err.ForbidWithMaxTargetSeqs);
-    }
-
-    if (config.getSortHits() != null
-      && config.getOutFormat().hasFormat()
-      && config.getOutFormat().getFormat().getValue() > 4)
-      errors.putError(JsonKeys.SORT_HITS, Err.OnlyForFmtLte4);
-
-    if (config.getSortHSPs() != null
-      && config.getOutFormat().hasFormat()
-      && config.getOutFormat().getFormat().getValue() > 1)
-      errors.putError(JsonKeys.SORT_HSPS, Err.OnlyForPairwise);
-
-    if (config.getGiList() != null && forbidGiList(config))
-      errors.putError(JsonKeys.GI_LIST, Err.ForbidGiList);
-
-    if (config.getSequenceIdList() != null && forbidSeqIdList(config))
-      errors.putError(JsonKeys.SEQ_ID_LIST, Err.ForbidSeqIdList);
-
-    if (config.getNegativeGiList() != null && forbidNegGiList(config))
-      errors.putError(JsonKeys.NEGATIVE_GI_LIST, Err.ForbidNegativeGiList);
-
-    if (config.getNegativeSequenceIdList() != null && forbidNegSeqIdList(config))
-      errors.putError(JsonKeys.NEGATIVE_SEQ_ID_LIST, Err.ForbidNegativeSeqIdList);
-
-    if (config.getTaxIds() != null && forbidTaxIds(config))
-      errors.putError(JsonKeys.TAX_IDS, Err.ForbidTaxIds);
-
-    if (config.getNegativeTaxIds() != null && forbidNegativeTaxIds(config))
-      errors.putError(JsonKeys.TAX_IDS, Err.ForbidNegativeTaxIds);
-
-    if (config.getTaxIdList() != null && forbidTaxIdList(config))
-      errors.putError(JsonKeys.TAX_IDS, Err.ForbidTaxIdList);
-
-    if (config.getNegativeTaxIdList() != null && forbidNegativeTaxIdList(config))
-      errors.putError(JsonKeys.TAX_IDS, Err.ForbidNegativeTaxIdList);
-
-    // The remote field must be present and set to "true" to use the entrezQuery
-    // field.
-    //
-    // You may ask something like "why not just default it to true when using
-    // this field?"  The remote flag is significant and requiring it forces the
-    // client to acknowledge that they actually want to run a remote query.
-    if (config.getEntrezQuery() != null && config.isRemoteEnabled())
-      errors.putError(ToolOption.Remote, Err.RequireRemote);
-
-//    if (config.getDbSoftMask() != null && forbidDbSoftMask())
-//      errors.putError(OptionName.DB_SOFT_MASK, Err.ForbidDbSoftMask);
-//
-//    if (config.getDbHardMask() != null && forbidDbHardMask())
-//      errors.putError(OptionName.DB_HARD_MASK, Err.ForbidDbHardMask);
+    optGtEq(errors, config.getWordSize(), 4, JsonKeys.WordSize);
+    optLtEq(errors, config.getPenalty(), 0, JsonKeys.Penalty);
+    optGtEq(errors, config.getReward(), 0, JsonKeys.Reward);
+    validateSubjectLoc(errors, config);
+    validateTaxIds(errors, config);
+    validateNegativeTaxIds(errors, config);
+    validateDbSoftMask(errors, config);
+    validateDbHardMask(errors, config);
+    optBetweenInc(errors, config.getPercIdentity(), 0, 100, JsonKeys.PercentIdentity);
+    optGtEq(errors, config.getCullingLimit(), 0, JsonKeys.CullingLimit);
+    optBetweenExc(errors, config.getBestHitOverhang(), 0, 0.5, JsonKeys.BestHitOverhang);
+    optBetweenExc(errors, config.getBestHitScoreEdge(), 0, 0.5, JsonKeys.BestHitScoreEdge);
+    validateTemplateType(errors, config);
+    validateTemplateLength(errors, config);
 
     return null;
   }
@@ -105,152 +35,89 @@ public class BlastnValidator extends BlastValidator
     return instance;
   }
 
-  public static ErrorMap validate(BlastNConfig config, boolean ext) {
-    return getInstance().validateConfig(config, ext);
-  }
-
-  static boolean forbidGiList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidSeqIdList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidNegGiList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidTaxIds(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIdList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidNegativeTaxIds(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidTaxIdList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidNegativeTaxIdList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeSequenceIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeTaxIds(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidNegSeqIdList(BlastNConfig config) {
-    return config.isRemoteEnabled() || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getSubject(),
-      config.getSubjectLocation()
-    );
-  }
-
-  static boolean forbidSubject(BlastNConfig config) {
-    // FIXME: DB is not actually used
-    return config.getBlastDatabase() != null || forbidList(
-      config.getGiList(),
-      config.getSequenceIdList(),
-      config.getNegativeGiList(),
-      config.getNegativeSequenceIdList(),
-      config.getTaxIds(),
-      config.getTaxIdList(),
-      config.getNegativeTaxIds(),
-      config.getNegativeTaxIdList(),
-      config.getDbSoftMask(),
-      config.getDbHardMask()
-    );
-  }
-
-  static boolean forbidList(Object... values) {
-    for (var obj : values)
-      if (obj != null)
-        return true;
-
-    return false;
-  }
-
-  static void validateWordSize(ErrorMap err, BlastNConfig conf) {
-    if (conf.getWordSize() == null)
+  static void validateDbHardMask(ErrorMap err, InputBlastnConfig conf) {
+    if (conf.getDbHardMask() == null)
       return;
 
-    if (conf.getWordSize() < 4)
-      err.putError(ToolOption.WordSize, "must be greater than or equal to 4");
+    if (conf.getDbSoftMask() != null)
+      err.putError(JsonKeys.DBHardMask, String.format(ErrIncompatibleWith, JsonKeys.DBSoftMask));
+
+    if (conf.getSubjectLoc() != null)
+      err.putError(
+        JsonKeys.DBHardMask,
+        String.format(ErrIncompatibleWith, JsonKeys.SubjectLocation)
+      );
   }
 
+  static void validateDbSoftMask(ErrorMap err, InputBlastnConfig conf) {
+    if (conf.getDbSoftMask() == null)
+      return;
+
+    if (conf.getDbHardMask() != null)
+      err.putError(JsonKeys.DBSoftMask, String.format(ErrIncompatibleWith, JsonKeys.DBHardMask));
+
+    if (conf.getSubjectLoc() != null)
+      err.putError(
+        JsonKeys.DBSoftMask,
+        String.format(ErrIncompatibleWith, JsonKeys.SubjectLocation)
+      );
+  }
+
+  static void validateTaxIds(ErrorMap err, InputBlastnConfig conf) {
+    if (conf.getTaxIds() == null || conf.getTaxIds().isEmpty())
+      return;
+
+    if (conf.getNegativeTaxIds() != null && !conf.getNegativeTaxIds().isEmpty())
+      err.putError(JsonKeys.TaxIDs, String.format(ErrIncompatibleWith, JsonKeys.NegativeTaxIDs));
+    if (conf.getSubjectLoc() != null)
+      err.putError(JsonKeys.TaxIDs, String.format(ErrIncompatibleWith, JsonKeys.SubjectLocation));
+  }
+
+  static void validateNegativeTaxIds(ErrorMap err, InputBlastnConfig conf) {
+    if (conf.getNegativeTaxIds() == null || conf.getNegativeTaxIds().isEmpty())
+      return;
+
+    if (conf.getTaxIds() != null && !conf.getTaxIds().isEmpty())
+      err.putError(JsonKeys.NegativeTaxIDs, String.format(ErrIncompatibleWith, JsonKeys.TaxIDs));
+
+    if (conf.getSubjectLoc() != null)
+      err.putError(
+        JsonKeys.NegativeTaxIDs,
+        String.format(ErrIncompatibleWith, JsonKeys.SubjectLocation)
+      );
+  }
+
+  static void validateSubjectLoc(ErrorMap err, InputBlastnConfig config) {
+    if (config.getSubjectLoc() == null)
+      return;
+
+    if (config.getTaxIds() != null)
+      err.putError(JsonKeys.SubjectLocation, String.format(ErrIncompatibleWith, JsonKeys.TaxIDs));
+
+    if (config.getNegativeTaxIds() != null)
+      err.putError(
+        JsonKeys.SubjectLocation,
+        String.format(ErrIncompatibleWith, JsonKeys.NegativeTaxIDs)
+      );
+
+    if (config.getDbSoftMask() != null)
+      err.putError(
+        JsonKeys.SubjectLocation,
+        String.format(ErrIncompatibleWith, JsonKeys.DBSoftMask)
+      );
+
+    if (config.getDbHardMask() != null)
+      err.putError(
+        JsonKeys.SubjectLocation,
+        String.format(ErrIncompatibleWith, JsonKeys.DBHardMask)
+      );
+  }
+
+  static void validateWindowSize(ErrorMap err, InputBlastnConfig conf) {
+    if (conf.getWindowSize() == null)
+      return;
+
+    if (conf.getWindowSize() < 0)
+      err.putError(JsonKeys.MultiHitWindowSize, String.format(ErrGtEq, 0));
+  }
 }

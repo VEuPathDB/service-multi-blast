@@ -25,14 +25,14 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
   private Double       bestHitScoreEdge;
   private boolean      subjectBestHit;
   private TemplateType templateType;
-  private Integer      templateLength;
+  private Byte         templateLength;
   private Boolean      sumStats;
   private Double       extDropoffPrelimGapped;
   private Double       extDropoffFinalGapped;
   private boolean      nonGreedyProgramExt;
   private Integer      minRawGappedScore;
   private boolean      ungappedAlignment;
-  private Short wordSize;
+  private Short        wordSize;
 
   public QueryStrand getStrand() {
     return strand;
@@ -182,11 +182,11 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
     this.templateType = templateType;
   }
 
-  public Integer getTemplateLength() {
+  public Byte getTemplateLength() {
     return templateLength;
   }
 
-  public void setTemplateLength(Integer templateLength) {
+  public void setTemplateLength(Byte templateLength) {
     this.templateLength = templateLength;
   }
 

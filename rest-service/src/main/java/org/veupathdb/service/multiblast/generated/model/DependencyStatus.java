@@ -14,7 +14,7 @@ public interface DependencyStatus {
   void setName(String name);
 
   @JsonProperty("reachable")
-  boolean getReachable();
+  Boolean getReachable();
 
   @JsonProperty("reachable")
   void setReachable(boolean reachable);

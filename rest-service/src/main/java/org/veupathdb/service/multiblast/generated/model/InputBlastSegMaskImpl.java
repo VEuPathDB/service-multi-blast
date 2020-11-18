@@ -13,19 +13,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class InputBlastSegMaskImpl implements InputBlastSegMask {
   @JsonProperty("enabled")
-  private boolean enabled;
+  private Boolean enabled;
 
   @JsonProperty("window")
-  private int window;
+  private Integer window;
 
   @JsonProperty("locut")
-  private double locut;
+  private Double locut;
 
   @JsonProperty("hicut")
-  private double hicut;
+  private Double hicut;
 
   @JsonProperty("enabled")
-  public boolean getEnabled() {
+  public Boolean getEnabled() {
     return this.enabled;
   }
 
@@ -35,7 +35,7 @@ public class InputBlastSegMaskImpl implements InputBlastSegMask {
   }
 
   @JsonProperty("window")
-  public int getWindow() {
+  public Integer getWindow() {
     return this.window;
   }
 
@@ -45,7 +45,7 @@ public class InputBlastSegMaskImpl implements InputBlastSegMask {
   }
 
   @JsonProperty("locut")
-  public double getLocut() {
+  public Double getLocut() {
     return this.locut;
   }
 
@@ -55,7 +55,7 @@ public class InputBlastSegMaskImpl implements InputBlastSegMask {
   }
 
   @JsonProperty("hicut")
-  public double getHicut() {
+  public Double getHicut() {
     return this.hicut;
   }
 

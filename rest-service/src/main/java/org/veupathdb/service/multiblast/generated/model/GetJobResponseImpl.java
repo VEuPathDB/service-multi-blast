@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class GetJobResponseImpl implements GetJobResponse {
   @JsonProperty("id")
-  private int id;
+  private Integer id;
 
   @JsonProperty("status")
   private IOJobStatus status;
@@ -21,7 +21,7 @@ public class GetJobResponseImpl implements GetJobResponse {
   private InputBlastConfig config;
 
   @JsonProperty("id")
-  public int getId() {
+  public Integer getId() {
     return this.id;
   }
 

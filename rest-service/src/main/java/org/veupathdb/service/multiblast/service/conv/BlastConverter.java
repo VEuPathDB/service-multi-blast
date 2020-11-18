@@ -1,9 +1,6 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -55,12 +52,8 @@ public class BlastConverter
     out.setEValue(conf.getExpectValue());
     out.setLineLength(conf.getLineLength());
     out.setSortHits(fromInternal(conf.getSortHits()));
-    out.setSeqIdList(conf.getSequenceIdList()); // FIXME: file
-    out.setNegativeSeqIdList(conf.getNegativeSequenceIdList()); // FIXME: file
-    out.setTaxIds(String.join(",", conf.getTaxIds()));
-    out.setNegativeTaxIds(String.join(",", conf.getNegativeTaxIds()));
-    out.setTaxIdList(conf.getTaxIdList()); // FIXME: file
-    out.setNegativeTaxIdList(conf.getNegativeTaxIdList()); // FIXME: file
+    out.setTaxIds(Arrays.asList(conf.getTaxIds()));
+    out.setNegativeTaxIds(Arrays.asList(conf.getNegativeTaxIds()));
     out.setSortHSPs(fromInternal(conf.getSortHSPs()));
     out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
     out.setNumDescriptions(conf.getNumDescriptions());
@@ -73,7 +66,7 @@ public class BlastConverter
     out.setDbSize(conf.getDbSize());
     out.setSearchSpace(conf.getSearchSpace());
     out.setParseDefLines(conf.isParseDefLinesEnabled());
-    out.setOutFmt(fromInternal(conf.getOutFormat()));
+    out.setOutFormat(fromInternal(conf.getOutFormat()));
     out.setTask(fromInternal(conf.getTask()));
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapOpen());
@@ -82,9 +75,7 @@ public class BlastConverter
     out.setPenalty(conf.getPenalty());
     out.setStrand(fromInternal(conf.getStrand()));
     out.setDust(fromInternal(conf.getDust()));
-    out.setFilteringDb(conf.getFilteringDb()); // FIXME: file (is this public?)
     out.setWindowMaskerTaxid(conf.getWindowMaskerTaxID());
-    out.setWindowMaskerDb(conf.getWindowMaskerDB()); // FIXME: file (is this public?)
     out.setSoftMasking(conf.getSoftMasking());
     out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
     out.setDbSoftMask(conf.getDbSoftMask());
@@ -126,12 +117,8 @@ public class BlastConverter
 
     out.setLineLength(conf.getLineLength());
     out.setSortHits(fromInternal(conf.getSortHits()));
-    out.setSeqIdList(conf.getSequenceIdList()); // FIXME: file
-    out.setNegativeSeqIdList(conf.getNegativeSequenceIdList()); // FIXME: file
-    out.setTaxIds(String.join(",", conf.getTaxIds()));
-    out.setNegativeTaxIds(String.join(",", conf.getNegativeTaxIds()));
-    out.setTaxIdList(conf.getTaxIdList()); // FIXME: file
-    out.setNegativeTaxIdList(conf.getNegativeTaxIdList()); // FIXME: file
+    out.setTaxIds(Arrays.asList(conf.getTaxIds()));
+    out.setNegativeTaxIds(Arrays.asList(conf.getNegativeTaxIds()));
     out.setSortHSPs(fromInternal(conf.getSortHSPs()));
     out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
     out.setNumDescriptions(conf.getNumDescriptions());
@@ -144,7 +131,7 @@ public class BlastConverter
     out.setDbSize(conf.getDbSize());
     out.setSearchSpace(conf.getSearchSpace());
     out.setParseDefLines(conf.isParseDefLinesEnabled());
-    out.setOutFmt(fromInternal(conf.getOutFormat()));
+    out.setOutFormat(fromInternal(conf.getOutFormat()));
     out.setSeg(fromInternal(conf.getSeg()));
     out.setSoftMasking(conf.getSoftMasking());
     out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
@@ -154,7 +141,7 @@ public class BlastConverter
     out.setXDropGapFinal(conf.getExtDropoffFinalGap());
     out.setXDropUngap(conf.getExtDropoffUngapped());
     out.setWindowSize(conf.getWindowSize());
-    out.setUseSwTBack(conf.getUseSmithWatermanAlignments());
+    out.setUseSWTraceback(conf.getUseSmithWatermanAlignments());
 
     return out;
   }
@@ -360,14 +347,14 @@ public class BlastConverter
     };
   }
 
-  InputBlastDcTemplateType fromInternal(TemplateType val) {
+  InputBlastnDcTemplateType fromInternal(TemplateType val) {
     if (val == null)
       return null;
 
     return switch (val) {
-      case Coding -> InputBlastDcTemplateType.CODING;
-      case Optimal -> InputBlastDcTemplateType.OPTIMAL;
-      case Both -> InputBlastDcTemplateType.BOTH;
+      case Coding -> InputBlastnDcTemplateType.CODING;
+      case Optimal -> InputBlastnDcTemplateType.OPTIMAL;
+      case Both -> InputBlastnDcTemplateType.BOTH;
     };
   }
 

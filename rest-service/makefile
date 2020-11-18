@@ -84,6 +84,8 @@ gen-jaxrs: api.raml merge-raml
 	@mv api2.raml api.raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
+	# Performing hack to correct nullable input fields
+	@find $(GEN_DIR) -type f -name '*.java' | xargs -I'{}' sed -i 's/ \(double\|byte\|boolean\|short\|long\) / \u\1 /g;s/ int / Integer /g' '{}'
 
 gen-docs: api.raml merge-raml
 	# Performing hack to make doc-gen work...

@@ -27,59 +27,11 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   @JsonProperty("queryLoc")
   void setQueryLoc(InputBlastLocation queryLoc);
 
-  @JsonProperty("strand")
-  InputBlastStrand getStrand();
-
-  @JsonProperty("strand")
-  void setStrand(InputBlastStrand strand);
-
-  @JsonProperty("queryGeneticCode")
-  byte getQueryGeneticCode();
-
-  @JsonProperty("queryGeneticCode")
-  void setQueryGeneticCode(byte queryGeneticCode);
-
   @JsonProperty("eValue")
   String getEValue();
 
   @JsonProperty("eValue")
   void setEValue(String eValue);
-
-  @JsonProperty("wordSize")
-  byte getWordSize();
-
-  @JsonProperty("wordSize")
-  void setWordSize(byte wordSize);
-
-  @JsonProperty("maxIntronLength")
-  int getMaxIntronLength();
-
-  @JsonProperty("maxIntronLength")
-  void setMaxIntronLength(int maxIntronLength);
-
-  @JsonProperty("matrix")
-  InputTBlastxScoringMatrix getMatrix();
-
-  @JsonProperty("matrix")
-  void setMatrix(InputTBlastxScoringMatrix matrix);
-
-  @JsonProperty("threshold")
-  double getThreshold();
-
-  @JsonProperty("threshold")
-  void setThreshold(double threshold);
-
-  @JsonProperty("dbGencode")
-  byte getDbGencode();
-
-  @JsonProperty("dbGencode")
-  void setDbGencode(byte dbGencode);
-
-  @JsonProperty("subjectLoc")
-  InputBlastLocation getSubjectLoc();
-
-  @JsonProperty("subjectLoc")
-  void setSubjectLoc(InputBlastLocation subjectLoc);
 
   @JsonProperty("outFormat")
   InputBlastOutFmt getOutFormat();
@@ -88,25 +40,25 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   void setOutFormat(InputBlastOutFmt outFormat);
 
   @JsonProperty("showGIs")
-  boolean getShowGIs();
+  Boolean getShowGIs();
 
   @JsonProperty("showGIs")
   void setShowGIs(boolean showGIs);
 
   @JsonProperty("numDescriptions")
-  int getNumDescriptions();
+  Integer getNumDescriptions();
 
   @JsonProperty("numDescriptions")
   void setNumDescriptions(int numDescriptions);
 
   @JsonProperty("numAlignments")
-  int getNumAlignments();
+  Integer getNumAlignments();
 
   @JsonProperty("numAlignments")
   void setNumAlignments(int numAlignments);
 
   @JsonProperty("lineLength")
-  int getLineLength();
+  Integer getLineLength();
 
   @JsonProperty("lineLength")
   void setLineLength(int lineLength);
@@ -123,6 +75,102 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   @JsonProperty("sortHSPs")
   void setSortHSPs(InputHSPSorting sortHSPs);
 
+  @JsonProperty("lcaseMasking")
+  Boolean getLcaseMasking();
+
+  @JsonProperty("lcaseMasking")
+  void setLcaseMasking(boolean lcaseMasking);
+
+  @JsonProperty("qCovHSPPerc")
+  Double getQCovHSPPerc();
+
+  @JsonProperty("qCovHSPPerc")
+  void setQCovHSPPerc(double qCovHSPPerc);
+
+  @JsonProperty("maxHSPs")
+  Integer getMaxHSPs();
+
+  @JsonProperty("maxHSPs")
+  void setMaxHSPs(int maxHSPs);
+
+  @JsonProperty("maxTargetSeqs")
+  Integer getMaxTargetSeqs();
+
+  @JsonProperty("maxTargetSeqs")
+  void setMaxTargetSeqs(int maxTargetSeqs);
+
+  @JsonProperty("dbSize")
+  Byte getDbSize();
+
+  @JsonProperty("dbSize")
+  void setDbSize(byte dbSize);
+
+  @JsonProperty("searchSpace")
+  Byte getSearchSpace();
+
+  @JsonProperty("searchSpace")
+  void setSearchSpace(byte searchSpace);
+
+  @JsonProperty("xDropUngap")
+  Double getXDropUngap();
+
+  @JsonProperty("xDropUngap")
+  void setXDropUngap(double xDropUngap);
+
+  @JsonProperty("parseDefLines")
+  Boolean getParseDefLines();
+
+  @JsonProperty("parseDefLines")
+  void setParseDefLines(boolean parseDefLines);
+
+  @JsonProperty("strand")
+  InputBlastStrand getStrand();
+
+  @JsonProperty("strand")
+  void setStrand(InputBlastStrand strand);
+
+  @JsonProperty("queryGeneticCode")
+  Byte getQueryGeneticCode();
+
+  @JsonProperty("queryGeneticCode")
+  void setQueryGeneticCode(byte queryGeneticCode);
+
+  @JsonProperty("wordSize")
+  Byte getWordSize();
+
+  @JsonProperty("wordSize")
+  void setWordSize(byte wordSize);
+
+  @JsonProperty("maxIntronLength")
+  Integer getMaxIntronLength();
+
+  @JsonProperty("maxIntronLength")
+  void setMaxIntronLength(int maxIntronLength);
+
+  @JsonProperty("matrix")
+  InputTBlastxScoringMatrix getMatrix();
+
+  @JsonProperty("matrix")
+  void setMatrix(InputTBlastxScoringMatrix matrix);
+
+  @JsonProperty("threshold")
+  Double getThreshold();
+
+  @JsonProperty("threshold")
+  void setThreshold(double threshold);
+
+  @JsonProperty("dbGencode")
+  Byte getDbGencode();
+
+  @JsonProperty("dbGencode")
+  void setDbGencode(byte dbGencode);
+
+  @JsonProperty("subjectLoc")
+  InputBlastLocation getSubjectLoc();
+
+  @JsonProperty("subjectLoc")
+  void setSubjectLoc(InputBlastLocation subjectLoc);
+
   @JsonProperty("seg")
   InputBlastSegMask getSeg();
 
@@ -130,16 +178,10 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   void setSeg(InputBlastSegMask seg);
 
   @JsonProperty("softMasking")
-  boolean getSoftMasking();
+  Boolean getSoftMasking();
 
   @JsonProperty("softMasking")
   void setSoftMasking(boolean softMasking);
-
-  @JsonProperty("lcaseMasking")
-  boolean getLcaseMasking();
-
-  @JsonProperty("lcaseMasking")
-  void setLcaseMasking(boolean lcaseMasking);
 
   @JsonProperty("taxIds")
   List<String> getTaxIds();
@@ -165,81 +207,39 @@ public interface InputTBlastxConfig extends InputBlastConfig {
   @JsonProperty("dbHardMask")
   void setDbHardMask(String dbHardMask);
 
-  @JsonProperty("qCovHspPerc")
-  double getQCovHspPerc();
-
-  @JsonProperty("qCovHspPerc")
-  void setQCovHspPerc(double qCovHspPerc);
-
-  @JsonProperty("maxHsps")
-  int getMaxHsps();
-
-  @JsonProperty("maxHsps")
-  void setMaxHsps(int maxHsps);
-
   @JsonProperty("cullingLimit")
-  int getCullingLimit();
+  Integer getCullingLimit();
 
   @JsonProperty("cullingLimit")
   void setCullingLimit(int cullingLimit);
 
   @JsonProperty("bestHitOverhang")
-  double getBestHitOverhang();
+  Double getBestHitOverhang();
 
   @JsonProperty("bestHitOverhang")
   void setBestHitOverhang(double bestHitOverhang);
 
   @JsonProperty("bestHitScoreEdge")
-  double getBestHitScoreEdge();
+  Double getBestHitScoreEdge();
 
   @JsonProperty("bestHitScoreEdge")
   void setBestHitScoreEdge(double bestHitScoreEdge);
 
   @JsonProperty("subjectBesthit")
-  boolean getSubjectBesthit();
+  Boolean getSubjectBesthit();
 
   @JsonProperty("subjectBesthit")
   void setSubjectBesthit(boolean subjectBesthit);
 
-  @JsonProperty("maxTargetSeqs")
-  int getMaxTargetSeqs();
-
-  @JsonProperty("maxTargetSeqs")
-  void setMaxTargetSeqs(int maxTargetSeqs);
-
-  @JsonProperty("dbSize")
-  byte getDbSize();
-
-  @JsonProperty("dbSize")
-  void setDbSize(byte dbSize);
-
-  @JsonProperty("searchSpace")
-  byte getSearchSpace();
-
-  @JsonProperty("searchSpace")
-  void setSearchSpace(byte searchSpace);
-
   @JsonProperty("sumStats")
-  boolean getSumStats();
+  Boolean getSumStats();
 
   @JsonProperty("sumStats")
   void setSumStats(boolean sumStats);
 
-  @JsonProperty("xDropUngap")
-  double getXDropUngap();
-
-  @JsonProperty("xDropUngap")
-  void setXDropUngap(double xDropUngap);
-
   @JsonProperty("windowSize")
-  int getWindowSize();
+  Integer getWindowSize();
 
   @JsonProperty("windowSize")
   void setWindowSize(int windowSize);
-
-  @JsonProperty("parseDeflines")
-  boolean getParseDeflines();
-
-  @JsonProperty("parseDeflines")
-  void setParseDeflines(boolean parseDeflines);
 }
