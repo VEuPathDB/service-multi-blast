@@ -18,7 +18,7 @@ public class BlastConfig implements CLISerializable
   private String        blastDatabase;
   private Byte          dbSize;
   private String        entrezQuery;
-  private Double        expectValue;
+  private String        expectValue;
   private File          exportSearchStrategy;
   private boolean       htmlOutputEnabled;
   private File          importSearchStrategy;
@@ -71,11 +71,11 @@ public class BlastConfig implements CLISerializable
     return this;
   }
 
-  public Double getExpectValue() {
+  public String getExpectValue() {
     return expectValue;
   }
 
-  public BlastConfig setExpectValue(Double expectValue) {
+  public BlastConfig setExpectValue(String expectValue) {
     this.expectValue = expectValue;
     return this;
   }

@@ -10,46 +10,8 @@ additionalProperties: false
 discriminator: tool
 
 properties:
-  # h?:
-  #   displayName: -h
-  #   type: boolean
-  #   description:
-  #     Print USAGE and DESCRIPTION.
-
-  #     Ignore all other parameters
-
-  # help?:
-  #   displayName: -help
-  #   type: boolean
-  #   description:
-  #     Print USAGE, DESCRIPTION and ARGUMENTS.
-
-  #     Ignore all other parameters
-
-  # version?:
-  #   displayName: -version
-  #   type: boolean
-  #   description: |
-  #     Print version number.
-
-  #     Ignore other arguments
 
   # Input query options
-
-  query?:
-    displayName: -query=<string, filename>
-    type: string
-    description: |
-      When posting a job using `application/json` this field is required.
-
-      When posting a job using `multipart/form-data` either this field _or_ the
-      query file field must be specified.
-
-  queryLoc?:
-    displayName: -query_loc=<string, range>
-    description: |
-      Location on the query sequence.
-    type: blast.InputBlastLocation
 
   strand?:
     displayName: -strand=<string, `both|minus|plus`>
@@ -69,33 +31,6 @@ properties:
     description: |
       Default value: `blastn`
     type: ext.InputBlastnTask
-
-  # db?:
-  #   displayName: "-db=<string, dir_name>"
-  #   type: string
-  #   description: |
-  #     BLAST database name
-
-  #     Incompatible with:  subject, subjectLoc
-
-  # out?:
-  #   displayName: "-out=<string, filename>"
-  #   type: string
-  #   description: |
-  #     Output file name
-
-  #     Default = `-`
-
-  eValue?:
-    displayName: -evalue=<real>
-    type: string
-    pattern: /\d+(?:\.\d+)?(?:[eE]-?\d+)?/
-    description: |
-      Expectation value (E) threshold for saving hits.
-
-      Values may use scientific notation.
-
-      Default = `10`
 
   wordSize?:
     displayName: -word_size=<integer, >=4>
@@ -244,69 +179,6 @@ properties:
       * dbHardMask
       * remote
 
-  # Formatting options
-
-  outFormat?:
-    displayName: -outfmt=<string, format>
-    type: blast.InputBlastOutFmt
-
-  showGIs?:
-    displayName: -show_gis
-    type: boolean
-    description: "Show NCBI GIs in deflines?"
-
-  numDescriptions?:
-    displayName: -num_descriptions=<integer, >=0>
-    type: integer
-    minimum: 0
-    description: |
-      Number of database sequences to show one-line descriptions for
-
-      Not applicable for outFormat > 4
-
-      Default = `500`
-
-      Incompatible with: `maxTargetSeqs`
-
-  numAlignments?:
-    displayName: -num_alignments=<integer, >=0>
-    type: integer
-    minimum: 0
-    description: |
-      Number of database sequences to show alignments for.
-
-      Default = `250`
-
-      Incompatible with: `maxTargetSeqs`
-
-  lineLength?:
-    displayName: -line_length=<integer, >=1>
-    type: integer
-    minimum: 1
-    description: |
-      Line length for formatting alignments
-
-      Not applicable for outFormat > 4
-
-      Default = `60`
-
-#  html?:
-#    displayName: -html
-#    type: boolean
-#    description: "Produce HTML output?"
-
-  sortHits?:
-    displayName: -sorthits=<integer, (>=0 and <=4)>
-    # TODO: translate this
-    description: |
-      Only applies to output formats 0-4.
-    type: com.InputHitSorting
-
-  sortHSPs?:
-    displayName: -sorthsps=<integer, (>=0 and <=4)>
-    description: Only applies to pairwise output format.
-    type: com.InputHSPSorting
-
   # Query filtering options
 
   dust?:
@@ -350,14 +222,6 @@ properties:
       Applies to task(s): all
 
       Default = `true`
-
-  lcaseMasking?:
-    displayName: -lcase_masking
-    type: boolean
-    description: |
-      Use lower case filtering in query and subject sequence(s).
-
-      Applies to task(s): all
 
   # Restrict search or results
 
@@ -563,25 +427,6 @@ properties:
 
       Applies to task(s): all
 
-  qCovHspPerc?:
-    displayName: -qcov_hsp_perc=<real, 0..100>
-    type: number
-    format: double
-    minimum: 0.0
-    maximum: 100.0
-    description: "Percent query coverage per hsp"
-
-  maxHsps?:
-    displayName: -max_hsps=<integer, >=1>
-    type: integer
-    minimum: 1
-    description: |
-      Maximum number of HSPs (alignments) to keep for any single query-subject
-      pair. The HSPs shown will be the best as judged by expect value. This
-      number should be an integer that is one or greater. If this option is not
-      set, BLAST shows all HSPs meeting the expect value criteria. Setting it
-      to one will show only the best HSP for every query-subject pair
-
   cullingLimit?:
     displayName: -culling_limit=<integer, >=0>
     type: integer
@@ -622,22 +467,6 @@ properties:
     type: boolean
     description: "Turn on best hit per subject sequence"
 
-  maxTargetSeqs?:
-    displayName: -max_target_seqs=<integer, >=1>
-    type: integer
-    minimum: 1
-    description: |
-      Number of aligned sequences to keep. Use with report formats that do not
-      have separate definition line and alignment sections such as tabular (all
-      outfmt > 4). Not compatible with numDescriptions or numAlignments. Ties
-      are broken by order of sequences in the database.
-      Default = `500`
-
-      Incompatible with:
-
-      * numDescriptions
-      * numAlignments
-
   # Discontiguous MegaBLAST options
 
   templateType?:
@@ -671,52 +500,12 @@ properties:
 
   # Statistical options
 
-  dbSize?:
-    displayName: -dbsize=<int8>
-    type: integer
-    format: int8
-    description: "Effective length of the database."
-
-  searchSpace?:
-    displayName: -searchsp=<int8, >=0>
-    type: integer
-    format: int8
-    minimum: 0
-    description: "Effective length of the search space"
-
   sumStats?:
     displayName: -sum_stats=<boolean>
     type: boolean
     description: "Use sum statistics"
 
-  # Search strategy options
-
-  # importSearchStrategy?:
-  #   displayName: -import_search_strategy=<string, filename>
-  #   type: file
-  #   description: |
-  #     Search strategy to use
-
-  #     Incompatible with: `exportSearchStrategy`
-
-  # exportSearchStrategy?:
-  #   displayName: -export_search_strategy=<string, filename>
-  #   type: string
-  #   description:
-  #     File name to record the search strategy used
-
-  #     Incompatible with: `importSearchStrategy`
-
   # Extension options
-
-  xDropUngap?:
-    displayName: -xdrop_ungap=<real>
-    type: number
-    format: double
-    description: |
-      X-dropoff value (in bits) for ungapped extensions
-
-      Default: `20.0`
 
   xDropGap?:
     displayName: -xdrop_gap=<real>
@@ -780,46 +569,3 @@ properties:
       Number of off-diagonals to search for the 2nd hit, use 0 to turn off
 
       Default = `0`
-
-  # Miscellaneous options
-
-  parseDeflines?:
-    displayName: -parse_deflines
-    type: boolean
-    description: |
-      Parse query and subject bar delimited sequence identifiers (e.g.,
-      gi|129295).
-
-      Default: `false`
-
-  # numThreads?:
-  #   displayName: -num_threads=<integer, >=1>
-  #   type: integer
-  #   format: int8
-  #   minimum: 1
-  #   description:
-  #     Number of threads (CPUs) to use in the BLAST search
-
-  #     Default = `1`
-
-  #     Incompatible with: `remote`
-
-  # remote?:
-  #   displayName: -remote
-  #   type: boolean
-  #   description: |
-  #     Execute search remotely?
-
-  #     Incompatible with:
-
-  #     * giList
-  #     * seqIdList
-  #     * taxIds
-  #     * taxIdList
-  #     * negativeGiList
-  #     * negativeSeqIdList
-  #     * negativeTaxIds
-  #     * negativeTaxIdList
-  #     * subjectLoc
-  #     * numThreads
-

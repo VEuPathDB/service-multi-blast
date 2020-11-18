@@ -1,43 +1,64 @@
 package org.veupathdb.service.multiblast.service.jobs;
 
+import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.service.multiblast.generated.model.InputBlastConfig;
+import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.InputBlastnConfig;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.BlastConfig;
+import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 public class BlastValidator
 {
-  static final String
-    ErrRequired = "is required.",
-    ErrNoEmpty = "cannot be empty",
-    ErrGt = "must be greater than %d",
-    ErrGtEq = "must be greater than or equal to %d",
-    ErrBetweenInc = "value must be between %d and %d (inclusive)",
-    ErrIncompatibleWith = "is incompatible with field %s";
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
+  // ┃                                                                      ┃ //
+  // ┃     Error Messages                                                   ┃ //
+  // ┃                                                                      ┃ //
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
+
+  protected static final String
+    ErrRequired         = "is required.",
+    ErrNoEmpty          = "cannot be empty",
+    ErrGt               = "must be greater than %d",
+    ErrGtEq             = "must be greater than or equal to %d",
+    ErrLtEq             = "must be less than or equal to %d",
+    ErrBetweenInc       = "value must be between %d and %d (inclusive)",
+    ErrBetweenIncF      = "value must be between %.1f and %.1f (inclusive)",
+    ErrIncompatibleWith = "is incompatible with field %s",
+    ErrGenCode          = "must be equal to 33 or in one of the following inclusive ranges: [1..6], [9..16], [21-31]",
+    ErrQueryLoc         = "start position must be less than stop position",
+    errFmt0             = "only valid for the "
+      + ReportFormatType.Pairwise.getIoName()
+      + " output format",
+    errNotFmtGt4 = "only valid for the following output format types: "
+      + Arrays.stream(ReportFormatType.values())
+      .limit(5)
+      .map(ReportFormatType::getIoName)
+      .collect(Collectors.joining(", ")),
+    errOnlyFmtGt4 = "not valid for the following output format types: "
+      + Arrays.stream(ReportFormatType.values())
+      .limit(5)
+      .map(ReportFormatType::getIoName)
+      .collect(Collectors.joining(", ")),
+    errEValue           = "must be a decimal value (optionally in E notation).";
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
+  // ┃                                                                      ┃ //
+  // ┃     Instance Management                                              ┃ //
+  // ┃                                                                      ┃ //
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   private static BlastValidator instance;
 
-  public ErrorMap validate(BlastConfig config, boolean ext) {
-    var out = new ErrorMap();
+  private final Logger log = LogManager.getLogger(getClass());
 
-    validateDbName(out, config, ext);
-    validateQuery(out, config, ext);
-    validateQueryLocation(out, config, ext);
-    validateEntrezQuery(out, config, ext);
-    validateExportSearchStrategy(out, config, ext);
-    validateImportSearchStrategy(out, config, ext);
-    validateLineLength(out, config, ext);
-    validateMaxHSPs(out, config, ext);
-    validateMaxTargetSeqs(out, config, ext);
-    validateNumAlignments(out, config, ext);
-    validateNumDescriptions(out, config, ext);
-    validateNumThreads(out, config, ext);
-    validateSearchSp(out, config, ext);
-    validateWindowSize(out, config, ext);
-    validateOutFormat(out, config, ext);
-    validateQCovHspPerc(out, config, ext);
-
-    return out;
+  private BlastValidator() {
   }
 
   public static BlastValidator getInstance() {
@@ -49,176 +70,220 @@ public class BlastValidator
 
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
-  // ┃     Internal Validation Helpers                                      ┃ //
+  // ┃     Public API                                                       ┃ //
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  static void validateDbName(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getBlastDatabase() == null)
-      err.putError(Util.key(ToolOption.BlastDatabase, ext), ErrRequired);
-    else if (conf.getBlastDatabase().isBlank())
-      err.putError(Util.key(ToolOption.BlastDatabase, ext), ErrNoEmpty);
+  public ErrorMap validate(InputBlastConfig config) {
+    var errors = new ErrorMap();
+
+    validateQueryLocation(errors, config);
+    validateEValue(errors, config);
+    validateOutFormat(errors, config);
+    validateNumDescriptions(errors, config);
+    validateNumAlignments(errors, config);
+    optGtEq(errors, config.getLineLength(), 1, JsonKeys.LineLength);
+    validateSortHits(errors, config);
+    validateSortHSPs(errors, config);
+    validateQCovHspPerc(errors, config);
+    optGtEq(errors, config.getMaxHSPs(), 1, JsonKeys.MaxHSPs);
+    validateMaxTargetSeqs(errors, config);
+    optGtEq(errors, config.getSearchSpace(), 0, JsonKeys.SearchSpace);
+
+    return switch (config.getTool()) {
+      case BLASTN -> BlastnValidator.getInstance().validateConfig(
+        errors,
+        (InputBlastnConfig) config
+      );
+      case BLASTP -> null;
+      case BLASTX -> null;
+      case TBLASTN -> null;
+      case TBLASTX -> null;
+    };
   }
 
-  static void validateQuery(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getQuery() == null)
-      err.putError(Util.key(ToolOption.Query, ext), ErrRequired);
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
+  // ┃                                                                      ┃ //
+  // ┃     Internal Validation Methods                                      ┃ //
+  // ┃                                                                      ┃ //
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
+  // ┃     General Purpose Validations                                      ┃ //
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
+
+  static void optLtEq(ErrorMap err, Integer val, int max, String field) {
+    if (val == null)
+      return;
+
+    if (val > max)
+      err.putError(JsonKeys.Penalty, String.format(ErrLtEq, max));
   }
 
-  static final String ErrQueryLoc = "start position must be less than stop position";
-  static void validateQueryLocation(ErrorMap err, BlastConfig conf, boolean ext) {
+  static void optGtEq(ErrorMap err, Integer val, int min, String field) {
+    if (val == null)
+      return;
+
+    if (val < min)
+      err.putError(field, String.format(ErrGtEq, min));
+  }
+
+  static void optGtEq(ErrorMap err, Short val, int min, String field) {
+    if (val == null)
+      return;
+
+    if (val < min)
+      err.putError(field, String.format(ErrGtEq, min));
+  }
+
+  static void optGtEq(ErrorMap err, Byte val, int min, String field) {
+    if (val == null)
+      return;
+
+    if (val < min)
+      err.putError(field, String.format(ErrGtEq, min));
+  }
+
+  static void optBetweenInc(ErrorMap err, Double val, double min, double max, String field) {
+    if (val == null)
+      return;
+
+    if (val < min || val > max)
+      err.putError(field, String.format(ErrBetweenIncF, min, max));
+  }
+
+  static void optBetweenExc(ErrorMap err, Double val, double min, double max, String field) {
+    if (val == null)
+      return;
+
+    if (val <= min || val >= max)
+      err.putError(field, String.format(ErrBetweenIncF, min, max));
+  }
+
+  // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
+  // ┃     Specialized Validations                                          ┃ //
+  // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
+
+  static void validateSortHits(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getSortHits() == null)
+      return;
+
+    if (conf.getOutFormat() == null || conf.getOutFormat().getFormat() == null)
+      return;
+
+    if (conf.getOutFormat().getFormat().ordinal() > 4)
+      err.putError(JsonKeys.SortHits, errNotFmtGt4);
+  }
+
+  static void validateSortHSPs(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getSortHits() == null)
+      return;
+
+    if (conf.getOutFormat() == null || conf.getOutFormat().getFormat() == null)
+      return;
+
+    if (conf.getOutFormat().getFormat() != InputBlastFormat.PAIRWISE)
+      err.putError(JsonKeys.SortHSPs, errFmt0);
+  }
+
+  static void validateQueryLocation(ErrorMap err, InputBlastConfig conf) {
     if (conf.getQueryLoc() == null)
       return;
 
     if (conf.getQueryLoc().getStart() >= conf.getQueryLoc().getStop())
-      err.putError(Util.key(ToolOption.QueryLocation, ext), ErrQueryLoc);
+      err.putError(JsonKeys.QueryLocation, ErrQueryLoc);
   }
 
-  static void validateEntrezQuery(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getEntrezQuery() == null)
-      return;
+  static final Pattern EValuePat = Pattern.compile("^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$");
 
-    if (!conf.isRemoteEnabled())
-      err.putError(Util.key(ToolOption.EntrezQuery, ext), "remote must be true to use this field");
+  static void validateEValue(ErrorMap err, InputBlastConfig conf) {
+    if (!EValuePat.matcher(conf.getEValue()).matches())
+      err.putError(JsonKeys.ExpectValue, errEValue);
   }
 
-  static void validateExportSearchStrategy(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getExportSearchStrategy() == null)
+  static void validateOutFormat(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getOutFormat() == null)
       return;
 
-    if (conf.getImportSearchStrategy() != null)
+    OutFormatValidator.validateExternal(conf.getOutFormat())
+      .forEach((k, v) -> err.put(JsonKeys.OUT_FMT + "." + k, v));
+  }
+
+  static void validateNumDescriptions(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getNumDescriptions() == null)
+      return;
+
+    if (conf.getNumDescriptions() < 0)
+      err.putError(JsonKeys.NumDescriptions, String.format(ErrGtEq, 0));
+
+    if (conf.getOutFormat() != null &&
+      conf.getOutFormat().getFormat() != null &&
+      conf.getOutFormat().getFormat().ordinal() > 4
+    )
+      err.putError(JsonKeys.NumDescriptions, errNotFmtGt4);
+
+    if (conf.getMaxTargetSeqs() != null)
       err.putError(
-        Util.key(ToolOption.ExportSearchStrategy, ext),
-        String.format(ErrIncompatibleWith, ToolOption.ImportSearchStrategy)
+        JsonKeys.NumDescriptions,
+        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
       );
   }
 
-  static void validateImportSearchStrategy(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getImportSearchStrategy() == null)
+  static void validateNumAlignments(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getNumAlignments() == null)
       return;
 
-    if (conf.getExportSearchStrategy() != null)
+    if (conf.getNumAlignments() < 0)
+      err.putError(JsonKeys.NumAlignments, String.format(ErrGtEq, 0));
+
+    if (conf.getMaxTargetSeqs() != null)
       err.putError(
-        Util.key(ToolOption.ImportSearchStrategy, ext),
-        String.format(ErrIncompatibleWith, ToolOption.ExportSearchStrategy)
+        JsonKeys.NumAlignments,
+        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
       );
   }
 
-  static void validateLineLength(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getLineLength() == null)
+  static void validateQCovHspPerc(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getQCovHSPPerc() == null)
       return;
 
-    if (conf.getLineLength() < 1)
-      err.putError(Util.key(ToolOption.LineLength, ext), String.format(ErrGtEq, 1));
+    if (conf.getQCovHSPPerc() < 0 || conf.getQCovHSPPerc() > 100)
+      err.putError(JsonKeys.QuerytCoverageHSPPercent, String.format(ErrBetweenInc, 0, 100));
   }
 
-  static void validateMaxHSPs(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getMaxHSPs() == null)
+  static void validateMaxTargetSeqs(ErrorMap err, InputBlastConfig conf) {
+    if (conf.getMaxTargetSeqs() == null)
       return;
 
-    if (conf.getMaxHSPs() < 1)
-      err.putError(Util.key(ToolOption.MaxHSPs, ext), String.format(ErrGtEq, 1));
-  }
-
-  static void validateMaxTargetSeqs(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getMaxTargetSequences() == null)
-      return;
-
-    if (conf.getMaxTargetSequences() < 1)
-      err.putError(Util.key(ToolOption.MaxTargetSequences, ext), String.format(ErrGtEq, 1));
+    if (conf.getMaxTargetSeqs() < 1)
+      err.putError(JsonKeys.MaxTargetSequences, String.format(ErrGtEq, 1));
 
     if (conf.getNumAlignments() != null)
       err.putError(
-        Util.key(ToolOption.MaxTargetSequences, ext),
+        JsonKeys.MaxTargetSequences,
         String.format(ErrIncompatibleWith, ToolOption.NumAlignments)
       );
 
     if (conf.getNumDescriptions() != null)
       err.putError(
-        Util.key(ToolOption.MaxTargetSequences, ext),
+        JsonKeys.MaxTargetSequences,
         String.format(ErrIncompatibleWith, ToolOption.NumDescriptions)
       );
+
+    if (conf.getOutFormat() == null
+      || conf.getOutFormat().getFormat() == null
+      || conf.getOutFormat().getFormat().ordinal() < 5
+    )
+      err.putError(JsonKeys.MaxTargetSequences, errOnlyFmtGt4);
+
   }
 
-  static void validateNumAlignments(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getNumAlignments() == null)
+  static void validateGenCode(ErrorMap err, Integer gc, String field) {
+    if (gc == null)
       return;
 
-    if (conf.getNumAlignments() < 0)
-      err.putError(Util.key(ToolOption.NumAlignments, ext), String.format(ErrGtEq, 0));
-
-    if (conf.getMaxTargetSequences() != null)
-      err.putError(
-        Util.key(ToolOption.NumAlignments, ext),
-        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
-      );
+    if (gc < 1 || gc > 33 || (gc > 6 && gc < 9) || (gc > 16 && gc < 21) || gc == 32)
+      err.putError(field, ErrGenCode);
   }
 
-  static void validateNumDescriptions(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getNumDescriptions() == null)
-      return;
-
-    if (conf.getNumDescriptions() < 0)
-      err.putError(Util.key(ToolOption.NumDescriptions, ext), String.format(ErrGtEq, 0));
-
-    if (conf.getMaxTargetSequences() != null)
-      err.putError(
-        Util.key(ToolOption.NumDescriptions, ext),
-        String.format(ErrIncompatibleWith, ToolOption.MaxTargetSequences)
-      );
-  }
-
-  static void validateNumThreads(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getNumThreads() == null)
-      return;
-
-    if (conf.getNumThreads() < 1)
-      err.putError(Util.key(ToolOption.NumberOfThreads, ext), String.format(ErrGtEq, 1));
-
-    if (conf.isRemoteEnabled())
-      err.putError(
-        Util.key(ToolOption.NumberOfThreads, ext),
-        String.format(ErrIncompatibleWith, ToolOption.Remote)
-      );
-  }
-
-  static void validateSearchSp(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getSearchSpace() == null)
-      return;
-
-    if (conf.getSearchSpace() < 0)
-      err.putError(Util.key(ToolOption.SearchSpaceEffectiveLength, ext), String.format(ErrGtEq, 0));
-  }
-
-  static void validateWindowSize(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getWindowSize() == null)
-      return;
-
-    if (conf.getWindowSize() < 0)
-      err.putError(Util.key(ToolOption.MultiHitWindowSize, ext), String.format(ErrGtEq, 0));
-  }
-
-  static void validateOutFormat(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getOutFormat() == null)
-      return;
-
-    if (ext) {
-      OutFormatValidator.validateExternal(conf.getOutFormat())
-        .forEach((k, v) -> err.put(JsonKeys.OUT_FMT + "." + k, v));
-    } else {
-      OutFormatValidator.validateInternal(conf.getOutFormat())
-        .forEach(s -> err.putError(ToolOption.OutputFormat, s));
-    }
-  }
-
-  static void validateQCovHspPerc(ErrorMap err, BlastConfig conf, boolean ext) {
-    if (conf.getQueryCoveragePercentHSP() == null)
-      return;
-
-    if (conf.getQueryCoveragePercentHSP() < 0 || conf.getQueryCoveragePercentHSP() > 100)
-      err.putError(
-        Util.key(ToolOption.QueryCoveragePercentHSP, ext),
-        String.format(ErrBetweenInc, 0, 100)
-      );
-  }
 }

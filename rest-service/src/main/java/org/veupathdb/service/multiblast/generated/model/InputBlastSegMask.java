@@ -8,25 +8,25 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface InputBlastSegMask {
   @JsonProperty("enabled")
-  boolean getEnabled();
+  Boolean getEnabled();
 
   @JsonProperty("enabled")
   void setEnabled(boolean enabled);
 
   @JsonProperty("window")
-  int getWindow();
+  Integer getWindow();
 
   @JsonProperty("window")
   void setWindow(int window);
 
   @JsonProperty("locut")
-  double getLocut();
+  Double getLocut();
 
   @JsonProperty("locut")
   void setLocut(double locut);
 
   @JsonProperty("hicut")
-  double getHicut();
+  Double getHicut();
 
   @JsonProperty("hicut")
   void setHicut(double hicut);

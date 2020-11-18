@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface InputBlastLocation {
   @JsonProperty("start")
-  long getStart();
+  Long getStart();
 
   @JsonProperty("start")
   void setStart(long start);
 
   @JsonProperty("stop")
-  long getStop();
+  Long getStop();
 
   @JsonProperty("stop")
   void setStop(long stop);

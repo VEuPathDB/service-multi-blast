@@ -30,7 +30,7 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public int getLength() {
+  public Integer getLength() {
     return this.delegate.getLength();
   }
 
@@ -64,7 +64,7 @@ public class ResponseDelegate extends Response {
     return this.entity;}
 
   @Override
-  public int getStatus() {
+  public Integer getStatus() {
     return this.delegate.getStatus();
   }
 
@@ -94,12 +94,12 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public boolean hasEntity() {
+  public Boolean hasEntity() {
     return this.delegate.hasEntity();
   }
 
   @Override
-  public boolean bufferEntity() {
+  public Boolean bufferEntity() {
     return this.delegate.bufferEntity();
   }
 
@@ -129,7 +129,7 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public boolean hasLink(String p0) {
+  public Boolean hasLink(String p0) {
     return this.delegate.hasLink(p0);
   }
 

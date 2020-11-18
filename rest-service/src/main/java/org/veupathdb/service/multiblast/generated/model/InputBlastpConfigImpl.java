@@ -12,15 +12,7 @@ import java.util.List;
     "tool",
     "query",
     "queryLoc",
-    "task",
     "eValue",
-    "wordSize",
-    "gapOpen",
-    "gapExtend",
-    "matrix",
-    "threshold",
-    "compBasedStats",
-    "subjectLoc",
     "outFormat",
     "showGIs",
     "numDescriptions",
@@ -28,29 +20,37 @@ import java.util.List;
     "lineLength",
     "sortHits",
     "sortHSPs",
-    "seg",
-    "softMasking",
     "lcaseMasking",
-    "taxIds",
-    "negativeTaxIds",
-    "dbSoftMask",
-    "dbHardMask",
-    "qCovHspPerc",
-    "maxHsps",
-    "cullingLimit",
-    "bestHitOverhang",
-    "bestHitScoreEdge",
-    "subjectBesthit",
+    "qCovHSPPerc",
+    "maxHSPs",
     "maxTargetSeqs",
     "dbSize",
     "searchSpace",
     "xDropUngap",
+    "parseDefLines",
+    "task",
+    "wordSize",
+    "gapOpen",
+    "gapExtend",
+    "matrix",
+    "threshold",
+    "compBasedStats",
+    "subjectLoc",
+    "seg",
+    "softMasking",
+    "taxIds",
+    "negativeTaxIds",
+    "dbSoftMask",
+    "dbHardMask",
+    "cullingLimit",
+    "bestHitOverhang",
+    "bestHitScoreEdge",
+    "subjectBesthit",
     "xDropGap",
     "xDropGapFinal",
     "windowSize",
     "ungapped",
-    "parseDeflines",
-    "useSwTback"
+    "useSWTraceback"
 })
 public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("tool")
@@ -62,47 +62,23 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("queryLoc")
   private InputBlastLocation queryLoc;
 
-  @JsonProperty("task")
-  private InputBlastpTask task;
-
   @JsonProperty("eValue")
   private String eValue;
-
-  @JsonProperty("wordSize")
-  private int wordSize;
-
-  @JsonProperty("gapOpen")
-  private int gapOpen;
-
-  @JsonProperty("gapExtend")
-  private int gapExtend;
-
-  @JsonProperty("matrix")
-  private InputBlastpScoringMatrix matrix;
-
-  @JsonProperty("threshold")
-  private double threshold;
-
-  @JsonProperty("compBasedStats")
-  private InputBlastCompBasedStats compBasedStats;
-
-  @JsonProperty("subjectLoc")
-  private InputBlastLocation subjectLoc;
 
   @JsonProperty("outFormat")
   private InputBlastOutFmt outFormat;
 
   @JsonProperty("showGIs")
-  private boolean showGIs;
+  private Boolean showGIs;
 
   @JsonProperty("numDescriptions")
-  private int numDescriptions;
+  private Integer numDescriptions;
 
   @JsonProperty("numAlignments")
-  private int numAlignments;
+  private Integer numAlignments;
 
   @JsonProperty("lineLength")
-  private int lineLength;
+  private Integer lineLength;
 
   @JsonProperty("sortHits")
   private InputHitSorting sortHits;
@@ -110,14 +86,59 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("sortHSPs")
   private InputHSPSorting sortHSPs;
 
+  @JsonProperty("lcaseMasking")
+  private Boolean lcaseMasking;
+
+  @JsonProperty("qCovHSPPerc")
+  private Double qCovHSPPerc;
+
+  @JsonProperty("maxHSPs")
+  private Integer maxHSPs;
+
+  @JsonProperty("maxTargetSeqs")
+  private Integer maxTargetSeqs;
+
+  @JsonProperty("dbSize")
+  private Byte dbSize;
+
+  @JsonProperty("searchSpace")
+  private Byte searchSpace;
+
+  @JsonProperty("xDropUngap")
+  private Double xDropUngap;
+
+  @JsonProperty("parseDefLines")
+  private Boolean parseDefLines;
+
+  @JsonProperty("task")
+  private InputBlastpTask task;
+
+  @JsonProperty("wordSize")
+  private Integer wordSize;
+
+  @JsonProperty("gapOpen")
+  private Integer gapOpen;
+
+  @JsonProperty("gapExtend")
+  private Integer gapExtend;
+
+  @JsonProperty("matrix")
+  private InputBlastpScoringMatrix matrix;
+
+  @JsonProperty("threshold")
+  private Double threshold;
+
+  @JsonProperty("compBasedStats")
+  private InputBlastCompBasedStats compBasedStats;
+
+  @JsonProperty("subjectLoc")
+  private InputBlastLocation subjectLoc;
+
   @JsonProperty("seg")
   private InputBlastSegMask seg;
 
   @JsonProperty("softMasking")
-  private boolean softMasking;
-
-  @JsonProperty("lcaseMasking")
-  private boolean lcaseMasking;
+  private Boolean softMasking;
 
   @JsonProperty("taxIds")
   private List<String> taxIds;
@@ -131,53 +152,32 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("dbHardMask")
   private String dbHardMask;
 
-  @JsonProperty("qCovHspPerc")
-  private double qCovHspPerc;
-
-  @JsonProperty("maxHsps")
-  private int maxHsps;
-
   @JsonProperty("cullingLimit")
-  private int cullingLimit;
+  private Integer cullingLimit;
 
   @JsonProperty("bestHitOverhang")
-  private double bestHitOverhang;
+  private Double bestHitOverhang;
 
   @JsonProperty("bestHitScoreEdge")
-  private double bestHitScoreEdge;
+  private Double bestHitScoreEdge;
 
   @JsonProperty("subjectBesthit")
-  private boolean subjectBesthit;
-
-  @JsonProperty("maxTargetSeqs")
-  private int maxTargetSeqs;
-
-  @JsonProperty("dbSize")
-  private byte dbSize;
-
-  @JsonProperty("searchSpace")
-  private byte searchSpace;
-
-  @JsonProperty("xDropUngap")
-  private double xDropUngap;
+  private Boolean subjectBesthit;
 
   @JsonProperty("xDropGap")
-  private double xDropGap;
+  private Double xDropGap;
 
   @JsonProperty("xDropGapFinal")
-  private double xDropGapFinal;
+  private Double xDropGapFinal;
 
   @JsonProperty("windowSize")
-  private int windowSize;
+  private Integer windowSize;
 
   @JsonProperty("ungapped")
-  private boolean ungapped;
+  private Boolean ungapped;
 
-  @JsonProperty("parseDeflines")
-  private boolean parseDeflines;
-
-  @JsonProperty("useSwTback")
-  private boolean useSwTback;
+  @JsonProperty("useSWTraceback")
+  private Boolean useSWTraceback;
 
   @JsonProperty("tool")
   public InputBlastTool getTool() {
@@ -204,16 +204,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.queryLoc = queryLoc;
   }
 
-  @JsonProperty("task")
-  public InputBlastpTask getTask() {
-    return this.task;
-  }
-
-  @JsonProperty("task")
-  public void setTask(InputBlastpTask task) {
-    this.task = task;
-  }
-
   @JsonProperty("eValue")
   public String getEValue() {
     return this.eValue;
@@ -222,76 +212,6 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   @JsonProperty("eValue")
   public void setEValue(String eValue) {
     this.eValue = eValue;
-  }
-
-  @JsonProperty("wordSize")
-  public int getWordSize() {
-    return this.wordSize;
-  }
-
-  @JsonProperty("wordSize")
-  public void setWordSize(int wordSize) {
-    this.wordSize = wordSize;
-  }
-
-  @JsonProperty("gapOpen")
-  public int getGapOpen() {
-    return this.gapOpen;
-  }
-
-  @JsonProperty("gapOpen")
-  public void setGapOpen(int gapOpen) {
-    this.gapOpen = gapOpen;
-  }
-
-  @JsonProperty("gapExtend")
-  public int getGapExtend() {
-    return this.gapExtend;
-  }
-
-  @JsonProperty("gapExtend")
-  public void setGapExtend(int gapExtend) {
-    this.gapExtend = gapExtend;
-  }
-
-  @JsonProperty("matrix")
-  public InputBlastpScoringMatrix getMatrix() {
-    return this.matrix;
-  }
-
-  @JsonProperty("matrix")
-  public void setMatrix(InputBlastpScoringMatrix matrix) {
-    this.matrix = matrix;
-  }
-
-  @JsonProperty("threshold")
-  public double getThreshold() {
-    return this.threshold;
-  }
-
-  @JsonProperty("threshold")
-  public void setThreshold(double threshold) {
-    this.threshold = threshold;
-  }
-
-  @JsonProperty("compBasedStats")
-  public InputBlastCompBasedStats getCompBasedStats() {
-    return this.compBasedStats;
-  }
-
-  @JsonProperty("compBasedStats")
-  public void setCompBasedStats(InputBlastCompBasedStats compBasedStats) {
-    this.compBasedStats = compBasedStats;
-  }
-
-  @JsonProperty("subjectLoc")
-  public InputBlastLocation getSubjectLoc() {
-    return this.subjectLoc;
-  }
-
-  @JsonProperty("subjectLoc")
-  public void setSubjectLoc(InputBlastLocation subjectLoc) {
-    this.subjectLoc = subjectLoc;
   }
 
   @JsonProperty("outFormat")
@@ -305,7 +225,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("showGIs")
-  public boolean getShowGIs() {
+  public Boolean getShowGIs() {
     return this.showGIs;
   }
 
@@ -315,7 +235,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("numDescriptions")
-  public int getNumDescriptions() {
+  public Integer getNumDescriptions() {
     return this.numDescriptions;
   }
 
@@ -325,7 +245,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("numAlignments")
-  public int getNumAlignments() {
+  public Integer getNumAlignments() {
     return this.numAlignments;
   }
 
@@ -335,7 +255,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("lineLength")
-  public int getLineLength() {
+  public Integer getLineLength() {
     return this.lineLength;
   }
 
@@ -364,6 +284,166 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.sortHSPs = sortHSPs;
   }
 
+  @JsonProperty("lcaseMasking")
+  public Boolean getLcaseMasking() {
+    return this.lcaseMasking;
+  }
+
+  @JsonProperty("lcaseMasking")
+  public void setLcaseMasking(boolean lcaseMasking) {
+    this.lcaseMasking = lcaseMasking;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public Double getQCovHSPPerc() {
+    return this.qCovHSPPerc;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public void setQCovHSPPerc(double qCovHSPPerc) {
+    this.qCovHSPPerc = qCovHSPPerc;
+  }
+
+  @JsonProperty("maxHSPs")
+  public Integer getMaxHSPs() {
+    return this.maxHSPs;
+  }
+
+  @JsonProperty("maxHSPs")
+  public void setMaxHSPs(int maxHSPs) {
+    this.maxHSPs = maxHSPs;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public Integer getMaxTargetSeqs() {
+    return this.maxTargetSeqs;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    this.maxTargetSeqs = maxTargetSeqs;
+  }
+
+  @JsonProperty("dbSize")
+  public Byte getDbSize() {
+    return this.dbSize;
+  }
+
+  @JsonProperty("dbSize")
+  public void setDbSize(byte dbSize) {
+    this.dbSize = dbSize;
+  }
+
+  @JsonProperty("searchSpace")
+  public Byte getSearchSpace() {
+    return this.searchSpace;
+  }
+
+  @JsonProperty("searchSpace")
+  public void setSearchSpace(byte searchSpace) {
+    this.searchSpace = searchSpace;
+  }
+
+  @JsonProperty("xDropUngap")
+  public Double getXDropUngap() {
+    return this.xDropUngap;
+  }
+
+  @JsonProperty("xDropUngap")
+  public void setXDropUngap(double xDropUngap) {
+    this.xDropUngap = xDropUngap;
+  }
+
+  @JsonProperty("parseDefLines")
+  public Boolean getParseDefLines() {
+    return this.parseDefLines;
+  }
+
+  @JsonProperty("parseDefLines")
+  public void setParseDefLines(boolean parseDefLines) {
+    this.parseDefLines = parseDefLines;
+  }
+
+  @JsonProperty("task")
+  public InputBlastpTask getTask() {
+    return this.task;
+  }
+
+  @JsonProperty("task")
+  public void setTask(InputBlastpTask task) {
+    this.task = task;
+  }
+
+  @JsonProperty("wordSize")
+  public Integer getWordSize() {
+    return this.wordSize;
+  }
+
+  @JsonProperty("wordSize")
+  public void setWordSize(int wordSize) {
+    this.wordSize = wordSize;
+  }
+
+  @JsonProperty("gapOpen")
+  public Integer getGapOpen() {
+    return this.gapOpen;
+  }
+
+  @JsonProperty("gapOpen")
+  public void setGapOpen(int gapOpen) {
+    this.gapOpen = gapOpen;
+  }
+
+  @JsonProperty("gapExtend")
+  public Integer getGapExtend() {
+    return this.gapExtend;
+  }
+
+  @JsonProperty("gapExtend")
+  public void setGapExtend(int gapExtend) {
+    this.gapExtend = gapExtend;
+  }
+
+  @JsonProperty("matrix")
+  public InputBlastpScoringMatrix getMatrix() {
+    return this.matrix;
+  }
+
+  @JsonProperty("matrix")
+  public void setMatrix(InputBlastpScoringMatrix matrix) {
+    this.matrix = matrix;
+  }
+
+  @JsonProperty("threshold")
+  public Double getThreshold() {
+    return this.threshold;
+  }
+
+  @JsonProperty("threshold")
+  public void setThreshold(double threshold) {
+    this.threshold = threshold;
+  }
+
+  @JsonProperty("compBasedStats")
+  public InputBlastCompBasedStats getCompBasedStats() {
+    return this.compBasedStats;
+  }
+
+  @JsonProperty("compBasedStats")
+  public void setCompBasedStats(InputBlastCompBasedStats compBasedStats) {
+    this.compBasedStats = compBasedStats;
+  }
+
+  @JsonProperty("subjectLoc")
+  public InputBlastLocation getSubjectLoc() {
+    return this.subjectLoc;
+  }
+
+  @JsonProperty("subjectLoc")
+  public void setSubjectLoc(InputBlastLocation subjectLoc) {
+    this.subjectLoc = subjectLoc;
+  }
+
   @JsonProperty("seg")
   public InputBlastSegMask getSeg() {
     return this.seg;
@@ -375,23 +455,13 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("softMasking")
-  public boolean getSoftMasking() {
+  public Boolean getSoftMasking() {
     return this.softMasking;
   }
 
   @JsonProperty("softMasking")
   public void setSoftMasking(boolean softMasking) {
     this.softMasking = softMasking;
-  }
-
-  @JsonProperty("lcaseMasking")
-  public boolean getLcaseMasking() {
-    return this.lcaseMasking;
-  }
-
-  @JsonProperty("lcaseMasking")
-  public void setLcaseMasking(boolean lcaseMasking) {
-    this.lcaseMasking = lcaseMasking;
   }
 
   @JsonProperty("taxIds")
@@ -434,28 +504,8 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.dbHardMask = dbHardMask;
   }
 
-  @JsonProperty("qCovHspPerc")
-  public double getQCovHspPerc() {
-    return this.qCovHspPerc;
-  }
-
-  @JsonProperty("qCovHspPerc")
-  public void setQCovHspPerc(double qCovHspPerc) {
-    this.qCovHspPerc = qCovHspPerc;
-  }
-
-  @JsonProperty("maxHsps")
-  public int getMaxHsps() {
-    return this.maxHsps;
-  }
-
-  @JsonProperty("maxHsps")
-  public void setMaxHsps(int maxHsps) {
-    this.maxHsps = maxHsps;
-  }
-
   @JsonProperty("cullingLimit")
-  public int getCullingLimit() {
+  public Integer getCullingLimit() {
     return this.cullingLimit;
   }
 
@@ -465,7 +515,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("bestHitOverhang")
-  public double getBestHitOverhang() {
+  public Double getBestHitOverhang() {
     return this.bestHitOverhang;
   }
 
@@ -475,7 +525,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public double getBestHitScoreEdge() {
+  public Double getBestHitScoreEdge() {
     return this.bestHitScoreEdge;
   }
 
@@ -485,7 +535,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("subjectBesthit")
-  public boolean getSubjectBesthit() {
+  public Boolean getSubjectBesthit() {
     return this.subjectBesthit;
   }
 
@@ -494,48 +544,8 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.subjectBesthit = subjectBesthit;
   }
 
-  @JsonProperty("maxTargetSeqs")
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs;
-  }
-
-  @JsonProperty("maxTargetSeqs")
-  public void setMaxTargetSeqs(int maxTargetSeqs) {
-    this.maxTargetSeqs = maxTargetSeqs;
-  }
-
-  @JsonProperty("dbSize")
-  public byte getDbSize() {
-    return this.dbSize;
-  }
-
-  @JsonProperty("dbSize")
-  public void setDbSize(byte dbSize) {
-    this.dbSize = dbSize;
-  }
-
-  @JsonProperty("searchSpace")
-  public byte getSearchSpace() {
-    return this.searchSpace;
-  }
-
-  @JsonProperty("searchSpace")
-  public void setSearchSpace(byte searchSpace) {
-    this.searchSpace = searchSpace;
-  }
-
-  @JsonProperty("xDropUngap")
-  public double getXDropUngap() {
-    return this.xDropUngap;
-  }
-
-  @JsonProperty("xDropUngap")
-  public void setXDropUngap(double xDropUngap) {
-    this.xDropUngap = xDropUngap;
-  }
-
   @JsonProperty("xDropGap")
-  public double getXDropGap() {
+  public Double getXDropGap() {
     return this.xDropGap;
   }
 
@@ -545,7 +555,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("xDropGapFinal")
-  public double getXDropGapFinal() {
+  public Double getXDropGapFinal() {
     return this.xDropGapFinal;
   }
 
@@ -555,7 +565,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("windowSize")
-  public int getWindowSize() {
+  public Integer getWindowSize() {
     return this.windowSize;
   }
 
@@ -565,7 +575,7 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
   }
 
   @JsonProperty("ungapped")
-  public boolean getUngapped() {
+  public Boolean getUngapped() {
     return this.ungapped;
   }
 
@@ -574,23 +584,13 @@ public class InputBlastpConfigImpl implements InputBlastpConfig {
     this.ungapped = ungapped;
   }
 
-  @JsonProperty("parseDeflines")
-  public boolean getParseDeflines() {
-    return this.parseDeflines;
+  @JsonProperty("useSWTraceback")
+  public Boolean getUseSWTraceback() {
+    return this.useSWTraceback;
   }
 
-  @JsonProperty("parseDeflines")
-  public void setParseDeflines(boolean parseDeflines) {
-    this.parseDeflines = parseDeflines;
-  }
-
-  @JsonProperty("useSwTback")
-  public boolean getUseSwTback() {
-    return this.useSwTback;
-  }
-
-  @JsonProperty("useSwTback")
-  public void setUseSwTback(boolean useSwTback) {
-    this.useSwTback = useSwTback;
+  @JsonProperty("useSWTraceback")
+  public void setUseSWTraceback(boolean useSWTraceback) {
+    this.useSWTraceback = useSWTraceback;
   }
 }

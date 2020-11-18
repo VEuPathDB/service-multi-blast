@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface GetJobResponse {
   @JsonProperty("id")
-  int getId();
+  Integer getId();
 
   @JsonProperty("id")
   void setId(int id);

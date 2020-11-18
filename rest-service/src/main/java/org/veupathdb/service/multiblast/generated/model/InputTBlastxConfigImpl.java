@@ -12,15 +12,7 @@ import java.util.List;
     "tool",
     "query",
     "queryLoc",
-    "strand",
-    "queryGeneticCode",
     "eValue",
-    "wordSize",
-    "maxIntronLength",
-    "matrix",
-    "threshold",
-    "dbGencode",
-    "subjectLoc",
     "outFormat",
     "showGIs",
     "numDescriptions",
@@ -28,26 +20,34 @@ import java.util.List;
     "lineLength",
     "sortHits",
     "sortHSPs",
+    "lcaseMasking",
+    "qCovHSPPerc",
+    "maxHSPs",
+    "maxTargetSeqs",
+    "dbSize",
+    "searchSpace",
+    "xDropUngap",
+    "parseDefLines",
+    "strand",
+    "queryGeneticCode",
+    "wordSize",
+    "maxIntronLength",
+    "matrix",
+    "threshold",
+    "dbGencode",
+    "subjectLoc",
     "seg",
     "softMasking",
-    "lcaseMasking",
     "taxIds",
     "negativeTaxIds",
     "dbSoftMask",
     "dbHardMask",
-    "qCovHspPerc",
-    "maxHsps",
     "cullingLimit",
     "bestHitOverhang",
     "bestHitScoreEdge",
     "subjectBesthit",
-    "maxTargetSeqs",
-    "dbSize",
-    "searchSpace",
     "sumStats",
-    "xDropUngap",
-    "windowSize",
-    "parseDeflines"
+    "windowSize"
 })
 public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("tool")
@@ -59,47 +59,23 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("queryLoc")
   private InputBlastLocation queryLoc;
 
-  @JsonProperty("strand")
-  private InputBlastStrand strand;
-
-  @JsonProperty("queryGeneticCode")
-  private byte queryGeneticCode;
-
   @JsonProperty("eValue")
   private String eValue;
-
-  @JsonProperty("wordSize")
-  private byte wordSize;
-
-  @JsonProperty("maxIntronLength")
-  private int maxIntronLength;
-
-  @JsonProperty("matrix")
-  private InputTBlastxScoringMatrix matrix;
-
-  @JsonProperty("threshold")
-  private double threshold;
-
-  @JsonProperty("dbGencode")
-  private byte dbGencode;
-
-  @JsonProperty("subjectLoc")
-  private InputBlastLocation subjectLoc;
 
   @JsonProperty("outFormat")
   private InputBlastOutFmt outFormat;
 
   @JsonProperty("showGIs")
-  private boolean showGIs;
+  private Boolean showGIs;
 
   @JsonProperty("numDescriptions")
-  private int numDescriptions;
+  private Integer numDescriptions;
 
   @JsonProperty("numAlignments")
-  private int numAlignments;
+  private Integer numAlignments;
 
   @JsonProperty("lineLength")
-  private int lineLength;
+  private Integer lineLength;
 
   @JsonProperty("sortHits")
   private InputHitSorting sortHits;
@@ -107,14 +83,59 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("sortHSPs")
   private InputHSPSorting sortHSPs;
 
+  @JsonProperty("lcaseMasking")
+  private Boolean lcaseMasking;
+
+  @JsonProperty("qCovHSPPerc")
+  private Double qCovHSPPerc;
+
+  @JsonProperty("maxHSPs")
+  private Integer maxHSPs;
+
+  @JsonProperty("maxTargetSeqs")
+  private Integer maxTargetSeqs;
+
+  @JsonProperty("dbSize")
+  private Byte dbSize;
+
+  @JsonProperty("searchSpace")
+  private Byte searchSpace;
+
+  @JsonProperty("xDropUngap")
+  private Double xDropUngap;
+
+  @JsonProperty("parseDefLines")
+  private Boolean parseDefLines;
+
+  @JsonProperty("strand")
+  private InputBlastStrand strand;
+
+  @JsonProperty("queryGeneticCode")
+  private Byte queryGeneticCode;
+
+  @JsonProperty("wordSize")
+  private Byte wordSize;
+
+  @JsonProperty("maxIntronLength")
+  private Integer maxIntronLength;
+
+  @JsonProperty("matrix")
+  private InputTBlastxScoringMatrix matrix;
+
+  @JsonProperty("threshold")
+  private Double threshold;
+
+  @JsonProperty("dbGencode")
+  private Byte dbGencode;
+
+  @JsonProperty("subjectLoc")
+  private InputBlastLocation subjectLoc;
+
   @JsonProperty("seg")
   private InputBlastSegMask seg;
 
   @JsonProperty("softMasking")
-  private boolean softMasking;
-
-  @JsonProperty("lcaseMasking")
-  private boolean lcaseMasking;
+  private Boolean softMasking;
 
   @JsonProperty("taxIds")
   private List<String> taxIds;
@@ -128,44 +149,23 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("dbHardMask")
   private String dbHardMask;
 
-  @JsonProperty("qCovHspPerc")
-  private double qCovHspPerc;
-
-  @JsonProperty("maxHsps")
-  private int maxHsps;
-
   @JsonProperty("cullingLimit")
-  private int cullingLimit;
+  private Integer cullingLimit;
 
   @JsonProperty("bestHitOverhang")
-  private double bestHitOverhang;
+  private Double bestHitOverhang;
 
   @JsonProperty("bestHitScoreEdge")
-  private double bestHitScoreEdge;
+  private Double bestHitScoreEdge;
 
   @JsonProperty("subjectBesthit")
-  private boolean subjectBesthit;
-
-  @JsonProperty("maxTargetSeqs")
-  private int maxTargetSeqs;
-
-  @JsonProperty("dbSize")
-  private byte dbSize;
-
-  @JsonProperty("searchSpace")
-  private byte searchSpace;
+  private Boolean subjectBesthit;
 
   @JsonProperty("sumStats")
-  private boolean sumStats;
-
-  @JsonProperty("xDropUngap")
-  private double xDropUngap;
+  private Boolean sumStats;
 
   @JsonProperty("windowSize")
-  private int windowSize;
-
-  @JsonProperty("parseDeflines")
-  private boolean parseDeflines;
+  private Integer windowSize;
 
   @JsonProperty("tool")
   public InputBlastTool getTool() {
@@ -192,26 +192,6 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.queryLoc = queryLoc;
   }
 
-  @JsonProperty("strand")
-  public InputBlastStrand getStrand() {
-    return this.strand;
-  }
-
-  @JsonProperty("strand")
-  public void setStrand(InputBlastStrand strand) {
-    this.strand = strand;
-  }
-
-  @JsonProperty("queryGeneticCode")
-  public byte getQueryGeneticCode() {
-    return this.queryGeneticCode;
-  }
-
-  @JsonProperty("queryGeneticCode")
-  public void setQueryGeneticCode(byte queryGeneticCode) {
-    this.queryGeneticCode = queryGeneticCode;
-  }
-
   @JsonProperty("eValue")
   public String getEValue() {
     return this.eValue;
@@ -220,66 +200,6 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   @JsonProperty("eValue")
   public void setEValue(String eValue) {
     this.eValue = eValue;
-  }
-
-  @JsonProperty("wordSize")
-  public byte getWordSize() {
-    return this.wordSize;
-  }
-
-  @JsonProperty("wordSize")
-  public void setWordSize(byte wordSize) {
-    this.wordSize = wordSize;
-  }
-
-  @JsonProperty("maxIntronLength")
-  public int getMaxIntronLength() {
-    return this.maxIntronLength;
-  }
-
-  @JsonProperty("maxIntronLength")
-  public void setMaxIntronLength(int maxIntronLength) {
-    this.maxIntronLength = maxIntronLength;
-  }
-
-  @JsonProperty("matrix")
-  public InputTBlastxScoringMatrix getMatrix() {
-    return this.matrix;
-  }
-
-  @JsonProperty("matrix")
-  public void setMatrix(InputTBlastxScoringMatrix matrix) {
-    this.matrix = matrix;
-  }
-
-  @JsonProperty("threshold")
-  public double getThreshold() {
-    return this.threshold;
-  }
-
-  @JsonProperty("threshold")
-  public void setThreshold(double threshold) {
-    this.threshold = threshold;
-  }
-
-  @JsonProperty("dbGencode")
-  public byte getDbGencode() {
-    return this.dbGencode;
-  }
-
-  @JsonProperty("dbGencode")
-  public void setDbGencode(byte dbGencode) {
-    this.dbGencode = dbGencode;
-  }
-
-  @JsonProperty("subjectLoc")
-  public InputBlastLocation getSubjectLoc() {
-    return this.subjectLoc;
-  }
-
-  @JsonProperty("subjectLoc")
-  public void setSubjectLoc(InputBlastLocation subjectLoc) {
-    this.subjectLoc = subjectLoc;
   }
 
   @JsonProperty("outFormat")
@@ -293,7 +213,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("showGIs")
-  public boolean getShowGIs() {
+  public Boolean getShowGIs() {
     return this.showGIs;
   }
 
@@ -303,7 +223,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("numDescriptions")
-  public int getNumDescriptions() {
+  public Integer getNumDescriptions() {
     return this.numDescriptions;
   }
 
@@ -313,7 +233,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("numAlignments")
-  public int getNumAlignments() {
+  public Integer getNumAlignments() {
     return this.numAlignments;
   }
 
@@ -323,7 +243,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("lineLength")
-  public int getLineLength() {
+  public Integer getLineLength() {
     return this.lineLength;
   }
 
@@ -352,6 +272,166 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.sortHSPs = sortHSPs;
   }
 
+  @JsonProperty("lcaseMasking")
+  public Boolean getLcaseMasking() {
+    return this.lcaseMasking;
+  }
+
+  @JsonProperty("lcaseMasking")
+  public void setLcaseMasking(boolean lcaseMasking) {
+    this.lcaseMasking = lcaseMasking;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public Double getQCovHSPPerc() {
+    return this.qCovHSPPerc;
+  }
+
+  @JsonProperty("qCovHSPPerc")
+  public void setQCovHSPPerc(double qCovHSPPerc) {
+    this.qCovHSPPerc = qCovHSPPerc;
+  }
+
+  @JsonProperty("maxHSPs")
+  public Integer getMaxHSPs() {
+    return this.maxHSPs;
+  }
+
+  @JsonProperty("maxHSPs")
+  public void setMaxHSPs(int maxHSPs) {
+    this.maxHSPs = maxHSPs;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public Integer getMaxTargetSeqs() {
+    return this.maxTargetSeqs;
+  }
+
+  @JsonProperty("maxTargetSeqs")
+  public void setMaxTargetSeqs(int maxTargetSeqs) {
+    this.maxTargetSeqs = maxTargetSeqs;
+  }
+
+  @JsonProperty("dbSize")
+  public Byte getDbSize() {
+    return this.dbSize;
+  }
+
+  @JsonProperty("dbSize")
+  public void setDbSize(byte dbSize) {
+    this.dbSize = dbSize;
+  }
+
+  @JsonProperty("searchSpace")
+  public Byte getSearchSpace() {
+    return this.searchSpace;
+  }
+
+  @JsonProperty("searchSpace")
+  public void setSearchSpace(byte searchSpace) {
+    this.searchSpace = searchSpace;
+  }
+
+  @JsonProperty("xDropUngap")
+  public Double getXDropUngap() {
+    return this.xDropUngap;
+  }
+
+  @JsonProperty("xDropUngap")
+  public void setXDropUngap(double xDropUngap) {
+    this.xDropUngap = xDropUngap;
+  }
+
+  @JsonProperty("parseDefLines")
+  public Boolean getParseDefLines() {
+    return this.parseDefLines;
+  }
+
+  @JsonProperty("parseDefLines")
+  public void setParseDefLines(boolean parseDefLines) {
+    this.parseDefLines = parseDefLines;
+  }
+
+  @JsonProperty("strand")
+  public InputBlastStrand getStrand() {
+    return this.strand;
+  }
+
+  @JsonProperty("strand")
+  public void setStrand(InputBlastStrand strand) {
+    this.strand = strand;
+  }
+
+  @JsonProperty("queryGeneticCode")
+  public Byte getQueryGeneticCode() {
+    return this.queryGeneticCode;
+  }
+
+  @JsonProperty("queryGeneticCode")
+  public void setQueryGeneticCode(byte queryGeneticCode) {
+    this.queryGeneticCode = queryGeneticCode;
+  }
+
+  @JsonProperty("wordSize")
+  public Byte getWordSize() {
+    return this.wordSize;
+  }
+
+  @JsonProperty("wordSize")
+  public void setWordSize(byte wordSize) {
+    this.wordSize = wordSize;
+  }
+
+  @JsonProperty("maxIntronLength")
+  public Integer getMaxIntronLength() {
+    return this.maxIntronLength;
+  }
+
+  @JsonProperty("maxIntronLength")
+  public void setMaxIntronLength(int maxIntronLength) {
+    this.maxIntronLength = maxIntronLength;
+  }
+
+  @JsonProperty("matrix")
+  public InputTBlastxScoringMatrix getMatrix() {
+    return this.matrix;
+  }
+
+  @JsonProperty("matrix")
+  public void setMatrix(InputTBlastxScoringMatrix matrix) {
+    this.matrix = matrix;
+  }
+
+  @JsonProperty("threshold")
+  public Double getThreshold() {
+    return this.threshold;
+  }
+
+  @JsonProperty("threshold")
+  public void setThreshold(double threshold) {
+    this.threshold = threshold;
+  }
+
+  @JsonProperty("dbGencode")
+  public Byte getDbGencode() {
+    return this.dbGencode;
+  }
+
+  @JsonProperty("dbGencode")
+  public void setDbGencode(byte dbGencode) {
+    this.dbGencode = dbGencode;
+  }
+
+  @JsonProperty("subjectLoc")
+  public InputBlastLocation getSubjectLoc() {
+    return this.subjectLoc;
+  }
+
+  @JsonProperty("subjectLoc")
+  public void setSubjectLoc(InputBlastLocation subjectLoc) {
+    this.subjectLoc = subjectLoc;
+  }
+
   @JsonProperty("seg")
   public InputBlastSegMask getSeg() {
     return this.seg;
@@ -363,23 +443,13 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("softMasking")
-  public boolean getSoftMasking() {
+  public Boolean getSoftMasking() {
     return this.softMasking;
   }
 
   @JsonProperty("softMasking")
   public void setSoftMasking(boolean softMasking) {
     this.softMasking = softMasking;
-  }
-
-  @JsonProperty("lcaseMasking")
-  public boolean getLcaseMasking() {
-    return this.lcaseMasking;
-  }
-
-  @JsonProperty("lcaseMasking")
-  public void setLcaseMasking(boolean lcaseMasking) {
-    this.lcaseMasking = lcaseMasking;
   }
 
   @JsonProperty("taxIds")
@@ -422,28 +492,8 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.dbHardMask = dbHardMask;
   }
 
-  @JsonProperty("qCovHspPerc")
-  public double getQCovHspPerc() {
-    return this.qCovHspPerc;
-  }
-
-  @JsonProperty("qCovHspPerc")
-  public void setQCovHspPerc(double qCovHspPerc) {
-    this.qCovHspPerc = qCovHspPerc;
-  }
-
-  @JsonProperty("maxHsps")
-  public int getMaxHsps() {
-    return this.maxHsps;
-  }
-
-  @JsonProperty("maxHsps")
-  public void setMaxHsps(int maxHsps) {
-    this.maxHsps = maxHsps;
-  }
-
   @JsonProperty("cullingLimit")
-  public int getCullingLimit() {
+  public Integer getCullingLimit() {
     return this.cullingLimit;
   }
 
@@ -453,7 +503,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("bestHitOverhang")
-  public double getBestHitOverhang() {
+  public Double getBestHitOverhang() {
     return this.bestHitOverhang;
   }
 
@@ -463,7 +513,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public double getBestHitScoreEdge() {
+  public Double getBestHitScoreEdge() {
     return this.bestHitScoreEdge;
   }
 
@@ -473,7 +523,7 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
   }
 
   @JsonProperty("subjectBesthit")
-  public boolean getSubjectBesthit() {
+  public Boolean getSubjectBesthit() {
     return this.subjectBesthit;
   }
 
@@ -482,38 +532,8 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.subjectBesthit = subjectBesthit;
   }
 
-  @JsonProperty("maxTargetSeqs")
-  public int getMaxTargetSeqs() {
-    return this.maxTargetSeqs;
-  }
-
-  @JsonProperty("maxTargetSeqs")
-  public void setMaxTargetSeqs(int maxTargetSeqs) {
-    this.maxTargetSeqs = maxTargetSeqs;
-  }
-
-  @JsonProperty("dbSize")
-  public byte getDbSize() {
-    return this.dbSize;
-  }
-
-  @JsonProperty("dbSize")
-  public void setDbSize(byte dbSize) {
-    this.dbSize = dbSize;
-  }
-
-  @JsonProperty("searchSpace")
-  public byte getSearchSpace() {
-    return this.searchSpace;
-  }
-
-  @JsonProperty("searchSpace")
-  public void setSearchSpace(byte searchSpace) {
-    this.searchSpace = searchSpace;
-  }
-
   @JsonProperty("sumStats")
-  public boolean getSumStats() {
+  public Boolean getSumStats() {
     return this.sumStats;
   }
 
@@ -522,33 +542,13 @@ public class InputTBlastxConfigImpl implements InputTBlastxConfig {
     this.sumStats = sumStats;
   }
 
-  @JsonProperty("xDropUngap")
-  public double getXDropUngap() {
-    return this.xDropUngap;
-  }
-
-  @JsonProperty("xDropUngap")
-  public void setXDropUngap(double xDropUngap) {
-    this.xDropUngap = xDropUngap;
-  }
-
   @JsonProperty("windowSize")
-  public int getWindowSize() {
+  public Integer getWindowSize() {
     return this.windowSize;
   }
 
   @JsonProperty("windowSize")
   public void setWindowSize(int windowSize) {
     this.windowSize = windowSize;
-  }
-
-  @JsonProperty("parseDeflines")
-  public boolean getParseDeflines() {
-    return this.parseDeflines;
-  }
-
-  @JsonProperty("parseDeflines")
-  public void setParseDeflines(boolean parseDeflines) {
-    this.parseDeflines = parseDeflines;
   }
 }

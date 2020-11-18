@@ -13,19 +13,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class InputBlastnDustImpl implements InputBlastnDust {
   @JsonProperty("enable")
-  private boolean enable;
+  private Boolean enable;
 
   @JsonProperty("level")
-  private short level;
+  private Short level;
 
   @JsonProperty("window")
-  private short window;
+  private Short window;
 
   @JsonProperty("linker")
-  private short linker;
+  private Short linker;
 
   @JsonProperty("enable")
-  public boolean getEnable() {
+  public Boolean getEnable() {
     return this.enable;
   }
 
@@ -35,7 +35,7 @@ public class InputBlastnDustImpl implements InputBlastnDust {
   }
 
   @JsonProperty("level")
-  public short getLevel() {
+  public Short getLevel() {
     return this.level;
   }
 
@@ -45,7 +45,7 @@ public class InputBlastnDustImpl implements InputBlastnDust {
   }
 
   @JsonProperty("window")
-  public short getWindow() {
+  public Short getWindow() {
     return this.window;
   }
 
@@ -55,7 +55,7 @@ public class InputBlastnDustImpl implements InputBlastnDust {
   }
 
   @JsonProperty("linker")
-  public short getLinker() {
+  public Short getLinker() {
     return this.linker;
   }
 
