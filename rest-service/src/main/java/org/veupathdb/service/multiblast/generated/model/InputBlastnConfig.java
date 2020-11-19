@@ -1,14 +1,16 @@
 package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;
 
+@JsonTypeName("blastn")
 @JsonDeserialize(
     as = InputBlastnConfigImpl.class
 )
 public interface InputBlastnConfig extends InputBlastConfig {
-  InputBlastTool _DISCRIMINATOR_TYPE_NAME = null;
+  InputBlastTool _DISCRIMINATOR_TYPE_NAME = InputBlastTool.BLASTN;
 
   @JsonProperty("tool")
   InputBlastTool getTool();
