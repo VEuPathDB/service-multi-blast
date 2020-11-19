@@ -172,486 +172,6 @@ securitySchemes:
 ################################################################################
 
 types:
-  InputBlastpConfig:
-    type: InputBlastConfig
-    discriminatorValue: blastp
-    additionalProperties: false
-    properties:
-      # General search options
-      task?:
-        displayName: -task=&lt;string&lt;
-        type: InputBlastpTask
-        description: |
-          Task to execute
-
-          Default = `blastp'
-      wordSize?:
-        displayName: -word_size=&lt;integer, &lt;=2&lt;
-        type: integer
-        minimum: 2
-        description: |
-          Word size of initial match.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 3     |
-          | `blastp-short` | 2     |
-          | `blastp-fast`  | 6     |
-
-          Applies to task(s): all
-      gapOpen?:
-        displayName: -gapopen=&lt;integer&lt;
-        type: integer
-        description: |
-          Cost to open a gap.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 11    |
-          | `blastp-short` | 9     |
-
-          Applies to task(s): `blastp`, `blastp-short`
-      gapExtend?:
-        displayName: -gapextend=&lt;integer&lt;
-        type: integer
-        description: |
-          Cost to extend a gap.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 1     |
-          | `blastp-short` | 1     |
-
-          Applies to task(s): `blastp`, `blastp-short`
-      matrix?:
-        displayName: -matrix=&lt;string&lt;
-        type: InputBlastpScoringMatrix
-        description: |
-          Scoring matrix name.
-
-          Default value by task:
-
-          | Task           | Value    |
-          |----------------|----------|
-          | `blastp`       | BLOSUM62 |
-          | `blastp-short` | PAM30    |
-
-          Applies to task(s): `blastp`, `blastp-short`
-      threshold?:
-        displayName: -threshold=&lt;real, &lt;=0&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 11.0  |
-          | `blastp-short` | 16.0  |
-          | `blastp-fast`  | 21.0  |
-
-          Applies to task(s): all
-      compBasedStats?:
-        displayName: -comp_based_stats=&lt;string&lt;
-        type: InputBlastCompBasedStats
-        description: |
-          Use composition-based statistics.
-
-          Default value by task:
-
-          | Task           | Value                                     |
-          |----------------|-------------------------------------------|
-          | `blastp`       | `conditional-comp-based-score-adjustment` |
-          | `blastp-short` | `none`                                    |
-          | `blastp-fast`  | `conditional-comp-based-score-adjustment` |
-
-          Applies to task(s): all
-      # BLAST-2-Sequences options
-
-      # subject?:
-      #   type: file
-      #   description: |
-      #     Subject sequence(s) to search
-
-      #     Incompatible with:
-
-      #     * db
-      #     * giList
-      #     * seqIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * ipgList
-      #     * negativeIpgList
-      #     * dbSoftMask
-      #     * dbHardMask
-      subjectLoc?:
-        displayName: -subject_loc=&lt;string, range&lt;
-        type: InputBlastLocation
-        description: |
-          Location on the subject sequence in 1-based offsets
-
-          Incompatible with:
-
-          * db
-          * giList
-          * seqIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * taxIds
-          * taxIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * ipgList
-          * negativeIpgList
-          * dbSoftMask
-          * dbHardMask
-          * remote
-      # Query filtering options
-      seg?:
-        displayName: -seg=&lt;string&lt;
-        description: |
-          Filter query sequence with SEG.
-
-          Applies to task(s): all
-        type: InputBlastSegMask
-      softMasking?:
-        displayName: -soft_masking=&lt;boolean&lt;
-        type: boolean
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Applies to task(s): `blastp`
-
-          Default = `false`
-      # Restrict search or results
-
-      # giList?:
-      #   displayName: -gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of GIs
-
-      #     Incompatible with:
-
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # seqIdList?:
-      #   displayName: -seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeGiList?:
-      #   displayName: negative_gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified GIs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeSeqIdList?:
-      #   displayName: negative_seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-      taxIds?:
-        displayName: -taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to include only the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      negativeTaxIds?:
-        displayName: -negative_taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to everything except the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIds
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      # taxIdList?:
-      #   displayName: taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to include only the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeTaxIdList?:
-      #   displayName: negative_taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      #  ipgList?:
-      #    displayName: -ipglist=&lt;string, filename&lt;
-      #    type: file
-      #    description: |
-      #      Restrict search of database to list of IPGs
-      #
-      #      Incompatible with:
-      #
-      #      * subject
-      #      * subject_loc
-      #
-      #  negativeIpgList?:
-      #    displayName: -negative_ipglist=&lt;string, filename&lt;
-      #    type: file
-      #    description: |
-      #      Restrict search of database to everything except the specified IPGs
-      #
-      #      Incompatible with:
-      #
-      #      * subject
-      #      * subject_loc
-
-      # entrezQuery?:
-      #   displayName: -entrez_query=&lt;string&lt;
-      #   type: string
-      #   description: |
-
-      #     Restrict search with the given Entrez query
-
-      #     Requires: remote
-      dbSoftMask?:
-        displayName: -db_soft_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbHardMask
-          * subject
-          * subjectLoc
-      dbHardMask?:
-        displayName: -db_hard_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbSoftMask
-          * subject
-          * subjectLoc
-      cullingLimit?:
-        displayName: -culling_limit=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          If the query range of a hit is enveloped by that of at least this many
-          higher-scoring hits, delete the hit
-
-          Incompatible with:
-
-          * bestHitOverhang
-          * bestHitScoreEdge
-      bestHitOverhang?:
-        displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      bestHitScoreEdge?:
-        displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      subjectBesthit?:
-        displayName: -subject_besthit
-        type: boolean
-        description: "Turn on best hit per subject sequence"
-      # Extension options
-      xDropGap?:
-        displayName: -xdrop_gap=&lt;real&lt;
-        type: number
-        format: double
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions
-
-          Default: `30.0`
-      xDropGapFinal?:
-        displayName: -xdrop_gap_final=&lt;real&lt;
-        type: number
-        format: double
-        description: |
-          X-dropoff value (in bits) for final gapped alignment
-
-          Dfault: `100.0`
-      windowSize?:
-        displayName: -window_size=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `blastp`       | 40    |
-          | `blastp-short` | 15    |
-          | `blastp-fast`  | 40    |
-
-          Applies to task(s): all
-      ungapped?:
-        displayName: -ungapped
-        type: boolean
-        description: |
-          Perform ungapped alignment only.
-
-          Applies to task(s): all
-      # Miscellaneous options
-      useSWTraceback?:
-        displayName: -use_sw_tback
-        type: boolean
-        description: |
-          Compute locally optimal Smith-Waterman alignments?
-  InputBlastpTask:
-    description: |
-      | Task           | Use Case                                                 |
-      |----------------|----------------------------------------------------------|
-      | `blastp`       |  for standard protein-protein comparisons                |
-      | `blastp-short` | optimized for query sequences shorter than 30 residues   |
-      | `blastp-fast`  | a faster version that uses a larger word-size per https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
-    type: string
-    enum:
-      - blastp
-      - blastp-short
-      - blastp-fast
-  InputBlastpScoringMatrix:
-    type: string
-    enum:
-      - BLOSUM45
-      - BLOSUM50
-      - BLOSUM62
-      - BLOSUM80
-      - BLOSUM90
-      - PAM30
-      - PAM70
-      - PAM250
-      - IDENTITY
   InputBlastnConfig:
     type: InputBlastConfig
     additionalProperties: false
@@ -659,7 +179,7 @@ types:
     properties:
       # Input query options
       strand?:
-        displayName: -strand=&lt;string, `both|minus|plus`&lt;
+        displayName: -strand=&lt;string, `both|minus|plus`&gt;
         description: |
           Query strand(s) to search against database/subject. Choice of both, minus,
           or plus.
@@ -670,12 +190,12 @@ types:
         type: InputBlastStrand
       # General search options
       task?:
-        displayName: -task=&lt;string&lt;
+        displayName: -task=&lt;string&gt;
         description: |
           Default value: `blastn`
         type: InputBlastnTask
       wordSize?:
-        displayName: -word_size=&lt;integer, &lt;=4&lt;
+        displayName: -word_size=&lt;integer, &gt;=4&gt;
         type: integer
         minimum: 4
         description: |
@@ -692,7 +212,7 @@ types:
 
           Applies to task(s): all
       gapOpen?:
-        displayName: -gapopen=&lt;integer&lt;
+        displayName: -gapopen=&lt;integer&gt;
         type: integer
         description: |
           Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
@@ -709,7 +229,7 @@ types:
 
           Applies to task(s): all
       gapExtend?:
-        displayName: -gapextend=&lt;integer&lt;
+        displayName: -gapextend=&lt;integer&gt;
         type: integer
         description: |
           Cost to extend a gap. This default is a function of reward/penalty value.
@@ -726,7 +246,7 @@ types:
 
           Applies to task(s): all
       penalty?:
-        displayName: -penalty=&lt;integer, &lt;=0&lt;
+        displayName: -penalty=&lt;integer, &lt;=0&gt;
         type: integer
         maximum: 0
         description: |
@@ -743,7 +263,7 @@ types:
 
           Applies to task(s): all
       reward?:
-        displayName: -reward=&lt;integer, &lt;=0&lt;
+        displayName: -reward=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -760,14 +280,14 @@ types:
 
           Applies to task(s): all
       useIndex?:
-        displayName: -use_index=&lt;boolean&lt;
+        displayName: -use_index=&lt;boolean&gt;
         type: boolean
         description: |
           Use MegaBLAST database index
 
           Default = `false`
       indexName?:
-        displayName: -index_name=&lt;string&lt;
+        displayName: -index_name=&lt;string&gt;
         type: string
         description: |
           MegaBLAST database index name (deprecated; use only for old style indices)
@@ -792,7 +312,7 @@ types:
       #     * dbSoftMask
       #     * dbHardMask
       subjectLoc?:
-        displayName: -subject_loc=&lt;string, range&lt;
+        displayName: -subject_loc=&lt;string, range&gt;
         type: InputBlastLocation
         description: |
           Location on the subject sequence in 1-based offsets
@@ -813,34 +333,34 @@ types:
           * remote
       # Query filtering options
       dust?:
-        displayName: -dust=&lt;string, dust&lt;
+        displayName: -dust=&lt;string, dust&gt;
         description: |
           Filter query sequence with dust.
 
           Applies to task(s): all
         type: InputBlastnDust
       # filteringDb?:
-      #   displayName: -filtering_db=&lt;string, dir_name&lt;
+      #   displayName: -filtering_db=&lt;string, dir_name&gt;
       #   type: string
       #     Mask query using the sequences in this database.
 
       #     Applies to task(s): all
       windowMaskerTaxid?:
-        displayName: -window_masker_taxid=&lt;integer&lt;
+        displayName: -window_masker_taxid=&lt;integer&gt;
         type: integer
         description: |
           Enable WindowMasker filtering using a Taxonomic ID.
 
           Applies to task(s): all
       # windowMaskerDb?:
-      #   displayName: -window_masker_db=&lt;string, filename&lt;
+      #   displayName: -window_masker_db=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Enable WindowMasker filtering using this repeats database.
 
       #     Applies to task(s): all
       softMasking?:
-        displayName: -soft_masking=&lt;boolean&lt;
+        displayName: -soft_masking=&lt;boolean&gt;
         type: boolean
         description: |
           Apply filtering locations as soft masks (i.e., only for finding initial
@@ -852,7 +372,7 @@ types:
       # Restrict search or results
 
       # giList?:
-      #   displayName: -gilist=&lt;string, filename&lt;
+      #   displayName: -gilist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to list of GIs
@@ -871,7 +391,7 @@ types:
       #     * subjectLoc
 
       # seqIdList?:
-      #   displayName: -seqidlist=&lt;string, filename&lt;
+      #   displayName: -seqidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to list of SeqIDs
@@ -890,7 +410,7 @@ types:
       #     * subjectLoc
 
       # negativeGiList?:
-      #   displayName: negative_gilist=&lt;string, filename&lt;
+      #   displayName: negative_gilist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified GIs
@@ -909,7 +429,7 @@ types:
       #     * subjectLoc
 
       # negativeSeqIdList?:
-      #   displayName: negative_seqidlist=&lt;string, filename&lt;
+      #   displayName: negative_seqidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified SeqIDs
@@ -927,7 +447,7 @@ types:
       #     * subject
       #     * subjectLoc
       taxIds?:
-        displayName: -taxids=&lt;string&lt;
+        displayName: -taxids=&lt;string&gt;
         type: string[]
         description: |
           Restrict search of database to include only the specified taxonomy IDs
@@ -945,7 +465,7 @@ types:
           * subject
           * subjectLoc
       negativeTaxIds?:
-        displayName: -negative_taxids=&lt;string&lt;
+        displayName: -negative_taxids=&lt;string&gt;
         type: string[]
         description: |
           Restrict search of database to everything except the specified taxonomy IDs
@@ -963,7 +483,7 @@ types:
           * subject
           * subjectLoc
       # taxIdList?:
-      #   displayName: taxidlist=&lt;string, filename&lt;
+      #   displayName: taxidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to include only the specified taxonomy IDs
@@ -982,7 +502,7 @@ types:
       #     * subjectLoc
 
       # negativeTaxIdList?:
-      #   displayName: negative_taxidlist=&lt;string, filename&lt;
+      #   displayName: negative_taxidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified taxonomy IDs
@@ -1001,7 +521,7 @@ types:
       #     * subjectLoc
 
       # entrezQuery?:
-      #   displayName: -entrez_query=&lt;string&lt;
+      #   displayName: -entrez_query=&lt;string&gt;
       #   type: string
       #   description: |
 
@@ -1009,7 +529,7 @@ types:
 
       #     Requires: remote
       dbSoftMask?:
-        displayName: -db_soft_mask=&lt;string&lt;
+        displayName: -db_soft_mask=&lt;string&gt;
         type: string
         description: |
           Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
@@ -1023,7 +543,7 @@ types:
           * subject
           * subjectLoc
       dbHardMask?:
-        displayName: -db_hard_mask=&lt;string&lt;
+        displayName: -db_hard_mask=&lt;string&gt;
         type: string
         description: |
           Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
@@ -1037,7 +557,7 @@ types:
           * subject
           * subjectLoc
       percIdentity?:
-        displayName: "-perc_identity=&lt;real, 0..100&lt;"
+        displayName: "-perc_identity=&lt;real, 0..100&gt;"
         type: number
         format: double
         minimum: 0.0
@@ -1047,7 +567,7 @@ types:
 
           Applies to task(s): all
       cullingLimit?:
-        displayName: -culling_limit=&lt;integer, &lt;=0&lt;
+        displayName: -culling_limit=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -1059,7 +579,7 @@ types:
           * bestHitOverhang
           * bestHitScoreEdge
       bestHitOverhang?:
-        displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
+        displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
         type: number
         format: double
         minimum: 0.0
@@ -1069,7 +589,7 @@ types:
 
           Incompatible with: `cullingLimit`
       bestHitScoreEdge?:
-        displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
+        displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
         type: number
         format: double
         minimum: 0.0
@@ -1084,7 +604,7 @@ types:
         description: "Turn on best hit per subject sequence"
       # Discontiguous MegaBLAST options
       templateType?:
-        displayName: -template_type=&lt;string, `coding|codingAndOptimal|optimal`&lt;
+        displayName: -template_type=&lt;string, `coding|codingAndOptimal|optimal`&gt;
         type: InputBlastnDcTemplateType
         description: |
           Discontiguous MegaBLAST template type.
@@ -1095,7 +615,7 @@ types:
 
           Requires: `templateLength`
       templateLength?:
-        displayName: -template_length=&lt;integer, `16|18|21` &lt;
+        displayName: -template_length=&lt;integer, `16|18|21` &gt;
         type: integer
         format: int8
         minimum: 16
@@ -1112,12 +632,12 @@ types:
           Default: `18`
       # Statistical options
       sumStats?:
-        displayName: -sum_stats=&lt;boolean&lt;
+        displayName: -sum_stats=&lt;boolean&gt;
         type: boolean
         description: "Use sum statistics"
       # Extension options
       xDropGap?:
-        displayName: -xdrop_gap=&lt;real&lt;
+        displayName: -xdrop_gap=&lt;real&gt;
         type: number
         format: double
         description: |
@@ -1125,7 +645,7 @@ types:
 
           Default: `30.0`
       xDropGapFinal?:
-        displayName: -xdrop_gap_final=&lt;real&lt;
+        displayName: -xdrop_gap_final=&lt;real&gt;
         type: number
         format: double
         description: |
@@ -1140,7 +660,7 @@ types:
 
           Applies to task(s): megablast
       minRawGappedScore?:
-        displayName: -min_raw_gapped_score=&lt;integer&lt;
+        displayName: -min_raw_gapped_score=&lt;integer&gt;
         type: integer
         description: |
           Minimum raw gapped score to keep an alignment in the preliminary gapped
@@ -1155,7 +675,7 @@ types:
 
           Applies to task(s): all
       windowSize?:
-        displayName: -window_size=&lt;integer, &lt;=0&lt;
+        displayName: -window_size=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -1165,7 +685,7 @@ types:
 
           Default: `40`
       offDiagonalRange?:
-        displayName: -off_diagonal_range=&lt;integer, &lt;=0&lt;
+        displayName: -off_diagonal_range=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -1219,941 +739,6 @@ types:
       - coding
       - optimal
       - both
-  InputTBlastnConfig:
-    type: InputBlastConfig
-    discriminatorValue: tblastn
-    additionalProperties: false
-    properties:
-      # General search options
-      task?:
-        displayName: -task=&lt;string&lt;
-        description: |
-          Default value: `tblastn`
-        type: InputTBlastnTask
-      wordSize?:
-        displayName: -word_size=&lt;integer, &lt;=2&lt;
-        type: integer
-        minimum: 2
-        description: |
-          Word size for wordfinder algorithm
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `tblastn`      | 3     |
-          | `tblastn-fast` | 6     |
-
-          Applies to task(s): all
-      gapOpen?:
-        displayName: -gapopen=&lt;integer&lt;
-        description: |
-          Cost to open a gap.
-
-          Default: `11`
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-      gapExtend?:
-        description: |
-          Cost to extend a gap.
-
-          Default: `1`
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-      dbGencode?:
-        displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&lt;
-        type: integer
-        format: int8
-        description: |
-          Genetic code to use to translate database/subjects (see user manual for
-          details)
-
-          Value must be equal to `33` or be in one of the following inclusive
-          ranges:
-
-          * [1..6]
-          * [9..16]
-          * [21..31]
-
-          Default Value: `1`
-
-          Applies to task(s): all
-      maxIntronLength?:
-        displayName: -max_intron_length=&lt;integer, &lt;=0&lt;
-        description: |
-          Length of the largest intron allowed in a translated nucleotide sequence
-          when linking multiple distinct alignments (a negative value disables
-          linking).
-
-          Default: 0
-
-          Applies to task(s): all
-        type: integer
-        minimum: 0
-      matrix?:
-        description: |
-          Scoring matrix name.
-
-          Applies to task(s): all
-
-          Default value: `BLOSUM62`
-        type: InputTBlastnScoringMatrix
-      threshold?:
-        displayName: -threshold=&lt;real, &lt;=0&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-
-          Default value by task:
-
-          | Task           | Value |
-          |----------------|-------|
-          | `tblastn`      | 13    |
-          | `tblastn-fast` | 21    |
-
-          Applies to task(s): all
-      compBasedStats?:
-        displayName: -comp_based_stats=&lt;string&lt;
-        description: |
-          Use composition-based statistics.
-
-          Applies to task(s): all
-
-          Default value: `conditional-comp-based-score-adjustment`
-        type: InputBlastCompBasedStats
-      # BLAST-2-Sequences options
-
-      # subject?:
-      #   type: file
-      #   description: |
-      #     Subject sequence(s) to search
-
-      #     Incompatible with:
-
-      #     * db
-      #     * giList
-      #     * seqIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * dbSoftMask
-      #     * dbHardMask
-      subjectLoc?:
-        displayName: -subject_loc=&lt;string, range&lt;
-        type: InputBlastLocation
-        description: |
-          Location on the subject sequence in 1-based offsets
-
-          Incompatible with:
-
-          * db
-          * giList
-          * seqIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * taxIds
-          * taxIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * dbSoftMask
-          * dbHardMask
-          * remote
-      # Query filtering options
-      seg?:
-        displayName: -seg=&lt;string&lt;
-        description: |
-          Filter query sequence with SEG.
-
-          Applies to task(s): all
-        type: InputBlastSegMask
-      softMasking?:
-        displayName: -soft_masking=&lt;boolean&lt;
-        type: boolean
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Default = `false`
-      # Restrict search or results
-
-      # giList?:
-      #   displayName: -gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of GIs
-
-      #     Incompatible with:
-
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # seqIdList?:
-      #   displayName: -seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeGiList?:
-      #   displayName: negative_gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified GIs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeSeqIdList?:
-      #   displayName: negative_seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-      taxIds?:
-        displayName: -taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to include only the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      negativeTaxIds?:
-        displayName: -negative_taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to everything except the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIds
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      # taxIdList?:
-      #   displayName: taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to include only the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeTaxIdList?:
-      #   displayName: negative_taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # entrezQuery?:
-      #   displayName: -entrez_query=&lt;string&lt;
-      #   type: string
-      #   description: |
-
-      #     Restrict search with the given Entrez query
-
-      #     Requires: remote
-      dbSoftMask?:
-        displayName: -db_soft_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbHardMask
-          * subject
-          * subjectLoc
-      dbHardMask?:
-        displayName: -db_hard_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbSoftMask
-          * subject
-          * subjectLoc
-      cullingLimit?:
-        displayName: -culling_limit=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          If the query range of a hit is enveloped by that of at least this many
-          higher-scoring hits, delete the hit
-
-          Incompatible with:
-
-          * bestHitOverhang
-          * bestHitScoreEdge
-      bestHitOverhang?:
-        displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      bestHitScoreEdge?:
-        displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      subjectBesthit?:
-        displayName: -subject_besthit
-        type: boolean
-        description: "Turn on best hit per subject sequence"
-      # Statistical options
-      sumStats?:
-        displayName: -sum_stats=&lt;boolean&lt;
-        type: boolean
-        description: "Use sum statistics"
-      # Extension options
-      xDropGap?:
-        displayName: -xdrop_gap=&lt;real&lt;
-        type: number
-        format: double
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions
-
-          Default: `30.0`
-      xDropGapFinal?:
-        displayName: -xdrop_gap_final=&lt;real&lt;
-        type: number
-        format: double
-        description: |
-          X-dropoff value (in bits) for final gapped alignment
-
-          Dfault: `100.0`
-      ungapped?:
-        displayName: -ungapped
-        type: boolean
-        description: |
-          Perform ungapped alignment only.
-
-          Applies to task(s): all
-      windowSize?:
-        displayName: -window_size=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm.
-
-          Default value: `40`
-
-          Applies to task(s): all
-      # Miscellaneous options
-      useSWTraceback?:
-        displayName: -use_sw_tback
-        type: boolean
-        description: |
-          Compute locally optimal Smith-Waterman alignments?
-        # PSI-TBLASTN options
-  InputTBlastnTask:
-    description: |
-      | Task           | Use Case                                                 |
-      |----------------|----------------------------------------------------------|
-      | `tblastn`      | for a standard protein-translated nucleotide comparison  |
-      | `tblastn-fast` | for a faster version with a larger word-size based on https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
-    type: string
-    enum:
-      - tblastn
-      - tblastn-fast
-  InputTBlastnScoringMatrix:
-    type: string
-    enum:
-      - BLOSUM45
-      - BLOSUM50
-      - BLOSUM62
-      - BLOSUM80
-      - BLOSUM90
-      - PAM30
-      - PAM70
-      - PAM250
-      - IDENTITY
-  NewJobPostRequestJSON:
-    type: object
-    additionalProperties: false
-    properties:
-      site:
-        type: string
-      organism:
-      target-type:
-        description: |
-          Target file name.  Maps to the `--db` flag for the blast tools.
-        type: string
-      config:
-        description: |
-          Blast tool configuration.
-
-          Must be one of the following implementation types:
-
-          - [InputBlastnConfig](#type:InputBlastnConfig)
-          - [InputBlastpConfig](#type:InputBlastpConfig)
-          - [InputBlastxConfig](#type:InputBlastxConfig)
-          - [InputTBlastnConfig](#type:InputTBlastnConfig)
-          - [InputTBlastxConfig](#type:InputTBlastxConfig)
-        type: InputBlastConfig
-      description?:
-        description: |
-          User provided description of the job.
-        type: string
-  NewJobPostRequestMultipart:
-    type: object
-    additionalProperties: false
-    properties:
-      query?: file
-      # subject?: file
-      properties: NewJobPostRequestJSON
-  NewJobPostResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      jobId:
-        type: integer
-        format: int32
-        minimum: 1
-  MetaResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      targets: OutputSiteListing
-  GetJobResponse:
-    description: |
-      Details about a specific job, it's configuration, and it's current status.
-    type: object
-    additionalProperties: false
-    properties:
-      id:
-        type: integer
-        format: int32
-        minimum: 1
-      status: IOJobStatus
-      config: InputBlastConfig
-  OutputSiteListing:
-    type: object
-    additionalProperties: false
-    properties:
-      "^[A-Za-z0-9_- ]+$":
-        type: array
-        items: OutputListOrganism
-  OutputListOrganism:
-    type: object
-    additionalProperties: false
-    properties:
-      name: string
-      blast:
-        type: array
-        items: string
-        minItems: 1
-        uniqueItems: true
-  IOJobStatus:
-    type: string
-    enum:
-      - queued
-      - in-progress
-      - completed
-      - errored
-  InputTBlastxConfig:
-    type: InputBlastConfig
-    discriminatorValue: tblastx
-    additionalProperties: false
-    properties:
-      # Input query options
-      strand?:
-        displayName: -strand=&lt;string, `both|minus|plus`&lt;
-        description: |
-          Query strand(s) to search against database/subject. Choice of both, minus,
-          or plus.
-
-          Applies to task(s): all
-
-          Default value: `both`
-        type: InputBlastStrand
-      queryGeneticCode:
-        displayName: -query_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&lt;
-        description: |
-          Genetic code to translate query, see
-          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes for details
-
-          Value must be equal to `33` or be in one of the following inclusive
-          ranges:
-
-          * [1..6]
-          * [9..16]
-          * [21..31]
-
-          Default Value: `1`
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 1
-      # General search options
-      wordSize?:
-        description: |
-          Word size for wordfinder algorithm.
-
-          Applies to task(s): all
-        type: integer
-        format: int8
-        minimum: 2
-      maxIntronLength?:
-        displayName: -max_intron_length=&lt;integer, &lt;=0&lt;
-        description: |
-          Length of the largest intron allowed in a translated nucleotide sequence
-          when linking multiple distinct alignments (a negative value disables
-          linking).
-
-          Default: 0
-
-          Applies to task(s): all
-        type: integer
-        minimum: 0
-      matrix?:
-        displayName: -matrix=&lt;string&lt;
-        description: |
-          Scoring matrix name.
-
-          Default value: `BLOSUM62`
-        type: InputTBlastxScoringMatrix
-      threshold?:
-        displayName: -threshold=&lt;real, &lt;=0&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        description: |
-          Minimum score to add a word to the BLAST lookup table.
-
-          Default value: `13`
-          Applies to task(s): all
-      dbGencode?:
-        displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&lt;
-        type: integer
-        format: int8
-        minimum: 1
-        maximum: 33
-        description: |
-          Genetic code to use to translate database/subjects (see user manual for
-          details)
-
-          Value must be equal to `33` or be in one of the following inclusive
-          ranges:
-
-          * [1..6]
-          * [9..16]
-          * [21..31]
-
-          Default Value: `1`
-
-          Applies to task(s): all
-      # BLAST-2-Sequences options
-
-      # subject?:
-      #   type: file
-      #   description: |
-      #     Subject sequence(s) to search
-
-      #     Incompatible with:
-
-      #     * db
-      #     * giList
-      #     * seqIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * dbSoftMask
-      #     * dbHardMask
-      subjectLoc?:
-        displayName: -subject_loc=&lt;string, range&lt;
-        type: InputBlastLocation
-        description: |
-          Location on the subject sequence in 1-based offsets
-
-          Incompatible with:
-
-          * db
-          * giList
-          * seqIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * taxIds
-          * taxIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * dbSoftMask
-          * dbHardMask
-          * remote
-      # Query filtering options
-      seg?:
-        displayName: -seg=&lt;string&lt;
-        description: |
-          Filter query sequence with SEG.
-
-          Default: `"12 2.2 2.5"`
-
-          Applies to task(s): all
-        type: InputBlastSegMask
-      softMasking?:
-        displayName: -soft_masking=&lt;boolean&lt;
-        type: boolean
-        description: |
-          Apply filtering locations as soft masks (i.e., only for finding initial
-          matches).
-
-          Default = `false`
-      # Restrict search or results
-
-      # giList?:
-      #   displayName: -gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of GIs
-
-      #     Incompatible with:
-
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # seqIdList?:
-      #   displayName: -seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to list of SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeGiList?:
-      #   displayName: negative_gilist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified GIs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeSeqIdList?:
-      #   displayName: negative_seqidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified SeqIDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-      taxIds?:
-        displayName: -taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to include only the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIds
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      negativeTaxIds?:
-        displayName: -negative_taxids=&lt;string&lt;
-        type: string[]
-        description: |
-          Restrict search of database to everything except the specified taxonomy IDs
-
-          Incompatible with:
-
-          * giList
-          * seqIdList
-          * taxIds
-          * taxIdList
-          * negativeGiList
-          * negativeSeqIdList
-          * negativeTaxIdList
-          * remote
-          * subject
-          * subjectLoc
-      # taxIdList?:
-      #   displayName: taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to include only the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * negativeTaxIdList
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # negativeTaxIdList?:
-      #   displayName: negative_taxidlist=&lt;string, filename&lt;
-      #   type: file
-      #   description: |
-      #     Restrict search of database to everything except the specified taxonomy IDs
-
-      #     Incompatible with:
-
-      #     * giList
-      #     * seqIdList
-      #     * taxIds
-      #     * taxIdList
-      #     * negativeGiList
-      #     * negativeSeqIdList
-      #     * negativeTaxIds
-      #     * remote
-      #     * subject
-      #     * subjectLoc
-
-      # entrezQuery?:
-      #   displayName: -entrez_query=&lt;string&lt;
-      #   type: string
-      #   description: |
-
-      #     Restrict search with the given Entrez query
-
-      #     Requires: remote
-      dbSoftMask?:
-        displayName: -db_soft_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
-          only for finding initial matches).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbHardMask
-          * subject
-          * subjectLoc
-      dbHardMask?:
-        displayName: -db_hard_mask=&lt;string&lt;
-        type: string
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
-          sequence is masked for all phases of search).
-
-          Applies to task(s): all
-
-          Incompatible with:
-
-          * dbSoftMask
-          * subject
-          * subjectLoc
-      cullingLimit?:
-        displayName: -culling_limit=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          If the query range of a hit is enveloped by that of at least this many
-          higher-scoring hits, delete the hit
-
-          Incompatible with:
-
-          * bestHitOverhang
-          * bestHitScoreEdge
-      bestHitOverhang?:
-        displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      bestHitScoreEdge?:
-        displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 0.5
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with: `cullingLimit`
-      subjectBesthit?:
-        displayName: -subject_besthit
-        type: boolean
-        description: "Turn on best hit per subject sequence"
-      # Statistical options
-      sumStats?:
-        displayName: -sum_stats=&lt;boolean&lt;
-        type: boolean
-        description: "Use sum statistics"
-      # Extension options
-      windowSize?:
-        displayName: -window_size=&lt;integer, &lt;=0&lt;
-        type: integer
-        minimum: 0
-        description: |
-          Multiple hits window size, use 0 to specify 1-hit algorithm.
-  InputTBlastxScoringMatrix:
-    type: string
-    enum:
-      - BLOSUM45
-      - BLOSUM50
-      - BLOSUM62
-      - BLOSUM80
-      - BLOSUM90
-      - PAM250
-      - PAM30
-      - PAM70
   InputBlastxConfig:
     type: InputBlastConfig
     discriminatorValue: blastx
@@ -2161,7 +746,7 @@ types:
     properties:
       # Input query options
       strand?:
-        displayName: -strand=&lt;string, `both|minus|plus`&lt;
+        displayName: -strand=&lt;string, `both|minus|plus`&gt;
         description: |
           Query strand(s) to search against database/subject. Choice of both, minus,
           or plus.
@@ -2171,7 +756,7 @@ types:
           Default value: `both`
         type: InputBlastStrand
       queryGeneticCode:
-        displayName: -query_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&lt;
+        displayName: -query_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&gt;
         description: |
           Genetic code to translate query, see
           ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
@@ -2191,7 +776,7 @@ types:
         minimum: 1
       # General search options
       task?:
-        displayName: -task=&lt;string&lt;
+        displayName: -task=&lt;string&gt;
         type: InputBlastxTask
         description: |
           Default value: `blastx`
@@ -2211,7 +796,7 @@ types:
         format: int8
         minimum: 2
       gapOpen?:
-        displayName: -gapopen=&lt;integer&lt;
+        displayName: -gapopen=&lt;integer&gt;
         description: |
           Cost to open a gap.
 
@@ -2230,7 +815,7 @@ types:
         type: integer
         format: int8
       maxIntronLength?:
-        displayName: -max_intron_length=&lt;integer, &lt;=0&lt;
+        displayName: -max_intron_length=&lt;integer, &gt;=0&gt;
         description: |
           Length of the largest intron allowed in a translated nucleotide sequence
           when linking multiple distinct alignments (a negative value disables
@@ -2250,7 +835,7 @@ types:
           Default value: `BLOSUM62`
         type: InputBlastxScoringMatrix
       threshold?:
-        displayName: -threshold=&lt;real, &lt;=0&lt;
+        displayName: -threshold=&lt;real, &gt;=0&gt;
         type: number
         format: double
         minimum: 0.0
@@ -2266,7 +851,7 @@ types:
 
           Applies to task(s): all
       compBasedStats?:
-        displayName: -comp_based_stats=&lt;string&lt;
+        displayName: -comp_based_stats=&lt;string&gt;
         description: |
           Use composition-based statistics.
 
@@ -2297,7 +882,7 @@ types:
       #     * dbSoftMask
       #     * dbHardMask
       subjectLoc?:
-        displayName: -subject_loc=&lt;string, range&lt;
+        displayName: -subject_loc=&lt;string, range&gt;
         type: InputBlastLocation
         description: |
           Location on the subject sequence in 1-based offsets
@@ -2320,14 +905,14 @@ types:
           * remote
       # Query filtering options
       seg?:
-        displayName: -seg=&lt;string&lt;
+        displayName: -seg=&lt;string&gt;
         description: |
           Filter query sequence with SEG.
 
           Applies to task(s): all
         type: InputBlastSegMask
       softMasking?:
-        displayName: -soft_masking=&lt;boolean&lt;
+        displayName: -soft_masking=&lt;boolean&gt;
         type: boolean
         description: |
           Apply filtering locations as soft masks (i.e., only for finding initial
@@ -2337,7 +922,7 @@ types:
       # Restrict search or results
 
       # giList?:
-      #   displayName: -gilist=&lt;string, filename&lt;
+      #   displayName: -gilist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to list of GIs
@@ -2356,7 +941,7 @@ types:
       #     * subjectLoc
 
       # seqIdList?:
-      #   displayName: -seqidlist=&lt;string, filename&lt;
+      #   displayName: -seqidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to list of SeqIDs
@@ -2375,7 +960,7 @@ types:
       #     * subjectLoc
 
       # negativeGiList?:
-      #   displayName: negative_gilist=&lt;string, filename&lt;
+      #   displayName: negative_gilist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified GIs
@@ -2394,7 +979,7 @@ types:
       #     * subjectLoc
 
       # negativeSeqIdList?:
-      #   displayName: negative_seqidlist=&lt;string, filename&lt;
+      #   displayName: negative_seqidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified SeqIDs
@@ -2412,7 +997,7 @@ types:
       #     * subject
       #     * subjectLoc
       taxIds?:
-        displayName: -taxids=&lt;string&lt;
+        displayName: -taxids=&lt;string&gt;
         type: string[]
         description: |
           Restrict search of database to include only the specified taxonomy IDs
@@ -2430,7 +1015,7 @@ types:
           * subject
           * subjectLoc
       negativeTaxIds?:
-        displayName: -negative_taxids=&lt;string&lt;
+        displayName: -negative_taxids=&lt;string&gt;
         type: string[]
         description: |
           Restrict search of database to everything except the specified taxonomy IDs
@@ -2448,7 +1033,7 @@ types:
           * subject
           * subjectLoc
       # taxIdList?:
-      #   displayName: taxidlist=&lt;string, filename&lt;
+      #   displayName: taxidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to include only the specified taxonomy IDs
@@ -2467,7 +1052,7 @@ types:
       #     * subjectLoc
 
       # negativeTaxIdList?:
-      #   displayName: negative_taxidlist=&lt;string, filename&lt;
+      #   displayName: negative_taxidlist=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Restrict search of database to everything except the specified taxonomy IDs
@@ -2486,7 +1071,7 @@ types:
       #     * subjectLoc
 
       #  ipgList?:
-      #    displayName: -ipglist=&lt;string, filename&lt;
+      #    displayName: -ipglist=&lt;string, filename&gt;
       #    type: file
       #    description: |
       #      Restrict search of database to list of IPGs
@@ -2497,7 +1082,7 @@ types:
       #      * subject_loc
       #
       #  negativeIpgList?:
-      #    displayName: -negative_ipglist=&lt;string, filename&lt;
+      #    displayName: -negative_ipglist=&lt;string, filename&gt;
       #    type: file
       #    description: |
       #      Restrict search of database to everything except the specified IPGs
@@ -2508,7 +1093,7 @@ types:
       #      * subject_loc
 
       # entrezQuery?:
-      #   displayName: -entrez_query=&lt;string&lt;
+      #   displayName: -entrez_query=&lt;string&gt;
       #   type: string
       #   description: |
 
@@ -2516,7 +1101,7 @@ types:
 
       #     Requires: remote
       dbSoftMask?:
-        displayName: -db_soft_mask=&lt;string&lt;
+        displayName: -db_soft_mask=&lt;string&gt;
         type: string
         description: |
           Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
@@ -2530,7 +1115,7 @@ types:
           * subject
           * subjectLoc
       dbHardMask?:
-        displayName: -db_hard_mask=&lt;string&lt;
+        displayName: -db_hard_mask=&lt;string&gt;
         type: string
         description: |
           Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
@@ -2544,7 +1129,7 @@ types:
           * subject
           * subjectLoc
       cullingLimit?:
-        displayName: -culling_limit=&lt;integer, &lt;=0&lt;
+        displayName: -culling_limit=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -2556,7 +1141,7 @@ types:
           * bestHitOverhang
           * bestHitScoreEdge
       bestHitOverhang?:
-        displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
+        displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
         type: number
         format: double
         minimum: 0.0
@@ -2566,7 +1151,7 @@ types:
 
           Incompatible with: `cullingLimit`
       bestHitScoreEdge?:
-        displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
+        displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
         type: number
         format: double
         minimum: 0.0
@@ -2581,12 +1166,12 @@ types:
         description: "Turn on best hit per subject sequence"
       # Statistical options
       sumStats?:
-        displayName: -sum_stats=&lt;boolean&lt;
+        displayName: -sum_stats=&lt;boolean&gt;
         type: boolean
         description: "Use sum statistics"
       # Extension options
       xDropGap?:
-        displayName: -xdrop_gap=&lt;real&lt;
+        displayName: -xdrop_gap=&lt;real&gt;
         type: number
         format: double
         description: |
@@ -2594,7 +1179,7 @@ types:
 
           Default: `30.0`
       xDropGapFinal?:
-        displayName: -xdrop_gap_final=&lt;real&lt;
+        displayName: -xdrop_gap_final=&lt;real&gt;
         type: number
         format: double
         description: |
@@ -2602,7 +1187,7 @@ types:
 
           Dfault: `100.0`
       windowSize?:
-        displayName: -window_size=&lt;integer, &lt;=0&lt;
+        displayName: -window_size=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -2645,6 +1230,574 @@ types:
       - PAM30
       - PAM70
       - PAM250
+  InputBlastpConfig:
+    type: InputBlastConfig
+    discriminatorValue: blastp
+    additionalProperties: false
+    properties:
+      # General search options
+      task?:
+        displayName: -task=&lt;string&gt;
+        type: InputBlastpTask
+        description: |
+          Task to execute
+
+          Default = `blastp'
+      wordSize?:
+        displayName: -word_size=&lt;integer, &gt;=2&gt;
+        type: integer
+        minimum: 2
+        description: |
+          Word size of initial match.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 3     |
+          | `blastp-short` | 2     |
+          | `blastp-fast`  | 6     |
+
+          Applies to task(s): all
+      gapOpen?:
+        displayName: -gapopen=&lt;integer&gt;
+        type: integer
+        description: |
+          Cost to open a gap.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 11    |
+          | `blastp-short` | 9     |
+
+          Applies to task(s): `blastp`, `blastp-short`
+      gapExtend?:
+        displayName: -gapextend=&lt;integer&gt;
+        type: integer
+        description: |
+          Cost to extend a gap.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 1     |
+          | `blastp-short` | 1     |
+
+          Applies to task(s): `blastp`, `blastp-short`
+      matrix?:
+        displayName: -matrix=&lt;string&gt;
+        type: InputBlastpScoringMatrix
+        description: |
+          Scoring matrix name.
+
+          Default value by task:
+
+          | Task           | Value    |
+          |----------------|----------|
+          | `blastp`       | BLOSUM62 |
+          | `blastp-short` | PAM30    |
+
+          Applies to task(s): `blastp`, `blastp-short`
+      threshold?:
+        displayName: -threshold=&lt;real, &gt;=0&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        description: |
+          Minimum score to add a word to the BLAST lookup table.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 11.0  |
+          | `blastp-short` | 16.0  |
+          | `blastp-fast`  | 21.0  |
+
+          Applies to task(s): all
+      compBasedStats?:
+        displayName: -comp_based_stats=&lt;string&gt;
+        type: InputBlastCompBasedStats
+        description: |
+          Use composition-based statistics.
+
+          Default value by task:
+
+          | Task           | Value                                     |
+          |----------------|-------------------------------------------|
+          | `blastp`       | `conditional-comp-based-score-adjustment` |
+          | `blastp-short` | `none`                                    |
+          | `blastp-fast`  | `conditional-comp-based-score-adjustment` |
+
+          Applies to task(s): all
+      # BLAST-2-Sequences options
+
+      # subject?:
+      #   type: file
+      #   description: |
+      #     Subject sequence(s) to search
+
+      #     Incompatible with:
+
+      #     * db
+      #     * giList
+      #     * seqIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * ipgList
+      #     * negativeIpgList
+      #     * dbSoftMask
+      #     * dbHardMask
+      subjectLoc?:
+        displayName: -subject_loc=&lt;string, range&gt;
+        type: InputBlastLocation
+        description: |
+          Location on the subject sequence in 1-based offsets
+
+          Incompatible with:
+
+          * db
+          * giList
+          * seqIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * taxIds
+          * taxIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * ipgList
+          * negativeIpgList
+          * dbSoftMask
+          * dbHardMask
+          * remote
+      # Query filtering options
+      seg?:
+        displayName: -seg=&lt;string&gt;
+        description: |
+          Filter query sequence with SEG.
+
+          Applies to task(s): all
+        type: InputBlastSegMask
+      softMasking?:
+        displayName: -soft_masking=&lt;boolean&gt;
+        type: boolean
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Applies to task(s): `blastp`
+
+          Default = `false`
+      # Restrict search or results
+
+      # giList?:
+      #   displayName: -gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of GIs
+
+      #     Incompatible with:
+
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # seqIdList?:
+      #   displayName: -seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeGiList?:
+      #   displayName: negative_gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified GIs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeSeqIdList?:
+      #   displayName: negative_seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+      taxIds?:
+        displayName: -taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to include only the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      negativeTaxIds?:
+        displayName: -negative_taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to everything except the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIds
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      # taxIdList?:
+      #   displayName: taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to include only the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeTaxIdList?:
+      #   displayName: negative_taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      #  ipgList?:
+      #    displayName: -ipglist=&lt;string, filename&gt;
+      #    type: file
+      #    description: |
+      #      Restrict search of database to list of IPGs
+      #
+      #      Incompatible with:
+      #
+      #      * subject
+      #      * subject_loc
+      #
+      #  negativeIpgList?:
+      #    displayName: -negative_ipglist=&lt;string, filename&gt;
+      #    type: file
+      #    description: |
+      #      Restrict search of database to everything except the specified IPGs
+      #
+      #      Incompatible with:
+      #
+      #      * subject
+      #      * subject_loc
+
+      # entrezQuery?:
+      #   displayName: -entrez_query=&lt;string&gt;
+      #   type: string
+      #   description: |
+
+      #     Restrict search with the given Entrez query
+
+      #     Requires: remote
+      dbSoftMask?:
+        displayName: -db_soft_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbHardMask
+          * subject
+          * subjectLoc
+      dbHardMask?:
+        displayName: -db_hard_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbSoftMask
+          * subject
+          * subjectLoc
+      cullingLimit?:
+        displayName: -culling_limit=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+
+          Incompatible with:
+
+          * bestHitOverhang
+          * bestHitScoreEdge
+      bestHitOverhang?:
+        displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 0.5
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      bestHitScoreEdge?:
+        displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 0.5
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      subjectBesthit?:
+        displayName: -subject_besthit
+        type: boolean
+        description: "Turn on best hit per subject sequence"
+      # Extension options
+      xDropGap?:
+        displayName: -xdrop_gap=&lt;real&gt;
+        type: number
+        format: double
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions
+
+          Default: `30.0`
+      xDropGapFinal?:
+        displayName: -xdrop_gap_final=&lt;real&gt;
+        type: number
+        format: double
+        description: |
+          X-dropoff value (in bits) for final gapped alignment
+
+          Dfault: `100.0`
+      windowSize?:
+        displayName: -window_size=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm.
+
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `blastp`       | 40    |
+          | `blastp-short` | 15    |
+          | `blastp-fast`  | 40    |
+
+          Applies to task(s): all
+      ungapped?:
+        displayName: -ungapped
+        type: boolean
+        description: |
+          Perform ungapped alignment only.
+
+          Applies to task(s): all
+      # Miscellaneous options
+      useSWTraceback?:
+        displayName: -use_sw_tback
+        type: boolean
+        description: |
+          Compute locally optimal Smith-Waterman alignments?
+  InputBlastpTask:
+    description: |
+      | Task           | Use Case                                                 |
+      |----------------|----------------------------------------------------------|
+      | `blastp`       |  for standard protein-protein comparisons                |
+      | `blastp-short` | optimized for query sequences shorter than 30 residues   |
+      | `blastp-fast`  | a faster version that uses a larger word-size per https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
+    type: string
+    enum:
+      - blastp
+      - blastp-short
+      - blastp-fast
+  InputBlastpScoringMatrix:
+    type: string
+    enum:
+      - BLOSUM45
+      - BLOSUM50
+      - BLOSUM62
+      - BLOSUM80
+      - BLOSUM90
+      - PAM30
+      - PAM70
+      - PAM250
+      - IDENTITY
+  InputBlastCompBasedStats:
+    description: |
+      | Value                                     | Description                    |
+      |-------------------------------------------|--------------------------------|
+      | none                                      | no composition-based statistics |
+      | comp-based-stats                          | Composition-based statistics as in NAR 29:2994-3005, 2001 |
+      | conditional-comp-based-score-adjustment   | Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties |
+      | unconditional-comp-based-score-adjustment | Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally |
+    type: string
+    enum:
+      - none
+      - comp-based-stats
+      - conditional-comp-based-score-adjustment
+      - unconditional-comp-based-score-adjustment
+  InputBlastScoringMatrix:
+    type: string
+    enum:
+      - BLOSUM45
+      - BLOSUM50
+      - BLOSUM62
+      - BLOSUM80
+      - BLOSUM90
+      - PAM250
+      - PAM30
+      - PAM70
+  InputBlastSegMask:
+    type: object
+    additionalProperties: false
+    properties:
+      enabled?:
+        description: |
+          Enable Seg Mask
+
+          Default: `false`
+        type: boolean
+      window?:
+        description: |
+          SEG window
+
+          Default: `12`
+        type: integer
+        format: int32
+        minimum: 1
+      locut?:
+        description: |
+          SEG locut
+
+          Default: `2.2`
+        type: number
+        format: double
+        minimum: 0.0
+      hicut?:
+        description: |
+          SEG hicut
+
+          Default: `2.5`
+        type: number
+        format: double
+        minimum: 0.0
+  InputBlastStrand:
+    type: string
+    enum:
+      - plus
+      - minus
+      - both
+  InputHitSorting:
+    type: string
+    enum:
+      - by-eval
+      - by-bit-score
+      - by-total-score
+      - by-percent-identity
+      - by-query-coverage
+  InputHSPSorting:
+    type: string
+    enum:
+      - by-hsp-evalue
+      - by-hsp-score
+      - by-hsp-query-start
+      - by-hsp-percent-identity
+      - by-hsp-subject-start
+  IOJobStatus:
+    type: string
+    enum:
+      - queued
+      - in-progress
+      - completed
+      - errored
   InputBlastConfig:
     type: object
     additionalProperties: false
@@ -2677,7 +1830,7 @@ types:
 
       # Input query options
       query?:
-        displayName: -query=&lt;string, filename&lt;
+        displayName: -query=&lt;string, filename&gt;
         type: string
         description: |
           When posting a job using `application/json` this field is required.
@@ -2685,14 +1838,14 @@ types:
           When posting a job using `multipart/form-data` either this field _or_ the
           query file field must be specified.
       queryLoc?:
-        displayName: -query_loc=&lt;string, range&lt;
+        displayName: -query_loc=&lt;string, range&gt;
         description: |
           Location on the query sequence.
         type: InputBlastLocation
       # General search options
 
       # db?:
-      #   displayName: "-db=&lt;string, dir_name&lt;"
+      #   displayName: "-db=&lt;string, dir_name&gt;"
       #   type: string
       #   description: |
       #     BLAST database name
@@ -2700,14 +1853,14 @@ types:
       #     Incompatible with:  subject, subjectLoc
 
       # out?:
-      #   displayName: "-out=&lt;string, filename&lt;"
+      #   displayName: "-out=&lt;string, filename&gt;"
       #   type: string
       #   description: |
       #     Output file name
 
       #     Default = `-`
       eValue?:
-        displayName: -evalue=&lt;real&lt;
+        displayName: -evalue=&lt;real&gt;
         type: string
         pattern: /^\d+(?:\.\d+)?(?:[eE]-?\d+)?$/
         description: |
@@ -2718,26 +1871,26 @@ types:
           Default = `10`
       # Formatting options
       outFormat?:
-        displayName: -outfmt=&lt;string, format&lt;
+        displayName: -outfmt=&lt;string, format&gt;
         type: InputBlastOutFmt
       showGIs?:
         displayName: -show_gis
         type: boolean
         description: "Show NCBI GIs in deflines?"
       numDescriptions?:
-        displayName: -num_descriptions=&lt;integer, &lt;=0&lt;
+        displayName: -num_descriptions=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
           Number of database sequences to show one-line descriptions for
 
-          Not applicable for outFormat &lt; 4
+          Not applicable for outFormat &gt; 4
 
           Default = `500`
 
           Incompatible with: `maxTargetSeqs`
       numAlignments?:
-        displayName: -num_alignments=&lt;integer, &lt;=0&lt;
+        displayName: -num_alignments=&lt;integer, &gt;=0&gt;
         type: integer
         minimum: 0
         description: |
@@ -2747,13 +1900,13 @@ types:
 
           Incompatible with: `maxTargetSeqs`
       lineLength?:
-        displayName: -line_length=&lt;integer, &lt;=1&lt;
+        displayName: -line_length=&lt;integer, &gt;=1&gt;
         type: integer
         minimum: 1
         description: |
           Line length for formatting alignments
 
-          Not applicable for outFormat &lt; 4
+          Not applicable for outFormat &gt; 4
 
           Default = `60`
         #  html?:
@@ -2761,13 +1914,13 @@ types:
         #    type: boolean
         #    description: "Produce HTML output?"
       sortHits?:
-        displayName: -sorthits=&lt;integer, (&lt;=0 and &lt;=4)&lt;
+        displayName: -sorthits=&lt;integer, (&gt;=0 and &lt;=4)&gt;
         # TODO: translate this
         description: |
           Only applies to output formats 0-4.
         type: InputHitSorting
       sortHSPs?:
-        displayName: -sorthsps=&lt;integer, (&lt;=0 and &lt;=4)&lt;
+        displayName: -sorthsps=&lt;integer, (&gt;=0 and &lt;=4)&gt;
         description: Only applies to pairwise output format.
         type: InputHSPSorting
       # Query filtering options
@@ -2778,14 +1931,14 @@ types:
           Use lower case filtering in query and subject sequence(s).
       # Restrict search or results
       qCovHSPPerc?:
-        displayName: -qcov_hsp_perc=&lt;real, 0..100&lt;
+        displayName: -qcov_hsp_perc=&lt;real, 0..100&gt;
         type: number
         format: double
         minimum: 0.0
         maximum: 100.0
         description: "Percent query coverage per hsp"
       maxHSPs?:
-        displayName: -max_hsps=&lt;integer, &lt;=1&lt;
+        displayName: -max_hsps=&lt;integer, &gt;=1&gt;
         type: integer
         minimum: 1
         description: |
@@ -2795,13 +1948,13 @@ types:
           set, BLAST shows all HSPs meeting the expect value criteria. Setting it
           to one will show only the best HSP for every query-subject pair
       maxTargetSeqs?:
-        displayName: -max_target_seqs=&lt;integer, &lt;=1&lt;
+        displayName: -max_target_seqs=&lt;integer, &gt;=1&gt;
         type: integer
         minimum: 1
         description: |
           Number of aligned sequences to keep. Use with report formats that do not
           have separate definition line and alignment sections such as tabular (all
-          outfmt &lt; 4). Not compatible with numDescriptions or numAlignments. Ties
+          outfmt &gt; 4). Not compatible with numDescriptions or numAlignments. Ties
           are broken by order of sequences in the database.
           Default = `500`
 
@@ -2811,12 +1964,12 @@ types:
           * numAlignments
       # Statistical options
       dbSize?:
-        displayName: -dbsize=&lt;int8&lt;
+        displayName: -dbsize=&lt;int8&gt;
         type: integer
         format: int8
         description: "Effective length of the database."
       searchSpace?:
-        displayName: -searchsp=&lt;int8, &lt;=0&lt;
+        displayName: -searchsp=&lt;int8, &gt;=0&gt;
         type: integer
         format: int8
         minimum: 0
@@ -2824,7 +1977,7 @@ types:
       # Search strategy options
 
       # importSearchStrategy?:
-      #   displayName: -import_search_strategy=&lt;string, filename&lt;
+      #   displayName: -import_search_strategy=&lt;string, filename&gt;
       #   type: file
       #   description: |
       #     Search strategy to use
@@ -2832,7 +1985,7 @@ types:
       #     Incompatible with: `exportSearchStrategy`
 
       # exportSearchStrategy?:
-      #   displayName: -export_search_strategy=&lt;string, filename&lt;
+      #   displayName: -export_search_strategy=&lt;string, filename&gt;
       #   type: string
       #   description:
       #     File name to record the search strategy used
@@ -2841,7 +1994,7 @@ types:
 
       # Extension options
       xDropUngap?:
-        displayName: -xdrop_ungap=&lt;real&lt;
+        displayName: -xdrop_ungap=&lt;real&gt;
         type: number
         format: double
         description: |
@@ -2904,7 +2057,7 @@ types:
       | `sblastnames` | unique Subject Blast Name(s), separated by a ';' (in alphabetical order) |
       | `sskingdoms`  | unique Subject Super Kingdom(s), separated by a ';' (in alphabetical order) |
       | `stitle`      | Subject Title |
-      | `salltitles`  | All Subject Title(s), separated by a '&lt;&lt;' |
+      | `salltitles`  | All Subject Title(s), separated by a '&lt;&gt;' |
       | `sstrand`     | Subject Strand |
       | `qcovs`       | Query Coverage Per Subject (for all HSPs) |
       | `qcovhsp`     | Query Coverage Per HSP |
@@ -3086,21 +2239,393 @@ types:
       - blastx
       - tblastn
       - tblastx
-  InputBlastCompBasedStats:
-    description: |
-      | Value                                     | Description                    |
-      |-------------------------------------------|--------------------------------|
-      | none                                      | no composition-based statistics |
-      | comp-based-stats                          | Composition-based statistics as in NAR 29:2994-3005, 2001 |
-      | conditional-comp-based-score-adjustment   | Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties |
-      | unconditional-comp-based-score-adjustment | Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally |
-    type: string
-    enum:
-      - none
-      - comp-based-stats
-      - conditional-comp-based-score-adjustment
-      - unconditional-comp-based-score-adjustment
-  InputBlastScoringMatrix:
+  InputTBlastxConfig:
+    type: InputBlastConfig
+    discriminatorValue: tblastx
+    additionalProperties: false
+    properties:
+      # Input query options
+      strand?:
+        displayName: -strand=&lt;string, `both|minus|plus`&gt;
+        description: |
+          Query strand(s) to search against database/subject. Choice of both, minus,
+          or plus.
+
+          Applies to task(s): all
+
+          Default value: `both`
+        type: InputBlastStrand
+      queryGeneticCode:
+        displayName: -query_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&gt;
+        description: |
+          Genetic code to translate query, see
+          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes for details
+
+          Value must be equal to `33` or be in one of the following inclusive
+          ranges:
+
+          * [1..6]
+          * [9..16]
+          * [21..31]
+
+          Default Value: `1`
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 1
+      # General search options
+      wordSize?:
+        description: |
+          Word size for wordfinder algorithm.
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+        minimum: 2
+      maxIntronLength?:
+        displayName: -max_intron_length=&lt;integer, &gt;=0&gt;
+        description: |
+          Length of the largest intron allowed in a translated nucleotide sequence
+          when linking multiple distinct alignments (a negative value disables
+          linking).
+
+          Default: 0
+
+          Applies to task(s): all
+        type: integer
+        minimum: 0
+      matrix?:
+        displayName: -matrix=&lt;string&gt;
+        description: |
+          Scoring matrix name.
+
+          Default value: `BLOSUM62`
+        type: InputTBlastxScoringMatrix
+      threshold?:
+        displayName: -threshold=&lt;real, &gt;=0&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        description: |
+          Minimum score to add a word to the BLAST lookup table.
+
+          Default value: `13`
+          Applies to task(s): all
+      dbGencode?:
+        displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&gt;
+        type: integer
+        format: int8
+        minimum: 1
+        maximum: 33
+        description: |
+          Genetic code to use to translate database/subjects (see user manual for
+          details)
+
+          Value must be equal to `33` or be in one of the following inclusive
+          ranges:
+
+          * [1..6]
+          * [9..16]
+          * [21..31]
+
+          Default Value: `1`
+
+          Applies to task(s): all
+      # BLAST-2-Sequences options
+
+      # subject?:
+      #   type: file
+      #   description: |
+      #     Subject sequence(s) to search
+
+      #     Incompatible with:
+
+      #     * db
+      #     * giList
+      #     * seqIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * dbSoftMask
+      #     * dbHardMask
+      subjectLoc?:
+        displayName: -subject_loc=&lt;string, range&gt;
+        type: InputBlastLocation
+        description: |
+          Location on the subject sequence in 1-based offsets
+
+          Incompatible with:
+
+          * db
+          * giList
+          * seqIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * taxIds
+          * taxIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * dbSoftMask
+          * dbHardMask
+          * remote
+      # Query filtering options
+      seg?:
+        displayName: -seg=&lt;string&gt;
+        description: |
+          Filter query sequence with SEG.
+
+          Default: `"12 2.2 2.5"`
+
+          Applies to task(s): all
+        type: InputBlastSegMask
+      softMasking?:
+        displayName: -soft_masking=&lt;boolean&gt;
+        type: boolean
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Default = `false`
+      # Restrict search or results
+
+      # giList?:
+      #   displayName: -gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of GIs
+
+      #     Incompatible with:
+
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # seqIdList?:
+      #   displayName: -seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeGiList?:
+      #   displayName: negative_gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified GIs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeSeqIdList?:
+      #   displayName: negative_seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+      taxIds?:
+        displayName: -taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to include only the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      negativeTaxIds?:
+        displayName: -negative_taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to everything except the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIds
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      # taxIdList?:
+      #   displayName: taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to include only the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeTaxIdList?:
+      #   displayName: negative_taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # entrezQuery?:
+      #   displayName: -entrez_query=&lt;string&gt;
+      #   type: string
+      #   description: |
+
+      #     Restrict search with the given Entrez query
+
+      #     Requires: remote
+      dbSoftMask?:
+        displayName: -db_soft_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbHardMask
+          * subject
+          * subjectLoc
+      dbHardMask?:
+        displayName: -db_hard_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbSoftMask
+          * subject
+          * subjectLoc
+      cullingLimit?:
+        displayName: -culling_limit=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+
+          Incompatible with:
+
+          * bestHitOverhang
+          * bestHitScoreEdge
+      bestHitOverhang?:
+        displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 0.5
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      bestHitScoreEdge?:
+        displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 0.5
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      subjectBesthit?:
+        displayName: -subject_besthit
+        type: boolean
+        description: "Turn on best hit per subject sequence"
+      # Statistical options
+      sumStats?:
+        displayName: -sum_stats=&lt;boolean&gt;
+        type: boolean
+        description: "Use sum statistics"
+      # Extension options
+      windowSize?:
+        displayName: -window_size=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm.
+  InputTBlastxScoringMatrix:
     type: string
     enum:
       - BLOSUM45
@@ -3111,60 +2636,535 @@ types:
       - PAM250
       - PAM30
       - PAM70
-  InputBlastSegMask:
+  NewJobPostRequestJSON:
     type: object
     additionalProperties: false
     properties:
-      enabled?:
+      site:
+        type: string
+      organism:
+      target-type:
         description: |
-          Enable Seg Mask
-
-          Default: `false`
-        type: boolean
-      window?:
+          Target file name.  Maps to the `--db` flag for the blast tools.
+        type: string
+      config:
         description: |
-          SEG window
+          Blast tool configuration.
 
-          Default: `12`
+          Must be one of the following implementation types:
+
+          - [InputBlastnConfig](#type:InputBlastnConfig)
+          - [InputBlastpConfig](#type:InputBlastpConfig)
+          - [InputBlastxConfig](#type:InputBlastxConfig)
+          - [InputTBlastnConfig](#type:InputTBlastnConfig)
+          - [InputTBlastxConfig](#type:InputTBlastxConfig)
+        type: InputBlastConfig
+      description?:
+        description: |
+          User provided description of the job.
+        type: string
+  NewJobPostRequestMultipart:
+    type: object
+    additionalProperties: false
+    properties:
+      query?: file
+      # subject?: file
+      properties: NewJobPostRequestJSON
+  NewJobPostResponse:
+    type: object
+    additionalProperties: false
+    properties:
+      jobId:
         type: integer
         format: int32
         minimum: 1
-      locut?:
+  MetaResponse:
+    type: object
+    additionalProperties: false
+    properties:
+      targets: OutputSiteListing
+  GetJobResponse:
+    description: |
+      Details about a specific job, it's configuration, and it's current status.
+    type: object
+    additionalProperties: false
+    properties:
+      id:
+        type: integer
+        format: int32
+        minimum: 1
+      status: IOJobStatus
+      config: InputBlastConfig
+  OutputSiteListing:
+    type: object
+    additionalProperties: false
+    properties:
+      "^[A-Za-z0-9_- ]+$":
+        type: array
+        items: OutputListOrganism
+  OutputListOrganism:
+    type: object
+    additionalProperties: false
+    properties:
+      name: string
+      blast:
+        type: array
+        items: string
+        minItems: 1
+        uniqueItems: true
+  InputTBlastnConfig:
+    type: InputBlastConfig
+    discriminatorValue: tblastn
+    additionalProperties: false
+    properties:
+      # General search options
+      task?:
+        displayName: -task=&lt;string&gt;
         description: |
-          SEG locut
+          Default value: `tblastn`
+        type: InputTBlastnTask
+      wordSize?:
+        displayName: -word_size=&lt;integer, &gt;=2&gt;
+        type: integer
+        minimum: 2
+        description: |
+          Word size for wordfinder algorithm
 
-          Default: `2.2`
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `tblastn`      | 3     |
+          | `tblastn-fast` | 6     |
+
+          Applies to task(s): all
+      gapOpen?:
+        displayName: -gapopen=&lt;integer&gt;
+        description: |
+          Cost to open a gap.
+
+          Default: `11`
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+      gapExtend?:
+        description: |
+          Cost to extend a gap.
+
+          Default: `1`
+
+          Applies to task(s): all
+        type: integer
+        format: int8
+      dbGencode?:
+        displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&gt;
+        type: integer
+        format: int8
+        description: |
+          Genetic code to use to translate database/subjects (see user manual for
+          details)
+
+          Value must be equal to `33` or be in one of the following inclusive
+          ranges:
+
+          * [1..6]
+          * [9..16]
+          * [21..31]
+
+          Default Value: `1`
+
+          Applies to task(s): all
+      maxIntronLength?:
+        displayName: -max_intron_length=&lt;integer, &gt;=0&gt;
+        description: |
+          Length of the largest intron allowed in a translated nucleotide sequence
+          when linking multiple distinct alignments (a negative value disables
+          linking).
+
+          Default: 0
+
+          Applies to task(s): all
+        type: integer
+        minimum: 0
+      matrix?:
+        description: |
+          Scoring matrix name.
+
+          Applies to task(s): all
+
+          Default value: `BLOSUM62`
+        type: InputTBlastnScoringMatrix
+      threshold?:
+        displayName: -threshold=&lt;real, &gt;=0&gt;
         type: number
         format: double
         minimum: 0.0
-      hicut?:
         description: |
-          SEG hicut
+          Minimum score to add a word to the BLAST lookup table.
 
-          Default: `2.5`
+          Default value by task:
+
+          | Task           | Value |
+          |----------------|-------|
+          | `tblastn`      | 13    |
+          | `tblastn-fast` | 21    |
+
+          Applies to task(s): all
+      compBasedStats?:
+        displayName: -comp_based_stats=&lt;string&gt;
+        description: |
+          Use composition-based statistics.
+
+          Applies to task(s): all
+
+          Default value: `conditional-comp-based-score-adjustment`
+        type: InputBlastCompBasedStats
+      # BLAST-2-Sequences options
+
+      # subject?:
+      #   type: file
+      #   description: |
+      #     Subject sequence(s) to search
+
+      #     Incompatible with:
+
+      #     * db
+      #     * giList
+      #     * seqIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * dbSoftMask
+      #     * dbHardMask
+      subjectLoc?:
+        displayName: -subject_loc=&lt;string, range&gt;
+        type: InputBlastLocation
+        description: |
+          Location on the subject sequence in 1-based offsets
+
+          Incompatible with:
+
+          * db
+          * giList
+          * seqIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * taxIds
+          * taxIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * dbSoftMask
+          * dbHardMask
+          * remote
+      # Query filtering options
+      seg?:
+        displayName: -seg=&lt;string&gt;
+        description: |
+          Filter query sequence with SEG.
+
+          Applies to task(s): all
+        type: InputBlastSegMask
+      softMasking?:
+        displayName: -soft_masking=&lt;boolean&gt;
+        type: boolean
+        description: |
+          Apply filtering locations as soft masks (i.e., only for finding initial
+          matches).
+
+          Default = `false`
+      # Restrict search or results
+
+      # giList?:
+      #   displayName: -gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of GIs
+
+      #     Incompatible with:
+
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # seqIdList?:
+      #   displayName: -seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to list of SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeGiList?:
+      #   displayName: negative_gilist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified GIs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeSeqIdList?:
+      #   displayName: negative_seqidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified SeqIDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+      taxIds?:
+        displayName: -taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to include only the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIds
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      negativeTaxIds?:
+        displayName: -negative_taxids=&lt;string&gt;
+        type: string[]
+        description: |
+          Restrict search of database to everything except the specified taxonomy IDs
+
+          Incompatible with:
+
+          * giList
+          * seqIdList
+          * taxIds
+          * taxIdList
+          * negativeGiList
+          * negativeSeqIdList
+          * negativeTaxIdList
+          * remote
+          * subject
+          * subjectLoc
+      # taxIdList?:
+      #   displayName: taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to include only the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * negativeTaxIdList
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # negativeTaxIdList?:
+      #   displayName: negative_taxidlist=&lt;string, filename&gt;
+      #   type: file
+      #   description: |
+      #     Restrict search of database to everything except the specified taxonomy IDs
+
+      #     Incompatible with:
+
+      #     * giList
+      #     * seqIdList
+      #     * taxIds
+      #     * taxIdList
+      #     * negativeGiList
+      #     * negativeSeqIdList
+      #     * negativeTaxIds
+      #     * remote
+      #     * subject
+      #     * subjectLoc
+
+      # entrezQuery?:
+      #   displayName: -entrez_query=&lt;string&gt;
+      #   type: string
+      #   description: |
+
+      #     Restrict search with the given Entrez query
+
+      #     Requires: remote
+      dbSoftMask?:
+        displayName: -db_soft_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
+          only for finding initial matches).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbHardMask
+          * subject
+          * subjectLoc
+      dbHardMask?:
+        displayName: -db_hard_mask=&lt;string&gt;
+        type: string
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
+          sequence is masked for all phases of search).
+
+          Applies to task(s): all
+
+          Incompatible with:
+
+          * dbSoftMask
+          * subject
+          * subjectLoc
+      cullingLimit?:
+        displayName: -culling_limit=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+
+          Incompatible with:
+
+          * bestHitOverhang
+          * bestHitScoreEdge
+      bestHitOverhang?:
+        displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
         type: number
         format: double
         minimum: 0.0
-  InputBlastStrand:
+        maximum: 0.5
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      bestHitScoreEdge?:
+        displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 0.5
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with: `cullingLimit`
+      subjectBesthit?:
+        displayName: -subject_besthit
+        type: boolean
+        description: "Turn on best hit per subject sequence"
+      # Statistical options
+      sumStats?:
+        displayName: -sum_stats=&lt;boolean&gt;
+        type: boolean
+        description: "Use sum statistics"
+      # Extension options
+      xDropGap?:
+        displayName: -xdrop_gap=&lt;real&gt;
+        type: number
+        format: double
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions
+
+          Default: `30.0`
+      xDropGapFinal?:
+        displayName: -xdrop_gap_final=&lt;real&gt;
+        type: number
+        format: double
+        description: |
+          X-dropoff value (in bits) for final gapped alignment
+
+          Dfault: `100.0`
+      ungapped?:
+        displayName: -ungapped
+        type: boolean
+        description: |
+          Perform ungapped alignment only.
+
+          Applies to task(s): all
+      windowSize?:
+        displayName: -window_size=&lt;integer, &gt;=0&gt;
+        type: integer
+        minimum: 0
+        description: |
+          Multiple hits window size, use 0 to specify 1-hit algorithm.
+
+          Default value: `40`
+
+          Applies to task(s): all
+      # Miscellaneous options
+      useSWTraceback?:
+        displayName: -use_sw_tback
+        type: boolean
+        description: |
+          Compute locally optimal Smith-Waterman alignments?
+        # PSI-TBLASTN options
+  InputTBlastnTask:
+    description: |
+      | Task           | Use Case                                                 |
+      |----------------|----------------------------------------------------------|
+      | `tblastn`      | for a standard protein-translated nucleotide comparison  |
+      | `tblastn-fast` | for a faster version with a larger word-size based on https://www.ncbi.nlm.nih.gov/pubmed/17921491 |
     type: string
     enum:
-      - plus
-      - minus
-      - both
-  InputHitSorting:
+      - tblastn
+      - tblastn-fast
+  InputTBlastnScoringMatrix:
     type: string
     enum:
-      - by-eval
-      - by-bit-score
-      - by-total-score
-      - by-percent-identity
-      - by-query-coverage
-  InputHSPSorting:
-    type: string
-    enum:
-      - by-hsp-evalue
-      - by-hsp-score
-      - by-hsp-query-start
-      - by-hsp-percent-identity
-      - by-hsp-subject-start
+      - BLOSUM45
+      - BLOSUM50
+      - BLOSUM62
+      - BLOSUM80
+      - BLOSUM90
+      - PAM30
+      - PAM70
+      - PAM250
+      - IDENTITY
 
