@@ -18,7 +18,7 @@ public enum InputHitSorting {
   @JsonProperty("by-query-coverage")
   BYQUERYCOVERAGE("by-query-coverage");
 
-  private String name;
+  public final String name;
 
   InputHitSorting(String name) {
     this.name = name;

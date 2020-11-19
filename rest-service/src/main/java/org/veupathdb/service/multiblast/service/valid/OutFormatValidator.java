@@ -44,15 +44,6 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public List<String> internalUseValidation(InputBlastOutFmt fmt) {
-    var out = new ArrayList<String>(2);
-
-    Optional.ofNullable(validateIntFields(fmt)).ifPresent(out::add);
-    Optional.ofNullable(validateIntDelim(fmt)).ifPresent(out::add);
-
-    return out;
-  }
-
   public ErrorMap externalUseValidation(InputBlastOutFmt fmt) {
     var errors = new ErrorMap();
 

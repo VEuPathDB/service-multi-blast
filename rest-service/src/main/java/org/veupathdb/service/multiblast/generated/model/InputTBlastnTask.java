@@ -9,7 +9,7 @@ public enum InputTBlastnTask {
   @JsonProperty("tblastn-fast")
   TBLASTNFAST("tblastn-fast");
 
-  private String name;
+  public final String name;
 
   InputTBlastnTask(String name) {
     this.name = name;

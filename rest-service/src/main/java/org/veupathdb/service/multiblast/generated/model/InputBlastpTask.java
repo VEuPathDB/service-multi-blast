@@ -12,7 +12,7 @@ public enum InputBlastpTask {
   @JsonProperty("blastp-fast")
   BLASTPFAST("blastp-fast");
 
-  private String name;
+  public final String name;
 
   InputBlastpTask(String name) {
     this.name = name;

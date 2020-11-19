@@ -9,7 +9,7 @@ public enum InputBlastxTask {
   @JsonProperty("blastx-fast")
   BLASTXFAST("blastx-fast");
 
-  private String name;
+  public final String name;
 
   InputBlastxTask(String name) {
     this.name = name;

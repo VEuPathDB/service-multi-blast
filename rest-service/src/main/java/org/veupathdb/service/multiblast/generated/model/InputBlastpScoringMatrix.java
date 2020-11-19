@@ -30,7 +30,7 @@ public enum InputBlastpScoringMatrix {
   @JsonProperty("IDENTITY")
   IDENTITY("IDENTITY");
 
-  private String name;
+  public final String name;
 
   InputBlastpScoringMatrix(String name) {
     this.name = name;

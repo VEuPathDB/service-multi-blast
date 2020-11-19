@@ -60,7 +60,7 @@ public enum InputBlastFormat {
   @JsonProperty("organism-report")
   ORGANISMREPORT("organism-report");
 
-  private String name;
+  public final String name;
 
   InputBlastFormat(String name) {
     this.name = name;

@@ -22,20 +22,18 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   protected static final String
-    ErrGt               = "must be greater than %d",
-    ErrBetweenInc       = "value must be between %d and %d (inclusive)",
-    errIncompatibleWith = "is incompatible with field %s",
+    errRequired         = "is required",
     ErrGenCode          = "must be equal to 33 or in one of the following inclusive ranges: [1..6], [9..16], [21-31]",
     ErrQueryLoc         = "start position must be less than stop position",
     errFmt0             = "only valid for the "
       + ReportFormatType.Pairwise.getIoName()
       + " output format",
-    errNotFmtGt4        = "only valid for the following output format types: "
+    errOnlyFmtGt4 = "only valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
       .collect(Collectors.joining(", ")),
-    errOnlyFmtGt4       = "not valid for the following output format types: "
+    errNotFmtGt4 = "not valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
@@ -119,11 +117,11 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       return;
 
     if (conf.getOutFormat().getFormat().ordinal() > 4)
-      err.putError(JsonKeys.SortHits, errNotFmtGt4);
+      err.putError(JsonKeys.SortHits, errOnlyFmtGt4);
   }
 
   static void validateSortHSPs(ErrorMap err, InputBlastConfig conf) {
-    if (conf.getSortHits() == null)
+    if (conf.getSortHSPs() == null)
       return;
 
     if (conf.getOutFormat() == null || conf.getOutFormat().getFormat() == null)
@@ -137,8 +135,16 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
     if (conf.getQueryLoc() == null)
       return;
 
-    if (conf.getQueryLoc().getStart() >= conf.getQueryLoc().getStop())
-      err.putError(JsonKeys.QueryLocation, ErrQueryLoc);
+    var ha = conf.getQueryLoc().getStart() == null;
+    var ho = conf.getQueryLoc().getStop() == null;
+
+    if (ha)
+      err.putError(QueryLocation, Start, errRequired);
+    if (ho)
+      err.putError(QueryLocation, Stop, errRequired);
+
+    if (!ha && !ho && conf.getQueryLoc().getStart() >= conf.getQueryLoc().getStop())
+      err.putError(QueryLocation, ErrQueryLoc);
   }
 
   static final Pattern EValuePat = Pattern.compile("^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$");
@@ -167,7 +173,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       conf.getOutFormat().getFormat() != null &&
       conf.getOutFormat().getFormat().ordinal() > 4
     )
-      err.putError(JsonKeys.NumDescriptions, errNotFmtGt4);
+      err.putError(JsonKeys.NumDescriptions, errOnlyFmtGt4);
   }
 
   static void validateNumAlignments(ErrorMap err, InputBlastConfig conf) {
@@ -194,7 +200,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       || conf.getOutFormat().getFormat() == null
       || conf.getOutFormat().getFormat().ordinal() < 5
     )
-      err.putError(MaxTargetSequences, errOnlyFmtGt4);
+      err.putError(MaxTargetSequences, errNotFmtGt4);
   }
 
   static void validateGenCode(ErrorMap err, Byte gc, String field) {
