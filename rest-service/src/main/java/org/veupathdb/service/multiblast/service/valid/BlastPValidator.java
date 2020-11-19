@@ -1,4 +1,4 @@
-package org.veupathdb.service.multiblast.service.jobs;
+package org.veupathdb.service.multiblast.service.valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +10,7 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
-public class BlastPValidator extends BlastValidator
+class BlastPValidator implements ConfigValidator<InputBlastpConfig>
 {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
@@ -29,14 +29,16 @@ public class BlastPValidator extends BlastValidator
     return instance;
   }
 
-  public ErrorMap validateConfig(ErrorMap err, InputBlastpConfig conf) {
+  public ErrorMap validate(InputBlastpConfig conf) {
     log.trace("#validateConfig(ErrorMap, InputBlastpConfig)");
 
-    optGtEq(err, conf.getWordSize(), 2, JsonKeys.WordSize);
+    var err = new ErrorMap();
+
+    Int.optGtEq(err, conf.getWordSize(), 2, JsonKeys.WordSize);
     validateGapOpen(err, conf);
     validateGapExtend(err, conf);
     validateMatrix(err, conf);
-    optGtEq(err, conf.getThreshold(), 0, JsonKeys.Threshold);
+    Dec.optGtEq(err, conf.getThreshold(), 0, JsonKeys.Threshold);
     validateSubjectLoc(err, conf);
     validateSoftMasking(err, conf);
     validateTaxIds(err, conf);
@@ -58,48 +60,52 @@ public class BlastPValidator extends BlastValidator
 
   private void validateBestHitScoreEdge(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
-      betweenExc(err, conf.getBestHitScoreEdge(), 0, 0.5, BestHitScoreEdge);
-      incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0, 0.5, BestHitScoreEdge);
+      Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
   private void validateBestHitOverhang(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getBestHitOverhang() != null) {
-      betweenExc(err, conf.getBestHitOverhang(), 0, 0.5, BestHitOverhang);
-      incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitOverhang(), 0, 0.5, BestHitOverhang);
+      Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
   private void validateCullingLimit(ErrorMap err, InputBlastpConfig conf) {
-    if (conf.getCullingLimit() == null) {
-      gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
-      incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
-      incompat(err, conf.getBestHitScoreEdge(), CullingLimit, BestHitScoreEdge);
+    if (conf.getCullingLimit() != null) {
+      Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
+      Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
+      Obj.incompat(err, conf.getBestHitScoreEdge(), CullingLimit, BestHitScoreEdge);
     }
   }
 
   private void validateDbHardMask(ErrorMap err, InputBlastpConfig conf) {
-    optIncompat(err, conf.getDbHardMask(), conf.getDbSoftMask(), DBHardMask, DBSoftMask);
-    optIncompat(err, conf.getDbHardMask(), conf.getSubjectLoc(), DBHardMask, SubjectLocation);
+    if (conf.getDbHardMask() != null) {
+      Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
+      Obj.incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
+    }
   }
 
   private void validateDbSoftMask(ErrorMap err, InputBlastpConfig conf) {
-    optIncompat(err, conf.getDbSoftMask(), conf.getDbHardMask(), DBSoftMask, DBHardMask);
-    optIncompat(err, conf.getDbSoftMask(), conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
+    if (conf.getDbSoftMask() != null) {
+      Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
+      Obj.incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
+    }
   }
 
   private void validateNegativeTaxIds(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getNegativeTaxIds() == null || conf.getNegativeTaxIds().isEmpty())
       return;
 
-    incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
+    Obj.incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
   }
 
   private void validateTaxIds(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getTaxIds() == null || conf.getTaxIds().isEmpty())
       return;
 
-    incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
+    Obj.incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
   }
 
   private void validateSoftMasking(ErrorMap err, InputBlastpConfig conf) {
@@ -107,15 +113,18 @@ public class BlastPValidator extends BlastValidator
       return;
 
     if (conf.getTask() != InputBlastpTask.BLASTP)
-      err.putError(JsonKeys.SoftMasking, String.format(errOnlyTask, BlastpTask.BlastP));
+      err.putError(
+        JsonKeys.SoftMasking,
+        String.format(BlastValidator.errOnlyTask, BlastpTask.BlastP)
+      );
   }
 
   private void validateSubjectLoc(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getSubjectLoc() != null) {
-      colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
-      colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
-      incompat(err, conf.getDbSoftMask(), SubjectLocation, DBSoftMask);
-      incompat(err, conf.getDbHardMask(), SubjectLocation, DBHardMask);
+      Obj.colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
+      Obj.colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
+      Obj.incompat(err, conf.getDbSoftMask(), SubjectLocation, DBSoftMask);
+      Obj.incompat(err, conf.getDbHardMask(), SubjectLocation, DBHardMask);
     }
   }
 
@@ -124,7 +133,10 @@ public class BlastPValidator extends BlastValidator
       return;
 
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
-      err.putError(JsonKeys.Matrix, String.format(errNotTask, BlastpTask.BlastPFast));
+      err.putError(
+        JsonKeys.Matrix,
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+      );
   }
 
   private void validateGapExtend(ErrorMap err, InputBlastpConfig conf) {
@@ -132,7 +144,10 @@ public class BlastPValidator extends BlastValidator
       return;
 
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
-      err.putError(JsonKeys.GapExtend, String.format(errNotTask, BlastpTask.BlastPFast));
+      err.putError(
+        JsonKeys.GapExtend,
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+      );
   }
 
   private void validateGapOpen(ErrorMap err, InputBlastpConfig conf) {
@@ -140,6 +155,9 @@ public class BlastPValidator extends BlastValidator
       return;
 
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
-      err.putError(JsonKeys.GapOpen, String.format(errNotTask, BlastpTask.BlastPFast));
+      err.putError(
+        JsonKeys.GapOpen,
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+      );
   }
 }

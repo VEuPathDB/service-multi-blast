@@ -77,7 +77,6 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    minimum: 1
 
   gapExtend?:
     description: |
@@ -88,7 +87,6 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    minimum: 1
 
   maxIntronLength?:
     displayName: -max_intron_length=<integer, >=0>
@@ -201,8 +199,6 @@ properties:
     description: |
       Apply filtering locations as soft masks (i.e., only for finding initial
       matches).
-
-      Applies to task(s): `blastp`
 
       Default = `false`
 

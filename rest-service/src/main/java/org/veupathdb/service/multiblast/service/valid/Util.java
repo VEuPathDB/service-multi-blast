@@ -1,4 +1,4 @@
-package org.veupathdb.service.multiblast.service.jobs;
+package org.veupathdb.service.multiblast.service.valid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,8 +99,8 @@ class Util
     mapping.put(ToolOption.PhiBlastPatternFile, JsonKeys.PhiBlastPatternFile);
     mapping.put(ToolOption.PseudoCount, JsonKeys.PseudoCount);
     mapping.put(ToolOption.Query, JsonKeys.Query);
-    mapping.put(ToolOption.QueryCoveragePercentHSP, JsonKeys.QuerytCoverageHSPPercent);
-    mapping.put(ToolOption.QueryGeneticCode, JsonKeys.QUERY_GENETIC_CODE);
+    mapping.put(ToolOption.QueryCoveragePercentHSP, JsonKeys.QueryCoverageHSPPercent);
+    mapping.put(ToolOption.QueryGeneticCode, JsonKeys.QueryGeneticCode);
     mapping.put(ToolOption.QueryLocation, JsonKeys.QueryLocation);
     mapping.put(ToolOption.Remote, JsonKeys.REMOTE);
     mapping.put(ToolOption.SaveEachPsiBlastCheckpoint, JsonKeys.SaveEachPsiBlastCheckpoint);
@@ -110,7 +110,7 @@ class Util
     );
     mapping.put(ToolOption.ScoringMatrix, JsonKeys.Matrix);
     mapping.put(ToolOption.SearchSpaceEffectiveLength, JsonKeys.SearchSpace);
-    mapping.put(ToolOption.SEGFilter, JsonKeys.SEG);
+    mapping.put(ToolOption.SEGFilter, JsonKeys.Seg);
     mapping.put(ToolOption.SequenceIDListFile, JsonKeys.SEQ_ID_LIST);
     mapping.put(ToolOption.ShowNCBIGIs, JsonKeys.ShowNCBIGIs);
     mapping.put(ToolOption.SoftMasking, JsonKeys.SoftMasking);

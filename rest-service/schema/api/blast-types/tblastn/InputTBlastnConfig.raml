@@ -44,7 +44,6 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    minimum: 1
 
   gapExtend?:
     description: |
@@ -55,7 +54,6 @@ properties:
       Applies to task(s): all
     type: integer
     format: int8
-    minimum: 1
 
   dbGencode?:
     displayName: -db_gencode=<integer, 1..6, 9..16, 21..31, 33>
@@ -475,15 +473,15 @@ properties:
 
   # PSI-TBLASTN options
 
-  in_pssm?:
-    displayName: -in_pssm=<string, filename>
-    type: string
-    description: |
-      PSI-TBLASTN checkpoint file
-
-      Incompatible with:
-
-      * remote
-      * query
-      * query_loc
+#  inPSSM?:
+#    displayName: -in_pssm=<string, filename>
+#    type: file
+#    description: |
+#      PSI-TBLASTN checkpoint file
+#
+#      Incompatible with:
+#
+#      * remote
+#      * query
+#      * query_loc
 
