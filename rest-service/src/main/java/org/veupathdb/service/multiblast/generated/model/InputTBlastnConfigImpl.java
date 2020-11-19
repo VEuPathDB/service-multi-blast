@@ -53,8 +53,7 @@ import java.util.List;
     "xDropGapFinal",
     "ungapped",
     "windowSize",
-    "useSWTraceback",
-    "in_pssm"
+    "useSWTraceback"
 })
 public class InputTBlastnConfigImpl implements InputTBlastnConfig {
   @JsonProperty("tool")
@@ -191,9 +190,6 @@ public class InputTBlastnConfigImpl implements InputTBlastnConfig {
 
   @JsonProperty("useSWTraceback")
   private Boolean useSWTraceback;
-
-  @JsonProperty("in_pssm")
-  private String inPssm;
 
   @JsonProperty("tool")
   public InputBlastTool getTool() {
@@ -638,15 +634,5 @@ public class InputTBlastnConfigImpl implements InputTBlastnConfig {
   @JsonProperty("useSWTraceback")
   public void setUseSWTraceback(boolean useSWTraceback) {
     this.useSWTraceback = useSWTraceback;
-  }
-
-  @JsonProperty("in_pssm")
-  public String getInPssm() {
-    return this.inPssm;
-  }
-
-  @JsonProperty("in_pssm")
-  public void setInPssm(String inPssm) {
-    this.inPssm = inPssm;
   }
 }

@@ -278,10 +278,4 @@ public interface InputTBlastnConfig extends InputBlastConfig {
 
   @JsonProperty("useSWTraceback")
   void setUseSWTraceback(boolean useSWTraceback);
-
-  @JsonProperty("in_pssm")
-  String getInPssm();
-
-  @JsonProperty("in_pssm")
-  void setInPssm(String inPssm);
 }

@@ -37,6 +37,7 @@ public class BlastConverter
     if (conf instanceof TBlastNConfig)
       return _fromInternal((TBlastNConfig) conf);
 
+    throw new RuntimeException("implement me");
   }
 
   InputBlastnConfig _fromInternal(BlastNConfig conf) {
@@ -148,10 +149,14 @@ public class BlastConverter
 
   InputBlastxConfig _fromInternal(BlastXConfig conf) {
     var out = new InputBlastxConfigImpl();
+
+    throw new RuntimeException("implement me");
   }
 
   InputTBlastnConfig _fromInternal(TBlastNConfig conf) {
     var out = new InputTBlastnConfigImpl();
+
+    throw new RuntimeException("implement me");
   }
 
   InputBlastSegMask fromInternal(Seg val) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
 import org.veupathdb.service.multiblast.generated.model.InputBlastOutFmt;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -88,7 +89,7 @@ public class OutFormatValidator
     if (fmt.getFields().isEmpty())
       return null;
 
-    return fmt.isCustomizableFormat() ? null : ErrFields;
+    return isCustomizableFormat(fmt.getFormat()) ? null : ErrFields;
   }
 
   static void validateExtDelim(ErrorMap err, InputBlastOutFmt fmt) {
@@ -102,6 +103,21 @@ public class OutFormatValidator
     if (fmt.getDelim() == null)
       return null;
 
-    return fmt.allowsDelimiters() ? null : ErrDelim;
+    return allowsDelimiters(fmt.getFormat()) ? null : ErrDelim;
   }
+
+  static boolean allowsDelimiters(InputBlastFormat fmt) {
+    return switch (fmt) {
+      case TABULAR, TABULARWITHCOMMENTS, CSV -> true;
+      default -> false;
+    };
+  }
+
+  static boolean isCustomizableFormat(InputBlastFormat fmt) {
+    return switch (fmt) {
+      case TABULAR, TABULARWITHCOMMENTS, CSV, SAM -> true;
+      default -> false;
+    };
+  }
+
 }

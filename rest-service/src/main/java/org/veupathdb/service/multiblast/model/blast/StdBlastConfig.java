@@ -141,7 +141,6 @@ public class StdBlastConfig extends BlastConfig
       .appendNonNull(ToolOption.NegativeTaxonomyIDListFile, negativeTaxIdList)
       .appendNonNull(ToolOption.SubjectFile, subject)
       .appendNonNull(ToolOption.SubjectLocation, subjectLocation)
-      .appendNonNull(ToolOption.WordSize, wordSize)
       .appendNonNull(ToolOption.TaxonomyIDs, str2obj(taxIds))
       .appendNonNull(ToolOption.NegativeTaxonomyIDs, str2obj(negativeTaxIds));
   }

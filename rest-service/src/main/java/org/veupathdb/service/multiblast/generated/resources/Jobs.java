@@ -43,7 +43,7 @@ public interface Jobs {
   @GET
   @Path("/{job-id}")
   @Produces("application/json")
-  GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") Integer jobId);
+  GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") int jobId);
 
   @GET
   @Path("/{job-id}/query")
@@ -51,8 +51,8 @@ public interface Jobs {
       "application/json",
       "text/plain"
   })
-  GetJobsQueryByJobIdResponse getJobsQueryByJobId(@PathParam("job-id") Integer jobId,
-      @QueryParam("download") Boolean download);
+  GetJobsQueryByJobIdResponse getJobsQueryByJobId(@PathParam("job-id") int jobId,
+      @QueryParam("download") boolean download);
 
   @GET
   @Path("/{job-id}/report")
@@ -62,7 +62,7 @@ public interface Jobs {
       "application/json",
       "text/plain"
   })
-  GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") Integer jobId,
+  GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") int jobId,
       @QueryParam("format") InputBlastFormat format,
       @QueryParam("fields") List<InputBlastFmtField> fields);
 
