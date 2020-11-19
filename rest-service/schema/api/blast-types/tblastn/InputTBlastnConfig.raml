@@ -13,13 +13,13 @@ properties:
   # General search options
 
   task?:
-    displayName: -task=&lt;string&lt;
+    displayName: -task=&lt;string&gt;
     description: |
       Default value: `tblastn`
     type: ext.InputTBlastnTask
 
   wordSize?:
-    displayName: -word_size=&lt;integer, &lt;=2&lt;
+    displayName: -word_size=&lt;integer, &gt;=2&gt;
     type: integer
     minimum: 2
     description: |
@@ -35,7 +35,7 @@ properties:
       Applies to task(s): all
 
   gapOpen?:
-    displayName: -gapopen=&lt;integer&lt;
+    displayName: -gapopen=&lt;integer&gt;
     description: |
       Cost to open a gap.
 
@@ -56,7 +56,7 @@ properties:
     format: int8
 
   dbGencode?:
-    displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&lt;
+    displayName: -db_gencode=&lt;integer, 1..6, 9..16, 21..31, 33&gt;
     type: integer
     format: int8
     description: |
@@ -75,7 +75,7 @@ properties:
       Applies to task(s): all
 
   maxIntronLength?:
-    displayName: -max_intron_length=&lt;integer, &lt;=0&lt;
+    displayName: -max_intron_length=&lt;integer, &gt;=0&gt;
     description: |
       Length of the largest intron allowed in a translated nucleotide sequence
       when linking multiple distinct alignments (a negative value disables
@@ -97,7 +97,7 @@ properties:
     type: ext.InputTBlastnScoringMatrix
 
   threshold?:
-    displayName: -threshold=&lt;real, &lt;=0&lt;
+    displayName: -threshold=&lt;real, &gt;=0&gt;
     type: number
     format: double
     minimum: 0.0
@@ -114,7 +114,7 @@ properties:
       Applies to task(s): all
 
   compBasedStats?:
-    displayName: -comp_based_stats=&lt;string&lt;
+    displayName: -comp_based_stats=&lt;string&gt;
     description: |
       Use composition-based statistics.
 
@@ -145,7 +145,7 @@ properties:
   #     * dbHardMask
 
   subjectLoc?:
-    displayName: -subject_loc=&lt;string, range&lt;
+    displayName: -subject_loc=&lt;string, range&gt;
     type: blast.InputBlastLocation
     description: |
       Location on the subject sequence in 1-based offsets
@@ -168,7 +168,7 @@ properties:
   # Query filtering options
 
   seg?:
-    displayName: -seg=&lt;string&lt;
+    displayName: -seg=&lt;string&gt;
     description: |
       Filter query sequence with SEG.
 
@@ -176,7 +176,7 @@ properties:
     type: com.InputBlastSegMask
 
   softMasking?:
-    displayName: -soft_masking=&lt;boolean&lt;
+    displayName: -soft_masking=&lt;boolean&gt;
     type: boolean
     description: |
       Apply filtering locations as soft masks (i.e., only for finding initial
@@ -187,7 +187,7 @@ properties:
   # Restrict search or results
 
   # giList?:
-  #   displayName: -gilist=&lt;string, filename&lt;
+  #   displayName: -gilist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to list of GIs
@@ -206,7 +206,7 @@ properties:
   #     * subjectLoc
 
   # seqIdList?:
-  #   displayName: -seqidlist=&lt;string, filename&lt;
+  #   displayName: -seqidlist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to list of SeqIDs
@@ -225,7 +225,7 @@ properties:
   #     * subjectLoc
 
   # negativeGiList?:
-  #   displayName: negative_gilist=&lt;string, filename&lt;
+  #   displayName: negative_gilist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified GIs
@@ -244,7 +244,7 @@ properties:
   #     * subjectLoc
 
   # negativeSeqIdList?:
-  #   displayName: negative_seqidlist=&lt;string, filename&lt;
+  #   displayName: negative_seqidlist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified SeqIDs
@@ -263,7 +263,7 @@ properties:
   #     * subjectLoc
 
   taxIds?:
-    displayName: -taxids=&lt;string&lt;
+    displayName: -taxids=&lt;string&gt;
     type: string[]
     description: |
       Restrict search of database to include only the specified taxonomy IDs
@@ -282,7 +282,7 @@ properties:
       * subjectLoc
 
   negativeTaxIds?:
-    displayName: -negative_taxids=&lt;string&lt;
+    displayName: -negative_taxids=&lt;string&gt;
     type: string[]
     description: |
       Restrict search of database to everything except the specified taxonomy IDs
@@ -301,7 +301,7 @@ properties:
       * subjectLoc
 
   # taxIdList?:
-  #   displayName: taxidlist=&lt;string, filename&lt;
+  #   displayName: taxidlist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to include only the specified taxonomy IDs
@@ -320,7 +320,7 @@ properties:
   #     * subjectLoc
 
   # negativeTaxIdList?:
-  #   displayName: negative_taxidlist=&lt;string, filename&lt;
+  #   displayName: negative_taxidlist=&lt;string, filename&gt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified taxonomy IDs
@@ -339,7 +339,7 @@ properties:
   #     * subjectLoc
 
   # entrezQuery?:
-  #   displayName: -entrez_query=&lt;string&lt;
+  #   displayName: -entrez_query=&lt;string&gt;
   #   type: string
   #   description: |
 
@@ -348,7 +348,7 @@ properties:
   #     Requires: remote
 
   dbSoftMask?:
-    displayName: -db_soft_mask=&lt;string&lt;
+    displayName: -db_soft_mask=&lt;string&gt;
     type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
@@ -363,7 +363,7 @@ properties:
       * subjectLoc
 
   dbHardMask?:
-    displayName: -db_hard_mask=&lt;string&lt;
+    displayName: -db_hard_mask=&lt;string&gt;
     type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
@@ -378,7 +378,7 @@ properties:
       * subjectLoc
 
   cullingLimit?:
-    displayName: -culling_limit=&lt;integer, &lt;=0&lt;
+    displayName: -culling_limit=&lt;integer, &gt;=0&gt;
     type: integer
     minimum: 0
     description: |
@@ -391,7 +391,7 @@ properties:
       * bestHitScoreEdge
 
   bestHitOverhang?:
-    displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
+    displayName: -best_hit_overhang=&lt;real, (&gt;0 and &lt;0.5)&gt;
     type: number
     format: double
     minimum: 0.0
@@ -402,7 +402,7 @@ properties:
       Incompatible with: `cullingLimit`
 
   bestHitScoreEdge?:
-    displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
+    displayName: -best_hit_score_edge=&lt;real, (&gt;0 and &lt;0.5)&gt;
     type: number
     format: double
     minimum: 0.0
@@ -420,14 +420,14 @@ properties:
   # Statistical options
 
   sumStats?:
-    displayName: -sum_stats=&lt;boolean&lt;
+    displayName: -sum_stats=&lt;boolean&gt;
     type: boolean
     description: "Use sum statistics"
 
   # Extension options
 
   xDropGap?:
-    displayName: -xdrop_gap=&lt;real&lt;
+    displayName: -xdrop_gap=&lt;real&gt;
     type: number
     format: double
     description: |
@@ -436,7 +436,7 @@ properties:
       Default: `30.0`
 
   xDropGapFinal?:
-    displayName: -xdrop_gap_final=&lt;real&lt;
+    displayName: -xdrop_gap_final=&lt;real&gt;
     type: number
     format: double
     description: |
@@ -453,7 +453,7 @@ properties:
       Applies to task(s): all
 
   windowSize?:
-    displayName: -window_size=&lt;integer, &lt;=0&lt;
+    displayName: -window_size=&lt;integer, &gt;=0&gt;
     type: integer
     minimum: 0
     description: |
@@ -474,7 +474,7 @@ properties:
   # PSI-TBLASTN options
 
 #  inPSSM?:
-#    displayName: -in_pssm=&lt;string, filename&lt;
+#    displayName: -in_pssm=&lt;string, filename&gt;
 #    type: file
 #    description: |
 #      PSI-TBLASTN checkpoint file
