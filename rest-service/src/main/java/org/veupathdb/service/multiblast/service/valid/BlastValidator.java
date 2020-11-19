@@ -28,12 +28,12 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
     errFmt0             = "only valid for the "
       + ReportFormatType.Pairwise.getIoName()
       + " output format",
-    errOnlyFmtGt4 = "only valid for the following output format types: "
+    errNotFmtGt4 = "only valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
       .collect(Collectors.joining(", ")),
-    errNotFmtGt4 = "not valid for the following output format types: "
+    errOnlyFmtGt4 = "not valid for the following output format types: "
       + Arrays.stream(ReportFormatType.values())
       .limit(5)
       .map(ReportFormatType::getIoName)
@@ -117,7 +117,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       return;
 
     if (conf.getOutFormat().getFormat().ordinal() > 4)
-      err.putError(JsonKeys.SortHits, errOnlyFmtGt4);
+      err.putError(JsonKeys.SortHits, errNotFmtGt4);
   }
 
   static void validateSortHSPs(ErrorMap err, InputBlastConfig conf) {
@@ -159,7 +159,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       return;
 
     OutFormatValidator.validateExternal(conf.getOutFormat())
-      .forEach((k, v) -> err.put(JsonKeys.OUT_FMT + "." + k, v));
+      .forEach((k, v) -> err.put(JsonKeys.OutFormat + "." + k, v));
   }
 
   static void validateNumDescriptions(ErrorMap err, InputBlastConfig conf) {
@@ -173,7 +173,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       conf.getOutFormat().getFormat() != null &&
       conf.getOutFormat().getFormat().ordinal() > 4
     )
-      err.putError(JsonKeys.NumDescriptions, errOnlyFmtGt4);
+      err.putError(JsonKeys.NumDescriptions, errNotFmtGt4);
   }
 
   static void validateNumAlignments(ErrorMap err, InputBlastConfig conf) {
@@ -200,7 +200,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       || conf.getOutFormat().getFormat() == null
       || conf.getOutFormat().getFormat().ordinal() < 5
     )
-      err.putError(MaxTargetSequences, errNotFmtGt4);
+      err.putError(MaxTargetSequences, errOnlyFmtGt4);
   }
 
   static void validateGenCode(ErrorMap err, Byte gc, String field) {

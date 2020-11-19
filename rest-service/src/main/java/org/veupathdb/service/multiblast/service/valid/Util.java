@@ -93,7 +93,7 @@ class Util
     mapping.put(ToolOption.OutputFile, JsonKeys.OutputFile);
     mapping.put(ToolOption.OutAsciiPsiBlastCheckpointFile, JsonKeys.OutAsciiPsiBlastCheckpointFile);
     mapping.put(ToolOption.OutPsiBlastCheckpointFile, JsonKeys.OutPsiBlastCheckpointFile);
-    mapping.put(ToolOption.OutputFormat, JsonKeys.OUT_FMT);
+    mapping.put(ToolOption.OutputFormat, JsonKeys.OutFormat);
     mapping.put(ToolOption.ParseDefLines, JsonKeys.PARSE_DEF_LINES);
     mapping.put(ToolOption.PercentIdentity, JsonKeys.PercentIdentity);
     mapping.put(ToolOption.PhiBlastPatternFile, JsonKeys.PhiBlastPatternFile);

@@ -96,7 +96,7 @@ public class OutFormat
   }
 
   private String jsonKey(String field) {
-    return JsonKeys.OUT_FMT + "." + field;
+    return JsonKeys.OutFormat + "." + field;
   }
 
 }
