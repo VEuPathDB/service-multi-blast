@@ -30,7 +30,7 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public Integer getLength() {
+  public int getLength() {
     return this.delegate.getLength();
   }
 
@@ -60,27 +60,22 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
+  public MultivaluedMap<String, Object> getHeaders() {
+    return this.delegate.getHeaders();
+  }
+
+  @Override
   public Object getEntity() {
     return this.entity;}
 
   @Override
-  public Integer getStatus() {
+  public int getStatus() {
     return this.delegate.getStatus();
   }
 
   @Override
   public Response.StatusType getStatusInfo() {
     return this.delegate.getStatusInfo();
-  }
-
-  @Override
-  public <T> T readEntity(Class<T> p0, Annotation[] p1) {
-    return this.delegate.readEntity(p0,p1);
-  }
-
-  @Override
-  public <T> T readEntity(GenericType<T> p0) {
-    return this.delegate.readEntity(p0);
   }
 
   @Override
@@ -94,12 +89,22 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public Boolean hasEntity() {
+  public <T> T readEntity(Class<T> p0, Annotation[] p1) {
+    return this.delegate.readEntity(p0,p1);
+  }
+
+  @Override
+  public <T> T readEntity(GenericType<T> p0) {
+    return this.delegate.readEntity(p0);
+  }
+
+  @Override
+  public boolean hasEntity() {
     return this.delegate.hasEntity();
   }
 
   @Override
-  public Boolean bufferEntity() {
+  public boolean bufferEntity() {
     return this.delegate.bufferEntity();
   }
 
@@ -129,7 +134,7 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public Boolean hasLink(String p0) {
+  public boolean hasLink(String p0) {
     return this.delegate.hasLink(p0);
   }
 
@@ -156,11 +161,6 @@ public class ResponseDelegate extends Response {
   @Override
   public String getHeaderString(String p0) {
     return this.delegate.getHeaderString(p0);
-  }
-
-  @Override
-  public MultivaluedMap<String, Object> getHeaders() {
-    return this.delegate.getHeaders();
   }
 
   public static class HeaderBuilderBase {

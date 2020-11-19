@@ -37,7 +37,7 @@ properties:
   # Input query options
 
   query?:
-    displayName: -query=<string, filename>
+    displayName: -query=&lt;string, filename&lt;
     type: string
     description: |
       When posting a job using `application/json` this field is required.
@@ -46,7 +46,7 @@ properties:
       query file field must be specified.
 
   queryLoc?:
-    displayName: -query_loc=<string, range>
+    displayName: -query_loc=&lt;string, range&lt;
     description: |
       Location on the query sequence.
     type: ext.InputBlastLocation
@@ -54,7 +54,7 @@ properties:
   # General search options
 
   # db?:
-  #   displayName: "-db=<string, dir_name>"
+  #   displayName: "-db=&lt;string, dir_name&lt;"
   #   type: string
   #   description: |
   #     BLAST database name
@@ -62,7 +62,7 @@ properties:
   #     Incompatible with:  subject, subjectLoc
 
   # out?:
-  #   displayName: "-out=<string, filename>"
+  #   displayName: "-out=&lt;string, filename&lt;"
   #   type: string
   #   description: |
   #     Output file name
@@ -70,7 +70,7 @@ properties:
   #     Default = `-`
 
   eValue?:
-    displayName: -evalue=<real>
+    displayName: -evalue=&lt;real&lt;
     type: string
     pattern: /^\d+(?:\.\d+)?(?:[eE]-?\d+)?$/
     description: |
@@ -83,7 +83,7 @@ properties:
   # Formatting options
 
   outFormat?:
-    displayName: -outfmt=<string, format>
+    displayName: -outfmt=&lt;string, format&lt;
     type: ext.InputBlastOutFmt
 
   showGIs?:
@@ -92,20 +92,20 @@ properties:
     description: "Show NCBI GIs in deflines?"
 
   numDescriptions?:
-    displayName: -num_descriptions=<integer, >=0>
+    displayName: -num_descriptions=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |
       Number of database sequences to show one-line descriptions for
 
-      Not applicable for outFormat > 4
+      Not applicable for outFormat &lt; 4
 
       Default = `500`
 
       Incompatible with: `maxTargetSeqs`
 
   numAlignments?:
-    displayName: -num_alignments=<integer, >=0>
+    displayName: -num_alignments=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |
@@ -116,13 +116,13 @@ properties:
       Incompatible with: `maxTargetSeqs`
 
   lineLength?:
-    displayName: -line_length=<integer, >=1>
+    displayName: -line_length=&lt;integer, &lt;=1&lt;
     type: integer
     minimum: 1
     description: |
       Line length for formatting alignments
 
-      Not applicable for outFormat > 4
+      Not applicable for outFormat &lt; 4
 
       Default = `60`
 
@@ -132,14 +132,14 @@ properties:
 #    description: "Produce HTML output?"
 
   sortHits?:
-    displayName: -sorthits=<integer, (>=0 and <=4)>
+    displayName: -sorthits=&lt;integer, (&lt;=0 and &lt;=4)&lt;
     # TODO: translate this
     description: |
       Only applies to output formats 0-4.
     type: com.InputHitSorting
 
   sortHSPs?:
-    displayName: -sorthsps=<integer, (>=0 and <=4)>
+    displayName: -sorthsps=&lt;integer, (&lt;=0 and &lt;=4)&lt;
     description: Only applies to pairwise output format.
     type: com.InputHSPSorting
 
@@ -154,7 +154,7 @@ properties:
   # Restrict search or results
 
   qCovHSPPerc?:
-    displayName: -qcov_hsp_perc=<real, 0..100>
+    displayName: -qcov_hsp_perc=&lt;real, 0..100&lt;
     type: number
     format: double
     minimum: 0.0
@@ -162,7 +162,7 @@ properties:
     description: "Percent query coverage per hsp"
 
   maxHSPs?:
-    displayName: -max_hsps=<integer, >=1>
+    displayName: -max_hsps=&lt;integer, &lt;=1&lt;
     type: integer
     minimum: 1
     description: |
@@ -173,13 +173,13 @@ properties:
       to one will show only the best HSP for every query-subject pair
 
   maxTargetSeqs?:
-    displayName: -max_target_seqs=<integer, >=1>
+    displayName: -max_target_seqs=&lt;integer, &lt;=1&lt;
     type: integer
     minimum: 1
     description: |
       Number of aligned sequences to keep. Use with report formats that do not
       have separate definition line and alignment sections such as tabular (all
-      outfmt > 4). Not compatible with numDescriptions or numAlignments. Ties
+      outfmt &lt; 4). Not compatible with numDescriptions or numAlignments. Ties
       are broken by order of sequences in the database.
       Default = `500`
 
@@ -191,13 +191,13 @@ properties:
   # Statistical options
 
   dbSize?:
-    displayName: -dbsize=<int8>
+    displayName: -dbsize=&lt;int8&lt;
     type: integer
     format: int8
     description: "Effective length of the database."
 
   searchSpace?:
-    displayName: -searchsp=<int8, >=0>
+    displayName: -searchsp=&lt;int8, &lt;=0&lt;
     type: integer
     format: int8
     minimum: 0
@@ -206,7 +206,7 @@ properties:
   # Search strategy options
 
   # importSearchStrategy?:
-  #   displayName: -import_search_strategy=<string, filename>
+  #   displayName: -import_search_strategy=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Search strategy to use
@@ -214,7 +214,7 @@ properties:
   #     Incompatible with: `exportSearchStrategy`
 
   # exportSearchStrategy?:
-  #   displayName: -export_search_strategy=<string, filename>
+  #   displayName: -export_search_strategy=&lt;string, filename&lt;
   #   type: string
   #   description:
   #     File name to record the search strategy used
@@ -224,7 +224,7 @@ properties:
   # Extension options
 
   xDropUngap?:
-    displayName: -xdrop_ungap=<real>
+    displayName: -xdrop_ungap=&lt;real&lt;
     type: number
     format: double
     description: |
@@ -240,7 +240,7 @@ properties:
       gi|129295).
 
   # numThreads?:
-  #   displayName: -num_threads=<integer, >=1>
+  #   displayName: -num_threads=&lt;integer, &lt;=1&lt;
   #   type: integer
   #   format: int8
   #   minimum: 1

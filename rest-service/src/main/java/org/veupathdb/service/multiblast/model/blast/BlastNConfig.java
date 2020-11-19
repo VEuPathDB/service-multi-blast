@@ -272,7 +272,8 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
       .appendNonNull(ToolOption.SumStats, sumStats)
       .appendNonNull(ToolOption.XDropoffPrelimGappedExtensions, extDropoffPrelimGapped)
       .appendNonNull(ToolOption.XDropoffFinalGappedExtensions, extDropoffFinalGapped)
-      .appendNonNull(ToolOption.MinRawGappedScore, minRawGappedScore);
+      .appendNonNull(ToolOption.MinRawGappedScore, minRawGappedScore)
+      .appendNonNull(ToolOption.WordSize, wordSize);
 
     if (useIndex)
       args.set(ToolOption.UseMegablastIndex, true);

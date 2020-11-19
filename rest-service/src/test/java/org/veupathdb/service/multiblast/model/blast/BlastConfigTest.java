@@ -88,7 +88,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setExpectValue(3.5);
+      target.setExpectValue("3.5");
       target.toArgs(build);
       assertEquals("-evalue='3.5'", build.toString());
     }
@@ -154,7 +154,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setMaxHSPs(42);
+      target.setMaxHSPs((short) 42);
       target.toArgs(build);
       assertEquals("-max_hsps='42'", build.toString());
     }
@@ -176,7 +176,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setNumDescriptions(42);
+      target.setNumDescriptions((short) 42);
       target.toArgs(build);
       assertEquals("-num_descriptions='42'", build.toString());
     }
@@ -308,7 +308,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setWindowSize(450);
+      target.setWindowSize((short) 450);
       target.toArgs(build);
       assertEquals("-window_size='450'", build.toString());
     }
@@ -319,7 +319,7 @@ class BlastConfigTest
       var target = new BlastConfig();
       var build  = new CliBuilder();
 
-      target.setXDropUngap(66.6);
+      target.setExtDropoffUngapped(66.6);
       target.toArgs(build);
       assertEquals("-xdrop_ungap='66.6'", build.toString());
     }
@@ -423,7 +423,7 @@ class BlastConfigTest
     void test7() {
       var target = new BlastConfig();
 
-      target.setExpectValue(3.5);
+      target.setExpectValue("3.5");
       assertEquals("-evalue='3.5'", target.toString());
     }
 
@@ -477,7 +477,7 @@ class BlastConfigTest
     void test13() {
       var target = new BlastConfig();
 
-      target.setMaxHSPs(42);
+      target.setMaxHSPs((short) 42);
       assertEquals("-max_hsps='42'", target.toString());
     }
 
@@ -495,7 +495,7 @@ class BlastConfigTest
     void test15() {
       var target = new BlastConfig();
 
-      target.setNumDescriptions(42);
+      target.setNumDescriptions((short) 42);
       assertEquals("-num_descriptions='42'", target.toString());
     }
 
@@ -603,7 +603,7 @@ class BlastConfigTest
     void test27() {
       var target = new BlastConfig();
 
-      target.setWindowSize(450);
+      target.setWindowSize((short) 450);
       assertEquals("-window_size='450'", target.toString());
     }
 
@@ -612,7 +612,7 @@ class BlastConfigTest
     void test28() {
       var target = new BlastConfig();
 
-      target.setXDropUngap(66.6);
+      target.setExtDropoffUngapped(66.6);
       assertEquals("-xdrop_ungap='66.6'", target.toString());
     }
 

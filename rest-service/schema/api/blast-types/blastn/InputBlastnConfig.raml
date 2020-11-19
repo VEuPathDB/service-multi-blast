@@ -14,7 +14,7 @@ properties:
   # Input query options
 
   strand?:
-    displayName: -strand=<string, `both|minus|plus`>
+    displayName: -strand=&lt;string, `both|minus|plus`&lt;
     description: |
       Query strand(s) to search against database/subject. Choice of both, minus,
       or plus.
@@ -27,13 +27,13 @@ properties:
   # General search options
 
   task?:
-    displayName: -task=<string>
+    displayName: -task=&lt;string&lt;
     description: |
       Default value: `blastn`
     type: ext.InputBlastnTask
 
   wordSize?:
-    displayName: -word_size=<integer, >=4>
+    displayName: -word_size=&lt;integer, &lt;=4&lt;
     type: integer
     minimum: 4
 
@@ -52,7 +52,7 @@ properties:
       Applies to task(s): all
 
   gapOpen?:
-    displayName: -gapopen=<integer>
+    displayName: -gapopen=&lt;integer&lt;
     type: integer
     description: |
       Cost to open a gap. See appendix “BLASTN reward/penalty values” in the
@@ -70,7 +70,7 @@ properties:
       Applies to task(s): all
 
   gapExtend?:
-    displayName: -gapextend=<integer>
+    displayName: -gapextend=&lt;integer&lt;
     type: integer
     description: |
       Cost to extend a gap. This default is a function of reward/penalty value.
@@ -88,7 +88,7 @@ properties:
       Applies to task(s): all
 
   penalty?:
-    displayName: -penalty=<integer, <=0>
+    displayName: -penalty=&lt;integer, &lt;=0&lt;
     type: integer
     maximum: 0
     description: |
@@ -106,7 +106,7 @@ properties:
       Applies to task(s): all
 
   reward?:
-    displayName: -reward=<integer, >=0>
+    displayName: -reward=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |
@@ -124,7 +124,7 @@ properties:
       Applies to task(s): all
 
   useIndex?:
-    displayName: -use_index=<boolean>
+    displayName: -use_index=&lt;boolean&lt;
     type: boolean
     description: |
       Use MegaBLAST database index
@@ -132,7 +132,7 @@ properties:
       Default = `false`
 
   indexName?:
-    displayName: -index_name=<string>
+    displayName: -index_name=&lt;string&lt;
     type: string
     description: |
       MegaBLAST database index name (deprecated; use only for old style indices)
@@ -159,7 +159,7 @@ properties:
   #     * dbHardMask
 
   subjectLoc?:
-    displayName: -subject_loc=<string, range>
+    displayName: -subject_loc=&lt;string, range&lt;
     type: blast.InputBlastLocation
     description: |
       Location on the subject sequence in 1-based offsets
@@ -182,7 +182,7 @@ properties:
   # Query filtering options
 
   dust?:
-    displayName: -dust=<string, dust>
+    displayName: -dust=&lt;string, dust&lt;
     description: |
       Filter query sequence with dust.
 
@@ -190,14 +190,14 @@ properties:
     type: ext.InputBlastnDust
 
   # filteringDb?:
-  #   displayName: -filtering_db=<string, dir_name>
+  #   displayName: -filtering_db=&lt;string, dir_name&lt;
   #   type: string
   #     Mask query using the sequences in this database.
 
   #     Applies to task(s): all
 
   windowMaskerTaxid?:
-    displayName: -window_masker_taxid=<integer>
+    displayName: -window_masker_taxid=&lt;integer&lt;
     type: integer
     description: |
       Enable WindowMasker filtering using a Taxonomic ID.
@@ -205,7 +205,7 @@ properties:
       Applies to task(s): all
 
   # windowMaskerDb?:
-  #   displayName: -window_masker_db=<string, filename>
+  #   displayName: -window_masker_db=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Enable WindowMasker filtering using this repeats database.
@@ -213,7 +213,7 @@ properties:
   #     Applies to task(s): all
 
   softMasking?:
-    displayName: -soft_masking=<boolean>
+    displayName: -soft_masking=&lt;boolean&lt;
     type: boolean
     description: |
       Apply filtering locations as soft masks (i.e., only for finding initial
@@ -226,7 +226,7 @@ properties:
   # Restrict search or results
 
   # giList?:
-  #   displayName: -gilist=<string, filename>
+  #   displayName: -gilist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to list of GIs
@@ -245,7 +245,7 @@ properties:
   #     * subjectLoc
 
   # seqIdList?:
-  #   displayName: -seqidlist=<string, filename>
+  #   displayName: -seqidlist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to list of SeqIDs
@@ -264,7 +264,7 @@ properties:
   #     * subjectLoc
 
   # negativeGiList?:
-  #   displayName: negative_gilist=<string, filename>
+  #   displayName: negative_gilist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified GIs
@@ -283,7 +283,7 @@ properties:
   #     * subjectLoc
 
   # negativeSeqIdList?:
-  #   displayName: negative_seqidlist=<string, filename>
+  #   displayName: negative_seqidlist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified SeqIDs
@@ -302,7 +302,7 @@ properties:
   #     * subjectLoc
 
   taxIds?:
-    displayName: -taxids=<string>
+    displayName: -taxids=&lt;string&lt;
     type: string[]
     description: |
       Restrict search of database to include only the specified taxonomy IDs
@@ -321,7 +321,7 @@ properties:
       * subjectLoc
 
   negativeTaxIds?:
-    displayName: -negative_taxids=<string>
+    displayName: -negative_taxids=&lt;string&lt;
     type: string[]
     description: |
       Restrict search of database to everything except the specified taxonomy IDs
@@ -340,7 +340,7 @@ properties:
       * subjectLoc
 
   # taxIdList?:
-  #   displayName: taxidlist=<string, filename>
+  #   displayName: taxidlist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to include only the specified taxonomy IDs
@@ -359,7 +359,7 @@ properties:
   #     * subjectLoc
 
   # negativeTaxIdList?:
-  #   displayName: negative_taxidlist=<string, filename>
+  #   displayName: negative_taxidlist=&lt;string, filename&lt;
   #   type: file
   #   description: |
   #     Restrict search of database to everything except the specified taxonomy IDs
@@ -378,7 +378,7 @@ properties:
   #     * subjectLoc
 
   # entrezQuery?:
-  #   displayName: -entrez_query=<string>
+  #   displayName: -entrez_query=&lt;string&lt;
   #   type: string
   #   description: |
 
@@ -387,7 +387,7 @@ properties:
   #     Requires: remote
 
   dbSoftMask?:
-    displayName: -db_soft_mask=<string>
+    displayName: -db_soft_mask=&lt;string&lt;
     type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as soft mask (i.e.,
@@ -402,7 +402,7 @@ properties:
       * subjectLoc
 
   dbHardMask?:
-    displayName: -db_hard_mask=<string>
+    displayName: -db_hard_mask=&lt;string&lt;
     type: string
     description: |
       Filtering algorithm ID to apply to the BLAST database as hard mask (i.e.,
@@ -417,7 +417,7 @@ properties:
       * subjectLoc
 
   percIdentity?:
-    displayName: "-perc_identity=<real, 0..100>"
+    displayName: "-perc_identity=&lt;real, 0..100&lt;"
     type: number
     format: double
     minimum: 0.0
@@ -428,7 +428,7 @@ properties:
       Applies to task(s): all
 
   cullingLimit?:
-    displayName: -culling_limit=<integer, >=0>
+    displayName: -culling_limit=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |
@@ -441,7 +441,7 @@ properties:
       * bestHitScoreEdge
 
   bestHitOverhang?:
-    displayName: -best_hit_overhang=<real, (>0 and <0.5)>
+    displayName: -best_hit_overhang=&lt;real, (&lt;0 and &lt;0.5)&lt;
     type: number
     format: double
     minimum: 0.0
@@ -452,7 +452,7 @@ properties:
       Incompatible with: `cullingLimit`
 
   bestHitScoreEdge?:
-    displayName: -best_hit_score_edge=<real, (>0 and <0.5)>
+    displayName: -best_hit_score_edge=&lt;real, (&lt;0 and &lt;0.5)&lt;
     type: number
     format: double
     minimum: 0.0
@@ -470,7 +470,7 @@ properties:
   # Discontiguous MegaBLAST options
 
   templateType?:
-    displayName: -template_type=<string, `coding|codingAndOptimal|optimal`>
+    displayName: -template_type=&lt;string, `coding|codingAndOptimal|optimal`&lt;
     type: ext.InputBlastnDcTemplateType
     description: |
       Discontiguous MegaBLAST template type.
@@ -482,7 +482,7 @@ properties:
       Requires: `templateLength`
 
   templateLength?:
-    displayName: -template_length=<integer, `16|18|21` >
+    displayName: -template_length=&lt;integer, `16|18|21` &lt;
     type: integer
     format: int8
     minimum: 16
@@ -501,14 +501,14 @@ properties:
   # Statistical options
 
   sumStats?:
-    displayName: -sum_stats=<boolean>
+    displayName: -sum_stats=&lt;boolean&lt;
     type: boolean
     description: "Use sum statistics"
 
   # Extension options
 
   xDropGap?:
-    displayName: -xdrop_gap=<real>
+    displayName: -xdrop_gap=&lt;real&lt;
     type: number
     format: double
     description: |
@@ -517,7 +517,7 @@ properties:
       Default: `30.0`
 
   xDropGapFinal?:
-    displayName: -xdrop_gap_final=<real>
+    displayName: -xdrop_gap_final=&lt;real&lt;
     type: number
     format: double
     description: |
@@ -534,7 +534,7 @@ properties:
       Applies to task(s): megablast
 
   minRawGappedScore?:
-    displayName: -min_raw_gapped_score=<integer>
+    displayName: -min_raw_gapped_score=&lt;integer&lt;
     type: integer
     description: |
       Minimum raw gapped score to keep an alignment in the preliminary gapped
@@ -551,7 +551,7 @@ properties:
       Applies to task(s): all
 
   windowSize?:
-    displayName: -window_size=<integer, >=0>
+    displayName: -window_size=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |
@@ -562,7 +562,7 @@ properties:
       Default: `40`
 
   offDiagonalRange?:
-    displayName: -off_diagonal_range=<integer, >=0>
+    displayName: -off_diagonal_range=&lt;integer, &lt;=0&lt;
     type: integer
     minimum: 0
     description: |

@@ -86,7 +86,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setExpectValue(3.5);
+      target.setExpectValue("3.5");
       target.toArgs(build);
       assertEquals("-evalue='3.5'", build.toString());
     }
@@ -152,7 +152,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setMaxHSPs(42);
+      target.setMaxHSPs((short) 42);
       target.toArgs(build);
       assertEquals("-max_hsps='42'", build.toString());
     }
@@ -174,7 +174,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setNumDescriptions(42);
+      target.setNumDescriptions((short) 42);
       target.toArgs(build);
       assertEquals("-num_descriptions='42'", build.toString());
     }
@@ -306,7 +306,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setWindowSize(450);
+      target.setWindowSize((short) 450);
       target.toArgs(build);
       assertEquals("-window_size='450'", build.toString());
     }
@@ -317,7 +317,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setXDropUngap(66.6);
+      target.setExtDropoffUngapped(66.6);
       target.toArgs(build);
       assertEquals("-xdrop_ungap='66.6'", build.toString());
     }
@@ -475,7 +475,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setWordSize(420);
+      target.setWordSize((short) 420);
       target.toArgs(build);
       assertEquals("-word_size='420'", build.toString());
     }
@@ -530,7 +530,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setGapOpen(33);
+      target.setGapOpen((byte) 33);
       target.toArgs(build);
       assertEquals("-gapopen='33'", build.toString());
     }
@@ -541,7 +541,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setGapExtend(77);
+      target.setGapExtend((byte) 77);
       target.toArgs(build);
       assertEquals("-gapextend='77'", build.toString());
     }
@@ -552,7 +552,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setPenalty(77);
+      target.setPenalty((byte) 77);
       target.toArgs(build);
       assertEquals("-penalty='77'", build.toString());
     }
@@ -563,7 +563,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setReward(77);
+      target.setReward((byte) 77);
       target.toArgs(build);
       assertEquals("-reward='77'", build.toString());
     }
@@ -574,7 +574,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setUseIndex(true);
+      target.setUseIndexEnabled(true);
       target.toArgs(build);
       assertEquals("-use_index='true'", build.toString());
     }
@@ -695,7 +695,7 @@ class BlastNConfigTest
       var target = new BlastNConfig();
       var build  = new CliBuilder();
 
-      target.setTemplateLength(16);
+      target.setTemplateLength((byte) 16);
       target.toArgs(build);
       assertEquals("-template_length='16'", build.toString());
     }
@@ -780,7 +780,7 @@ class BlastNConfigTest
     void test7() {
       var target = new BlastNConfig();
 
-      target.setExpectValue(3.5);
+      target.setExpectValue("3.5");
       assertEquals("-evalue='3.5'", target.toString());
     }
 
@@ -834,7 +834,7 @@ class BlastNConfigTest
     void test13() {
       var target = new BlastNConfig();
 
-      target.setMaxHSPs(42);
+      target.setMaxHSPs((short) 42);
       assertEquals("-max_hsps='42'", target.toString());
     }
 
@@ -852,7 +852,7 @@ class BlastNConfigTest
     void test15() {
       var target = new BlastNConfig();
 
-      target.setNumDescriptions(42);
+      target.setNumDescriptions((short) 42);
       assertEquals("-num_descriptions='42'", target.toString());
     }
 
@@ -960,7 +960,7 @@ class BlastNConfigTest
     void test27() {
       var target = new BlastNConfig();
 
-      target.setWindowSize(450);
+      target.setWindowSize((short) 450);
       assertEquals("-window_size='450'", target.toString());
     }
 
@@ -969,7 +969,7 @@ class BlastNConfigTest
     void test28() {
       var target = new BlastNConfig();
 
-      target.setXDropUngap(66.6);
+      target.setExtDropoffUngapped(66.6);
       assertEquals("-xdrop_ungap='66.6'", target.toString());
     }
 
@@ -1099,7 +1099,7 @@ class BlastNConfigTest
     void test41() {
       var target = new BlastNConfig();
 
-      target.setWordSize(420);
+      target.setWordSize((short) 420);
       assertEquals("-word_size='420'", target.toString());
     }
 
@@ -1144,7 +1144,7 @@ class BlastNConfigTest
     void test46() {
       var target = new BlastNConfig();
 
-      target.setGapOpen(33);
+      target.setGapOpen((byte) 33);
       assertEquals("-gapopen='33'", target.toString());
     }
 
@@ -1153,7 +1153,7 @@ class BlastNConfigTest
     void test47() {
       var target = new BlastNConfig();
 
-      target.setGapExtend(77);
+      target.setGapExtend((byte) 77);
       assertEquals("-gapextend='77'", target.toString());
     }
 
@@ -1162,7 +1162,7 @@ class BlastNConfigTest
     void test48() {
       var target = new BlastNConfig();
 
-      target.setPenalty(77);
+      target.setPenalty((byte) 77);
       assertEquals("-penalty='77'", target.toString());
     }
 
@@ -1171,7 +1171,7 @@ class BlastNConfigTest
     void test49() {
       var target = new BlastNConfig();
 
-      target.setReward(77);
+      target.setReward((byte) 77);
       assertEquals("-reward='77'", target.toString());
     }
 
@@ -1180,7 +1180,7 @@ class BlastNConfigTest
     void test50() {
       var target = new BlastNConfig();
 
-      target.setUseIndex(true);
+      target.setUseIndexEnabled(true);
       assertEquals("-use_index='true'", target.toString());
     }
 
@@ -1279,7 +1279,7 @@ class BlastNConfigTest
     void test61() {
       var target = new BlastNConfig();
 
-      target.setTemplateLength(16);
+      target.setTemplateLength((byte) 16);
       assertEquals("-template_length='16'", target.toString());
     }
 
