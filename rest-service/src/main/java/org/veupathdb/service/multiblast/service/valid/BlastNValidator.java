@@ -1,4 +1,4 @@
-package org.veupathdb.service.multiblast.service.jobs;
+package org.veupathdb.service.multiblast.service.valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +11,7 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
-public class BlastNValidator extends BlastValidator
+class BlastNValidator implements ConfigValidator<InputBlastnConfig>
 {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
@@ -36,18 +36,21 @@ public class BlastNValidator extends BlastValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public ErrorMap validateConfig(ErrorMap err, InputBlastnConfig conf) {
+  @Override
+  public ErrorMap validate(InputBlastnConfig conf) {
     log.trace("#validateConfig(ErrorMap, InputBlastnConfig)");
 
-    optGtEq(err, conf.getWordSize(), 4, JsonKeys.WordSize);
-    optLtEq(err, conf.getPenalty(), 0, JsonKeys.Penalty);
-    optGtEq(err, conf.getReward(), 0, JsonKeys.Reward);
+    var err = new ErrorMap();
+
+    Int.optGtEq(err, conf.getWordSize(), 4, JsonKeys.WordSize);
+    Int.optLtEq(err, conf.getPenalty(), 0, JsonKeys.Penalty);
+    Int.optGtEq(err, conf.getReward(), 0, JsonKeys.Reward);
     validateSubjectLoc(err, conf);
     validateTaxIds(err, conf);
     validateNegativeTaxIds(err, conf);
     validateDbSoftMask(err, conf);
     validateDbHardMask(err, conf);
-    optBetweenInc(err, conf.getPercIdentity(), 0, 100, JsonKeys.PercentIdentity);
+    Dec.optBetweenInc(err, conf.getPercIdentity(), 0, 100, JsonKeys.PercentIdentity);
     validateCullingLimit(err, conf);
     validateBestHitOverhang(err, conf);
     validateBestHitScoreEdge(err, conf);
@@ -55,7 +58,7 @@ public class BlastNValidator extends BlastValidator
     validateTemplateLength(err, conf);
     validateNoGreedy(err, conf);
     validateWindowSize(err, conf);
-    optGtEq(err, conf.getOffDiagonalRange(), 0, JsonKeys.OffDiagonalRange);
+    Int.optGtEq(err, conf.getOffDiagonalRange(), 0, JsonKeys.OffDiagonalRange);
 
     return err;
   }
@@ -68,29 +71,29 @@ public class BlastNValidator extends BlastValidator
 
   private void validateBestHitScoreEdge(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
-      betweenExc(err, conf.getBestHitScoreEdge(), 0.0, 0.5, BestHitScoreEdge);
-      incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0.0, 0.5, BestHitScoreEdge);
+      Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
   private void validateBestHitOverhang(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getBestHitOverhang() != null) {
-      betweenExc(err, conf.getBestHitOverhang(), 0.0, 0.5, BestHitOverhang);
-      incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitOverhang(), 0.0, 0.5, BestHitOverhang);
+      Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
   private void validateCullingLimit(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getCullingLimit() != null) {
-      gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
-      incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
-      incompat(err, conf.getBestHitScoreEdge(), CullingLimit, BestHitScoreEdge);
+      Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
+      Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
+      Obj.incompat(err, conf.getBestHitScoreEdge(), CullingLimit, BestHitScoreEdge);
     }
   }
 
   static void validateNoGreedy(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getNoGreedy() != null && conf.getTask() != InputBlastnTask.MEGABLAST)
-      err.putError(NonGreedy, String.format(errOnlyTask, BlastnTask.Megablast));
+      err.putError(NonGreedy, String.format(BlastValidator.errOnlyTask, BlastnTask.Megablast));
   }
 
   static void validateTemplateLength(ErrorMap err, InputBlastnConfig conf) {
@@ -101,7 +104,7 @@ public class BlastNValidator extends BlastValidator
       conf.setTemplateType(InputBlastnDcTemplateType.CODING);
 
     if (conf.getTask() != InputBlastnTask.DCMEGABLAST)
-      err.putError(TemplateLength, String.format(errOnlyTask, BlastnTask.DiscontiguousMegablast));
+      err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast));
 
     if (
       conf.getTemplateLength() != 16
@@ -119,43 +122,43 @@ public class BlastNValidator extends BlastValidator
       conf.setTemplateLength((byte) 18);
 
     if (conf.getTask() != InputBlastnTask.DCMEGABLAST)
-      err.putError(TemplateType, String.format(errOnlyTask, BlastnTask.DiscontiguousMegablast));
+      err.putError(TemplateType, String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast));
   }
 
   static void validateDbHardMask(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getDbHardMask() != null) {
-      incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
-      incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
+      Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
+      Obj.incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
     }
   }
 
   static void validateDbSoftMask(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getDbSoftMask() != null) {
-      incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
-      incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
+      Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
+      Obj.incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
     }
   }
 
   static void validateTaxIds(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getTaxIds() != null && !conf.getTaxIds().isEmpty()) {
-      colIncompat(err, conf.getNegativeTaxIds(), TaxIDs, NegativeTaxIDs);
-      incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
+      Obj.colIncompat(err, conf.getNegativeTaxIds(), TaxIDs, NegativeTaxIDs);
+      Obj.incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
     }
   }
 
   static void validateNegativeTaxIds(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getNegativeTaxIds() != null && !conf.getNegativeTaxIds().isEmpty()) {
-      colIncompat(err, conf.getTaxIds(), NegativeTaxIDs, TaxIDs);
-      incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
+      Obj.colIncompat(err, conf.getTaxIds(), NegativeTaxIDs, TaxIDs);
+      Obj.incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
     }
   }
 
   static void validateSubjectLoc(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getSubjectLoc() != null) {
-      colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
-      colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
-      incompat(err, conf.getDbSoftMask(), SubjectLocation, DBSoftMask);
-      incompat(err, conf.getDbHardMask(), SubjectLocation, DBHardMask);
+      Obj.colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
+      Obj.colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
+      Obj.incompat(err, conf.getDbSoftMask(), SubjectLocation, DBSoftMask);
+      Obj.incompat(err, conf.getDbHardMask(), SubjectLocation, DBHardMask);
     }
   }
 
@@ -163,12 +166,12 @@ public class BlastNValidator extends BlastValidator
     if (conf.getWindowSize() == null)
       return;
 
-    gtEq(err, conf.getWindowSize(), 0, MultiHitWindowSize);
+    Int.gtEq(err, conf.getWindowSize(), 0, MultiHitWindowSize);
 
     if (conf.getTask() != InputBlastnTask.DCMEGABLAST)
       err.putError(
         MultiHitWindowSize,
-        String.format(errOnlyTask, BlastnTask.DiscontiguousMegablast)
+        String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast)
       );
   }
 }

@@ -1,4 +1,4 @@
-package org.veupathdb.service.multiblast.service.jobs;
+package org.veupathdb.service.multiblast.service.valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.veupathdb.service.multiblast.generated.model.InputBlastOutFmt;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.OutFormat;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 public class OutFormatValidator

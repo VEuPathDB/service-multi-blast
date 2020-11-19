@@ -1,4 +1,4 @@
-package org.veupathdb.service.multiblast.service.jobs;
+package org.veupathdb.service.multiblast.service.valid;
 
 import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
