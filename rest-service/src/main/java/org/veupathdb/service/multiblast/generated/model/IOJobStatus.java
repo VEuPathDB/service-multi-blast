@@ -15,7 +15,7 @@ public enum IOJobStatus {
   @JsonProperty("errored")
   ERRORED("errored");
 
-  private String name;
+  public final String name;
 
   IOJobStatus(String name) {
     this.name = name;

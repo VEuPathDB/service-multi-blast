@@ -12,7 +12,7 @@ public enum InputBlastnDcTemplateType {
   @JsonProperty("both")
   BOTH("both");
 
-  private String name;
+  public final String name;
 
   InputBlastnDcTemplateType(String name) {
     this.name = name;

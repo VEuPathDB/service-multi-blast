@@ -18,7 +18,7 @@ public enum InputBlastTool {
   @JsonProperty("tblastx")
   TBLASTX("tblastx");
 
-  private String name;
+  public final String name;
 
   InputBlastTool(String name) {
     this.name = name;

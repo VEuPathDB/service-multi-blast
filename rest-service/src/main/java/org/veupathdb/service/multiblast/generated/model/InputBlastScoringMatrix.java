@@ -27,7 +27,7 @@ public enum InputBlastScoringMatrix {
   @JsonProperty("PAM70")
   PAM70("PAM70");
 
-  private String name;
+  public final String name;
 
   InputBlastScoringMatrix(String name) {
     this.name = name;

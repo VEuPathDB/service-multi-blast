@@ -15,7 +15,7 @@ public enum InputBlastCompBasedStats {
   @JsonProperty("unconditional-comp-based-score-adjustment")
   UNCONDITIONALCOMPBASEDSCOREADJUSTMENT("unconditional-comp-based-score-adjustment");
 
-  private String name;
+  public final String name;
 
   InputBlastCompBasedStats(String name) {
     this.name = name;

@@ -12,7 +12,7 @@ public enum InputBlastStrand {
   @JsonProperty("both")
   BOTH("both");
 
-  private String name;
+  public final String name;
 
   InputBlastStrand(String name) {
     this.name = name;

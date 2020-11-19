@@ -18,7 +18,7 @@ public enum InputHSPSorting {
   @JsonProperty("by-hsp-subject-start")
   BYHSPSUBJECTSTART("by-hsp-subject-start");
 
-  private String name;
+  public final String name;
 
   InputHSPSorting(String name) {
     this.name = name;

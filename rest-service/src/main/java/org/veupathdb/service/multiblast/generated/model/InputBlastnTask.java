@@ -15,7 +15,7 @@ public enum InputBlastnTask {
   @JsonProperty("blastn-short")
   BLASTNSHORT("blastn-short");
 
-  private String name;
+  public final String name;
 
   InputBlastnTask(String name) {
     this.name = name;

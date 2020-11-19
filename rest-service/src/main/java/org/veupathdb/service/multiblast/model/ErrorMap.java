@@ -16,6 +16,10 @@ public final class ErrorMap extends HashMap<String, List<String>>
     computeIfAbsent(key, this::newList).add(error);
   }
 
+  public void putError(String prefix, String key, String error) {
+    computeIfAbsent(prefix + "." + key, this::newList).add(error);
+  }
+
   public void putError(String prefix, String key, List<String> errors) {
     computeIfAbsent(prefix + "." + key, this::newList).addAll(errors);
   }

@@ -159,7 +159,7 @@ public enum InputBlastFmtField {
   @JsonProperty("stitle")
   STITLE("stitle");
 
-  private String name;
+  public final String name;
 
   InputBlastFmtField(String name) {
     this.name = name;
