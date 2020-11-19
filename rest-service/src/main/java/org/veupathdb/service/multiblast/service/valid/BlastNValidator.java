@@ -69,21 +69,21 @@ class BlastNValidator implements ConfigValidator<InputBlastnConfig>
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  private void validateBestHitScoreEdge(ErrorMap err, InputBlastnConfig conf) {
+  static void validateBestHitScoreEdge(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
       Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0.0, 0.5, BestHitScoreEdge);
       Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
-  private void validateBestHitOverhang(ErrorMap err, InputBlastnConfig conf) {
+  static void validateBestHitOverhang(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getBestHitOverhang() != null) {
       Dec.betweenExc(err, conf.getBestHitOverhang(), 0.0, 0.5, BestHitOverhang);
       Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
-  private void validateCullingLimit(ErrorMap err, InputBlastnConfig conf) {
+  static void validateCullingLimit(ErrorMap err, InputBlastnConfig conf) {
     if (conf.getCullingLimit() != null) {
       Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
       Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
