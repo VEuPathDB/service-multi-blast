@@ -58,21 +58,21 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  private void validateBestHitScoreEdge(ErrorMap err, InputBlastpConfig conf) {
+  static void validateBestHitScoreEdge(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
       Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0, 0.5, BestHitScoreEdge);
       Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
-  private void validateBestHitOverhang(ErrorMap err, InputBlastpConfig conf) {
+  static void validateBestHitOverhang(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getBestHitOverhang() != null) {
       Dec.betweenExc(err, conf.getBestHitOverhang(), 0, 0.5, BestHitOverhang);
       Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
-  private void validateCullingLimit(ErrorMap err, InputBlastpConfig conf) {
+  static void validateCullingLimit(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getCullingLimit() != null) {
       Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
       Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
@@ -80,35 +80,35 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     }
   }
 
-  private void validateDbHardMask(ErrorMap err, InputBlastpConfig conf) {
+  static void validateDbHardMask(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getDbHardMask() != null) {
       Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
       Obj.incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
     }
   }
 
-  private void validateDbSoftMask(ErrorMap err, InputBlastpConfig conf) {
+  static void validateDbSoftMask(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getDbSoftMask() != null) {
       Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
       Obj.incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
     }
   }
 
-  private void validateNegativeTaxIds(ErrorMap err, InputBlastpConfig conf) {
+  static void validateNegativeTaxIds(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getNegativeTaxIds() == null || conf.getNegativeTaxIds().isEmpty())
       return;
 
     Obj.incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
   }
 
-  private void validateTaxIds(ErrorMap err, InputBlastpConfig conf) {
+  static void validateTaxIds(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getTaxIds() == null || conf.getTaxIds().isEmpty())
       return;
 
     Obj.incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
   }
 
-  private void validateSoftMasking(ErrorMap err, InputBlastpConfig conf) {
+  static void validateSoftMasking(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getSoftMasking() == null || !conf.getSoftMasking())
       return;
 
@@ -119,7 +119,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
       );
   }
 
-  private void validateSubjectLoc(ErrorMap err, InputBlastpConfig conf) {
+  static void validateSubjectLoc(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getSubjectLoc() != null) {
       Obj.colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
       Obj.colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
@@ -128,7 +128,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     }
   }
 
-  private void validateMatrix(ErrorMap err, InputBlastpConfig conf) {
+  static void validateMatrix(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getMatrix() == null)
       return;
 
@@ -139,7 +139,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
       );
   }
 
-  private void validateGapExtend(ErrorMap err, InputBlastpConfig conf) {
+  static void validateGapExtend(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getGapExtend() == null)
       return;
 
@@ -150,7 +150,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
       );
   }
 
-  private void validateGapOpen(ErrorMap err, InputBlastpConfig conf) {
+  static void validateGapOpen(ErrorMap err, InputBlastpConfig conf) {
     if (conf.getGapOpen() == null)
       return;
 
