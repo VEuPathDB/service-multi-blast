@@ -48,21 +48,21 @@ class TBlastNValidator implements ConfigValidator<InputTBlastnConfig>
     return err;
   }
 
-  private void validateBestHitScoreEdge(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateBestHitScoreEdge(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
       Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0, 0.5, BestHitScoreEdge);
       Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
-  private void validateBestHitOverhang(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateBestHitOverhang(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getBestHitOverhang() != null) {
       Dec.betweenExc(err, conf.getBestHitOverhang(), 0, 0.5, BestHitOverhang);
       Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
-  private void validateCullingLimit(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateCullingLimit(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getCullingLimit() != null) {
       Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
       Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
@@ -70,35 +70,35 @@ class TBlastNValidator implements ConfigValidator<InputTBlastnConfig>
     }
   }
 
-  private void validateDBHardMask(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateDBHardMask(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getDbHardMask() != null) {
       Obj.incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
       Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
     }
   }
 
-  private void validateDBSoftMask(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateDBSoftMask(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getDbSoftMask() != null) {
       Obj.incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
       Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
     }
   }
 
-  private void validateNegativeTaxIDs(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateNegativeTaxIDs(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getNegativeTaxIds() != null && !conf.getNegativeTaxIds().isEmpty()) {
       Obj.colIncompat(err, conf.getTaxIds(), NegativeTaxIDs, TaxIDs);
       Obj.incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
     }
   }
 
-  private void validateTaxIDs(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateTaxIDs(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getTaxIds() != null && !conf.getTaxIds().isEmpty()) {
       Obj.colIncompat(err, conf.getNegativeTaxIds(), TaxIDs, NegativeTaxIDs);
       Obj.incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
     }
   }
 
-  private void validateSubjectLoc(ErrorMap err, InputTBlastnConfig conf) {
+  static void validateSubjectLoc(ErrorMap err, InputTBlastnConfig conf) {
     if (conf.getSubjectLoc() != null) {
       Obj.colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
       Obj.colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);

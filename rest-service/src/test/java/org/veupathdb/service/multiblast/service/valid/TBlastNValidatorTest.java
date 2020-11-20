@@ -7,22 +7,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.multiblast.generated.model.InputBlastLocationImpl;
-import org.veupathdb.service.multiblast.generated.model.InputBlastxConfig;
-import org.veupathdb.service.multiblast.generated.model.InputBlastxConfigImpl;
+import org.veupathdb.service.multiblast.generated.model.InputTBlastnConfig;
+import org.veupathdb.service.multiblast.generated.model.InputTBlastnConfigImpl;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
-import static org.veupathdb.service.multiblast.model.io.JsonKeys.BestHitScoreEdge;
 
-class BlastXValidatorTest
+class TBlastNValidatorTest
 {
-  private InputBlastxConfig conf;
+  private InputTBlastnConfig conf;
   private ErrorMap          err;
 
   @BeforeEach
   void setUp() {
-    conf = new InputBlastxConfigImpl();
+    conf = new InputTBlastnConfigImpl();
     err  = new ErrorMap();
   }
 
@@ -33,7 +32,7 @@ class BlastXValidatorTest
     @Test
     @DisplayName("does nothing if the " + BestHitScoreEdge + " value is null")
     void test1() {
-      BlastXValidator.validateBestHitScoreEdge(err, conf);
+      TBlastNValidator.validateBestHitScoreEdge(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -41,7 +40,7 @@ class BlastXValidatorTest
     @DisplayName("rejects values less than or equal to 0")
     void test2() {
       conf.setBestHitScoreEdge(0D);
-      BlastXValidator.validateBestHitScoreEdge(err, conf);
+      TBlastNValidator.validateBestHitScoreEdge(err, conf);
       confirmSingleError(BestHitScoreEdge, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }
 
@@ -49,7 +48,7 @@ class BlastXValidatorTest
     @DisplayName("rejects values greater than or equal to 0.5")
     void test3() {
       conf.setBestHitScoreEdge(0.5);
-      BlastXValidator.validateBestHitScoreEdge(err, conf);
+      TBlastNValidator.validateBestHitScoreEdge(err, conf);
       confirmSingleError(BestHitScoreEdge, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }
 
@@ -58,7 +57,7 @@ class BlastXValidatorTest
     void test4() {
       conf.setBestHitScoreEdge(0.3);
       conf.setCullingLimit(1);
-      BlastXValidator.validateBestHitScoreEdge(err, conf);
+      TBlastNValidator.validateBestHitScoreEdge(err, conf);
       confirmSingleError(
         BestHitScoreEdge,
         String.format(ConfigValidator.errIncompat, CullingLimit)
@@ -73,7 +72,7 @@ class BlastXValidatorTest
     @Test
     @DisplayName("does nothing if the " + BestHitOverhang + " value is null")
     void test1() {
-      BlastXValidator.validateBestHitOverhang(err, conf);
+      TBlastNValidator.validateBestHitOverhang(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -81,7 +80,7 @@ class BlastXValidatorTest
     @DisplayName("rejects values less than or equal to 0")
     void test2() {
       conf.setBestHitOverhang(0D);
-      BlastXValidator.validateBestHitOverhang(err, conf);
+      TBlastNValidator.validateBestHitOverhang(err, conf);
       confirmSingleError(BestHitOverhang, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }
 
@@ -89,7 +88,7 @@ class BlastXValidatorTest
     @DisplayName("rejects values greater than or equal to 0.5")
     void test3() {
       conf.setBestHitOverhang(0.5);
-      BlastXValidator.validateBestHitOverhang(err, conf);
+      TBlastNValidator.validateBestHitOverhang(err, conf);
       confirmSingleError(BestHitOverhang, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }
 
@@ -98,7 +97,7 @@ class BlastXValidatorTest
     void test4() {
       conf.setBestHitOverhang(0.3);
       conf.setCullingLimit(1);
-      BlastXValidator.validateBestHitOverhang(err, conf);
+      TBlastNValidator.validateBestHitOverhang(err, conf);
       confirmSingleError(
         BestHitOverhang,
         String.format(ConfigValidator.errIncompat, CullingLimit)
@@ -113,7 +112,7 @@ class BlastXValidatorTest
     @Test
     @DisplayName("does nothing if the " + CullingLimit + " value is null")
     void test1() {
-      BlastXValidator.validateCullingLimit(err, conf);
+      TBlastNValidator.validateCullingLimit(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -121,7 +120,7 @@ class BlastXValidatorTest
     @DisplayName("rejects values less than 0")
     void test2() {
       conf.setCullingLimit(-1);
-      BlastXValidator.validateCullingLimit(err, conf);
+      TBlastNValidator.validateCullingLimit(err, conf);
       confirmSingleError(CullingLimit, String.format(ConfigValidator.errGtEqD, 0));
     }
 
@@ -130,7 +129,7 @@ class BlastXValidatorTest
     void test3() {
       conf.setCullingLimit(1);
       conf.setBestHitOverhang(0.1);
-      BlastXValidator.validateCullingLimit(err, conf);
+      TBlastNValidator.validateCullingLimit(err, conf);
       confirmSingleError(
         CullingLimit,
         String.format(ConfigValidator.errIncompat, BestHitOverhang)
@@ -142,7 +141,7 @@ class BlastXValidatorTest
     void test4() {
       conf.setCullingLimit(1);
       conf.setBestHitScoreEdge(0.1);
-      BlastXValidator.validateCullingLimit(err, conf);
+      TBlastNValidator.validateCullingLimit(err, conf);
       confirmSingleError(
         CullingLimit,
         String.format(ConfigValidator.errIncompat, BestHitScoreEdge)
@@ -151,13 +150,13 @@ class BlastXValidatorTest
   }
 
   @Nested
-  @DisplayName("#validateDbHardMask(ErrorMap, InputBlastpConfig)")
+  @DisplayName("#validateDBHardMask(ErrorMap, InputBlastpConfig)")
   class ValidateDbHardMask
   {
     @Test
     @DisplayName("does nothing if the " + DBHardMask + " value is null")
     void test1() {
-      BlastXValidator.validateDbHardMask(err, conf);
+      TBlastNValidator.validateDBHardMask(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -166,7 +165,7 @@ class BlastXValidatorTest
     void test2() {
       conf.setDbHardMask("hi");
       conf.setDbSoftMask("ho");
-      BlastXValidator.validateDbHardMask(err, conf);
+      TBlastNValidator.validateDBHardMask(err, conf);
       confirmSingleError(
         DBHardMask,
         String.format(ConfigValidator.errIncompat, DBSoftMask)
@@ -178,7 +177,7 @@ class BlastXValidatorTest
     void test3() {
       conf.setDbHardMask("hi");
       conf.setSubjectLoc(new InputBlastLocationImpl());
-      BlastXValidator.validateDbHardMask(err, conf);
+      TBlastNValidator.validateDBHardMask(err, conf);
       confirmSingleError(
         DBHardMask,
         String.format(ConfigValidator.errIncompat, SubjectLocation)
@@ -187,13 +186,13 @@ class BlastXValidatorTest
   }
 
   @Nested
-  @DisplayName("#validateDbSoftMask(ErrorMap, InputBlastpConfig)")
+  @DisplayName("#validateDBSoftMask(ErrorMap, InputBlastpConfig)")
   class ValidateDbSoftMask
   {
     @Test
     @DisplayName("does nothing if the " + DBSoftMask + " value is null")
     void test1() {
-      BlastXValidator.validateDbSoftMask(err, conf);
+      TBlastNValidator.validateDBSoftMask(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -202,7 +201,7 @@ class BlastXValidatorTest
     void test2() {
       conf.setDbHardMask("hi");
       conf.setDbSoftMask("ho");
-      BlastXValidator.validateDbSoftMask(err, conf);
+      TBlastNValidator.validateDBSoftMask(err, conf);
       confirmSingleError(
         DBSoftMask,
         String.format(ConfigValidator.errIncompat, DBHardMask)
@@ -214,7 +213,7 @@ class BlastXValidatorTest
     void test3() {
       conf.setDbSoftMask("hi");
       conf.setSubjectLoc(new InputBlastLocationImpl());
-      BlastXValidator.validateDbSoftMask(err, conf);
+      TBlastNValidator.validateDBSoftMask(err, conf);
       confirmSingleError(
         DBSoftMask,
         String.format(ConfigValidator.errIncompat, SubjectLocation)
@@ -232,7 +231,7 @@ class BlastXValidatorTest
       // create an error condition to verify it's ignored
       conf.setSubjectLoc(new InputBlastLocationImpl());
 
-      BlastXValidator.validateTaxIDs(err, conf);
+      TBlastNValidator.validateTaxIDs(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -244,7 +243,7 @@ class BlastXValidatorTest
 
       conf.setTaxIds(Collections.emptyList());
 
-      BlastXValidator.validateTaxIDs(err, conf);
+      TBlastNValidator.validateTaxIDs(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -254,7 +253,7 @@ class BlastXValidatorTest
       conf.setTaxIds(Collections.singletonList("hi"));
       conf.setSubjectLoc(new InputBlastLocationImpl());
 
-      BlastXValidator.validateTaxIDs(err, conf);
+      TBlastNValidator.validateTaxIDs(err, conf);
 
       confirmSingleError(
         TaxIDs,
@@ -273,7 +272,7 @@ class BlastXValidatorTest
       // create an error condition to verify it's ignored
       conf.setSubjectLoc(new InputBlastLocationImpl());
 
-      BlastXValidator.validateNegativeTaxIDs(err, conf);
+      TBlastNValidator.validateNegativeTaxIDs(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -285,7 +284,7 @@ class BlastXValidatorTest
 
       conf.setNegativeTaxIds(Collections.emptyList());
 
-      BlastXValidator.validateNegativeTaxIDs(err, conf);
+      TBlastNValidator.validateNegativeTaxIDs(err, conf);
       assertTrue(err.isEmpty());
     }
 
@@ -295,7 +294,7 @@ class BlastXValidatorTest
       conf.setNegativeTaxIds(Collections.singletonList("hi"));
       conf.setSubjectLoc(new InputBlastLocationImpl());
 
-      BlastXValidator.validateNegativeTaxIDs(err, conf);
+      TBlastNValidator.validateNegativeTaxIDs(err, conf);
 
       confirmSingleError(
         NegativeTaxIDs,
@@ -317,7 +316,7 @@ class BlastXValidatorTest
       void test1() {
         conf.setTaxIds(Collections.singletonList("hello"));
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         assertTrue(err.isEmpty());
       }
 
@@ -326,7 +325,7 @@ class BlastXValidatorTest
       void test2() {
         conf.setNegativeTaxIds(Collections.singletonList("hello"));
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         assertTrue(err.isEmpty());
       }
 
@@ -335,7 +334,7 @@ class BlastXValidatorTest
       void test3() {
         conf.setDbSoftMask("hello");
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         assertTrue(err.isEmpty());
       }
 
@@ -344,7 +343,7 @@ class BlastXValidatorTest
       void test4() {
         conf.setDbHardMask("hello");
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         assertTrue(err.isEmpty());
       }
     }
@@ -359,7 +358,7 @@ class BlastXValidatorTest
         conf.setTaxIds(Collections.singletonList("goodbye"));
         conf.setSubjectLoc(new InputBlastLocationImpl());
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         confirmSingleError(SubjectLocation, String.format(ConfigValidator.errIncompat, TaxIDs));
       }
 
@@ -369,7 +368,7 @@ class BlastXValidatorTest
         conf.setNegativeTaxIds(Collections.singletonList("goodbye"));
         conf.setSubjectLoc(new InputBlastLocationImpl());
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         confirmSingleError(
           SubjectLocation,
           String.format(ConfigValidator.errIncompat, NegativeTaxIDs)
@@ -382,7 +381,7 @@ class BlastXValidatorTest
         conf.setDbSoftMask("goodbye");
         conf.setSubjectLoc(new InputBlastLocationImpl());
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         confirmSingleError(SubjectLocation, String.format(ConfigValidator.errIncompat, DBSoftMask));
       }
 
@@ -392,7 +391,7 @@ class BlastXValidatorTest
         conf.setDbHardMask("goodbye");
         conf.setSubjectLoc(new InputBlastLocationImpl());
 
-        BlastXValidator.validateSubjectLoc(err, conf);
+        TBlastNValidator.validateSubjectLoc(err, conf);
         confirmSingleError(SubjectLocation, String.format(ConfigValidator.errIncompat, DBHardMask));
       }
     }
