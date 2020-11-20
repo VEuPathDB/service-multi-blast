@@ -8,26 +8,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface InputBlastnDust {
   @JsonProperty("enable")
-  Boolean getEnable();
+   Boolean getEnable();
 
   @JsonProperty("enable")
-  void setEnable(boolean enable);
+  void setEnable (Boolean enable);
 
   @JsonProperty("level")
-  Short getLevel();
+   Short getLevel();
 
   @JsonProperty("level")
-  void setLevel(short level);
+  void setLevel (Short level);
 
   @JsonProperty("window")
-  Short getWindow();
+   Short getWindow();
 
   @JsonProperty("window")
-  void setWindow(short window);
+  void setWindow (Short window);
 
   @JsonProperty("linker")
-  Short getLinker();
+   Short getLinker();
 
   @JsonProperty("linker")
-  void setLinker(short linker);
+  void setLinker (Short linker);
 }

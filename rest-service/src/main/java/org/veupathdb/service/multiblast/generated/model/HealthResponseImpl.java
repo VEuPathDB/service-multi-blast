@@ -69,7 +69,7 @@ public class HealthResponseImpl implements HealthResponse {
     private String uptime;
 
     @JsonProperty("uptimeMillis")
-    private Long uptimeMillis;
+    private  Long uptimeMillis;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new ExcludingMap();
@@ -80,7 +80,7 @@ public class HealthResponseImpl implements HealthResponse {
     }
 
     @JsonProperty("threads")
-    public void setThreads(int threads) {
+    public void setThreads(Integer threads) {
       this.threads = threads;
     }
 
@@ -95,12 +95,12 @@ public class HealthResponseImpl implements HealthResponse {
     }
 
     @JsonProperty("uptimeMillis")
-    public Long getUptimeMillis() {
+    public  Long getUptimeMillis() {
       return this.uptimeMillis;
     }
 
     @JsonProperty("uptimeMillis")
-    public void setUptimeMillis(long uptimeMillis) {
+    public void setUptimeMillis (Long uptimeMillis) {
       this.uptimeMillis = uptimeMillis;
     }
 

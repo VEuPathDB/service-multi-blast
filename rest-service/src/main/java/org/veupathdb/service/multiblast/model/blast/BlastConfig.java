@@ -24,9 +24,9 @@ public class BlastConfig implements CLISerializable
   private File          importSearchStrategy;
   private Integer       lineLength;
   private boolean       lowercaseMaskingEnabled;
-  private Short         maxHSPs;
+  private Integer       maxHSPs;
   private Integer       maxTargetSequences;
-  private Short         numDescriptions;
+  private Integer       numDescriptions;
   private Integer       numAlignments;
   private Byte          numThreads;
   private File          out;
@@ -38,7 +38,7 @@ public class BlastConfig implements CLISerializable
   private Boolean       softMasking;
   private HitSorting    sortHits;
   private HspSorting    sortHsps;
-  private Short         windowSize;
+  private Integer         windowSize;
   private Double        extDropoffUngapped;
   private OutFormat     outFormat;
   private Double        queryCoveragePercentHSP;
@@ -125,11 +125,11 @@ public class BlastConfig implements CLISerializable
     return this;
   }
 
-  public Short getMaxHSPs() {
+  public Integer getMaxHSPs() {
     return maxHSPs;
   }
 
-  public BlastConfig setMaxHSPs(Short maxHSPs) {
+  public BlastConfig setMaxHSPs(Integer maxHSPs) {
     this.maxHSPs = maxHSPs;
     return this;
   }
@@ -143,11 +143,11 @@ public class BlastConfig implements CLISerializable
     return this;
   }
 
-  public Short getNumDescriptions() {
+  public Integer getNumDescriptions() {
     return numDescriptions;
   }
 
-  public BlastConfig setNumDescriptions(Short numDescriptions) {
+  public BlastConfig setNumDescriptions(Integer numDescriptions) {
     this.numDescriptions = numDescriptions;
     return this;
   }
@@ -251,11 +251,11 @@ public class BlastConfig implements CLISerializable
     return this;
   }
 
-  public Short getWindowSize() {
+  public Integer getWindowSize() {
     return windowSize;
   }
 
-  public BlastConfig setWindowSize(Short windowSize) {
+  public BlastConfig setWindowSize(Integer windowSize) {
     this.windowSize = windowSize;
     return this;
   }

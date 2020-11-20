@@ -37,7 +37,7 @@ class BlastNValidatorTest
     @Test
     @DisplayName("rejects values less than or equal to 0")
     void test2() {
-      conf.setBestHitScoreEdge(0);
+      conf.setBestHitScoreEdge(0D);
       BlastNValidator.validateBestHitScoreEdge(err, conf);
       confirmSingleError(BestHitScoreEdge, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }
@@ -65,7 +65,7 @@ class BlastNValidatorTest
     @Test
     @DisplayName("rejects values less than or equal to 0")
     void test2() {
-      conf.setBestHitOverhang(0);
+      conf.setBestHitOverhang(0D);
       BlastNValidator.validateBestHitOverhang(err, conf);
       confirmSingleError(BestHitOverhang, String.format(ConfigValidator.errBetweenExcF, 0D, 0.5));
     }

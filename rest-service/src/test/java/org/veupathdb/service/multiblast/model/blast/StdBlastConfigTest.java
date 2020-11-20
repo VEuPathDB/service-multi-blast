@@ -152,7 +152,7 @@ class StdBlastConfigTest
       var target = new StdBlastConfig();
       var build  = new CliBuilder();
 
-      target.setMaxHSPs((short) 42);
+      target.setMaxHSPs(42);
       target.toArgs(build);
       assertEquals("-max_hsps='42'", build.toString());
     }
@@ -174,7 +174,7 @@ class StdBlastConfigTest
       var target = new StdBlastConfig();
       var build  = new CliBuilder();
 
-      target.setNumDescriptions((short) 42);
+      target.setNumDescriptions(42);
       target.toArgs(build);
       assertEquals("-num_descriptions='42'", build.toString());
     }
@@ -306,7 +306,7 @@ class StdBlastConfigTest
       var target = new StdBlastConfig();
       var build  = new CliBuilder();
 
-      target.setWindowSize((short) 450);
+      target.setWindowSize(450);
       target.toArgs(build);
       assertEquals("-window_size='450'", build.toString());
     }
@@ -619,7 +619,7 @@ class StdBlastConfigTest
     void test13() {
       var target = new StdBlastConfig();
 
-      target.setMaxHSPs((short) 42);
+      target.setMaxHSPs(42);
       assertEquals("-max_hsps='42'", target.toString());
     }
 
@@ -637,7 +637,7 @@ class StdBlastConfigTest
     void test15() {
       var target = new StdBlastConfig();
 
-      target.setNumDescriptions((short) 42);
+      target.setNumDescriptions(42);
       assertEquals("-num_descriptions='42'", target.toString());
     }
 
@@ -745,7 +745,7 @@ class StdBlastConfigTest
     void test27() {
       var target = new StdBlastConfig();
 
-      target.setWindowSize((short) 450);
+      target.setWindowSize(450);
       assertEquals("-window_size='450'", target.toString());
     }
 

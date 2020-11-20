@@ -9,10 +9,10 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
 {
   private QueryStrand  strand;
   private BlastnTask   task;
-  private Byte         gapOpen;
-  private Byte         gapExtend;
-  private Byte         penalty;
-  private Byte         reward;
+  private Integer      gapOpen;
+  private Integer      gapExtend;
+  private Integer         penalty;
+  private Integer         reward;
   private boolean      useIndex;
   private String       indexName;
   private Dust         dust;
@@ -32,13 +32,13 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
   private boolean      nonGreedyProgramExt;
   private Integer      minRawGappedScore;
   private boolean      ungappedAlignment;
-  private Short        wordSize;
+  private Integer      wordSize;
 
   public QueryStrand getStrand() {
     return strand;
   }
 
-  public Short getWordSize() {
+  public Integer getWordSize() {
     return wordSize;
   }
 
@@ -54,35 +54,35 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
     this.task = task;
   }
 
-  public Byte getGapOpen() {
+  public Integer getGapOpen() {
     return gapOpen;
   }
 
-  public void setGapOpen(Byte gapOpen) {
+  public void setGapOpen(Integer gapOpen) {
     this.gapOpen = gapOpen;
   }
 
-  public Byte getGapExtend() {
+  public Integer getGapExtend() {
     return gapExtend;
   }
 
-  public void setGapExtend(Byte gapExtend) {
+  public void setGapExtend(Integer gapExtend) {
     this.gapExtend = gapExtend;
   }
 
-  public Byte getPenalty() {
+  public Integer getPenalty() {
     return penalty;
   }
 
-  public void setPenalty(Byte penalty) {
+  public void setPenalty(Integer penalty) {
     this.penalty = penalty;
   }
 
-  public Byte getReward() {
+  public Integer getReward() {
     return reward;
   }
 
-  public void setReward(Byte reward) {
+  public void setReward(Integer reward) {
     this.reward = reward;
   }
 
@@ -243,7 +243,7 @@ public class BlastNConfig extends StdBlastConfig implements CLISerializable
     return this;
   }
 
-  public StdBlastConfig setWordSize(Short wordSize) {
+  public StdBlastConfig setWordSize(Integer wordSize) {
     this.wordSize = wordSize;
     return this;
   }

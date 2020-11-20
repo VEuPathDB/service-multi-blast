@@ -16,7 +16,7 @@ public class NewJobPostResponseImpl implements NewJobPostResponse {
   }
 
   @JsonProperty("jobId")
-  public void setJobId(int jobId) {
+  public void setJobId(Integer jobId) {
     this.jobId = jobId;
   }
 }
