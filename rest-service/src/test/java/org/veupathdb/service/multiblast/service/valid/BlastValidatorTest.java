@@ -449,7 +449,7 @@ class BlastValidatorTest
         assertNotNull(err.get(NumDescriptions));
         assertEquals(1, err.get(NumDescriptions).size());
         assertEquals(
-          String.format(ConfigValidator.errIncompatibleWith, MaxTargetSequences),
+          String.format(ConfigValidator.errIncompat, MaxTargetSequences),
           err.get(NumDescriptions).get(0)
         );
       }
@@ -554,7 +554,7 @@ class BlastValidatorTest
         assertNotNull(err.get(NumAlignments));
         assertEquals(1, err.get(NumAlignments).size());
         assertEquals(
-          String.format(ConfigValidator.errIncompatibleWith, MaxTargetSequences),
+          String.format(ConfigValidator.errIncompat, MaxTargetSequences),
           err.get(NumAlignments).get(0)
         );
       }
@@ -655,7 +655,7 @@ class BlastValidatorTest
         BlastValidator.validateMaxTargetSeqs(err, conf);
         confirmSingleError(
           MaxTargetSequences,
-          String.format(ConfigValidator.errIncompatibleWith, NumAlignments)
+          String.format(ConfigValidator.errIncompat, NumAlignments)
         );
       }
 
@@ -669,7 +669,7 @@ class BlastValidatorTest
         BlastValidator.validateMaxTargetSeqs(err, conf);
         confirmSingleError(
           MaxTargetSequences,
-          String.format(ConfigValidator.errIncompatibleWith, NumDescriptions)
+          String.format(ConfigValidator.errIncompat, NumDescriptions)
         );
       }
 

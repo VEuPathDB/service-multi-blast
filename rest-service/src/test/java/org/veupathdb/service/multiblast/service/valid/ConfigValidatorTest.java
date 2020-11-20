@@ -754,7 +754,7 @@ class ConfigValidatorTest
         assertEquals(1, err.get("test1").size());
         assertNotNull(err.get("test1").get(0));
         assertEquals(
-          String.format(ConfigValidator.errIncompatibleWith, "test2"),
+          String.format(ConfigValidator.errIncompat, "test2"),
           err.get("test1").get(0)
         );
       }
@@ -797,7 +797,7 @@ class ConfigValidatorTest
         assertEquals(1, err.get("test1").size());
         assertNotNull(err.get("test1").get(0));
         assertEquals(
-          String.format(ConfigValidator.errIncompatibleWith, "test2"),
+          String.format(ConfigValidator.errIncompat, "test2"),
           err.get("test1").get(0)
         );
       }
