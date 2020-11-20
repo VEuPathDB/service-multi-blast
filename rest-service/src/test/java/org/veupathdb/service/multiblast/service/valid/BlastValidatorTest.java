@@ -209,8 +209,8 @@ class BlastValidatorTest
           @DisplayName("passes when start is less than end")
           void test1() {
             var q = new InputBlastLocationImpl();
-            q.setStart(1);
-            q.setStop(2);
+            q.setStart(1L);
+            q.setStop(2L);
 
             conf.setQueryLoc(q);
 
@@ -223,8 +223,8 @@ class BlastValidatorTest
           @DisplayName("fails when start is equal to end")
           void test2() {
             var q = new InputBlastLocationImpl();
-            q.setStart(2);
-            q.setStop(2);
+            q.setStart(2L);
+            q.setStop(2L);
 
             conf.setQueryLoc(q);
 
@@ -241,8 +241,8 @@ class BlastValidatorTest
           @DisplayName("fails when start is less than end")
           void test3() {
             var q = new InputBlastLocationImpl();
-            q.setStart(2);
-            q.setStop(1);
+            q.setStart(2L);
+            q.setStop(1L);
 
             conf.setQueryLoc(q);
 
@@ -259,7 +259,7 @@ class BlastValidatorTest
           @DisplayName("fails when start is not set")
           void test4() {
             var q = new InputBlastLocationImpl();
-            q.setStop(1);
+            q.setStop(1L);
 
             conf.setQueryLoc(q);
 
@@ -277,7 +277,7 @@ class BlastValidatorTest
           @DisplayName("fails when stop is not set")
           void test5() {
             var q = new InputBlastLocationImpl();
-            q.setStart(1);
+            q.setStart(1L);
 
             conf.setQueryLoc(q);
 
@@ -583,7 +583,7 @@ class BlastValidatorTest
     @Test
     @DisplayName("rejects values < 0")
     void test2() {
-      conf.setQCovHSPPerc(-1);
+      conf.setQCovHSPPerc(-1D);
       BlastValidator.validateQCovHspPerc(err, conf);
       confirmSingleError(
         QueryCoverageHSPPercent,
@@ -594,7 +594,7 @@ class BlastValidatorTest
     @Test
     @DisplayName("rejects values > 100")
     void test3() {
-      conf.setQCovHSPPerc(101);
+      conf.setQCovHSPPerc(101D);
       BlastValidator.validateQCovHspPerc(err, conf);
       assertEquals(1, err.size());
       assertTrue(err.containsKey(QueryCoverageHSPPercent));
@@ -609,7 +609,7 @@ class BlastValidatorTest
     @Test
     @DisplayName("accepts values >= 0 and <= 100")
     void test4() {
-      conf.setQCovHSPPerc(45);
+      conf.setQCovHSPPerc(45D);
       BlastValidator.validateQCovHspPerc(err, conf);
       assertTrue(err.isEmpty());
     }

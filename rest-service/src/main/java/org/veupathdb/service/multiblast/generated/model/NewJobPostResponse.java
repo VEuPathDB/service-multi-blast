@@ -11,5 +11,5 @@ public interface NewJobPostResponse {
   Integer getJobId();
 
   @JsonProperty("jobId")
-  void setJobId(int jobId);
+  void setJobId(Integer jobId);
 }

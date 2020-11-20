@@ -51,7 +51,7 @@ public interface HealthResponse {
     Integer getThreads();
 
     @JsonProperty("threads")
-    void setThreads(int threads);
+    void setThreads(Integer threads);
 
     @JsonProperty("uptime")
     String getUptime();
@@ -60,10 +60,10 @@ public interface HealthResponse {
     void setUptime(String uptime);
 
     @JsonProperty("uptimeMillis")
-    Long getUptimeMillis();
+     Long getUptimeMillis();
 
     @JsonProperty("uptimeMillis")
-    void setUptimeMillis(long uptimeMillis);
+    void setUptimeMillis (Long uptimeMillis);
 
     @JsonAnyGetter
     Map<String, Object> getAdditionalProperties();

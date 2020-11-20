@@ -11,28 +11,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class InputBlastLocationImpl implements InputBlastLocation {
   @JsonProperty("start")
-  private Long start;
+  private  Long start;
 
   @JsonProperty("stop")
-  private Long stop;
+  private  Long stop;
 
   @JsonProperty("start")
-  public Long getStart() {
+  public  Long getStart() {
     return this.start;
   }
 
   @JsonProperty("start")
-  public void setStart(long start) {
+  public void setStart (Long start) {
     this.start = start;
   }
 
   @JsonProperty("stop")
-  public Long getStop() {
+  public  Long getStop() {
     return this.stop;
   }
 
   @JsonProperty("stop")
-  public void setStop(long stop) {
+  public void setStop (Long stop) {
     this.stop = stop;
   }
 }

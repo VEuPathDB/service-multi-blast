@@ -11,7 +11,7 @@ public interface GetJobResponse {
   Integer getId();
 
   @JsonProperty("id")
-  void setId(int id);
+  void setId(Integer id);
 
   @JsonProperty("status")
   IOJobStatus getStatus();

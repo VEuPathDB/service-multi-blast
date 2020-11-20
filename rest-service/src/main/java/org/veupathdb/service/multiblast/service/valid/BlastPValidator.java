@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.InputBlastpConfig;
 import org.veupathdb.service.multiblast.generated.model.InputBlastpTask;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.BlastpTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
@@ -114,7 +113,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
 
     if (conf.getTask() != InputBlastpTask.BLASTP)
       err.putError(
-        JsonKeys.SoftMasking,
+        SoftMasking,
         String.format(BlastValidator.errOnlyTask, InputBlastpTask.BLASTP.name)
       );
   }
@@ -146,7 +145,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
       err.putError(
         JsonKeys.GapExtend,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+        String.format(BlastValidator.errNotTask, InputBlastpTask.BLASTPFAST.name)
       );
   }
 
@@ -157,7 +156,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
       err.putError(
         JsonKeys.GapOpen,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+        String.format(BlastValidator.errNotTask, InputBlastpTask.BLASTPFAST.name)
       );
   }
 }

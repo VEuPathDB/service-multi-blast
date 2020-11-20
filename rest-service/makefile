@@ -85,7 +85,7 @@ gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
 	# Performing hack to correct nullable input fields
-	@find $(GEN_DIR)/model -type f -name '*.java' | xargs -I'{}' sed -i 's/ \(double\|byte\|boolean\|short\|long\) / \u\1 /g;s/ int / Integer /g' '{}'
+	@find $(GEN_DIR)/model -type f -name '*.java' | xargs -I'{}' sed -i 's/\([ (]\)\(double\|byte\|boolean\|short\|long\) / \1\u\2 /g;s/\([ (]\)int /\1Integer /g' '{}'
 	# Performing hack to correct enum name visibility
 	@grep -rl '^public enum' $(GEN_DIR)/model | xargs -I'{}' sed -i 's/private String name;/public final String name;/' '{}'
 

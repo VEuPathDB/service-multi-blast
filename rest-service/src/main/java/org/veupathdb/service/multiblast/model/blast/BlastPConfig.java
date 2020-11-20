@@ -7,8 +7,8 @@ public class BlastPConfig extends StdBlastConfig
   private BlastpTask          task;
   private File                ipgList;
   private File                negativeIpgList;
-  private Byte                gapOpen;
-  private Byte                gapExtend;
+  private Integer             gapOpen;
+  private Integer             gapExtend;
   private Double              extDropoffPrelimGap;
   private Double              extDropoffFinalGap;
   private Seg                 seg;
@@ -21,7 +21,7 @@ public class BlastPConfig extends StdBlastConfig
   private Boolean             ungapped;
   private CompBasedStats      compBasedStats;
   private Boolean             useSmithWatermanAlignments;
-  private Byte                wordSize;
+  private Integer             wordSize;
 
   public BlastpTask getTask() {
     return task;
@@ -32,7 +32,7 @@ public class BlastPConfig extends StdBlastConfig
     return this;
   }
 
-  public Byte getWordSize() {
+  public Integer getWordSize() {
     return wordSize;
   }
 
@@ -54,20 +54,20 @@ public class BlastPConfig extends StdBlastConfig
     return this;
   }
 
-  public Byte getGapOpen() {
+  public Integer getGapOpen() {
     return gapOpen;
   }
 
-  public BlastPConfig setGapOpen(Byte gapOpen) {
+  public BlastPConfig setGapOpen(Integer gapOpen) {
     this.gapOpen = gapOpen;
     return this;
   }
 
-  public Byte getGapExtend() {
+  public Integer getGapExtend() {
     return gapExtend;
   }
 
-  public BlastPConfig setGapExtend(Byte gapExtend) {
+  public BlastPConfig setGapExtend(Integer gapExtend) {
     this.gapExtend = gapExtend;
     return this;
   }
@@ -180,7 +180,7 @@ public class BlastPConfig extends StdBlastConfig
     return this;
   }
 
-  public BlastPConfig setWordSize(Byte wordSize) {
+  public BlastPConfig setWordSize(Integer wordSize) {
     this.wordSize = wordSize;
     return this;
   }
