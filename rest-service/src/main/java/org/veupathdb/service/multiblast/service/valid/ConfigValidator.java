@@ -14,7 +14,7 @@ interface ConfigValidator<C>
     errBetweenIncF      = "must be between [%.1f..%.1f]",
     errBetweenExcD      = "must be between (%d..%d)",
     errBetweenExcF      = "must be between (%.1f..%.1f)",
-    errIncompatibleWith = "is incompatible with field %s";
+    errIncompat = "is incompatible with field %s";
 
   ErrorMap validate(C conf);
 
@@ -88,7 +88,7 @@ interface ConfigValidator<C>
      */
     static void incompat(ErrorMap err, Object obj, String self, String other) {
       if (obj != null)
-        err.putError(self, String.format(errIncompatibleWith, other));
+        err.putError(self, String.format(errIncompat, other));
     }
 
     /**
@@ -106,7 +106,7 @@ interface ConfigValidator<C>
      */
     static void colIncompat(ErrorMap err, Collection<?> other, String tField, String oField) {
       if (other != null && !other.isEmpty())
-        err.putError(tField, String.format(errIncompatibleWith, oField));
+        err.putError(tField, String.format(errIncompat, oField));
     }
   }
 }

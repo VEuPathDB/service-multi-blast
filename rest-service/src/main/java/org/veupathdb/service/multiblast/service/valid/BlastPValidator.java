@@ -115,7 +115,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     if (conf.getTask() != InputBlastpTask.BLASTP)
       err.putError(
         JsonKeys.SoftMasking,
-        String.format(BlastValidator.errOnlyTask, BlastpTask.BlastP)
+        String.format(BlastValidator.errOnlyTask, InputBlastpTask.BLASTP.name)
       );
   }
 
@@ -135,7 +135,7 @@ class BlastPValidator implements ConfigValidator<InputBlastpConfig>
     if (conf.getTask() == InputBlastpTask.BLASTPFAST)
       err.putError(
         JsonKeys.Matrix,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast)
+        String.format(BlastValidator.errNotTask, InputBlastpTask.BLASTPFAST.name)
       );
   }
 

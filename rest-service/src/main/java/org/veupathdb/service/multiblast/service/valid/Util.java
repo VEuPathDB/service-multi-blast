@@ -121,7 +121,7 @@ class Util
     mapping.put(ToolOption.SubjectFile, JsonKeys.SUBJECT);
     mapping.put(ToolOption.SubjectLocation, JsonKeys.SubjectLocation);
     mapping.put(ToolOption.SumStats, JsonKeys.SumStats);
-    mapping.put(ToolOption.Task, JsonKeys.TASK);
+    mapping.put(ToolOption.Task, JsonKeys.Task);
     mapping.put(ToolOption.TaxonomyIDs, JsonKeys.TaxIDs);
     mapping.put(ToolOption.TaxonomyIDListFile, JsonKeys.TAX_ID_LIST);
     mapping.put(ToolOption.Threshold, JsonKeys.Threshold);
