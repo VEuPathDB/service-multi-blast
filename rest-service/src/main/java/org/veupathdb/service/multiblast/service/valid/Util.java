@@ -48,9 +48,9 @@ class Util
     mapping.put(ToolOption.EntrezQuery, JsonKeys.EntrezQuery);
     mapping.put(ToolOption.ExpectationValue, JsonKeys.ExpectValue);
     mapping.put(ToolOption.ExportSearchStrategy, JsonKeys.ExportSearchStrategy);
-    mapping.put(ToolOption.FilteringDatabase, JsonKeys.FILTERING_DB);
-    mapping.put(ToolOption.GapExtendCost, JsonKeys.GapExtend);
-    mapping.put(ToolOption.GapOpenCost, JsonKeys.GapOpen);
+    mapping.put(ToolOption.FilteringDatabasePath, JsonKeys.FILTERING_DB);
+    mapping.put(ToolOption.GapCostExtend, JsonKeys.GapExtend);
+    mapping.put(ToolOption.GapCostOpen, JsonKeys.GapOpen);
     mapping.put(ToolOption.GIListFile, JsonKeys.GI_LIST);
     mapping.put(ToolOption.Help, JsonKeys.Help);
     mapping.put(ToolOption.HTMLOutput, JsonKeys.Html);
@@ -62,15 +62,15 @@ class Util
     mapping.put(ToolOption.InclusionEValueThreshold, JsonKeys.InclusionEValueThreshold);
     mapping.put(ToolOption.InputMultiSequenceAlignmentFile, JsonKeys.InputMultiSequenceAlignment);
     mapping.put(ToolOption.InputPsiBlastCheckpointFile, JsonKeys.InputPsiBlastCheckpointFile);
-    mapping.put(ToolOption.IPGList, JsonKeys.IPGList);
+    mapping.put(ToolOption.IdenticalProteinGroupListFile, JsonKeys.IPGList);
     mapping.put(ToolOption.LineLength, JsonKeys.LineLength);
     mapping.put(ToolOption.LowercaseMasking, JsonKeys.LOWERCASE_MASKING);
     mapping.put(ToolOption.MatchReward, JsonKeys.Reward);
     mapping.put(ToolOption.MaxHSPs, JsonKeys.MaxHSPs);
     mapping.put(ToolOption.MaxTargetSequences, JsonKeys.MaxTargetSequences);
     mapping.put(ToolOption.MegablastIndexName, JsonKeys.INDEX_NAME);
-    mapping.put(ToolOption.MegablastTemplateLength, JsonKeys.TemplateLength);
-    mapping.put(ToolOption.MegablastTemplateType, JsonKeys.TemplateType);
+    mapping.put(ToolOption.DiscontiguousMegablastTemplateLength, JsonKeys.TemplateLength);
+    mapping.put(ToolOption.DiscontiguousMegablastTemplateType, JsonKeys.TemplateType);
     mapping.put(ToolOption.MaxIntronLength, JsonKeys.MaxIntronLength);
     mapping.put(ToolOption.MinRawGappedScore, JsonKeys.MIN_RAW_GAPPED_SCORE);
     mapping.put(ToolOption.MismatchPenalty, JsonKeys.Penalty);
@@ -80,7 +80,7 @@ class Util
       JsonKeys.MultiSequenceAlignmentMasterIndex
     );
     mapping.put(ToolOption.NegativeGIListFile, JsonKeys.NEGATIVE_GI_LIST);
-    mapping.put(ToolOption.NegativeIPGList, JsonKeys.NegativeIPGList);
+    mapping.put(ToolOption.NegativeIdenticalProteinGroupListFile, JsonKeys.NegativeIPGList);
     mapping.put(ToolOption.NegativeSequenceIDListFile, JsonKeys.NEGATIVE_SEQ_ID_LIST);
     mapping.put(ToolOption.NegativeTaxonomyIDs, JsonKeys.NegativeTaxIDs);
     mapping.put(ToolOption.NegativeTaxonomyIDListFile, JsonKeys.NEGATIVE_TAX_ID_LIST);
@@ -116,7 +116,7 @@ class Util
     mapping.put(ToolOption.SoftMasking, JsonKeys.SoftMasking);
     mapping.put(ToolOption.SortHits, JsonKeys.SortHits);
     mapping.put(ToolOption.SortHSPs, JsonKeys.SortHSPs);
-    mapping.put(ToolOption.Strand, JsonKeys.STRAND);
+    mapping.put(ToolOption.QueryStrand, JsonKeys.STRAND);
     mapping.put(ToolOption.SubjectBestHit, JsonKeys.SubjectBestHit);
     mapping.put(ToolOption.SubjectFile, JsonKeys.SUBJECT);
     mapping.put(ToolOption.SubjectLocation, JsonKeys.SubjectLocation);
@@ -129,11 +129,11 @@ class Util
     mapping.put(ToolOption.UseMegablastIndex, JsonKeys.USE_INDEX);
     mapping.put(ToolOption.UseSmithWatermanAlignments, JsonKeys.USE_SMITH_WATERMAN_ALIGNS);
     mapping.put(ToolOption.Version, JsonKeys.Version);
-    mapping.put(ToolOption.WindowMaskerDatabase, JsonKeys.WINDOW_MASKER_DB);
+    mapping.put(ToolOption.WindowMaskerDatabasePath, JsonKeys.WINDOW_MASKER_DB);
     mapping.put(ToolOption.WindowMaskerTaxonomicID, JsonKeys.WINDOW_MASKER_TAX_ID);
     mapping.put(ToolOption.WordSize, JsonKeys.WordSize);
-    mapping.put(ToolOption.XDropoffFinalGappedExtensions, JsonKeys.XDROP_GAP_FINAL);
-    mapping.put(ToolOption.XDropoffPrelimGappedExtensions, JsonKeys.XDROP_GAP);
+    mapping.put(ToolOption.ExtensionDropoffFinalGapped, JsonKeys.XDROP_GAP_FINAL);
+    mapping.put(ToolOption.ExtensionDropoffPrelimGapped, JsonKeys.XDROP_GAP);
     mapping.put(ToolOption.XDropoffUngappedExtensions, JsonKeys.XDROP_UNGAP);
   }
 }

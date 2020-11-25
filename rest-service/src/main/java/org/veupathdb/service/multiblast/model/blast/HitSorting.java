@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public enum HitSorting
 {
-  BY_EXPECT_VALUE(0),
-  BY_BIT_SCORE(1),
-  BY_TOTAL_SCORE(2),
-  BY_PERCENT_IDENTITY(3),
-  BY_QUERY_COVERAGE(4);
+  ByExpectValue(0),
+  ByBitScore(1),
+  ByTotalScore(2),
+  ByPercentIdentity(3),
+  ByQueryCoverage(4);
 
   private final byte value;
 
@@ -20,7 +20,7 @@ public enum HitSorting
     return value;
   }
 
-  public boolean isValidFor(ReportFormatType fmt) {
+  public boolean isValidFor(BlastReportType fmt) {
     Objects.requireNonNull(fmt);
 
     return fmt.getValue() <= 4;

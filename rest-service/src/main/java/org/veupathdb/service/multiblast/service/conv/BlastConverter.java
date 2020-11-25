@@ -1,382 +1,405 @@
 package org.veupathdb.service.multiblast.service.conv;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
+import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
+import org.veupathdb.service.multiblast.model.blast.tx.TBlastxConfig;
+import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
+import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
 
 public class BlastConverter
 {
+  private static final Logger log = LogProvider.logger(BlastConverter.class);
+
   private static BlastConverter instance;
 
-  private final Logger log;
-
   private BlastConverter() {
-    log = LogManager.getLogger(getClass());
+    log.trace("#new()");
   }
 
   public static BlastConverter getInstance() {
+    log.trace("#getInstance()");
+
+    if (instance == null)
+      return instance = new BlastConverter();
+
     return instance;
   }
 
-  public InputBlastConfig fromInternal(BlastConfig conf) {
-    log.trace("#fromInternal(BlastConfig)");
+  static BlastConfig<?> toInternal(IOBlastConfig conf) {
+    log.trace("#toInternal(IOBlastConfig)");
 
-    if (conf == null)
-      return null;
-
-    if (conf instanceof BlastNConfig)
-      return _fromInternal((BlastNConfig) conf);
-    if (conf instanceof BlastPConfig)
-      return _fromInternal((BlastPConfig) conf);
-    if (conf instanceof BlastXConfig)
-      return _fromInternal((BlastXConfig) conf);
-    if (conf instanceof TBlastNConfig)
-      return _fromInternal((TBlastNConfig) conf);
-
-    throw new RuntimeException("implement me");
+    return getInstance().externalToInternal(conf);
   }
 
-  InputBlastnConfig _fromInternal(BlastNConfig conf) {
-    log.trace("#_fromInternal(BlastNConfig)");
+  public BlastConfig<?> externalToInternal(IOBlastConfig conf) {
+    log.trace("#externalToInternal(IOBlastConfig)");
 
     if (conf == null)
       return null;
 
-    var out = new InputBlastnConfigImpl();
+    BlastConfig<?> out = switch (conf.getTool()) {
+      case BLASTN -> BlastnConverter.toInternal((IOBlastnConfig) conf);
+      case BLASTP -> BlastpConverter.toInternal((IOBlastpConfig) conf);
+      case BLASTX -> BlastxConverter.toInternal((IOBlastxConfig) conf);
+      case TBLASTN -> TBlastnConverter.toInternal((IOTBlastnConfig) conf);
+      case TBLASTX -> TBlastxConverter.toInternal((IOTBlastxConfig) conf);
+    };
 
-    // out.setQuery(conf.getQuery()); // Intentionally omitted.
-    out.setQueryLoc(fromInternal(conf.getQueryLoc()));
-    out.setEValue(conf.getExpectValue());
-    out.setLineLength(conf.getLineLength());
-    out.setSortHits(fromInternal(conf.getSortHits()));
-    out.setTaxIds(Arrays.asList(conf.getTaxIds()));
-    out.setNegativeTaxIds(Arrays.asList(conf.getNegativeTaxIds()));
-    out.setSortHSPs(fromInternal(conf.getSortHSPs()));
-    out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
+    out.setQueryLocation(BCC.toInternal(conf.getQueryLoc()))
+      .setExpectValue(new BigDecimal(conf.getEValue()))
+      .setReportFormat(toInternal(conf.getOutFormat()))
+      .setNumDescriptions(conf.getNumDescriptions())
+      .setNumAlignments(conf.getNumAlignments())
+      .setLineLength(conf.getLineLength())
+      .setHitSorting(toInternal(conf.getSortHits()))
+      .setHspSorting(toInternal(conf.getSortHSPs()))
+      .enableLowercaseMasking(BCC.nullToFalse(conf.getLcaseMasking()))
+      .setQueryCoverageHspPercent(conf.getQCovHSPPerc())
+      .setMaxHsps(conf.getMaxHSPs())
+      .setMaxTargetSequences(conf.getMaxTargetSeqs())
+      .setEffectiveDatabaseSize(conf.getDbSize())
+      .setEffectiveSearchSpaceLength(conf.getSearchSpace())
+      .setExtensionDropoffUngapped(conf.getXDropUngap())
+      .enableDefLineParsing(BCC.nullToFalse(conf.getParseDefLines()));
+
+    return out;
+  }
+
+
+  public IOBlastConfig internalToExternal(BlastConfig<?> conf) {
+    log.trace("#internalToExternal(BlastConfig)");
+
+    if (conf == null)
+      return null;
+
+    var out = newExternal(conf);
+
+    out.setQueryLoc(BCC.toExternal(conf.getQueryLocation()));
+    out.setEValue(conf.getExpectValue().toString());
+    out.setOutFormat(toExternal(conf.getReportFormat()));
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
-    out.setMaxTargetSeqs(conf.getMaxTargetSequences());
-    out.setMaxHSPs(conf.getMaxHSPs());
-    out.setCullingLimit(conf.getCullingLimit());
-    out.setBestHitOverhang(conf.getBestHitOverhang());
-    out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
-    out.setDbSize(conf.getDbSize());
-    out.setSearchSpace(conf.getSearchSpace());
-    out.setParseDefLines(conf.isParseDefLinesEnabled());
-    out.setOutFormat(fromInternal(conf.getOutFormat()));
-    out.setTask(fromInternal(conf.getTask()));
-    out.setWordSize(conf.getWordSize());
-    out.setGapOpen(conf.getGapOpen());
-    out.setGapExtend(conf.getGapExtend());
-    out.setReward(conf.getReward());
-    out.setPenalty(conf.getPenalty());
-    out.setStrand(fromInternal(conf.getStrand()));
-    out.setDust(fromInternal(conf.getDust()));
-    out.setWindowMaskerTaxid(conf.getWindowMaskerTaxID());
-    out.setSoftMasking(conf.getSoftMasking());
-    out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
-    out.setDbSoftMask(conf.getDbSoftMask());
-    out.setDbHardMask(conf.getDbHardMask());
-    out.setPercIdentity(conf.getPercIdentity());
-    out.setTemplateType(fromInternal(conf.getTemplateType()));
-    out.setTemplateLength(conf.getTemplateLength());
-    out.setUseIndex(conf.isUseIndexEnabled());
-    out.setIndexName(conf.getIndexName());
-    out.setXDropUngap(conf.getExtDropoffUngapped());
-    out.setXDropGap(conf.getExtDropoffPrelimGapped());
-    out.setXDropGapFinal(conf.getExtDropoffFinalGapped());
-    out.setNoGreedy(conf.isNonGreedyProgramExtEnabled());
-    out.setMinRawGappedScore(conf.getMinRawGappedScore());
-    out.setUngapped(conf.isUngappedAlignmentEnabled());
-    out.setWindowSize(conf.getWindowSize());
-
-    return out;
-  }
-
-  InputBlastpConfig _fromInternal(BlastPConfig conf) {
-    log.trace("#_fromInternal(BlastPConfig)");
-
-    if (conf == null)
-      return null;
-
-    var out = new InputBlastpConfigImpl();
-
-    // out.setQuery(conf.getQuery()); // Intentionally omitted.
-    out.setQueryLoc(fromInternal(conf.getQueryLoc()));
-    out.setTask(fromInternal(conf.getTask()));
-    out.setEValue(conf.getExpectValue());
-    out.setWordSize(conf.getWordSize());
-    out.setGapOpen(conf.getGapOpen());
-    out.setGapExtend(conf.getGapExtend());
-    out.setMatrix(fromInternal(conf.getMatrix()));
-    out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(fromInternal(conf.getCompBasedStats()));
-
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(fromInternal(conf.getSortHits()));
-    out.setTaxIds(Arrays.asList(conf.getTaxIds()));
-    out.setNegativeTaxIds(Arrays.asList(conf.getNegativeTaxIds()));
-    out.setSortHSPs(fromInternal(conf.getSortHSPs()));
-    out.setQCovHSPPerc(conf.getQueryCoveragePercentHSP());
-    out.setNumDescriptions(conf.getNumDescriptions());
-    out.setNumAlignments(conf.getNumAlignments());
-    out.setMaxTargetSeqs(conf.getMaxTargetSequences());
-    out.setMaxHSPs(conf.getMaxHSPs());
-    out.setCullingLimit(conf.getCullingLimit());
-    out.setBestHitOverhang(conf.getBestHitOverhang());
-    out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
-    out.setDbSize(conf.getDbSize());
-    out.setSearchSpace(conf.getSearchSpace());
-    out.setParseDefLines(conf.isParseDefLinesEnabled());
-    out.setOutFormat(fromInternal(conf.getOutFormat()));
-    out.setSeg(fromInternal(conf.getSeg()));
-    out.setSoftMasking(conf.getSoftMasking());
+    out.setSortHits(toExternal(conf.getHitSorting()));
+    out.setSortHSPs(toExternal(conf.getHspSorting()));
     out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
-    out.setDbSoftMask(conf.getDbSoftMask());
-    out.setDbHardMask(conf.getDbHardMask());
-    out.setXDropGap(conf.getExtDropoffPrelimGap());
-    out.setXDropGapFinal(conf.getExtDropoffFinalGap());
-    out.setXDropUngap(conf.getExtDropoffUngapped());
-    out.setWindowSize(conf.getWindowSize());
-    out.setUseSWTraceback(conf.getUseSmithWatermanAlignments());
+    out.setQCovHSPPerc(conf.getQueryCoverageHspPercent());
+    out.setMaxHSPs(conf.getMaxHsps());
+    out.setMaxTargetSeqs(conf.getMaxTargetSequences());
+    out.setDbSize(conf.getEffectiveDatabaseSize());
+    out.setSearchSpace(conf.getEffectiveSearchSpaceLength());
+    out.setXDropUngap(conf.getUngappedExtensionDropoff());
+    out.setParseDefLines(conf.isDefLineParsingEnabled());
 
-    return out;
+    return switch (out.getTool()) {
+      case BLASTN -> BlastnConverter.toExternal((IOBlastnConfig) out, (BlastnConfig) conf);
+      case BLASTP -> BlastpConverter.toExternal((IOBlastpConfig) out, (BlastpConfig) conf);
+      case BLASTX -> BlastxConverter.toExternal((IOBlastxConfig) out, (BlastxConfig) conf);
+      case TBLASTN -> TBlastnConverter.toExternal((IOTBlastnConfig) out, (TBlastnConfig) conf);
+      case TBLASTX -> TBlastxConverter.toExternal((IOTBlastxConfig) out, (TBlastxConfig) conf);
+    };
   }
 
-  InputBlastxConfig _fromInternal(BlastXConfig conf) {
-    var out = new InputBlastxConfigImpl();
+  static IOBlastConfig newExternal(BlastConfig<?> conf) {
+    log.trace("#newExternal(BlastConfig)");
 
-    throw new RuntimeException("implement me");
+    if (conf instanceof BlastnConfig)
+      return new IOBlastnConfigImpl();
+    if (conf instanceof BlastpConfig)
+      return new IOBlastpConfigImpl();
+    if (conf instanceof BlastxConfig)
+      return new IOBlastxConfigImpl();
+    if (conf instanceof TBlastnConfig)
+      return new IOTBlastnConfigImpl();
+    if (conf instanceof TBlastxConfig)
+      return new IOTBlastxConfigImpl();
+
+    throw new IllegalArgumentException("unrecognized blast config type");
   }
 
-  InputTBlastnConfig _fromInternal(TBlastNConfig conf) {
-    var out = new InputTBlastnConfigImpl();
+  static IOBlastFormat toExternal(BlastReportType val) {
+    log.trace("#toExternal(ReportFormatType)");
 
-    throw new RuntimeException("implement me");
-  }
-
-  InputBlastSegMask fromInternal(Seg val) {
-    if (val == null)
-      return null;
-
-    var out = new InputBlastSegMaskImpl();
-
-    out.setEnabled(true);
-    out.setWindow(val.getWindow());
-    out.setLocut(val.getLoCut());
-    out.setHicut(val.getHiCut());
-
-    return out;
-  }
-
-  InputBlastCompBasedStats fromInternal(CompBasedStats val) {
     if (val == null)
       return null;
 
     return switch (val) {
-      case None -> InputBlastCompBasedStats.NONE;
-      case CompBasedStats -> InputBlastCompBasedStats.COMPBASEDSTATS;
-      case ConditionalScoreAdjustment -> InputBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT;
-      case UnconditionalScoreAdjustment -> InputBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT;
+      case Pairwise -> IOBlastFormat.PAIRWISE;
+      case QueryAnchoredWithIdentities -> IOBlastFormat.QUERYANCHOREDWITHIDENTITIES;
+      case QueryAnchoredWithoutIdentities -> IOBlastFormat.QUERYANCHOREDWITHOUTIDENTITIES;
+      case FlatQueryAnchoredWithIdentities -> IOBlastFormat.FLATQUERYANCHOREDWITHIDENTITIES;
+      case FlatQueryAnchoredWithoutIdentities -> IOBlastFormat.FLATQUERYANCHOREDWITHOUTIDENTITIES;
+      case XML -> IOBlastFormat.XML;
+      case Tabular -> IOBlastFormat.TABULAR;
+      case TabularWithComments -> IOBlastFormat.TABULARWITHCOMMENTS;
+      case TextASN1 -> IOBlastFormat.TEXTASN_1;
+      case BinaryASN1 -> IOBlastFormat.BINARYASN_1;
+      case CSV -> IOBlastFormat.CSV;
+      case ArchiveASN1 -> IOBlastFormat.ARCHIVEASN_1;
+      case SeqAlignJSON -> IOBlastFormat.SEQALIGNJSON;
+      case MultiFileJSON -> IOBlastFormat.MULTIFILEJSON;
+      case MultiFileXML2 -> IOBlastFormat.MULTIFILEXML2;
+      case SingleFileJSON -> IOBlastFormat.SINGLEFILEJSON;
+      case SingleFileXML2 -> IOBlastFormat.SINGLEFILEXML2;
+      case SAM -> IOBlastFormat.SAM;
+      case OrganismReport -> IOBlastFormat.ORGANISMREPORT;
     };
   }
 
-  InputBlastnDust fromInternal(Dust val) {
-    if (val == null)
-      return null;
+  static IOBlastReportField toExternal(BlastReportField field) {
+    log.trace("#toExternal(BlastReportField)");
 
-    var out = new InputBlastnDustImpl();
-
-    out.setEnable(true);
-    out.setLevel(val.getLevel());
-    out.setLinker(val.getLinker());
-    out.setWindow(val.getWindow());
-
-    return out;
+    return switch (field) {
+      case QUERY_SEQUENCE_ID -> IOBlastReportField.QSEQID;
+      case QUERY_GI -> IOBlastReportField.QGI;
+      case QUERY_ACCESSION -> IOBlastReportField.QACC;
+      case QUERY_ACCESSION_VERSION -> IOBlastReportField.QACCVER;
+      case QUERY_SEQUENCE_LENGTH -> IOBlastReportField.QLEN;
+      case SUBJECT_SEQUENCE_ID -> IOBlastReportField.SSEQID;
+      case SUBJECT_ALL_SEQUENCE_ID -> IOBlastReportField.SALLSEQID;
+      case SUBJECT_GI -> IOBlastReportField.SGI;
+      case SUBJECT_ALL_GI -> IOBlastReportField.SALLGI;
+      case SUBJECT_ACCESSION -> IOBlastReportField.SACC;
+      case SUBJECT_ACCESSION_VERSION -> IOBlastReportField.SACCVER;
+      case SUBJECT_ALL_ACCESSION -> IOBlastReportField.SALLACC;
+      case SUBJECT_SEQUENCE_LENGTH -> IOBlastReportField.SLEN;
+      case QUERY_ALIGNMENT_START -> IOBlastReportField.QSTART;
+      case QUERY_ALIGNMENT_END -> IOBlastReportField.QEND;
+      case SUBJECT_ALIGNMENT_START -> IOBlastReportField.SSTART;
+      case SUBJECT_ALIGNMENT_END -> IOBlastReportField.SEND;
+      case QUERY_SEQUENCE -> IOBlastReportField.QSEQ;
+      case SUBJECT_SEQUENCE -> IOBlastReportField.SSEQ;
+      case EXPECT_VALUE -> IOBlastReportField.EVALUE;
+      case BIT_SCORE -> IOBlastReportField.BITSCORE;
+      case RAW_SCORE -> IOBlastReportField.SCORE;
+      case ALIGNMENT_LENGTH -> IOBlastReportField.LENGTH;
+      case PERCENT_IDENTICAL_MATCHES -> IOBlastReportField.PIDENT;
+      case NUMBER_IDENTICAL_MATCHES -> IOBlastReportField.NIDENT;
+      case NUMBER_MISMATCHES -> IOBlastReportField.MISMATCH;
+      case NUMBER_POSITIVE_MATCHES -> IOBlastReportField.POSITIVE;
+      case NUMBER_GAP_OPENINGS -> IOBlastReportField.GAPOPEN;
+      case NUMBER_GAPS -> IOBlastReportField.GAPS;
+      case PERCENT_POSITIVE_MATCHES -> IOBlastReportField.PPOS;
+      case FRAMES -> IOBlastReportField.FRAMES;
+      case QUERY_FRAME -> IOBlastReportField.QFRAME;
+      case SUBJECT_FRAME -> IOBlastReportField.SFRAME;
+      case BLAST_TRACEBACK_OPS -> IOBlastReportField.BTOP;
+      case SUBJECT_TAXONOMY_ID -> IOBlastReportField.STAXID;
+      case SUBJECT_SCIENTIFIC_NAME -> IOBlastReportField.SSCINAME;
+      case SUBJECT_COMMON_NAME -> IOBlastReportField.SCOMNAME;
+      case SUBJECT_BLAST_NAME -> IOBlastReportField.SBLASTNAME;
+      case SUBJECT_SUPER_KINGDOM -> IOBlastReportField.SSKINGDOM;
+      case SUBJECT_UNIQUE_TAXONOMY_IDS -> IOBlastReportField.STAXIDS;
+      case SUBJECT_SCIENTIFIC_NAMES -> IOBlastReportField.SSCINAMES;
+      case SUBJECT_COMMON_NAMES -> IOBlastReportField.SCOMNAMES;
+      case SUBJECT_BLAST_NAMES -> IOBlastReportField.SBLASTNAMES;
+      case SUBJECT_SUPER_KINGDOMS -> IOBlastReportField.SSKINGDOMS;
+      case SUBJECT_TITLE -> IOBlastReportField.STITLE;
+      case SUBJECT_ALL_TITLES -> IOBlastReportField.SALLTITLES;
+      case SUBJECT_STRAND -> IOBlastReportField.SSTRAND;
+      case QUERY_COVERAGE_PER_SUBJECT -> IOBlastReportField.QCOVS;
+      case QUERY_COVERAGE_PER_HSP -> IOBlastReportField.QCOVHSP;
+      case QUERY_COVERAGE_PER_UNIQUE_SUBJECT -> IOBlastReportField.QCOVUS;
+      case SQ -> IOBlastReportField.SQ;
+      case SR -> IOBlastReportField.SR;
+    };
   }
 
-  InputBlastOutFmt fromInternal(OutFormat fmt) {
+
+  static IOHitSorting toExternal(HitSorting val) {
+    log.trace("#toExternal(HitSorting)");
+
+    return switch (val) {
+      case ByExpectValue -> IOHitSorting.BYEVAL;
+      case ByBitScore -> IOHitSorting.BYBITSCORE;
+      case ByTotalScore -> IOHitSorting.BYTOTALSCORE;
+      case ByPercentIdentity -> IOHitSorting.BYPERCENTIDENTITY;
+      case ByQueryCoverage -> IOHitSorting.BYQUERYCOVERAGE;
+    };
+  }
+
+  static IOHSPSorting toExternal(HspSorting val) {
+    log.trace("#toExternal(HspSorting)");
+
+    return switch (val) {
+      case ByExpectValue -> IOHSPSorting.BYHSPEVALUE;
+      case ByScore -> IOHSPSorting.BYHSPSCORE;
+      case ByQueryStart -> IOHSPSorting.BYHSPQUERYSTART;
+      case ByPercentIdentity -> IOHSPSorting.BYHSPPERCENTIDENTITY;
+      case BySubjectStart -> IOHSPSorting.BYHSPSUBJECTSTART;
+    };
+  }
+
+  static IOBlastReportFormat toExternal(BlastReportFormat fmt) {
+    log.trace("#toExternal(OutFormat)");
+
     if (fmt == null)
       return null;
 
-    var out = new InputBlastOutFmtImpl();
+    var out = new IOBlastReportFormatImpl();
 
-    out.setDelim(String.valueOf(fmt.getDelim()));
-    out.setFields(fmt.getFields().stream().map(this::fromInternal).collect(Collectors.toList()));
-    out.setFormat(fromInternal(fmt.getFormat()));
+    out.setDelim(String.valueOf(fmt.getDelimiter()));
+    out.setFields(Arrays.stream(fmt.getReportFields())
+      .map(BlastConverter::toExternal)
+      .collect(Collectors.toList()));
+    out.setFormat(toExternal(fmt.getType()));
 
     return out;
   }
 
-  InputBlastFormat fromInternal(ReportFormatType val) {
+  static BlastReportType toInternal(IOBlastFormat val) {
+    log.trace("#toInternal(IOBlastFormat)");
+
     if (val == null)
       return null;
 
     return switch (val) {
-      case Pairwise -> InputBlastFormat.PAIRWISE;
-      case QueryAnchoredWithIdentities -> InputBlastFormat.QUERYANCHOREDWITHIDENTITIES;
-      case QueryAnchoredWithoutIdentities -> InputBlastFormat.QUERYANCHOREDWITHOUTIDENTITIES;
-      case FlatQueryAnchoredWithIdentities -> InputBlastFormat.FLATQUERYANCHOREDWITHIDENTITIES;
-      case FlatQueryAnchoredWithoutIdentities -> InputBlastFormat.FLATQUERYANCHOREDWITHOUTIDENTITIES;
-      case XML -> InputBlastFormat.XML;
-      case Tabular -> InputBlastFormat.TABULAR;
-      case TabularWithComments -> InputBlastFormat.TABULARWITHCOMMENTS;
-      case TextASN1 -> InputBlastFormat.TEXTASN_1;
-      case BinaryASN1 -> InputBlastFormat.BINARYASN_1;
-      case CSV -> InputBlastFormat.CSV;
-      case ArchiveASN1 -> InputBlastFormat.ARCHIVEASN_1;
-      case SeqAlignJSON -> InputBlastFormat.SEQALIGNJSON;
-      case MultiFileJSON -> InputBlastFormat.MULTIFILEJSON;
-      case MultiFileXML2 -> InputBlastFormat.MULTIFILEXML2;
-      case SingleFileJSON -> InputBlastFormat.SINGLEFILEJSON;
-      case SingleFileXML2 -> InputBlastFormat.SINGLEFILEXML2;
-      case SAM -> InputBlastFormat.SAM;
-      case OrganismReport -> InputBlastFormat.ORGANISMREPORT;
+      case PAIRWISE -> BlastReportType.Pairwise;
+      case QUERYANCHOREDWITHIDENTITIES -> BlastReportType.QueryAnchoredWithIdentities;
+      case QUERYANCHOREDWITHOUTIDENTITIES -> BlastReportType.QueryAnchoredWithoutIdentities;
+      case FLATQUERYANCHOREDWITHIDENTITIES -> BlastReportType.FlatQueryAnchoredWithIdentities;
+      case FLATQUERYANCHOREDWITHOUTIDENTITIES -> BlastReportType.FlatQueryAnchoredWithoutIdentities;
+      case XML -> BlastReportType.XML;
+      case TABULAR -> BlastReportType.Tabular;
+      case TABULARWITHCOMMENTS -> BlastReportType.TabularWithComments;
+      case TEXTASN_1 -> BlastReportType.TextASN1;
+      case BINARYASN_1 -> BlastReportType.BinaryASN1;
+      case CSV -> BlastReportType.CSV;
+      case ARCHIVEASN_1 -> BlastReportType.ArchiveASN1;
+      case SEQALIGNJSON -> BlastReportType.SeqAlignJSON;
+      case MULTIFILEJSON -> BlastReportType.MultiFileJSON;
+      case MULTIFILEXML2 -> BlastReportType.MultiFileXML2;
+      case SINGLEFILEJSON -> BlastReportType.SingleFileJSON;
+      case SINGLEFILEXML2 -> BlastReportType.SingleFileXML2;
+      case SAM -> BlastReportType.SAM;
+      case ORGANISMREPORT -> BlastReportType.OrganismReport;
     };
   }
 
-  InputBlastFmtField fromInternal(BlastReportField field) {
-    return switch (field) {
-      case QUERY_SEQUENCE_ID -> InputBlastFmtField.QSEQID;
-      case QUERY_GI -> InputBlastFmtField.QGI;
-      case QUERY_ACCESSION -> InputBlastFmtField.QACC;
-      case QUERY_ACCESSION_VERSION -> InputBlastFmtField.QACCVER;
-      case QUERY_SEQUENCE_LENGTH -> InputBlastFmtField.QLEN;
-      case SUBJECT_SEQUENCE_ID -> InputBlastFmtField.SSEQID;
-      case SUBJECT_ALL_SEQUENCE_ID -> InputBlastFmtField.SALLSEQID;
-      case SUBJECT_GI -> InputBlastFmtField.SGI;
-      case SUBJECT_ALL_GI -> InputBlastFmtField.SALLGI;
-      case SUBJECT_ACCESSION -> InputBlastFmtField.SACC;
-      case SUBJECT_ACCESSION_VERSION -> InputBlastFmtField.SACCVER;
-      case SUBJECT_ALL_ACCESSION -> InputBlastFmtField.SALLACC;
-      case SUBJECT_SEQUENCE_LENGTH -> InputBlastFmtField.SLEN;
-      case QUERY_ALIGNMENT_START -> InputBlastFmtField.QSTART;
-      case QUERY_ALIGNMENT_END -> InputBlastFmtField.QEND;
-      case SUBJECT_ALIGNMENT_START -> InputBlastFmtField.SSTART;
-      case SUBJECT_ALIGNMENT_END -> InputBlastFmtField.SEND;
-      case QUERY_SEQUENCE -> InputBlastFmtField.QSEQ;
-      case SUBJECT_SEQUENCE -> InputBlastFmtField.SSEQ;
-      case EXPECT_VALUE -> InputBlastFmtField.EVALUE;
-      case BIT_SCORE -> InputBlastFmtField.BITSCORE;
-      case RAW_SCORE -> InputBlastFmtField.SCORE;
-      case ALIGNMENT_LENGTH -> InputBlastFmtField.LENGTH;
-      case PERCENT_IDENTICAL_MATCHES -> InputBlastFmtField.PIDENT;
-      case NUMBER_IDENTICAL_MATCHES -> InputBlastFmtField.NIDENT;
-      case NUMBER_MISMATCHES -> InputBlastFmtField.MISMATCH;
-      case NUMBER_POSITIVE_MATCHES -> InputBlastFmtField.POSITIVE;
-      case NUMBER_GAP_OPENINGS -> InputBlastFmtField.GAPOPEN;
-      case NUMBER_GAPS -> InputBlastFmtField.GAPS;
-      case PERCENT_POSITIVE_MATCHES -> InputBlastFmtField.PPOS;
-      case FRAMES -> InputBlastFmtField.FRAMES;
-      case QUERY_FRAME -> InputBlastFmtField.QFRAME;
-      case SUBJECT_FRAME -> InputBlastFmtField.SFRAME;
-      case BLAST_TRACEBACK_OPS -> InputBlastFmtField.BTOP;
-      case SUBJECT_TAXONOMY_ID -> InputBlastFmtField.STAXID;
-      case SUBJECT_SCIENTIFIC_NAME -> InputBlastFmtField.SSCINAME;
-      case SUBJECT_COMMON_NAME -> InputBlastFmtField.SCOMNAME;
-      case SUBJECT_BLAST_NAME -> InputBlastFmtField.SBLASTNAME;
-      case SUBJECT_SUPER_KINGDOM -> InputBlastFmtField.SSKINGDOM;
-      case SUBJECT_UNIQUE_TAXONOMY_IDS -> InputBlastFmtField.STAXIDS;
-      case SUBJECT_SCIENTIFIC_NAMES -> InputBlastFmtField.SSCINAMES;
-      case SUBJECT_COMMON_NAMES -> InputBlastFmtField.SCOMNAMES;
-      case SUBJECT_BLAST_NAMES -> InputBlastFmtField.SBLASTNAMES;
-      case SUBJECT_SUPER_KINGDOMS -> InputBlastFmtField.SSKINGDOMS;
-      case SUBJECT_TITLE -> InputBlastFmtField.STITLE;
-      case SUBJECT_ALL_TITLES -> InputBlastFmtField.SALLTITLES;
-      case SUBJECT_STRAND -> InputBlastFmtField.SSTRAND;
-      case QUERY_COVERAGE_PER_SUBJECT -> InputBlastFmtField.QCOVS;
-      case QUERY_COVERAGE_PER_HSP -> InputBlastFmtField.QCOVHSP;
-      case QUERY_COVERAGE_PER_UNIQUE_SUBJECT -> InputBlastFmtField.QCOVUS;
-      case SQ -> InputBlastFmtField.SQ;
-      case SR -> InputBlastFmtField.SR;
-    };
+  static BlastReportField[] toInternal(List<IOBlastReportField> vals) {
+    log.trace("#toInternal(List)");
+
+    if (vals == null || vals.isEmpty())
+      return null;
+
+    return vals.stream()
+      .filter(Objects::nonNull)
+      .map(BlastConverter::toInternal)
+      .toArray(BlastReportField[]::new);
   }
 
-  InputBlastLocation fromInternal(QueryLocation loc) {
-    var out = new InputBlastLocationImpl();
-    out.setStart(loc.getStart());
-    out.setStop(loc.getStop());
-    return out;
-  }
+  static BlastReportField toInternal(IOBlastReportField val) {
+    log.trace("#toInternal(IOBlastReportField)");
 
-  InputBlastnTask fromInternal(BlastnTask val) {
-    return switch (val) {
-      case BlastN -> InputBlastnTask.BLASTN;
-      case BlastNShort -> InputBlastnTask.BLASTNSHORT;
-      case DiscontiguousMegablast -> InputBlastnTask.DCMEGABLAST;
-      case Megablast -> InputBlastnTask.MEGABLAST;
-      case RMBlastN -> throw new RuntimeException("rmblastn is currently disallowed.");
-    };
-  }
-
-  InputBlastpTask fromInternal(BlastpTask val) {
-    return switch (val) {
-      case BlastP -> InputBlastpTask.BLASTP;
-      case BlastPFast -> InputBlastpTask.BLASTPFAST;
-      case BlastPShort -> InputBlastpTask.BLASTPSHORT;
-    };
-  }
-
-  InputHitSorting fromInternal(HitSorting val) {
-    return switch (val) {
-      case BY_EXPECT_VALUE -> InputHitSorting.BYEVAL;
-      case BY_BIT_SCORE -> InputHitSorting.BYBITSCORE;
-      case BY_TOTAL_SCORE -> InputHitSorting.BYTOTALSCORE;
-      case BY_PERCENT_IDENTITY -> InputHitSorting.BYPERCENTIDENTITY;
-      case BY_QUERY_COVERAGE -> InputHitSorting.BYQUERYCOVERAGE;
-    };
-  }
-
-  InputHSPSorting fromInternal(HspSorting val) {
-    return switch (val) {
-      case BY_EXPECT_VALUE -> InputHSPSorting.BYHSPEVALUE;
-      case BY_SCORE -> InputHSPSorting.BYHSPSCORE;
-      case BY_QUERY_START -> InputHSPSorting.BYHSPQUERYSTART;
-      case BY_PERCENT_IDENTITY -> InputHSPSorting.BYHSPPERCENTIDENTITY;
-      case BY_SUBJECT_START -> InputHSPSorting.BYHSPSUBJECTSTART;
-    };
-  }
-
-  InputBlastStrand fromInternal(QueryStrand val) {
     if (val == null)
       return null;
 
     return switch (val) {
-      case BOTH -> InputBlastStrand.BOTH;
-      case MINUS -> InputBlastStrand.MINUS;
-      case PLUS -> InputBlastStrand.PLUS;
+      case BITSCORE -> BlastReportField.BIT_SCORE;
+      case BTOP -> BlastReportField.BLAST_TRACEBACK_OPS;
+      case EVALUE -> BlastReportField.EXPECT_VALUE;
+      case FRAMES -> BlastReportField.FRAMES;
+      case GAPOPEN -> BlastReportField.NUMBER_GAP_OPENINGS;
+      case GAPS -> BlastReportField.NUMBER_GAPS;
+      case LENGTH -> BlastReportField.ALIGNMENT_LENGTH;
+      case MISMATCH -> BlastReportField.NUMBER_MISMATCHES;
+      case NIDENT -> BlastReportField.NUMBER_IDENTICAL_MATCHES;
+      case PIDENT -> BlastReportField.PERCENT_IDENTICAL_MATCHES;
+      case POSITIVE -> BlastReportField.NUMBER_POSITIVE_MATCHES;
+      case PPOS -> BlastReportField.PERCENT_POSITIVE_MATCHES;
+      case QACC -> BlastReportField.QUERY_ACCESSION;
+      case QACCVER -> BlastReportField.QUERY_ACCESSION_VERSION;
+      case QCOVHSP -> BlastReportField.QUERY_COVERAGE_PER_HSP;
+      case QCOVS -> BlastReportField.QUERY_COVERAGE_PER_SUBJECT;
+      case QCOVUS -> BlastReportField.QUERY_COVERAGE_PER_UNIQUE_SUBJECT;
+      case QEND -> BlastReportField.QUERY_ALIGNMENT_END;
+      case QFRAME -> BlastReportField.QUERY_FRAME;
+      case QGI -> BlastReportField.QUERY_GI;
+      case QLEN -> BlastReportField.QUERY_SEQUENCE_LENGTH;
+      case QSEQ -> BlastReportField.QUERY_SEQUENCE;
+      case QSEQID -> BlastReportField.QUERY_SEQUENCE_ID;
+      case QSTART -> BlastReportField.QUERY_ALIGNMENT_START;
+      case SACC -> BlastReportField.SUBJECT_ACCESSION;
+      case SACCVER -> BlastReportField.SUBJECT_ACCESSION_VERSION;
+      case SALLACC -> BlastReportField.SUBJECT_ALL_ACCESSION;
+      case SALLGI -> BlastReportField.SUBJECT_ALL_GI;
+      case SALLSEQID -> BlastReportField.SUBJECT_ALL_SEQUENCE_ID;
+      case SALLTITLES -> BlastReportField.SUBJECT_ALL_TITLES;
+      case SBLASTNAME -> BlastReportField.SUBJECT_BLAST_NAME;
+      case SBLASTNAMES -> BlastReportField.SUBJECT_BLAST_NAMES;
+      case SCOMNAME -> BlastReportField.SUBJECT_COMMON_NAME;
+      case SCOMNAMES -> BlastReportField.SUBJECT_COMMON_NAMES;
+      case SCORE -> BlastReportField.RAW_SCORE;
+      case SEND -> BlastReportField.SUBJECT_ALIGNMENT_END;
+      case SFRAME -> BlastReportField.SUBJECT_FRAME;
+      case SGI -> BlastReportField.SUBJECT_GI;
+      case SLEN -> BlastReportField.SUBJECT_SEQUENCE_LENGTH;
+      case SQ -> BlastReportField.SQ;
+      case SR -> BlastReportField.SR;
+      case SSCINAME -> BlastReportField.SUBJECT_SCIENTIFIC_NAME;
+      case SSCINAMES -> BlastReportField.SUBJECT_SCIENTIFIC_NAMES;
+      case SSEQ -> BlastReportField.SUBJECT_SEQUENCE;
+      case SSEQID -> BlastReportField.SUBJECT_SEQUENCE_ID;
+      case SSKINGDOM -> BlastReportField.SUBJECT_SUPER_KINGDOM;
+      case SSKINGDOMS -> BlastReportField.SUBJECT_SUPER_KINGDOMS;
+      case SSTART -> BlastReportField.SUBJECT_ALIGNMENT_START;
+      case SSTRAND -> BlastReportField.SUBJECT_STRAND;
+      case STAXID -> BlastReportField.SUBJECT_TAXONOMY_ID;
+      case STAXIDS -> BlastReportField.SUBJECT_UNIQUE_TAXONOMY_IDS;
+      case STITLE -> BlastReportField.SUBJECT_TITLE;
     };
   }
 
-  InputBlastnDcTemplateType fromInternal(TemplateType val) {
+  static BlastReportFormat toInternal(IOBlastReportFormat fmt) {
+    log.trace("#toInternal(IOBlastReportFormat)");
+
+    if (fmt == null)
+      return null;
+
+    return new ReportFormatImpl()
+      .setType(toInternal(fmt.getFormat()))
+      .setDelimiter(fmt.getDelim())
+      .setReportFields(toInternal(fmt.getFields()));
+  }
+
+  static HitSorting toInternal(IOHitSorting val) {
+    log.trace("#toInternal(IOHitSorting)");
+
     if (val == null)
       return null;
 
-    return switch (val) {
-      case Coding -> InputBlastnDcTemplateType.CODING;
-      case Optimal -> InputBlastnDcTemplateType.OPTIMAL;
-      case Both -> InputBlastnDcTemplateType.BOTH;
+    return switch(val) {
+      case BYEVAL -> HitSorting.ByExpectValue;
+      case BYBITSCORE -> HitSorting.ByBitScore;
+      case BYTOTALSCORE -> HitSorting.ByTotalScore;
+      case BYPERCENTIDENTITY -> HitSorting.ByPercentIdentity;
+      case BYQUERYCOVERAGE -> HitSorting.ByQueryCoverage;
     };
   }
 
-  InputBlastpScoringMatrix fromInternal(BlastpScoringMatrix val) {
+  static HspSorting toInternal(IOHSPSorting val) {
+    log.trace("#toInternal(IOHSPSorting)");
+
     if (val == null)
       return null;
 
-    return switch (val) {
-      case Blosum45 -> InputBlastpScoringMatrix.BLOSUM45;
-      case Blosum50 -> InputBlastpScoringMatrix.BLOSUM50;
-      case Blosum62 -> InputBlastpScoringMatrix.BLOSUM62;
-      case Blosum80 -> InputBlastpScoringMatrix.BLOSUM80;
-      case Blosum90 -> InputBlastpScoringMatrix.BLOSUM90;
-      case Pam30 -> InputBlastpScoringMatrix.PAM30;
-      case Pam70 -> InputBlastpScoringMatrix.PAM70;
-      case Pam250 -> InputBlastpScoringMatrix.PAM250;
-      case Identity -> InputBlastpScoringMatrix.IDENTITY;
+    return switch(val) {
+      case BYHSPEVALUE -> HspSorting.ByExpectValue;
+      case BYHSPSCORE -> HspSorting.ByScore;
+      case BYHSPQUERYSTART -> HspSorting.ByQueryStart;
+      case BYHSPPERCENTIDENTITY -> HspSorting.ByPercentIdentity;
+      case BYHSPSUBJECTSTART -> HspSorting.BySubjectStart;
     };
   }
 }

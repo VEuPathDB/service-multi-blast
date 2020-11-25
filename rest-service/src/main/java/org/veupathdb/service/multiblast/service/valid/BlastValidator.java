@@ -8,12 +8,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.ReportFormatType;
+import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
-public class BlastValidator implements ConfigValidator<InputBlastConfig>
+public class BlastValidator implements ConfigValidator<IOBlastConfig>
 {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //
   // ┃                                                                      ┃ //
@@ -21,22 +21,22 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  protected static final String
+  public static final String
     errRequired         = "is required",
     ErrGenCode          = "must be equal to 33 or in one of the following inclusive ranges: [1..6], [9..16], [21-31]",
     ErrQueryLoc         = "start position must be less than stop position",
     errFmt0             = "only valid for the "
-      + ReportFormatType.Pairwise.getIoName()
+      + BlastReportType.Pairwise.getIoName()
       + " output format",
     errNotFmtGt4 = "only valid for the following output format types: "
-      + Arrays.stream(ReportFormatType.values())
+      + Arrays.stream(BlastReportType.values())
       .limit(5)
-      .map(ReportFormatType::getIoName)
+      .map(BlastReportType::getIoName)
       .collect(Collectors.joining(", ")),
     errOnlyFmtGt4 = "not valid for the following output format types: "
-      + Arrays.stream(ReportFormatType.values())
+      + Arrays.stream(BlastReportType.values())
       .limit(5)
-      .map(ReportFormatType::getIoName)
+      .map(BlastReportType::getIoName)
       .collect(Collectors.joining(", ")),
     errEValue           = "must be a decimal value (optionally in E notation).",
     errOnlyTask         = "can only be used with task type %s",
@@ -70,8 +70,8 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   @Override
-  public ErrorMap validate(InputBlastConfig conf) {
-    log.trace("#validate(InputBlastConfig)");
+  public ErrorMap validate(IOBlastConfig conf) {
+    log.trace("#validate(IOBlastConfig)");
 
     var errors = new ErrorMap();
 
@@ -89,11 +89,11 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
     Int.optGtEq(errors, conf.getSearchSpace(), (byte) 0, JsonKeys.SearchSpace);
 
     errors.putAll(switch (conf.getTool()) {
-      case BLASTN -> BlastNValidator.getInstance().validate((InputBlastnConfig) conf);
-      case BLASTP -> BlastPValidator.getInstance().validate((InputBlastpConfig) conf);
-      case BLASTX -> BlastXValidator.getInstance().validate((InputBlastxConfig) conf);
-      case TBLASTN -> TBlastNValidator.getInstance().validate((InputTBlastnConfig) conf);
-      case TBLASTX -> TBlastXValidator.getInstance().validate((InputTBlastxConfig) conf);
+      case BLASTN -> BlastNValidator.getInstance().validate((IOBlastnConfig) conf);
+      case BLASTP -> BlastPValidator.getInstance().validate((IOBlastpConfig) conf);
+      case BLASTX -> BlastXValidator.getInstance().validate((IOBlastxConfig) conf);
+      case TBLASTN -> TBlastNValidator.getInstance().validate((IOTBlastnConfig) conf);
+      case TBLASTX -> TBlastXValidator.getInstance().validate((IOTBlastxConfig) conf);
     });
 
     return errors;
@@ -109,7 +109,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
   // ┃     Specialized Validations                                          ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  static void validateSortHits(ErrorMap err, InputBlastConfig conf) {
+  static void validateSortHits(ErrorMap err, IOBlastConfig conf) {
     if (conf.getSortHits() == null)
       return;
 
@@ -120,18 +120,18 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       err.putError(JsonKeys.SortHits, errNotFmtGt4);
   }
 
-  static void validateSortHSPs(ErrorMap err, InputBlastConfig conf) {
+  static void validateSortHSPs(ErrorMap err, IOBlastConfig conf) {
     if (conf.getSortHSPs() == null)
       return;
 
     if (conf.getOutFormat() == null || conf.getOutFormat().getFormat() == null)
       return;
 
-    if (conf.getOutFormat().getFormat() != InputBlastFormat.PAIRWISE)
+    if (conf.getOutFormat().getFormat() != IOBlastFormat.PAIRWISE)
       err.putError(JsonKeys.SortHSPs, errFmt0);
   }
 
-  static void validateQueryLocation(ErrorMap err, InputBlastConfig conf) {
+  static void validateQueryLocation(ErrorMap err, IOBlastConfig conf) {
     if (conf.getQueryLoc() == null)
       return;
 
@@ -149,12 +149,12 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
 
   static final Pattern EValuePat = Pattern.compile("^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$");
 
-  static void validateEValue(ErrorMap err, InputBlastConfig conf) {
+  static void validateEValue(ErrorMap err, IOBlastConfig conf) {
     if (conf.getEValue() != null && !EValuePat.matcher(conf.getEValue()).matches())
       err.putError(JsonKeys.ExpectValue, errEValue);
   }
 
-  static void validateOutFormat(ErrorMap err, InputBlastConfig conf) {
+  static void validateOutFormat(ErrorMap err, IOBlastConfig conf) {
     if (conf.getOutFormat() == null)
       return;
 
@@ -162,7 +162,7 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       .forEach((k, v) -> err.put(JsonKeys.OutFormat + "." + k, v));
   }
 
-  static void validateNumDescriptions(ErrorMap err, InputBlastConfig conf) {
+  static void validateNumDescriptions(ErrorMap err, IOBlastConfig conf) {
     if (conf.getNumDescriptions() == null)
       return;
 
@@ -176,19 +176,19 @@ public class BlastValidator implements ConfigValidator<InputBlastConfig>
       err.putError(JsonKeys.NumDescriptions, errNotFmtGt4);
   }
 
-  static void validateNumAlignments(ErrorMap err, InputBlastConfig conf) {
+  static void validateNumAlignments(ErrorMap err, IOBlastConfig conf) {
     if (conf.getNumAlignments() != null) {
       Int.gtEq(err, conf.getNumAlignments(), 0, NumAlignments);
       Obj.incompat(err, conf.getMaxTargetSeqs(), NumAlignments, MaxTargetSequences);
     }
   }
 
-  static void validateQCovHspPerc(ErrorMap err, InputBlastConfig conf) {
+  static void validateQCovHspPerc(ErrorMap err, IOBlastConfig conf) {
     if (conf.getQCovHSPPerc() != null)
       Dec.betweenInc(err, conf.getQCovHSPPerc(), 0, 100, QueryCoverageHSPPercent);
   }
 
-  static void validateMaxTargetSeqs(ErrorMap err, InputBlastConfig conf) {
+  static void validateMaxTargetSeqs(ErrorMap err, IOBlastConfig conf) {
     if (conf.getMaxTargetSeqs() == null)
       return;
 

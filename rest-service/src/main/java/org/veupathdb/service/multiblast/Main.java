@@ -1,6 +1,7 @@
 package org.veupathdb.service.multiblast;
 
 import org.veupathdb.lib.container.jaxrs.config.Options;
+import org.veupathdb.lib.container.jaxrs.health.Dependency;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.lib.container.jaxrs.server.Server;
@@ -8,9 +9,10 @@ import org.veupathdb.service.multiblast.db.PgDbMan;
 import org.veupathdb.service.multiblast.model.mapping.BlastTools;
 import org.veupathdb.service.multiblast.service.repo.SelectTasks;
 import org.veupathdb.service.multiblast.service.repo.SelectTools;
+import org.veupathdb.service.multiblast.util.QueueDep;
 
 public class Main extends Server {
-  public static final Config config = new Config();
+  private static final Config config = Config.getInstance();
 
   public static void main(String[] args) {
     var server = new Main();
@@ -46,6 +48,13 @@ public class Main extends Server {
       log.fatal("Failed to load blast config cache.", e);
       Runtime.getRuntime().exit(1);
     }
+  }
+
+  @Override
+  protected Dependency[] dependencies() {
+    return new Dependency[]{
+      new QueueDep(config),
+    };
   }
 
   @Override

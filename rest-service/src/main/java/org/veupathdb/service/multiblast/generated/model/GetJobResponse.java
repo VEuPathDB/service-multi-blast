@@ -20,8 +20,8 @@ public interface GetJobResponse {
   void setStatus(IOJobStatus status);
 
   @JsonProperty("config")
-  InputBlastConfig getConfig();
+  IOBlastConfig getConfig();
 
   @JsonProperty("config")
-  void setConfig(InputBlastConfig config);
+  void setConfig(IOBlastConfig config);
 }

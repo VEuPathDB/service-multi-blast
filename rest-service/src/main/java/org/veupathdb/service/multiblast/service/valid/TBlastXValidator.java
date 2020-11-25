@@ -2,12 +2,12 @@ package org.veupathdb.service.multiblast.service.valid;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
-import org.veupathdb.service.multiblast.generated.model.InputTBlastxConfig;
+import org.veupathdb.service.multiblast.generated.model.IOTBlastxConfig;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
-class TBlastXValidator implements ConfigValidator<InputTBlastxConfig>
+class TBlastXValidator implements ConfigValidator<IOTBlastxConfig>
 {
   private static TBlastXValidator instance;
 
@@ -23,8 +23,8 @@ class TBlastXValidator implements ConfigValidator<InputTBlastxConfig>
   }
 
   @Override
-  public ErrorMap validate(InputTBlastxConfig conf) {
-    log.trace("#validate(InputTBlastxConfig)");
+  public ErrorMap validate(IOTBlastxConfig conf) {
+    log.trace("#validate(IOTBlastxConfig)");
 
     var err = new ErrorMap();
 
@@ -33,12 +33,9 @@ class TBlastXValidator implements ConfigValidator<InputTBlastxConfig>
     Int.optGtEq(err, conf.getWordSize(), (byte) 2, WordSize);
     Int.optGtEq(err, conf.getMaxIntronLength(), (byte) 0, MaxIntronLength);
     Dec.optGtEq(err, conf.getThreshold(), 0, Threshold);
-    validateSubjectLoc(err, conf);
     SegValidator.getInstance()
       .validate(conf.getSeg())
       .forEach((k, v) -> err.putError(Seg, k, v));
-    validateTaxIds(err, conf);
-    validateNegativeTaxIds(err, conf);
     validateDbSoftMask(err, conf);
     validateDbHardMask(err, conf);
     validateCullingLimit(err, conf);
@@ -49,44 +46,21 @@ class TBlastXValidator implements ConfigValidator<InputTBlastxConfig>
     return err;
   }
 
-  static void validateSubjectLoc(ErrorMap err, InputTBlastxConfig conf) {
-    if (conf.getSubjectLoc() != null) {
-      Obj.colIncompat(err, conf.getTaxIds(), SubjectLocation, TaxIDs);
-      Obj.colIncompat(err, conf.getNegativeTaxIds(), SubjectLocation, NegativeTaxIDs);
-      Obj.incompat(err, conf.getDbSoftMask(), SubjectLocation, DBSoftMask);
-      Obj.incompat(err, conf.getDbHardMask(), SubjectLocation, DBHardMask);
-    }
-  }
-
-  static void validateNegativeTaxIds(ErrorMap err, InputTBlastxConfig conf) {
-    if (conf.getNegativeTaxIds() == null || conf.getNegativeTaxIds().isEmpty())
-      return;
-
-    Obj.incompat(err, conf.getSubjectLoc(), NegativeTaxIDs, SubjectLocation);
-  }
-
-  static void validateTaxIds(ErrorMap err, InputTBlastxConfig conf) {
-    if (conf.getTaxIds() == null || conf.getTaxIds().isEmpty())
-      return;
-
-    Obj.incompat(err, conf.getSubjectLoc(), TaxIDs, SubjectLocation);
-  }
-
-  static void validateBestHitScoreEdge(ErrorMap err, InputTBlastxConfig conf) {
+  static void validateBestHitScoreEdge(ErrorMap err, IOTBlastxConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
       Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0, 0.5, BestHitScoreEdge);
       Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
     }
   }
 
-  static void validateBestHitOverhang(ErrorMap err, InputTBlastxConfig conf) {
+  static void validateBestHitOverhang(ErrorMap err, IOTBlastxConfig conf) {
     if (conf.getBestHitOverhang() != null) {
       Dec.betweenExc(err, conf.getBestHitOverhang(), 0, 0.5, BestHitOverhang);
       Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
     }
   }
 
-  static void validateCullingLimit(ErrorMap err, InputTBlastxConfig conf) {
+  static void validateCullingLimit(ErrorMap err, IOTBlastxConfig conf) {
     if (conf.getCullingLimit() != null) {
       Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
       Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
@@ -94,17 +68,15 @@ class TBlastXValidator implements ConfigValidator<InputTBlastxConfig>
     }
   }
 
-  static void validateDbHardMask(ErrorMap err, InputTBlastxConfig conf) {
+  static void validateDbHardMask(ErrorMap err, IOTBlastxConfig conf) {
     if (conf.getDbHardMask() != null) {
       Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
-      Obj.incompat(err, conf.getSubjectLoc(), DBHardMask, SubjectLocation);
     }
   }
 
-  static void validateDbSoftMask(ErrorMap err, InputTBlastxConfig conf) {
+  static void validateDbSoftMask(ErrorMap err, IOTBlastxConfig conf) {
     if (conf.getDbSoftMask() != null) {
       Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
-      Obj.incompat(err, conf.getSubjectLoc(), DBSoftMask, SubjectLocation);
     }
   }
 

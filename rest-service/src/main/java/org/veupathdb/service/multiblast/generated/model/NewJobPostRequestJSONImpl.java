@@ -23,7 +23,7 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
   private String targetType;
 
   @JsonProperty("config")
-  private InputBlastConfig config;
+  private IOBlastConfig config;
 
   @JsonProperty("description")
   private String description;
@@ -59,12 +59,12 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON {
   }
 
   @JsonProperty("config")
-  public InputBlastConfig getConfig() {
+  public IOBlastConfig getConfig() {
     return this.config;
   }
 
   @JsonProperty("config")
-  public void setConfig(InputBlastConfig config) {
+  public void setConfig(IOBlastConfig config) {
     this.config = config;
   }
 

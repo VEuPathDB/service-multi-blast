@@ -57,24 +57,33 @@ public class CliBuilder
 
   @Override
   public String toString() {
-    return toComponentStream().collect(Collectors.joining(" "));
+    return toJoinedStream().collect(Collectors.joining(" "));
+  }
+
+  public String[][] toArgPairs() {
+    return toComponentStream().toArray(String[][]::new);
   }
 
   public String[] toArgArray() {
-    return toComponentStream().toArray(String[]::new);
+    return toJoinedStream().toArray(String[]::new);
   }
 
-  public Stream<String> toComponentStream() {
+  public Stream<String[]> toComponentStream() {
     return params.entrySet()
       .stream()
-      .map(e -> e.getKey().getFlag() + (
+      .map(e -> new String[]{
+        e.getKey().getFlag(),
         e.getValue() == null || e.getValue().length == 0
-          ? ""
-          : '=' + Arrays.stream(e.getValue())
+          ? null
+          : Arrays.stream(e.getValue())
             .map(Object::toString)
             .map(CliBuilder::escape)
-            .collect(Collectors.joining(",", "'", "'"))
-      ));
+            .collect(Collectors.joining(","))
+      });
+  }
+
+  public Stream<String> toJoinedStream() {
+    return toComponentStream().map(e -> e[0] + (e[1] == null ? "" : '=' + e[1]));
   }
 
   public static String escape(String in) {

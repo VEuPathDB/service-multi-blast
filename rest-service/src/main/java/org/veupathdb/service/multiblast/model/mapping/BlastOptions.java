@@ -14,7 +14,7 @@ public class BlastOptions extends EnumMap<Short, ToolOption>
 
   @Override
   public EnumMapping<Short, ToolOption> putRaw(Short id, String value) {
-    return put(id, ToolOption.fromString(Objects.requireNonNull(value)).orElseThrow());
+    return put(id, ToolOption.fromString(Objects.requireNonNull(value)));
   }
 
   public static BlastOptions getInstance() {

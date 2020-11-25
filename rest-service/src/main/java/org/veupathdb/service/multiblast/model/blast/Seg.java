@@ -1,47 +1,17 @@
 package org.veupathdb.service.multiblast.model.blast;
 
-import org.veupathdb.service.multiblast.util.Format;
+import java.math.BigDecimal;
 
-public class Seg
+public interface Seg
 {
-  private final int    window;
-  private final double loCut;
-  private final double hiCut;
+  int getWindow();
+  Seg setWindow(int window);
 
-  public Seg(int window, double loCut, double hiCut) {
-    this.window = window;
-    this.loCut  = loCut;
-    this.hiCut  = hiCut;
-  }
+  double getLowCut();
+  Seg setLowCut(double lowCut);
+  Seg setLowCut(BigDecimal lowCut);
 
-  public int getWindow() {
-    return window;
-  }
-
-  public double getLoCut() {
-    return loCut;
-  }
-
-  public double getHiCut() {
-    return hiCut;
-  }
-
-  @Override
-  public String toString() {
-    return String.format(
-      "%d %s %s",
-      window,
-      Format.Decimals.format(loCut),
-      Format.Decimals.format(hiCut)
-    );
-  }
-
-  public static Seg unsafeFromString(String value) {
-    var split = value.split(" +");
-    return new Seg(
-      Integer.parseInt(split[0]),
-      Double.parseDouble(split[1]),
-      Double.parseDouble(split[2])
-    );
-  }
+  double getHighCut();
+  Seg setHighCut(double highCut);
+  Seg setHighCut(BigDecimal highCut);
 }

@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
-import javax.validation.constraints.NotNull;
-
 import org.veupathdb.service.multiblast.model.internal.JobStatus;
 
 public class JobStatuses extends EnumMap<Byte, JobStatus>

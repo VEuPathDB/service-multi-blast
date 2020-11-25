@@ -1,9 +1,8 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
 
-import org.veupathdb.service.multiblast.model.blast.BlastxTask;
+import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 public class BlastxTasks extends EnumMap<Byte, BlastxTask>
 {

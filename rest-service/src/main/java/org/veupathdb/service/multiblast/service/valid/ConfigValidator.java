@@ -3,6 +3,8 @@ package org.veupathdb.service.multiblast.service.valid;
 import java.util.Collection;
 
 import org.veupathdb.service.multiblast.model.ErrorMap;
+import org.veupathdb.service.multiblast.model.blast.trait.WithBestHit;
+import org.veupathdb.service.multiblast.model.blast.trait.WithCullingLimit;
 
 interface ConfigValidator<C>
 {

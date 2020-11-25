@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public enum HspSorting
 {
-  BY_EXPECT_VALUE(0),
-  BY_SCORE(1),
-  BY_QUERY_START(2),
-  BY_PERCENT_IDENTITY(3),
-  BY_SUBJECT_START(4);
+  ByExpectValue(0),
+  ByScore(1),
+  ByQueryStart(2),
+  ByPercentIdentity(3),
+  BySubjectStart(4);
 
   private final byte value;
 
@@ -20,7 +20,7 @@ public enum HspSorting
     return value;
   }
 
-  public boolean isValidFor(ReportFormatType fmt) {
+  public boolean isValidFor(BlastReportType fmt) {
     Objects.requireNonNull(fmt);
 
     return fmt.getValue() <= 4;

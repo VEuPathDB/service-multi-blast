@@ -4,14 +4,14 @@ import java.util.Optional;
 
 public enum BlastTool
 {
-  BLASTN,
-  BLASTP,
-  BLASTX,
+  BlastN,
+  BlastP,
+  BlastX,
   PSIBLAST,
   RPSBLAST,
   RPSTBLASTN,
-  TBLASTN,
-  TBLASTX;
+  TBlastN,
+  TBlastX;
 
   public String value() {
     return name().toLowerCase();
