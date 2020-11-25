@@ -74,9 +74,6 @@ services:
       # Configures the number of simultaneous blast jobs that can be run
       FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: 2
 
-      FIREWORQ_BIND: 0.0.0.0:80
-      FIREWORQ_DRIVER: mysql
-      FIREWORQ_QUEUE_DEFAULT: blast
 
     networks:
       - queueInternal

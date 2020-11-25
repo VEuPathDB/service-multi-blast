@@ -18,7 +18,7 @@ public class GetJobResponseImpl implements GetJobResponse {
   private IOJobStatus status;
 
   @JsonProperty("config")
-  private InputBlastConfig config;
+  private IOBlastConfig config;
 
   @JsonProperty("id")
   public Integer getId() {
@@ -41,12 +41,12 @@ public class GetJobResponseImpl implements GetJobResponse {
   }
 
   @JsonProperty("config")
-  public InputBlastConfig getConfig() {
+  public IOBlastConfig getConfig() {
     return this.config;
   }
 
   @JsonProperty("config")
-  public void setConfig(InputBlastConfig config) {
+  public void setConfig(IOBlastConfig config) {
     this.config = config;
   }
 }

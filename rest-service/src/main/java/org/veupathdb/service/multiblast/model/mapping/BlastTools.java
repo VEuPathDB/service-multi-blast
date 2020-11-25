@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
 
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 

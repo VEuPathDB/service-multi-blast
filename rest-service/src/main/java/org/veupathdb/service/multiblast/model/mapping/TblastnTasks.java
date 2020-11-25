@@ -2,7 +2,7 @@ package org.veupathdb.service.multiblast.model.mapping;
 
 import javax.validation.constraints.NotNull;
 
-import org.veupathdb.service.multiblast.model.blast.TBlastnTask;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastnTask;
 
 public class TblastnTasks extends EnumMap<Byte, TBlastnTask>
 {

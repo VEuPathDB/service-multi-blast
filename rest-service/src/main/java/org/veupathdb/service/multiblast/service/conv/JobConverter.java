@@ -1,12 +1,9 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
-import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.model.internal.JobStatus;
 
@@ -20,13 +17,15 @@ public class JobConverter
 
   private static JobConverter instance;
 
-  private final Logger log;
+  private static final Logger log = LogProvider.logger(JobConverter.class);
 
   private JobConverter() {
-    log = LogManager.getLogger(getClass());
+    log.trace("#new()");
   }
 
-  public JobConverter getInstance() {
+  public static JobConverter getInstance() {
+    log.trace("#getInstance()");
+
     if (instance == null)
       return instance = new JobConverter();
 
@@ -38,6 +37,34 @@ public class JobConverter
   // ┃     Conversion Methods                                               ┃ //
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
+
+  public static BlastTool toInternal(IOBlastTool val) {
+    log.trace("#toInternal(IOBlastTool)");
+
+    return switch(val) {
+      case BLASTN -> BlastTool.BlastN;
+      case BLASTP -> BlastTool.BlastP;
+      case BLASTX -> BlastTool.BlastX;
+      case TBLASTN -> BlastTool.TBlastN;
+      case TBLASTX -> BlastTool.TBlastX;
+    };
+  }
+
+  public static IOBlastTool toExternal(BlastTool val) {
+    log.trace("#toExternal(BlastTool)");
+
+    return switch(val) {
+      case BlastN -> IOBlastTool.BLASTN;
+      case BlastP -> IOBlastTool.BLASTP;
+      case BlastX -> IOBlastTool.BLASTX;
+      case TBlastN -> IOBlastTool.TBLASTN;
+      case TBlastX -> IOBlastTool.TBLASTX;
+
+      default -> throw new IllegalArgumentException(
+        String.format("Blast tool \"%s\" is not currently supported.", val)
+      );
+    };
+  }
 
   public IOJobStatus fromInternal(JobStatus val) {
     return switch(val) {
@@ -57,13 +84,14 @@ public class JobConverter
     };
   }
 
-  public GetJobResponse fromInternal(Job job) {
-    var out = new GetJobResponseImpl();
+  public static Job toInternal(long userId, IOBlastConfig conf) {
+    log.trace("#toInternal(long, IOBlastConfig)");
 
-    out.setId(job.getJobId());
-    out.setStatus(fromInternal(job.getStatus()));
-    out.setConfig(BlastConverter.getInstance().fromInternal(job.getConfig()));
+    return getInstance().externalToInternal(userId, conf);
+  }
 
-    return out;
+  public Job externalToInternal(long userId, IOBlastConfig conf) {
+    var out = new Job(userId, JobStatus.Queued, toInternal(conf.getTool()));
+    return out.setConfig(BlastConverter.toInternal(conf));
   }
 }

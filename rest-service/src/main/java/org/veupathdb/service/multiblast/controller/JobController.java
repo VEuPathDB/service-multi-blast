@@ -7,8 +7,8 @@ import javax.ws.rs.core.Request;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
-import org.veupathdb.service.multiblast.generated.model.InputBlastFmtField;
-import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
@@ -67,8 +67,8 @@ public class JobController implements Jobs
   @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
     int jobId,
-    InputBlastFormat format,
-    List<InputBlastFmtField> fields
+    IOBlastFormat format,
+    List<IOBlastReportField> fields
   ) {
     var wrap = service.getReport(jobId, format, fields, user, request);
     var head = GetJobsReportByJobIdResponse.headersFor200();

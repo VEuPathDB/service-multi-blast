@@ -1,11 +1,7 @@
 package org.veupathdb.service.multiblast.service.valid;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
-import org.veupathdb.service.multiblast.generated.model.InputBlastOutFmt;
+import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastReportFormat;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
@@ -44,7 +40,7 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public ErrorMap externalUseValidation(InputBlastOutFmt fmt) {
+  public ErrorMap externalUseValidation(IOBlastReportFormat fmt) {
     var errors = new ErrorMap();
 
     validateExtFields(errors, fmt);
@@ -59,7 +55,7 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  public static ErrorMap validateExternal(InputBlastOutFmt fmt) {
+  public static ErrorMap validateExternal(IOBlastReportFormat fmt) {
     return getInstance().externalUseValidation(fmt);
   }
 
@@ -69,42 +65,42 @@ public class OutFormatValidator
   // ┃                                                                      ┃ //
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
-  static void validateExtFields(ErrorMap err, InputBlastOutFmt fmt) {
+  static void validateExtFields(ErrorMap err, IOBlastReportFormat fmt) {
     var tmp = validateIntFields(fmt);
 
     if (tmp != null)
       err.putError(JsonKeys.Fields, tmp);
   }
 
-  static String validateIntFields(InputBlastOutFmt fmt) {
+  static String validateIntFields(IOBlastReportFormat fmt) {
     if (fmt.getFields().isEmpty())
       return null;
 
     return isCustomizableFormat(fmt.getFormat()) ? null : ErrFields;
   }
 
-  static void validateExtDelim(ErrorMap err, InputBlastOutFmt fmt) {
+  static void validateExtDelim(ErrorMap err, IOBlastReportFormat fmt) {
     var tmp = validateIntDelim(fmt);
 
     if (tmp != null)
       err.putError(JsonKeys.Delimiter, tmp);
   }
 
-  static String validateIntDelim(InputBlastOutFmt fmt) {
+  static String validateIntDelim(IOBlastReportFormat fmt) {
     if (fmt.getDelim() == null)
       return null;
 
     return allowsDelimiters(fmt.getFormat()) ? null : ErrDelim;
   }
 
-  static boolean allowsDelimiters(InputBlastFormat fmt) {
+  static boolean allowsDelimiters(IOBlastFormat fmt) {
     return switch (fmt) {
       case TABULAR, TABULARWITHCOMMENTS, CSV -> true;
       default -> false;
     };
   }
 
-  static boolean isCustomizableFormat(InputBlastFormat fmt) {
+  static boolean isCustomizableFormat(IOBlastFormat fmt) {
     return switch (fmt) {
       case TABULAR, TABULARWITHCOMMENTS, CSV, SAM -> true;
       default -> false;

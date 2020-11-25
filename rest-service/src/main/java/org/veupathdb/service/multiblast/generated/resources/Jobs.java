@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import org.veupathdb.service.multiblast.generated.model.BadRequestError;
 import org.veupathdb.service.multiblast.generated.model.GetJobResponse;
-import org.veupathdb.service.multiblast.generated.model.InputBlastFmtField;
-import org.veupathdb.service.multiblast.generated.model.InputBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
@@ -63,8 +63,8 @@ public interface Jobs {
       "text/plain"
   })
   GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") int jobId,
-      @QueryParam("format") InputBlastFormat format,
-      @QueryParam("fields") List<InputBlastFmtField> fields);
+      @QueryParam("format") IOBlastFormat format,
+      @QueryParam("fields") List<IOBlastReportField> fields);
 
   class GetJobsResponse extends ResponseDelegate {
     private GetJobsResponse(Response response, Object entity) {

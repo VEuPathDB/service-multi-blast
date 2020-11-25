@@ -1,368 +1,141 @@
 package org.veupathdb.service.multiblast.model.blast;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.nio.file.Path;
 
-import org.veupathdb.service.multiblast.model.CLISerializable;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
-/**
- * Base blast configuration.
- * <p>
- * The fields in this class are common to all blast tools available in the NCBI
- * blast toolset.
- */
-public class BlastConfig implements CLISerializable
+public interface BlastConfig <T extends BlastConfig<T>>
 {
-  private boolean       helpEnabled;
-  private boolean       versionEnabled;
-  private String        blastDatabase;
-  private Byte          dbSize;
-  private String        entrezQuery;
-  private String        expectValue;
-  private File          exportSearchStrategy;
-  private boolean       htmlOutputEnabled;
-  private File          importSearchStrategy;
-  private Integer       lineLength;
-  private boolean       lowercaseMaskingEnabled;
-  private Integer       maxHSPs;
-  private Integer       maxTargetSequences;
-  private Integer       numDescriptions;
-  private Integer       numAlignments;
-  private Byte          numThreads;
-  private File          out;
-  private File          query;
-  private QueryLocation queryLoc;
-  private boolean       remoteEnabled;
-  private Byte          searchSpace;
-  private boolean       showGIsEnabled;
-  private Boolean       softMasking;
-  private HitSorting    sortHits;
-  private HspSorting    sortHsps;
-  private Integer         windowSize;
-  private Double        extDropoffUngapped;
-  private OutFormat     outFormat;
-  private Double        queryCoveragePercentHSP;
-  private boolean       parseDefLinesEnabled;
-
-  public String getBlastDatabase() {
-    return blastDatabase;
-  }
-
-  public BlastConfig setBlastDatabase(String blastDatabase) {
-    this.blastDatabase = blastDatabase;
-    return this;
-  }
-
-  public Byte getDbSize() {
-    return dbSize;
-  }
-
-  public BlastConfig setDbSize(Byte dbSize) {
-    this.dbSize = dbSize;
-    return this;
-  }
-
-  public String getEntrezQuery() {
-    return entrezQuery;
-  }
-
-  public BlastConfig setEntrezQuery(String entrezQuery) {
-    this.entrezQuery = entrezQuery;
-    return this;
-  }
-
-  public String getExpectValue() {
-    return expectValue;
-  }
-
-  public BlastConfig setExpectValue(String expectValue) {
-    this.expectValue = expectValue;
-    return this;
-  }
-
-  public File getExportSearchStrategy() {
-    return exportSearchStrategy;
-  }
-
-  public BlastConfig setExportSearchStrategy(File exportSearchStrategy) {
-    this.exportSearchStrategy = exportSearchStrategy;
-    return this;
-  }
-
-  public boolean isHtmlOutputEnabled() {
-    return htmlOutputEnabled;
-  }
-
-  public BlastConfig setHtmlOutputEnabled(boolean htmlOutputEnabled) {
-    this.htmlOutputEnabled = htmlOutputEnabled;
-    return this;
-  }
-
-  public File getImportSearchStrategy() {
-    return importSearchStrategy;
-  }
-
-  public BlastConfig setImportSearchStrategy(File importSearchStrategy) {
-    this.importSearchStrategy = importSearchStrategy;
-    return this;
-  }
-
-  public Integer getLineLength() {
-    return lineLength;
-  }
-
-  public BlastConfig setLineLength(Integer lineLength) {
-    this.lineLength = lineLength;
-    return this;
-  }
-
-  public boolean isLowercaseMaskingEnabled() {
-    return lowercaseMaskingEnabled;
-  }
-
-  public BlastConfig setLowercaseMaskingEnabled(boolean lowercaseMaskingEnabled) {
-    this.lowercaseMaskingEnabled = lowercaseMaskingEnabled;
-    return this;
-  }
-
-  public Integer getMaxHSPs() {
-    return maxHSPs;
-  }
-
-  public BlastConfig setMaxHSPs(Integer maxHSPs) {
-    this.maxHSPs = maxHSPs;
-    return this;
-  }
-
-  public Integer getMaxTargetSequences() {
-    return maxTargetSequences;
-  }
-
-  public BlastConfig setMaxTargetSequences(Integer maxTargetSequences) {
-    this.maxTargetSequences = maxTargetSequences;
-    return this;
-  }
-
-  public Integer getNumDescriptions() {
-    return numDescriptions;
-  }
-
-  public BlastConfig setNumDescriptions(Integer numDescriptions) {
-    this.numDescriptions = numDescriptions;
-    return this;
-  }
-
-  public Integer getNumAlignments() {
-    return numAlignments;
-  }
-
-  public BlastConfig setNumAlignments(Integer numAlignments) {
-    this.numAlignments = numAlignments;
-    return this;
-  }
-
-  public Byte getNumThreads() {
-    return numThreads;
-  }
-
-  public BlastConfig setNumThreads(Byte numThreads) {
-    this.numThreads = numThreads;
-    return this;
-  }
-
-  public File getOut() {
-    return out;
-  }
-
-  public BlastConfig setOut(File out) {
-    this.out = out;
-    return this;
-  }
-
-  public File getQuery() {
-    return query;
-  }
-
-  public BlastConfig setQuery(File query) {
-    this.query = query;
-    return this;
-  }
-
-  public QueryLocation getQueryLoc() {
-    return queryLoc;
-  }
-
-  public BlastConfig setQueryLoc(QueryLocation queryLoc) {
-    this.queryLoc = queryLoc;
-    return this;
-  }
-
-  public boolean isRemoteEnabled() {
-    return remoteEnabled;
-  }
-
-  public BlastConfig setRemoteEnabled(boolean remoteEnabled) {
-    this.remoteEnabled = remoteEnabled;
-    return this;
-  }
-
-  public Byte getSearchSpace() {
-    return searchSpace;
-  }
-
-  public BlastConfig setSearchSpace(Byte searchSpace) {
-    this.searchSpace = searchSpace;
-    return this;
-  }
-
-  public boolean isShowGIsEnabled() {
-    return showGIsEnabled;
-  }
-
-  public BlastConfig setShowGIsEnabled(boolean showGIsEnabled) {
-    this.showGIsEnabled = showGIsEnabled;
-    return this;
-  }
-
-  public Boolean getSoftMasking() {
-    return softMasking;
-  }
-
-  public BlastConfig setSoftMasking(Boolean softMasking) {
-    this.softMasking = softMasking;
-    return this;
-  }
-
-  public HitSorting getSortHits() {
-    return sortHits;
-  }
-
-  public BlastConfig setSortHits(HitSorting sortHits) {
-    this.sortHits = sortHits;
-    return this;
-  }
-
-  public HspSorting getSortHSPs() {
-    return sortHsps;
-  }
-
-  public BlastConfig setSortHsps(HspSorting sortHsps) {
-    this.sortHsps = sortHsps;
-    return this;
-  }
-
-  public Integer getWindowSize() {
-    return windowSize;
-  }
-
-  public BlastConfig setWindowSize(Integer windowSize) {
-    this.windowSize = windowSize;
-    return this;
-  }
-
-  public boolean isVersionEnabled() {
-    return versionEnabled;
-  }
-
-  public BlastConfig setVersionEnabled(boolean versionEnabled) {
-    this.versionEnabled = versionEnabled;
-    return this;
-  }
-
-  public Double getExtDropoffUngapped() {
-    return extDropoffUngapped;
-  }
-
-  public BlastConfig setExtDropoffUngapped(Double xDropUngap) {
-    this.extDropoffUngapped = xDropUngap;
-    return this;
-  }
-
-  public OutFormat getOutFormat() {
-    return outFormat;
-  }
-
-  public BlastConfig setOutFormat(OutFormat outFormat) {
-    this.outFormat = outFormat;
-    return this;
-  }
-
-  public Double getQueryCoveragePercentHSP() {
-    return queryCoveragePercentHSP;
-  }
-
-  public BlastConfig setQueryCoveragePercentHSP(Double queryCoveragePercentHSP) {
-    this.queryCoveragePercentHSP = queryCoveragePercentHSP;
-    return this;
-  }
-
-  public boolean isParseDefLinesEnabled() {
-    return parseDefLinesEnabled;
-  }
-
-  public BlastConfig setParseDefLinesEnabled(boolean parseDefLinesEnabled) {
-    this.parseDefLinesEnabled = parseDefLinesEnabled;
-    return this;
-  }
-
-  public boolean isHelpEnabled() {
-    return helpEnabled;
-  }
-
-  public BlastConfig setHelpEnabled(boolean helpEnabled) {
-    this.helpEnabled = helpEnabled;
-    return this;
-  }
-
-  @Override
-  public void toArgs(CliBuilder args) {
-    args.appendNonNull(ToolOption.BlastDatabase, blastDatabase)
-      .appendNonNull(ToolOption.DatabaseEffectiveSize, dbSize)
-      .appendNonNull(ToolOption.EntrezQuery, entrezQuery)
-      .appendNonNull(ToolOption.ExpectationValue, expectValue)
-      .appendNonNull(ToolOption.ExportSearchStrategy, exportSearchStrategy)
-      .appendNonNull(ToolOption.ImportSearchStrategy, importSearchStrategy)
-      .appendNonNull(ToolOption.LineLength, lineLength)
-      .appendNonNull(ToolOption.MaxHSPs, maxHSPs)
-      .appendNonNull(ToolOption.MaxTargetSequences, maxTargetSequences)
-      .appendNonNull(ToolOption.NumDescriptions, numDescriptions)
-      .appendNonNull(ToolOption.NumAlignments, numAlignments)
-      .appendNonNull(ToolOption.NumberOfThreads, numThreads)
-      .appendNonNull(ToolOption.OutputFile, out)
-      .appendNonNull(ToolOption.Query, query)
-      .appendNonNull(ToolOption.QueryLocation, queryLoc)
-      .appendNonNull(ToolOption.SearchSpaceEffectiveLength, searchSpace)
-      .appendNonNull(ToolOption.SortHits, sortHits)
-      .appendNonNull(ToolOption.SortHSPs, sortHsps)
-      .appendNonNull(ToolOption.MultiHitWindowSize, windowSize)
-      .appendNonNull(ToolOption.XDropoffUngappedExtensions, extDropoffUngapped)
-      .appendNonNull(ToolOption.OutputFormat, outFormat)
-      .appendNonNull(ToolOption.QueryCoveragePercentHSP, queryCoveragePercentHSP)
-      .appendNonNull(ToolOption.SoftMasking, softMasking)
-    ;
-
-    if (htmlOutputEnabled)
-      args.append(ToolOption.HTMLOutput);
-    if (lowercaseMaskingEnabled)
-      args.append(ToolOption.LowercaseMasking);
-    if (versionEnabled)
-      args.append(ToolOption.Version);
-    if (helpEnabled)
-      args.append(ToolOption.Help);
-    if (showGIsEnabled)
-      args.append(ToolOption.ShowNCBIGIs);
-    if (parseDefLinesEnabled)
-      args.append(ToolOption.ParseDefLines);
-    if (remoteEnabled)
-      args.append(ToolOption.Remote);
-  }
-
-  @Override
-  public String toString() {
-    var args = new CliBuilder();
-
-    toArgs(args);
-
-    return args.toString();
-  }
+  boolean isHelpEnabled();
+  T enableHelp(boolean b);
+
+  boolean isVersionEnabled();
+  T enableVersion(boolean b);
+
+  File getQueryFile();
+  T setQueryFile(File f);
+
+  Location getQueryLocation();
+  T setQueryLocation(Location loc);
+
+  Path getDatabase();
+  T setDatabase(Path db);
+
+  File getOutputFile();
+  T setOutputFile(File out);
+
+  BigDecimal getExpectValue();
+  T setExpectValue(BigDecimal val);
+
+  BlastReportFormat getReportFormat();
+  T setReportFormat(BlastReportFormat format);
+
+  boolean showNCBIGenInfoIds();
+  T enableNCBIGenInfoIds(boolean b);
+
+  /**
+   * Gets the currently configured number of database sequences to show one-line
+   * descriptions for.
+   * <p>
+   * If unset, this method returns null.
+   */
+  Integer getNumDescriptions();
+
+  /**
+   * Sets the currently configured number of database sequences to show one-line
+   * descriptions for.
+   * <p>
+   * To unset, pass a null value.
+   */
+  T setNumDescriptions(Integer num);
+
+  /**
+   * Gets the currently configured number of database sequences to show
+   * alignments for.
+   * <p>
+   * If unset, this method returns null.
+   */
+  Integer getNumAlignments();
+
+  /**
+   * Sets the currently configured number of database sequences to show
+   * alignments for.
+   * <p>
+   * To unset, pass a null value.
+   */
+  T setNumAlignments(Integer num);
+
+  Integer getLineLength();
+  T setLineLength(Integer len);
+
+  boolean isHtmlOutputEnabled();
+  T enableHtmlOutput(boolean b);
+
+  HitSorting getHitSorting();
+  T setHitSorting(HitSorting val);
+
+  HspSorting getHspSorting();
+  T setHspSorting(HspSorting val);
+
+  boolean isLowercaseMaskingEnabled();
+  T enableLowercaseMasking(boolean b);
+
+  Double getQueryCoverageHspPercent();
+  T setQueryCoverageHspPercent(Double v);
+
+  Integer getMaxHsps();
+  T setMaxHsps(Integer v);
+
+  Integer getMaxTargetSequences();
+  T setMaxTargetSequences(Integer v);
+
+  Byte getEffectiveDatabaseSize();
+  T setEffectiveDatabaseSize(Byte v);
+
+  Byte getEffectiveSearchSpaceLength();
+  T setEffectiveSearchSpaceLength(Byte v);
+
+  File getSearchStrategyImportFile();
+  T setSearchStrategyImportFile(File f);
+
+  File getSearchStrategyExportFile();
+  T setSearchStrategyExportFile(File f);
+
+  Double getUngappedExtensionDropoff();
+  T setExtensionDropoffUngapped(Double v);
+
+  boolean isDefLineParsingEnabled();
+  T enableDefLineParsing(boolean b);
+
+  Byte getThreadCount();
+  T setThreadCount(Byte b);
+
+  boolean isRemoteSearchExecutionEnabled();
+  T enableRemoteSearchExecution(boolean b);
+
+  String getEntrezQuery();
+  T setEntrezQuery(String q);
+
+  Boolean isSoftMaskingEnabled();
+  T enableSoftMasking(Boolean b);
+
+  /**
+   * Gets the currently configured multi-hit window size.
+   * <p>
+   * If this config option is not currently set, this method will return null.
+   */
+  Integer getMultiHitWindowSize();
+
+  /**
+   * Sets a new multi-hit window size.
+   * <p>
+   * Use 0 to specify 1-hit algorithm.
+   * <p>
+   * To unset this config option, call this method with a null value.
+   */
+  T setMultiHitWindowSize(Integer i);
+
+  void toCli(CliBuilder cli);
 }

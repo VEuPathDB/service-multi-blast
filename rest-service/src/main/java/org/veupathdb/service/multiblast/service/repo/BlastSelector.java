@@ -1,157 +1,75 @@
 package org.veupathdb.service.multiblast.service.repo;
 
 import java.io.File;
-import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.BlastConfig;
+import org.veupathdb.service.multiblast.model.blast.HitSorting;
+import org.veupathdb.service.multiblast.model.blast.HspSorting;
+import org.veupathdb.service.multiblast.model.blast.ToolOption;
+import org.veupathdb.service.multiblast.model.blast.impl.LocationImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
 import org.veupathdb.service.multiblast.model.mapping.BlastOptions;
 
-abstract class BlastSelector<T extends BlastConfig>
+import static org.veupathdb.service.multiblast.model.blast.ToolOption.*;
+
+abstract class BlastSelector<T extends BlastConfig<T>>
 {
-  private static final Map<ToolOption, Setter<?>> setters = new HashMap<>();
+  protected static final Function<String, Boolean> pBool = (s) -> s == null || Boolean.parseBoolean(s);
+  protected static final Function<String, Integer> pInt  = Integer::parseInt;
+  protected static final Function<String, Byte>    pByte = Byte::parseByte;
+  protected static final Function<String, Double>  pDub  = Double::parseDouble;
+  protected static final Function<String, File>    pFile = File::new;
+  protected static final Function<String, String>  pStr  = Function.identity();
 
-  static {
-    var cls = BlastConfig.class;
+  private static final Map<ToolOption, Setter<BlastConfig<?>, ?>> setters = new HashMap<>()
+  {{
+    put(Help, new Setter<>(BlastConfig::enableHelp, pBool));
+    put(Version, new Setter<>(BlastConfig::enableVersion, pBool));
+    put(Query, new Setter<>(BlastConfig::setQueryFile, pFile));
+    put(QueryLocation, new Setter<>(BlastConfig::setQueryLocation, LocationImpl::fromString));
+    put(BlastDatabase, new Setter<>(BlastConfig::setDatabase, Path::of));
+    put(OutputFile, new Setter<>(BlastConfig::setOutputFile, pFile));
+    put(ExpectationValue, new Setter<>(BlastConfig::setExpectValue, BigDecimal::new));
+    put(OutputFormat, new Setter<>(BlastConfig::setReportFormat, ReportFormatImpl::fromString));
+    put(ShowNCBIGIs, new Setter<>(BlastConfig::enableNCBIGenInfoIds, pBool));
+    put(NumDescriptions, new Setter<>(BlastConfig::setNumDescriptions, pInt));
+    put(NumAlignments, new Setter<>(BlastConfig::setNumAlignments, pInt));
+    put(LineLength, new Setter<>(BlastConfig::setLineLength, pInt));
+    put(HTMLOutput, new Setter<>(BlastConfig::enableHtmlOutput, pBool));
+    put(SortHits, new Setter<>(BlastConfig::setHitSorting, HitSorting::fromString));
+    put(SortHSPs, new Setter<>(BlastConfig::setHspSorting, HspSorting::fromString));
+    put(LowercaseMasking, new Setter<>(BlastConfig::enableLowercaseMasking, pBool));
+    put(QueryCoveragePercentHSP, new Setter<>(BlastConfig::setQueryCoverageHspPercent, pDub));
+    put(MaxHSPs, new Setter<>(BlastConfig::setMaxHsps, pInt));
+    put(MaxTargetSequences, new Setter<>(BlastConfig::setMaxTargetSequences, pInt));
+    put(DatabaseEffectiveSize, new Setter<>(BlastConfig::setEffectiveDatabaseSize, pByte));
+    put(
+      SearchSpaceEffectiveLength,
+      new Setter<>(BlastConfig::setEffectiveSearchSpaceLength, pByte)
+    );
+    put(ImportSearchStrategy, new Setter<>(BlastConfig::setSearchStrategyImportFile, pFile));
+    put(ExportSearchStrategy, new Setter<>(BlastConfig::setSearchStrategyExportFile, pFile));
+    put(XDropoffUngappedExtensions, new Setter<>(BlastConfig::setExtensionDropoffUngapped, pDub));
+    put(ParseDefLines, new Setter<>(BlastConfig::enableDefLineParsing, pBool));
+    put(NumberOfThreads, new Setter<>(BlastConfig::setThreadCount, pByte));
+    put(Remote, new Setter<>(BlastConfig::enableRemoteSearchExecution, pBool));
+    put(EntrezQuery, new Setter<>(BlastConfig::setEntrezQuery, pStr));
+    put(SoftMasking, new Setter<>(BlastConfig::enableSoftMasking, pBool));
+    put(MultiHitWindowSize, new Setter<>(BlastConfig::setMultiHitWindowSize, pInt));
+  }};
 
-    try {
-      setters.put(
-        ToolOption.BlastDatabase,
-        new Setter<>(cls.getDeclaredMethod("setBlastDatabase", String.class), Function.identity())
-      );
-      setters.put(
-        ToolOption.DatabaseEffectiveSize,
-        new Setter<>(cls.getDeclaredMethod("setDbSize", Byte.class), Byte::parseByte)
-      );
-      setters.put(
-        ToolOption.EntrezQuery,
-        new Setter<>(cls.getDeclaredMethod("setEntrezQuery", String.class), Function.identity())
-      );
-      setters.put(
-        ToolOption.ExpectationValue,
-        new Setter<>(cls.getDeclaredMethod("setExpectValue", Double.class), Double::parseDouble)
-      );
-      setters.put(
-        ToolOption.ExportSearchStrategy,
-        new Setter<>(cls.getDeclaredMethod("setExportSearchStrategy", File.class), File::new)
-      );
-      setters.put(
-        ToolOption.HTMLOutput,
-        new Setter<>(cls.getDeclaredMethod("setHtmlOutputEnabled", Boolean.class), Boolean::parseBoolean)
-      );
-      setters.put(
-        ToolOption.ImportSearchStrategy,
-        new Setter<>(cls.getDeclaredMethod("setImportSearchStrategy", File.class), File::new)
-      );
-      setters.put(
-        ToolOption.LineLength,
-        new Setter<>(cls.getDeclaredMethod("setImportSearchStrategy", File.class), File::new)
-      );
-      setters.put(
-        ToolOption.LowercaseMasking,
-        new Setter<>(
-          cls.getDeclaredMethod("setLowercaseMaskingEnabled", Boolean.class),
-          Boolean::parseBoolean
-        )
-      );
-      setters.put(
-        ToolOption.MaxHSPs,
-        new Setter<>(cls.getDeclaredMethod("setMaxHSPs", Integer.class), Integer::parseInt)
-      );
-      setters.put(
-        ToolOption.MaxTargetSequences,
-        new Setter<>(
-          cls.getDeclaredMethod("setMaxTargetSequences", Integer.class),
-          Integer::parseInt
-        )
-      );
-      setters.put(
-        ToolOption.NumDescriptions,
-        new Setter<>(cls.getDeclaredMethod("setNumDescriptions", Integer.class), Integer::parseInt)
-      );
-      setters.put(
-        ToolOption.NumAlignments,
-        new Setter<>(cls.getDeclaredMethod("setNumAlignments", Integer.class), Integer::parseInt)
-      );
-      setters.put(
-        ToolOption.NumberOfThreads,
-        new Setter<>(cls.getDeclaredMethod("setNumThreads", Byte.class), Byte::parseByte)
-      );
-      setters.put(
-        ToolOption.OutputFile,
-        new Setter<>(cls.getDeclaredMethod("setOut", File.class), File::new)
-      );
-      setters.put(
-        ToolOption.Query,
-        new Setter<>(cls.getDeclaredMethod("setQuery", File.class), File::new)
-      );
-      setters.put(
-        ToolOption.QueryLocation,
-        new Setter<>(
-          cls.getDeclaredMethod("setQueryLoc", QueryLocation.class),
-          QueryLocation::unsafeFromString
-        )
-      );
-      setters.put(
-        ToolOption.Remote,
-        new Setter<>(cls.getDeclaredMethod("setRemoteEnabled", Boolean.class), Boolean::parseBoolean)
-      );
-      setters.put(
-        ToolOption.SearchSpaceEffectiveLength,
-        new Setter<>(cls.getDeclaredMethod("setSearchSpace", Integer.class), Integer::parseInt)
-      );
-      setters.put(
-        ToolOption.ShowNCBIGIs,
-        new Setter<>(cls.getDeclaredMethod("setShowGIsEnabled", Boolean.class), Boolean::parseBoolean)
-      );
-      setters.put(
-        ToolOption.SoftMasking,
-        new Setter<>(cls.getDeclaredMethod("setSoftMasking", Boolean.class), Boolean::parseBoolean)
-      );
-      setters.put(
-        ToolOption.SortHits,
-        new Setter<>(cls.getDeclaredMethod("setSortHits", HitSorting.class), HitSorting::fromString)
-      );
-      setters.put(
-        ToolOption.SortHSPs,
-        new Setter<>(cls.getDeclaredMethod("setSortHsps", HspSorting.class), HspSorting::fromString)
-      );
-      setters.put(
-        ToolOption.MultiHitWindowSize,
-        new Setter<>(cls.getDeclaredMethod("setWindowSize", Integer.class), Integer::parseInt)
-      );
-      setters.put(
-        ToolOption.Version,
-        new Setter<>(cls.getDeclaredMethod("setVersionEnabled", Boolean.class), Boolean::parseBoolean)
-      );
-      setters.put(
-        ToolOption.XDropoffUngappedExtensions,
-        new Setter<>(cls.getDeclaredMethod("setxDropUngap", Double.class), Double::parseDouble)
-      );
-      setters.put(
-        ToolOption.OutputFormat,
-        new Setter<>(cls.getDeclaredMethod("setOutFormat", OutFormat.class), OutFormat::fromString)
-      );
-      setters.put(
-        ToolOption.QueryCoveragePercentHSP,
-        new Setter<>(
-          cls.getDeclaredMethod("setQueryCoveragePercentHSP", Double.class),
-          Double::parseDouble
-        )
-      );
-      setters.put(
-        ToolOption.ParseDefLines,
-        new Setter<>(
-          cls.getDeclaredMethod("setParseDefLinesEnabled", Boolean.class),
-          Boolean::parseBoolean
-        )
-      );
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  protected static int[] stringToIntArray(String value) {
+    return Arrays.stream(value.split(","))
+      .mapToInt(Integer::parseInt)
+      .toArray();
   }
 
   protected abstract T newBlastConfig();
@@ -171,23 +89,25 @@ abstract class BlastSelector<T extends BlastConfig>
     return out;
   }
 
-  protected void parseBlastConfig(BlastConfig out, ToolOption key, String value) throws Exception {
+  protected void parseBlastConfig(T out, ToolOption key, String value) {
     var set = setters.get(key);
 
-    if (set != null) {
-      set.setter.invoke(out, set.converter.apply(value));
-    }
+    if (set != null)
+      set.set(out, value);
   }
 
-
-  static class Setter<T>
+  static class Setter<P extends BlastConfig<?>, T>
   {
-    final Method              setter;
-    final Function<String, T> converter;
+    private final BiConsumer<P, T>    setter;
+    private final Function<String, T> converter;
 
-    Setter(Method setter, Function<String, T> converter) {
+    Setter(BiConsumer<P, T> setter, Function<String, T> converter) {
       this.setter    = setter;
       this.converter = converter;
+    }
+
+    void set(P out, String value) {
+      setter.accept(out, converter.apply(value));
     }
   }
 }

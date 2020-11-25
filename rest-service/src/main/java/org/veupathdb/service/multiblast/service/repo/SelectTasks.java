@@ -43,12 +43,12 @@ public class SelectTasks
    */
   private void sortTool(byte id, BlastTool tool) {
     switch (tool) {
-      case BLASTN -> maps.putIfAbsent(id, BlastnTasks.getInstance());
-      case BLASTP -> maps.putIfAbsent(id, BlastpTasks.getInstance());
-      case BLASTX -> maps.putIfAbsent(id, BlastxTasks.getInstance());
-      case TBLASTN -> maps.putIfAbsent(id, TblastnTasks.getInstance());
+      case BlastN -> maps.putIfAbsent(id, BlastnTasks.getInstance());
+      case BlastP -> maps.putIfAbsent(id, BlastpTasks.getInstance());
+      case BlastX -> maps.putIfAbsent(id, BlastxTasks.getInstance());
+      case TBlastN -> maps.putIfAbsent(id, TblastnTasks.getInstance());
 
-      case PSIBLAST, RPSBLAST, RPSTBLASTN, TBLASTX -> { /* there should be no tasks for these */ }
+      case PSIBLAST, RPSBLAST, RPSTBLASTN, TBlastX -> { /* there should be no tasks for these */ }
     }
   }
 }

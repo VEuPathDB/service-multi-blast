@@ -90,9 +90,9 @@ class SQL
 
   static class Insert
   {
-    static class Job
-    {
-    }
+    static final String
+      Job = insert("job"),
+      JobConfig = insert("config");
   }
 
   static class Select
@@ -118,6 +118,9 @@ class SQL
   {
     static class Job
     {
+      static final String
+        Status = update(join(Schema.Job, Table.Job.Jobs, "status")),
+        QueueId = update(join(Schema.Job, Table.Job.Jobs, "queue-id"));
     }
   }
 

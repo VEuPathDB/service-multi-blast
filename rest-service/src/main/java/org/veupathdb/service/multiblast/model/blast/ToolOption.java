@@ -12,13 +12,14 @@ public enum ToolOption
   DatabaseEffectiveSize("dbsize"),
   DatabaseHardMask("db_hard_mask"),
   DatabaseSoftMask("db_soft_mask"),
+  DatabaseTranslationGenCode("db_gencode"),
   Dust("dust"),
   EntrezQuery("entrez_query"),
   ExpectationValue("evalue"),
   ExportSearchStrategy("export_search_strategy"),
-  FilteringDatabase("filtering_db"),
-  GapExtendCost("gapextend"),
-  GapOpenCost("gapopen"),
+  FilteringDatabasePath("filtering_db"),
+  GapCostExtend("gapextend"),
+  GapCostOpen("gapopen"),
   GIListFile("gilist"),
   Help("help"),
   HTMLOutput("html"),
@@ -27,22 +28,22 @@ public enum ToolOption
   InclusionEValueThreshold("inclusion_ethresh"),
   InputMultiSequenceAlignmentFile("in_msa"),
   InputPsiBlastCheckpointFile("in_pssm"),
-  IPGList("ipglist"),
+  IdenticalProteinGroupListFile("ipglist"),
   LineLength("line_length"),
   LowercaseMasking("lcase_masking"),
   MatchReward("reward"),
   MaxHSPs("max_hsps"),
   MaxTargetSequences("max_target_seqs"),
   MegablastIndexName("index_name"),
-  MegablastTemplateLength("template_length"),
-  MegablastTemplateType("template_type"),
+  DiscontiguousMegablastTemplateLength("template_length"),
+  DiscontiguousMegablastTemplateType("template_type"),
   MaxIntronLength("max_intron_length"),
   MinRawGappedScore("min_raw_gapped_score"),
   MismatchPenalty("penalty"),
   MultiHitWindowSize("window_size"),
   MultiSequenceAlignmentMasterIndex("msa_master_idx"),
   NegativeGIListFile("negative_gilist"),
-  NegativeIPGList("negative_ipglist"),
+  NegativeIdenticalProteinGroupListFile("negative_ipglist"),
   NegativeSequenceIDListFile("negative_seqidlist"),
   NegativeTaxonomyIDs("negative_taxids"),
   NegativeTaxonomyIDListFile("negative_taxidlist"),
@@ -75,7 +76,7 @@ public enum ToolOption
   SoftMasking("soft_masking"),
   SortHits("sorthits"),
   SortHSPs("sorthsps"),
-  Strand("strand"),
+  QueryStrand("strand"),
   SubjectBestHit("subject_besthit"),
   SubjectFile("subject"),
   SubjectLocation("subject_loc"),
@@ -88,11 +89,11 @@ public enum ToolOption
   UseMegablastIndex("use_index"),
   UseSmithWatermanAlignments("use_sw_tback"),
   Version("version"),
-  WindowMaskerDatabase("window_masker_db"),
+  WindowMaskerDatabasePath("window_masker_db"),
   WindowMaskerTaxonomicID("window_masker_taxid"),
   WordSize("word_size"),
-  XDropoffFinalGappedExtensions("xdrop_gap_final"),
-  XDropoffPrelimGappedExtensions("xdrop_gap"),
+  ExtensionDropoffFinalGapped("xdrop_gap_final"),
+  ExtensionDropoffPrelimGapped("xdrop_gap"),
   XDropoffUngappedExtensions("xdrop_ungap"),
   ;
 
@@ -111,15 +112,11 @@ public enum ToolOption
     return flag;
   }
 
-  public static Optional<ToolOption> fromString(String value) {
+  public static ToolOption fromString(String value) {
     for (var e : ToolOption.values())
       if (e.flag.equals(value))
-        return Optional.of(e);
+        return e;
 
-    return Optional.empty();
-  }
-
-  public static ToolOption unsafeFromString(String value) {
-    return fromString(value).orElseThrow(IllegalArgumentException::new);
+    throw new IllegalArgumentException(); // TODO: print actual value
   }
 }

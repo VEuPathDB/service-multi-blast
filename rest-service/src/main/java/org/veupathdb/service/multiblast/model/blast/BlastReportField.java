@@ -276,11 +276,11 @@ public enum BlastReportField
     return value;
   }
 
-  public boolean isValidFor(ReportFormatType fmt) {
+  public boolean isValidFor(BlastReportType fmt) {
     Objects.requireNonNull(fmt);
 
     return switch (this) {
-      case SQ, SR -> fmt == ReportFormatType.SAM;
+      case SQ, SR -> fmt == BlastReportType.SAM;
       default -> true;
     };
   }
@@ -290,11 +290,11 @@ public enum BlastReportField
     return value;
   }
 
-  public static Optional<BlastReportField> fromString(String value) {
+  public static BlastReportField fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))
-        return Optional.of(e);
+        return e;
 
-    return Optional.empty();
+    throw new IllegalArgumentException(); // TODO: print value in error.
   }
 }

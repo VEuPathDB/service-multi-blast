@@ -26,10 +26,10 @@ public interface NewJobPostRequestJSON {
   void setTargetType(String targetType);
 
   @JsonProperty("config")
-  InputBlastConfig getConfig();
+  IOBlastConfig getConfig();
 
   @JsonProperty("config")
-  void setConfig(InputBlastConfig config);
+  void setConfig(IOBlastConfig config);
 
   @JsonProperty("description")
   String getDescription();
