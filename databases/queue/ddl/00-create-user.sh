@@ -2,14 +2,6 @@
 
 # Shhhhh.  Super secret passwords in play...
 
-expect <<EOS
-  regsub -all -expanded -- "'" \$env(QUEUE_DB_PASS) "''" dbPass
-
-  spawn mysql --user=root --password
-  expect "Enter*"
-  send "\$env(MYSQL_ROOT_PASSWORD)\r"
-  expect "mysql>"
-  send "CREATE USER IF NOT EXISTS '\$env(QUEUE_DB_USER)' IDENTIFIED BY '\$dbPass';\r"
-  send "\\\\q\\r"
-  exit
-EOS
+HISTSIZE=0
+ mysql --user=root --password="$MYSQL_ROOT_PASSWORD" <<< \
+  "CREATE USER IF NOT EXISTS '$QUEUE_DB_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$QUEUE_DB_PASS';"

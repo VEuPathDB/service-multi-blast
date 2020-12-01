@@ -48,20 +48,24 @@ services:
 
   queue-db:
     build:
-      dockerfile: ../databases/queue/Dockerfile
-      context: .
+      dockerfile: Dockerfile
+      context: ../databases/queue
     environment:
       # Root user password (IT'S A SECRET TO EVERYBODY)
       MYSQL_ROOT_PASSWORD:
-      # Service user username
-      SVC_DB_USER: queue
-      # Service user password
-      SVC_DB_PASS:
+      # Queue user username
+      QUEUE_DB_USER: queue
+      # Queue user password
+      QUEUE_DB_PASS:
     networks:
       - queueInternal
+    ports:
+      - 3306:3306
 
   queue:
-    image: fireworq/fireworq:1.4
+    build:
+      dockerfile: Dockerfile
+      context: ../queue
     environment:
       # REQUIRED!
       # Specifies a data source name for the job queue and the repository
@@ -73,8 +77,6 @@ services:
 
       # Configures the number of simultaneous blast jobs that can be run
       FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: 2
-
-
     networks:
       - queueInternal
       - blastInternal
@@ -82,6 +84,8 @@ services:
     depends_on:
       - queue-db
       - blast
+    ports:
+      - 8080:80
 
 networks:
   blastInternal:
