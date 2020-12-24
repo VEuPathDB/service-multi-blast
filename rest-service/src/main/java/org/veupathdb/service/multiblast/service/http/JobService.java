@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.service.http;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.Collections;
 import java.util.List;
@@ -13,16 +11,15 @@ import javax.ws.rs.core.StreamingOutput;
 
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import org.veupathdb.service.multiblast.db.PgDbMan;
+import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.extern.JobQueueMan;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
-import org.veupathdb.service.multiblast.service.repo.InsertJob;
-import org.veupathdb.service.multiblast.service.repo.InsertJobConfig;
-import org.veupathdb.service.multiblast.service.repo.SelectJob;
+import mb.lib.db.select.SelectJob;
 import org.veupathdb.service.multiblast.service.valid.BlastValidator;
 
+import static org.veupathdb.service.multiblast.service.http.Util.parseUrlJobID;
 import static org.veupathdb.service.multiblast.service.http.Util.wrapException;
 
 public class JobService
@@ -133,13 +130,17 @@ public class JobService
     throw new RuntimeException("implement me");
   }
 
-  public GetJobResponse getJob(int jobId, UserProfile user, Request request) {
+  public GetJobResponse getJob(String rawID, UserProfile user, Request request) {
+    var jobID = parseUrlJobID(rawID);
 
     try {
-      var opt = new SelectJob(jobId, user.getUserId()).execute();
+      var opt = new SelectJob(jobID).
+        execute(DbManager.userDatabase().getDataSource()::getConnection);
 
       if (opt.isEmpty())
         throw new NotFoundException();
+
+
 
     } catch (Exception e) {
       throw wrapException(e);
@@ -154,7 +155,7 @@ public class JobService
   }
 
   public StreamingOutput getQuery(
-    int jobId,
+    String jobId,
     UserProfile user,
     Request req
   ) {
@@ -162,7 +163,7 @@ public class JobService
   }
 
   public ReportWrap getReport(
-    int jobId,
+    String jobId,
     IOBlastFormat format,
     List<IOBlastReportField> fields,
     UserProfile user,

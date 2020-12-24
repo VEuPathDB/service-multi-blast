@@ -5,15 +5,13 @@ import picocli.CommandLine.Option;
 
 public class Config extends Options
 {
-  private static final String DefaultDbHost       = "service-db";
-  private static final String DefaultDbName       = "postgres";
-  private static final String DefaultJobQueueHost = "queue";
-  private static final String DefaultBlastHost    = "blast";
-  private static final String DefaultQueueName    = "blast";
-  private static final String DefaultQueueRoute   = "blast";
-  private static final int    DefaultDbPort       = 5432;
-
   private static Config instance;
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
+  // ║    Postgres Service Database                                         ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   @Option(
     names = "--svc-db-user",
@@ -36,26 +34,50 @@ public class Config extends Options
   @Option(
     names = "--svc-db-host",
     arity = "1",
+    required = true,
     defaultValue = "${env:SVC_DB_HOST}",
     description = "Postgres service database hostname.  Defaults to \"service-db\""
   )
-  private String serviceDbHost = DefaultDbHost;
+  private String serviceDbHost;
 
   @Option(
     names = "--svc-db-port",
     arity = "1",
+    required = true,
     defaultValue = "${env:SVC_DB_PORT}",
     description = "Postgres service database port.  Defaults to 5432"
   )
-  private int serviceDbPort = DefaultDbPort;
+  private int serviceDbPort;
 
   @Option(
     names = "--svc-db-name",
     arity = "1",
+    required = true,
     defaultValue = "${env:SVC_DB_NAME}",
-    description = "Postgres database name.  Defaults to \"postgres\""
+    description = "Postgres database name."
   )
-  private String serviceDbName = DefaultDbName;
+  private String serviceDbName;
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
+  // ║    WDK User Database                                                 ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
+
+  @Option(
+    names = "--multiblast-schema",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:MULTIBLAST_SCHEMA}",
+    description = "User DB schema where the multiblast tables reside."
+  )
+  private String multiBlastSchema;
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
+  // ║    Job Running                                                       ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   @Option(
     names = "--mount-path",
@@ -69,34 +91,38 @@ public class Config extends Options
   @Option(
     names = "--queue-host",
     arity = "1",
-    defaultValue = "${env:JOB_QUEUE_HOST}",
+    required = true,
+    defaultValue = "${env:QUEUE_HOST}",
     description = "Job queue host address"
   )
-  private String queueHost = DefaultJobQueueHost;
+  private String queueHost;
 
   @Option(
     names = "--blast-host",
     arity = "1",
     required = true,
+    defaultValue = "${env:BLAST_HOST}",
     description = "Blast service host address"
   )
-  private String blastHost = DefaultBlastHost;
+  private String blastHost;
 
   @Option(
     names = "--queue-name",
     arity = "1",
+    required = true,
     defaultValue = "${env:FIREWORQ_QUEUE_DEFAULT}",
     description = "Name of the queue new blast jobs will be added to."
   )
-  private String queueName = DefaultQueueName;
+  private String queueName;
 
   @Option(
     names = "--queue-route",
     arity = "1",
+    required = true,
     defaultValue = "${env:QUEUE_ROUTE}",
     description = "Name of the queue new blast jobs will be added to."
   )
-  private String queueRoute = DefaultQueueRoute;
+  private String queueRoute;
 
   private Config() {
   }
@@ -145,6 +171,7 @@ public class Config extends Options
   }
 
   public String getQueueRoute() {
+
     return queueRoute;
   }
 }
