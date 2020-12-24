@@ -8,15 +8,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder("jobId")
 public class NewJobPostResponseImpl implements NewJobPostResponse {
   @JsonProperty("jobId")
-  private Integer jobId;
+  private String jobId;
 
   @JsonProperty("jobId")
-  public Integer getJobId() {
+  public String getJobId() {
     return this.jobId;
   }
 
   @JsonProperty("jobId")
-  public void setJobId(Integer jobId) {
+  public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 }

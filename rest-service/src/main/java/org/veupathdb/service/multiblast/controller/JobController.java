@@ -52,7 +52,7 @@ public class JobController implements Jobs
   }
 
   @Override
-  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(int jobId, boolean download) {
+  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobId, boolean download) {
     var head = GetJobsQueryByJobIdResponse.headersFor200();
 
     if (download)
@@ -66,7 +66,7 @@ public class JobController implements Jobs
 
   @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
-    int jobId,
+    String jobId,
     IOBlastFormat format,
     List<IOBlastReportField> fields
   ) {
