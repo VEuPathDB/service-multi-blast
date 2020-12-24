@@ -76,7 +76,7 @@ properties:
     description: |
       Expectation value (E) threshold for saving hits.
 
-      Values may use scientific notation.
+      Values may use E notation.
 
       Default = `10`
 
@@ -98,7 +98,13 @@ properties:
     description: |
       Number of database sequences to show one-line descriptions for
 
-      Not applicable for outFormat &gt; 4
+      Only applicable for the following output formats:
+
+      * `pairwise`
+      * `query-anchored-with-identities`
+      * `query-anchored-without-identities`
+      * `flat-query-anchored-with-identities`
+      * `flat-query-anchored-without-identities`
 
       Default = `500`
 
@@ -122,7 +128,13 @@ properties:
     description: |
       Line length for formatting alignments
 
-      Not applicable for outFormat &gt; 4
+      Only applicable for the following output formats:
+
+      * `pairwise`
+      * `query-anchored-with-identities`
+      * `query-anchored-without-identities`
+      * `flat-query-anchored-with-identities`
+      * `flat-query-anchored-without-identities`
 
       Default = `60`
 
@@ -133,9 +145,14 @@ properties:
 
   sortHits?:
     displayName: -sorthits=&lt;integer, (&gt;=0 and &lt;=4)&gt;
-    # TODO: translate this
     description: |
-      Only applies to output formats 0-4.
+      Only applicable for the following output formats:
+
+      * `pairwise`
+      * `query-anchored-with-identities`
+      * `query-anchored-without-identities`
+      * `flat-query-anchored-with-identities`
+      * `flat-query-anchored-without-identities`
     type: com.IOHitSorting
 
   sortHSPs?:
