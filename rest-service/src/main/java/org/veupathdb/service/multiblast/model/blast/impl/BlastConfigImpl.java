@@ -18,6 +18,12 @@ import org.veupathdb.service.multiblast.service.cli.CliOptions;
 public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 {
   /**
+   * A cached stringified form of this configuration.  This should be wiped out
+   * any time the config values change.
+   */
+  protected String strCache;
+
+  /**
    * {@code -h|-help}
    */
   private boolean help;
@@ -175,7 +181,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableHelp(boolean b) {
-    this.help = b;
+    if (b != help) {
+      strCache = null;
+      help     = b;
+    }
+
     return (T) this;
   }
 
@@ -187,7 +197,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableVersion(boolean b) {
-    this.version = b;
+    if (b != version) {
+      strCache = null;
+      version  = b;
+    }
+
     return (T) this;
   }
 
@@ -199,7 +213,9 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setQueryFile(File f) {
-    this.query = f;
+    strCache = null;
+    query    = f;
+
     return (T) this;
   }
 
@@ -211,7 +227,9 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setQueryLocation(Location loc) {
-    this.queryLocation = loc;
+    strCache      = null;
+    queryLocation = loc;
+
     return (T) this;
   }
 
@@ -223,7 +241,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setDatabase(Path db) {
-    this.database = db;
+    strCache = null;
+    database = db;
     return (T) this;
   }
 
@@ -235,6 +254,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setOutputFile(File out) {
+    strCache = null;
     this.out = out;
     return (T) this;
   }
@@ -247,7 +267,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setExpectValue(BigDecimal val) {
-    this.expectValue = val;
+    strCache    = null;
+    expectValue = val;
     return (T) this;
   }
 
@@ -259,7 +280,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setReportFormat(BlastReportFormat format) {
-    this.outFmt = format;
+    strCache = null;
+    outFmt   = format;
     return (T) this;
   }
 
@@ -271,7 +293,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableNCBIGenInfoIds(boolean b) {
-    this.showGenInfoIds = b;
+    if (b != showGenInfoIds) {
+      strCache       = null;
+      showGenInfoIds = b;
+    }
+
     return (T) this;
   }
 
@@ -283,7 +309,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setNumDescriptions(Integer num) {
-    this.numDescriptions = num;
+    strCache             = null;
+    numDescriptions = num;
     return (T) this;
   }
 
@@ -295,7 +322,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setNumAlignments(Integer num) {
-    this.numAlignments = num;
+    strCache           = null;
+    numAlignments = num;
     return (T) this;
   }
 
@@ -307,7 +335,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setLineLength(Integer len) {
-    this.lineLength = len;
+    strCache        = null;
+    lineLength = len;
     return (T) this;
   }
 
@@ -319,7 +348,10 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableHtmlOutput(boolean b) {
-    this.outputHtml = b;
+    if (b != outputHtml) {
+      strCache   = null;
+      outputHtml = b;
+    }
     return (T) this;
   }
 
@@ -331,7 +363,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setHitSorting(HitSorting val) {
-    this.sortHits = val;
+    if (val != sortHits) {
+      strCache = null;
+      sortHits = val;
+    }
+
     return (T) this;
   }
 
@@ -343,7 +379,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setHspSorting(HspSorting val) {
-    this.sortHsps = val;
+    if (val != sortHsps) {
+      strCache = null;
+      sortHsps = val;
+    }
+
     return (T) this;
   }
 
@@ -355,7 +395,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableLowercaseMasking(boolean b) {
-    this.lcaseMasking = b;
+    if (b != lcaseMasking) {
+      strCache     = null;
+      lcaseMasking = b;
+    }
+
     return (T) this;
   }
 
@@ -463,7 +507,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableDefLineParsing(boolean b) {
-    this.parseDefLines = b;
+    if (b != parseDefLines) {
+      strCache      = null;
+      parseDefLines = b;
+    }
+
     return (T) this;
   }
 
@@ -487,7 +535,10 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableRemoteSearchExecution(boolean b) {
-    this.remote = b;
+    if (b != remote) {
+      strCache = null;
+      remote   = b;
+    }
     return (T) this;
   }
 
@@ -525,6 +576,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   public T setMultiHitWindowSize(Integer i) {
     this.windowSize = i;
     return (T) this;
+  }
+
+  @Override
+  public String toString() {
+    var tmp = new CliBuilder();
+    toCli(tmp);
+    return tmp.toString();
   }
 
   @Override

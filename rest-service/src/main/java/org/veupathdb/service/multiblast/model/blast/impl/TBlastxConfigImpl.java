@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.veupathdb.service.multiblast.model.blast.Location;
@@ -154,15 +156,17 @@ public class TBlastxConfigImpl
 
   @Override
   public TBlastxConfig enableSubjectBestHit(boolean b) {
-    if (b)
+    if (b) {
+      strCache = null;
       (bestHit = lazy(bestHit, EBestHit::new)).enableSubjectBestHit(b);
+    }
     return this;
   }
 
   @Override
   public TBlastxConfig enableSumStatistics(Boolean b) {
-    if (b != null)
-      (sumStats = lazy(sumStats, ESumStats::new)).enableSumStatistics(b);
+    strCache = null;
+    (sumStats = lazy(sumStats, ESumStats::new)).enableSumStatistics(b);
     return this;
   }
 
@@ -173,174 +177,191 @@ public class TBlastxConfigImpl
 
   @Override
   public TBlastxConfig setBestHitOverhang(Double v) {
-    if (v != null)
-      (bestHit = lazy(bestHit, EBestHit::new)).setBestHitOverhang(v);
+    strCache = null;
+    (bestHit = lazy(bestHit, EBestHit::new)).setBestHitOverhang(v);
     return this;
   }
 
   @Override
   public TBlastxConfig setBestHitScoreEdge(Double v) {
-    if (v != null)
-      (bestHit = lazy(bestHit, EBestHit::new)).setBestHitScoreEdge(v);
+    strCache = null;
+    (bestHit = lazy(bestHit, EBestHit::new)).setBestHitScoreEdge(v);
     return this;
   }
 
   @Override
   public TBlastxConfig setCullingLimit(Integer v) {
-    if (v != null)
-      (cullingLimit = lazy(cullingLimit, ECullingLimit::new)).setCullingLimit(v);
+    strCache = null;
+    (cullingLimit = lazy(cullingLimit, ECullingLimit::new)).setCullingLimit(v);
     return this;
   }
 
   @Override
   public TBlastxConfig setDbHardMaskAlgorithmId(String id) {
-    if (id != null)
-      (dbMask = lazy(dbMask, EDbMask::new)).setDbHardMaskAlgorithmId(id);
+    strCache = null;
+    (dbMask = lazy(dbMask, EDbMask::new)).setDbHardMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public TBlastxConfig setDbSoftMaskAlgorithmId(String id) {
-    if (id != null)
-      (dbMask = lazy(dbMask, EDbMask::new)).setDbSoftMaskAlgorithmId(id);
+    strCache = null;
+    (dbMask = lazy(dbMask, EDbMask::new)).setDbSoftMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public TBlastxConfig setDbTranslationGeneticCode(Byte i) {
-    if (i != null)
-      (dbGenCode = lazy(dbGenCode, EDbGenCode::new)).setDbTranslationGeneticCode(i);
+    strCache = null;
+    (dbGenCode = lazy(dbGenCode, EDbGenCode::new)).setDbTranslationGeneticCode(i);
     return this;
   }
 
   @Override
   public TBlastxConfig setGenInfoIdListFile(File f) {
-    if (f != null)
-      (giList = lazy(giList, EGiList::new)).setGenInfoIdListFile(f);
+    strCache = null;
+    (giList = lazy(giList, EGiList::new)).setGenInfoIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setMaxIntronLength(Integer len) {
-    if (len != null)
-      (maxIntronLength = lazy(maxIntronLength, EMaxIntronLength::new)).setMaxIntronLength(len);
+    strCache = null;
+    (maxIntronLength = lazy(maxIntronLength, EMaxIntronLength::new)).setMaxIntronLength(len);
     return this;
   }
 
   @Override
   public TBlastxConfig setNegativeGenInfoIdListFile(File f) {
-    if (f != null)
-      (giList = lazy(giList, EGiList::new)).setNegativeGenInfoIdListFile(f);
+    strCache = null;
+    (giList = lazy(giList, EGiList::new)).setNegativeGenInfoIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setNegativeSequenceIdListFile(File f) {
-    if (f != null)
-      (seqIdList = lazy(seqIdList, ESeqIdList::new)).setNegativeSequenceIdListFile(f);
+    strCache = null;
+    (seqIdList = lazy(seqIdList, ESeqIdList::new)).setNegativeSequenceIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setNegativeTaxIdListFile(File f) {
-    if (f != null)
-      (taxIdList = lazy(taxIdList, ETaxIdList::new)).setNegativeTaxIdListFile(f);
+    strCache = null;
+    (taxIdList = lazy(taxIdList, ETaxIdList::new)).setNegativeTaxIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setNegativeTaxIds(int[] negativeTaxIds) {
+    strCache = null;
+
     if (negativeTaxIds != null)
-      (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(negativeTaxIds);
+      (taxIds = lazy(taxIds, ETaxIds::new)).
+        setNegativeTaxIds(Arrays.copyOf(negativeTaxIds, negativeTaxIds.length));
+    else
+      taxIds = null;
+
     return this;
   }
 
   @Override
   public TBlastxConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
+    strCache = null;
     if (negativeTaxIds != null)
-      (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(negativeTaxIds);
+      (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(new ArrayList<>(negativeTaxIds));
+    else
+      taxIds = null;
     return this;
   }
 
   @Override
   public TBlastxConfig setQueryTranslationGeneticCode(Byte i) {
-    if (i != null)
-      (queryGenCode = lazy(queryGenCode, EQueryGenCode::new)).setQueryTranslationGeneticCode(i);
+    strCache = null;
+    (queryGenCode = lazy(queryGenCode, EQueryGenCode::new)).setQueryTranslationGeneticCode(i);
     return this;
   }
 
   @Override
   public TBlastxConfig setScoreThreshold(Double d) {
-    if (d != null)
-      (matrix = lazy(matrix, EScoringMatrix::new)).setScoreThreshold(d);
+    strCache = null;
+    (matrix = lazy(matrix, EScoringMatrix::new)).setScoreThreshold(d);
     return this;
   }
 
   @Override
   public TBlastxConfig setScoringMatrix(TBlastxScoringMatrix matrix) {
-    if (matrix != null)
-      (this.matrix = lazy(this.matrix, EScoringMatrix::new)).setScoringMatrix(matrix);
+    strCache = null;
+    (this.matrix = lazy(this.matrix, EScoringMatrix::new)).setScoringMatrix(matrix);
     return this;
   }
 
   @Override
   public TBlastxConfig setSeg(Seg seg) {
-    if (seg != null)
-      (this.seg = lazy(this.seg, ESeg::new)).setSeg(seg);
+    strCache = null;
+    (this.seg = lazy(this.seg, ESeg::new)).setSeg(seg);
     return this;
   }
 
   @Override
   public TBlastxConfig setSequenceIdListFile(File f) {
-    if (f != null)
-      (seqIdList = lazy(seqIdList, ESeqIdList::new)).setSequenceIdListFile(f);
+    strCache = null;
+    (seqIdList = lazy(seqIdList, ESeqIdList::new)).setSequenceIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setStrand(QueryStrand s) {
-    if (s != null)
-      (strand = lazy(strand, EStrand::new)).setStrand(s);
+    strCache = null;
+    (strand = lazy(strand, EStrand::new)).setStrand(s);
     return this;
   }
 
   @Override
   public TBlastxConfig setSubjectFile(File f) {
-    if (f != null)
-      (subject = lazy(subject, ESubject::new)).setSubjectFile(f);
+    strCache = null;
+    (subject = lazy(subject, ESubject::new)).setSubjectFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setSubjectLocation(Location loc) {
-    if (loc != null)
-      (subject = lazy(subject, ESubject::new)).setSubjectLocation(loc);
+    strCache = null;
+    (subject = lazy(subject, ESubject::new)).setSubjectLocation(loc);
     return this;
   }
 
   @Override
   public TBlastxConfig setTaxIdListFile(File f) {
-    if (f != null)
-      (taxIdList = lazy(taxIdList, ETaxIdList::new)).setTaxIdListFile(f);
+    strCache = null;
+    (taxIdList = lazy(taxIdList, ETaxIdList::new)).setTaxIdListFile(f);
     return this;
   }
 
   @Override
   public TBlastxConfig setTaxIds(int[] taxIds) {
+    strCache = null;
     if (taxIds != null)
-      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(taxIds);
+      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).
+        setTaxIds(Arrays.copyOf(taxIds, taxIds.length));
+    else
+      this.taxIds = null;
     return this;
   }
 
   @Override
   public TBlastxConfig setTaxIds(Collection<Integer> taxIds) {
+    strCache = null;
     if (taxIds != null)
-      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(taxIds);
+      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(new ArrayList<>(taxIds));
+    else
+      taxIds = null;
     return this;
   }
 
   @Override
   public TBlastxConfig setWordSize(Integer size) {
+    strCache = null;
     if (size != null)
       (wordSize = lazy(wordSize, EWordSize::new)).setWordSize(size);
     return this;

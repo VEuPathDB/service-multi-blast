@@ -76,9 +76,10 @@ public class DustImpl implements Dust
 
   public static Dust fromString(String value) {
     var split = value.split(" +");
-    return new DustImpl()
-      .setLevel(Integer.parseInt(split[0]))
-      .setWindow(Integer.parseInt(split[1]))
-      .setLinker(Integer.parseInt(split[2]));
+    return new DustImpl(
+      Integer.parseInt(split[0]),
+      Integer.parseInt(split[1]),
+      Integer.parseInt(split[2])
+    );
   }
 }

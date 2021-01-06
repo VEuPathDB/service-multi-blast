@@ -113,10 +113,7 @@ class BCC
     if (val == null)
       return null;
 
-    return new SegImpl()
-      .setWindow(val.getWindow())
-      .setLowCut(val.getLocut())
-      .setHighCut(val.getHicut());
+    return new SegImpl(val.getWindow(), val.getLocut(), val.getHicut());
   }
 
   static Location toInternal(IOBlastLocation val) {
@@ -126,7 +123,7 @@ class BCC
       return null;
     }
 
-    return new LocationImpl().setStart(val.getStart()).setStop(val.getStop());
+    return new LocationImpl(val.getStart(), val.getStop());
   }
 
   static QueryStrand toInternal(IOBlastStrand val) {

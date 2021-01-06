@@ -26,7 +26,7 @@ public class ETaxIds implements WithTaxIds<Void>
 
   @Override
   public Void setTaxIds(Collection<Integer> taxIds) {
-    this.taxIds = taxIds.stream().mapToInt(Integer::intValue).toArray();
+    this.taxIds = taxIds == null ? null : taxIds.stream().mapToInt(Integer::intValue).toArray();
     return null;
   }
 
@@ -43,7 +43,9 @@ public class ETaxIds implements WithTaxIds<Void>
 
   @Override
   public Void setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-    this.negativeTaxIds = negativeTaxIds.stream().mapToInt(Integer::intValue).toArray();
+    this.negativeTaxIds = negativeTaxIds == null
+      ? null
+      : negativeTaxIds.stream().mapToInt(Integer::intValue).toArray();
     return null;
   }
 

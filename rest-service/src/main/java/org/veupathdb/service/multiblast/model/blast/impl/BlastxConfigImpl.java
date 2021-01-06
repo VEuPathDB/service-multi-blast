@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
@@ -212,24 +214,28 @@ public class BlastxConfigImpl
 
   @Override
   public BlastxConfig enableSmithWatermanTraceback(boolean b) {
+    strCache = null;
     (sw = lazy(sw, ESWTback::new)).enableSmithWatermanTraceback(b);
     return this;
   }
 
   @Override
   public BlastxConfig enableSubjectBestHit(boolean b) {
+    strCache = null;
     (bestHit = lazy(bestHit, EBestHit::new)).enableSubjectBestHit(b);
     return this;
   }
 
   @Override
   public BlastxConfig enableSumStatistics(Boolean b) {
+    strCache = null;
     (sumStats = lazy(sumStats, ESumStats::new)).enableSumStatistics(b);
     return this;
   }
 
   @Override
   public BlastxConfig enableUngappedAlignmentOnly(boolean b) {
+    strCache = null;
     (ungapped = lazy(ungapped, EUngapped::new)).enableUngappedAlignmentOnly(b);
     return this;
   }
@@ -241,138 +247,165 @@ public class BlastxConfigImpl
 
   @Override
   public BlastxConfig setBestHitOverhang(Double v) {
+    strCache = null;
     (bestHit = lazy(bestHit, EBestHit::new)).setBestHitOverhang(v);
     return this;
   }
 
   @Override
   public BlastxConfig setBestHitScoreEdge(Double v) {
+    strCache = null;
     (bestHit = lazy(bestHit, EBestHit::new)).setBestHitScoreEdge(v);
     return this;
   }
 
   @Override
   public BlastxConfig setCompBasedStatisticsType(CompBasedStats c) {
+    strCache = null;
     (compBasedStats = lazy(compBasedStats, ECompBasedStats::new)).setCompBasedStatisticsType(c);
     return this;
   }
 
   @Override
   public BlastxConfig setCullingLimit(Integer v) {
+    strCache = null;
     (cullingLimit = lazy(cullingLimit, ECullingLimit::new)).setCullingLimit(v);
     return this;
   }
 
   @Override
   public BlastxConfig setDbHardMaskAlgorithmId(String id) {
+    strCache = null;
     (dbMask = lazy(dbMask, EDbMask::new)).setDbHardMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public BlastxConfig setDbSoftMaskAlgorithmId(String id) {
+    strCache = null;
     (dbMask = lazy(dbMask, EDbMask::new)).setDbSoftMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public BlastxConfig setExtensionDropoffFinalGapped(Double d) {
+    strCache = null;
     (xDrop = lazy(xDrop, EGapExtDrop::new)).setExtensionDropoffFinalGapped(d);
     return this;
   }
 
   @Override
   public BlastxConfig setGapCostExtend(Integer cost) {
+    strCache = null;
     (gapCost = lazy(gapCost, EGapCost::new)).setGapCostExtend(cost);
     return this;
   }
 
   @Override
   public BlastxConfig setGapCostOpen(Integer cost) {
+    strCache = null;
     (gapCost = lazy(gapCost, EGapCost::new)).setGapCostOpen(cost);
     return this;
   }
 
   @Override
   public BlastxConfig setGenInfoIdListFile(File f) {
+    strCache = null;
     (giList = lazy(giList, EGiList::new)).setGenInfoIdListFile(f);
     return this;
   }
 
   @Override
   public BlastxConfig setIdenticalProteinGroupListFile(File ipgList) {
+    strCache = null;
     (this.ipgList = lazy(this.ipgList, EIpgList::new)).setIdenticalProteinGroupListFile(ipgList);
     return this;
   }
 
   @Override
   public BlastxConfig setMaxIntronLength(Integer len) {
+    strCache = null;
     (maxIntronLength = lazy(maxIntronLength, EMaxIntronLength::new)).setMaxIntronLength(len);
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeGenInfoIdListFile(File f) {
+    strCache = null;
     (giList = lazy(giList, EGiList::new)).setNegativeGenInfoIdListFile(f);
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeIdenticalProteinGroupListFile(File negIpgList) {
+    strCache = null;
     (ipgList = lazy(ipgList, EIpgList::new)).setNegativeIdenticalProteinGroupListFile(negIpgList);
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeSequenceIdListFile(File f) {
+    strCache = null;
     (seqIdList = lazy(seqIdList, ESeqIdList::new)).setNegativeSequenceIdListFile(f);
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeTaxIdListFile(File f) {
+    strCache = null;
     (taxIdList = lazy(taxIdList, ETaxIdList::new)).setNegativeTaxIdListFile(f);
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeTaxIds(int[] negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(negativeTaxIds);
+    strCache = null;
+    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
+      negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
+    );
     return this;
   }
 
   @Override
   public BlastxConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(negativeTaxIds);
+    strCache = null;
+    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
+      negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds)
+    );
     return this;
   }
 
   @Override
   public BlastxConfig setExtensionDropoffPreliminaryGapped(Double d) {
+    strCache = null;
     (xDrop = lazy(xDrop, EGapExtDrop::new)).setExtensionDropoffPreliminaryGapped(d);
     return this;
   }
 
   @Override
   public BlastxConfig setQueryTranslationGeneticCode(Byte i) {
+    strCache = null;
     (queryGenCode = lazy(queryGenCode, EQueryGenCode::new)).setQueryTranslationGeneticCode(i);
     return this;
   }
 
   @Override
   public BlastxConfig setScoreThreshold(Double d) {
+    strCache = null;
     (scoringMatrix = lazy(scoringMatrix, EScoringMatrix::new)).setScoreThreshold(d);
     return this;
   }
 
   @Override
   public BlastxConfig setScoringMatrix(BlastxScoringMatrix matrix) {
+    strCache = null;
     (scoringMatrix = lazy(scoringMatrix, EScoringMatrix::new)).setScoringMatrix(matrix);
     return this;
   }
 
   @Override
   public BlastxConfig setSeg(Seg seg) {
+    strCache = null;
     (this.seg = lazy(this.seg, ESeg::new)).setSeg(seg);
     return this;
   }
@@ -409,13 +442,17 @@ public class BlastxConfigImpl
 
   @Override
   public BlastxConfig setTaxIds(int[] taxIds) {
-    (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(taxIds);
+    (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(
+      taxIds == null ? null : Arrays.copyOf(taxIds, taxIds.length)
+    );
     return this;
   }
 
   @Override
   public BlastxConfig setTaxIds(Collection<Integer> taxIds) {
-    (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(taxIds);
+    (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIds(
+      taxIds == null ? null : new ArrayList<>(taxIds)
+    );
     return this;
   }
 

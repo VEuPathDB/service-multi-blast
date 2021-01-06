@@ -1,15 +1,10 @@
 package mb.lib.db.model;
 
-public final class JobRow extends Row
+import java.time.OffsetDateTime;
+
+public interface JobRow extends Row
 {
-  private final String config;
+  String getConfig();
 
-  public JobRow(byte[] hash, String config) {
-    super(hash);
-    this.config = config;
-  }
-
-  public String getConfig() {
-    return config;
-  }
+  OffsetDateTime getCreatedOn();
 }

@@ -2,10 +2,12 @@ package org.veupathdb.service.multiblast.model.internal;
 
 import java.time.OffsetDateTime;
 
+import mb.lib.db.model.JobRow;
 import org.veupathdb.service.multiblast.model.blast.BlastConfig;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
-public class Job
+public class Job implements JobRow
 {
   private int jobId;
 
@@ -16,8 +18,6 @@ public class Job
   private final BlastTool tool;
 
   private OffsetDateTime createdOn;
-
-  private OffsetDateTime modifiedOn;
 
   private BlastConfig config;
 
@@ -53,15 +53,6 @@ public class Job
     return this;
   }
 
-  public OffsetDateTime getModifiedOn() {
-    return modifiedOn;
-  }
-
-  public Job setModifiedOn(OffsetDateTime modifiedOn) {
-    this.modifiedOn = modifiedOn;
-    return this;
-  }
-
   public JobStatus getStatus() {
     return status;
   }
@@ -70,16 +61,23 @@ public class Job
     return config != null;
   }
 
-  public BlastConfig getConfig() {
+  public BlastConfig getJobConfig() {
     return config;
   }
 
-  public Job setConfig(BlastConfig config) {
+  public Job setJobConfig(BlastConfig config) {
     this.config = config;
     return this;
   }
 
   public BlastTool getTool() {
     return tool;
+  }
+
+  @Override
+  public String toString() {
+    var tmp = new CliBuilder();
+    var out = new StringBuilder(tool.value()).append(' ');
+
   }
 }

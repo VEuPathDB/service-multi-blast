@@ -9,18 +9,16 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.StreamingOutput;
 
+import mb.lib.db.insert.InsertJobQuery;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.extern.JobQueueMan;
 import org.veupathdb.service.multiblast.generated.model.*;
+import mb.lib.db.select.SelectJob;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
-import mb.lib.db.select.SelectJob;
 import org.veupathdb.service.multiblast.service.valid.BlastValidator;
-
-import static org.veupathdb.service.multiblast.service.http.Util.parseUrlJobID;
-import static org.veupathdb.service.multiblast.service.http.Util.wrapException;
 
 public class JobService
 {
@@ -67,11 +65,11 @@ public class JobService
     try {
       var job = JobConverter.toInternal(user.getUserId(), input.getConfig());
 
-      try (var con = PgDbMan.getInstance().getDataSource().getConnection()) {
+      try (var con = DbManager.getInstance().getUserDatabase().getDataSource().getConnection()) {
         con.setAutoCommit(false);
 
         try {
-          new InsertJob(con, job).execute();
+          InsertJobQuery.execute(con, job);
 
           var path = Util.createJobDir(job.getJobId());
           var file = path.resolve("query.txt").toFile();
