@@ -8,11 +8,8 @@ public class LocationImpl implements Location
 {
   public static final char delim = '-';
 
-  private long start;
-  private long stop;
-
-  public LocationImpl() {
-  }
+  private final long start;
+  private final long stop;
 
   public LocationImpl(long start, long stop) {
     this.start = start;
@@ -25,20 +22,8 @@ public class LocationImpl implements Location
   }
 
   @Override
-  public Location setStart(long start) {
-    this.start = start;
-    return this;
-  }
-
-  @Override
   public long getStop() {
     return stop;
-  }
-
-  @Override
-  public Location setStop(long stop) {
-    this.stop = stop;
-    return this;
   }
 
   @Override
@@ -57,8 +42,9 @@ public class LocationImpl implements Location
 
   public static Location fromString(String value) {
     var pos = value.indexOf(delim);
-    return new LocationImpl()
-      .setStart(Long.parseLong(value.substring(0, pos)))
-      .setStop(Long.parseLong(value.substring(pos + 1)));
+    return new LocationImpl(
+      Long.parseLong(value.substring(0, pos)),
+      Long.parseLong(value.substring(pos + 1))
+    );
   }
 }

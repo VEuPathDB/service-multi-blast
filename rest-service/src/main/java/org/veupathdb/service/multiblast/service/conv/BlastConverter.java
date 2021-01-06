@@ -367,10 +367,11 @@ public class BlastConverter
     if (fmt == null)
       return null;
 
-    return new ReportFormatImpl()
-      .setType(toInternal(fmt.getFormat()))
-      .setDelimiter(fmt.getDelim())
-      .setReportFields(toInternal(fmt.getFields()));
+    return new ReportFormatImpl(
+      toInternal(fmt.getFormat()),
+      fmt.getDelim(),
+      toInternal(fmt.getFields())
+    );
   }
 
   static HitSorting toInternal(IOHitSorting val) {

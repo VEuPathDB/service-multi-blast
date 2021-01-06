@@ -15,15 +15,26 @@ public class ReportFormatImpl implements BlastReportFormat
   private String delimiter;
   private BlastReportField[] fields;
 
-  @Override
-  public BlastReportType getType() {
-    return type;
+  public ReportFormatImpl() {}
+
+  public ReportFormatImpl(
+    BlastReportType type,
+    String delimiter,
+    BlastReportField[] fields
+  ) {
+    this.type      = type;
+    this.delimiter = delimiter;
+    if (fields == null || fields.length == 0) {
+      this.fields = new BlastReportField[0];
+    } else {
+      this.fields = new BlastReportField[fields.length];
+      System.arraycopy(fields, 0, this.fields, 0, fields.length);
+    }
   }
 
   @Override
-  public BlastReportFormat setType(BlastReportType type) {
-    this.type = type;
-    return this;
+  public BlastReportType getType() {
+    return type;
   }
 
   @Override
@@ -32,26 +43,8 @@ public class ReportFormatImpl implements BlastReportFormat
   }
 
   @Override
-  public BlastReportFormat setDelimiter(String del) {
-    this.delimiter = del;
-    return this;
-  }
-
-  @Override
   public BlastReportField[] getReportFields() {
     return fields;
-  }
-
-  @Override
-  public BlastReportFormat setReportFields(BlastReportField[] fields) {
-    this.fields = fields;
-    return this;
-  }
-
-  @Override
-  public BlastReportFormat setReportFields(Collection<BlastReportField> fields) {
-    this.fields = fields.toArray(BlastReportField[]::new);
-    return this;
   }
 
   public static BlastReportFormat fromString(String value) {
@@ -65,14 +58,14 @@ public class ReportFormatImpl implements BlastReportFormat
       if (doInt) {
         try {
           var tmp = Integer.parseInt(seg);
-          out.setType(BlastReportType.unsafeFromInt(tmp));
+          out.type = BlastReportType.unsafeFromInt(tmp);
           doInt = false;
           continue;
         } catch (NumberFormatException ignored) {}
       }
 
       if (doDelim && seg.startsWith(delimiterPrefix)) {
-        out.setDelimiter(seg.substring(delimiterPrefix.length()));
+        out.delimiter = seg.substring(delimiterPrefix.length());
         doDelim = false;
         continue;
       }
@@ -80,6 +73,8 @@ public class ReportFormatImpl implements BlastReportFormat
       fields.add(BlastReportField.fromString(seg));
     }
 
-    return out.setReportFields(fields);
+    out.fields = fields.toArray(BlastReportField[]::new);
+
+    return out;
   }
 }

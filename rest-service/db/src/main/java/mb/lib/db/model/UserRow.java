@@ -1,21 +1,8 @@
 package mb.lib.db.model;
 
-public final class UserRow extends Row
+public interface UserRow extends Row
 {
-  private final long userId;
-  private final String description;
+  long getUserId();
 
-  public UserRow(byte[] hash, long userId, String description) {
-    super(hash);
-    this.userId      = userId;
-    this.description = description;
-  }
-
-  public long getUserId() {
-    return userId;
-  }
-
-  public String getDescription() {
-    return description;
-  }
+  String getDescription();
 }

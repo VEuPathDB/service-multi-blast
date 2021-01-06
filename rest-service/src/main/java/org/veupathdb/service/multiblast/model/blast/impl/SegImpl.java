@@ -13,15 +13,6 @@ public class SegImpl implements Seg
   private BigDecimal locut;
   private BigDecimal hicut;
 
-  public SegImpl() {
-  }
-
-  public SegImpl(int window, String locut, String hicut) {
-    this.window = window;
-    this.locut  = new BigDecimal(locut);
-    this.hicut  = new BigDecimal(hicut);
-  }
-
   public SegImpl(int window, double locut, double hicut) {
     this.window = window;
     this.locut  = new BigDecimal(locut);
@@ -40,43 +31,13 @@ public class SegImpl implements Seg
   }
 
   @Override
-  public Seg setWindow(int window) {
-    this.window = window;
-    return this;
-  }
-
-  @Override
   public double getLowCut() {
     return locut.doubleValue();
   }
 
   @Override
-  public Seg setLowCut(double lowCut) {
-    this.locut = new BigDecimal(lowCut);
-    return this;
-  }
-
-  @Override
-  public Seg setLowCut(BigDecimal lowCut) {
-    this.locut = lowCut;
-    return this;
-  }
-
-  @Override
   public double getHighCut() {
     return hicut.doubleValue();
-  }
-
-  @Override
-  public Seg setHighCut(double highCut) {
-    this.hicut = new BigDecimal(highCut);
-    return this;
-  }
-
-  @Override
-  public Seg setHighCut(BigDecimal highCut) {
-    this.hicut = highCut;
-    return this;
   }
 
   @Override
@@ -101,9 +62,10 @@ public class SegImpl implements Seg
 
   public static Seg fromString(String value) {
     var split = value.split(" +");
-    return new SegImpl()
-      .setWindow(Integer.parseInt(split[0]))
-      .setLowCut(new BigDecimal(split[1]))
-      .setHighCut(new BigDecimal(split[2]));
+    return new SegImpl(
+      Integer.parseInt(split[0]),
+      new BigDecimal(split[1]),
+      new BigDecimal(split[2])
+    );
   }
 }

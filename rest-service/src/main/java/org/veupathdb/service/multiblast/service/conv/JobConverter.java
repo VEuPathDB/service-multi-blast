@@ -92,6 +92,6 @@ public class JobConverter
 
   public Job externalToInternal(long userId, IOBlastConfig conf) {
     var out = new Job(userId, JobStatus.Queued, toInternal(conf.getTool()));
-    return out.setConfig(BlastConverter.toInternal(conf));
+    return out.setJobConfig(BlastConverter.toInternal(conf));
   }
 }

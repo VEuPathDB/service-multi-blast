@@ -10,8 +10,8 @@ public interface SQL
 
   interface Insert
   {
-    String Job       = Load.insert("job");
-    String JobConfig = Load.insert("config");
+    String Job  = Load.insert(Schema.MultiBlast, "job");
+    String User = Load.insert(Schema.MultiBlast, "user");
   }
 
   interface Select
