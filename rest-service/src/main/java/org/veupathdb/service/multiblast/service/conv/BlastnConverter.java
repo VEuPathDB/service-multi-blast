@@ -7,7 +7,7 @@ import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
-import org.veupathdb.service.multiblast.model.blast.impl.BlastnConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
 
 class BlastnConverter
@@ -144,7 +144,7 @@ class BlastnConverter
       return null;
     }
 
-    return new BlastnConfigImpl()
+    return new BlastNConfigImpl()
       .setStrand(BCC.toInternal(val.getStrand()))
       .setTask(toInternal(val.getTask()))
       .setWordSize(val.getWordSize())

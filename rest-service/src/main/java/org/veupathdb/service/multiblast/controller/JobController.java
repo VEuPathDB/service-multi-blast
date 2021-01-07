@@ -19,12 +19,14 @@ public class JobController implements Jobs
 {
   private static final String AttachmentPat = "attachment; filename=\"%s.%s\"";
 
-  private final Request     request;
+  private final Request request;
+
   private final UserProfile user;
   private final JobService  service;
 
   public JobController(@Context Request request) {
     this.request = request;
+
     this.user    = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     this.service = JobService.getInstance();
   }
@@ -45,7 +47,7 @@ public class JobController implements Jobs
   }
 
   @Override
-  public GetJobsByJobIdResponse getJobsByJobId(int jobId) {
+  public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
     return GetJobsByJobIdResponse.respond200WithApplicationJson(
       service.getJob(jobId, user, request)
     );
@@ -95,15 +97,15 @@ public class JobController implements Jobs
         , FLATQUERYANCHOREDWITHIDENTITIES
         , FLATQUERYANCHOREDWITHOUTIDENTITIES
         , SAM
-        , ORGANISMREPORT
-        -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
-          wrap.stream,
-          head.withContentDisposition(String.format(AttachmentPat, jobId, "txt"))
-        );
+        , ORGANISMREPORT -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
+        wrap.stream,
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "txt"))
+      );
 
       case ARCHIVEASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
         wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "asna")));
+        head.withContentDisposition(String.format(AttachmentPat, jobId, "asna"))
+      );
       case BINARYASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
         wrap.stream,
         head.withContentDisposition(String.format(AttachmentPat, jobId, "asnb"))

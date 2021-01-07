@@ -15,6 +15,9 @@ import org.veupathdb.service.multiblast.model.blast.Location;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.service.cli.CliOptions;
 
+/**
+ * Represents the CLI config options universal to all NCBI Blast+ tools.
+ */
 public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 {
   /**

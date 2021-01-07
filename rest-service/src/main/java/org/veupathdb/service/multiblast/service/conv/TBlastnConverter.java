@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.generated.model.IOTBlastnTask;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnTask;
-import org.veupathdb.service.multiblast.model.blast.impl.TBlastnConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.TBlastNConfigImpl;
 
 public class TBlastnConverter
 {
@@ -144,7 +144,7 @@ public class TBlastnConverter
     if (val == null)
       return null;
 
-    return new TBlastnConfigImpl()
+    return new TBlastNConfigImpl()
       .setTask(toInternal(val.getTask()))
       .setWordSize(val.getWordSize())
       .setGapCostOpen(val.getGapOpen())

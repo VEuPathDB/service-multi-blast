@@ -2,6 +2,7 @@ package org.veupathdb.service.multiblast.generated.resources;
 
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -52,7 +53,7 @@ public interface Jobs {
       "text/plain"
   })
   GetJobsQueryByJobIdResponse getJobsQueryByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("download") Object download);
+      @QueryParam("download") @DefaultValue("false") boolean download);
 
   @GET
   @Path("/{job-id}/report")
