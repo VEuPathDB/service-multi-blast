@@ -13,30 +13,161 @@ import org.veupathdb.service.multiblast.model.blast.tn.TBlastnScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnTask;
 import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 
-public class TBlastnConfigImpl
+/**
+ * Represents the CLI configuration specifically for the {@code tblastn} NCBI
+ * Blast+ tool.
+ */
+public class TBlastNConfigImpl
   extends BlastConfigImpl<TBlastnConfig>
   implements TBlastnConfig
 {
+  /**
+   * <pre>
+   * -task <String, Permissible values: 'tblastn' 'tblastn-fast' >
+   *    Task to execute
+   *    Default = `tblastn'
+   * </pre>
+   */
   private TBlastnTask                          task;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EWordSize                            wordSize;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EGapCost                             gapCost;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EDbGenCode                           dbGenCode;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EMaxIntronLength                     maxIntronLength;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EScoringMatrix<TBlastnScoringMatrix> matrix;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ECompBasedStats                      compBasedStats;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ESubject                             subject;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ESeg                                 seg;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EGiList                              giList;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ESeqIdList                           seqIdList;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ETaxIds                              taxIds;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ETaxIdList                           taxIdList;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EDbMask                              dbMask;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ECullingLimit                        cullingLimit;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EBestHit                             bestHit;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ESumStats                            sumStats;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EGapExtDrop                          xDrop;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EUngapped                            ungapped;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private ESWTback                             sw;
+
+  /**
+   * <pre>
+   *
+   * </pre>
+   */
   private EPssm                                pssm;
 
   @Override
@@ -45,7 +176,7 @@ public class TBlastnConfigImpl
   }
 
   @Override
-  public TBlastnConfigImpl setTask(TBlastnTask task) {
+  public TBlastNConfigImpl setTask(TBlastnTask task) {
     strCache = null;
     this.task = task;
     return this;

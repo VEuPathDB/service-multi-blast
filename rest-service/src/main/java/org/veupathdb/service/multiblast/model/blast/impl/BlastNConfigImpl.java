@@ -16,43 +16,312 @@ import org.veupathdb.service.multiblast.model.blast.n.Dust;
 import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
-public class BlastnConfigImpl
+/**
+ * Represents the CLI configuration specifically for the {@code blastn} NCBI
+ * Blast+ tool.
+ */
+public class BlastNConfigImpl
   extends BlastConfigImpl<BlastnConfig>
   implements BlastnConfig
 {
   // Wrapped Options
-  private EBestHit      eBestHit;
-  private ECullingLimit eCullingLimit;
-  private EDbMask       eDbMask;
-  private EGapCost      eGapCost;
-  private EGapExtDrop   eXGap;
-  private ETaxIds       eTaxIds;
-  private EUngapped     eUngap;
-  private ESubject      eSubject;
-  private EWordSize     eWordSize;
-  private ESeqIdList    eSeqIdList;
-  private ETaxIdList    eTaxIdList;
-  private EGiList       eGiList;
-  private EStrand       eStrand;
-  private ESumStats     eSumStats;
 
+  /**
+   * <pre>
+   *  -best_hit_overhang <Real, (>0 and <0.5)>
+   *    Best Hit algorithm overhang value (recommended value: 0.1)
+   *     * Incompatible with:  culling_limit
+   * </pre>
+   */
+  private EBestHit eBestHit;
+
+  /**
+   * <pre>
+   *  -culling_limit <Integer, >=0>
+   *    If the query range of a hit is enveloped by that of at least this many
+   *    higher-scoring hits, delete the hit
+   *     * Incompatible with:  best_hit_overhang, best_hit_score_edge
+   * </pre>
+   */
+  private ECullingLimit eCullingLimit;
+
+  /**
+   * <pre>
+   *  -db_soft_mask <String>
+   *    Filtering algorithm ID to apply to the BLAST database as soft masking
+   *     * Incompatible with:  db_hard_mask, subject, subject_loc
+   *  -db_hard_mask <String>
+   *    Filtering algorithm ID to apply to the BLAST database as hard masking
+   *     * Incompatible with:  db_soft_mask, subject, subject_loc
+   * </pre>
+   */
+  private EDbMask eDbMask;
+
+  /**
+   * <pre>
+   *  -gapopen <Integer>
+   *    Cost to open a gap
+   *  -gapextend <Integer>
+   *    Cost to extend a gap
+   * </pre>
+   */
+  private EGapCost eGapCost;
+
+  /**
+   * <pre>
+   *  -xdrop_gap <Real>
+   *    X-dropoff value (in bits) for preliminary gapped extensions
+   *  -xdrop_gap_final <Real>
+   *    X-dropoff value (in bits) for final gapped alignment
+   * </pre>
+   */
+  private EGapExtDrop eXGap;
+
+  /**
+   * <pre>
+   *  -taxids <String>
+   *    Restrict search of database to include only the specified taxonomy IDs
+   *    (multiple IDs delimited by ',')
+   *     * Incompatible with:  gilist, seqidlist, taxidlist, negative_gilist,
+   *    negative_seqidlist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   *  -negative_taxids <String>
+   *    Restrict search of database to everything except the specified taxonomy IDs
+   *    (multiple IDs delimited by ',')
+   *     * Incompatible with:  gilist, seqidlist, taxids, taxidlist,
+   *    negative_gilist, negative_seqidlist, negative_taxidlist, remote, subject,
+   *    subject_loc
+   * </pre>
+   */
+  private ETaxIds eTaxIds;
+
+  /**
+   * <pre>
+   *  -ungapped
+   *    Perform ungapped alignment only?
+   * </pre>
+   */
+  private EUngapped eUngap;
+
+  /**
+   * <pre>
+   *  -subject <File_In>
+   *    Subject sequence(s) to search
+   *     * Incompatible with:  db, gilist, seqidlist, negative_gilist,
+   *    negative_seqidlist, taxids, taxidlist, negative_taxids, negative_taxidlist,
+   *    db_soft_mask, db_hard_mask
+   *  -subject_loc <String>
+   *    Location on the subject sequence in 1-based offsets (Format: start-stop)
+   *     * Incompatible with:  db, gilist, seqidlist, negative_gilist,
+   *    negative_seqidlist, taxids, taxidlist, negative_taxids, negative_taxidlist,
+   *    db_soft_mask, db_hard_mask, remote
+   * </pre>
+   */
+  private ESubject eSubject;
+
+  /**
+   * <pre>
+   *  -word_size <Integer, >=4>
+   *    Word size for wordfinder algorithm (length of best perfect match)
+   * </pre>
+   */
+  private EWordSize eWordSize;
+
+  /**
+   * <pre>
+   *  -seqidlist <String>
+   *    Restrict search of database to list of SeqIDs
+   *     * Incompatible with:  gilist, taxids, taxidlist, negative_gilist,
+   *    negative_seqidlist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   *  -negative_seqidlist <String>
+   *    Restrict search of database to everything except the specified SeqIDs
+   *     * Incompatible with:  gilist, seqidlist, taxids, taxidlist,
+   *    negative_gilist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   * </pre>
+   */
+  private ESeqIdList eSeqIdList;
+
+  /**
+   * <pre>
+   *  -taxidlist <String>
+   *    Restrict search of database to include only the specified taxonomy IDs
+   *     * Incompatible with:  gilist, seqidlist, taxids, negative_gilist,
+   *    negative_seqidlist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   *  -negative_taxidlist <String>
+   *    Restrict search of database to everything except the specified taxonomy IDs
+   *     * Incompatible with:  gilist, seqidlist, taxids, taxidlist,
+   *    negative_gilist, negative_seqidlist, negative_taxids, remote, subject,
+   *    subject_loc
+   * </pre>
+   */
+  private ETaxIdList eTaxIdList;
+
+  /**
+   * <pre>
+   *  -gilist <String>
+   *    Restrict search of database to list of GIs
+   *     * Incompatible with:  seqidlist, taxids, taxidlist, negative_gilist,
+   *    negative_seqidlist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   *  -negative_gilist <String>
+   *    Restrict search of database to everything except the specified GIs
+   *     * Incompatible with:  gilist, seqidlist, taxids, taxidlist,
+   *    negative_seqidlist, negative_taxids, negative_taxidlist, remote, subject,
+   *    subject_loc
+   * </pre>
+   */
+  private EGiList eGiList;
+
+  /**
+   * <pre>
+   *  -strand <String, `both', `minus', `plus'>
+   *    Query strand(s) to search against database/subject
+   *    Default = `both'
+   * </pre>
+   */
+  private EStrand eStrand;
+
+  /**
+   * <pre>
+   *  -sum_stats <Boolean>
+   *    Use sum statistics
+   * </pre>
+   */
+  private ESumStats eSumStats;
 
   // Exported options
-  private BlastnTask     task;
-  private Integer        reward;
-  private Integer        penalty;
-  private Boolean        useIndex;
-  private String         indexName;
-  private Dust           dust;
-  private Path           filteringDb;
-  private Integer        windowMaskerTaxId;
-  private Path           windowMaskerDbPath;
+
+  /**
+   * <pre>
+   *  -task <String, Permissible values: 'blastn' 'blastn-short' 'dc-megablast'
+   *                 'megablast' 'rmblastn' >
+   *    Task to execute
+   *    Default = `megablast'
+   * </pre>
+   */
+  private BlastnTask task;
+
+  /**
+   * <pre>
+   *  -reward <Integer, >=0>
+   *    Reward for a nucleotide match
+   * </pre>
+   */
+  private Integer reward;
+
+  /**
+   * <pre>
+   *  -penalty <Integer, <=0>
+   *    Penalty for a nucleotide mismatch
+   * </pre>
+   */
+  private Integer penalty;
+
+  /**
+   * <pre>
+   *  -use_index <Boolean>
+   *    Use MegaBLAST database index
+   *    Default = `false'
+   * </pre>
+   */
+  private Boolean useIndex;
+
+  /**
+   * <pre>
+   *  -index_name <String>
+   *    MegaBLAST database index name (deprecated; use only for old style indices)
+   * </pre>
+   */
+  private String indexName;
+
+  /**
+   * <pre>
+   *  -dust <String>
+   *    Filter query sequence with DUST (Format: 'yes', 'level window linker', or
+   *    'no' to disable)
+   *    Default = `20 64 1'
+   * </pre>
+   */
+  private Dust dust;
+
+  /**
+   * <pre>
+   *  -filtering_db <String>
+   *    BLAST database containing filtering elements (i.e.: repeats)
+   * </pre>
+   */
+  private Path filteringDb;
+
+  /**
+   * <pre>
+   *  -window_masker_taxid <Integer>
+   *    Enable WindowMasker filtering using a Taxonomic ID
+   * </pre>
+   */
+  private Integer windowMaskerTaxId;
+
+  /**
+   * <pre>
+   *  -window_masker_db <String>
+   *    Enable WindowMasker filtering using this repeats database.
+   * </pre>
+   */
+  private Path windowMaskerDbPath;
+
+  /**
+   * <pre>
+   *  -template_type <String, `coding', `coding_and_optimal', `optimal'>
+   *    Discontiguous MegaBLAST template type
+   *     * Requires:  template_length
+   * </pre>
+   */
   private DcTemplateType dcTemplateType;
-  private Byte           dcTemplateLength;
-  private boolean        noGreedy;
-  private Double         percentIdentity;
-  private Integer        minRawGappedScore;
-  private Integer        offDiagonalRange;
+
+  /**
+   * <pre>
+   *  -template_length <Integer, Permissible values: '16' '18' '21' >
+   *    Discontiguous MegaBLAST template length
+   *     * Requires:  template_type
+   * </pre>
+   */
+  private Byte dcTemplateLength;
+
+  /**
+   * <pre>
+   *  -no_greedy
+   *    Use non-greedy dynamic programming extension
+   * </pre>
+   */
+  private boolean noGreedy;
+
+  /**
+   * <pre>
+   *  -perc_identity <Real, 0..100>
+   *    Percent identity
+   * </pre>
+   */
+  private Double percentIdentity;
+
+  /**
+   * <pre>
+   *  -min_raw_gapped_score <Integer>
+   *    Minimum raw gapped score to keep an alignment in the preliminary gapped and
+   *    traceback stages
+   * </pre>
+   */
+  private Integer minRawGappedScore;
+
+  /**
+   * <pre>
+   *  -off_diagonal_range <Integer, >=0>
+   *    Number of off-diagonals to search for the 2nd hit, use 0 to turn off
+   *    Default = `0'
+   * </pre>
+   */
+  private Integer offDiagonalRange;
 
   @Override
   public Integer getNucleotideMatchReward() {
@@ -321,7 +590,7 @@ public class BlastnConfigImpl
 
   @Override
   public BlastnConfig setDiscontiguousMegablastTemplateLength(Byte len) {
-    strCache = null;
+    strCache         = null;
     dcTemplateLength = len;
     return this;
   }
@@ -329,7 +598,7 @@ public class BlastnConfigImpl
   @Override
   public BlastnConfig setDiscontiguousMegablastTemplateType(DcTemplateType type) {
     if (type != dcTemplateType) {
-      strCache = null;
+      strCache       = null;
       dcTemplateType = type;
     }
     return this;
@@ -338,13 +607,13 @@ public class BlastnConfigImpl
   @Override
   public BlastnConfig setDust(Dust d) {
     strCache = null;
-    dust = d;
+    dust     = d;
     return this;
   }
 
   @Override
   public BlastnConfig setFilteringDbPath(Path p) {
-    strCache = null;
+    strCache    = null;
     filteringDb = p;
     return this;
   }
@@ -379,14 +648,14 @@ public class BlastnConfigImpl
 
   @Override
   public BlastnConfig setMegablastDbIndexName(String name) {
-    strCache = null;
+    strCache  = null;
     indexName = name;
     return this;
   }
 
   @Override
   public BlastnConfig setMinRawGappedScore(Integer i) {
-    strCache = null;
+    strCache          = null;
     minRawGappedScore = i;
     return this;
   }
@@ -433,27 +702,27 @@ public class BlastnConfigImpl
   @Override
   public BlastnConfig setNucleotideMatchReward(Integer i) {
     strCache = null;
-    reward = i;
+    reward   = i;
     return this;
   }
 
   @Override
   public BlastnConfig setNucleotideMismatchPenalty(Integer i) {
     strCache = null;
-    penalty = i;
+    penalty  = i;
     return this;
   }
 
   @Override
   public BlastnConfig setOffDiagonalRange(Integer val) {
-    strCache = null;
+    strCache         = null;
     offDiagonalRange = val;
     return this;
   }
 
   @Override
   public BlastnConfig setPercentIdentity(Double d) {
-    strCache = null;
+    strCache        = null;
     percentIdentity = d;
     return this;
   }
@@ -495,7 +764,7 @@ public class BlastnConfigImpl
 
   @Override
   public BlastnConfig setTask(BlastnTask task) {
-    strCache = null;
+    strCache  = null;
     this.task = task;
     return this;
   }
@@ -527,14 +796,14 @@ public class BlastnConfigImpl
 
   @Override
   public BlastnConfig setWindowMaskerDbPath(Path p) {
-    strCache = null;
+    strCache           = null;
     windowMaskerDbPath = p;
     return this;
   }
 
   @Override
   public BlastnConfig setWindowMaskerTaxId(Integer id) {
-    strCache = null;
+    strCache          = null;
     windowMaskerTaxId = id;
     return this;
   }
