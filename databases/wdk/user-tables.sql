@@ -5,9 +5,6 @@ CREATE TABLE userlogins5.multiblast_jobs (
   -- Raw job configuration as a JSON blob
 , job_config CLOB NOT NULL
 
-  -- Raw input query as a text blob
-, query CLOB NOT NULL
-
   -- ID of the job in the job queue.
 , queue_id   NUMBER(7)
 

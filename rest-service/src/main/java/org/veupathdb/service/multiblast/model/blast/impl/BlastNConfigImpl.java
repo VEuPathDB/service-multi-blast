@@ -862,7 +862,7 @@ public class BlastNConfigImpl
         case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
         case PercentIdentity -> out.setPercentIdentity(curr.get(1).asDouble());
-        case Query -> out.setQueryFile(new File(curr.get(1).asText()));
+        case Query -> out.setQuery(curr.get(1).asText());
         case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
         case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());

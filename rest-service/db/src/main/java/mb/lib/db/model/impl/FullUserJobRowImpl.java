@@ -14,12 +14,11 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String query,
     String config,
     long userId,
     String description
   ) {
-    super(hash, queueID, createdOn, deleteOn, query, config);
+    super(hash, queueID, createdOn, deleteOn, config);
     this.userId      = userId;
     this.description = description;
   }

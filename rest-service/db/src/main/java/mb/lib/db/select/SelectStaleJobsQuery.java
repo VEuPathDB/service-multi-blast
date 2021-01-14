@@ -10,7 +10,7 @@ import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
-import mb.lib.db.model.impl.FullJobRowImpl;
+import mb.lib.db.model.JobRowFactory;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class SelectStaleJobsQuery
@@ -22,7 +22,7 @@ public class SelectStaleJobsQuery
   }
 
   public Collection<FullJobRow> run() throws Exception {
-    return new BasicPreparedListReadQuery<FullJobRow>(
+    return new BasicPreparedListReadQuery<>(
       SQL.Select.MultiBlastJobs.Stale,
       DbManager.userDatabase().getDataSource()::getConnection,
       this::parse,
@@ -31,13 +31,12 @@ public class SelectStaleJobsQuery
   }
 
   FullJobRow parse(ResultSet rs) throws Exception {
-    return new FullJobRowImpl(
+    return JobRowFactory.newFullJobRow(
       rs.getBytes(Column.MultiBlastJobs.JobDigest),
-      rs.getString(Column.MultiBlastJobs.JobConfig),
       rs.getInt(Column.MultiBlastJobs.QueueID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
-      "",
-      rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class)
+      rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
+      rs.getString(Column.MultiBlastJobs.JobConfig)
     );
   }
 

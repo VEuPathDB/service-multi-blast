@@ -12,7 +12,7 @@ repositories {
 dependencies {
   implementation("io.vulpine.lib", "sql-import", "0.2.1")
   implementation("io.vulpine.lib", "lib-query-util", "2.1.0")
-  implementation("org.veupathdb.lib", "jaxrs-container-core", "3.0.0")
+  implementation("org.veupathdb.lib", "jaxrs-container-core", "4.0.0")
   implementation(files(
     "${rootDir}/vendor/fgputil-accountdb-1.0.0.jar",
     "${rootDir}/vendor/fgputil-core-1.0.0.jar",

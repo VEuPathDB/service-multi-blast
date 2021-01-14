@@ -32,8 +32,11 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   /**
    * {@code -query <string; filename>}
+   * <p>
+   * Note, while the input to the blast tool is a filename, internally in this
+   * service, the query is tracked as a string.
    */
-  private File query;
+  private String query;
 
   /**
    * {@code -query_loc <string; range>}
@@ -195,13 +198,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   }
 
   @Override
-  public File getQueryFile() {
+  public String getQuery() {
     return this.query;
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setQueryFile(File f) {
+  public T setQuery(String f) {
     query = f;
     return (T) this;
   }

@@ -4,7 +4,7 @@
 val coreLib = "3.0.0" // Container core lib version
 
 val jersey  = "2.+"    // Jersey/JaxRS version
-val jackson = "2.+"    // FasterXML Jackson version
+val jackson = "2.12.1"    // FasterXML Jackson version
 val junit   = "5.7.0"  // JUnit version
 val log4j   = "2.14.0" // Log4J version
 val metrics = "0.9.0"  // Prometheus lib version
@@ -20,6 +20,7 @@ dependencies {
   implementation(project(":queue"))
   implementation(project(":config"))
   implementation(project(":job-data"))
+  implementation(project(":formatter"))
 
   //
   // FgpUtil & Compatibility Dependencies

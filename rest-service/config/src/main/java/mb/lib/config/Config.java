@@ -126,6 +126,20 @@ public class Config extends Options
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                      ║ //
+  // ║    Formatter Config                                                  ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
+
+  @Option(
+    names = "--formatter-host",
+    arity = "1",
+    defaultValue = "${env:FORMATTER_HOST}",
+    description = "Host for the Blast+ formatter service"
+  )
+  private String formatterURI;
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
   // ║    Misc Config                                                       ║ //
   // ║                                                                      ║ //
   // ╚══════════════════════════════════════════════════════════════════════╝ //
@@ -189,5 +203,9 @@ public class Config extends Options
 
   public int getJobTimeout() {
     return jobTimeout;
+  }
+
+  public String getFormatterURI() {
+    return formatterURI;
   }
 }

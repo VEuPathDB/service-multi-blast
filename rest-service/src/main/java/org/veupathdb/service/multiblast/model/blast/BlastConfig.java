@@ -14,8 +14,8 @@ public interface BlastConfig <T extends BlastConfig<T>>
   boolean isVersionEnabled();
   T enableVersion(boolean b);
 
-  File getQueryFile();
-  T setQueryFile(File f);
+  String getQuery();
+  T setQuery(String f);
 
   Location getQueryLocation();
   T setQueryLocation(Location loc);

@@ -394,7 +394,7 @@ public class TBlastXConfigImpl
         case OutputFile -> out.setOutputFile(new File(curr.get(1).asText()));
         case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
-        case Query -> out.setQueryFile(new File(curr.get(1).asText()));
+        case Query -> out.setQuery(curr.get(1).asText());
         case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
         case QueryGeneticCode -> out.setQueryTranslationGeneticCode((byte) curr.get(1).asInt());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));

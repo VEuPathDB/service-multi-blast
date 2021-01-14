@@ -9,7 +9,7 @@ import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
-import mb.lib.db.model.impl.FullJobRowImpl;
+import mb.lib.db.model.JobRowFactory;
 
 public class SelectJobsByUserQuery
 {
@@ -22,16 +22,15 @@ public class SelectJobsByUserQuery
   }
 
   public Collection<FullJobRow> run() throws Exception {
-    return new BasicPreparedListReadQuery<FullJobRow>(
+    return new BasicPreparedListReadQuery<>(
       SQL.Select.MultiBlastJobs.ByUser,
       ds::getConnection,
-      rs -> new FullJobRowImpl(
+      rs -> JobRowFactory.newFullJobRow(
         rs.getBytes(Column.MultiBlastJobs.JobDigest),
-        rs.getString(Column.MultiBlastJobs.JobConfig),
         rs.getInt(Column.MultiBlastJobs.QueueID),
         rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
-        rs.getString(Column.MultiBlastUsers.Description),
-        rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class)
+        rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
+        rs.getString(Column.MultiBlastJobs.JobConfig)
       ),
       StatementPreparer.singleLong(userId)
     ).execute().getValue();

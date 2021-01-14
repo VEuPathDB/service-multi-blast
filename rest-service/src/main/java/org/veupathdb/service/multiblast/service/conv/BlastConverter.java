@@ -57,7 +57,7 @@ public class BlastConverter
       case TBLASTX -> TBlastxConverter.toInternal((IOTBlastxConfig) conf);
     };
 
-    out.setQueryFile(new File(conf.getQuery()))
+    out.setQuery(conf.getQuery())
       .setQueryLocation(BCC.toInternal(conf.getQueryLoc()))
       .setExpectValue(new BigDecimal(conf.getEValue()))
       .setReportFormat(toInternal(conf.getOutFormat()))

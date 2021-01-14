@@ -43,7 +43,6 @@ public class SelectFullUserJob
       rs.getInt(Column.MultiBlastJobs.QueueID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
-      rs.getString(Column.MultiBlastJobs.Query),
       rs.getString(Column.MultiBlastJobs.JobConfig),
       rs.getLong(Column.MultiBlastUsers.UserId),
       rs.getString(Column.MultiBlastUsers.Description)
