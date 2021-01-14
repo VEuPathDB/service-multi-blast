@@ -1,13 +1,13 @@
 //
-// Version Numbers
+// Library Versions
 //
 val coreLib = "3.0.0" // Container core lib version
 
-val jersey  = "2.+"   // Jersey/JaxRS version
-val jackson = "2.+"   // FasterXML Jackson version
-val junit   = "5.7.0"   // JUnit version
-val log4j   = "2.+"   // Log4J version
-val metrics = "0.9.0" // Prometheus lib version
+val jersey  = "2.+"    // Jersey/JaxRS version
+val jackson = "2.+"    // FasterXML Jackson version
+val junit   = "5.7.0"  // JUnit version
+val log4j   = "2.14.0" // Log4J version
+val metrics = "0.9.0"  // Prometheus lib version
 
 val implementation by configurations
 val runtimeOnly    by configurations
@@ -17,6 +17,9 @@ val testRuntimeOnly    by configurations
 
 dependencies {
   implementation(project(":db"))
+  implementation(project(":queue"))
+  implementation(project(":config"))
+  implementation(project(":job-data"))
 
   //
   // FgpUtil & Compatibility Dependencies
@@ -79,7 +82,6 @@ dependencies {
   // Utils
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
-  implementation("info.picocli", "picocli", "4.5.2")
 
   // Database
   implementation("com.zaxxer", "HikariCP", "3.4.5")

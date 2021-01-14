@@ -4,7 +4,7 @@ public interface Table
 {
   interface MultiBlast
   {
-    String MultiBlastJobs  = "multiblast_jobs";
-    String MultiBlastUsers = "multiblast_users";
+    String Jobs  = "multiblast_jobs";
+    String Users = "multiblast_users";
   }
 }

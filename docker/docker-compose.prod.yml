@@ -34,7 +34,7 @@ services:
 
   blast:
     build:
-      dockerfile: ../blast/Dockerfile
+      dockerfile: ../blast/querier/Dockerfile
       context: .
     volumes:
       - type: volume

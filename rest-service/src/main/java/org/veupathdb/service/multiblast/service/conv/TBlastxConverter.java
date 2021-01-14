@@ -4,9 +4,9 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.tx.TBlastxConfig;
+import org.veupathdb.service.multiblast.model.blast.tx.TBlastXConfig;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.impl.TBlastxConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.TBlastXConfigImpl;
 
 class TBlastxConverter
 {
@@ -26,7 +26,7 @@ class TBlastxConverter
     return instance;
   }
 
-  static IOTBlastxConfig toExternal(IOTBlastxConfig out, TBlastxConfig conf) {
+  static IOTBlastxConfig toExternal(IOTBlastxConfig out, TBlastXConfig conf) {
     log.trace("#toExternal(IOTBlastxConfig, TBlastxConfig)");
 
     return getInstance().internalToExternal(out, conf);
@@ -68,16 +68,16 @@ class TBlastxConverter
     };
   }
 
-  static TBlastxConfig toInternal(IOTBlastxConfig conf) {
+  static TBlastXConfig toInternal(IOTBlastxConfig conf) {
     log.trace("#toInternal(IOTBlastxConfig)");
 
     return getInstance().externalToInternal(conf);
   }
 
-  TBlastxConfig externalToInternal(IOTBlastxConfig conf) {
+  TBlastXConfig externalToInternal(IOTBlastxConfig conf) {
     log.trace("#externalToInternal(IOTBlastxConfig)");
 
-    return new TBlastxConfigImpl()
+    return new TBlastXConfigImpl()
       .setStrand(BCC.toInternal(conf.getStrand()))
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
       .setWordSize(conf.getWordSize())
@@ -87,7 +87,7 @@ class TBlastxConverter
       .setDbTranslationGeneticCode(conf.getDbGencode())
       .setSeg(BCC.toInternal(conf.getSeg()))
       .enableSoftMasking(conf.getSoftMasking())
-      .setTaxIds(conf.getTaxIds())
+      .setTaxIDs(conf.getTaxIds())
       .setNegativeTaxIds(conf.getNegativeTaxIds())
       .setDbSoftMaskAlgorithmId(conf.getDbSoftMask())
       .setDbHardMaskAlgorithmId(conf.getDbHardMask())
@@ -99,7 +99,7 @@ class TBlastxConverter
       .setMultiHitWindowSize(conf.getWindowSize());
   }
 
-  IOTBlastxConfig internalToExternal(IOTBlastxConfig out, TBlastxConfig conf) {
+  IOTBlastxConfig internalToExternal(IOTBlastxConfig out, TBlastXConfig conf) {
     log.trace("#internalToExternal(IOTBlastxConfig, TBlastxConfig)");
 
     out.setStrand(BCC.toExternal(conf.getStrand()));

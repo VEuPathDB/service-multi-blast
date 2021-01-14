@@ -7,14 +7,14 @@ import java.sql.Types;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
-import mb.lib.db.model.JobRow;
+import mb.lib.db.model.FullJobRow;
 
 public class InsertJobQuery
 {
   private final Connection connection;
-  private final JobRow job;
+  private final FullJobRow job;
 
-  public InsertJobQuery(Connection connection, JobRow job) {
+  public InsertJobQuery(Connection connection, FullJobRow job) {
     this.connection = connection;
     this.job        = job;
   }
@@ -24,12 +24,8 @@ public class InsertJobQuery
   }
 
   private void prepare(PreparedStatement ps) throws Exception {
-    ps.setBytes(1, job.getJobHash());
-    ps.setClob(2, new StringReader(job.getConfig()));
-    ps.setObject(3, job.getCreatedOn(), Types.TIMESTAMP_WITH_TIMEZONE);
-  }
-
-  public static void execute(Connection con, JobRow job) throws Exception {
-    new InsertJobQuery(con, job).run();
+    ps.setBytes(1, job.jobHash());
+    ps.setClob(2, new StringReader(job.config()));
+    ps.setObject(3, job.createdOn(), Types.TIMESTAMP_WITH_TIMEZONE);
   }
 }

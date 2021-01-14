@@ -8,10 +8,9 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.health.ExternalDependency;
 import org.veupathdb.lib.container.jaxrs.health.ServiceDependency;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
-import org.veupathdb.service.multiblast.Config;
+import mb.lib.config.Config;
 
 public class QueueDep extends ServiceDependency
 {

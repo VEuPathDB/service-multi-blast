@@ -23,12 +23,12 @@ public enum BlastxTask
     return def;
   }
 
-  public static Optional<BlastxTask> fromString(String value) {
+  public static BlastxTask fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))
-        return Optional.of(e);
+        return e;
 
-    return Optional.empty();
+    throw new IllegalArgumentException();
   }
 
   @Override

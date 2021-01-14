@@ -17,7 +17,7 @@ public class ETaxIdList implements WithTaxIdList<Void>
   }
 
   @Override
-  public Void setTaxIdListFile(File f) {
+  public Void setTaxIDListFile(File f) {
     taxIdList = f;
     return null;
   }
@@ -28,7 +28,7 @@ public class ETaxIdList implements WithTaxIdList<Void>
   }
 
   @Override
-  public Void setNegativeTaxIdListFile(File f) {
+  public Void setNegativeTaxIDListFile(File f) {
     negativeTaxIdList = f;
     return null;
   }

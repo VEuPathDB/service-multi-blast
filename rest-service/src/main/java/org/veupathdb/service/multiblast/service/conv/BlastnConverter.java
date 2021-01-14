@@ -157,7 +157,7 @@ class BlastnConverter
       .setDust(toInternal(val.getDust()))
       .setWindowMaskerTaxId(val.getWindowMaskerTaxid())
       .enableSoftMasking(val.getSoftMasking())
-      .setTaxIds(val.getTaxIds())
+      .setTaxIDs(val.getTaxIds())
       .setNegativeTaxIds(val.getNegativeTaxIds())
       .setDbSoftMaskAlgorithmId(val.getDbSoftMask())
       .setDbHardMaskAlgorithmId(val.getDbHardMask())

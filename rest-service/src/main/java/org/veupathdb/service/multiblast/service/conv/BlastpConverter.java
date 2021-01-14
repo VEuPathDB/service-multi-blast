@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.generated.model.IOBlastpTask;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
-import org.veupathdb.service.multiblast.model.blast.impl.BlastpConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.BlastPConfigImpl;
 
 class BlastpConverter
 {
@@ -106,7 +106,7 @@ class BlastpConverter
   BlastpConfig externalToInternal(IOBlastpConfig conf) {
     log.trace("#externalToInternal(IOBlastpConfig)");
 
-    return new BlastpConfigImpl()
+    return new BlastPConfigImpl()
       .setTask(toInternal(conf.getTask()))
       .setWordSize(conf.getWordSize())
       .setGapCostOpen(conf.getGapOpen())
@@ -116,7 +116,7 @@ class BlastpConverter
       .setCompBasedStatisticsType(BCC.toInternal(conf.getCompBasedStats()))
       .setSeg(BCC.toInternal(conf.getSeg()))
       .enableSoftMasking(conf.getSoftMasking())
-      .setTaxIds(BCC.listToArray(conf.getTaxIds()))
+      .setTaxIDs(BCC.listToArray(conf.getTaxIds()))
       .setNegativeTaxIds(BCC.listToArray(conf.getNegativeTaxIds()))
       .setDbSoftMaskAlgorithmId(conf.getDbSoftMask())
       .setDbHardMaskAlgorithmId(conf.getDbHardMask())

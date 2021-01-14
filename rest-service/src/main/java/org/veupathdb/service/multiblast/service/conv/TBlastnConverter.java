@@ -6,8 +6,8 @@ import org.veupathdb.service.multiblast.generated.model.IOTBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnScoringMatrix;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnTask;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.tn.TBlastnScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.tn.TBlastnTask;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 import org.veupathdb.service.multiblast.model.blast.impl.TBlastNConfigImpl;
 
 public class TBlastnConverter
@@ -29,19 +29,19 @@ public class TBlastnConverter
     return instance;
   }
 
-  static IOTBlastnTask toExternal(TBlastnTask task) {
+  static IOTBlastnTask toExternal(TBlastNTask task) {
     log.trace("#toExternal(TBlastnTask)");
 
     if (task == null)
       return null;
 
     return switch (task) {
-      case TBlastn -> IOTBlastnTask.TBLASTN;
-      case TBlastnFast -> IOTBlastnTask.TBLASTNFAST;
+      case TBlastN -> IOTBlastnTask.TBLASTN;
+      case TBlastNFast -> IOTBlastnTask.TBLASTNFAST;
     };
   }
 
-  static IOTBlastnScoringMatrix toExternal(TBlastnScoringMatrix matrix) {
+  static IOTBlastnScoringMatrix toExternal(TBlastNScoringMatrix matrix) {
     log.trace("#toExternal(TBlastnScoringMatrix)");
 
     if (matrix == null)
@@ -66,34 +66,34 @@ public class TBlastnConverter
     return getInstance().internalToExternal(out, conf);
   }
 
-  static TBlastnTask toInternal(IOTBlastnTask val) {
+  static TBlastNTask toInternal(IOTBlastnTask val) {
     log.trace("#toInternal(IOTBlastnTask)");
 
     if (val == null)
       return null;
 
     return switch (val) {
-      case TBLASTN -> TBlastnTask.TBlastn;
-      case TBLASTNFAST -> TBlastnTask.TBlastnFast;
+      case TBLASTN -> TBlastNTask.TBlastN;
+      case TBLASTNFAST -> TBlastNTask.TBlastNFast;
     };
   }
 
-  static TBlastnScoringMatrix toInternal(IOTBlastnScoringMatrix val) {
+  static TBlastNScoringMatrix toInternal(IOTBlastnScoringMatrix val) {
     log.trace("#toInternal(IOTBlastnScoringMatrix)");
 
     if (val == null)
       return null;
 
     return switch (val) {
-      case BLOSUM45 -> TBlastnScoringMatrix.Blosum45;
-      case BLOSUM50 -> TBlastnScoringMatrix.Blosum50;
-      case BLOSUM62 -> TBlastnScoringMatrix.Blosum62;
-      case BLOSUM80 -> TBlastnScoringMatrix.Blosum80;
-      case BLOSUM90 -> TBlastnScoringMatrix.Blosum90;
-      case PAM30 -> TBlastnScoringMatrix.Pam30;
-      case PAM70 -> TBlastnScoringMatrix.Pam70;
-      case PAM250 -> TBlastnScoringMatrix.Pam250;
-      case IDENTITY -> TBlastnScoringMatrix.Identity;
+      case BLOSUM45 -> TBlastNScoringMatrix.Blosum45;
+      case BLOSUM50 -> TBlastNScoringMatrix.Blosum50;
+      case BLOSUM62 -> TBlastNScoringMatrix.Blosum62;
+      case BLOSUM80 -> TBlastNScoringMatrix.Blosum80;
+      case BLOSUM90 -> TBlastNScoringMatrix.Blosum90;
+      case PAM30 -> TBlastNScoringMatrix.Pam30;
+      case PAM70 -> TBlastNScoringMatrix.Pam70;
+      case PAM250 -> TBlastNScoringMatrix.Pam250;
+      case IDENTITY -> TBlastNScoringMatrix.Identity;
     };
   }
 
@@ -156,7 +156,7 @@ public class TBlastnConverter
       .setCompBasedStatisticsType(BCC.toInternal(val.getCompBasedStats()))
       .setSeg(BCC.toInternal(val.getSeg()))
       .enableSoftMasking(val.getSoftMasking())
-      .setTaxIds(val.getTaxIds())
+      .setTaxIDs(val.getTaxIds())
       .setNegativeTaxIds(val.getNegativeTaxIds())
       .setDbSoftMaskAlgorithmId(val.getDbSoftMask())
       .setDbHardMaskAlgorithmId(val.getDbHardMask())

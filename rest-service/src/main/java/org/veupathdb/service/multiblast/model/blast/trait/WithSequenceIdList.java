@@ -7,8 +7,8 @@ import org.veupathdb.service.multiblast.service.cli.CliOptions;
 public interface WithSequenceIdList <T> extends CliOptions
 {
   File getSequenceIdListFile();
-  T setSequenceIdListFile(File f);
+  T setSequenceIDListFile(File f);
 
   File getNegativeSequenceIdListFile();
-  T setNegativeSequenceIdListFile(File f);
+  T setNegativeSequenceIDListFile(File f);
 }

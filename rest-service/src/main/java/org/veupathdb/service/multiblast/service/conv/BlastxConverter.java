@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.generated.model.IOBlastxTask;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
-import org.veupathdb.service.multiblast.model.blast.impl.BlastxConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.impl.BlastXConfigImpl;
 
 public class BlastxConverter
 {
@@ -104,7 +104,7 @@ public class BlastxConverter
     if (conf == null)
       return null;
 
-    return new BlastxConfigImpl()
+    return new BlastXConfigImpl()
       .setStrand(BCC.toInternal(conf.getStrand()))
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
       .setTask(toInternal(conf.getTask()))
@@ -117,7 +117,7 @@ public class BlastxConverter
       .setCompBasedStatisticsType(BCC.toInternal(conf.getCompBasedStats()))
       .setSeg(BCC.toInternal(conf.getSeg()))
       .enableSoftMasking(conf.getSoftMasking())
-      .setTaxIds(BCC.listToArray(conf.getTaxIds()))
+      .setTaxIDs(BCC.listToArray(conf.getTaxIds()))
       .setNegativeTaxIds(BCC.listToArray(conf.getNegativeTaxIds()))
       .setDbSoftMaskAlgorithmId(conf.getDbSoftMask())
       .setDbHardMaskAlgorithmId(conf.getDbHardMask())

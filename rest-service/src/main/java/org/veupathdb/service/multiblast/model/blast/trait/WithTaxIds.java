@@ -7,8 +7,8 @@ import org.veupathdb.service.multiblast.service.cli.CliOptions;
 public interface WithTaxIds <T> extends CliOptions
 {
   int[] getTaxIds();
-  T setTaxIds(int[] taxIds);
-  T setTaxIds(Collection<Integer> taxIds);
+  T setTaxIDs(int[] taxIds);
+  T setTaxIDs(Collection<Integer> taxIds);
 
   int[] getNegativeTaxIds();
   T setNegativeTaxIds(int[] negativeTaxIds);

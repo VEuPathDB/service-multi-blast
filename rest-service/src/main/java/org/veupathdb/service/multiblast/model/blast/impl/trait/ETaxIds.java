@@ -19,13 +19,13 @@ public class ETaxIds implements WithTaxIds<Void>
   }
 
   @Override
-  public Void setTaxIds(int[] taxIds) {
+  public Void setTaxIDs(int[] taxIds) {
     this.taxIds = taxIds;
     return null;
   }
 
   @Override
-  public Void setTaxIds(Collection<Integer> taxIds) {
+  public Void setTaxIDs(Collection<Integer> taxIds) {
     this.taxIds = taxIds == null ? null : taxIds.stream().mapToInt(Integer::intValue).toArray();
     return null;
   }

@@ -41,7 +41,7 @@ class Util
     mapping.put(ToolOption.BlastDatabase, JsonKeys.BlastDatabase);
     mapping.put(ToolOption.CompositionBasedStats, JsonKeys.CompositionBasedStats);
     mapping.put(ToolOption.CullingLimit, JsonKeys.CullingLimit);
-    mapping.put(ToolOption.DatabaseEffectiveSize, JsonKeys.DB_SIZE);
+    mapping.put(ToolOption.EffectiveDatabaseSize, JsonKeys.DB_SIZE);
     mapping.put(ToolOption.DatabaseHardMask, JsonKeys.DBHardMask);
     mapping.put(ToolOption.DatabaseSoftMask, JsonKeys.SoftMasking);
     mapping.put(ToolOption.Dust, JsonKeys.DUST);
@@ -114,8 +114,8 @@ class Util
     mapping.put(ToolOption.SequenceIDListFile, JsonKeys.SEQ_ID_LIST);
     mapping.put(ToolOption.ShowNCBIGIs, JsonKeys.ShowNCBIGIs);
     mapping.put(ToolOption.SoftMasking, JsonKeys.SoftMasking);
-    mapping.put(ToolOption.SortHits, JsonKeys.SortHits);
-    mapping.put(ToolOption.SortHSPs, JsonKeys.SortHSPs);
+    mapping.put(ToolOption.HSPSorting, JsonKeys.SortHits);
+    mapping.put(ToolOption.HitSorting, JsonKeys.SortHSPs);
     mapping.put(ToolOption.QueryStrand, JsonKeys.STRAND);
     mapping.put(ToolOption.SubjectBestHit, JsonKeys.SubjectBestHit);
     mapping.put(ToolOption.SubjectFile, JsonKeys.SUBJECT);
@@ -134,6 +134,6 @@ class Util
     mapping.put(ToolOption.WordSize, JsonKeys.WordSize);
     mapping.put(ToolOption.ExtensionDropoffFinalGapped, JsonKeys.XDROP_GAP_FINAL);
     mapping.put(ToolOption.ExtensionDropoffPrelimGapped, JsonKeys.XDROP_GAP);
-    mapping.put(ToolOption.XDropoffUngappedExtensions, JsonKeys.XDROP_UNGAP);
+    mapping.put(ToolOption.ExtensionDropoffUngapped, JsonKeys.XDROP_UNGAP);
   }
 }
