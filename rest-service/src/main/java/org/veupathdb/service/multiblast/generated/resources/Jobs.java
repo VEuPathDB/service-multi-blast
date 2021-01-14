@@ -11,7 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import org.veupathdb.service.multiblast.generated.model.BadRequestError;
 import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
@@ -59,10 +58,8 @@ public interface Jobs {
   @GET
   @Path("/{job-id}/report")
   @Produces({
-      "application/xml",
-      "application/octet-stream",
       "application/json",
-      "text/plain"
+      "application/zip"
   })
   GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") String jobId,
       @QueryParam("format") IOBlastFormat format,
@@ -235,33 +232,9 @@ public interface Jobs {
       return new HeadersFor200();
     }
 
-    public static GetJobsReportByJobIdResponse respond200WithTextPlain(Object entity,
+    public static GetJobsReportByJobIdResponse respond200WithApplicationZip(Object entity,
         HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "text/plain");
-      responseBuilder.entity(entity);
-      headers.toResponseBuilder(responseBuilder);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond200WithApplicationJson(Object entity,
-        HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      headers.toResponseBuilder(responseBuilder);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond200WithApplicationXml(Object entity,
-        HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/xml");
-      responseBuilder.entity(entity);
-      headers.toResponseBuilder(responseBuilder);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond200WithApplicationOctetStream(
-        StreamingOutput entity, HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/octet-stream");
+      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/zip");
       responseBuilder.entity(entity);
       headers.toResponseBuilder(responseBuilder);
       return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
