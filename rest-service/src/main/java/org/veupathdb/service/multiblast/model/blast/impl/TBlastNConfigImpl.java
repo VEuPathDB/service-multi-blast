@@ -755,7 +755,7 @@ public class TBlastNConfigImpl
           out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
           break;
         case Query:
-          out.setQueryFile(new File(curr.get(1).asText()));
+          out.setQuery(curr.get(1).asText());
           break;
         case QueryCoveragePercentHSP:
           out.setQueryCoveragePercentHsp(curr.get(1).asDouble());

@@ -48,7 +48,7 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestJSON entity) {
-    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user, request));
+    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
   /**
@@ -103,65 +103,17 @@ public class JobController implements Jobs
     );
   }
 
-  // TODO: revisit this, the job may have produced multiple files.  This
-  //       endpoint will be returning a zip file
   @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
     String jobId,
     IOBlastFormat format,
     List<IOBlastReportField> fields
   ) {
-    var wrap = service.getReport(jobId, format, fields, user, request);
+    var wrap = service.getReport(jobId, format, fields);
     var head = GetJobsReportByJobIdResponse.headersFor200();
 
-    return switch (wrap.format) {
-      case TABULAR, TABULARWITHCOMMENTS -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "tsv"))
-      );
+    head.withContentDisposition(String.format(AttachmentPat, wrap.name, "zip"));
 
-      case CSV -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "csv"))
-      );
-
-      case TEXTASN_1 -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "asn"))
-      );
-
-      case PAIRWISE
-        , QUERYANCHOREDWITHIDENTITIES
-        , QUERYANCHOREDWITHOUTIDENTITIES
-        , FLATQUERYANCHOREDWITHIDENTITIES
-        , FLATQUERYANCHOREDWITHOUTIDENTITIES
-        , SAM
-        , ORGANISMREPORT -> GetJobsReportByJobIdResponse.respond200WithTextPlain(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "txt"))
-      );
-
-      case ARCHIVEASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "asna"))
-      );
-      case BINARYASN_1 -> GetJobsReportByJobIdResponse.respond200WithApplicationOctetStream(
-        wrap.stream,
-        head.withContentDisposition(String.format(AttachmentPat, jobId, "asnb"))
-      );
-
-      case SEQALIGNJSON, MULTIFILEJSON, SINGLEFILEJSON -> GetJobsReportByJobIdResponse
-        .respond200WithApplicationJson(
-          wrap.stream,
-          head.withContentDisposition(String.format(AttachmentPat, jobId, "json"))
-        );
-
-      case XML, MULTIFILEXML2, SINGLEFILEXML2 -> GetJobsReportByJobIdResponse
-        .respond200WithApplicationXml(
-          wrap.stream,
-          head.withContentDisposition(String.format(AttachmentPat, jobId, "xml"))
-        );
-    };
+    return GetJobsReportByJobIdResponse.respond200WithApplicationZip(wrap, head);
   }
-
 }

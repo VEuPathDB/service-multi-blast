@@ -11,5 +11,5 @@ repositories {
 
 dependencies {
   implementation(project(":config"))
-  implementation("org.veupathdb.lib", "jaxrs-container-core", "3.0.0")
+  implementation("org.veupathdb.lib", "jaxrs-container-core", "4.0.0")
 }

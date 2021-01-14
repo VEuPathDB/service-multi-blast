@@ -52,10 +52,9 @@ public class JobRowFactory
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String query,
     String config
   ) {
-    return getInstance().createNewFullJobRow(hash, queueID, createdOn, deleteOn, query, config);
+    return getInstance().createNewFullJobRow(hash, queueID, createdOn, deleteOn, config);
   }
 
   public FullJobRow createNewFullJobRow(
@@ -63,10 +62,9 @@ public class JobRowFactory
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String query,
     String config
   ) {
-    return newFullJobRow.create(hash, queueID, createdOn, deleteOn, query, config);
+    return newFullJobRow.create(hash, queueID, createdOn, deleteOn, config);
   }
 
   public void setFullJobRowConstructor(FullJobRowConstructor con) {
@@ -119,7 +117,6 @@ public class JobRowFactory
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String query,
     String config,
     long userId,
     String description
@@ -129,7 +126,6 @@ public class JobRowFactory
       queueID,
       createdOn,
       deleteOn,
-      query,
       config,
       userId,
       description
@@ -141,7 +137,6 @@ public class JobRowFactory
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String query,
     String config,
     long userId,
     String description
@@ -151,7 +146,6 @@ public class JobRowFactory
       queueID,
       createdOn,
       deleteOn,
-      query,
       config,
       userId,
       description
@@ -207,7 +201,6 @@ public class JobRowFactory
       int queueID,
       OffsetDateTime createdOn,
       OffsetDateTime deleteOn,
-      String query,
       String config
     );
   }
@@ -220,7 +213,6 @@ public class JobRowFactory
       int queueID,
       OffsetDateTime createdOn,
       OffsetDateTime deleteOn,
-      String query,
       String config,
       long userId,
       String description

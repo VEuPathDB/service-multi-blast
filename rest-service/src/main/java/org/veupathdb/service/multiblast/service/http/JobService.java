@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.service.http;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,22 +8,21 @@ import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Request;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
-import mb.lib.db.select.SelectJobsByUserQuery;
 import mb.lib.extern.JobStatus;
+import mb.lib.format.FormatType;
+import mb.lib.format.FormatterManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import org.veupathdb.lib.container.jaxrs.providers.RequestIdProvider;
-import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import mb.lib.extern.JobQueueManager;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.internal.Job;
@@ -57,150 +55,6 @@ public class JobService
       instance = new JobService();
 
     return instance;
-  }
-
-  public NewJobPostResponse createJob(
-    NewJobPostRequestJSON input,
-    UserProfile user,
-    Request request
-  ) {
-    log.trace("JobService.createJob(NewJobPostRequestJSON, UserProfile, Request)");
-    if (input == null) {
-      log.debug("Rejecting request for null body.");
-      throw new BadRequestException();
-    }
-
-    if (input.getConfig() == null) {
-      log.debug("Rejecting request for null job configuration.");
-      throw new UnprocessableEntityException(
-        Collections.singletonMap(JsonKeys.Config, Collections.singletonList("is required"))
-      );
-    }
-
-    {
-      var err = BlastValidator.getInstance().validate(input.getConfig());
-      if (!err.isEmpty()) {
-        log.debug("Rejecting request for validation errors.");
-        throw new UnprocessableEntityException(err);
-      }
-    }
-
-    if (input.getConfig() == null
-      || input.getConfig().getQuery() == null
-      || input.getConfig().getQuery().isBlank()
-    ) {
-      log.debug("Rejecting request for missing query value.");
-      throw new UnprocessableEntityException(Collections.singletonMap(
-        JsonKeys.Query,
-        Collections.singletonList(
-          BlastValidator.errRequired)
-      ));
-    }
-
-    try {
-      var tmpFile = new File("/tmp/" + RequestIdProvider.getRequestId(request));
-      if (!tmpFile.createNewFile()) {
-        log.error("Failed to create temp file for job query");
-        throw new RuntimeException("Failed to create temp file for job query");
-      }
-
-      try (var write = new FileWriter(tmpFile)) {
-        // Get the query hash as the file will be stored under this as a name
-        // to ensure the overall job hash includes the query data (since this
-        // data may be posted as a file using multipart/form-data).
-        var queryHash = Format.toHexString(Format.toSHA256(input.getConfig().getQuery()));
-        new StringReader(input.getConfig().getQuery()).transferTo(write);
-        input.getConfig().setQuery(queryHash);
-
-        var job = JobConverter.toInternal(input.getConfig());
-        var cli = new CliBuilder(job.getTool());
-        job.getJobConfig().toCli(cli);
-
-        var id = createJob(new SimpleJobRequest(
-          user.getUserId(),
-          input.getDescription(),
-          job,
-          cli,
-          tmpFile,
-          queryHash
-        ));
-
-        var out = new NewJobPostResponseImpl();
-        out.setJobId(id);
-
-        return out;
-      } finally {
-        if (!tmpFile.delete())
-          log.warn("Failed to delete temp file " + tmpFile.getName());
-      }
-    } catch (Exception e) {
-      throw wrapException(e);
-    }
-  }
-
-  public NewJobPostResponse createJob(NewJobPostRequestMultipart input, UserProfile user) {
-    log.trace("JobService.createJob(NewJobPostRequestMultipart, UserProfile, Request)");
-
-    if (input == null) {
-      log.debug("Rejecting request for null body.");
-      throw new BadRequestException();
-    }
-    if (input.getQuery() == null) {
-      log.debug("Rejecting request for query upload.");
-      throw new BadRequestException();
-    }
-    if (input.getProperties() == null) {
-      log.debug("Rejecting request for properties.");
-      throw new BadRequestException();
-    }
-    if (input.getProperties().getConfig() == null) {
-      log.debug("Rejecting request for job config.");
-      throw new UnprocessableEntityException(
-        Collections.singletonMap(JsonKeys.Config, Collections.singletonList("is required"))
-      );
-    }
-
-    {
-      var err = BlastValidator.getInstance().validate(input.getProperties().getConfig());
-      if (!err.isEmpty()) {
-        log.debug("Rejecting request for validation errors.");
-        throw new UnprocessableEntityException(err);
-      }
-    }
-
-    try {
-      byte[] queryHash;
-      try (var read = new FileInputStream(input.getQuery())) {
-        queryHash = Format.toSHA256(read);
-      }
-      var qName = Format.toHexString(queryHash);
-
-      input.getProperties().getConfig().setQuery(qName);
-
-      var job = JobConverter.toInternal(input.getProperties().getConfig());
-      var cli = new CliBuilder(job.getTool());
-
-      job.getJobConfig().toCli(cli);
-
-      var id = createJob(new SimpleJobRequest(
-        user.getUserId(),
-        input.getProperties().getDescription(),
-        job,
-        cli,
-        input.getQuery(),
-        qName
-      ));
-
-      var out = new NewJobPostResponseImpl();
-      out.setJobId(id);
-
-      return out;
-    } catch (Exception e) {
-      throw wrapException(e);
-    } finally {
-      if (!input.getQuery().delete())
-        log.warn("Could not delete ");
-    }
   }
 
   public LongJobResponse getJob(String rawID, UserProfile user) {
@@ -267,7 +121,7 @@ public class JobService
         throw new IllegalStateException("Job exists but has no workspace.");
 
       var jobConfig = Job.fromSerial(optJob.get().config());
-      var queryFile = JobDataManager.getJobFile(jobID, jobConfig.getJobConfig().getQueryFile());
+      var queryFile = JobDataManager.getJobFile(jobID, jobConfig.getJobConfig().getQuery());
 
       return out -> {
         var buf = new byte[buffSize];
@@ -283,24 +137,169 @@ public class JobService
     }
   }
 
-  public ReportWrap getReport(
-    String jobId,
-    IOBlastFormat format,
-    List<IOBlastReportField> fields,
-    UserProfile user,
-    Request req
-  ) {
-    Job
+  public ReportWrap getReport(String jobId, IOBlastFormat format, List<IOBlastReportField> fields) {
+    try {
+      var pFormat = switch(format) {
+        case PAIRWISE -> FormatType.Pairwise;
+        case QUERYANCHOREDWITHIDENTITIES -> FormatType.QueryAnchoredWithIdentities;
+        case QUERYANCHOREDWITHOUTIDENTITIES -> FormatType.QueryAnchoredWithoutIdentities;
+        case FLATQUERYANCHOREDWITHIDENTITIES -> FormatType.FlatQueryAnchoredWithIdentities;
+        case FLATQUERYANCHOREDWITHOUTIDENTITIES -> FormatType.FlatQueryAnchoredWithoutIdentities;
+        case XML -> FormatType.BlastXML;
+        case TABULAR -> FormatType.Tabular;
+        case TABULARWITHCOMMENTS -> FormatType.TabularWithCommentLines;
+        case TEXTASN_1 -> FormatType.SeqAlignTextASN1;
+        case BINARYASN_1 -> FormatType.SeqAlignBinaryASN1;
+        case CSV -> FormatType.CommaSeparatedValues;
+        case ARCHIVEASN_1 -> FormatType.BlastArchiveASN1;
+        case SEQALIGNJSON -> FormatType.SeqAlignJSON;
+        case MULTIFILEJSON -> FormatType.MultipleFileBlastJSON;
+        case MULTIFILEXML2 -> FormatType.MultipleFileBlastXML2;
+        case SINGLEFILEJSON -> FormatType.SingleFileBlastJSON;
+        case SINGLEFILEXML2 -> FormatType.SingleFileBlastXML2;
+        case SAM -> FormatType.SequenceAlignmentMap;
+        case ORGANISMREPORT -> FormatType.OrganismReport;
+      };
+
+      return new ReportWrap(
+        jobId + "_fmt_" + pFormat.id(),
+        FormatterManager.formatAs(pFormat, fields.stream().map(f -> f.name).toArray(String[]::new))
+      );
+    } catch (Exception e) {
+      var eOut = wrapException(e);
+
+      if (eOut instanceof InternalServerErrorException) {
+        log.error(String.format("Failed to get report for job %s.", jobId), e);
+      } else {
+        log.info(String.format("Failed to get report for job %s.", jobId), e);
+      }
+
+      throw eOut;
+    }
   }
 
-  public static class ReportWrap
-  {
-    public final IOBlastFormat   format;
-    public final StreamingOutput stream;
+  public NewJobPostResponse createJob(NewJobPostRequestJSON input, UserProfile user) {
+    log.trace("JobService.createJob(NewJobPostRequestJSON, UserProfile, Request)");
+    if (input == null) {
+      log.debug("Rejecting request for null body.");
+      throw new BadRequestException();
+    }
 
-    public ReportWrap(IOBlastFormat format, StreamingOutput stream) {
-      this.format = format;
-      this.stream = stream;
+    if (input.getConfig() == null) {
+      log.debug("Rejecting request for null job configuration.");
+      throw new UnprocessableEntityException(
+        Collections.singletonMap(JsonKeys.Config, Collections.singletonList("is required"))
+      );
+    }
+
+    {
+      var err = BlastValidator.getInstance().validate(input.getConfig());
+      if (!err.isEmpty()) {
+        log.debug("Rejecting request for validation errors.");
+        throw new UnprocessableEntityException(err);
+      }
+    }
+
+    if (input.getConfig() == null
+      || input.getConfig().getQuery() == null
+      || input.getConfig().getQuery().isBlank()
+    ) {
+      log.debug("Rejecting request for missing query value.");
+      throw new UnprocessableEntityException(Collections.singletonMap(
+        JsonKeys.Query,
+        Collections.singletonList(
+          BlastValidator.errRequired)
+      ));
+    }
+
+    try {
+      var job = JobConverter.toInternal(input.getConfig());
+      var cli = new CliBuilder(job.getTool());
+      job.getJobConfig().toCli(cli);
+
+      var id = createJob(new SimpleJobRequest(
+        user.getUserId(),
+        input.getDescription(),
+        job,
+        cli
+      ));
+
+      var out = new NewJobPostResponseImpl();
+      out.setJobId(id);
+
+      return out;
+    } catch (Exception e) {
+      throw wrapException(e);
+    }
+  }
+
+  public NewJobPostResponse createJob(NewJobPostRequestMultipart input, UserProfile user) {
+    log.trace("JobService.createJob(NewJobPostRequestMultipart, UserProfile, Request)");
+
+    if (input == null) {
+      log.debug("Rejecting request for null body.");
+      throw new BadRequestException();
+    }
+
+    if (input.getQuery() == null) {
+      log.debug("Rejecting request for missing query upload.");
+      throw new BadRequestException();
+    }
+
+    if (input.getProperties() == null) {
+      log.debug("Rejecting request for null properties.");
+      throw new BadRequestException();
+    }
+
+    if (input.getProperties().getConfig() == null) {
+      log.debug("Rejecting request for null job config.");
+      throw new UnprocessableEntityException(
+        Collections.singletonMap(JsonKeys.Config, Collections.singletonList("is required"))
+      );
+    }
+
+    {
+      var err = BlastValidator.getInstance().validate(input.getProperties().getConfig());
+      if (!err.isEmpty()) {
+        log.debug("Rejecting request for validation errors.");
+        throw new UnprocessableEntityException(err);
+      }
+    }
+
+    try {
+      var qString = new StringBuilder((int) input.getQuery().length());
+      try (var read = new BufferedReader(new FileReader(input.getQuery()))) {
+        var n = 0;
+        var b = new char[8192];
+        while ((n = read.read(b)) > 0)
+          qString.append(b, 0, n);
+        input.getProperties().getConfig().setQuery(qString.toString());
+      } finally {
+        //noinspection ResultOfMethodCallIgnored
+        input.getQuery().delete();
+      }
+
+      var job = JobConverter.toInternal(input.getProperties().getConfig());
+      var cli = new CliBuilder(job.getTool());
+
+      job.getJobConfig().toCli(cli);
+
+      var id = createJob(new SimpleJobRequest(
+        user.getUserId(),
+        input.getProperties().getDescription(),
+        job,
+        cli
+      ));
+
+      var out = new NewJobPostResponseImpl();
+      out.setJobId(id);
+
+      return out;
+    } catch (Exception e) {
+      throw wrapException(e);
+    } finally {
+      if (!input.getQuery().delete())
+        log.warn("Could not delete ");
     }
   }
 
@@ -344,20 +343,23 @@ public class JobService
 
     var jobIDString = Format.toHexString(hash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
+    var queueID     = JobQueueManager.submitJob(Format.toHexString(hash), req.builder.toArgArray());
+    var now         = OffsetDateTime.now();
 
-    Files.copy(req.query.toPath(), jobPath.resolve(req.job.getJobConfig().getQueryFile().getName()));
-
-    var queueID = JobQueueManager.submitJob(Format.toHexString(hash), req.builder.toArgArray());
-    var now     = OffsetDateTime.now();
+    var qFile = jobPath.resolve("query.txt").toFile();
+    //noinspection ResultOfMethodCallIgnored
+    qFile.createNewFile();
+    try (var write = new BufferedWriter(new FileWriter(qFile))) {
+      write.write(req.job.getJobConfig().getQuery());
+    }
 
     JobDBManager.registerJob(
       new FullJobRowImpl(
         hash,
-        req.job.toString(),
         queueID,
         now,
-        "",
-        now.plusDays(conf.getJobTimeout())
+        now.plusDays(conf.getJobTimeout()),
+        req.job.toString()
       ),
       new UserRowImpl(hash, req.userID, req.description)
     );
@@ -371,6 +373,28 @@ public class JobService
       case InProgress -> IOJobStatus.INPROGRESS;
     };
   }
+
+  public static class ReportWrap implements StreamingOutput
+  {
+    public final String name;
+    public final InputStream stream;
+
+    public ReportWrap(String name, InputStream stream) {
+      this.name   = name;
+      this.stream = stream;
+    }
+
+    @Override
+    public void write(OutputStream output) throws IOException, WebApplicationException {
+      try (var b = new BufferedInputStream(stream)) {
+        var n = 0;
+        var a = new byte[8192];
+
+        while ((n = b.read(a)) > 0)
+          output.write(a, 0, n);
+      }
+    }
+  }
 }
 
 class SimpleJobRequest
@@ -379,22 +403,16 @@ class SimpleJobRequest
   final String     description;
   final Job        job;
   final CliBuilder builder;
-  final File       query;
-  final String     queryName;
 
   SimpleJobRequest(
     long userID,
     String description,
     Job job,
-    CliBuilder builder,
-    File query,
-    String queryName
+    CliBuilder builder
   ) {
     this.userID      = userID;
     this.description = description;
     this.job         = job;
     this.builder     = builder;
-    this.query       = query;
-    this.queryName   = queryName;
   }
 }
