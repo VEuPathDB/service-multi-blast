@@ -31,28 +31,65 @@ public class JobController implements Jobs
     this.service = JobService.getInstance();
   }
 
+  /**
+   * @return A list of jobs associated with the currently logged in user.
+   */
   @Override
   public GetJobsResponse getJobs() {
     return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user));
   }
 
+  /**
+   * Create a new job by JSON body.
+   *
+   * @param entity New job request parameters.
+   *
+   * @return Basic info about the newly created job (such as the job id).
+   */
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestJSON entity) {
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user, request));
   }
 
+  /**
+   * Create a new job with the blast query uploaded as a separate file.
+   *
+   * @param entity New job request parameters.
+   *
+   * @return Basic info about the newly created job (such as the job id).
+   */
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestMultipart entity) {
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
+  /**
+   * Attempt to retrieve a specific job associated with the logged in user.
+   * <p>
+   * If no job with the given ID was found, or the specified job is not
+   * associated with the current user, this endpoint returns a 404.
+   *
+   * @param jobId ID of the job to look up.
+   *
+   * @return Full details about the specified job.
+   */
   @Override
   public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
     return GetJobsByJobIdResponse.respond200WithApplicationJson(
-      service.getJob(jobId)
+      service.getJob(jobId, user)
     );
   }
 
+  /**
+   * Retrieve the raw blast query for a specific job.
+   *
+   * @param jobId    ID of the job whose query should be retrieved.
+   * @param download Whether or not the query should be marked as an attachment
+   *                 in the HTTP response.
+   *
+   * @return The query file associated with the specific job, either as a raw
+   * text output, or a file attachment.
+   */
   @Override
   public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobId, boolean download) {
     var head = GetJobsQueryByJobIdResponse.headersFor200();
@@ -66,6 +103,8 @@ public class JobController implements Jobs
     );
   }
 
+  // TODO: revisit this, the job may have produced multiple files.  This
+  //       endpoint will be returning a zip file
   @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
     String jobId,
