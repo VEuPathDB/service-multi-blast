@@ -21,12 +21,6 @@ import org.veupathdb.service.multiblast.service.cli.CliOptions;
 public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 {
   /**
-   * A cached stringified form of this configuration.  This should be wiped out
-   * any time the config values change.
-   */
-  protected String strCache;
-
-  /**
    * {@code -h|-help}
    */
   private boolean help;
@@ -184,11 +178,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableHelp(boolean b) {
-    if (b != help) {
-      strCache = null;
-      help     = b;
-    }
-
+    help = b;
     return (T) this;
   }
 
@@ -200,11 +190,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableVersion(boolean b) {
-    if (b != version) {
-      strCache = null;
-      version  = b;
-    }
-
+    version = b;
     return (T) this;
   }
 
@@ -216,9 +202,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setQueryFile(File f) {
-    strCache = null;
-    query    = f;
-
+    query = f;
     return (T) this;
   }
 
@@ -230,9 +214,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setQueryLocation(Location loc) {
-    strCache      = null;
     queryLocation = loc;
-
     return (T) this;
   }
 
@@ -244,7 +226,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setDatabase(Path db) {
-    strCache = null;
     database = db;
     return (T) this;
   }
@@ -257,7 +238,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setOutputFile(File out) {
-    strCache = null;
     this.out = out;
     return (T) this;
   }
@@ -270,7 +250,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setExpectValue(BigDecimal val) {
-    strCache    = null;
     expectValue = val;
     return (T) this;
   }
@@ -283,8 +262,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setReportFormat(BlastReportFormat format) {
-    strCache = null;
-    outFmt   = format;
+    outFmt = format;
     return (T) this;
   }
 
@@ -296,11 +274,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableNCBIGenInfoIds(boolean b) {
-    if (b != showGenInfoIds) {
-      strCache       = null;
-      showGenInfoIds = b;
-    }
-
+    showGenInfoIds = b;
     return (T) this;
   }
 
@@ -312,7 +286,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setNumDescriptions(Integer num) {
-    strCache             = null;
     numDescriptions = num;
     return (T) this;
   }
@@ -325,7 +298,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setNumAlignments(Integer num) {
-    strCache           = null;
     numAlignments = num;
     return (T) this;
   }
@@ -338,7 +310,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setLineLength(Integer len) {
-    strCache        = null;
     lineLength = len;
     return (T) this;
   }
@@ -352,7 +323,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @SuppressWarnings("unchecked")
   public T enableHtmlOutput(boolean b) {
     if (b != outputHtml) {
-      strCache   = null;
       outputHtml = b;
     }
     return (T) this;
@@ -366,11 +336,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T setHitSorting(HitSorting val) {
-    if (val != sortHits) {
-      strCache = null;
-      sortHits = val;
-    }
-
+    sortHits = val;
     return (T) this;
   }
 
@@ -381,12 +347,8 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setHspSorting(HspSorting val) {
-    if (val != sortHsps) {
-      strCache = null;
-      sortHsps = val;
-    }
-
+  public T setHSPSorting(HspSorting val) {
+    sortHsps = val;
     return (T) this;
   }
 
@@ -398,11 +360,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableLowercaseMasking(boolean b) {
-    if (b != lcaseMasking) {
-      strCache     = null;
-      lcaseMasking = b;
-    }
-
+    lcaseMasking = b;
     return (T) this;
   }
 
@@ -413,7 +371,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setQueryCoverageHspPercent(Double v) {
+  public T setQueryCoveragePercentHsp(Double v) {
     this.qCovHspPerc = v;
     return (T) this;
   }
@@ -425,7 +383,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setMaxHsps(Integer v) {
+  public T setMaxHSPs(Integer v) {
     this.maxHsps = v;
     return (T) this;
   }
@@ -510,11 +468,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableDefLineParsing(boolean b) {
-    if (b != parseDefLines) {
-      strCache      = null;
-      parseDefLines = b;
-    }
-
+    parseDefLines = b;
     return (T) this;
   }
 
@@ -538,10 +492,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   @Override
   @SuppressWarnings("unchecked")
   public T enableRemoteSearchExecution(boolean b) {
-    if (b != remote) {
-      strCache = null;
-      remote   = b;
-    }
+    remote = b;
     return (T) this;
   }
 
@@ -582,13 +533,6 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   }
 
   @Override
-  public String toString() {
-    var tmp = new CliBuilder();
-    toCli(tmp);
-    return tmp.toString();
-  }
-
-  @Override
   public void toCli(CliBuilder cli) {
     if (help) {
       cli.append(ToolOption.Help);
@@ -607,16 +551,16 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
       .appendNonNull(ToolOption.NumDescriptions, numDescriptions)
       .appendNonNull(ToolOption.NumAlignments, numAlignments)
       .appendNonNull(ToolOption.LineLength, lineLength)
-      .appendNonNull(ToolOption.SortHits, sortHits)
-      .appendNonNull(ToolOption.SortHSPs, sortHsps)
+      .appendNonNull(ToolOption.HSPSorting, sortHits)
+      .appendNonNull(ToolOption.HitSorting, sortHsps)
       .appendNonNull(ToolOption.QueryCoveragePercentHSP, qCovHspPerc)
       .appendNonNull(ToolOption.MaxHSPs, maxHsps)
       .appendNonNull(ToolOption.MaxTargetSequences, maxTargetSeqs)
-      .appendNonNull(ToolOption.DatabaseEffectiveSize, dbSize)
+      .appendNonNull(ToolOption.EffectiveDatabaseSize, dbSize)
       .appendNonNull(ToolOption.SearchSpaceEffectiveLength, searchSpace)
       .appendNonNull(ToolOption.ImportSearchStrategy, importSearchStrategy)
       .appendNonNull(ToolOption.ExportSearchStrategy, exportSearchStrategy)
-      .appendNonNull(ToolOption.XDropoffUngappedExtensions, xDropUngap)
+      .appendNonNull(ToolOption.ExtensionDropoffUngapped, xDropUngap)
       .appendNonNull(ToolOption.NumberOfThreads, numThreads)
       .appendNonNull(ToolOption.EntrezQuery, entrezQuery)
       .appendNonNull(ToolOption.SoftMasking, softMasking)

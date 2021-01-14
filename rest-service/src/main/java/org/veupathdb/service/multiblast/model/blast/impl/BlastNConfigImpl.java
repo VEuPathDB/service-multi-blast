@@ -1,14 +1,14 @@
 package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.veupathdb.service.multiblast.model.blast.ToolOption;
-import org.veupathdb.service.multiblast.model.blast.Location;
-import org.veupathdb.service.multiblast.model.blast.QueryStrand;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.veupathdb.service.multiblast.model.blast.*;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
@@ -510,35 +510,30 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig enableMegablastDbIndexUsage(Boolean b) {
-    strCache = null;
     useIndex = b;
     return this;
   }
 
   @Override
   public BlastnConfig enableNonGreedyDynamicProgramExtension(boolean b) {
-    strCache = null;
     noGreedy = b;
     return this;
   }
 
   @Override
   public BlastnConfig enableSubjectBestHit(boolean b) {
-    strCache = null;
     (eBestHit = lazy(eBestHit, EBestHit::new)).enableSubjectBestHit(b);
     return this;
   }
 
   @Override
   public BlastnConfig enableSumStatistics(Boolean b) {
-    strCache = null;
     (eSumStats = lazy(eSumStats, ESumStats::new)).enableSumStatistics(b);
     return this;
   }
 
   @Override
   public BlastnConfig enableUngappedAlignmentOnly(boolean b) {
-    strCache = null;
     (eUngap = lazy(eUngap, EUngapped::new)).enableUngappedAlignmentOnly(b);
     return this;
   }
@@ -555,42 +550,36 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig setBestHitOverhang(Double v) {
-    strCache = null;
     (eBestHit = lazy(eBestHit, EBestHit::new)).setBestHitOverhang(v);
     return this;
   }
 
   @Override
   public BlastnConfig setBestHitScoreEdge(Double v) {
-    strCache = null;
     (eBestHit = lazy(eBestHit, EBestHit::new)).setBestHitScoreEdge(v);
     return this;
   }
 
   @Override
   public BlastnConfig setCullingLimit(Integer v) {
-    strCache = null;
     (eCullingLimit = lazy(eCullingLimit, ECullingLimit::new)).setCullingLimit(v);
     return this;
   }
 
   @Override
   public BlastnConfig setDbHardMaskAlgorithmId(String id) {
-    strCache = null;
     (eDbMask = lazy(eDbMask, EDbMask::new)).setDbHardMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public BlastnConfig setDbSoftMaskAlgorithmId(String id) {
-    strCache = null;
     (eDbMask = lazy(eDbMask, EDbMask::new)).setDbSoftMaskAlgorithmId(id);
     return this;
   }
 
   @Override
   public BlastnConfig setDiscontiguousMegablastTemplateLength(Byte len) {
-    strCache         = null;
     dcTemplateLength = len;
     return this;
   }
@@ -598,7 +587,6 @@ public class BlastNConfigImpl
   @Override
   public BlastnConfig setDiscontiguousMegablastTemplateType(DcTemplateType type) {
     if (type != dcTemplateType) {
-      strCache       = null;
       dcTemplateType = type;
     }
     return this;
@@ -606,84 +594,72 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig setDust(Dust d) {
-    strCache = null;
     dust     = d;
     return this;
   }
 
   @Override
   public BlastnConfig setFilteringDbPath(Path p) {
-    strCache    = null;
     filteringDb = p;
     return this;
   }
 
   @Override
   public BlastnConfig setExtensionDropoffFinalGapped(Double d) {
-    strCache = null;
     (eXGap = lazy(eXGap, EGapExtDrop::new)).setExtensionDropoffFinalGapped(d);
     return this;
   }
 
   @Override
   public BlastnConfig setGapCostExtend(Integer cost) {
-    strCache = null;
     (eGapCost = lazy(eGapCost, EGapCost::new)).setGapCostExtend(cost);
     return this;
   }
 
   @Override
   public BlastnConfig setGapCostOpen(Integer cost) {
-    strCache = null;
     (eGapCost = lazy(eGapCost, EGapCost::new)).setGapCostOpen(cost);
     return this;
   }
 
   @Override
   public BlastnConfig setGenInfoIdListFile(File f) {
-    strCache = null;
     (eGiList = lazy(eGiList, EGiList::new)).setGenInfoIdListFile(f);
     return this;
   }
 
   @Override
   public BlastnConfig setMegablastDbIndexName(String name) {
-    strCache  = null;
     indexName = name;
     return this;
   }
 
   @Override
   public BlastnConfig setMinRawGappedScore(Integer i) {
-    strCache          = null;
     minRawGappedScore = i;
     return this;
   }
 
   @Override
   public BlastnConfig setNegativeGenInfoIdListFile(File f) {
-    strCache = null;
     (eGiList = lazy(eGiList, EGiList::new)).setNegativeGenInfoIdListFile(f);
     return this;
   }
 
   @Override
-  public BlastnConfig setNegativeSequenceIdListFile(File f) {
-    strCache = null;
-    (eSeqIdList = lazy(eSeqIdList, ESeqIdList::new)).setNegativeSequenceIdListFile(f);
+  public BlastnConfig setNegativeSequenceIDListFile(File f) {
+    (eSeqIdList = lazy(eSeqIdList, ESeqIdList::new)).setNegativeSequenceIDListFile(f);
     return this;
   }
 
   @Override
-  public BlastnConfig setNegativeTaxIdListFile(File f) {
-    strCache = null;
-    (eTaxIdList = lazy(eTaxIdList, ETaxIdList::new)).setNegativeTaxIdListFile(f);
+  public BlastnConfig setNegativeTaxIDListFile(File f) {
+    (eTaxIdList = lazy(eTaxIdList, ETaxIdList::new)).setNegativeTaxIDListFile(f);
     return this;
   }
 
   @Override
   public BlastnConfig setNegativeTaxIds(int[] negativeTaxIds) {
-    strCache = null;
     (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setNegativeTaxIds(
       negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
     );
@@ -692,7 +668,6 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-    strCache = null;
     (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setNegativeTaxIds(
       negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds)
     );
@@ -701,94 +676,81 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig setNucleotideMatchReward(Integer i) {
-    strCache = null;
     reward   = i;
     return this;
   }
 
   @Override
   public BlastnConfig setNucleotideMismatchPenalty(Integer i) {
-    strCache = null;
     penalty  = i;
     return this;
   }
 
   @Override
   public BlastnConfig setOffDiagonalRange(Integer val) {
-    strCache         = null;
     offDiagonalRange = val;
     return this;
   }
 
   @Override
   public BlastnConfig setPercentIdentity(Double d) {
-    strCache        = null;
     percentIdentity = d;
     return this;
   }
 
   @Override
   public BlastnConfig setExtensionDropoffPreliminaryGapped(Double d) {
-    strCache = null;
     (eXGap = lazy(eXGap, EGapExtDrop::new)).setExtensionDropoffPreliminaryGapped(d);
     return this;
   }
 
   @Override
-  public BlastnConfig setSequenceIdListFile(File f) {
-    strCache = null;
-    (eSeqIdList = lazy(eSeqIdList, ESeqIdList::new)).setSequenceIdListFile(f);
+  public BlastnConfig setSequenceIDListFile(File f) {
+    (eSeqIdList = lazy(eSeqIdList, ESeqIdList::new)).setSequenceIDListFile(f);
     return this;
   }
 
   @Override
   public BlastnConfig setStrand(QueryStrand s) {
-    strCache = null;
     (eStrand = lazy(eStrand, EStrand::new)).setStrand(s);
     return this;
   }
 
   @Override
   public BlastnConfig setSubjectFile(File f) {
-    strCache = null;
     (eSubject = lazy(eSubject, ESubject::new)).setSubjectFile(f);
     return this;
   }
 
   @Override
   public BlastnConfig setSubjectLocation(Location loc) {
-    strCache = null;
     (eSubject = lazy(eSubject, ESubject::new)).setSubjectLocation(loc);
     return this;
   }
 
   @Override
   public BlastnConfig setTask(BlastnTask task) {
-    strCache  = null;
     this.task = task;
     return this;
   }
 
   @Override
-  public BlastnConfig setTaxIdListFile(File f) {
-    strCache = null;
-    (eTaxIdList = lazy(eTaxIdList, ETaxIdList::new)).setTaxIdListFile(f);
+  public BlastnConfig setTaxIDListFile(File f) {
+    (eTaxIdList = lazy(eTaxIdList, ETaxIdList::new)).setTaxIDListFile(f);
     return this;
   }
 
   @Override
-  public BlastnConfig setTaxIds(int[] taxIds) {
-    strCache = null;
-    (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setTaxIds(
+  public BlastnConfig setTaxIDs(int[] taxIds) {
+    (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setTaxIDs(
       taxIds == null ? null : Arrays.copyOf(taxIds, taxIds.length)
     );
     return this;
   }
 
   @Override
-  public BlastnConfig setTaxIds(Collection<Integer> taxIds) {
-    strCache = null;
-    (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setTaxIds(
+  public BlastnConfig setTaxIDs(Collection<Integer> taxIds) {
+    (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setTaxIDs(
       taxIds == null ? null : new ArrayList<>(taxIds)
     );
     return this;
@@ -796,21 +758,18 @@ public class BlastNConfigImpl
 
   @Override
   public BlastnConfig setWindowMaskerDbPath(Path p) {
-    strCache           = null;
     windowMaskerDbPath = p;
     return this;
   }
 
   @Override
   public BlastnConfig setWindowMaskerTaxId(Integer id) {
-    strCache          = null;
     windowMaskerTaxId = id;
     return this;
   }
 
   @Override
   public BlastnConfig setWordSize(Integer size) {
-    strCache = null;
     (eWordSize = lazy(eWordSize, EWordSize::new)).setWordSize(size);
     return this;
   }
@@ -853,5 +812,86 @@ public class BlastNConfigImpl
       eGiList,
       eStrand
     );
+  }
+
+  public static BlastnConfig fromSerial(ArrayNode node) {
+    var out  = new BlastNConfigImpl();
+    var size = node.size();
+
+    for (var i = 1; i < size; i++) {
+      var curr = node.get(i);
+      switch (ToolOption.optionsByName.get(curr.get(0).asText())) {
+        case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
+        case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
+        case BlastDatabase -> out.setDatabase(Path.of(curr.get(1).asText()));
+        case CullingLimit -> out.setCullingLimit(curr.get(1).asInt());
+        case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
+        case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
+        case Dust -> out.setDust(DustImpl.fromString(curr.get(1).asText()));
+        case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
+        case ExpectationValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
+        case FilteringDatabasePath -> out.setFilteringDbPath(Path.of(curr.get(1).asText()));
+        case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
+        case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
+        case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
+        case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput -> out.enableHtmlOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
+        case LineLength -> out.setLineLength(curr.get(1).asInt());
+        case LowercaseMasking -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case MatchReward -> out.setNucleotideMatchReward(curr.get(1).asInt());
+        case MaxHSPs -> out.setMaxHSPs(curr.get(1).asInt());
+        case MaxTargetSequences -> out.setMaxTargetSequences(curr.get(1).asInt());
+        case MegablastIndexName -> out.setMegablastDbIndexName(curr.get(1).asText());
+        case DiscontiguousMegablastTemplateLength -> out.setDiscontiguousMegablastTemplateLength((byte) curr.get(1).asInt());
+        case DiscontiguousMegablastTemplateType -> out.setDiscontiguousMegablastTemplateType(DcTemplateType.unsafeFromString(curr.get(1).asText()));
+        case MinRawGappedScore -> out.setMinRawGappedScore(curr.get(1).asInt());
+        case MismatchPenalty -> out.setNucleotideMismatchPenalty(curr.get(1).asInt());
+        case MultiHitWindowSize -> out.setMultiHitWindowSize(curr.get(1).asInt());
+        case NegativeGIListFile -> out.setNegativeGenInfoIdListFile(new File(curr.get(1).asText()));
+        case NegativeSequenceIDListFile -> out.setNegativeSequenceIDListFile(new File(curr.get(1).asText()));
+        case NegativeTaxonomyIDs -> out.setNegativeTaxIds(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::valueOf).toArray());
+        case NegativeTaxonomyIDListFile -> out.setNegativeTaxIDListFile(new File(curr.get(1).asText()));
+        case NonGreedyExtension -> out.enableNonGreedyDynamicProgramExtension(curr.size() == 1 || curr.get(1).asBoolean());
+        case NumAlignments -> out.setNumAlignments(curr.get(1).asInt());
+        case NumberOfThreads -> out.setThreadCount((byte) curr.get(1).asInt());
+        case NumDescriptions -> out.setNumDescriptions(curr.get(1).asInt());
+        case OffDiagonalRange -> out.setOffDiagonalRange(curr.get(1).asInt());
+        case OutputFile -> out.setOutputFile(new File(curr.get(1).asText()));
+        case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
+        case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
+        case PercentIdentity -> out.setPercentIdentity(curr.get(1).asDouble());
+        case Query -> out.setQueryFile(new File(curr.get(1).asText()));
+        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
+        case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
+        case SearchSpaceEffectiveLength -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
+        case SequenceIDListFile -> out.setSequenceIDListFile(new File(curr.get(1).asText()));
+        case ShowNCBIGIs -> out.enableNCBIGenInfoIds(curr.size() == 1 || curr.get(1).asBoolean());
+        case SoftMasking -> out.enableSoftMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case HSPSorting -> out.setHitSorting(HitSorting.fromString(curr.get(1).asText()));
+        case HitSorting -> out.setHSPSorting(HspSorting.fromString(curr.get(1).asText()));
+        case QueryStrand -> out.setStrand(QueryStrand.fromString(curr.get(1).asText()));
+        case SubjectBestHit -> out.enableSubjectBestHit(curr.size() == 1 || curr.get(1).asBoolean());
+        case SubjectFile -> out.setSubjectFile(new File(curr.get(1).asText()));
+        case SubjectLocation -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case SumStats -> out.enableSumStatistics(curr.size() == 1 || curr.get(1).asBoolean());
+        case Task -> out.setTask(BlastnTask.fromString(curr.get(1).asText()));
+        case TaxonomyIDs -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
+        case TaxonomyIDListFile -> out.setTaxIDListFile(new File(curr.get(1).asText()));
+        case UngappedAlignmentOnly -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());
+        case UseMegablastIndex -> out.enableMegablastDbIndexUsage(curr.size() == 1 || curr.get(1).asBoolean());
+        case Version -> out.enableVersion(curr.size() == 1 || curr.get(1).asBoolean());
+        case WindowMaskerDatabasePath -> out.setWindowMaskerDbPath(Path.of(curr.get(1).asText()));
+        case WindowMaskerTaxonomicID -> out.setWindowMaskerTaxId(curr.get(1).asInt());
+        case WordSize -> out.setWordSize(curr.get(1).asInt());
+        case ExtensionDropoffFinalGapped -> out.setExtensionDropoffFinalGapped(curr.get(1).asDouble());
+        case ExtensionDropoffPrelimGapped -> out.setExtensionDropoffPreliminaryGapped(curr.get(1).asDouble());
+        case ExtensionDropoffUngapped -> out.setExtensionDropoffUngapped(curr.get(1).asDouble());
+      }
+    }
+
+    return out;
   }
 }

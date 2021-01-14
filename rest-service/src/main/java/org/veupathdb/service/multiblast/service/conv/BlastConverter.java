@@ -1,5 +1,6 @@
 package org.veupathdb.service.multiblast.service.conv;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +14,7 @@ import org.veupathdb.service.multiblast.model.blast.*;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.tx.TBlastxConfig;
+import org.veupathdb.service.multiblast.model.blast.tx.TBlastXConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
 
@@ -56,17 +57,18 @@ public class BlastConverter
       case TBLASTX -> TBlastxConverter.toInternal((IOTBlastxConfig) conf);
     };
 
-    out.setQueryLocation(BCC.toInternal(conf.getQueryLoc()))
+    out.setQueryFile(new File(conf.getQuery()))
+      .setQueryLocation(BCC.toInternal(conf.getQueryLoc()))
       .setExpectValue(new BigDecimal(conf.getEValue()))
       .setReportFormat(toInternal(conf.getOutFormat()))
       .setNumDescriptions(conf.getNumDescriptions())
       .setNumAlignments(conf.getNumAlignments())
       .setLineLength(conf.getLineLength())
       .setHitSorting(toInternal(conf.getSortHits()))
-      .setHspSorting(toInternal(conf.getSortHSPs()))
+      .setHSPSorting(toInternal(conf.getSortHSPs()))
       .enableLowercaseMasking(BCC.nullToFalse(conf.getLcaseMasking()))
-      .setQueryCoverageHspPercent(conf.getQCovHSPPerc())
-      .setMaxHsps(conf.getMaxHSPs())
+      .setQueryCoveragePercentHsp(conf.getQCovHSPPerc())
+      .setMaxHSPs(conf.getMaxHSPs())
       .setMaxTargetSequences(conf.getMaxTargetSeqs())
       .setEffectiveDatabaseSize(conf.getDbSize())
       .setEffectiveSearchSpaceLength(conf.getSearchSpace())
@@ -76,6 +78,9 @@ public class BlastConverter
     return out;
   }
 
+  public static IOBlastConfig toExternal(BlastConfig<?> conf) {
+    return getInstance().internalToExternal(conf);
+  }
 
   public IOBlastConfig internalToExternal(BlastConfig<?> conf) {
     log.trace("#internalToExternal(BlastConfig)");
@@ -107,7 +112,7 @@ public class BlastConverter
       case BLASTP -> BlastpConverter.toExternal((IOBlastpConfig) out, (BlastpConfig) conf);
       case BLASTX -> BlastxConverter.toExternal((IOBlastxConfig) out, (BlastxConfig) conf);
       case TBLASTN -> TBlastnConverter.toExternal((IOTBlastnConfig) out, (TBlastnConfig) conf);
-      case TBLASTX -> TBlastxConverter.toExternal((IOTBlastxConfig) out, (TBlastxConfig) conf);
+      case TBLASTX -> TBlastxConverter.toExternal((IOTBlastxConfig) out, (TBlastXConfig) conf);
     };
   }
 
@@ -122,7 +127,7 @@ public class BlastConverter
       return new IOBlastxConfigImpl();
     if (conf instanceof TBlastnConfig)
       return new IOTBlastnConfigImpl();
-    if (conf instanceof TBlastxConfig)
+    if (conf instanceof TBlastXConfig)
       return new IOTBlastxConfigImpl();
 
     throw new IllegalArgumentException("unrecognized blast config type");

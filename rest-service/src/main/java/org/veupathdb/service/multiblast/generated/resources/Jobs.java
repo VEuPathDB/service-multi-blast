@@ -13,14 +13,15 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import org.veupathdb.service.multiblast.generated.model.BadRequestError;
-import org.veupathdb.service.multiblast.generated.model.GetJobResponse;
 import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
+import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
 import org.veupathdb.service.multiblast.generated.model.NotFoundError;
 import org.veupathdb.service.multiblast.generated.model.ServerError;
+import org.veupathdb.service.multiblast.generated.model.ShortJobResponse;
 import org.veupathdb.service.multiblast.generated.model.UnauthorizedError;
 import org.veupathdb.service.multiblast.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
@@ -76,9 +77,9 @@ public interface Jobs {
       super(response);
     }
 
-    public static GetJobsResponse respond200WithApplicationJson(List<GetJobResponse> entity) {
+    public static GetJobsResponse respond200WithApplicationJson(List<ShortJobResponse> entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<GetJobResponse>> wrappedEntity = new GenericEntity<List<GetJobResponse>>(entity){};
+      GenericEntity<List<ShortJobResponse>> wrappedEntity = new GenericEntity<List<ShortJobResponse>>(entity){};
       responseBuilder.entity(wrappedEntity);
       return new GetJobsResponse(responseBuilder.build(), wrappedEntity);
     }
@@ -145,7 +146,7 @@ public interface Jobs {
       super(response);
     }
 
-    public static GetJobsByJobIdResponse respond200WithApplicationJson(GetJobResponse entity) {
+    public static GetJobsByJobIdResponse respond200WithApplicationJson(LongJobResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetJobsByJobIdResponse(responseBuilder.build(), entity);

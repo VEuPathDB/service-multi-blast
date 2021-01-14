@@ -6,12 +6,12 @@ import org.veupathdb.service.multiblast.model.blast.trait.*;
 public interface TBlastnConfig
 extends
   BlastConfig<TBlastnConfig>
-, WithTask<TBlastnConfig, TBlastnTask>
+, WithTask<TBlastnConfig, TBlastNTask>
 , WithWordSize<TBlastnConfig>
 , WithGapCosts<TBlastnConfig>
 , WithDbGeneticCode<TBlastnConfig>
 , WithMaxIntronLength<TBlastnConfig>
-, WithScoringMatrix<TBlastnConfig, TBlastnScoringMatrix>
+, WithScoringMatrix<TBlastnConfig, TBlastNScoringMatrix>
 , WithCompBasedStats<TBlastnConfig>
 , WithSubject<TBlastnConfig>
 , WithSeg<TBlastnConfig>

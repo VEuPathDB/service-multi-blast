@@ -6,6 +6,10 @@ public interface Column
   {
     String JobDigest = "job_digest";
     String JobConfig = "job_config";
+    String QueueID   = "queue_id";
+    String Query     = "query";
+    String CreatedOn = "created_on";
+    String DeleteOn  = "delete_on";
   }
 
   interface MultiBlastUsers

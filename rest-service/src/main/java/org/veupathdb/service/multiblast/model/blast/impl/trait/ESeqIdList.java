@@ -17,7 +17,7 @@ public class ESeqIdList implements WithSequenceIdList<Void>
   }
 
   @Override
-  public Void setSequenceIdListFile(File f) {
+  public Void setSequenceIDListFile(File f) {
     seqIdList = f;
     return null;
   }
@@ -28,7 +28,7 @@ public class ESeqIdList implements WithSequenceIdList<Void>
   }
 
   @Override
-  public Void setNegativeSequenceIdListFile(File f) {
+  public Void setNegativeSequenceIDListFile(File f) {
     negativeSeqIdList = f;
     return null;
   }

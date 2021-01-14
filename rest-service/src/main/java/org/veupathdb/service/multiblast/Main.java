@@ -1,5 +1,6 @@
 package org.veupathdb.service.multiblast;
 
+import mb.lib.config.Config;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.health.Dependency;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;

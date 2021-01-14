@@ -7,8 +7,8 @@ import org.veupathdb.service.multiblast.service.cli.CliOptions;
 public interface WithTaxIdList <T> extends CliOptions
 {
   File getTaxIdListFile();
-  T setTaxIdListFile(File f);
+  T setTaxIDListFile(File f);
 
   File getNegativeTaxIdListFile();
-  T setNegativeTaxIdListFile(File f);
+  T setNegativeTaxIDListFile(File f);
 }

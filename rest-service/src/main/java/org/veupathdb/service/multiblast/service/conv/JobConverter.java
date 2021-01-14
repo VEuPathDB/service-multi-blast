@@ -84,14 +84,22 @@ public class JobConverter
     };
   }
 
-  public static Job toInternal(long userId, IOBlastConfig conf) {
+  public static Job toInternal(IOBlastConfig conf) {
     log.trace("#toInternal(long, IOBlastConfig)");
 
-    return getInstance().externalToInternal(userId, conf);
+    return getInstance().externalToInternal(conf);
   }
 
-  public Job externalToInternal(long userId, IOBlastConfig conf) {
-    var out = new Job(userId, JobStatus.Queued, toInternal(conf.getTool()));
+  public Job externalToInternal(IOBlastConfig conf) {
+    var out = new Job(toInternal(conf.getTool()));
     return out.setJobConfig(BlastConverter.toInternal(conf));
+  }
+
+  public static IOBlastConfig toExternal(Job job) {
+    return getInstance().internalToExternal(job);
+  }
+
+  public IOBlastConfig internalToExternal(Job job) {
+    return BlastConverter.toExternal(job.getJobConfig());
   }
 }

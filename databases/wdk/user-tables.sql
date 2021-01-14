@@ -1,11 +1,23 @@
 CREATE TABLE userlogins5.multiblast_jobs (
   -- SHA256 hash of the job configuration
   job_digest RAW(32) PRIMARY KEY
+
   -- Raw job configuration as a JSON blob
 , job_config CLOB NOT NULL
+
+  -- Raw input query as a text blob
+, query CLOB NOT NULL
+
+  -- ID of the job in the job queue.
+, queue_id   NUMBER(7)
+
   -- Timestamp for the job creation.  Used to detect "new" jobs created from a
   -- different instance.
 , created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+
+  -- Timestamp for the job deletion date.  After this date the job record is
+  -- subject to automatic pruning.
+, delete_on TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE userlogins5.multiblast_users (

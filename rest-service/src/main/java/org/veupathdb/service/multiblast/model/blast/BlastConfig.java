@@ -77,16 +77,16 @@ public interface BlastConfig <T extends BlastConfig<T>>
   T setHitSorting(HitSorting val);
 
   HspSorting getHspSorting();
-  T setHspSorting(HspSorting val);
+  T setHSPSorting(HspSorting val);
 
   boolean isLowercaseMaskingEnabled();
   T enableLowercaseMasking(boolean b);
 
   Double getQueryCoverageHspPercent();
-  T setQueryCoverageHspPercent(Double v);
+  T setQueryCoveragePercentHsp(Double v);
 
   Integer getMaxHsps();
-  T setMaxHsps(Integer v);
+  T setMaxHSPs(Integer v);
 
   Integer getMaxTargetSequences();
   T setMaxTargetSequences(Integer v);

@@ -23,7 +23,7 @@ public class InsertUserQuery
   }
 
   private void prepare(PreparedStatement ps) throws SQLException {
-    ps.setBytes(1, user.getJobHash());
+    ps.setBytes(1, user.jobHash());
     ps.setLong(2, user.getUserId());
     ps.setString(3, user.getDescription());
   }

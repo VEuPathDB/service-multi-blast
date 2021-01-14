@@ -33,7 +33,7 @@ public class JobController implements Jobs
 
   @Override
   public GetJobsResponse getJobs() {
-    return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user, request));
+    return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user));
   }
 
   @Override
@@ -43,13 +43,13 @@ public class JobController implements Jobs
 
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestMultipart entity) {
-    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user, request));
+    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
   @Override
   public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
     return GetJobsByJobIdResponse.respond200WithApplicationJson(
-      service.getJob(jobId, user, request)
+      service.getJob(jobId)
     );
   }
 
@@ -61,7 +61,7 @@ public class JobController implements Jobs
       head = head.withContentDisposition(String.format(AttachmentPat, (jobId + "-query"), "txt"));
 
     return GetJobsQueryByJobIdResponse.respond200WithTextPlain(
-      service.getQuery(jobId, user, request),
+      service.getQuery(jobId),
       head
     );
   }

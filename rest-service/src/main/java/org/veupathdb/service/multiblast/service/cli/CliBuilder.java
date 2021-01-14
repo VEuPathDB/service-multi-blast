@@ -7,16 +7,20 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
 public class CliBuilder
 {
   private static final Pattern SingleQuotes = Pattern.compile("('+)");
 
+  private final BlastTool tool;
+
   private final Map<ToolOption, Object[]> params;
 
-  public CliBuilder() {
-    params = new LinkedHashMap<>();
+  public CliBuilder(BlastTool tool) {
+    this.tool   = tool;
+    this.params = new LinkedHashMap<>();
   }
 
   public CliBuilder set(ToolOption key, Object... values) {
@@ -60,6 +64,18 @@ public class CliBuilder
     return toJoinedStream().collect(Collectors.joining(" "));
   }
 
+  public void toString(StringBuilder out) {
+    var it = toJoinedStream().iterator();
+
+    if (!it.hasNext())
+      return;
+
+    out.append(it.next());
+
+    while (it.hasNext())
+      out.append(' ').append(it.next());
+  }
+
   public String[][] toArgPairs() {
     return toComponentStream().toArray(String[][]::new);
   }
@@ -69,17 +85,19 @@ public class CliBuilder
   }
 
   public Stream<String[]> toComponentStream() {
-    return params.entrySet()
-      .stream()
-      .map(e -> new String[]{
-        e.getKey().getFlag(),
-        e.getValue() == null || e.getValue().length == 0
-          ? null
-          : Arrays.stream(e.getValue())
-            .map(Object::toString)
-            .map(CliBuilder::escape)
-            .collect(Collectors.joining(","))
-      });
+    return Stream.concat(Stream.<String[]>of(
+      new String[]{tool.value(), null}),
+      params.entrySet()
+        .stream()
+        .map(e -> new String[]{
+          e.getKey().getFlag(),
+          e.getValue() == null || e.getValue().length == 0
+            ? null
+            : Arrays.stream(e.getValue())
+              .map(Object::toString)
+              .map(CliBuilder::escape)
+              .collect(Collectors.joining(","))
+        }));
   }
 
   public Stream<String> toJoinedStream() {
