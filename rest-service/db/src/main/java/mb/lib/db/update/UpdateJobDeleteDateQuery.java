@@ -3,7 +3,6 @@ package mb.lib.db.update;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.OffsetDateTime;
-import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;

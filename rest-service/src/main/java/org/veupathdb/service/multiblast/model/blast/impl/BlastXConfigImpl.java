@@ -9,10 +9,11 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
-import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 public class BlastXConfigImpl
   extends BlastConfigImpl<BlastxConfig>
@@ -435,6 +436,37 @@ public class BlastXConfigImpl
     return this;
   }
 
+  @Override
+  public void toCli(CliBuilder cli) {
+    super.toCli(cli);
+
+    cli.appendNonNull(ToolOption.Task, task);
+
+    lazy(cli,
+      strand,
+      queryGenCode,
+      wordSize,
+      gapCost,
+      maxIntronLength,
+      scoringMatrix,
+      compBasedStats,
+      subject,
+      seg,
+      giList,
+      seqIdList,
+      taxIds,
+      taxIdList,
+      ipgList,
+      dbMask,
+      cullingLimit,
+      bestHit,
+      sumStats,
+      xDrop,
+      ungapped,
+      sw
+    );
+  }
+
   public static BlastxConfig fromSerial(ArrayNode node) {
     var out = new BlastXConfigImpl();
     var size = node.size();
@@ -461,14 +493,14 @@ public class BlastXConfigImpl
           -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
         case EntrezQuery
           -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectationValue
+        case ExpectValue
           -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
         case ExportSearchStrategy
           -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
         case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
         case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
         case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
-        case HTMLOutput -> out.enableHtmlOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
         case ImportSearchStrategy
           -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
         case IdenticalProteinGroupListFile
@@ -498,7 +530,7 @@ public class BlastXConfigImpl
         case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
         case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
+        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
         case QueryGeneticCode -> out.setQueryTranslationGeneticCode((byte) curr.get(1).asInt());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
         case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());

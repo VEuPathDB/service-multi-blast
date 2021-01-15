@@ -1,5 +1,5 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.*
 
 val buildProps = Properties()
 buildProps.load(FileInputStream(File(rootDir, "service.properties")))

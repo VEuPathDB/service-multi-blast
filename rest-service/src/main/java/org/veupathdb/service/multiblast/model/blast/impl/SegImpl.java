@@ -9,9 +9,9 @@ public class SegImpl implements Seg
 {
   public static final String stringFormat = "%d %s %s";
 
-  private int        window;
-  private BigDecimal locut;
-  private BigDecimal hicut;
+  private final int        window;
+  private final BigDecimal locut;
+  private final BigDecimal hicut;
 
   public SegImpl(int window, double locut, double hicut) {
     this.window = window;

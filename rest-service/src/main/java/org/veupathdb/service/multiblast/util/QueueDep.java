@@ -7,10 +7,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+import mb.lib.config.Config;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.health.ServiceDependency;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
-import mb.lib.config.Config;
 
 public class QueueDep extends ServiceDependency
 {

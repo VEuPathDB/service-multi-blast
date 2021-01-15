@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.model.blast.trait.*;
 public interface BlastnConfig
 extends
   BlastConfig<BlastnConfig>
-, WithTask<BlastnConfig, BlastnTask>
+, WithTask<BlastnConfig, BlastNTask>
 , WithTaxIds<BlastnConfig>
 , WithGenInfoIdList<BlastnConfig>
 , WithSequenceIdList<BlastnConfig>

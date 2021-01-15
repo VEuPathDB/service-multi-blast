@@ -2,8 +2,8 @@ package org.veupathdb.service.multiblast.model.blast.impl.trait;
 
 import java.io.File;
 
-import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.blast.Location;
+import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.blast.trait.WithSubject;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 

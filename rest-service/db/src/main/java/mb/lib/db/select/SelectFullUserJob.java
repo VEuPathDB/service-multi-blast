@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Optional;
-
 import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;

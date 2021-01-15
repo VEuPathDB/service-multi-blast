@@ -8,12 +8,12 @@ import java.util.Optional;
 
 import io.vulpine.lib.jcfi.CheckedSupplier;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
+import mb.lib.db.constants.Column;
+import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import oracle.jdbc.OracleType;
 import oracle.sql.RAW;
-import mb.lib.db.constants.Column;
-import mb.lib.db.constants.SQL;
 
 public class SelectJob
 {

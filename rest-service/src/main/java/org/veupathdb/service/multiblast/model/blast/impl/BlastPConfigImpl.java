@@ -9,10 +9,10 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
-import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 public class BlastPConfigImpl
@@ -433,13 +433,13 @@ public class BlastPConfigImpl
         case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
         case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
         case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectationValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExpectValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
         case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
         case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
         case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
         case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
         case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
-        case HTMLOutput -> out.enableHtmlOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
         case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
         case IdenticalProteinGroupListFile -> out.setIdenticalProteinGroupListFile(new File(curr.get(1).asText()));
         case LineLength -> out.setLineLength(curr.get(1).asInt());
@@ -458,7 +458,7 @@ public class BlastPConfigImpl
         case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
         case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
+        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
         case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
         case ScoringMatrix -> out.setScoringMatrix(BlastpScoringMatrix.fromString(curr.get(1).asText()));

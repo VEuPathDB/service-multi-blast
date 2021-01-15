@@ -46,7 +46,7 @@ class Util
     mapping.put(ToolOption.DatabaseSoftMask, JsonKeys.SoftMasking);
     mapping.put(ToolOption.Dust, JsonKeys.DUST);
     mapping.put(ToolOption.EntrezQuery, JsonKeys.EntrezQuery);
-    mapping.put(ToolOption.ExpectationValue, JsonKeys.ExpectValue);
+    mapping.put(ToolOption.ExpectValue, JsonKeys.ExpectValue);
     mapping.put(ToolOption.ExportSearchStrategy, JsonKeys.ExportSearchStrategy);
     mapping.put(ToolOption.FilteringDatabasePath, JsonKeys.FILTERING_DB);
     mapping.put(ToolOption.GapCostExtend, JsonKeys.GapExtend);

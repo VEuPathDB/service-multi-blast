@@ -6,7 +6,7 @@ import org.veupathdb.service.multiblast.generated.model.IOBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDcTemplateType;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnTask;
 import org.veupathdb.service.multiblast.model.ErrorMap;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
+import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
@@ -92,7 +92,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
 
   static void validateNoGreedy(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getNoGreedy() != null && conf.getTask() != IOBlastnTask.MEGABLAST)
-      err.putError(NonGreedy, String.format(BlastValidator.errOnlyTask, BlastnTask.Megablast));
+      err.putError(NonGreedy, String.format(BlastValidator.errOnlyTask, BlastNTask.Megablast));
   }
 
   static void validateTemplateLength(ErrorMap err, IOBlastnConfig conf) {
@@ -103,7 +103,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
       conf.setTemplateType(IOBlastnDcTemplateType.CODING);
 
     if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
-      err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast));
+      err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
 
     if (
       conf.getTemplateLength() != 16
@@ -121,7 +121,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
       conf.setTemplateLength((byte) 18);
 
     if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
-      err.putError(TemplateType, String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast));
+      err.putError(TemplateType, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
   }
 
   static void validateDbHardMask(ErrorMap err, IOBlastnConfig conf) {
@@ -157,7 +157,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
     if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
       err.putError(
         MultiHitWindowSize,
-        String.format(BlastValidator.errOnlyTask, BlastnTask.DiscontiguousMegablast)
+        String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast)
       );
   }
 }

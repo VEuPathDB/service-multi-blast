@@ -19,7 +19,7 @@ public enum ToolOption
   DiscontiguousMegablastTemplateType("template_type"),
   Dust("dust"),
   EntrezQuery("entrez_query"),
-  ExpectationValue("evalue"),
+  ExpectValue("evalue"),
   ExportSearchStrategy("export_search_strategy"),
   ExtensionDropoffFinalGapped("xdrop_gap_final"),
   ExtensionDropoffPrelimGapped("xdrop_gap"),
@@ -79,8 +79,8 @@ public enum ToolOption
   SequenceIDListFile("seqidlist"),
   ShowNCBIGIs("show_gis"),
   SoftMasking("soft_masking"),
-  HitSorting("sorthsps"),
-  HSPSorting("sorthits"),
+  HitSorting("sorthits"),
+  HSPSorting("sorthsps"),
   SubjectBestHit("subject_besthit"),
   SubjectFile("subject"),
   SubjectLocation("subject_loc"),
@@ -111,7 +111,7 @@ public enum ToolOption
       put("db_gencode", DatabaseTranslationGenCode);
       put("dust", Dust);
       put("entrez_query", EntrezQuery);
-      put("evalue", ExpectationValue);
+      put("evalue", ExpectValue);
       put("export_search_strategy", ExportSearchStrategy);
       put("filtering_db", FilteringDatabasePath);
       put("gapextend", GapCostExtend);

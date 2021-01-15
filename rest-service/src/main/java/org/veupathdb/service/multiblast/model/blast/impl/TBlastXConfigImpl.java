@@ -9,9 +9,9 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastXConfig;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 public class TBlastXConfigImpl
@@ -368,10 +368,10 @@ public class TBlastXConfigImpl
         case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
         case DatabaseTranslationGenCode -> out.setDbTranslationGeneticCode((byte) curr.get(1).asInt());
         case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectationValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExpectValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
         case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
         case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
-        case HTMLOutput -> out.enableHtmlOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
         case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
         case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
         case LineLength -> out.setLineLength(curr.get(1).asInt());
@@ -395,7 +395,7 @@ public class TBlastXConfigImpl
         case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
         case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
+        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
         case QueryGeneticCode -> out.setQueryTranslationGeneticCode((byte) curr.get(1).asInt());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
         case QueryStrand -> out.setStrand(QueryStrand.fromString(curr.get(1).asText()));

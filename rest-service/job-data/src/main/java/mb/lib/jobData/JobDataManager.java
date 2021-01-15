@@ -1,6 +1,9 @@
 package mb.lib.jobData;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -26,7 +29,9 @@ public class JobDataManager
   }
 
   public static Path createJobWorkspace(String jobID) throws Exception {
-
+    var path = Path.of(conf.getMountPath(), jobID);
+    Files.createDirectories(path);
+    return path;
   }
 
   public static File getJobFile(String jobID, String fileName) throws Exception {

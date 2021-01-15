@@ -2,7 +2,9 @@ package org.veupathdb.service.multiblast.service.conv;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
-import org.veupathdb.service.multiblast.generated.model.*;
+import org.veupathdb.service.multiblast.generated.model.IOBlastConfig;
+import org.veupathdb.service.multiblast.generated.model.IOBlastTool;
+import org.veupathdb.service.multiblast.generated.model.IOJobStatus;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.model.internal.JobStatus;

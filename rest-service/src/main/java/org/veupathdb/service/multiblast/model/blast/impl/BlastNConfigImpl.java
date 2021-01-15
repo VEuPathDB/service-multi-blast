@@ -9,11 +9,11 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
+import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
-import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
 /**
@@ -202,7 +202,7 @@ public class BlastNConfigImpl
    *    Default = `megablast'
    * </pre>
    */
-  private BlastnTask task;
+  private BlastNTask task;
 
   /**
    * <pre>
@@ -429,7 +429,7 @@ public class BlastNConfigImpl
   }
 
   @Override
-  public BlastnTask getTask() {
+  public BlastNTask getTask() {
     return task;
   }
 
@@ -729,7 +729,7 @@ public class BlastNConfigImpl
   }
 
   @Override
-  public BlastnConfig setTask(BlastnTask task) {
+  public BlastnConfig setTask(BlastNTask task) {
     this.task = task;
     return this;
   }
@@ -778,6 +778,9 @@ public class BlastNConfigImpl
   public void toCli(CliBuilder cli) {
     super.toCli(cli);
 
+    if (this.isHelpEnabled() || this.isVersionEnabled())
+      return;
+
     cli.appendNonNull(ToolOption.Task, task)
       .appendNonNull(ToolOption.MatchReward, reward)
       .appendNonNull(ToolOption.MismatchPenalty, penalty)
@@ -787,7 +790,7 @@ public class BlastNConfigImpl
       .appendNonNull(ToolOption.FilteringDatabasePath, filteringDb)
       .appendNonNull(ToolOption.WindowMaskerTaxonomicID, windowMaskerTaxId)
       .appendNonNull(ToolOption.WindowMaskerDatabasePath, windowMaskerDbPath)
-      .appendNonNull(ToolOption.DiscontiguousMegablastTemplateType, dcTemplateLength)
+      .appendNonNull(ToolOption.DiscontiguousMegablastTemplateType, dcTemplateType)
       .appendNonNull(ToolOption.DiscontiguousMegablastTemplateLength, dcTemplateLength)
       .appendNonNull(ToolOption.PercentIdentity, percentIdentity)
       .appendNonNull(ToolOption.MinRawGappedScore, minRawGappedScore)
@@ -810,7 +813,8 @@ public class BlastNConfigImpl
       eSeqIdList,
       eTaxIdList,
       eGiList,
-      eStrand
+      eStrand,
+      eSumStats
     );
   }
 
@@ -829,14 +833,14 @@ public class BlastNConfigImpl
         case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
         case Dust -> out.setDust(DustImpl.fromString(curr.get(1).asText()));
         case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectationValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExpectValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
         case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
         case FilteringDatabasePath -> out.setFilteringDbPath(Path.of(curr.get(1).asText()));
         case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
         case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
         case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
         case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
-        case HTMLOutput -> out.enableHtmlOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
         case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
         case LineLength -> out.setLineLength(curr.get(1).asInt());
         case LowercaseMasking -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
@@ -863,7 +867,7 @@ public class BlastNConfigImpl
         case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
         case PercentIdentity -> out.setPercentIdentity(curr.get(1).asDouble());
         case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHsp(curr.get(1).asDouble());
+        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
         case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
         case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
         case SearchSpaceEffectiveLength -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
@@ -877,7 +881,7 @@ public class BlastNConfigImpl
         case SubjectFile -> out.setSubjectFile(new File(curr.get(1).asText()));
         case SubjectLocation -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
         case SumStats -> out.enableSumStatistics(curr.size() == 1 || curr.get(1).asBoolean());
-        case Task -> out.setTask(BlastnTask.fromString(curr.get(1).asText()));
+        case Task -> out.setTask(BlastNTask.fromString(curr.get(1).asText()));
         case TaxonomyIDs -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
         case TaxonomyIDListFile -> out.setTaxIDListFile(new File(curr.get(1).asText()));
         case UngappedAlignmentOnly -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());

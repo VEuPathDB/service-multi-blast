@@ -1,6 +1,5 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -11,12 +10,12 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.*;
+import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastXConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
-import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
 
 public class BlastConverter
 {
@@ -67,7 +66,7 @@ public class BlastConverter
       .setHitSorting(toInternal(conf.getSortHits()))
       .setHSPSorting(toInternal(conf.getSortHSPs()))
       .enableLowercaseMasking(BCC.nullToFalse(conf.getLcaseMasking()))
-      .setQueryCoveragePercentHsp(conf.getQCovHSPPerc())
+      .setQueryCoveragePercentHSP(conf.getQCovHSPPerc())
       .setMaxHSPs(conf.getMaxHSPs())
       .setMaxTargetSequences(conf.getMaxTargetSeqs())
       .setEffectiveDatabaseSize(conf.getDbSize())

@@ -1,8 +1,6 @@
 package org.veupathdb.service.multiblast.model.blast.n;
 
-import java.util.Optional;
-
-public enum BlastnTask
+public enum BlastNTask
 {
   BlastN("blastn"),
   BlastNShort("blastn-short"),
@@ -12,7 +10,7 @@ public enum BlastnTask
 
   private final String value;
 
-  BlastnTask(String value) {
+  BlastNTask(String value) {
     this.value = value;
   }
 
@@ -20,7 +18,7 @@ public enum BlastnTask
     return value;
   }
 
-  public static BlastnTask fromString(String value) {
+  public static BlastNTask fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))
         return e;

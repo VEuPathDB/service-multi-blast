@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.model.blast;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public enum BlastReportField
 {

@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.util;
 
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

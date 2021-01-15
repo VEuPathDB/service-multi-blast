@@ -8,12 +8,9 @@ public class DustImpl implements Dust
 {
   public static final String stringFormat = "%d %d %d";
 
-  private int level;
-  private int window;
-  private int linker;
-
-  public DustImpl() {
-  }
+  private final int level;
+  private final int window;
+  private final int linker;
 
   public DustImpl(int level, int window, int linker) {
     this.level  = level;
@@ -27,31 +24,13 @@ public class DustImpl implements Dust
   }
 
   @Override
-  public Dust setLevel(int level) {
-    this.level = level;
-    return this;
-  }
-
-  @Override
   public int getWindow() {
     return window;
   }
 
   @Override
-  public Dust setWindow(int window) {
-    this.window = window;
-    return this;
-  }
-
-  @Override
   public int getLinker() {
     return linker;
-  }
-
-  @Override
-  public Dust setLinker(int linker) {
-    this.linker = linker;
-    return this;
   }
 
   @Override

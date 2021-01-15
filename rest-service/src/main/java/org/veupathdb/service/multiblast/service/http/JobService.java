@@ -15,6 +15,7 @@ import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
+import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.JobStatus;
 import mb.lib.format.FormatType;
 import mb.lib.format.FormatterManager;
@@ -23,7 +24,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import mb.lib.extern.JobQueueManager;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -270,7 +270,7 @@ public class JobService
       var qString = new StringBuilder((int) input.getQuery().length());
       try (var read = new BufferedReader(new FileReader(input.getQuery()))) {
         var n = 0;
-        var b = new char[8192];
+        var b = new char[buffSize];
         while ((n = read.read(b)) > 0)
           qString.append(b, 0, n);
         input.getProperties().getConfig().setQuery(qString.toString());

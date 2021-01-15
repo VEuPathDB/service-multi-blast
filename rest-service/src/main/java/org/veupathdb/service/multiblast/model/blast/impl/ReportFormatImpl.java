@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.veupathdb.service.multiblast.model.blast.BlastReportField;
 import org.veupathdb.service.multiblast.model.blast.BlastReportFormat;
@@ -9,7 +8,7 @@ import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 
 public class ReportFormatImpl implements BlastReportFormat
 {
-  public static final String delimiterPrefix = "delim=";
+  public static final String delimiterPrefix = "@delim=";
 
   private BlastReportType type;
   private String delimiter;
@@ -20,7 +19,7 @@ public class ReportFormatImpl implements BlastReportFormat
   public ReportFormatImpl(
     BlastReportType type,
     String delimiter,
-    BlastReportField[] fields
+    BlastReportField... fields
   ) {
     this.type      = type;
     this.delimiter = delimiter;
@@ -45,6 +44,24 @@ public class ReportFormatImpl implements BlastReportFormat
   @Override
   public BlastReportField[] getReportFields() {
     return fields;
+  }
+
+  @Override
+  public String toString() {
+    var out = new StringBuilder();
+
+    out.append(type.getValue());
+
+    if (delimiter != null && !delimiter.isEmpty())
+      out.append(' ').append(delimiterPrefix).append(delimiter.charAt(0));
+
+    if (fields == null || fields.length == 0)
+      out.append(" std");
+    else
+      for (var field : fields)
+        out.append(' ').append(field);
+
+    return out.toString();
   }
 
   public static BlastReportFormat fromString(String value) {

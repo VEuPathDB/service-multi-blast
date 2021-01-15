@@ -3,12 +3,12 @@ package org.veupathdb.service.multiblast.service.conv;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
-import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
-import org.veupathdb.service.multiblast.model.blast.n.Dust;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
+import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
+import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
+import org.veupathdb.service.multiblast.model.blast.n.Dust;
 
 class BlastnConverter
 {
@@ -51,7 +51,7 @@ class BlastnConverter
     return out;
   }
 
-  static IOBlastnTask toExternal(BlastnTask val) {
+  static IOBlastnTask toExternal(BlastNTask val) {
     log.trace( "#toExternal(BlastnTask)");
 
     if (val == null)
@@ -79,17 +79,17 @@ class BlastnConverter
     };
   }
 
-  static BlastnTask toInternal(IOBlastnTask val) {
+  static BlastNTask toInternal(IOBlastnTask val) {
     log.trace("#toInternal(IOBlastnTask)");
 
     if (val == null)
       return null;
 
     return switch (val) {
-      case MEGABLAST -> BlastnTask.Megablast;
-      case DCMEGABLAST -> BlastnTask.DiscontiguousMegablast;
-      case BLASTN -> BlastnTask.BlastN;
-      case BLASTNSHORT -> BlastnTask.BlastNShort;
+      case MEGABLAST -> BlastNTask.Megablast;
+      case DCMEGABLAST -> BlastNTask.DiscontiguousMegablast;
+      case BLASTN -> BlastNTask.BlastN;
+      case BLASTNSHORT -> BlastNTask.BlastNShort;
     };
   }
 

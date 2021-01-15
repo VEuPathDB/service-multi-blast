@@ -1,6 +1,6 @@
 package mb.lib.db.model;
 
-interface Row
+public interface Row
 {
   byte[] jobHash();
 }
