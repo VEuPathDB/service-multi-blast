@@ -71,7 +71,7 @@ public interface BlastConfig <T extends BlastConfig<T>>
   T setLineLength(Integer len);
 
   boolean isHtmlOutputEnabled();
-  T enableHtmlOutput(boolean b);
+  T enableHTMLOutput(boolean b);
 
   HitSorting getHitSorting();
   T setHitSorting(HitSorting val);
@@ -83,7 +83,7 @@ public interface BlastConfig <T extends BlastConfig<T>>
   T enableLowercaseMasking(boolean b);
 
   Double getQueryCoverageHspPercent();
-  T setQueryCoveragePercentHsp(Double v);
+  T setQueryCoveragePercentHSP(Double v);
 
   Integer getMaxHsps();
   T setMaxHSPs(Integer v);

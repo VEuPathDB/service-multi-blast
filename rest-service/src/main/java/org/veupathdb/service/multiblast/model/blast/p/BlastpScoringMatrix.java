@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.model.blast.p;
 
-import java.util.Optional;
-
 public enum BlastpScoringMatrix
 {
   Blosum45,

@@ -4,9 +4,9 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxScoringMatrix;
+import org.veupathdb.service.multiblast.model.blast.impl.TBlastXConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastXConfig;
 import org.veupathdb.service.multiblast.model.blast.tx.TBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.impl.TBlastXConfigImpl;
 
 class TBlastxConverter
 {

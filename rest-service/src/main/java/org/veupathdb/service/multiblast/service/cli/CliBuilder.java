@@ -61,19 +61,27 @@ public class CliBuilder
 
   @Override
   public String toString() {
-    return toJoinedStream().collect(Collectors.joining(" "));
+    var out = new StringBuilder();
+
+    toString(out);
+
+    return out.toString();
   }
 
   public void toString(StringBuilder out) {
-    var it = toJoinedStream().iterator();
+    var it = toComponentStream().iterator();
 
     if (!it.hasNext())
       return;
 
-    out.append(it.next());
+    out.append(it.next()[0]);
 
-    while (it.hasNext())
-      out.append(' ').append(it.next());
+    while (it.hasNext()) {
+      var arr = it.next();
+      out.append(' ').append(arr[0]);
+      if (arr[1] != null)
+        out.append("='").append(escape(arr[1])).append('\'');
+    }
   }
 
   public String[][] toArgPairs() {
@@ -95,13 +103,12 @@ public class CliBuilder
             ? null
             : Arrays.stream(e.getValue())
               .map(Object::toString)
-              .map(CliBuilder::escape)
               .collect(Collectors.joining(","))
         }));
   }
 
   public Stream<String> toJoinedStream() {
-    return toComponentStream().map(e -> e[0] + (e[1] == null ? "" : '=' + e[1]));
+    return toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "='" + escape(e[1]) + '\''));
   }
 
   public static String escape(String in) {

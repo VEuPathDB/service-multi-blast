@@ -1,13 +1,13 @@
 package org.veupathdb.service.multiblast.model.mapping;
 
-import org.veupathdb.service.multiblast.model.blast.n.BlastnTask;
+import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 
-public class BlastnTasks extends EnumMap<Byte, BlastnTask>
+public class BlastnTasks extends EnumMap<Byte, BlastNTask>
 {
   private static BlastnTasks instance;
 
   private BlastnTasks() {
-    super(BlastnTask.values().length);
+    super(BlastNTask.values().length);
   }
 
   public static BlastnTasks getInstance() {
@@ -18,7 +18,7 @@ public class BlastnTasks extends EnumMap<Byte, BlastnTask>
   }
 
   @Override
-  public EnumMapping<Byte, BlastnTask> putRaw(Byte id, String value) {
-    return this.put(id, BlastnTask.fromString(value));
+  public EnumMapping<Byte, BlastNTask> putRaw(Byte id, String value) {
+    return this.put(id, BlastNTask.fromString(value));
   }
 }

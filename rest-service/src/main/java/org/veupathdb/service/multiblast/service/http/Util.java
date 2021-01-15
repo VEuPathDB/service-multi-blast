@@ -7,8 +7,8 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
-import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import mb.lib.config.Config;
+import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 
 class Util
 {

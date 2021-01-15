@@ -87,9 +87,9 @@ class BCC
       return null;
 
     return switch (val) {
-      case BOTH -> IOBlastStrand.BOTH;
-      case MINUS -> IOBlastStrand.MINUS;
-      case PLUS -> IOBlastStrand.PLUS;
+      case Both -> IOBlastStrand.BOTH;
+      case Minus -> IOBlastStrand.MINUS;
+      case Plus -> IOBlastStrand.PLUS;
     };
   }
 
@@ -133,9 +133,9 @@ class BCC
       return null;
 
     return switch (val) {
-      case PLUS -> QueryStrand.PLUS;
-      case MINUS -> QueryStrand.MINUS;
-      case BOTH -> QueryStrand.BOTH;
+      case PLUS -> QueryStrand.Plus;
+      case MINUS -> QueryStrand.Minus;
+      case BOTH -> QueryStrand.Both;
     };
   }
 }

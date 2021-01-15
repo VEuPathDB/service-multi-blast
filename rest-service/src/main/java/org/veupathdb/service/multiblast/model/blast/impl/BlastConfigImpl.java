@@ -6,12 +6,7 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.veupathdb.service.multiblast.model.blast.BlastConfig;
-import org.veupathdb.service.multiblast.model.blast.ToolOption;
-import org.veupathdb.service.multiblast.model.blast.BlastReportFormat;
-import org.veupathdb.service.multiblast.model.blast.HitSorting;
-import org.veupathdb.service.multiblast.model.blast.HspSorting;
-import org.veupathdb.service.multiblast.model.blast.Location;
+import org.veupathdb.service.multiblast.model.blast.*;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.service.cli.CliOptions;
 
@@ -324,7 +319,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   @Override
   @SuppressWarnings("unchecked")
-  public T enableHtmlOutput(boolean b) {
+  public T enableHTMLOutput(boolean b) {
     if (b != outputHtml) {
       outputHtml = b;
     }
@@ -374,7 +369,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setQueryCoveragePercentHsp(Double v) {
+  public T setQueryCoveragePercentHSP(Double v) {
     this.qCovHspPerc = v;
     return (T) this;
   }
@@ -549,13 +544,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
       .appendNonNull(ToolOption.QueryLocation, queryLocation)
       .appendNonNull(ToolOption.BlastDatabase, database)
       .appendNonNull(ToolOption.OutputFile, out)
-      .appendNonNull(ToolOption.ExpectationValue, expectValue)
+      .appendNonNull(ToolOption.ExpectValue, expectValue)
       .appendNonNull(ToolOption.OutputFormat, outFmt)
       .appendNonNull(ToolOption.NumDescriptions, numDescriptions)
       .appendNonNull(ToolOption.NumAlignments, numAlignments)
       .appendNonNull(ToolOption.LineLength, lineLength)
-      .appendNonNull(ToolOption.HSPSorting, sortHits)
-      .appendNonNull(ToolOption.HitSorting, sortHsps)
+      .appendNonNull(ToolOption.HSPSorting, sortHsps)
+      .appendNonNull(ToolOption.HitSorting, sortHits)
       .appendNonNull(ToolOption.QueryCoveragePercentHSP, qCovHspPerc)
       .appendNonNull(ToolOption.MaxHSPs, maxHsps)
       .appendNonNull(ToolOption.MaxTargetSequences, maxTargetSeqs)

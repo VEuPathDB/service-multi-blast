@@ -36,6 +36,6 @@ public class ETaxIdList implements WithTaxIdList<Void>
   @Override
   public void toCli(CliBuilder cli) {
     cli.appendNonNull(ToolOption.TaxonomyIDListFile, taxIdList)
-      .appendNonNull(ToolOption.NegativeTaxonomyIDs, negativeTaxIdList);
+      .appendNonNull(ToolOption.NegativeTaxonomyIDListFile, negativeTaxIdList);
   }
 }

@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.model.blast.x;
 
-import java.util.Optional;
-
 public enum BlastxTask
 {
   BlastX("blastx"),

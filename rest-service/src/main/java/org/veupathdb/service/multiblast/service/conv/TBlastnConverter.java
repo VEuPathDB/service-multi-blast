@@ -5,10 +5,10 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnScoringMatrix;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnTask;
-import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
+import org.veupathdb.service.multiblast.model.blast.impl.TBlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
-import org.veupathdb.service.multiblast.model.blast.impl.TBlastNConfigImpl;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
 
 public class TBlastnConverter
 {

@@ -1,7 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast.impl.trait;
 
-import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.blast.Seg;
+import org.veupathdb.service.multiblast.model.blast.ToolOption;
 import org.veupathdb.service.multiblast.model.blast.trait.WithSeg;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 

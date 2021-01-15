@@ -36,6 +36,11 @@ public class LocationImpl implements Location
   }
 
   @Override
+  public String toString() {
+    return String.format("%d%s%d", start, delim, stop);
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hash(start, stop);
   }

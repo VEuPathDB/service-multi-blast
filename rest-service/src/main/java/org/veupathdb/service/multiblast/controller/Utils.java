@@ -2,8 +2,6 @@ package org.veupathdb.service.multiblast.controller;
 
 import javax.ws.rs.InternalServerErrorException;
 
-import org.gusdb.fgputil.accountdb.UserProfile;
-
 class Utils
 {
   private static final String

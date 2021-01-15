@@ -1,6 +1,6 @@
 .gradle/
 .idea/
-/build/
+build/
 /vendor/
 /.tools/
 /bin/
@@ -14,6 +14,7 @@
 *.bak
 *.swp
 *.jar
+*.class
 
 local.properties
 .loadpath

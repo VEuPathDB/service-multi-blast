@@ -3,9 +3,11 @@ package org.veupathdb.service.multiblast.service.cli;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("CliBuilder")
 class CliBuilderTest
@@ -17,7 +19,7 @@ class CliBuilderTest
     @Test
     @DisplayName("Returns the keys and values joined with '=' in a space delimited string")
     void test1() {
-      var target = new CliBuilder();
+      var target = new CliBuilder(BlastTool.BlastX);
 
       target.set(ToolOption.OutputFile, "hello")
         .set(ToolOption.CullingLimit, 1234)
@@ -25,7 +27,7 @@ class CliBuilderTest
         .append(ToolOption.Query, "orange");
 
       assertEquals(
-        "-out='hello' -culling_limit='1234' -query='apple,orange'",
+        "blastx -out='hello' -culling_limit='1234' -query='apple,orange'",
         target.toString()
       );
     }
@@ -38,7 +40,7 @@ class CliBuilderTest
     @Test
     @DisplayName("Returns the keys and values joined with '=' in an array")
     void test1() {
-      var target = new CliBuilder();
+      var target = new CliBuilder(BlastTool.BlastN);
 
       target.set(ToolOption.OutputFile, "hello")
         .set(ToolOption.CullingLimit, 1234)
@@ -46,7 +48,7 @@ class CliBuilderTest
         .append(ToolOption.Query, "orange");
 
       assertArrayEquals(
-        new String[]{"-out='hello'", "-culling_limit='1234'", "-query='apple,orange'"},
+        new String[]{"blastn", "-out='hello'", "-culling_limit='1234'", "-query='apple,orange'"},
         target.toArgArray()
       );
     }
@@ -165,26 +167,26 @@ class CliBuilderTest
       @Test
       @DisplayName("Does not add it to the argument list")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.BlastP);
 
-        assertEquals("", target.toString());
+        assertEquals("blastp", target.toString());
 
         target.setNonNull(ToolOption.CullingLimit, (Object) null);
 
-        assertEquals("", target.toString());
+        assertEquals("blastp", target.toString());
       }
 
       @Test
       @DisplayName("Does not overwrite a previously set value")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.PSIBLAST);
         target.set(ToolOption.CullingLimit, 123);
 
-        assertEquals("-culling_limit='123'", target.toString());
+        assertEquals("psiblast -culling_limit='123'", target.toString());
 
         target.setNonNull(ToolOption.CullingLimit, (Object) null);
 
-        assertEquals("-culling_limit='123'", target.toString());
+        assertEquals("psiblast -culling_limit='123'", target.toString());
       }
     }
 
@@ -195,27 +197,27 @@ class CliBuilderTest
       @Test
       @DisplayName("Adds the argument to the builder")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.RPSBLAST);
 
-        assertEquals("", target.toString());
+        assertEquals("rpsblast", target.toString());
 
         target.setNonNull(ToolOption.Dust, "hey");
 
-        assertEquals("-dust='hey'", target.toString());
+        assertEquals("rpsblast -dust='hey'", target.toString());
       }
 
       @Test
       @DisplayName("Overwrites existing values")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.RPSTBLASTN);
 
         target.set(ToolOption.Dust, "hey");
 
-        assertEquals("-dust='hey'", target.toString());
+        assertEquals("rpstblastn -dust='hey'", target.toString());
 
         target.setNonNull(ToolOption.Dust, "man");
 
-        assertEquals("-dust='man'", target.toString());
+        assertEquals("rpstblastn -dust='man'", target.toString());
       }
     }
   }
@@ -231,13 +233,13 @@ class CliBuilderTest
       @Test
       @DisplayName("Does not add it to the argument list")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.TBlastN);
 
-        assertEquals("", target.toString());
+        assertEquals("tblastn", target.toString());
 
         target.appendNonNull(ToolOption.CullingLimit, (Object) null);
 
-        assertEquals("", target.toString());
+        assertEquals("tblastn", target.toString());
       }
     }
 
@@ -248,27 +250,27 @@ class CliBuilderTest
       @Test
       @DisplayName("Adds the argument to the builder")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.TBlastX);
 
-        assertEquals("", target.toString());
+        assertEquals("tblastx", target.toString());
 
         target.appendNonNull(ToolOption.Dust, "hey");
 
-        assertEquals("-dust='hey'", target.toString());
+        assertEquals("tblastx -dust='hey'", target.toString());
       }
 
       @Test
       @DisplayName("Adds the argument to the existing values")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder(BlastTool.BlastN);
 
         target.set(ToolOption.Dust, "hey", "man", "nice");
 
-        assertEquals("-dust='hey,man,nice'", target.toString());
+        assertEquals("blastn -dust='hey,man,nice'", target.toString());
 
         target.appendNonNull(ToolOption.Dust, "shot");
 
-        assertEquals("-dust='hey,man,nice,shot'", target.toString());
+        assertEquals("blastn -dust='hey,man,nice,shot'", target.toString());
       }
     }
   }

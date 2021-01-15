@@ -2,9 +2,9 @@ package org.veupathdb.service.multiblast.model.blast;
 
 public enum QueryStrand
 {
-  BOTH,
-  MINUS,
-  PLUS;
+  Both,
+  Minus,
+  Plus;
 
   public String value() {
     return name().toLowerCase();

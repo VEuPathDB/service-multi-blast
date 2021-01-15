@@ -24,6 +24,6 @@ public class BlastxTasks extends EnumMap<Byte, BlastxTask>
     Objects.requireNonNull(id);
     Objects.requireNonNull(value);
 
-    return put(id, BlastxTask.fromString(value).orElseThrow());
+    return put(id, BlastxTask.fromString(value));
   }
 }

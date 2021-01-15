@@ -5,10 +5,10 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOBlastxConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastxScoringMatrix;
 import org.veupathdb.service.multiblast.generated.model.IOBlastxTask;
+import org.veupathdb.service.multiblast.model.blast.impl.BlastXConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
-import org.veupathdb.service.multiblast.model.blast.impl.BlastXConfigImpl;
 
 public class BlastxConverter
 {
