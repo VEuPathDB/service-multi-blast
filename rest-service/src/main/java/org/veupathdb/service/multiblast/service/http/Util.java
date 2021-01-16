@@ -20,7 +20,7 @@ class Util
   }
 
   static Path createJobDir(int jobId) {
-    var path = Path.of(Config.getInstance().getMountPath(), String.valueOf(jobId));
+    var path = Path.of(Config.getInstance().getJobMountPath(), String.valueOf(jobId));
     var file = path.toFile();
 
     if (file.exists())

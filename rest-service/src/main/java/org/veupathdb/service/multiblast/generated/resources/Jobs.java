@@ -1,11 +1,28 @@
 package org.veupathdb.service.multiblast.generated.resources;
 
 import java.util.List;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-
-import org.veupathdb.service.multiblast.generated.model.*;
+import org.veupathdb.service.multiblast.generated.model.BadRequestError;
+import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
+import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
+import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
+import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
+import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
+import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
+import org.veupathdb.service.multiblast.generated.model.NotFoundError;
+import org.veupathdb.service.multiblast.generated.model.ServerError;
+import org.veupathdb.service.multiblast.generated.model.ShortJobResponse;
+import org.veupathdb.service.multiblast.generated.model.UnauthorizedError;
+import org.veupathdb.service.multiblast.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
 
 @Path("/jobs")

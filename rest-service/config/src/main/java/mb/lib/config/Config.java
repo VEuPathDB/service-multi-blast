@@ -3,60 +3,9 @@ package mb.lib.config;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import picocli.CommandLine.Option;
 
-public class Config extends Options
+public class  Config extends Options
 {
   private static Config instance;
-
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Postgres Service Database                                         ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
-
-  @Option(
-    names = "--svc-db-user",
-    required = true,
-    arity = "1",
-    defaultValue = "${env:SVC_DB_USER}",
-    description = "Postgres service database username"
-  )
-  private String serviceDbUser;
-
-  @Option(
-    names = "--svc-db-pass",
-    required = true,
-    arity = "1",
-    defaultValue = "${env:SVC_DB_PASS}",
-    description = "Postgres service database password."
-  )
-  private String serviceDbPass;
-
-  @Option(
-    names = "--svc-db-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:SVC_DB_HOST}",
-    description = "Postgres service database hostname.  Defaults to \"service-db\""
-  )
-  private String serviceDbHost;
-
-  @Option(
-    names = "--svc-db-port",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:SVC_DB_PORT}",
-    description = "Postgres service database port.  Defaults to 5432"
-  )
-  private int serviceDbPort;
-
-  @Option(
-    names = "--svc-db-name",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:SVC_DB_NAME}",
-    description = "Postgres database name."
-  )
-  private String serviceDbName;
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                      ║ //
@@ -80,13 +29,31 @@ public class Config extends Options
   // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   @Option(
-    names = "--mount-path",
+    names = "--job-mount-path",
     arity = "1",
     required = true,
     defaultValue = "${env:JOB_MOUNT_PATH}",
-    description = "Job data directory path."
+    description = "Job data workspace mount point."
   )
-  private String mountPath;
+  private String jobMountPath;
+
+  @Option(
+    names = "--db-mount-path",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:DB_MOUNT_PATH}",
+    description = "Blast file mount point."
+  )
+  private String dbMountPath;
+
+  @Option(
+    names = "--db-build",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:DB_BUILD}",
+    description = "Site build number"
+  )
+  private int buildNum;
 
   @Option(
     names = "--queue-host",
@@ -116,13 +83,13 @@ public class Config extends Options
   private String queueName;
 
   @Option(
-    names = "--queue-route",
+    names = "--job-category",
     arity = "1",
     required = true,
-    defaultValue = "${env:QUEUE_ROUTE}",
-    description = "Name of the queue new blast jobs will be added to."
+    defaultValue = "${env:JOB_CATEGORY}",
+    description = "Endpoint (including category"
   )
-  private String queueRoute;
+  private String jobCategory;
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                      ║ //
@@ -133,6 +100,7 @@ public class Config extends Options
   @Option(
     names = "--formatter-host",
     arity = "1",
+    required = true,
     defaultValue = "${env:FORMATTER_HOST}",
     description = "Host for the Blast+ formatter service"
   )
@@ -161,28 +129,16 @@ public class Config extends Options
     return instance;
   }
 
-  public String getServiceDbUser() {
-    return serviceDbUser;
+  public String getJobMountPath() {
+    return jobMountPath;
   }
 
-  public String getServiceDbPass() {
-    return serviceDbPass;
+  public String getDbMountPath() {
+    return dbMountPath;
   }
 
-  public String getServiceDbHost() {
-    return serviceDbHost;
-  }
-
-  public int getServiceDbPort() {
-    return serviceDbPort;
-  }
-
-  public String getServiceDbName() {
-    return serviceDbName;
-  }
-
-  public String getMountPath() {
-    return mountPath;
+  public String getMultiBlastSchema() {
+    return multiBlastSchema;
   }
 
   public String getQueueHost() {
@@ -197,8 +153,8 @@ public class Config extends Options
     return queueName;
   }
 
-  public String getQueueRoute() {
-    return queueRoute;
+  public String getJobCategory() {
+    return jobCategory;
   }
 
   public int getJobTimeout() {
@@ -207,5 +163,9 @@ public class Config extends Options
 
   public String getFormatterURI() {
     return formatterURI;
+  }
+
+  public int getBuildNum() {
+    return buildNum;
   }
 }

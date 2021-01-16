@@ -3,98 +3,159 @@ package server
 import (
 	"archive/zip"
 	"compress/flate"
-	"crypto/sha256"
 	"encoding/json"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
+	"github.com/vulpine-io/midl-layers/request-id/short-id/v1/pkg/midlid"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
 )
 
+func RunReport6Endpoint(req midl.Request) midl.Response {
+	return customReport("6", req)
+}
+
+func RunReport7Endpoint(req midl.Request) midl.Response {
+	return customReport("7", req)
+}
+
+func RunReport10Endpoint(req midl.Request) midl.Response {
+	return customReport("10", req)
+}
+
 func RunReport17Endpoint(req midl.Request) midl.Response {
+	return customReport("17", req)
+}
+
+func customReport(fmt string, req midl.Request) midl.Response {
 	if req.RawRequest().Body != nil {
 		defer req.RawRequest().Body.Close()
 	}
 
 	params := mux.Vars(req.RawRequest())
-	reqID := req.AdditionalContext()[reqIDKey].(string)
-	kind := params[reportTypeParam]
+	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
+	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
-	reportsDir := filepath.Join(config.mountPath, params[jobIDParam])
-	// reportDir := filepath.Join(workspace, reportDirPrefix + kind)
+	kindNum, err := strconv.Atoi(fmt)
+	if err != nil {
+		log.Info("Rejecting request for non-numeric report type")
+		return midl.MakeResponse(http.StatusNotFound, New404Error("No report format found with the given id", reqID))
+	}
 
-	body := new(runRequestBody)
+	workspace, err := getWorkspace(params[jobIDParam])
+	if err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
 
-	req.ProcessBody(midl.BodyProcessorFunc(func(bytes []byte) error {
-		return json.Unmarshal(bytes, body)
-	}))
+	outputDir, err := createTmpDir(workspace)
+	if err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
+
+	rawInput := req.Body()
 	if req.Error() != nil {
 		return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
 	}
+	if len(rawInput) > 0 {
+		body := new(runRequestBody)
 
-	fieldString := strings.Join()
-	midl.Response().Callback()
-
-	if _, err := os.Stat(reportDir); err != nil {
-		if !os.IsNotExist(err) {
-			return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		req.ProcessBody(midl.BodyProcessorFunc(func(bytes []byte) error {
+			return json.Unmarshal(bytes, body)
+		}))
+		if req.Error() != nil {
+			return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
 		}
 
-		if err = os.Mkdir(reportDir, 0775); err != nil {
-			return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		if len(body.Delim) > 0 {
+			fmt += " delim=" + body.Delim
 		}
-
-		return midl.
-	} else {
-
+		if len(body.Fields) > 0 {
+			fmt += " " + strings.Join(body.Fields, " ")
+		}
 	}
 
-
-	args := make([]string, 0, 4)
-	args = append(args, "-archive", "output.asn", "-outfmt")
-	if len(body.Fields) > 0 {
-		args = append(args, "17 " + strings.Join(body.Fields, " "))
-	} else {
-		args = append(args, "17")
+	if err = runCommand(fmt, outputName(kindNum), outputDir); err != nil {
+		logrus.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
 	}
 
-	exec.Command(
-		"blast_formatter",
-		"-archive", "output.asn",
-		"-outfmt", strings.Join(body.Fields, " "))
+	zip, err := zipDir(outputDir)
+	if err != nil {
+		logrus.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
+	res := midl.MakeResponse(http.StatusOK, zip)
+	res.Callback(func() {
+		_ = zip.Close()
+		_ = os.RemoveAll(outputDir)
+	})
 
+	return res
 }
 
 func RunReportEndpoint(req midl.Request) midl.Response {
+	if req.RawRequest().Body != nil {
+		defer req.RawRequest().Body.Close()
+	}
+
 	params := mux.Vars(req.RawRequest())
-	reqID := req.AdditionalContext()[reqIDKey].(string)
+	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
 	kind := params[reportTypeParam]
+	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
-	workspace := filepath.Join(config.mountPath, params[jobIDParam])
-	body := new(runRequestBody)
+	kindNum, err := strconv.Atoi(kind)
+	if err != nil {
+		log.Info("Rejecting request for non-numeric report type")
+		return midl.MakeResponse(http.StatusNotFound, New404Error("No report format found with the given id", reqID))
+	}
 
-	req.ProcessBody(midl.BodyProcessorFunc(func(bytes []byte) error {
-		return json.Unmarshal(bytes, body)
-	}))
+	workspace, err := getWorkspace(params[jobIDParam])
+	if err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
 
-	fields := "std"
+	outputDir, err := createTmpDir(workspace)
+	if err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
 
-	exec.Command(
-		"blast_formatter",
-		"-archive", "output.asn",
-		"-outfmt", strings.Join(body.Fields, " "))
+	outFile := outputName(kindNum)
+	if err = runCommand(kind, outFile, outputDir); err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
 
+	log.Debug("Zipping command output.")
+	zip, err := zipDir(outputDir)
+	if err != nil {
+		log.Error(err.Error())
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	}
+	res := midl.MakeResponse(http.StatusOK, zip)
+	res.Callback(func() {
+		log.Debug("Removing temp dir: ", outputDir)
+		_ = zip.Close()
+		_ = os.RemoveAll(outputDir)
+	})
+	res.AddHeader("Content-Type", "application/zip")
+
+	return res
 }
 
 type runRequestBody struct {
 	Fields []string `json:"fields"`
-	Delim  byte     `json:"delim"`
+	Delim  string   `json:"delim"`
 }
 
 func zipDir(path string) (file *os.File, err error) {
@@ -121,7 +182,7 @@ func zipDir(path string) (file *os.File, err error) {
 
 	var tf io.Writer
 	for i := range matches {
-		tf, err = zp.Create(filepath.Base(matches[i]));
+		tf, err = zp.Create(filepath.Base(matches[i]))
 		if err != nil {
 			return
 		}
@@ -131,7 +192,15 @@ func zipDir(path string) (file *os.File, err error) {
 		}
 	}
 
-	err = zp.Close()
+	if err = zp.Flush(); err != nil {
+		return
+	}
+
+	if err = zp.Close(); err != nil {
+		return
+	}
+
+	_, err = file.Seek(0, io.SeekStart)
 
 	return
 }
@@ -148,4 +217,43 @@ func copyFileInto(path string, w io.Writer) error {
 	}
 
 	return nil
+}
+
+func outputName(kind int) string {
+	out := "report"
+
+	switch kind {
+	case 0, 1, 2, 3, 4, 18:
+		out += ".txt"
+	case 5, 14, 16:
+		out += ".xml"
+	case 6, 7:
+		out += ".tsv"
+	case 8:
+		out += ".txt.asn1"
+	case 9, 11:
+		out += ".bin.asn1"
+	case 10:
+		out += ".csv"
+	case 12, 13, 15:
+		out += ".json"
+	case 17:
+		out += ".sam"
+	}
+
+	return out
+}
+
+func runCommand(fmt, out, dir string) (err error) {
+	cmd := exec.Command(
+		"/blast/bin/blast_formatter",
+		"-archive", "../output.asn",
+		"-outfmt", fmt,
+		"-out", out)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Dir = dir
+	cmd.Env = os.Environ()
+
+	return cmd.Run()
 }

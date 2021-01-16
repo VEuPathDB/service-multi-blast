@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 
 public class ReportFormatImpl implements BlastReportFormat
 {
-  public static final String delimiterPrefix = "@delim=";
+  public static final String delimiterPrefix = "delim=";
 
   private BlastReportType type;
   private String delimiter;

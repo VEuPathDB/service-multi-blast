@@ -92,7 +92,7 @@ public class JobQueueManager
     log.trace("JobQueueManager#submitJob(String, String[])");
 
     var uri = URI.create(Config.getInstance().getQueueHost())
-      .resolve(String.format(JobEndpoint, Config.getInstance().getQueueName()));
+      .resolve(String.format(JobEndpoint, Config.getInstance().getJobCategory()));
 
     log.debug("Attempting to queue job {} at {}", jobId, uri);
     var res = HttpClient.newHttpClient().send(

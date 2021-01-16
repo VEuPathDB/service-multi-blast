@@ -17,7 +17,7 @@ public class JobDataManager
   private static final String jobErrorFile = "error.log";
 
   public static boolean jobDataExists(String jobID) {
-    var jobDir = Path.of(conf.getMountPath(), jobID).toFile();
+    var jobDir = Path.of(conf.getJobMountPath(), jobID).toFile();
 
     if (!jobDir.exists())
       return false;
@@ -29,13 +29,13 @@ public class JobDataManager
   }
 
   public static Path createJobWorkspace(String jobID) throws Exception {
-    var path = Path.of(conf.getMountPath(), jobID);
+    var path = Path.of(conf.getJobMountPath(), jobID);
     Files.createDirectories(path);
     return path;
   }
 
   public static File getJobFile(String jobID, String fileName) throws Exception {
-    return Path.of(conf.getMountPath(), jobID, fileName).toFile();
+    return Path.of(conf.getJobMountPath(), jobID, fileName).toFile();
   }
 
   public static File getJobFile(String jobID, File file) throws Exception {
@@ -54,7 +54,7 @@ public class JobDataManager
    *         contents.
    */
   public static Optional<InputStream> getJobError(String jobID) {
-    var errorLog = Path.of(conf.getMountPath(), jobID, jobErrorFile).toFile();
+    var errorLog = Path.of(conf.getJobMountPath(), jobID, jobErrorFile).toFile();
 
     if (!errorLog.exists())
       return Optional.empty();
@@ -74,7 +74,7 @@ public class JobDataManager
    * @param jobID ID of the job whose directory should be erased.
    */
   public static void deleteJobData(String jobID) throws Exception {
-    var path = Path.of(conf.getMountPath(), jobID);
+    var path = Path.of(conf.getJobMountPath(), jobID);
 
     Files.walk(path)
       .sorted(Comparator.reverseOrder())
@@ -96,7 +96,7 @@ public class JobDataManager
    * @return A list of all files associated with that job.
    */
   public static Collection<File> getAllJobFiles(String jobID) {
-    var jobDir   = Path.of(Config.getInstance().getMountPath(), jobID).toFile();
+    var jobDir   = Path.of(Config.getInstance().getJobMountPath(), jobID).toFile();
     var children = jobDir.listFiles();
 
     if (children == null)

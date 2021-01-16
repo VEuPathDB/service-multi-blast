@@ -9,7 +9,7 @@ init() {
   echo "Fireworq online"
 
   echo "Creating job route"
-  cat category-init.json | envsubst | curl -s -X"PUT" -d"@-" localhost/routing/${QUEUE_ROUTE}
+  cat category-init.json | envsubst | curl -s -X"PUT" -d"@-" localhost/routing/${JOB_CATEGORY}
 }
 
 db() {
