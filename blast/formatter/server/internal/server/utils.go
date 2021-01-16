@@ -1,47 +1,35 @@
 package server
 
 import (
-	"fmt"
-	"net/http"
+	"errors"
 	"os"
 	"path/filepath"
 
-	"github.com/gorilla/mux"
-	"github.com/vulpine-io/midl/v1/pkg/midl"
+	"github.com/teris-io/shortid"
 )
 
-// JobDirFilter filters out requests that for jobs that do not have a workspace
-// directory.
-//
-// Jobs that are filtered out will be sent a 404 response.
-func JobDirFilter(req midl.Request) midl.Response {
-	params    := mux.Vars(req.RawRequest())
-	jobHash   := params[jobIDParam]
-	workspace := filepath.Join(config.mountPath, jobHash)
-	reqID     := req.AdditionalContext()[reqIDKey].(string)
+func getWorkspace(jobKey string) (string, error) {
+	workspace := filepath.Join(config.WSMountPath, jobKey)
 
-	// Verify a workspace exists for the given hash.
-	stat, err := os.Stat(workspace)
+	if stat, err := os.Stat(workspace); err != nil {
+		return "", err
+	} else if !stat.IsDir() {
+		return "", errors.New("workspace dir is a regular file")
+	}
+
+	return workspace, nil
+}
+
+func createTmpDir(root string) (path string, err error) {
+	// Generate unique temp dir name
+	id, err := shortid.Generate()
 	if err != nil {
-		// Workspace does not exist, return 404
-		if os.IsNotExist(err) {
-			return midl.MakeResponse(
-				http.StatusNotFound,
-				New404Error(fmt.Sprintf(ErrfJobNotFound, jobHash), reqID),
-			)
-		}
-
-		// Some other error occurred, return 500
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		return
 	}
 
-	// Verify that the path is actually a directory before we attempt to walk it.
-	if !stat.IsDir() {
-		return midl.MakeResponse(
-			http.StatusInternalServerError,
-			New500Error("report path exists but is not a directory", reqID),
-		)
-	}
+	// Create output directory
+	path = filepath.Join(root, id)
+	err = os.Mkdir(path, 0775)
 
-	return nil
+	return
 }

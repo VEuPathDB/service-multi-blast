@@ -764,7 +764,7 @@ class BlastConfigImplTest
 
       assertEquals(args[6].length, 2);
       assertEquals(args[6][0], "-outfmt");
-      assertEquals(args[6][1], "10 @delim=v btop");
+      assertEquals(args[6][1], "10 delim=v btop");
 
       assertEquals(args[7].length, 2);
       assertEquals(args[7][0], "-num_descriptions");

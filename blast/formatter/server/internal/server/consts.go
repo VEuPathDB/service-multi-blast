@@ -6,10 +6,5 @@ const (
 )
 
 const (
-	reqIDKey = "requestID"
-)
-
-const (
-	reportDirPrefix  = "report_"
 	reportExportName = "report.zip"
 )

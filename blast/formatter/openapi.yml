@@ -6,30 +6,6 @@ info:
     report into various desired output formats.
   version: 1.0.0
 paths:
-  /translate/{jobHash}:
-    parameters:
-      - $ref: '#/components/parameters/jobHash'
-    get:
-      summary: List Cached Reports
-      description: |
-        Returns a list of already cached report formats.  These are translations
-        that have already been run for the specified job.
-        <br><br>
-        The returned set of cached report formats will be returned as a map of
-        report format view option keys mapped to a list of cached files for that
-        translation.
-      responses:
-        200:
-          description: "Success"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/listBody'
-        404:
-          $ref: '#/components/responses/404'
-        500:
-          $ref: '#/components/responses/500'
-
   /translate/{jobHash}/6:
     parameters:
       - $ref: '#/components/parameters/jobHash'
@@ -208,41 +184,12 @@ components:
         - message
         - requestID
 
-    listBody:
-      type: object
-      properties:
-        0: { $ref: '#/components/schemas/fileList' }
-        1: { $ref: '#/components/schemas/fileList' }
-        2: { $ref: '#/components/schemas/fileList' }
-        3: { $ref: '#/components/schemas/fileList' }
-        4: { $ref: '#/components/schemas/fileList' }
-        5: { $ref: '#/components/schemas/fileList' }
-        6: { $ref: '#/components/schemas/fileList' }
-        7: { $ref: '#/components/schemas/fileList' }
-        8: { $ref: '#/components/schemas/fileList' }
-        9: { $ref: '#/components/schemas/fileList' }
-        10: { $ref: '#/components/schemas/fileList' }
-        11: { $ref: '#/components/schemas/fileList' }
-        12: { $ref: '#/components/schemas/fileList' }
-        13: { $ref: '#/components/schemas/fileList' }
-        14: { $ref: '#/components/schemas/fileList' }
-        15: { $ref: '#/components/schemas/fileList' }
-        16: { $ref: '#/components/schemas/fileList' }
-        17: { $ref: '#/components/schemas/fileList' }
-        18: { $ref: '#/components/schemas/fileList' }
-
     reportType:
       type: integer
       format: byte
       minimum: 0
       maximum: 18
 
-    fileList:
-      type: array
-      uniqueItems: true
-      items:
-        type: string
-        format: uri
     form17Body:
       type: object
       properties:

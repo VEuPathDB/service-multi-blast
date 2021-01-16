@@ -1,9 +1,12 @@
 package server
 
 type Config struct {
-	mountPath string
+	DBMountPath string
+	WSMountPath string
 }
 
 var config Config
 
-
+func GetConfig() *Config {
+	return &config
+}

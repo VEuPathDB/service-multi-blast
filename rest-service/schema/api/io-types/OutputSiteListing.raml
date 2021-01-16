@@ -4,9 +4,13 @@ uses:
   io: index.raml
 
 type: object
-additionalProperties: false
+description: |
+  The type of this response is actually just a map of site name to an array of
+  blast compatible files.  The "`Site`" property defined below is a hacky
+  workaround for a RAML-To-JaxRS quirk, however all properties actually present
+  on the response object _will_ match the type defined by the `Site` property.
 properties:
-  "^[A-Za-z0-9_- ]+$":
+  Site:
     type: array
     items: io.OutputListOrganism
-
+    required: false

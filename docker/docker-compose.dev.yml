@@ -1,44 +1,116 @@
 version: "3.5"
 
 services:
-  service-db:
-    build:
-      context: ../databases/service/
-      dockerfile: ./Dockerfile
-    environment:
-      # Postgres root user password
-      POSTGRES_PASSWORD:
-      # Service user username
-      SVC_DB_USER: service
-      # Service user password
-      SVC_DB_PASS:
-    ports:
-      - 5432:5432
-
+  # #
+  # Public facing REST API
+  # #
   service:
     build:
       dockerfile: Dockerfile
       context: ../rest-service
+    # These values can be provided using the .env template file
+    environment:
+      AUTH_SECRET_KEY:
+      SERVER_PORT:
+      LDAP_SERVER:
+      ORACLE_BASE_DN:
+
+      # Account Database
+      ACCT_DB_TNS_NAME:
+      ACCT_DB_USER:
+      ACCT_DB_PASS:
+      #ACCT_DB_HOST:
+      #ACCT_DB_PORT:
+      #ACCT_DB_NAME:
+      #ACCT_DB_POOL_SIZE:
+      #ACCT_DB_PLATFORM:
+
+      # User Database
+      USER_DB_TNS_NAME:
+      USER_DB_USER:
+      USER_DB_PASS:
+      #USER_DB_HOST:
+      #USER_DB_PORT:
+      #USER_DB_NAME:
+      #USER_DB_POOL_SIZE:
+      #USER_DB_PLATFORM:
+      MULTIBLAST_SCHEMA:
+
+      # Queue Connection
+      QUEUE_HOST:
+      JOB_CATEGORY:
+      QUEUE_NAME:
+
+      # Misc Config
+      JOB_MOUNT_PATH:
+      DB_MOUNT_PATH:
+      DB_BUILD:
+      BLAST_HOST:
+      FORMATTER_HOST:
+      JOB_TIMEOUT:
     volumes:
-      - type: volume
-        source: job-data
+      # Replace `source` with the path you would like the job workspace to
+      # reside in your development environment.
+      - type: bind # volume
+        source: /home/ellie/blastout # job-data
         target: /jobs
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: /home/ellie/blastdb # blast-data
+        target: /db
     depends_on:
       - queue
       - service-db
+      - formatter
 
+  # #
+  # Blast Query Runner (Job Queue Managed)
+  # #
   blast:
     build:
       dockerfile: ../blast/querier/Dockerfile
       context: .
+    environment:
+      DB_MOUNT_PATH:
+      JOB_MOUNT_PATH:
     volumes:
-      - type: volume
-        source: job-data
-        target: /out
-      - type: volume
-        source: blast-data
+      # Replace `source` with the path you would like the job workspace to
+      # reside in your development environment.
+      - type: bind # volume
+        source: /home/ellie/blastout # job-data
+        target: /jobs
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: /home/ellie/blastdb # blast-data
         target: /db
 
+  # #
+  # Blast Result Formatter
+  # #
+  formatter:
+    build:
+      dockerfile: ../blast/formatter/Dockerfile
+      context: .
+    environment:
+      DB_MOUNT_PATH:
+      JOB_MOUNT_PATH:
+    volumes:
+      # Replace `source` with the path you would like the job workspace to
+      # reside in your development environment.
+      - type: bind # volume
+        source: /home/ellie/blastout # job-data
+        target: /jobs
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: /home/ellie/blastdb # blast-data
+        target: /db
+
+  # #
+  # MySQL backing database queue persistence
+  # #
   queue-db:
     build:
       dockerfile: ../databases/queue/Dockerfile
@@ -51,6 +123,9 @@ services:
       # Service user password
       SVC_DB_PASS:
 
+  # #
+  # Job Queue
+  # #
   queue:
     image: fireworq/fireworq:1.4
     environment:
@@ -68,6 +143,7 @@ services:
       FIREWORQ_BIND: 0.0.0.0:80
       FIREWORQ_DRIVER: mysql
       FIREWORQ_QUEUE_DEFAULT: blast
+      JOB_CATEGORY: blast
 
     depends_on:
       - queue-db

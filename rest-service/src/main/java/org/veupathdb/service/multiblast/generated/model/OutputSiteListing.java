@@ -1,17 +1,25 @@
 package org.veupathdb.service.multiblast.generated.model;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.List;
+import java.util.Map;
 
 @JsonDeserialize(
     as = OutputSiteListingImpl.class
 )
 public interface OutputSiteListing {
-  @JsonProperty("^[A-Za-z0-9_- ]+$")
-  List<OutputListOrganism> getAZaZ0_9();
+  @JsonProperty("Site")
+  List<OutputListOrganism> getSite();
 
-  @JsonProperty("^[A-Za-z0-9_- ]+$")
-  void setAZaZ0_9(List<OutputListOrganism> aZaZ0_9);
+  @JsonProperty("Site")
+  void setSite(List<OutputListOrganism> site);
+
+  @JsonAnyGetter
+  Map<String, Object> getAdditionalProperties();
+
+  @JsonAnySetter
+  void setAdditionalProperties(String key, Object value);
 }
