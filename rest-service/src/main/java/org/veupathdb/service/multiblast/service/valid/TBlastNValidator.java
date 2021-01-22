@@ -15,7 +15,7 @@ class TBlastNValidator implements ConfigValidator<IOTBlastnConfig>
   private Logger log = LogProvider.logger(getClass());
 
   private TBlastNValidator() {
-    log.trace("#new()");
+    log.trace("TBlastNValidator#new()");
   }
 
   public static TBlastNValidator getInstance() {
@@ -25,7 +25,7 @@ class TBlastNValidator implements ConfigValidator<IOTBlastnConfig>
 
   @Override
   public ErrorMap validate(IOTBlastnConfig conf) {
-    log.trace("#validate(IOTBlastnConfig)");
+    log.trace("TBlastNValidator#validate(IOTBlastnConfig)");
 
     var err = new ErrorMap();
 

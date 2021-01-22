@@ -2,11 +2,9 @@ plugins {
   java
 }
 
-group = "org.veupathdb.service"
-version = "1.0.0"
-
-repositories {
-  mavenCentral()
+java {
+  targetCompatibility = JavaVersion.VERSION_15
+  sourceCompatibility = JavaVersion.VERSION_15
 }
 
 dependencies {

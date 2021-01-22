@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,28 @@ public class JobDataManager
 {
   private static final Config conf = Config.getInstance();
   private static final String jobErrorFile = "error.log";
+
+  public static Path makeDBPath(String site, String org, String tgt) {
+    return Paths.get(conf.getDbMountPath(), site, "build-" + conf.getBuildNum(), org, "blast", tgt);
+  }
+
+  public static boolean reportExists(String jobID) {
+    return Path.of(conf.getJobMountPath(), jobID, "report.asn1").toFile().exists();
+  }
+
+  public static boolean targetDBExists(Path tgt) {
+    if (!tgt.getParent().toFile().exists())
+      return false;
+
+    var base = tgt.toString();
+
+    // Check for n-index
+    if (new File(base + ".nin").exists())
+      return true;
+
+    // Check for p-index
+    return new File(base + ".pin").exists();
+  }
 
   public static boolean jobDataExists(String jobID) {
     var jobDir = Path.of(conf.getJobMountPath(), jobID).toFile();
@@ -34,11 +57,15 @@ public class JobDataManager
     return path;
   }
 
-  public static File getJobFile(String jobID, String fileName) throws Exception {
+  public static File getJobQuery(String jobID) {
+    return getJobFile(jobID, "query.txt");
+  }
+
+  public static File getJobFile(String jobID, String fileName) {
     return Path.of(conf.getJobMountPath(), jobID, fileName).toFile();
   }
 
-  public static File getJobFile(String jobID, File file) throws Exception {
+  public static File getJobFile(String jobID, File file) {
     return getJobFile(jobID, file.getName());
   }
 

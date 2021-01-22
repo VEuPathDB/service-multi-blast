@@ -62,7 +62,7 @@ public interface Jobs {
       "application/zip"
   })
   GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("format") IOBlastFormat format,
+      @QueryParam("format") String format,
       @QueryParam("fields") List<IOBlastReportField> fields);
 
   class GetJobsResponse extends ResponseDelegate {

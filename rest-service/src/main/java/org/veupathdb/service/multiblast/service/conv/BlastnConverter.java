@@ -17,11 +17,11 @@ class BlastnConverter
   private static BlastnConverter instance;
 
   private BlastnConverter() {
-    log.trace("#new()");
+    log.trace("BlastnConverter#new()");
   }
 
   static BlastnConverter getInstance() {
-    log.trace("#getInstance()");
+    log.trace("BlastnConverter#getInstance()");
 
     if (instance == null)
       return instance = new BlastnConverter();
@@ -30,13 +30,13 @@ class BlastnConverter
   }
 
   static IOBlastnConfig toExternal(IOBlastnConfig out, BlastnConfig conf) {
-    log.trace( "#toExternal(IOBlastnConfig, BlastNConfig)");
+    log.trace( "BlastnConverter#toExternal(IOBlastnConfig, BlastNConfig)");
 
     return getInstance().internalToExternal(out, conf);
   }
 
   static IOBlastnDust toExternal(Dust val) {
-    log.trace( "#toExternal(Dust)");
+    log.trace( "BlastnConverter#toExternal(Dust)");
 
     if (val == null)
       return null;
@@ -52,7 +52,7 @@ class BlastnConverter
   }
 
   static IOBlastnTask toExternal(BlastNTask val) {
-    log.trace( "#toExternal(BlastnTask)");
+    log.trace( "BlastnConverter#toExternal(BlastnTask)");
 
     if (val == null)
       return null;
@@ -67,7 +67,7 @@ class BlastnConverter
   }
 
   static IOBlastnDcTemplateType toExternal(DcTemplateType val) {
-    log.trace( "#toExternal(TemplateType)");
+    log.trace( "BlastnConverter#toExternal(TemplateType)");
 
     if (val == null)
       return null;
@@ -80,7 +80,7 @@ class BlastnConverter
   }
 
   static BlastNTask toInternal(IOBlastnTask val) {
-    log.trace("#toInternal(IOBlastnTask)");
+    log.trace("BlastnConverter#toInternal(IOBlastnTask)");
 
     if (val == null)
       return null;
@@ -109,7 +109,7 @@ class BlastnConverter
    * @return internal dust representation
    */
   static Dust toInternal(IOBlastnDust val) {
-    log.trace("#toInternal(IOBlastnDust)");
+    log.trace("BlastnConverter#toInternal(IOBlastnDust)");
 
     if (val == null || !val.getEnable())
       return null;
@@ -118,7 +118,7 @@ class BlastnConverter
   }
 
   static DcTemplateType toInternal(IOBlastnDcTemplateType val) {
-    log.trace("#toInternal(IOBlastnDcTemplateType)");
+    log.trace("BlastnConverter#toInternal(IOBlastnDcTemplateType)");
 
     if (val == null) {
       return null;
@@ -132,13 +132,13 @@ class BlastnConverter
   }
 
   static BlastnConfig toInternal(IOBlastnConfig val) {
-    log.trace("#toInternal(IOBlastnConfig)");
+    log.trace("BlastnConverter#toInternal(IOBlastnConfig)");
 
     return getInstance().externalToInternal(val);
   }
 
   BlastnConfig externalToInternal(IOBlastnConfig val) {
-    log.trace("#externalToInternal(IOBlastnConfig)");
+    log.trace("BlastnConverter#externalToInternal(IOBlastnConfig)");
 
     if (val == null) {
       return null;
@@ -179,7 +179,7 @@ class BlastnConverter
   }
 
   IOBlastnConfig internalToExternal(IOBlastnConfig out, BlastnConfig conf) {
-    log.trace("#internalToExternal(IOBlastnConfig, BlastNConfig)");
+    log.trace("BlastnConverter#internalToExternal(IOBlastnConfig, BlastNConfig)");
 
     if (conf == null)
       return null;
@@ -204,15 +204,15 @@ class BlastnConverter
     out.setCullingLimit(conf.getCullingLimit());
     out.setBestHitOverhang(conf.getBestHitOverhang());
     out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
-    out.setSubjectBestHit(conf.isSubjectBestHitEnabled());
+    out.setSubjectBestHit(conf.isSubjectBestHitEnabled() ? true : null);
     out.setTemplateType(toExternal(conf.getDiscontiguousMegablastTemplateType()));
     out.setTemplateLength(conf.getDiscontiguousMegablastTemplateLength());
     out.setSumStats(conf.isSumStatisticsEnabled());
     out.setXDropGap(conf.getExtensionDropoffPreliminaryGapped());
     out.setXDropGapFinal(conf.getExtensionDropoffFinalGapped());
-    out.setNoGreedy(conf.isNonGreedyDynamicProgramExtensionEnabled());
+    out.setNoGreedy(conf.isNonGreedyDynamicProgramExtensionEnabled() ? true : null);
     out.setMinRawGappedScore(conf.getMinRawGappedScore());
-    out.setUngapped(conf.isUngappedAlignmentOnlyEnabled());
+    out.setUngapped(conf.isUngappedAlignmentOnlyEnabled() ? true : null);
     out.setWindowSize(conf.getMultiHitWindowSize());
     out.setOffDiagonalRange(conf.getOffDiagonalRange());
 

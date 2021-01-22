@@ -26,7 +26,7 @@ public class BlastxConverter
   }
 
   static IOBlastxTask toExternal(BlastxTask val) {
-    log.trace("#toExternal(BlastxTask)");
+    log.trace("BlastxConverter#toExternal(BlastxTask)");
 
     if (val == null)
       return null;
@@ -38,7 +38,7 @@ public class BlastxConverter
   }
 
   static IOBlastxScoringMatrix toExternal(BlastxScoringMatrix val) {
-    log.trace("#toExternal(BlastxScoringMatrix)");
+    log.trace("BlastxConverter#toExternal(BlastxScoringMatrix)");
 
     if (val == null)
       return null;
@@ -56,7 +56,7 @@ public class BlastxConverter
   }
 
   static BlastxScoringMatrix toInternal(IOBlastxScoringMatrix val) {
-    log.trace("#toInternal(IOBlastxScoringMatrix)");
+    log.trace("BlastxConverter#toInternal(IOBlastxScoringMatrix)");
 
     if (val == null) {
       return null;
@@ -75,7 +75,7 @@ public class BlastxConverter
   }
 
   static BlastxTask toInternal(IOBlastxTask val) {
-    log.trace("#toInternal(IOBlastxTask)");
+    log.trace("BlastxConverter#toInternal(IOBlastxTask)");
 
     if (val == null)
       return null;
@@ -87,19 +87,19 @@ public class BlastxConverter
   }
 
   static IOBlastxConfig toExternal(IOBlastxConfig out, BlastxConfig conf) {
-    log.trace("#toExternal(IOBlastxConfig, BlastxConfig)");
+    log.trace("BlastxConverter#toExternal(IOBlastxConfig, BlastxConfig)");
 
     return getInstance().internalToExternal(out, conf);
   }
 
   static BlastxConfig toInternal(IOBlastxConfig conf) {
-    log.trace("#toInternal(IOBlastxConfig)");
+    log.trace("BlastxConverter#toInternal(IOBlastxConfig)");
 
     return getInstance().externalToInternal(conf);
   }
 
   BlastxConfig externalToInternal(IOBlastxConfig conf) {
-    log.trace("#externalToInternal(IOBlastxConfig)");
+    log.trace("BlastxConverter#externalToInternal(IOBlastxConfig)");
 
     if (conf == null)
       return null;
@@ -135,7 +135,7 @@ public class BlastxConverter
   }
 
   IOBlastxConfig internalToExternal(IOBlastxConfig out, BlastxConfig conf) {
-    log.trace("#intenralToExternal(IOBlastxConfig, BlastxConfig)");
+    log.trace("BlastxConverter#intenralToExternal(IOBlastxConfig, BlastxConfig)");
 
     out.setStrand(BCC.toExternal(conf.getStrand()));
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());

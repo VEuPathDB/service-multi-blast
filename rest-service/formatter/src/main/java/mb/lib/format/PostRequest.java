@@ -3,19 +3,19 @@ package mb.lib.format;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PutRequest
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class PostRequest
 {
-  private final char delimiter;
+  private final Character delimiter;
   private final String[] fields;
 
-  public PutRequest(char delimiter, String[] fields) {
+  public PostRequest(Character delimiter, String[] fields) {
     this.delimiter = delimiter;
     this.fields    = fields;
   }
 
   @JsonGetter("delim")
-  public char getDelimiter() {
+  public Character getDelimiter() {
     return delimiter;
   }
 

@@ -16,12 +16,11 @@ public enum QueryStrand
   }
 
   public static QueryStrand fromString(String value) {
-    value = value.toUpperCase();
-
-    for (var e : values())
-      if (e.name().equals(value))
-        return e;
-
-    throw new IllegalArgumentException(); //TODO: print actual value
+    return switch (value.toLowerCase()) {
+      case "both" -> Both;
+      case "minus" -> Minus;
+      case "plus" -> Plus;
+      default -> throw new IllegalStateException("Unexpected QueryStrand value: " + value.toLowerCase());
+    };
   }
 }

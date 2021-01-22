@@ -7,21 +7,18 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
 public class CliBuilder
 {
   private static final Pattern SingleQuotes = Pattern.compile("('+)");
 
-  private final BlastTool tool;
-
   private final Map<ToolOption, Object[]> params;
 
-  public CliBuilder(BlastTool tool) {
-    this.tool   = tool;
+  public CliBuilder() {
     this.params = new LinkedHashMap<>();
   }
+
 
   public CliBuilder set(ToolOption key, Object... values) {
     params.put(key, values);
@@ -88,14 +85,12 @@ public class CliBuilder
     return toComponentStream().toArray(String[][]::new);
   }
 
-  public String[] toArgArray() {
-    return toJoinedStream().toArray(String[]::new);
+  public String[] toArgArray(boolean quoted) {
+    return toJoinedStream(quoted).toArray(String[]::new);
   }
 
   public Stream<String[]> toComponentStream() {
-    return Stream.concat(Stream.<String[]>of(
-      new String[]{tool.value(), null}),
-      params.entrySet()
+    return params.entrySet()
         .stream()
         .map(e -> new String[]{
           e.getKey().getFlag(),
@@ -104,11 +99,13 @@ public class CliBuilder
             : Arrays.stream(e.getValue())
               .map(Object::toString)
               .collect(Collectors.joining(","))
-        }));
+        });
   }
 
-  public Stream<String> toJoinedStream() {
-    return toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "='" + escape(e[1]) + '\''));
+  public Stream<String> toJoinedStream(boolean quoted) {
+    return quoted
+      ? toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "='" + escape(e[1]) + '\''))
+      : toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "=" + escape(e[1])));
   }
 
   public static String escape(String in) {

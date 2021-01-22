@@ -26,10 +26,10 @@ public enum BlastTool
     if (value == null)
       return Optional.empty();
 
-    var up = value.toUpperCase();
+    var up = value.toLowerCase();
 
     for (var e : values())
-      if (e.name().equals(up))
+      if (e.value().equals(up))
         return Optional.of(e);
 
     return Optional.empty();

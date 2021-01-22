@@ -13,7 +13,7 @@ class SegValidator implements ConfigValidator<IOBlastSegMask>
   private final Logger log = LogManager.getLogger(getClass());
 
   private SegValidator() {
-    log.trace("#new()");
+    log.trace("SegValidator#new()");
   }
 
   public static SegValidator getInstance() {
@@ -23,7 +23,7 @@ class SegValidator implements ConfigValidator<IOBlastSegMask>
 
   @Override
   public ErrorMap validate(IOBlastSegMask conf) {
-    log.trace("#validate(InputBlastSegMask)");
+    log.trace("SegValidator#validate(InputBlastSegMask)");
 
     var err = new ErrorMap();
 

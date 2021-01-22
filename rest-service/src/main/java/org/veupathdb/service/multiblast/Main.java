@@ -14,12 +14,14 @@ public class Main extends Server {
     var server = new Main();
 
     server.enableAccountDB();
+    server.enableUserDB();
     server.start(args);
   }
 
   @Override
   protected ContainerResources newResourceConfig(Options options) {
     final var out =  new Resources(options);
+    out.enableAuth();
 
     // Enabled by default for debugging purposes, this should be removed when
     // production ready.

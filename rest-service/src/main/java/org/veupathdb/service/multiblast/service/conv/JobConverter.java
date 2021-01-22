@@ -22,11 +22,11 @@ public class JobConverter
   private static final Logger log = LogProvider.logger(JobConverter.class);
 
   private JobConverter() {
-    log.trace("#new()");
+    log.trace("JobConverter#new()");
   }
 
   public static JobConverter getInstance() {
-    log.trace("#getInstance()");
+    log.trace("JobConverter#getInstance()");
 
     if (instance == null)
       return instance = new JobConverter();
@@ -41,7 +41,7 @@ public class JobConverter
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   public static BlastTool toInternal(IOBlastTool val) {
-    log.trace("#toInternal(IOBlastTool)");
+    log.trace("JobConverter#toInternal(IOBlastTool)");
 
     return switch(val) {
       case BLASTN -> BlastTool.BlastN;
@@ -53,7 +53,7 @@ public class JobConverter
   }
 
   public static IOBlastTool toExternal(BlastTool val) {
-    log.trace("#toExternal(BlastTool)");
+    log.trace("JobConverter#toExternal(BlastTool)");
 
     return switch(val) {
       case BlastN -> IOBlastTool.BLASTN;
@@ -87,7 +87,7 @@ public class JobConverter
   }
 
   public static Job toInternal(IOBlastConfig conf) {
-    log.trace("#toInternal(long, IOBlastConfig)");
+    log.trace("JobConverter#toInternal(long, IOBlastConfig)");
 
     return getInstance().externalToInternal(conf);
   }

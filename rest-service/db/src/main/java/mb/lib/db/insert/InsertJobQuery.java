@@ -26,6 +26,8 @@ public class InsertJobQuery
   private void prepare(PreparedStatement ps) throws Exception {
     ps.setBytes(1, job.jobHash());
     ps.setClob(2, new StringReader(job.config()));
-    ps.setObject(3, job.createdOn(), Types.TIMESTAMP_WITH_TIMEZONE);
+    ps.setInt(3, job.queueID());
+    ps.setObject(4, job.createdOn(), Types.TIMESTAMP_WITH_TIMEZONE);
+    ps.setObject(5, job.deleteOn(), Types.TIMESTAMP_WITH_TIMEZONE);
   }
 }

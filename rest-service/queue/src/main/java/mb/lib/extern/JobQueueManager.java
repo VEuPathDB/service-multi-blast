@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 public class JobQueueManager
 {
   public static final String
-    JobEndpoint      = "job/%s",
-    QueueEndpoint    = "queue",
+    JobEndpoint      = "/job/%s",
+    QueueEndpoint    = "/queue",
     QueueIdEndpoint  = QueueEndpoint + "/%s",
     QueueJobEndpoint = QueueIdEndpoint + "/job/%d";
 
@@ -46,7 +46,7 @@ public class JobQueueManager
     log.trace("JobQueueManager#getJobStatus(int)");
 
     var con = Config.getInstance();
-    var uri = URI.create(Config.getInstance().getQueueHost()).
+    var uri = URI.create(prependHTTP(conf.getQueueHost())).
       resolve(String.format(QueueJobEndpoint, con.getQueueName(), queueId));
 
     log.debug("Attempting to look up job status for queue element {} at {}", queueId, uri);
@@ -57,6 +57,10 @@ public class JobQueueManager
         .build(),
       HttpResponse.BodyHandlers.ofString()
     );
+
+    if (res.statusCode() == 404) {
+      return JobStatus.Unknown;
+    }
 
     if (res.statusCode() != 200) {
       log.error(
@@ -73,10 +77,10 @@ public class JobQueueManager
   }
 
   /**
-   * @see #submitJob(String, String[])
+   * @see #submitJob(String, String, String[])
    */
-  public static int submitJob(String jobId, String[] cli) throws Exception {
-    return getInstance().submitNewJob(jobId, cli);
+  public static int submitJob(String jobId, String tool, String[] cli) throws Exception {
+    return getInstance().submitNewJob(jobId, tool, cli);
   }
 
   /**
@@ -88,19 +92,21 @@ public class JobQueueManager
    *
    * @return the queue ID for the queued job
    */
-  public int submitNewJob(String jobId, String[] cli) throws Exception {
+  public int submitNewJob(String jobId, String tool, String[] cli) throws Exception {
     log.trace("JobQueueManager#submitJob(String, String[])");
 
-    var uri = URI.create(Config.getInstance().getQueueHost())
-      .resolve(String.format(JobEndpoint, Config.getInstance().getJobCategory()));
+    var uri = URI.create(prependHTTP(conf.getQueueHost()))
+      .resolve(String.format(JobEndpoint, conf.getJobCategory()));
+
+    var sendBody = json.writeValueAsString(new JobCreateRequest(
+      String.join("/", prependHTTP(conf.getBlastHost()), tool, jobId), cli));
 
     log.debug("Attempting to queue job {} at {}", jobId, uri);
+    log.debug(sendBody);
     var res = HttpClient.newHttpClient().send(
       HttpRequest.newBuilder()
         .uri(uri)
-        .POST(HttpRequest.BodyPublishers.ofString(
-          json.writeValueAsString(new JobCreateRequest(Config.getInstance().getBlastHost(), jobId, cli))
-        ))
+        .POST(HttpRequest.BodyPublishers.ofString(sendBody))
         .build(),
       HttpResponse.BodyHandlers.ofString()
     );
@@ -123,7 +129,7 @@ public class JobQueueManager
   public static void deleteJob(int queueID) throws Exception {
     log.trace("JobQueueManager#deleteJob(String)");
 
-    var uri = URI.create(conf.getQueueHost())
+    var uri = URI.create(prependHTTP(conf.getQueueHost()))
       .resolve(String.format(QueueJobEndpoint, conf.getQueueName(), queueID));
 
     log.debug("Attempting to delete queue entry for job {}", queueID);
@@ -131,5 +137,13 @@ public class JobQueueManager
       HttpRequest.newBuilder().uri(uri).DELETE().build(),
       HttpResponse.BodyHandlers.discarding()
     );
+
+    // TODO: error handling?
+  }
+
+  static String prependHTTP(String uri) {
+    if (uri.startsWith("http://") || uri.startsWith("https://"))
+      return uri;
+    return "http://" + uri;
   }
 }

@@ -1,7 +1,7 @@
 //
 // Library Versions
 //
-val coreLib = "3.0.0" // Container core lib version
+val coreLib = "4.2.0" // Container core lib version
 
 val jersey  = "2.+"    // Jersey/JaxRS version
 val jackson = "2.12.1"    // FasterXML Jackson version

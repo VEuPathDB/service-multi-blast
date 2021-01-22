@@ -19,7 +19,7 @@ class BCC
   private static final Logger log = LogProvider.logger(BCC.class);
 
   static List<Integer> arrayToList(int[] val) {
-    log.trace("#arrayToList(int[])");
+    log.trace("BCC#arrayToList(int[])");
 
     if (val == null)
       return null;
@@ -28,7 +28,7 @@ class BCC
   }
 
   static int[] listToArray(List<Integer> ints) {
-    log.trace("#listToArray(List)");
+    log.trace("BCC#listToArray(List)");
 
     if (ints == null)
       return null;
@@ -41,7 +41,10 @@ class BCC
   }
 
   static IOBlastLocation toExternal(Location loc) {
-    log.trace( "#toExternal(QueryLocation)");
+    log.trace("BCC#toExternal(QueryLocation)");
+
+    if (loc == null)
+      return null;
 
     var out = new IOBlastLocationImpl();
 
@@ -52,7 +55,7 @@ class BCC
   }
 
   static IOBlastSegMask toExternal(Seg val) {
-    log.trace( "#toExternal(Seg)");
+    log.trace("BCC#toExternal(Seg)");
 
     if (val == null)
       return null;
@@ -67,7 +70,7 @@ class BCC
   }
 
   static IOBlastCompBasedStats toExternal(CompBasedStats val) {
-    log.trace("gapCost(CompBasedStats)");
+    log.trace("BCC#toExternal(CompBasedStats)");
 
     if (val == null)
       return null;
@@ -81,7 +84,7 @@ class BCC
   }
 
   static IOBlastStrand toExternal(QueryStrand val) {
-    log.trace( "#toExternal(QueryStrand)");
+    log.trace("BCC#toExternal(QueryStrand)");
 
     if (val == null)
       return null;
@@ -94,7 +97,7 @@ class BCC
   }
 
   static CompBasedStats toInternal(IOBlastCompBasedStats val) {
-    log.trace("#toInternal(IOBlastCompBasedStats)");
+    log.trace("BCC#toInternal(IOBlastCompBasedStats)");
 
     if (val == null)
       return null;
@@ -108,7 +111,7 @@ class BCC
   }
 
   static Seg toInternal(IOBlastSegMask val) {
-    log.trace("#toInternal(Seg)");
+    log.trace("BCC#toInternal(Seg)");
 
     if (val == null)
       return null;
@@ -117,7 +120,7 @@ class BCC
   }
 
   static Location toInternal(IOBlastLocation val) {
-    log.trace("#toInternal(IOBlastLocation)");
+    log.trace("BCC#toInternal(IOBlastLocation)");
 
     if (val == null) {
       return null;
@@ -127,7 +130,7 @@ class BCC
   }
 
   static QueryStrand toInternal(IOBlastStrand val) {
-    log.trace("#toInternal(IOBlastStrand)");
+    log.trace("BCC#toInternal(IOBlastStrand)");
 
     if (val == null)
       return null;

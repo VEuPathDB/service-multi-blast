@@ -54,7 +54,8 @@ public enum BlastReportType
   }
 
   public static BlastReportType unsafeFromInt(int value) {
-    return fromInt(value).orElseThrow(IllegalArgumentException::new);
+    return fromInt(value)
+      .orElseThrow(() -> new IllegalArgumentException("Unrecognized BlastReportType: " + value));
   }
 
   public static Optional<BlastReportType> fromIoName(String value) {

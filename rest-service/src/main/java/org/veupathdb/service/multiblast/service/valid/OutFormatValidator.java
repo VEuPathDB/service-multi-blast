@@ -73,7 +73,7 @@ public class OutFormatValidator
   }
 
   static String validateIntFields(IOBlastReportFormat fmt) {
-    if (fmt.getFields().isEmpty())
+    if (fmt.getFields() == null || fmt.getFields().isEmpty())
       return null;
 
     return isCustomizableFormat(fmt.getFormat()) ? null : ErrFields;

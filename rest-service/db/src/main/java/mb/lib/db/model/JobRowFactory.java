@@ -3,15 +3,21 @@ package mb.lib.db.model;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+import mb.lib.db.model.impl.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JobRowFactory
 {
+  private static final Logger log = LogManager.getLogger(JobRowFactory.class);
+
   private static JobRowFactory instance;
 
-  private RowConstructor             newRow;
-  private ShortJobRowConstructor     newShortJobRow;
-  private ShortUserJobRowConstructor newShortUserJobRow;
-  private FullJobRowConstructor      newFullJobRow;
-  private FullUserJobRowConstructor  newFullUserJobRow;
+  private RowConstructor             newRow             = RowImpl::new;
+  private ShortJobRowConstructor     newShortJobRow     = ShortJobRowImpl::new;
+  private ShortUserJobRowConstructor newShortUserJobRow = ShortUserJobRowImpl::new;
+  private FullJobRowConstructor      newFullJobRow      = FullJobRowImpl::new;
+  private FullUserJobRowConstructor  newFullUserJobRow  = FullUserJobRowImpl::new;
 
   public static Row newRow(byte[] jobHash) {
     return getInstance().createNewRow(jobHash);
@@ -40,6 +46,7 @@ public class JobRowFactory
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn
   ) {
+    log.trace("JobRowFactory#createNewShortJobRow(byte[], int, OffsetDateTime, OffsetDateTime)");
     return newShortJobRow.create(hash, queueID, createdOn, deleteOn);
   }
 
@@ -64,6 +71,7 @@ public class JobRowFactory
     OffsetDateTime deleteOn,
     String config
   ) {
+    log.trace("JobRowFactory#createNewFullJobRow(byte[], int, OffsetDateTime, OffsetDateTime, String)");
     return newFullJobRow.create(hash, queueID, createdOn, deleteOn, config);
   }
 
@@ -97,6 +105,8 @@ public class JobRowFactory
     long userId,
     String description
   ) {
+    log.trace(
+      "JobRowFactory#createNewShortUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, long, String)");
     return newShortUserJobRow.create(
       hash,
       queueID,
@@ -141,6 +151,8 @@ public class JobRowFactory
     long userId,
     String description
   ) {
+    log.trace(
+      "JobRowFactory#createNewFullUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, String, long, String)");
     return newFullUserJobRow.create(
       hash,
       queueID,

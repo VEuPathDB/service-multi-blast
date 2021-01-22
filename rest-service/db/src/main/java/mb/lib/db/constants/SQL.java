@@ -10,7 +10,8 @@ public interface SQL
       String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
     }
 
-    interface MultiBlastUsers {
+    interface MultiBlastUsers
+    {
       String ByJobID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "by-job-id");
     }
   }
@@ -29,14 +30,17 @@ public interface SQL
       String ByUser = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-user");
       String Stale  = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
 
-      String ShortById = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "short-by-id");
-      String ShortByUserID = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "short-by-user-id");
-      String FullUserRow = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");
-    }
-
-    interface MultiBlastUsers
-    {
-      String ById = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "by-id");
+      String ShortById         = Load.select(
+        Schema.MultiBlast,
+        Table.MultiBlast.Jobs,
+        "short-by-id"
+      );
+      String FullUserRow       = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");
+      String ShortUserByUserID = Load.select(
+        Schema.MultiBlast,
+        Table.MultiBlast.Jobs,
+        "short-user-by-user-id"
+      );
     }
   }
 

@@ -14,7 +14,7 @@ class TBlastXValidator implements ConfigValidator<IOTBlastxConfig>
   private final Logger log = LogProvider.logger(getClass());
 
   private TBlastXValidator() {
-    log.trace("#new()");
+    log.trace("TBlastXValidator#new()");
   }
 
   public static TBlastXValidator getInstance() {
@@ -24,7 +24,7 @@ class TBlastXValidator implements ConfigValidator<IOTBlastxConfig>
 
   @Override
   public ErrorMap validate(IOTBlastxConfig conf) {
-    log.trace("#validate(IOTBlastxConfig)");
+    log.trace("TBlastXValidator#validate(IOTBlastxConfig)");
 
     var err = new ErrorMap();
 
@@ -79,5 +79,4 @@ class TBlastXValidator implements ConfigValidator<IOTBlastxConfig>
       Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
     }
   }
-
 }

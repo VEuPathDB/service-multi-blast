@@ -5,7 +5,8 @@ public enum JobStatus
   Completed,
   Errored,
   Queued,
-  InProgress;
+  InProgress,
+  Unknown;
 
   static JobStatus fromString(String value) {
     var status = value.toLowerCase();
@@ -19,6 +20,9 @@ public enum JobStatus
     if ("grabbed".equals(status))
       return JobStatus.InProgress;
 
-    return JobStatus.Queued;
+    if ("waiting".equals(status))
+      return JobStatus.Queued;
+
+    return JobStatus.Unknown;
   }
 }
