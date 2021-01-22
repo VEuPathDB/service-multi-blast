@@ -21,8 +21,7 @@ public class Main extends Server {
   @Override
   protected ContainerResources newResourceConfig(Options options) {
     final var out =  new Resources(options);
-    // FIXME: ENABLE THIS!!!
-//    out.enableAuth();
+    out.enableAuth();
 
     // Enabled by default for debugging purposes, this should be removed when
     // production ready.
