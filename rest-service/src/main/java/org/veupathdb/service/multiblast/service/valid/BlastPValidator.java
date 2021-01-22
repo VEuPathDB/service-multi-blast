@@ -29,7 +29,7 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
   }
 
   public ErrorMap validate(IOBlastpConfig conf) {
-    log.trace("#validateConfig(ErrorMap, InputBlastpConfig)");
+    log.trace("BlastPValidator#validateConfig(ErrorMap, InputBlastpConfig)");
 
     var err = new ErrorMap();
 

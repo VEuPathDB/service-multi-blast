@@ -2,11 +2,9 @@ plugins {
   java
 }
 
-group = "org.veupathdb.service"
-version = "1.0.0"
-
-repositories {
-  mavenCentral()
+java {
+  targetCompatibility = JavaVersion.VERSION_15
+  sourceCompatibility = JavaVersion.VERSION_15
 }
 
 dependencies {
@@ -25,4 +23,7 @@ dependencies {
     "${rootDir}/vendor/xstreams.jar"
   ))
   implementation("io.vulpine.lib", "Jackfish", "1.+")
+  implementation("org.apache.logging.log4j", "log4j-api", "2.14.0")
+  implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
+  implementation("org.apache.logging.log4j", "log4j", "2.14.0")
 }

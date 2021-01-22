@@ -21,13 +21,10 @@ public class JobController implements Jobs
 
   private final Request request;
 
-  private final UserProfile user;
   private final JobService  service;
 
   public JobController(@Context Request request) {
     this.request = request;
-
-    this.user    = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     this.service = JobService.getInstance();
   }
 
@@ -36,6 +33,7 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsResponse getJobs() {
+    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user));
   }
 
@@ -48,6 +46,7 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestJSON entity) {
+    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
@@ -60,6 +59,7 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(NewJobPostRequestMultipart entity) {
+    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
@@ -75,6 +75,7 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
+    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return GetJobsByJobIdResponse.respond200WithApplicationJson(
       service.getJob(jobId, user)
     );
@@ -106,13 +107,13 @@ public class JobController implements Jobs
   @Override
   public GetJobsReportByJobIdResponse getJobsReportByJobId(
     String jobId,
-    IOBlastFormat format,
+    String format,
     List<IOBlastReportField> fields
   ) {
     var wrap = service.getReport(jobId, format, fields);
     var head = GetJobsReportByJobIdResponse.headersFor200();
 
-    head.withContentDisposition(String.format(AttachmentPat, wrap.name, "zip"));
+    head.withContentDisposition(String.format(AttachmentPat, "report", "zip"));
 
     return GetJobsReportByJobIdResponse.respond200WithApplicationZip(wrap, head);
   }

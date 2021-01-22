@@ -27,7 +27,6 @@ public enum FormatType
   private final boolean parameterized;
   private final boolean delimiterAllowed;
 
-
   FormatType(int id, boolean parameterized, boolean delimiterAllowed) {
     this.id            = id;
     this.parameterized = parameterized;
@@ -44,5 +43,13 @@ public enum FormatType
 
   public boolean isDelimiterAllowed() {
     return delimiterAllowed;
+  }
+
+  public static FormatType fromID(int id) {
+    for (var v : values())
+      if (v.id == id)
+        return v;
+
+    throw new IllegalArgumentException("Unrecognized format id: " + id);
   }
 }

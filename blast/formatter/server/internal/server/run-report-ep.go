@@ -63,6 +63,7 @@ func customReport(fmt string, req midl.Request) midl.Response {
 
 	rawInput := req.Body()
 	if req.Error() != nil {
+		log.Info("Rejecting request for request error: ", req.Error())
 		return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
 	}
 	if len(rawInput) > 0 {
@@ -72,6 +73,7 @@ func customReport(fmt string, req midl.Request) midl.Response {
 			return json.Unmarshal(bytes, body)
 		}))
 		if req.Error() != nil {
+			log.Info("Rejecting request for deserialization error: ", req.Error())
 			return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
 		}
 
@@ -84,13 +86,13 @@ func customReport(fmt string, req midl.Request) midl.Response {
 	}
 
 	if err = runCommand(fmt, outputName(kindNum), outputDir); err != nil {
-		logrus.Error(err.Error())
+		log.Error(err.Error())
 		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
 	}
 
 	zip, err := zipDir(outputDir)
 	if err != nil {
-		logrus.Error(err.Error())
+		log.Error(err.Error())
 		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
 	}
 	res := midl.MakeResponse(http.StatusOK, zip)
@@ -111,6 +113,8 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
 	kind := params[reportTypeParam]
 	log := logrus.WithField(midlid.KeyRequestId, reqID)
+
+	log.Debug("Handling request for report type ", kind)
 
 	kindNum, err := strconv.Atoi(kind)
 	if err != nil {
@@ -247,7 +251,7 @@ func outputName(kind int) string {
 func runCommand(fmt, out, dir string) (err error) {
 	cmd := exec.Command(
 		"/blast/bin/blast_formatter",
-		"-archive", "../output.asn",
+		"-archive", "../report.asn1",
 		"-outfmt", fmt,
 		"-out", out)
 	cmd.Stdout = os.Stdout

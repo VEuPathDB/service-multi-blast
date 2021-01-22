@@ -1,48 +1,46 @@
 package org.veupathdb.service.multiblast.model.blast;
 
-import java.util.Objects;
-
 public enum BlastReportField
 {
   /**
    * Query Seq-id
    */
-  QUERY_SEQUENCE_ID("qseqid"),
+  QuerySequenceID("qseqid"),
 
   /**
    * Query GI
    */
-  QUERY_GI("qgi"),
+  QueryGenInfo("qgi"),
 
   /**
    * Query accesion
    */
-  QUERY_ACCESSION("qacc"),
+  QueryAccession("qacc"),
 
   /**
    * Query accesion.version
    */
-  QUERY_ACCESSION_VERSION("qaccver"),
+  QueryAccessionVersion("qaccver"),
 
   /**
    * Query sequence length
    */
-  QUERY_SEQUENCE_LENGTH("qlen"),
+  QuerySequenceLength("qlen"),
 
   /**
    * Subject Seq-id
    */
-  SUBJECT_SEQUENCE_ID("sseqid"),
+  SubjectSequenceID("sseqid"),
 
   /**
    * All subject Seq-id(s), separated by a ';'
    */
-  SUBJECT_ALL_SEQUENCE_ID("sallseqid"),
+  SubjectAllSequenceID("sallseqid"),
 
   /**
    * Subject GI
    */
-  SUBJECT_GI("sgi"),
+  SubjectGenInfo("sgi"),
 
   /**
    * All subject GIs
@@ -263,7 +261,12 @@ public enum BlastReportField
   /**
    * Subject as Reference Seq
    */
-  SR("SR");
+  SR("SR"),
+
+  /**
+   * Standard (default) field set specifier.
+   */
+  Standard("std");
 
   private final String value;
 
@@ -273,15 +276,6 @@ public enum BlastReportField
 
   public String getValue() {
     return value;
-  }
-
-  public boolean isValidFor(BlastReportType fmt) {
-    Objects.requireNonNull(fmt);
-
-    return switch (this) {
-      case SQ, SR -> fmt == BlastReportType.SAM;
-      default -> true;
-    };
   }
 
   @Override
@@ -294,6 +288,6 @@ public enum BlastReportField
       if (e.value.equals(value))
         return e;
 
-    throw new IllegalArgumentException(); // TODO: print value in error.
+    throw new IllegalArgumentException("Unrecognized BlastReportField value: " + value);
   }
 }

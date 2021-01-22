@@ -24,7 +24,7 @@ public class SelectShortUserJobsByUser
 
   public Collection<ShortUserJobRow> run() throws Exception {
     return new BasicPreparedListReadQuery<>(
-      SQL.Select.MultiBlastJobs.ShortById,
+      SQL.Select.MultiBlastJobs.ShortUserByUserID,
       ds::getConnection,
       this::parse,
       this::prep

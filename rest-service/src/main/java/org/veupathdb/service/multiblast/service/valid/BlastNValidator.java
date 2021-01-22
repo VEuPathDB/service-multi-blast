@@ -38,7 +38,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
 
   @Override
   public ErrorMap validate(IOBlastnConfig conf) {
-    log.trace("#validateConfig(ErrorMap, InputBlastnConfig)");
+    log.trace("BlastNValidator#validateConfig(ErrorMap, InputBlastnConfig)");
 
     var err = new ErrorMap();
 

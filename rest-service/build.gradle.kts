@@ -21,15 +21,15 @@ java {
 }
 
 // Project settings
-group = buildProps["project.group"] ?: error("empty 1")
-version = buildProps["project.version"] ?: error("empty 2")
-
 allprojects {
+  group = buildProps["project.group"] ?: error("empty 1")
+  version = buildProps["project.version"] ?: error("empty 2")
+
+
   repositories {
     jcenter()
     mavenCentral()
   }
-
 }
 
 tasks.jar {

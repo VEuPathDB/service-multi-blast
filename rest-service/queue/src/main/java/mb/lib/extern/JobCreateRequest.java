@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 class JobCreateRequest
 {
   private final String host;
-  private final Payload payload;
+  private final String[] payload;
 
-  public JobCreateRequest(String host, String jobID, String[] cli) {
-    this.payload = new Payload(jobID, cli);
+  public JobCreateRequest(String host, String[] cli) {
+    this.payload = cli;
     this.host = host;
   }
 
@@ -18,27 +18,7 @@ class JobCreateRequest
   }
 
   @JsonGetter("payload")
-  public Payload getPayload() {
+  public String[] getPayload() {
     return payload;
-  }
-}
-
-class Payload {
-  private final String   jobId;
-  private final String[] args;
-
-  public Payload(String jobId, String[] args) {
-    this.jobId = jobId;
-    this.args  = args;
-  }
-
-  @JsonGetter("jobId")
-  public String getJobId() {
-    return jobId;
-  }
-
-  @JsonGetter("args")
-  public String[] getArgs() {
-    return args;
   }
 }

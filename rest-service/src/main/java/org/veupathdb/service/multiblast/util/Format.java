@@ -8,9 +8,13 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Format
 {
+  private static final Logger log = LogManager.getLogger(Format.class);
+
   public static final byte   HASH_SIZE = 32;
   public static final String HASH_TYPE = "SHA-256";
 
@@ -20,15 +24,19 @@ public class Format
   private static final byte[] hexTable = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
 
   public static String toHexString(byte[] value) {
+    log.trace("Format#toHexString(byte[])");
+
     var tmp = new byte[value.length * 2];
     for (int i = 0, j = 0; i < value.length; i++) {
-      tmp[j++] = hexTable[value[i] >>> 4];
+      tmp[j++] = hexTable[(value[i] >>> 4) & 0xF];
       tmp[j++] = hexTable[value[i] & 0xF];
     }
     return new String(tmp, StandardCharsets.UTF_8);
   }
 
   public static byte[] hexToBytes(String value) {
+    log.trace("Format#hexToBytes(String)");
+
     var raw = value.getBytes(StandardCharsets.US_ASCII);
     var out = new byte[raw.length / 2];
 
@@ -50,6 +58,8 @@ public class Format
   }
 
   public static boolean isHex(String val) {
+    log.trace("Format#isHex(String)");
+
     for (var b : val.getBytes(StandardCharsets.UTF_8)) {
       if (b < '0' || b > 'f' || b > '9' && b < 'A' || b > 'F' && b < 'a') {
         return false;
@@ -60,6 +70,8 @@ public class Format
   }
 
   public static byte[] toSHA256(String value) {
+    log.trace("Format#toSHA256(String)");
+
     try {
       var dig = MessageDigest.getInstance(HASH_TYPE);
       return dig.digest(value.getBytes(StandardCharsets.UTF_8));

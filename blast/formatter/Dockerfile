@@ -9,4 +9,6 @@ FROM ncbi/blast:2.10.1 AS run
 
 COPY --from=build /server/server /server
 
+EXPOSE 80
+
 CMD /server

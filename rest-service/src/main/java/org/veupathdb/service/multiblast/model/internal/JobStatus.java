@@ -28,6 +28,7 @@ public enum JobStatus
   }
 
   public static JobStatus unsafeFromString(String name) {
-    return fromString(name).orElseThrow(IllegalArgumentException::new);
+    return fromString(name)
+      .orElseThrow(() -> new IllegalArgumentException("Unrecognized JobStatus value: " + name));
   }
 }

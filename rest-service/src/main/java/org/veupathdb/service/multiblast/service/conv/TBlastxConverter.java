@@ -14,11 +14,11 @@ class TBlastxConverter
   private static       TBlastxConverter instance;
 
   private TBlastxConverter() {
-    log.trace("#new()");
+    log.trace("TBlastxConverter#new()");
   }
 
   public static TBlastxConverter getInstance() {
-    log.trace("#getInstance()");
+    log.trace("TBlastxConverter#getInstance()");
 
     if (instance == null)
       return instance = new TBlastxConverter();
@@ -27,13 +27,13 @@ class TBlastxConverter
   }
 
   static IOTBlastxConfig toExternal(IOTBlastxConfig out, TBlastXConfig conf) {
-    log.trace("#toExternal(IOTBlastxConfig, TBlastxConfig)");
+    log.trace("TBlastxConverter#toExternal(IOTBlastxConfig, TBlastxConfig)");
 
     return getInstance().internalToExternal(out, conf);
   }
 
   static IOTBlastxScoringMatrix toExternal(TBlastxScoringMatrix val) {
-    log.trace("#toExternal(TBlastxScoringMatrix)");
+    log.trace("TBlastxConverter#toExternal(TBlastxScoringMatrix)");
 
     if (val == null)
       return null;
@@ -51,7 +51,7 @@ class TBlastxConverter
   }
 
   static TBlastxScoringMatrix toInternal(IOTBlastxScoringMatrix val) {
-    log.trace("#toInternal(IOTBlastxScoringMatrix)");
+    log.trace("TBlastxConverter#toInternal(IOTBlastxScoringMatrix)");
 
     if (val == null)
       return null;
@@ -69,13 +69,13 @@ class TBlastxConverter
   }
 
   static TBlastXConfig toInternal(IOTBlastxConfig conf) {
-    log.trace("#toInternal(IOTBlastxConfig)");
+    log.trace("TBlastxConverter#toInternal(IOTBlastxConfig)");
 
     return getInstance().externalToInternal(conf);
   }
 
   TBlastXConfig externalToInternal(IOTBlastxConfig conf) {
-    log.trace("#externalToInternal(IOTBlastxConfig)");
+    log.trace("TBlastxConverter#externalToInternal(IOTBlastxConfig)");
 
     return new TBlastXConfigImpl()
       .setStrand(BCC.toInternal(conf.getStrand()))
@@ -100,7 +100,7 @@ class TBlastxConverter
   }
 
   IOTBlastxConfig internalToExternal(IOTBlastxConfig out, TBlastXConfig conf) {
-    log.trace("#internalToExternal(IOTBlastxConfig, TBlastxConfig)");
+    log.trace("TBlastxConverter#internalToExternal(IOTBlastxConfig, TBlastxConfig)");
 
     out.setStrand(BCC.toExternal(conf.getStrand()));
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());

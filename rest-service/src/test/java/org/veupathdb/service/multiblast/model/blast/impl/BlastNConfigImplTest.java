@@ -1616,278 +1616,275 @@ class BlastNConfigImplTest
         .enableSumStatistics(true)
         ;
 
-      var cli = new CliBuilder(BlastTool.BlastN);
+      var cli = new CliBuilder();
       tgt.toCli(cli);
 
       var args = cli.toArgPairs();
-      assertEquals(args.length, 67);
+      assertEquals(args.length, 66);
+
       assertEquals(args[0].length, 2);
-      assertEquals(args[0][0], "blastn");
-      assertNull(args[0][1]);
+      assertEquals(args[0][0], "-query");
+      assertEquals(args[0][1], "hello 1");
 
       assertEquals(args[1].length, 2);
-      assertEquals(args[1][0], "-query");
-      assertEquals(args[1][1], "hello 1");
+      assertEquals(args[1][0], "-query_loc");
+      assertEquals(args[1][1], "23-32");
 
       assertEquals(args[2].length, 2);
-      assertEquals(args[2][0], "-query_loc");
-      assertEquals(args[2][1], "23-32");
+      assertEquals(args[2][0], "-db");
+      assertEquals(args[2][1], "hi");
 
       assertEquals(args[3].length, 2);
-      assertEquals(args[3][0], "-db");
-      assertEquals(args[3][1], "hi");
+      assertEquals(args[3][0], "-out");
+      assertEquals(args[3][1], "test1");
 
       assertEquals(args[4].length, 2);
-      assertEquals(args[4][0], "-out");
-      assertEquals(args[4][1], "test1");
+      assertEquals(args[4][0], "-evalue");
+      assertEquals(args[4][1], "77");
 
       assertEquals(args[5].length, 2);
-      assertEquals(args[5][0], "-evalue");
-      assertEquals(args[5][1], "77");
+      assertEquals(args[5][0], "-outfmt");
+      assertEquals(args[5][1], "10 delim=v btop");
 
       assertEquals(args[6].length, 2);
-      assertEquals(args[6][0], "-outfmt");
-      assertEquals(args[6][1], "10 delim=v btop");
+      assertEquals(args[6][0], "-num_descriptions");
+      assertEquals(args[6][1], "69");
 
       assertEquals(args[7].length, 2);
-      assertEquals(args[7][0], "-num_descriptions");
-      assertEquals(args[7][1], "69");
+      assertEquals(args[7][0], "-num_alignments");
+      assertEquals(args[7][1], "777");
 
       assertEquals(args[8].length, 2);
-      assertEquals(args[8][0], "-num_alignments");
-      assertEquals(args[8][1], "777");
+      assertEquals(args[8][0], "-line_length");
+      assertEquals(args[8][1], "666");
 
       assertEquals(args[9].length, 2);
-      assertEquals(args[9][0], "-line_length");
-      assertEquals(args[9][1], "666");
+      assertEquals(args[9][0], "-sorthsps");
+      assertEquals(args[9][1], "1");
 
       assertEquals(args[10].length, 2);
-      assertEquals(args[10][0], "-sorthsps");
+      assertEquals(args[10][0], "-sorthits");
       assertEquals(args[10][1], "1");
 
       assertEquals(args[11].length, 2);
-      assertEquals(args[11][0], "-sorthits");
-      assertEquals(args[11][1], "1");
+      assertEquals(args[11][0], "-qcov_hsp_perc");
+      assertEquals(args[11][1], "1.3");
 
       assertEquals(args[12].length, 2);
-      assertEquals(args[12][0], "-qcov_hsp_perc");
-      assertEquals(args[12][1], "1.3");
+      assertEquals(args[12][0], "-max_hsps");
+      assertEquals(args[12][1], "13");
 
       assertEquals(args[13].length, 2);
-      assertEquals(args[13][0], "-max_hsps");
-      assertEquals(args[13][1], "13");
+      assertEquals(args[13][0], "-max_target_seqs");
+      assertEquals(args[13][1], "86");
 
       assertEquals(args[14].length, 2);
-      assertEquals(args[14][0], "-max_target_seqs");
-      assertEquals(args[14][1], "86");
+      assertEquals(args[14][0], "-dbsize");
+      assertEquals(args[14][1], "76");
 
       assertEquals(args[15].length, 2);
-      assertEquals(args[15][0], "-dbsize");
-      assertEquals(args[15][1], "76");
+      assertEquals(args[15][0], "-searchsp");
+      assertEquals(args[15][1], "88");
 
       assertEquals(args[16].length, 2);
-      assertEquals(args[16][0], "-searchsp");
-      assertEquals(args[16][1], "88");
+      assertEquals(args[16][0], "-import_search_strategy");
+      assertEquals(args[16][1], "test2");
 
       assertEquals(args[17].length, 2);
-      assertEquals(args[17][0], "-import_search_strategy");
-      assertEquals(args[17][1], "test2");
+      assertEquals(args[17][0], "-export_search_strategy");
+      assertEquals(args[17][1], "test3");
 
       assertEquals(args[18].length, 2);
-      assertEquals(args[18][0], "-export_search_strategy");
-      assertEquals(args[18][1], "test3");
+      assertEquals(args[18][0], "-xdrop_ungap");
+      assertEquals(args[18][1], "3.33");
 
       assertEquals(args[19].length, 2);
-      assertEquals(args[19][0], "-xdrop_ungap");
-      assertEquals(args[19][1], "3.33");
+      assertEquals(args[19][0], "-num_threads");
+      assertEquals(args[19][1], "12");
 
       assertEquals(args[20].length, 2);
-      assertEquals(args[20][0], "-num_threads");
-      assertEquals(args[20][1], "12");
+      assertEquals(args[20][0], "-entrez_query");
+      assertEquals(args[20][1], "query");
 
       assertEquals(args[21].length, 2);
-      assertEquals(args[21][0], "-entrez_query");
-      assertEquals(args[21][1], "query");
+      assertEquals(args[21][0], "-soft_masking");
+      assertEquals(args[21][1], "true");
 
       assertEquals(args[22].length, 2);
-      assertEquals(args[22][0], "-soft_masking");
-      assertEquals(args[22][1], "true");
+      assertEquals(args[22][0], "-window_size");
+      assertEquals(args[22][1], "67");
 
       assertEquals(args[23].length, 2);
-      assertEquals(args[23][0], "-window_size");
-      assertEquals(args[23][1], "67");
+      assertEquals(args[23][0], "-show_gis");
+      assertNull(args[23][1]);
 
       assertEquals(args[24].length, 2);
-      assertEquals(args[24][0], "-show_gis");
+      assertEquals(args[24][0], "-html");
       assertNull(args[24][1]);
 
       assertEquals(args[25].length, 2);
-      assertEquals(args[25][0], "-html");
+      assertEquals(args[25][0], "-lcase_masking");
       assertNull(args[25][1]);
 
       assertEquals(args[26].length, 2);
-      assertEquals(args[26][0], "-lcase_masking");
+      assertEquals(args[26][0], "-parse_deflines");
       assertNull(args[26][1]);
 
       assertEquals(args[27].length, 2);
-      assertEquals(args[27][0], "-parse_deflines");
+      assertEquals(args[27][0], "-remote");
       assertNull(args[27][1]);
 
       assertEquals(args[28].length, 2);
-      assertEquals(args[28][0], "-remote");
-      assertNull(args[28][1]);
+      assertEquals(args[28][0], "-task");
+      assertEquals(args[28][1], BlastNTask.BlastNShort.getValue());
 
       assertEquals(args[29].length, 2);
-      assertEquals(args[29][0], "-task");
-      assertEquals(args[29][1], BlastNTask.BlastNShort.getValue());
+      assertEquals(args[29][0], "-reward");
+      assertEquals(args[29][1], "10");
 
       assertEquals(args[30].length, 2);
-      assertEquals(args[30][0], "-reward");
-      assertEquals(args[30][1], "10");
+      assertEquals(args[30][0], "-penalty");
+      assertEquals(args[30][1], "11");
 
       assertEquals(args[31].length, 2);
-      assertEquals(args[31][0], "-penalty");
-      assertEquals(args[31][1], "11");
+      assertEquals(args[31][0], "-use_index");
+      assertEquals(args[31][1], "true");
 
       assertEquals(args[32].length, 2);
-      assertEquals(args[32][0], "-use_index");
-      assertEquals(args[32][1], "true");
+      assertEquals(args[32][0], "-index_name");
+      assertEquals(args[32][1], "name");
 
       assertEquals(args[33].length, 2);
-      assertEquals(args[33][0], "-index_name");
-      assertEquals(args[33][1], "name");
+      assertEquals(args[33][0], "-dust");
+      assertEquals(args[33][1], "1 2 3");
 
       assertEquals(args[34].length, 2);
-      assertEquals(args[34][0], "-dust");
-      assertEquals(args[34][1], "1 2 3");
+      assertEquals(args[34][0], "-filtering_db");
+      assertEquals(args[34][1], "bye");
 
       assertEquals(args[35].length, 2);
-      assertEquals(args[35][0], "-filtering_db");
-      assertEquals(args[35][1], "bye");
+      assertEquals(args[35][0], "-window_masker_taxid");
+      assertEquals(args[35][1], "12");
 
       assertEquals(args[36].length, 2);
-      assertEquals(args[36][0], "-window_masker_taxid");
-      assertEquals(args[36][1], "12");
+      assertEquals(args[36][0], "-window_masker_db");
+      assertEquals(args[36][1], "yo");
 
       assertEquals(args[37].length, 2);
-      assertEquals(args[37][0], "-window_masker_db");
-      assertEquals(args[37][1], "yo");
+      assertEquals(args[37][0], "-template_type");
+      assertEquals(args[37][1], "coding");
 
       assertEquals(args[38].length, 2);
-      assertEquals(args[38][0], "-template_type");
-      assertEquals(args[38][1], "coding");
+      assertEquals(args[38][0], "-template_length");
+      assertEquals(args[38][1], "13");
 
       assertEquals(args[39].length, 2);
-      assertEquals(args[39][0], "-template_length");
-      assertEquals(args[39][1], "13");
+      assertEquals(args[39][0], "-perc_identity");
+      assertEquals(args[39][1], "1.23");
 
       assertEquals(args[40].length, 2);
-      assertEquals(args[40][0], "-perc_identity");
-      assertEquals(args[40][1], "1.23");
+      assertEquals(args[40][0], "-min_raw_gapped_score");
+      assertEquals(args[40][1], "14");
 
       assertEquals(args[41].length, 2);
-      assertEquals(args[41][0], "-min_raw_gapped_score");
-      assertEquals(args[41][1], "14");
+      assertEquals(args[41][0], "-off_diagonal_range");
+      assertEquals(args[41][1], "15");
 
       assertEquals(args[42].length, 2);
-      assertEquals(args[42][0], "-off_diagonal_range");
-      assertEquals(args[42][1], "15");
+      assertEquals(args[42][0], "-best_hit_overhang");
+      assertEquals(args[42][1], "2.34");
 
       assertEquals(args[43].length, 2);
-      assertEquals(args[43][0], "-best_hit_overhang");
-      assertEquals(args[43][1], "2.34");
+      assertEquals(args[43][0], "-best_hit_score_edge");
+      assertEquals(args[43][1], "3.45");
 
       assertEquals(args[44].length, 2);
-      assertEquals(args[44][0], "-best_hit_score_edge");
-      assertEquals(args[44][1], "3.45");
+      assertEquals(args[44][0], "-subject_besthit");
+      assertNull(args[44][1]);
 
       assertEquals(args[45].length, 2);
-      assertEquals(args[45][0], "-subject_besthit");
-      assertNull(args[45][1]);
+      assertEquals(args[45][0], "-culling_limit");
+      assertEquals(args[45][1], "16");
 
       assertEquals(args[46].length, 2);
-      assertEquals(args[46][0], "-culling_limit");
-      assertEquals(args[46][1], "16");
+      assertEquals(args[46][0], "-db_soft_mask");
+      assertEquals(args[46][1], "id1");
 
       assertEquals(args[47].length, 2);
-      assertEquals(args[47][0], "-db_soft_mask");
-      assertEquals(args[47][1], "id1");
+      assertEquals(args[47][0], "-db_hard_mask");
+      assertEquals(args[47][1], "id2");
 
       assertEquals(args[48].length, 2);
-      assertEquals(args[48][0], "-db_hard_mask");
-      assertEquals(args[48][1], "id2");
+      assertEquals(args[48][0], "-gapopen");
+      assertEquals(args[48][1], "17");
 
       assertEquals(args[49].length, 2);
-      assertEquals(args[49][0], "-gapopen");
-      assertEquals(args[49][1], "17");
+      assertEquals(args[49][0], "-gapextend");
+      assertEquals(args[49][1], "18");
 
       assertEquals(args[50].length, 2);
-      assertEquals(args[50][0], "-gapextend");
-      assertEquals(args[50][1], "18");
+      assertEquals(args[50][0], "-xdrop_gap");
+      assertEquals(args[50][1], "4.56");
 
       assertEquals(args[51].length, 2);
-      assertEquals(args[51][0], "-xdrop_gap");
-      assertEquals(args[51][1], "4.56");
+      assertEquals(args[51][0], "-xdrop_gap_final");
+      assertEquals(args[51][1], "5.67");
 
       assertEquals(args[52].length, 2);
-      assertEquals(args[52][0], "-xdrop_gap_final");
-      assertEquals(args[52][1], "5.67");
+      assertEquals(args[52][0], "-taxids");
+      assertEquals(args[52][1], "19,20");
 
       assertEquals(args[53].length, 2);
-      assertEquals(args[53][0], "-taxids");
-      assertEquals(args[53][1], "19,20");
+      assertEquals(args[53][0], "-negative_taxids");
+      assertEquals(args[53][1], "21,22");
 
       assertEquals(args[54].length, 2);
-      assertEquals(args[54][0], "-negative_taxids");
-      assertEquals(args[54][1], "21,22");
+      assertEquals(args[54][0], "-ungapped");
+      assertNull(args[54][1]);
 
       assertEquals(args[55].length, 2);
-      assertEquals(args[55][0], "-ungapped");
-      assertNull(args[55][1]);
+      assertEquals(args[55][0], "-subject");
+      assertEquals(args[55][1], "test4");
 
       assertEquals(args[56].length, 2);
-      assertEquals(args[56][0], "-subject");
-      assertEquals(args[56][1], "test4");
+      assertEquals(args[56][0], "-subject_loc");
+      assertEquals(args[56][1], "23-24");
 
       assertEquals(args[57].length, 2);
-      assertEquals(args[57][0], "-subject_loc");
-      assertEquals(args[57][1], "23-24");
+      assertEquals(args[57][0], "-word_size");
+      assertEquals(args[57][1], "25");
 
       assertEquals(args[58].length, 2);
-      assertEquals(args[58][0], "-word_size");
-      assertEquals(args[58][1], "25");
+      assertEquals(args[58][0], "-seqidlist");
+      assertEquals(args[58][1], "test5");
 
       assertEquals(args[59].length, 2);
-      assertEquals(args[59][0], "-seqidlist");
-      assertEquals(args[59][1], "test5");
+      assertEquals(args[59][0], "-negative_seqidlist");
+      assertEquals(args[59][1], "test6");
 
       assertEquals(args[60].length, 2);
-      assertEquals(args[60][0], "-negative_seqidlist");
-      assertEquals(args[60][1], "test6");
+      assertEquals(args[60][0], "-taxidlist");
+      assertEquals(args[60][1], "test7");
 
       assertEquals(args[61].length, 2);
-      assertEquals(args[61][0], "-taxidlist");
-      assertEquals(args[61][1], "test7");
+      assertEquals(args[61][0], "-negative_taxidlist");
+      assertEquals(args[61][1], "test8");
 
       assertEquals(args[62].length, 2);
-      assertEquals(args[62][0], "-negative_taxidlist");
-      assertEquals(args[62][1], "test8");
+      assertEquals(args[62][0], "-gilist");
+      assertEquals(args[62][1], "test9");
 
       assertEquals(args[63].length, 2);
-      assertEquals(args[63][0], "-gilist");
-      assertEquals(args[63][1], "test9");
+      assertEquals(args[63][0], "-negative_gilist");
+      assertEquals(args[63][1], "test10");
 
       assertEquals(args[64].length, 2);
-      assertEquals(args[64][0], "-negative_gilist");
-      assertEquals(args[64][1], "test10");
+      assertEquals(args[64][0], "-strand");
+      assertEquals(args[64][1], "plus");
 
       assertEquals(args[65].length, 2);
-      assertEquals(args[65][0], "-strand");
-      assertEquals(args[65][1], "plus");
-
-      assertEquals(args[66].length, 2);
-      assertEquals(args[66][0], "-sum_stats");
-      assertEquals(args[66][1], "true");
+      assertEquals(args[65][0], "-sum_stats");
+      assertEquals(args[65][1], "true");
     }
   }
 }

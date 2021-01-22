@@ -24,11 +24,11 @@ public class BlastConverter
   private static BlastConverter instance;
 
   private BlastConverter() {
-    log.trace("#new()");
+    log.trace("BlastConverter#new()");
   }
 
   public static BlastConverter getInstance() {
-    log.trace("#getInstance()");
+    log.trace("BlastConverter#getInstance()");
 
     if (instance == null)
       return instance = new BlastConverter();
@@ -37,13 +37,13 @@ public class BlastConverter
   }
 
   static BlastConfig<?> toInternal(IOBlastConfig conf) {
-    log.trace("#toInternal(IOBlastConfig)");
+    log.trace("BlastConverter#toInternal(IOBlastConfig)");
 
     return getInstance().externalToInternal(conf);
   }
 
   public BlastConfig<?> externalToInternal(IOBlastConfig conf) {
-    log.trace("#externalToInternal(IOBlastConfig)");
+    log.trace("BlastConverter#externalToInternal(IOBlastConfig)");
 
     if (conf == null)
       return null;
@@ -82,7 +82,7 @@ public class BlastConverter
   }
 
   public IOBlastConfig internalToExternal(BlastConfig<?> conf) {
-    log.trace("#internalToExternal(BlastConfig)");
+    log.trace("BlastConverter#internalToExternal(BlastConfig)");
 
     if (conf == null)
       return null;
@@ -97,14 +97,14 @@ public class BlastConverter
     out.setLineLength(conf.getLineLength());
     out.setSortHits(toExternal(conf.getHitSorting()));
     out.setSortHSPs(toExternal(conf.getHspSorting()));
-    out.setLcaseMasking(conf.isLowercaseMaskingEnabled());
+    out.setLcaseMasking(conf.isLowercaseMaskingEnabled() ? true : null);
     out.setQCovHSPPerc(conf.getQueryCoverageHspPercent());
     out.setMaxHSPs(conf.getMaxHsps());
     out.setMaxTargetSeqs(conf.getMaxTargetSequences());
     out.setDbSize(conf.getEffectiveDatabaseSize());
     out.setSearchSpace(conf.getEffectiveSearchSpaceLength());
     out.setXDropUngap(conf.getUngappedExtensionDropoff());
-    out.setParseDefLines(conf.isDefLineParsingEnabled());
+    out.setParseDefLines(conf.isDefLineParsingEnabled() ? true : null);
 
     return switch (out.getTool()) {
       case BLASTN -> BlastnConverter.toExternal((IOBlastnConfig) out, (BlastnConfig) conf);
@@ -116,7 +116,7 @@ public class BlastConverter
   }
 
   static IOBlastConfig newExternal(BlastConfig<?> conf) {
-    log.trace("#newExternal(BlastConfig)");
+    log.trace("BlastConverter#newExternal(BlastConfig)");
 
     if (conf instanceof BlastnConfig)
       return new IOBlastnConfigImpl();
@@ -133,7 +133,7 @@ public class BlastConverter
   }
 
   static IOBlastFormat toExternal(BlastReportType val) {
-    log.trace("#toExternal(ReportFormatType)");
+    log.trace("BlastConverter#toExternal(ReportFormatType)");
 
     if (val == null)
       return null;
@@ -162,17 +162,17 @@ public class BlastConverter
   }
 
   static IOBlastReportField toExternal(BlastReportField field) {
-    log.trace("#toExternal(BlastReportField)");
+    log.trace("BlastConverter#toExternal(BlastReportField)");
 
     return switch (field) {
-      case QUERY_SEQUENCE_ID -> IOBlastReportField.QSEQID;
-      case QUERY_GI -> IOBlastReportField.QGI;
-      case QUERY_ACCESSION -> IOBlastReportField.QACC;
-      case QUERY_ACCESSION_VERSION -> IOBlastReportField.QACCVER;
-      case QUERY_SEQUENCE_LENGTH -> IOBlastReportField.QLEN;
-      case SUBJECT_SEQUENCE_ID -> IOBlastReportField.SSEQID;
-      case SUBJECT_ALL_SEQUENCE_ID -> IOBlastReportField.SALLSEQID;
-      case SUBJECT_GI -> IOBlastReportField.SGI;
+      case QuerySequenceID -> IOBlastReportField.QSEQID;
+      case QueryGenInfo -> IOBlastReportField.QGI;
+      case QueryAccession -> IOBlastReportField.QACC;
+      case QueryAccessionVersion -> IOBlastReportField.QACCVER;
+      case QuerySequenceLength -> IOBlastReportField.QLEN;
+      case SubjectSequenceID -> IOBlastReportField.SSEQID;
+      case SubjectAllSequenceID -> IOBlastReportField.SALLSEQID;
+      case SubjectGenInfo -> IOBlastReportField.SGI;
       case SUBJECT_ALL_GI -> IOBlastReportField.SALLGI;
       case SUBJECT_ACCESSION -> IOBlastReportField.SACC;
       case SUBJECT_ACCESSION_VERSION -> IOBlastReportField.SACCVER;
@@ -217,12 +217,16 @@ public class BlastConverter
       case QUERY_COVERAGE_PER_UNIQUE_SUBJECT -> IOBlastReportField.QCOVUS;
       case SQ -> IOBlastReportField.SQ;
       case SR -> IOBlastReportField.SR;
+      case Standard -> null;
     };
   }
 
 
   static IOHitSorting toExternal(HitSorting val) {
-    log.trace("#toExternal(HitSorting)");
+    log.trace("BlastConverter#toExternal(HitSorting)");
+
+    if (val == null)
+      return null;
 
     return switch (val) {
       case ByExpectValue -> IOHitSorting.BYEVAL;
@@ -234,7 +238,10 @@ public class BlastConverter
   }
 
   static IOHSPSorting toExternal(HspSorting val) {
-    log.trace("#toExternal(HspSorting)");
+    log.trace("BlastConverter#toExternal(HspSorting)");
+
+    if (val == null)
+      return null;
 
     return switch (val) {
       case ByExpectValue -> IOHSPSorting.BYHSPEVALUE;
@@ -246,24 +253,29 @@ public class BlastConverter
   }
 
   static IOBlastReportFormat toExternal(BlastReportFormat fmt) {
-    log.trace("#toExternal(OutFormat)");
+    log.trace("BlastConverter#toExternal(OutFormat)");
 
     if (fmt == null)
       return null;
 
     var out = new IOBlastReportFormatImpl();
 
-    out.setDelim(String.valueOf(fmt.getDelimiter()));
-    out.setFields(Arrays.stream(fmt.getReportFields())
-      .map(BlastConverter::toExternal)
-      .collect(Collectors.toList()));
+    out.setDelim(fmt.getDelimiter() == null ? null : String.valueOf(fmt.getDelimiter()));
+    out.setFields(
+      fmt.getReportFields() == null
+        || fmt.getReportFields().length == 1
+        && fmt.getReportFields()[0] == BlastReportField.Standard
+      ? null
+      : Arrays.stream(fmt.getReportFields())
+        .map(BlastConverter::toExternal)
+        .collect(Collectors.toList()));
     out.setFormat(toExternal(fmt.getType()));
 
     return out;
   }
 
   static BlastReportType toInternal(IOBlastFormat val) {
-    log.trace("#toInternal(IOBlastFormat)");
+    log.trace("BlastConverter#toInternal(IOBlastFormat)");
 
     if (val == null)
       return null;
@@ -292,7 +304,7 @@ public class BlastConverter
   }
 
   static BlastReportField[] toInternal(List<IOBlastReportField> vals) {
-    log.trace("#toInternal(List)");
+    log.trace("BlastConverter#toInternal(List)");
 
     if (vals == null || vals.isEmpty())
       return null;
@@ -304,7 +316,7 @@ public class BlastConverter
   }
 
   static BlastReportField toInternal(IOBlastReportField val) {
-    log.trace("#toInternal(IOBlastReportField)");
+    log.trace("BlastConverter#toInternal(IOBlastReportField)");
 
     if (val == null)
       return null;
@@ -322,23 +334,23 @@ public class BlastConverter
       case PIDENT -> BlastReportField.PERCENT_IDENTICAL_MATCHES;
       case POSITIVE -> BlastReportField.NUMBER_POSITIVE_MATCHES;
       case PPOS -> BlastReportField.PERCENT_POSITIVE_MATCHES;
-      case QACC -> BlastReportField.QUERY_ACCESSION;
-      case QACCVER -> BlastReportField.QUERY_ACCESSION_VERSION;
+      case QACC -> BlastReportField.QueryAccession;
+      case QACCVER -> BlastReportField.QueryAccessionVersion;
       case QCOVHSP -> BlastReportField.QUERY_COVERAGE_PER_HSP;
       case QCOVS -> BlastReportField.QUERY_COVERAGE_PER_SUBJECT;
       case QCOVUS -> BlastReportField.QUERY_COVERAGE_PER_UNIQUE_SUBJECT;
       case QEND -> BlastReportField.QUERY_ALIGNMENT_END;
       case QFRAME -> BlastReportField.QUERY_FRAME;
-      case QGI -> BlastReportField.QUERY_GI;
-      case QLEN -> BlastReportField.QUERY_SEQUENCE_LENGTH;
+      case QGI -> BlastReportField.QueryGenInfo;
+      case QLEN -> BlastReportField.QuerySequenceLength;
       case QSEQ -> BlastReportField.QUERY_SEQUENCE;
-      case QSEQID -> BlastReportField.QUERY_SEQUENCE_ID;
+      case QSEQID -> BlastReportField.QuerySequenceID;
       case QSTART -> BlastReportField.QUERY_ALIGNMENT_START;
       case SACC -> BlastReportField.SUBJECT_ACCESSION;
       case SACCVER -> BlastReportField.SUBJECT_ACCESSION_VERSION;
       case SALLACC -> BlastReportField.SUBJECT_ALL_ACCESSION;
       case SALLGI -> BlastReportField.SUBJECT_ALL_GI;
-      case SALLSEQID -> BlastReportField.SUBJECT_ALL_SEQUENCE_ID;
+      case SALLSEQID -> BlastReportField.SubjectAllSequenceID;
       case SALLTITLES -> BlastReportField.SUBJECT_ALL_TITLES;
       case SBLASTNAME -> BlastReportField.SUBJECT_BLAST_NAME;
       case SBLASTNAMES -> BlastReportField.SUBJECT_BLAST_NAMES;
@@ -347,14 +359,14 @@ public class BlastConverter
       case SCORE -> BlastReportField.RAW_SCORE;
       case SEND -> BlastReportField.SUBJECT_ALIGNMENT_END;
       case SFRAME -> BlastReportField.SUBJECT_FRAME;
-      case SGI -> BlastReportField.SUBJECT_GI;
+      case SGI -> BlastReportField.SubjectGenInfo;
       case SLEN -> BlastReportField.SUBJECT_SEQUENCE_LENGTH;
       case SQ -> BlastReportField.SQ;
       case SR -> BlastReportField.SR;
       case SSCINAME -> BlastReportField.SUBJECT_SCIENTIFIC_NAME;
       case SSCINAMES -> BlastReportField.SUBJECT_SCIENTIFIC_NAMES;
       case SSEQ -> BlastReportField.SUBJECT_SEQUENCE;
-      case SSEQID -> BlastReportField.SUBJECT_SEQUENCE_ID;
+      case SSEQID -> BlastReportField.SubjectSequenceID;
       case SSKINGDOM -> BlastReportField.SUBJECT_SUPER_KINGDOM;
       case SSKINGDOMS -> BlastReportField.SUBJECT_SUPER_KINGDOMS;
       case SSTART -> BlastReportField.SUBJECT_ALIGNMENT_START;
@@ -366,7 +378,7 @@ public class BlastConverter
   }
 
   static BlastReportFormat toInternal(IOBlastReportFormat fmt) {
-    log.trace("#toInternal(IOBlastReportFormat)");
+    log.trace("BlastConverter#toInternal(IOBlastReportFormat)");
 
     if (fmt == null)
       return null;
@@ -379,7 +391,7 @@ public class BlastConverter
   }
 
   static HitSorting toInternal(IOHitSorting val) {
-    log.trace("#toInternal(IOHitSorting)");
+    log.trace("BlastConverter#toInternal(IOHitSorting)");
 
     if (val == null)
       return null;
@@ -394,7 +406,7 @@ public class BlastConverter
   }
 
   static HspSorting toInternal(IOHSPSorting val) {
-    log.trace("#toInternal(IOHSPSorting)");
+    log.trace("BlastConverter#toInternal(IOHSPSorting)");
 
     if (val == null)
       return null;

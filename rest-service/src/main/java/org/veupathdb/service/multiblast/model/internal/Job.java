@@ -3,6 +3,8 @@ package org.veupathdb.service.multiblast.model.internal;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.model.blast.BlastConfig;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.impl.*;
@@ -11,6 +13,8 @@ import org.veupathdb.service.multiblast.util.Format;
 
 public class Job
 {
+  private static final Logger log = LogManager.getLogger(Job.class);
+
   private final BlastTool tool;
 
   private OffsetDateTime createdOn;
@@ -49,34 +53,43 @@ public class Job
 
   @Override
   public String toString() {
-    var cli = new CliBuilder(tool);
+    var str = new StringBuilder(tool.value()).append(' ');
+    var cli = new CliBuilder();
 
     config.toCli(cli);
 
-    return cli.toString();
+    cli.toString(str);
+    return str.toString();
   }
 
   public String toSerial() {
-    var cli = new CliBuilder(tool);
+    log.trace("Job#toSerial()");
+    var cli = new CliBuilder();
 
     config.toCli(cli);
 
+    var out = Format.Json.createArrayNode();
+    out.add(Format.Json.createArrayNode().add(tool.value()));
+
     return cli.toComponentStream().collect(
-      Format.Json::createArrayNode,
+      () -> out,
       (a, v) -> {
         if (v[1] == null)
           a.add(Format.Json.createArrayNode().add(v[0]));
         else
           a.add(Format.Json.createArrayNode().add(v[0]).add(v[1]));
       },
-      ArrayNode::addAll
+      (a, b) -> {}
     ).toString();
   }
 
   // TODO: this is a bad place for this
   public static Job fromSerial(String cli) throws Exception {
+    log.trace("Job#fromSerial(String)");
+    log.debug("Deserializing from {}", cli);
     var node = (ArrayNode) Format.Json.readTree(cli);
-    var tool = BlastTool.fromString(node.get(0).asText()).orElseThrow();
+    var tool = BlastTool.fromString(node.get(0).get(0).asText())
+      .orElseThrow(() -> new IllegalStateException("Unrecognized blast tool in serialized job: " + node.get(0).get(0).asText()));
     var out  = new Job(tool);
 
     switch (tool) {

@@ -1,12 +1,14 @@
-FROM ncbi/blast:2.10.1
+FROM golang:alpine3.12 AS build
 
-ARG SERVER_VERSION="v0.0.12"
-ARG SERVER_REPO="https://github.com/VEuPathDB/util-http2cli"
+COPY server /server
+WORKDIR /server
+RUN CGO_ENABLED=0 GOOS=linux go build -o server cmd/server/main.go
+RUN pwd && ls
 
-RUN curl -Lo /tmp/server.tar.gz ${SERVER_REPO}/releases/download/${SERVER_VERSION}/http2cli.linux.${SERVER_VERSION}.x64.tar.gz \
- && tar -xf /tmp/server.tar.gz \
- && mv http2cli /usr/bin/http2cli
+FROM ncbi/blast:2.10.1 AS run
+
+COPY --from=build /server/server /server
 
 EXPOSE 80
 
-CMD http2cli
+CMD /server

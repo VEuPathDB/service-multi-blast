@@ -17,11 +17,11 @@ public class TBlastnConverter
   private static TBlastnConverter instance;
 
   private TBlastnConverter() {
-    log.trace("#new()");
+    log.trace("TBlastnConverter#new()");
   }
 
   public static TBlastnConverter getInstance() {
-    log.trace("#getInstance()");
+    log.trace("TBlastnConverter#getInstance()");
 
     if (instance == null)
       return instance = new TBlastnConverter();
@@ -30,7 +30,7 @@ public class TBlastnConverter
   }
 
   static IOTBlastnTask toExternal(TBlastNTask task) {
-    log.trace("#toExternal(TBlastnTask)");
+    log.trace("TBlastnConverter#toExternal(TBlastnTask)");
 
     if (task == null)
       return null;
@@ -42,7 +42,7 @@ public class TBlastnConverter
   }
 
   static IOTBlastnScoringMatrix toExternal(TBlastNScoringMatrix matrix) {
-    log.trace("#toExternal(TBlastnScoringMatrix)");
+    log.trace("TBlastnConverter#toExternal(TBlastnScoringMatrix)");
 
     if (matrix == null)
       return null;
@@ -61,13 +61,13 @@ public class TBlastnConverter
   }
 
   static IOTBlastnConfig toExternal(IOTBlastnConfig out, TBlastnConfig conf) {
-    log.trace("#toExternal(IOTBlastnConfig, TBlastnConfig)");
+    log.trace("TBlastnConverter#toExternal(IOTBlastnConfig, TBlastnConfig)");
 
     return getInstance().internalToExternal(out, conf);
   }
 
   static TBlastNTask toInternal(IOTBlastnTask val) {
-    log.trace("#toInternal(IOTBlastnTask)");
+    log.trace("TBlastnConverter#toInternal(IOTBlastnTask)");
 
     if (val == null)
       return null;
@@ -79,7 +79,7 @@ public class TBlastnConverter
   }
 
   static TBlastNScoringMatrix toInternal(IOTBlastnScoringMatrix val) {
-    log.trace("#toInternal(IOTBlastnScoringMatrix)");
+    log.trace("TBlastnConverter#toInternal(IOTBlastnScoringMatrix)");
 
     if (val == null)
       return null;
@@ -98,13 +98,13 @@ public class TBlastnConverter
   }
 
   static TBlastnConfig toInternal(IOTBlastnConfig val) {
-    log.trace("#toInternal(IOTBlastnConfig)");
+    log.trace("TBlastnConverter#toInternal(IOTBlastnConfig)");
 
     return getInstance().externalToInternal(val);
   }
 
   IOTBlastnConfig internalToExternal(IOTBlastnConfig out, TBlastnConfig conf) {
-    log.trace("#internalToExternal(IOTBlastnConfig, TBlastNConfig)");
+    log.trace("TBlastnConverter#internalToExternal(IOTBlastnConfig, TBlastNConfig)");
 
     if (conf == null)
       return null;
@@ -139,7 +139,7 @@ public class TBlastnConverter
   }
 
   private TBlastnConfig externalToInternal(IOTBlastnConfig val) {
-    log.trace("#exernalToInternal(IOTBlastnConfig)");
+    log.trace("TBlastnConverter#exernalToInternal(IOTBlastnConfig)");
 
     if (val == null)
       return null;

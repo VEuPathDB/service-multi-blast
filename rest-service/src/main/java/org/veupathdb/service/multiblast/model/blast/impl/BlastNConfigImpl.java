@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.model.blast.*;
 import org.veupathdb.service.multiblast.model.blast.impl.trait.*;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
@@ -24,6 +26,8 @@ public class BlastNConfigImpl
   extends BlastConfigImpl<BlastnConfig>
   implements BlastnConfig
 {
+  private static final Logger log = LogManager.getLogger(BlastNConfigImpl.class);
+
   // Wrapped Options
 
   /**
@@ -671,7 +675,7 @@ public class BlastNConfigImpl
     (eTaxIds = lazy(eTaxIds, ETaxIds::new)).setNegativeTaxIds(
       negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds)
     );
-    return null;
+    return this;
   }
 
   @Override
@@ -819,12 +823,15 @@ public class BlastNConfigImpl
   }
 
   public static BlastnConfig fromSerial(ArrayNode node) {
+    log.trace("BlastNConfigImpl#fromSerial(ArrayNode)");
+
     var out  = new BlastNConfigImpl();
     var size = node.size();
 
     for (var i = 1; i < size; i++) {
       var curr = node.get(i);
-      switch (ToolOption.optionsByName.get(curr.get(0).asText())) {
+      log.debug("Deserializing option: {}", curr.get(0).asText().substring(1));
+      switch (ToolOption.optionsByName.get(curr.get(0).asText().substring(1))) {
         case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
         case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
         case BlastDatabase -> out.setDatabase(Path.of(curr.get(1).asText()));
