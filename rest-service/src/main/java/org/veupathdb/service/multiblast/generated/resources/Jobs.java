@@ -11,18 +11,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import org.veupathdb.service.multiblast.generated.model.BadRequestError;
-import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
+
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
-import org.veupathdb.service.multiblast.generated.model.NotFoundError;
-import org.veupathdb.service.multiblast.generated.model.ServerError;
 import org.veupathdb.service.multiblast.generated.model.ShortJobResponse;
-import org.veupathdb.service.multiblast.generated.model.UnauthorizedError;
-import org.veupathdb.service.multiblast.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
 
 @Path("/jobs")
@@ -61,17 +56,17 @@ public interface Jobs {
       "application/json",
       "application/zip"
   })
-  GetJobsReportByJobIdResponse getJobsReportByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("format") String format,
-      @QueryParam("fields") List<IOBlastReportField> fields);
+  Response getJobsReportByJobId(
+    @PathParam("job-id") String jobId,
+    @QueryParam("format") String format,
+    @QueryParam("zip") @DefaultValue("true") boolean zip,
+    @QueryParam("inline") @DefaultValue("false") boolean inline,
+    @QueryParam("fields") List<IOBlastReportField> fields
+  );
 
   class GetJobsResponse extends ResponseDelegate {
     private GetJobsResponse(Response response, Object entity) {
       super(response, entity);
-    }
-
-    private GetJobsResponse(Response response) {
-      super(response);
     }
 
     public static GetJobsResponse respond200WithApplicationJson(List<ShortJobResponse> entity) {
@@ -80,18 +75,6 @@ public interface Jobs {
       responseBuilder.entity(wrappedEntity);
       return new GetJobsResponse(responseBuilder.build(), wrappedEntity);
     }
-
-    public static GetJobsResponse respond401WithApplicationJson(UnauthorizedError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsResponse(responseBuilder.build(), entity);
-    }
   }
 
   class PostJobsResponse extends ResponseDelegate {
@@ -99,36 +82,8 @@ public interface Jobs {
       super(response, entity);
     }
 
-    private PostJobsResponse(Response response) {
-      super(response);
-    }
-
     public static PostJobsResponse respond200WithApplicationJson(NewJobPostResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new PostJobsResponse(responseBuilder.build(), entity);
-    }
-
-    public static PostJobsResponse respond400WithApplicationJson(BadRequestError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(400).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new PostJobsResponse(responseBuilder.build(), entity);
-    }
-
-    public static PostJobsResponse respond401WithApplicationJson(UnauthorizedError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new PostJobsResponse(responseBuilder.build(), entity);
-    }
-
-    public static PostJobsResponse respond422WithApplicationJson(UnprocessableEntityError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(422).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new PostJobsResponse(responseBuilder.build(), entity);
-    }
-
-    public static PostJobsResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new PostJobsResponse(responseBuilder.build(), entity);
     }
@@ -139,30 +94,8 @@ public interface Jobs {
       super(response, entity);
     }
 
-    private GetJobsByJobIdResponse(Response response) {
-      super(response);
-    }
-
     public static GetJobsByJobIdResponse respond200WithApplicationJson(LongJobResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsByJobIdResponse respond401WithApplicationJson(UnauthorizedError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsByJobIdResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
     }
@@ -171,10 +104,6 @@ public interface Jobs {
   class GetJobsQueryByJobIdResponse extends ResponseDelegate {
     private GetJobsQueryByJobIdResponse(Response response, Object entity) {
       super(response, entity);
-    }
-
-    private GetJobsQueryByJobIdResponse(Response response) {
-      super(response);
     }
 
     public static HeadersFor200 headersFor200() {
@@ -187,76 +116,6 @@ public interface Jobs {
       responseBuilder.entity(entity);
       headers.toResponseBuilder(responseBuilder);
       return new GetJobsQueryByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsQueryByJobIdResponse respond401WithApplicationJson(
-        UnauthorizedError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsQueryByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsQueryByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsQueryByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsQueryByJobIdResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsQueryByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static class HeadersFor200 extends HeaderBuilderBase {
-      private HeadersFor200() {
-      }
-
-      public HeadersFor200 withContentDisposition(final String p) {
-        headerMap.put("Content-Disposition", String.valueOf(p));;
-        return this;
-      }
-    }
-  }
-
-  class GetJobsReportByJobIdResponse extends ResponseDelegate {
-    private GetJobsReportByJobIdResponse(Response response, Object entity) {
-      super(response, entity);
-    }
-
-    private GetJobsReportByJobIdResponse(Response response) {
-      super(response);
-    }
-
-    public static HeadersFor200 headersFor200() {
-      return new HeadersFor200();
-    }
-
-    public static GetJobsReportByJobIdResponse respond200WithApplicationZip(Object entity,
-        HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/zip");
-      responseBuilder.entity(entity);
-      headers.toResponseBuilder(responseBuilder);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond401WithApplicationJson(
-        UnauthorizedError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsReportByJobIdResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsReportByJobIdResponse(responseBuilder.build(), entity);
     }
 
     public static class HeadersFor200 extends HeaderBuilderBase {
