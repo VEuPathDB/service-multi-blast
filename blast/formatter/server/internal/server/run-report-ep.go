@@ -114,6 +114,14 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 	kind := params[reportTypeParam]
 	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
+	doZip := true
+	param, ok := req.Parameter("zip")
+	if ok {
+		if param == "false" || param == "f" || param == "0" {
+			doZip = false
+		}
+	}
+
 	log.Debug("Handling request for report type ", kind)
 
 	kindNum, err := strconv.Atoi(kind)
@@ -140,21 +148,39 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
 	}
 
-	log.Debug("Zipping command output.")
-	zip, err := zipDir(outputDir)
-	if err != nil {
-		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	if doZip {
+		log.Debug("Zipping command output.")
+		zip, err := zipDir(outputDir)
+		if err != nil {
+			log.Error(err.Error())
+			return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		}
+		res := midl.MakeResponse(http.StatusOK, zip)
+		res.Callback(func() {
+			log.Debug("Removing temp dir: ", outputDir)
+			_ = zip.Close()
+			_ = os.RemoveAll(outputDir)
+		})
+		res.AddHeader("Content-Type", "application/zip")
+		return res
 	}
-	res := midl.MakeResponse(http.StatusOK, zip)
-	res.Callback(func() {
-		log.Debug("Removing temp dir: ", outputDir)
-		_ = zip.Close()
-		_ = os.RemoveAll(outputDir)
-	})
-	res.AddHeader("Content-Type", "application/zip")
 
-	return res
+	// Not zipping output
+	if tmp, err := os.Open(filepath.Join(outputDir, outFile)); err != nil {
+		log.Error(err.Error())
+
+		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	} else {
+		res := midl.MakeResponse(http.StatusOK, tmp)
+		res.Callback(func() {
+			log.Debug("Removing temp dir: ", outputDir)
+			_ = tmp.Close()
+			_ = os.RemoveAll(outputDir)
+		})
+		res.AddHeader("Content-Type", "application/binary")
+
+		return res
+	}
 }
 
 type runRequestBody struct {
@@ -227,22 +253,18 @@ func outputName(kind int) string {
 	out := "report"
 
 	switch kind {
-	case 0, 1, 2, 3, 4, 18:
+	case 0, 1, 2, 3, 4, 17, 18:
 		out += ".txt"
 	case 5, 14, 16:
 		out += ".xml"
 	case 6, 7:
 		out += ".tsv"
-	case 8:
-		out += ".txt.asn1"
-	case 9, 11:
-		out += ".bin.asn1"
+	case 8, 9, 11:
+		out += ".asn1"
 	case 10:
 		out += ".csv"
 	case 12, 13, 15:
 		out += ".json"
-	case 17:
-		out += ".sam"
 	}
 
 	return out

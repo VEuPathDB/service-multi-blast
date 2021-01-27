@@ -3,11 +3,10 @@ package org.veupathdb.service.multiblast.controller;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
-import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
-import org.veupathdb.service.multiblast.generated.model.IOBlastFormat;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
@@ -105,16 +104,20 @@ public class JobController implements Jobs
   }
 
   @Override
-  public GetJobsReportByJobIdResponse getJobsReportByJobId(
+  public Response getJobsReportByJobId(
     String jobId,
     String format,
+    boolean zip,
+    boolean inline,
     List<IOBlastReportField> fields
   ) {
-    var wrap = service.getReport(jobId, format, fields);
-    var head = GetJobsReportByJobIdResponse.headersFor200();
+    var wrap = service.getReport(jobId, format, zip, fields);
 
-    head.withContentDisposition(String.format(AttachmentPat, "report", "zip"));
+    var resp = Response.status(200).header("Content-Type", wrap.contentType);
 
-    return GetJobsReportByJobIdResponse.respond200WithApplicationZip(wrap, head);
+    if (!inline)
+      resp.header("Content-Disposition", String.format(AttachmentPat, "report", wrap.ext));
+
+    return resp.entity(wrap.stream).build();
   }
 }

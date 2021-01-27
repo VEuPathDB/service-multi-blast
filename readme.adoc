@@ -15,4 +15,114 @@ v1.0.0
 
 https://veupathdb.github.io/service-multi-blast/api.html[API Docs]
 
-// TODO: Explain the raml-2-jaxrs / raml-2-json-schema / etc.. and any hacks or weirdness that people may need to know when modifying this project.
+== Local Development
+
+Building this project locally can be done by running the following command (from
+the repository root):
+
+[source, bash]
+----
+$ docker-compose -f docker/docker-compose.dev.yml up
+----
+
+This will spin up all the required containers, mounting the rest service on your
+host network (as opposed to the docker managed network).  Running this service
+locally will require and ssh tunnel or, preferrably, running `sshuttle` to grant
+the service access to the Oracle user and login databases.
+
+== Repo Organization
+
+This repo contains the source and configuration for 4 of the 5 containers the
+multi-blast service requires (the fifth is an off the shelf image).
+
+----
+# repository root
+/:
+|- blast/
+|  |- formatter/ <1>
+|  |- querier/ <2>
+|- databases/
+|  |- queue/ <3>
+|  |- wdk/ <4>
+|- docker/ <5>
+|- docs/ <6>
+|- rest-service/ <7>
+----
+<1> Source for the <<Blast Formatter>>
+<2> Source for the <<Blast Querier>>
+<3> Container config for the <<Job Queue Database>>
+<4> DDL for the multi-blast user database tables.
+<5> Collection of docker-compose configs for the project.
+<6> API and blast+ tool documentation.
+<7> Source for the <<Public REST Service>>
+
+== Project Components
+
+This project consists of 5 docker containers and 2 shared volumes.
+
+=== Blast Formatter
+
+The blast formatter is a small server that runs the NCBI `blast_formatter` tool
+on the output of a given job and returns the formatted result.
+
+This server is called directly by the rest service.
+
+=== Blast Querier
+
+The blast querier is a small server managed by the <<Job Queue>> that runs blast
+queries on a selected db using the input provided in the request.
+
+=== Job Queue
+
+A https://github.com/fireworq/fireworq[Fireworq] job queue managing calls to the
+<<Blast Querier>> server.
+
+=== Job Queue Database
+
+A MySQL database backing the job queue.  No direct interactions with this
+database are required, it is managed entirely by the Fireworq service.
+
+=== Public REST Service
+
+The public facing Java server that is used to validate, store, submit, check on,
+and otherwise deal with the running of blast jobs and the returning of the
+results in client specified formats.
+
+Internally this service is broken up into 6 modules:
+
+. Config
+. DB
+. Formatter
+. Job-Data
+. Queue
+. Rest-Service
+
+==== The Config Module
+
+A tiny module containing only the CLI/Environment configuration file.  This is
+broken into a separate module to avoid circular module dependencies.
+
+==== The DB Module
+
+This module contains all code that directly deals with the WDK User database.
+
+==== The Formatter Module
+
+This module contains all code that directly deals with the <<Blast Formatter>>
+service.
+
+==== The Job-Data Module
+
+This module contains all code that directly deals with the mounted blast output
+filesystem.
+
+==== The Queue Module
+
+This module contains all code that directly deals with the <<Job Queue>>
+service.
+
+==== The Rest-Service Module
+
+This module contains all code that handles incoming HTTP requests and outgoing
+responses. Additionally, it performs validation on the inputs and the user
+session.

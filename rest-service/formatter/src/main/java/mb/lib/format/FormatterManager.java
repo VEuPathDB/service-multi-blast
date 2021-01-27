@@ -24,24 +24,29 @@ public class FormatterManager
 
   private static FormatterManager instance;
 
-  private final URI uri;
+  private final String baseURI;
 
   public FormatterManager() {
-    this.uri = URI.create("http://" + conf.getFormatterURI());
+    this.baseURI = "http://" + conf.getFormatterURI();
   }
 
-  public static InputStream formatAs(String jobID, FormatType type, String... fields) throws Exception {
-    return getInstance().formatReportAs(jobID, type, null, fields);
+  public static InputStream formatAs(
+    String jobID,
+    FormatType type,
+    boolean zip,
+    String... fields
+  ) throws Exception {
+    return getInstance().formatReportAs(jobID, type, null, zip, fields);
   }
 
-  public static InputStream formatAs(String jobID, FormatType type, char delim, String... fields)
-  throws Exception {
-    return getInstance().formatReportAs(jobID, type, delim, fields);
-  }
-
-  public InputStream formatReportAs(String jobID, FormatType type, Character delim, String... fields)
-  throws Exception {
-    log.trace("FormatterManager#formatReportAs(FormatType, Character, String...)");
+  public InputStream formatReportAs(
+    String jobID,
+    FormatType type,
+    Character delim,
+    boolean zip,
+    String... fields
+  ) throws Exception {
+    log.trace("FormatterManager#formatReportAs(String, FormatType, Character, boolean, String...)");
 
     if (!type.isDelimiterAllowed() && delim != null)
       throw new Exception(String.format(
@@ -55,12 +60,16 @@ public class FormatterManager
       ));
 
     var outBody = mapper.writeValueAsString(new PostRequest(delim, fields));
-    var address = uri.resolve(translateEndpoint + "/" + jobID + "/" + type.id());
+    var address = baseURI + (translateEndpoint + "/" + jobID + "/" + type.id());
+
+    if (!zip)
+      address += "?zip=false";
+
     log.debug("Sending request to formatter " + address + ": " + outBody);
 
     var res = HttpClient.newHttpClient()
       .send(
-        HttpRequest.newBuilder(uri.resolve(address))
+        HttpRequest.newBuilder(URI.create(address))
           .POST(HttpRequest.BodyPublishers
             .ofString(outBody))
           .header("Content-Type", "application/json")

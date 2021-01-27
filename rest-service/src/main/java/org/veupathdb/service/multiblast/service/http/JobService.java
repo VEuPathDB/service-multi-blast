@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.service.http;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
@@ -137,7 +136,12 @@ public class JobService
     }
   }
 
-  public ReportWrap getReport(String jobID, String format, List<IOBlastReportField> fields) {
+  public ReportWrap getReport(
+    String jobID,
+    String format,
+    boolean zip,
+    List<IOBlastReportField> fields
+  ) {
     try {
       if (!Format.isHex(jobID))
         throw new NotFoundException();
@@ -177,10 +181,21 @@ public class JobService
         }
       }
 
-      return new ReportWrap(
-        jobID + "_fmt_" + pFormat.id(),
-        FormatterManager.formatAs(jobID, pFormat, fields.stream().map(f -> f.name).toArray(String[]::new))
+      if (pFormat == FormatType.MultipleFileBlastJSON || pFormat == FormatType.MultipleFileBlastXML2)
+        zip = true;
+
+      var out = new ReportWrap();
+      out.zipped = zip;
+      out.stream = FormatterManager.formatAs(
+        jobID,
+        pFormat,
+        zip,
+        fields.stream().map(f -> f.name).toArray(String[]::new)
       );
+
+      setContentType(out, pFormat);
+
+      return out;
     } catch (Exception e) {
       var eOut = wrapException(e);
 
@@ -204,7 +219,7 @@ public class JobService
     return JobCreationService.createJob(input, user.getUserId());
   }
 
-  private static IOJobStatus convStatus(JobStatus stat) {
+  static IOJobStatus convStatus(JobStatus stat) {
     return switch (stat) {
       case Completed -> IOJobStatus.COMPLETED;
       case Errored -> IOJobStatus.ERRORED;
@@ -214,15 +229,41 @@ public class JobService
     };
   }
 
+  static void setContentType(ReportWrap wrap, FormatType type) {
+    switch (type) {
+      case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
+        wrap.contentType = "application/xml";
+        wrap.ext = "xml";
+      }
+      case Tabular -> {
+        wrap.contentType = "text/plain";
+        wrap.ext = "tsv";
+      }
+      case SeqAlignTextASN1, SeqAlignBinaryASN1, BlastArchiveASN1 -> {
+        wrap.contentType = "text/plain";
+        wrap.ext = "asn";
+      }
+      case CommaSeparatedValues -> {
+        wrap.contentType = "text/plain";
+        wrap.ext = "csv";
+      }
+      case SeqAlignJSON, SingleFileBlastJSON, MultipleFileBlastJSON -> {
+        wrap.contentType = "application/json";
+        wrap.ext = "json";
+      }
+      default -> {
+        wrap.contentType = "text/plain";
+        wrap.ext = "txt";
+      }
+    }
+  }
+
   public static class ReportWrap implements StreamingOutput
   {
-    public final String      name;
-    public final InputStream stream;
-
-    public ReportWrap(String name, InputStream stream) {
-      this.name   = name;
-      this.stream = stream;
-    }
+    public String      ext;
+    public String      contentType;
+    public boolean     zipped;
+    public InputStream stream;
 
     @Override
     public void write(OutputStream output) throws IOException, WebApplicationException {
