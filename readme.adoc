@@ -22,7 +22,7 @@ the repository root):
 
 [source, bash]
 ----
-$ docker-compose -f docker/docker-compose.dev.yml up
+$ docker-compose -f docker/docker-compose.local.yml up
 ----
 
 This will spin up all the required containers, mounting the rest service on your

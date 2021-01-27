@@ -5,10 +5,7 @@ services:
   # Public facing REST API
   # #
   service:
-    build:
-      dockerfile: Dockerfile
-      context: ../rest-service
-    # These values can be provided using the .env template file
+    image: veupathdb/mblast-http-service
     ports:
       - 8080:80
     environment:
@@ -53,9 +50,7 @@ services:
   # Blast Query Runner (Job Queue Managed)
   # #
   blast:
-    build:
-      dockerfile: Dockerfile
-      context: ../blast/querier
+    image: veupathdb/mblast-blast-query
     environment:
       DB_MOUNT_PATH: ${DB_MOUNT_PATH:-/db}
       JOB_MOUNT_PATH: ${JOB_MOUNT_PATH:-/out}
@@ -71,9 +66,7 @@ services:
   # Blast Result Formatter
   # #
   formatter:
-    build:
-      dockerfile: Dockerfile
-      context: ../blast/formatter
+    image: veupathdb/mblast-blast-formatter
     environment:
       DB_MOUNT_PATH: ${DB_MOUNT_PATH:-/db}
       JOB_MOUNT_PATH: ${JOB_MOUNT_PATH:-/out}
@@ -89,9 +82,7 @@ services:
   # MySQL backing database queue persistence
   # #
   queue-db:
-    build:
-      dockerfile: Dockerfile
-      context: ../databases/queue
+    image: veupathdb/mblast-queue-db
     environment:
       # Root user password
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
