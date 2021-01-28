@@ -86,6 +86,17 @@ public class JobCreationService
     jobInfo.query = query;
     jobInfo.job = JobConverter.toInternal(js.getConfig());
     jobInfo.cli = new CliBuilder();
+    jobInfo.job.getJobConfig().setDatabase(dbPath);
+
+    var queryHashString = Format.toHexString(query.queryHash);
+    log.debug("Query Hash: {}", queryHashString);
+
+    // Overwrite the query value with a hash string containing the sha256
+    // checksum of the actual query value.
+    // The actual query is stored as a file.
+    jobInfo.job.getJobConfig().setQuery(queryHashString);
+
+    // Convert the job config to a CLI format (which will be hashed).
     jobInfo.job.getJobConfig().toCli(jobInfo.cli);
 
     jobInfo.jobHash = Format.toSHA256(String.format(
@@ -96,8 +107,7 @@ public class JobCreationService
       jobInfo.cli.toString()
     ));
 
-    jobInfo.job.getJobConfig().setDatabase(dbPath);
-    jobInfo.job.getJobConfig().setQuery(Format.toHexString(query.queryHash));
+    log.debug("Job Hash: {}", () -> Format.toHexString(jobInfo.jobHash));
 
     // Check if the hash for the current job collides with a pre-existing job.
     var collide = JobDBManager.getJob(jobInfo.jobHash);
@@ -126,7 +136,7 @@ public class JobCreationService
 
     var jobIDString = Format.toHexString(job.jobHash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
-    var queueID = JobQueueManager.submitJob(
+    var queueID     = JobQueueManager.submitJob(
       jobIDString,
       job.job.getTool().value(),
       job.cli.toArgArray(false)
@@ -151,17 +161,41 @@ public class JobCreationService
     return out;
   }
 
+  /**
+   * Links the requesting user to the existing job (if that user is not already
+   * linked).
+   *
+   * @param jobHash Job to link the user to
+   * @param userID  ID of the User to link
+   * @param desc    User's description for the job.
+   *
+   * @return Job creation response
+   */
   static NewJobPostResponse handleCollision(byte[] jobHash, long userID, String desc)
   throws Exception {
     log.trace("JobCreationService::handleCollision(byte[], long, String)");
-    JobDBManager.linkUserToJob(new UserRowImpl(jobHash, userID, desc));
-    JobDBManager.updateJobDeleteTimer(jobHash, OffsetDateTime.now().plusDays(conf.getJobTimeout()));
+
+    // TODO: what about if a user submits the same job 2x with different descriptions?
+    if (JobDBManager.getUserJob(jobHash, userID).isEmpty()) {
+      JobDBManager.linkUserToJob(new UserRowImpl(jobHash, userID, desc));
+      JobDBManager.updateJobDeleteTimer(
+        jobHash,
+        OffsetDateTime.now().plusDays(conf.getJobTimeout())
+      );
+    }
 
     var out = new NewJobPostResponseImpl();
     out.setJobId(Format.toHexString(jobHash));
     return out;
   }
 
+  /**
+   * Writes the contents of the request's query to a tmp file on disk.
+   *
+   * @param query Stream containing query contents to write.
+   *
+   * @return Info about the temp file that was written.
+   */
   static QueryInfo writeQueryToTmp(InputStream query) throws Exception {
     log.trace("JobCreationService::writeQueryToTmp(InputStream)");
     var tmp = new File("/tmp/" + UUID.randomUUID().toString());
@@ -170,7 +204,7 @@ public class JobCreationService
 
     try (
       var write = new BufferedOutputStream(new FileOutputStream(tmp));
-      var read = new BufferedInputStream(query)
+      var read  = new BufferedInputStream(query)
     ) {
       var dig = MessageDigest.getInstance(Format.HASH_TYPE);
       var buf = new byte[8192];

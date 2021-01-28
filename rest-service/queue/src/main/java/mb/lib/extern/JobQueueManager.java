@@ -93,13 +93,15 @@ public class JobQueueManager
    * @return the queue ID for the queued job
    */
   public int submitNewJob(String jobId, String tool, String[] cli) throws Exception {
-    log.trace("JobQueueManager#submitJob(String, String[])");
+    log.trace("JobQueueManager#submitJob(String, String, String[])");
 
     var uri = URI.create(prependHTTP(conf.getQueueHost()))
       .resolve(String.format(JobEndpoint, conf.getJobCategory()));
 
     var sendBody = json.writeValueAsString(new JobCreateRequest(
-      String.join("/", prependHTTP(conf.getBlastHost()), tool, jobId), cli));
+      String.join("/", prependHTTP(conf.getBlastHost()), tool, jobId),
+      cli
+    ));
 
     log.debug("Attempting to queue job {} at {}", jobId, uri);
     log.debug(sendBody);
