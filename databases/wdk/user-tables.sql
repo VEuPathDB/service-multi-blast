@@ -26,4 +26,6 @@ CREATE TABLE userlogins5.multiblast_users (
 , user_id     NUMBER(12)  REFERENCES userlogins5.users (user_id)
   -- User provided description of their job run.
 , description VARCHAR2(1024)
+  -- Unique user-to-job link
+, CONSTRAINT mb_uq_user_job UNIQUE (job_digest, user_id)
 )
