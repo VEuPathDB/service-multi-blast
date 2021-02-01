@@ -8,7 +8,7 @@ node('centos8') {
 
   def builder = new Builder(this)
 
-  builder.gitClone(['https://github.com/VEuPathDB/service-multi-blast.git', env.BRANCH_NAME])
+  checkout scm
   builder.buildContainers([
     [ name: 'mblast-http-service',    path: 'rest-service'    ],
     [ name: 'mblast-blast-query',     path: 'blast/querier'   ],
