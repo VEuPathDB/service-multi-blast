@@ -3,10 +3,11 @@ package h2c_test
 import (
 	"bytes"
 	"context"
-	"github.com/gorilla/mux"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gorilla/mux"
 
 	. "github.com/smartystreets/goconvey/convey"
 

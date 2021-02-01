@@ -2,17 +2,16 @@
 
 uses:
   blast: ../blast-types/blast/index.raml
+  ext: index.raml
 
 type: object
 additionalProperties: false
 properties:
   site:
-    type: string
-  organism:
-  target-type:
-    description: |
-      Target file name.  Maps to the `--db` flag for the blast tools.
-    type: string
+  targets:
+    type: array
+    items: ext.IOJobTarget
+    minItems: 1
   config:
     description: |
       Blast tool configuration.

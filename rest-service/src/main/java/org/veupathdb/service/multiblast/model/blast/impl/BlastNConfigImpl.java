@@ -834,7 +834,7 @@ public class BlastNConfigImpl
       switch (ToolOption.optionsByName.get(curr.get(0).asText().substring(1))) {
         case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
         case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
-        case BlastDatabase -> out.setDatabase(Path.of(curr.get(1).asText()));
+        case BlastDatabase -> out.setDatabase(curr.get(1).asText());
         case CullingLimit -> out.setCullingLimit(curr.get(1).asInt());
         case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
         case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());

@@ -20,8 +20,8 @@ public interface BlastConfig <T extends BlastConfig<T>>
   Location getQueryLocation();
   T setQueryLocation(Location loc);
 
-  Path getDatabase();
-  T setDatabase(Path db);
+  String getDatabase();
+  T setDatabase(String db);
 
   File getOutputFile();
   T setOutputFile(File out);

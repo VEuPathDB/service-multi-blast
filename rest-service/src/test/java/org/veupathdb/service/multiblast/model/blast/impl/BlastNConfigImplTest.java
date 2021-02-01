@@ -156,7 +156,7 @@ class BlastNConfigImplTest
       @DisplayName("appears in cli output")
       void test1() {
         var tgt  = new BlastNConfigImpl();
-        var path = mock(Path.class);
+        var path = "hello";
         tgt.setDatabase(path);
 
         tgt.toCli(mockCLI);
@@ -1544,7 +1544,7 @@ class BlastNConfigImplTest
       var tgt = new BlastNConfigImpl();
 
       tgt.setQuery("hello 1")
-        .setDatabase(Path.of("hi"))
+        .setDatabase("hi")
         .setOutputFile(new File("test1"))
         .setExpectValue(new BigDecimal(77))
         .setReportFormat(new ReportFormatImpl(
