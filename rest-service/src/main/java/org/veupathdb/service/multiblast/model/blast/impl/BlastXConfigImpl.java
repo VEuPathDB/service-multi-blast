@@ -480,7 +480,7 @@ public class BlastXConfigImpl
         case BestHitScoreEdge
           -> out.setBestHitScoreEdge(curr.get(1).asDouble());
         case BlastDatabase
-          -> out.setDatabase(Path.of(curr.get(1).asText()));
+          -> out.setDatabase(curr.get(1).asText());
         case CompositionBasedStats
           -> out.setCompBasedStatisticsType(CompBasedStats.fromValue(curr.get(1).asText()));
         case CullingLimit

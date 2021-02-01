@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.UUID;
 import javax.ws.rs.BadRequestException;
 
@@ -33,6 +34,14 @@ public class JobCreationService
 {
   private static final Logger log  = LogManager.getLogger(JobCreationService.class);
   private static final Config conf = Config.getInstance();
+
+  /**
+   * Params:
+   *   1 - Site
+   *   2 - Target string (space separated list of DBs)
+   *   3 - Tool
+   *   4 - CLI Args
+   */
   private static final String hashPattern = "%s-%s-%s-%s";
 
   public static NewJobPostResponse createJob(NewJobPostRequestJSON req, long userID) {
@@ -77,16 +86,25 @@ public class JobCreationService
         throw new UnprocessableEntityException(errs);
     }
 
+    if (js.getTargets() == null || js.getTargets().length == 0)
+      throw new UnprocessableEntityException(Collections.singletonMap("targets", Collections.singletonList("1 or more targets must be selected.")));
+
     var jobInfo = new JobInfo();
-    var dbPath  = JobDataManager.makeDBPath(js.getSite(), js.getOrganism(), js.getTargetType());
-    if (!JobDataManager.targetDBExists(dbPath))
-      throw new BadRequestException("unrecognized query target");
+    var dbPath  = new StringBuilder();
+    for (var db : js.getTargets()) {
+      var path = JobDataManager.makeDBPath(js.getSite(), db.organism(), db.target());
+      if (!JobDataManager.targetDBExists(path))
+        throw new BadRequestException("unrecognized query target");
+      if (!dbPath.isEmpty())
+        dbPath.append(' ');
+      dbPath.append(path);
+    }
 
     jobInfo.description = js.getDescription();
     jobInfo.query = query;
     jobInfo.job = JobConverter.toInternal(js.getConfig());
     jobInfo.cli = new CliBuilder();
-    jobInfo.job.getJobConfig().setDatabase(dbPath);
+    jobInfo.job.getJobConfig().setDatabase(dbPath.toString());
 
     var queryHashString = Format.toHexString(query.queryHash);
     log.debug("Query Hash: {}", queryHashString);
@@ -99,13 +117,12 @@ public class JobCreationService
     // Convert the job config to a CLI format (which will be hashed).
     jobInfo.job.getJobConfig().toCli(jobInfo.cli);
 
-    jobInfo.jobHash = Format.toSHA256(String.format(
-      hashPattern,
+    jobInfo.jobHash = hashJob(
       js.getSite(),
-      js.getOrganism(),
-      js.getTargetType(),
+      dbPath.toString(),
+      js.getConfig().getTool().name,
       jobInfo.cli.toString()
-    ));
+    );
 
     log.debug("Job Hash: {}", () -> Format.toHexString(jobInfo.jobHash));
 
@@ -238,6 +255,10 @@ public class JobCreationService
   static void nullCheck(Object req, String msg) {
     if (req == null)
       throw new BadRequestException(msg);
+  }
+
+  static byte[] hashJob(String site, String dbs, String tool, String cli) {
+    return Format.toSHA256(String.format(hashPattern, site, dbs, tool, cli));
   }
 }
 

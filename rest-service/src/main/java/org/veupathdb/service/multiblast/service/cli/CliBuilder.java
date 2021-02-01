@@ -7,20 +7,40 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
 public class CliBuilder
 {
+  private static final Logger log = LogManager.getLogger(CliBuilder.class);
+
   private static final Pattern SingleQuotes = Pattern.compile("('+)");
 
   private final Map<ToolOption, Object[]> params;
 
   public CliBuilder() {
+    log.trace("CliBuilder::new()");
     this.params = new LinkedHashMap<>();
   }
 
+  public CliBuilder set(ToolOption key, String... values) {
+    return setRaw(key, values);
+  }
 
-  public CliBuilder set(ToolOption key, Object... values) {
+  public CliBuilder set(ToolOption key, Integer... values) {
+    return setRaw(key, values);
+  }
+
+  public CliBuilder set(ToolOption key, Double... values) {
+    return setRaw(key, values);
+  }
+
+  public CliBuilder set(ToolOption key, Long... values) {
+    return setRaw(key, values);
+  }
+
+  public CliBuilder setRaw(ToolOption key, Object[] values) {
     params.put(key, values);
     return this;
   }
@@ -58,10 +78,12 @@ public class CliBuilder
 
   @Override
   public String toString() {
+    log.trace("CliBuilder#toString()");
     var out = new StringBuilder();
 
     toString(out);
 
+    log.debug("CliBuilder output: {}", out::toString);
     return out.toString();
   }
 
@@ -71,10 +93,13 @@ public class CliBuilder
     if (!it.hasNext())
       return;
 
-    out.append(it.next()[0]);
+    var arr = it.next();
+    out.append(arr[0]);
+    if (arr[1] != null)
+      out.append("='").append(escape(arr[1])).append('\'');
 
     while (it.hasNext()) {
-      var arr = it.next();
+      arr = it.next();
       out.append(' ').append(arr[0]);
       if (arr[1] != null)
         out.append("='").append(escape(arr[1])).append('\'');

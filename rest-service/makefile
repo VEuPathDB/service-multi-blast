@@ -41,11 +41,11 @@ default:
 	@echo ""
 
 .PHONY: compile
-compile: install-dev-env gen-jaxrs gen-docs
+compile: install-dev-env
 	@./gradlew clean compileJava
 
 .PHONY: test
-test: install-dev-env gen-jaxrs gen-docs
+test: install-dev-env
 	@./gradlew clean test
 
 .PHONY: jar

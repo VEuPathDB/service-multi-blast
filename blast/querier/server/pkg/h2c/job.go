@@ -4,7 +4,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -20,7 +19,7 @@ type (
 	DirCreateFn  func(string, os.FileMode) error
 	FileCreateFn func(string) (*os.File, error)
 	FileStatFn   func(string) (os.FileInfo, error)
-	ExecFn       func(*exec.Cmd)
+	ExecFn       func(*exec.Cmd) error
 )
 
 func NewJob() *Job {
@@ -36,7 +35,6 @@ type Job struct {
 	ID     string
 	Tool   string
 	Args   []string
-	Query  string
 	Config *Config
 
 	MkDir  DirCreateFn
@@ -115,22 +113,18 @@ func (j *Job) Run() error {
 	cmd := exec.Command(j.Tool, j.Args...)
 	cmd.Stdout = sout
 	cmd.Stderr = serr
-	cmd.Stdin = strings.NewReader(j.Query)
 	cmd.Dir = j.GetJobPath()
 
-	j.Exec(cmd)
-
-	return nil
+	return j.Exec(cmd)
 }
 
-func execute(cmd *exec.Cmd) {
+func execute(cmd *exec.Cmd) (err error) {
 	logrus.Debug("Executing command ", cmd)
 
-
-	if err := cmd.Run(); err != nil {
-		logrus.Debug("Command run failed with ", err.Error())
+	if err = cmd.Run(); err != nil {
+		logrus.Warn("Command run failed with ", err.Error())
 		_, _ = cmd.Stderr.Write([]byte(err.Error()))
 	}
 
-	cmd.Wait()
+	return
 }

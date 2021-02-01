@@ -2,7 +2,6 @@ package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -39,9 +38,9 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   private Location queryLocation;
 
   /**
-   * {@code -db <string; dir/filename}
+   * {@code -db <string; dir/filenames}
    */
-  private Path database;
+  private String database;
 
   /**
    * {@code -out <string; filename>}
@@ -217,13 +216,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   }
 
   @Override
-  public Path getDatabase() {
+  public String getDatabase() {
     return this.database;
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public T setDatabase(Path db) {
+  public T setDatabase(String db) {
     database = db;
     return (T) this;
   }

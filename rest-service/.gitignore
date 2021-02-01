@@ -3,3 +3,4 @@
 .tools
 !/gradle/
 !/gradlew
+/db/build/

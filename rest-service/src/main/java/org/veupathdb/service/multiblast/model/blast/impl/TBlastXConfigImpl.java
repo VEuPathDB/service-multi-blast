@@ -361,7 +361,7 @@ public class TBlastXConfigImpl
       switch (ToolOption.fromString(curr.get(0).asText())) {
         case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
         case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
-        case BlastDatabase -> out.setDatabase(Path.of(curr.get(1).asText()));
+        case BlastDatabase -> out.setDatabase(curr.get(1).asText());
         case CullingLimit -> out.setCullingLimit(curr.get(1).asInt());
         case EffectiveDatabaseSize -> out.setEffectiveDatabaseSize((byte) curr.get(1).asInt());
         case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());

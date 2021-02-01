@@ -152,7 +152,7 @@ class BlastConfigImplTest
       @DisplayName("appears in cli output")
       void test1() {
         var tgt  = new BlastConfigImpl<>();
-        var path = mock(Path.class);
+        var path = "holo";
         tgt.setDatabase(path);
 
         tgt.toCli(mockCLI);
@@ -705,7 +705,7 @@ class BlastConfigImplTest
       var tgt = new BlastConfigImpl<>();
 
       tgt.setQuery("hello 1")
-        .setDatabase(Path.of("hi"))
+        .setDatabase("hi")
         .setOutputFile(new File("test1"))
         .setExpectValue(new BigDecimal(77))
         .setReportFormat(new ReportFormatImpl(BlastReportType.CSV, "v", BlastReportField.BLAST_TRACEBACK_OPS))

@@ -44,13 +44,13 @@ func (e *endpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := ""
 	args := make([]string, 0, len(rawArgs) - 1)
 	hasOut := false
 	hasFmt := false
+	args = append(args, "-query=query.txt")
 	for i := range rawArgs {
 		if strings.HasPrefix(rawArgs[i], "-query=") {
-			query = rawArgs[i][7:]
+			// Ignore -query in favor of stored query file
 		} else if strings.HasPrefix(rawArgs[i], "-outfmt=") {
 			args = append(args, "-outfmt=11")
 			hasFmt = true
@@ -74,7 +74,6 @@ func (e *endpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	job.ID = vars["job-id"]
 	job.Tool = tool
 	job.Args = args
-	job.Query = query
 	job.Config = e.config
 
 	if err := job.Run(); err != nil {
