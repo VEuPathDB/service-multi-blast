@@ -5,10 +5,7 @@ import java.util.*
 
 plugins {
   java
-  jacoco
 }
-
-apply(from = "dependencies.gradle.kts")
 
 // Load Props
 val buildProps = Properties()
@@ -25,11 +22,15 @@ allprojects {
   group = buildProps["project.group"] ?: error("empty 1")
   version = buildProps["project.version"] ?: error("empty 2")
 
-
   repositories {
+    mavenLocal()
     jcenter()
     mavenCentral()
   }
+}
+
+dependencies {
+  implementation(project(":api"))
 }
 
 tasks.jar {
@@ -81,16 +82,4 @@ val test by tasks.getting(Test::class) {
 
 tasks.test {
   exclude("org/veupathdb/service/multiblast/generated")
-  finalizedBy(tasks.jacocoTestReport)
-}
-tasks.jacocoTestReport {
-  dependsOn(tasks.test)
-  reports {
-    xml.isEnabled = true
-    csv.isEnabled = false
-    html.isEnabled = true
-  }
-}
-jacoco {
-  toolVersion = "0.8.6"
 }

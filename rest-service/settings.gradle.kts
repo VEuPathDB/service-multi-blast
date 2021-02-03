@@ -12,9 +12,11 @@ rootProject.name = buildProps.getProperty("project.name")
 //  include(":core")
 //  project(":core").projectDir = core
 //}
+include("api")
 include("db")
 include("queue")
 include("config")
 include("worker")
 include("job-data")
 include("formatter")
+include("bom")

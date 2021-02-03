@@ -8,6 +8,8 @@ java {
 }
 
 dependencies {
-  implementation("org.veupathdb.lib", "jaxrs-container-core", "4.0.0")
-  implementation("info.picocli", "picocli", "4.5.2")
+  implementation(platform(project(":bom")))
+
+  implementation("org.veupathdb.lib", "jaxrs-container-core")
+  implementation("info.picocli", "picocli")
 }

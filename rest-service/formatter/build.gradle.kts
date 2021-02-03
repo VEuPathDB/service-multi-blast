@@ -8,10 +8,15 @@ java {
 }
 
 dependencies {
+  implementation(platform(project(":bom")))
+
   implementation(project(":config"))
-  implementation("org.veupathdb.lib", "jaxrs-container-core", "4.0.0")
-  implementation("com.fasterxml.jackson.core", "jackson-databind", "2.12.1")
-  implementation("org.apache.logging.log4j", "log4j-api", "2.14.0")
-  implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
-  implementation("org.apache.logging.log4j", "log4j", "2.14.0")
+
+  implementation("org.veupathdb.lib", "jaxrs-container-core")
+
+  implementation("com.fasterxml.jackson.core", "jackson-databind")
+
+  implementation("org.apache.logging.log4j", "log4j-api")
+  implementation("org.apache.logging.log4j", "log4j-core")
+  implementation("org.apache.logging.log4j", "log4j")
 }

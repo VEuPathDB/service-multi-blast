@@ -17,6 +17,16 @@ https://veupathdb.github.io/service-multi-blast/api.html[API Docs]
 
 == Local Development
 
+[WARNING]
+--
+Code generation has been intentionally disabled for this repository due to the
+number of "hacks" that would be necessary to adjust the generation output to fit
+this service's needs.
+
+If code generation is needed, commit all changes before running the code
+generator and use git diff to re-apply the manual changes to the generated code.
+--
+
 Building this project locally can be done by running the following command (from
 the repository root):
 

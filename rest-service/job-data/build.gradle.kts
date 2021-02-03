@@ -8,6 +8,9 @@ java {
 }
 
 dependencies {
+  implementation(platform(project(":bom")))
+
   implementation(project(":config"))
-  implementation("org.veupathdb.lib", "jaxrs-container-core", "4.0.0")
+
+  implementation("org.veupathdb.lib", "jaxrs-container-core")
 }
