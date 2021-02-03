@@ -12,6 +12,22 @@ properties:
     type: array
     items: ext.IOJobTarget
     minItems: 1
+  maxResults:
+    description: |
+      Number of results to limit the search to.
+
+      Clients sending this value must also send limiting fields such as
+      `max_target_seqs`, `num_descriptions`, or `num_alignments`.
+
+      The service will validate that the value of the limiting field(s)
+      multiplied by the number of query sequences does not exceed this value.
+
+      Assuming that the number of query seqs is represented as `Q` the
+      validation is performed as `(Q * max_target_seqs) <= maxResults` or
+      `(Q * max(num_descriptions, num_alignments)) <= maxResults`.
+    type: integer
+    minimum: 1
+    required: false
   config:
     description: |
       Blast tool configuration.

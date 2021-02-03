@@ -119,6 +119,20 @@ public class  Config extends Options
   )
   private int jobTimeout = 30;
 
+  @Option(
+    names = "--max-queries-per-request",
+    arity = "1",
+    description = "Max number of queries a user can submit in a single request.\n\nDefaults to 100."
+  )
+  private int maxQueries = 100;
+
+  @Option(
+    names = "--max-results-per-query",
+    arity = "1",
+    description = "Max number of results a user can request.  This value is calculated as <num_queries> * <max_target_seqs>.\n\nDefaults to 10,000."
+  )
+  private int maxResults = 10_000;
+
   private Config() {
   }
 
@@ -167,5 +181,13 @@ public class  Config extends Options
 
   public int getBuildNum() {
     return buildNum;
+  }
+
+  public int getMaxQueries() {
+    return maxQueries;
+  }
+
+  public int getMaxResults() {
+    return maxResults;
   }
 }
