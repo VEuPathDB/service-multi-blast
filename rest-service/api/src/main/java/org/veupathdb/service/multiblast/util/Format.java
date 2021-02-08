@@ -15,8 +15,8 @@ public class Format
 {
   private static final Logger log = LogManager.getLogger(Format.class);
 
-  public static final byte   HASH_SIZE = 32;
-  public static final String HASH_TYPE = "SHA-256";
+  public static final byte   HASH_SIZE = 20;
+  public static final String HASH_TYPE = "MD5";
 
   public static final DecimalFormat Decimals = new DecimalFormat("0.##########");
   public static final ObjectMapper  Json     = new ObjectMapper();
