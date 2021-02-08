@@ -5,6 +5,7 @@ SELECT
 , a.delete_on
 , b.user_id
 , b.description
+, b.max_download_size
 FROM
   userlogins5.multiblast_jobs a
   INNER JOIN userlogins5.multiblast_users b

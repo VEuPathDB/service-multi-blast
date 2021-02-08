@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -18,10 +20,15 @@ public class Format
   public static final byte   HASH_SIZE = 20;
   public static final String HASH_TYPE = "MD5";
 
-  public static final DecimalFormat Decimals = new DecimalFormat("0.##########");
-  public static final ObjectMapper  Json     = new ObjectMapper();
+  public static final DecimalFormat     Decimals   = new DecimalFormat("0.##########");
+  public static final ObjectMapper      Json       = new ObjectMapper();
+  public static final DateTimeFormatter DateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
   private static final byte[] hexTable = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
+
+  public static String toString(OffsetDateTime date) {
+    return DateFormat.format(date);
+  }
 
   public static String toHexString(byte[] value) {
     log.trace("Format#toHexString(byte[])");
