@@ -10,12 +10,13 @@ import java.io.File;
     "query",
     "properties"
 })
-public class NewJobPostRequestMultipartImpl implements NewJobPostRequestMultipart {
+public class IOMultipartJobRequestImpl implements IOMultipartJobRequest
+{
   @JsonProperty("query")
   private File query;
 
   @JsonProperty("properties")
-  private NewJobPostRequestJSON properties;
+  private IOJsonJobRequest properties;
 
   @JsonProperty("query")
   public File getQuery() {
@@ -28,12 +29,12 @@ public class NewJobPostRequestMultipartImpl implements NewJobPostRequestMultipar
   }
 
   @JsonProperty("properties")
-  public NewJobPostRequestJSON getProperties() {
+  public IOJsonJobRequest getProperties() {
     return this.properties;
   }
 
   @JsonProperty("properties")
-  public void setProperties(NewJobPostRequestJSON properties) {
+  public void setProperties(IOJsonJobRequest properties) {
     this.properties = properties;
   }
 }

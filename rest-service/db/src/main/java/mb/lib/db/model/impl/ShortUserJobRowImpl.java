@@ -8,6 +8,7 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
 {
   private final long   userID;
   private final String description;
+  private final long   maxDlSize;
 
   public ShortUserJobRowImpl(
     byte[] hash,
@@ -15,11 +16,13 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userID,
-    String description
+    String description,
+    long maxDlSize
   ) {
     super(hash, queueID, createdOn, deleteOn);
     this.userID      = userID;
     this.description = description;
+    this.maxDlSize   = maxDlSize;
   }
 
   @Override
@@ -30,5 +33,10 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
   @Override
   public String description() {
     return description;
+  }
+
+  @Override
+  public long maxDownloadSize() {
+    return maxDlSize;
   }
 }

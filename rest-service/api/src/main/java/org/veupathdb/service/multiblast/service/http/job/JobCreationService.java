@@ -40,7 +40,7 @@ public class JobCreationService
    */
   private static final String hashPattern = "%s-%s-%s-%s";
 
-  public static NewJobPostResponse createJob(NewJobPostRequestJSON req, long userID) {
+  public static NewJobPostResponse createJob(IOJsonJobRequest req, long userID) {
     log.trace("JobCreationService::createJob(NewJobPostRequestJSON, long)");
     verifyBody(req);
     verifyConfig(req.getConfig());
@@ -56,7 +56,7 @@ public class JobCreationService
     }
   }
 
-  public static NewJobPostResponse createJob(NewJobPostRequestMultipart req, long userID) {
+  public static NewJobPostResponse createJob(IOMultipartJobRequest req, long userID) {
     log.trace("JobCreationService::createJob(NewJobPostRequestMultipart, long)");
     verifyBody(req);
     verifyProps(req.getProperties());
@@ -65,6 +65,7 @@ public class JobCreationService
 
     try {
       var queryHandle = writeQueryToTmp(new FileInputStream(req.getQuery()));
+      //noinspection ResultOfMethodCallIgnored
       req.getQuery().delete();
 
       return createJob(queryHandle, req.getProperties(), userID);
@@ -73,7 +74,7 @@ public class JobCreationService
     }
   }
 
-  static NewJobPostResponse createJob(QueryInfo query, NewJobPostRequestJSON js, long userID)
+  static NewJobPostResponse createJob(QueryInfo query, IOJsonJobRequest js, long userID)
   throws Exception {
     log.trace("JobCreationService::createJob(QueryInfo, NewJobPostRequestJSON, long)");
     {
@@ -89,6 +90,8 @@ public class JobCreationService
 
     var jobInfo = new JobInfo();
     var dbPath  = new StringBuilder();
+    var usrInfo = new UserInfo();
+
     for (var db : js.getTargets()) {
       var path = JobDataManager.makeDBPath(js.getSite(), db.organism(), db.target());
       if (!JobDataManager.targetDBExists(path))
@@ -98,7 +101,10 @@ public class JobCreationService
       dbPath.append(path);
     }
 
-    jobInfo.description = js.getDescription();
+    usrInfo.userID = userID;
+    usrInfo.maxDlSize = js.getMaxResultSize() == null ? 0 : js.getMaxResultSize();
+    usrInfo.description = js.getDescription();
+
     jobInfo.query = query;
     jobInfo.job = JobConverter.toInternal(js.getConfig());
     jobInfo.cli = new CliBuilder();
@@ -128,14 +134,14 @@ public class JobCreationService
     var collide = JobDBManager.getJob(jobInfo.jobHash);
 
     if (collide.isEmpty())
-      return createNew(jobInfo, userID);
+      return createNew(jobInfo, usrInfo);
 
     // If we've hit a job that is dead but has not yet been cleaned up
     // automatically, then do it manually before proceeding.
     if (OffsetDateTime.now().isAfter(collide.get().deleteOn())) {
       new JobCleanup().runChecked();
 
-      return createNew(jobInfo, userID);
+      return createNew(jobInfo, usrInfo);
     }
 
     var jobID = Format.toHexString(jobInfo.jobHash);
@@ -143,10 +149,10 @@ public class JobCreationService
     if (!JobDataManager.jobDataExists(jobID))
       throw new IllegalStateException("Job " + jobID + " has no workspace");
 
-    return handleCollision(jobInfo.jobHash, userID, jobInfo.description);
+    return handleCollision(jobInfo.jobHash, userID, usrInfo);
   }
 
-  static NewJobPostResponse createNew(JobInfo job, long userID) throws Exception {
+  static NewJobPostResponse createNew(JobInfo job, UserInfo user) throws Exception {
     log.trace("JobCreationService::createNew(JobInfo, long)");
 
     var jobIDString = Format.toHexString(job.jobHash);
@@ -168,7 +174,7 @@ public class JobCreationService
         now.plusDays(conf.getJobTimeout()),
         job.job.toSerial()
       ),
-      new UserRowImpl(job.jobHash, userID, job.description)
+      new UserRowImpl(job.jobHash, user.userID, user.description, user.maxDlSize)
     );
 
     var out = new NewJobPostResponseImpl();
@@ -182,17 +188,17 @@ public class JobCreationService
    *
    * @param jobHash Job to link the user to
    * @param userID  ID of the User to link
-   * @param desc    User's description for the job.
+   * @param usrInfo User specific info about the job
    *
    * @return Job creation response
    */
-  static NewJobPostResponse handleCollision(byte[] jobHash, long userID, String desc)
+  static NewJobPostResponse handleCollision(byte[] jobHash, long userID, UserInfo usrInfo)
   throws Exception {
     log.trace("JobCreationService::handleCollision(byte[], long, String)");
 
     // TODO: what about if a user submits the same job 2x with different descriptions?
     if (JobDBManager.getUserJob(jobHash, userID).isEmpty()) {
-      JobDBManager.linkUserToJob(new UserRowImpl(jobHash, userID, desc));
+      JobDBManager.linkUserToJob(new UserRowImpl(jobHash, userID, usrInfo.description, usrInfo.maxDlSize));
       JobDBManager.updateJobDeleteTimer(
         jobHash,
         OffsetDateTime.now().plusDays(conf.getJobTimeout())
@@ -264,7 +270,7 @@ public class JobCreationService
       throw new BadRequestException(msg);
   }
 
-  static void verifyResultLimit(NewJobPostRequestJSON req, QueryInfo query) {
+  static void verifyResultLimit(IOJsonJobRequest req, QueryInfo query) {
     if (req.getMaxResults() != null && req.getMaxResults() > 0)
       ResultLimitValidator.validateResultLimit(
         req.getMaxResults(),
@@ -297,5 +303,11 @@ class JobInfo
   Job        job;
   QueryInfo  query;
   CliBuilder cli;
-  String     description;
+}
+
+class UserInfo
+{
+  long   userID;
+  String description;
+  long   maxDlSize;
 }

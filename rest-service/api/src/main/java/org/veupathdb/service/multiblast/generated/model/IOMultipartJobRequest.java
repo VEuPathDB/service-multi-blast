@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.File;
 
 @JsonDeserialize(
-    as = NewJobPostRequestMultipartImpl.class
+    as = IOMultipartJobRequestImpl.class
 )
-public interface NewJobPostRequestMultipart {
+public interface IOMultipartJobRequest
+{
   @JsonProperty("query")
   File getQuery();
 
@@ -15,8 +16,8 @@ public interface NewJobPostRequestMultipart {
   void setQuery(File query);
 
   @JsonProperty("properties")
-  NewJobPostRequestJSON getProperties();
+  IOJsonJobRequest getProperties();
 
   @JsonProperty("properties")
-  void setProperties(NewJobPostRequestJSON properties);
+  void setProperties(IOJsonJobRequest properties);
 }

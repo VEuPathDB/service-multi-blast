@@ -8,8 +8,8 @@ import javax.ws.rs.core.Response;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
-import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
-import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
+import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
+import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
 import org.veupathdb.service.multiblast.service.http.JobService;
 
@@ -44,7 +44,7 @@ public class JobController implements Jobs
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public PostJobsResponse postJobs(NewJobPostRequestJSON entity) {
+  public PostJobsResponse postJobs(IOJsonJobRequest entity) {
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
@@ -57,7 +57,7 @@ public class JobController implements Jobs
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public PostJobsResponse postJobs(NewJobPostRequestMultipart entity) {
+  public PostJobsResponse postJobs(IOMultipartJobRequest entity) {
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }

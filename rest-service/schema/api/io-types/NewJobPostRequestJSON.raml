@@ -12,7 +12,7 @@ properties:
     type: array
     items: ext.IOJobTarget
     minItems: 1
-  maxResults:
+  maxResults?:
     description: |
       Number of results to limit the search to.
 
@@ -28,6 +28,22 @@ properties:
     type: integer
     minimum: 1
     required: false
+  maxResultSize?:
+    type: integer
+    format: int64
+    minimum: 0
+    description: |
+      Maximum number of bytes the client is willing to accept for report
+      results.  If a requested report for a job is greater in size than the
+      job's `maxResultSize` value, the server will return a 403 error with a
+      message indicating why it is refusing the report request.
+
+      Additionally, when requesting a report, the client may choose to override
+      this value by using the `Content-Max-Length` header to provide an
+      alternative max file size.
+
+      A value of `0` indicates no size limit for generated reports.
+    default: 0
   config:
     description: |
       Blast tool configuration.

@@ -27,14 +27,8 @@ public interface SQL
     interface MultiBlastJobs
     {
       String ById   = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
-      String ByUser = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-user");
       String Stale  = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
 
-      String ShortById         = Load.select(
-        Schema.MultiBlast,
-        Table.MultiBlast.Jobs,
-        "short-by-id"
-      );
       String FullUserRow       = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");
       String ShortUserByUserID = Load.select(
         Schema.MultiBlast,

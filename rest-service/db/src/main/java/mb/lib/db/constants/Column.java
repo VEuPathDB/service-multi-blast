@@ -13,8 +13,9 @@ public interface Column
 
   interface MultiBlastUsers
   {
-    String JobDigest   = "job_digest";
-    String UserId      = "user_id";
-    String Description = "description";
+    String JobDigest       = "job_digest";
+    String UserId          = "user_id";
+    String Description     = "description";
+    String MaxDownloadSize = "max_download_size";
   }
 }

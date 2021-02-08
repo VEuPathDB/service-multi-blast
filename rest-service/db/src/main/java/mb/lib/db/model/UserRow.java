@@ -5,4 +5,6 @@ public interface UserRow extends Row
   long getUserId();
 
   String getDescription();
+
+  long getMaxDownloadSize();
 }
