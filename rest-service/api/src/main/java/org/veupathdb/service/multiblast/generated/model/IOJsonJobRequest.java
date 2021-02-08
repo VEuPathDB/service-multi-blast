@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonDeserialize(
-    as = NewJobPostRequestJSONImpl.class
+    as = IOJsonJobRequestImpl.class
 )
-public interface NewJobPostRequestJSON {
+public interface IOJsonJobRequest
+{
   @JsonProperty("site")
   String getSite();
 
@@ -37,4 +38,10 @@ public interface NewJobPostRequestJSON {
 
   @JsonProperty(JsonKeys.MaxResults)
   void setMaxResults(Integer maxResults);
+
+  @JsonProperty(JsonKeys.MaxResultSize)
+  Long getMaxResultSize();
+
+  @JsonProperty(JsonKeys.MaxResultSize)
+  void setMaxResultSize(Long maxSize);
 }

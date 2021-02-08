@@ -13,46 +13,9 @@ public class JobRowFactory
 
   private static JobRowFactory instance;
 
-  private RowConstructor             newRow             = RowImpl::new;
-  private ShortJobRowConstructor     newShortJobRow     = ShortJobRowImpl::new;
   private ShortUserJobRowConstructor newShortUserJobRow = ShortUserJobRowImpl::new;
   private FullJobRowConstructor      newFullJobRow      = FullJobRowImpl::new;
   private FullUserJobRowConstructor  newFullUserJobRow  = FullUserJobRowImpl::new;
-
-  public static Row newRow(byte[] jobHash) {
-    return getInstance().createNewRow(jobHash);
-  }
-
-  public Row createNewRow(byte[] jobHash) {
-    return newRow.create(jobHash);
-  }
-
-  public void setRowConstructor(RowConstructor con) {
-    newRow = Objects.requireNonNull(con);
-  }
-
-  public static ShortJobRow newShortJobRow(
-    byte[] hash,
-    int queueID,
-    OffsetDateTime createdOn,
-    OffsetDateTime deleteOn
-  ) {
-    return getInstance().createNewShortJobRow(hash, queueID, createdOn, deleteOn);
-  }
-
-  public ShortJobRow createNewShortJobRow(
-    byte[] hash,
-    int queueID,
-    OffsetDateTime createdOn,
-    OffsetDateTime deleteOn
-  ) {
-    log.trace("JobRowFactory#createNewShortJobRow(byte[], int, OffsetDateTime, OffsetDateTime)");
-    return newShortJobRow.create(hash, queueID, createdOn, deleteOn);
-  }
-
-  public void setShortJobRowConstructor(ShortJobRowConstructor con) {
-    newShortJobRow = Objects.requireNonNull(con);
-  }
 
   public static FullJobRow newFullJobRow(
     byte[] hash,
@@ -85,7 +48,8 @@ public class JobRowFactory
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userId,
-    String description
+    String description,
+    long maxDlSize
   ) {
     return getInstance().createNewShortUserJobRow(
       hash,
@@ -93,7 +57,8 @@ public class JobRowFactory
       createdOn,
       deleteOn,
       userId,
-      description
+      description,
+      maxDlSize
     );
   }
 
@@ -103,7 +68,8 @@ public class JobRowFactory
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userId,
-    String description
+    String description,
+    long maxDlSize
   ) {
     log.trace(
       "JobRowFactory#createNewShortUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, long, String)");
@@ -113,7 +79,8 @@ public class JobRowFactory
       createdOn,
       deleteOn,
       userId,
-      description
+      description,
+      maxDlSize
     );
   }
 
@@ -129,7 +96,8 @@ public class JobRowFactory
     OffsetDateTime deleteOn,
     String config,
     long userId,
-    String description
+    String description,
+    long maxDlSize
   ) {
     return getInstance().createNewFullUserJobRow(
       hash,
@@ -138,7 +106,8 @@ public class JobRowFactory
       deleteOn,
       config,
       userId,
-      description
+      description,
+      maxDlSize
     );
   }
 
@@ -149,7 +118,8 @@ public class JobRowFactory
     OffsetDateTime deleteOn,
     String config,
     long userId,
-    String description
+    String description,
+    long maxDlSize
   ) {
     log.trace(
       "JobRowFactory#createNewFullUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, String, long, String)");
@@ -160,7 +130,8 @@ public class JobRowFactory
       deleteOn,
       config,
       userId,
-      description
+      description,
+      maxDlSize
     );
   }
 
@@ -176,23 +147,6 @@ public class JobRowFactory
   }
 
   @FunctionalInterface
-  public interface RowConstructor
-  {
-    Row create(byte[] jobHash);
-  }
-
-  @FunctionalInterface
-  public interface ShortJobRowConstructor
-  {
-    ShortJobRow create(
-      byte[] jobHash,
-      int queueID,
-      OffsetDateTime createdOn,
-      OffsetDateTime deleteOn
-    );
-  }
-
-  @FunctionalInterface
   public interface ShortUserJobRowConstructor
   {
     ShortUserJobRow create(
@@ -201,7 +155,8 @@ public class JobRowFactory
       OffsetDateTime createdOn,
       OffsetDateTime deleteOn,
       long userID,
-      String description
+      String description,
+      long maxDlSize
     );
   }
 
@@ -227,7 +182,8 @@ public class JobRowFactory
       OffsetDateTime deleteOn,
       String config,
       long userId,
-      String description
+      String description,
+      long maxDlSize
     );
   }
 }

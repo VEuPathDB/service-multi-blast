@@ -26,6 +26,13 @@ CREATE TABLE userlogins5.multiblast_users (
 , user_id     NUMBER(12)  REFERENCES userlogins5.users (user_id)
   -- User provided description of their job run.
 , description VARCHAR2(1024)
+  -- Max file size (in bytes) the requester is willing to parse.
+  --
+  -- This limit is applied to all reports requested by this user unless the user
+  -- provides an override max-size header when requesting the results directly.
+  --
+  -- A value of 0 indicates no max size.
+, max_download_size NUMBER(12) DEFAULT 0 NOT NULL
   -- Unique user-to-job link
 , CONSTRAINT mb_uq_user_job UNIQUE (job_digest, user_id)
 )

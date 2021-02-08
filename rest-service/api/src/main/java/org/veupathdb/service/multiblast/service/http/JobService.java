@@ -209,12 +209,12 @@ public class JobService
     }
   }
 
-  public NewJobPostResponse createJob(NewJobPostRequestJSON input, UserProfile user) {
+  public NewJobPostResponse createJob(IOJsonJobRequest input, UserProfile user) {
     log.trace("JobService#createJob(NewJobPostRequestJSON, UserProfile, Request)");
     return JobCreationService.createJob(input, user.getUserId());
   }
 
-  public NewJobPostResponse createJob(NewJobPostRequestMultipart input, UserProfile user) {
+  public NewJobPostResponse createJob(IOMultipartJobRequest input, UserProfile user) {
     log.trace("JobService#createJob(NewJobPostRequestMultipart, UserProfile, Request)");
     return JobCreationService.createJob(input, user.getUserId());
   }

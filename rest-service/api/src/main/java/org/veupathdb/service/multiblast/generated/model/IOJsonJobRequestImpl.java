@@ -3,13 +3,14 @@ package org.veupathdb.service.multiblast.generated.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON
+public class IOJsonJobRequestImpl implements IOJsonJobRequest
 {
   private String        site;
   private IOJobTarget[] targets;
   private IOBlastConfig config;
   private String        description;
   private Integer       maxResults;
+  private Long          maxResultSize;
 
   @Override
   public String getSite() {
@@ -59,5 +60,15 @@ public class NewJobPostRequestJSONImpl implements NewJobPostRequestJSON
   @Override
   public void setMaxResults(Integer maxResults) {
     this.maxResults = maxResults;
+  }
+
+  @Override
+  public Long getMaxResultSize() {
+    return maxResultSize;
+  }
+
+  @Override
+  public void setMaxResultSize(Long maxResultSize) {
+    this.maxResultSize = maxResultSize;
   }
 }

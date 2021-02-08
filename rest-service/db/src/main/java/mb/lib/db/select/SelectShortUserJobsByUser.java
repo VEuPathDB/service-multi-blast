@@ -42,7 +42,8 @@ public class SelectShortUserJobsByUser
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getLong(Column.MultiBlastUsers.UserId),
-      rs.getString(Column.MultiBlastUsers.Description)
+      rs.getString(Column.MultiBlastUsers.Description),
+      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize)
     );
   }
 }

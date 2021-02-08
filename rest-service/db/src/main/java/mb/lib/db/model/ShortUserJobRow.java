@@ -4,4 +4,5 @@ public interface ShortUserJobRow extends ShortJobRow
 {
   long userID();
   String description();
+  long maxDownloadSize();
 }

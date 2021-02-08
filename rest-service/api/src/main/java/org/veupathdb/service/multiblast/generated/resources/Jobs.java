@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response;
 
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
-import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestJSON;
-import org.veupathdb.service.multiblast.generated.model.NewJobPostRequestMultipart;
+import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
+import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
 import org.veupathdb.service.multiblast.generated.model.ShortJobResponse;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
@@ -29,12 +29,12 @@ public interface Jobs {
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  PostJobsResponse postJobs(NewJobPostRequestJSON entity);
+  PostJobsResponse postJobs(IOJsonJobRequest entity);
 
   @POST
   @Produces("application/json")
   @Consumes("multipart/form-data")
-  PostJobsResponse postJobs(NewJobPostRequestMultipart entity);
+  PostJobsResponse postJobs(IOMultipartJobRequest entity);
 
   @GET
   @Path("/{job-id}")

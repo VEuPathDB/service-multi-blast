@@ -6,8 +6,9 @@ import mb.lib.db.model.FullUserJobRow;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
-  private final long userId;
+  private final long   userId;
   private final String description;
+  private final long   maxDlSize;
 
   public FullUserJobRowImpl(
     byte[] hash,
@@ -16,11 +17,13 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
     OffsetDateTime deleteOn,
     String config,
     long userId,
-    String description
+    String description,
+    long maxDlSize
   ) {
     super(hash, queueID, createdOn, deleteOn, config);
     this.userId      = userId;
     this.description = description;
+    this.maxDlSize   = maxDlSize;
   }
 
   @Override
@@ -31,5 +34,10 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
   @Override
   public String description() {
     return description;
+  }
+
+  @Override
+  public long maxDownloadSize() {
+    return maxDlSize;
   }
 }

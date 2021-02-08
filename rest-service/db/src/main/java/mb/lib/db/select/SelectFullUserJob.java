@@ -44,7 +44,8 @@ public class SelectFullUserJob
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getString(Column.MultiBlastJobs.JobConfig),
       rs.getLong(Column.MultiBlastUsers.UserId),
-      rs.getString(Column.MultiBlastUsers.Description)
+      rs.getString(Column.MultiBlastUsers.Description),
+      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize)
     ));
   }
 

@@ -4,13 +4,15 @@ import mb.lib.db.model.UserRow;
 
 public class UserRowImpl extends RowImpl implements UserRow
 {
-  private final long userID;
+  private final long   userID;
   private final String description;
+  private final long   maxDownloadSize;
 
-  public UserRowImpl(byte[] hash, long userID, String description) {
+  public UserRowImpl(byte[] hash, long userID, String description, long maxDlSize) {
     super(hash);
-    this.userID      = userID;
-    this.description = description;
+    this.userID          = userID;
+    this.description     = description;
+    this.maxDownloadSize = maxDlSize;
   }
 
   @Override
@@ -21,5 +23,10 @@ public class UserRowImpl extends RowImpl implements UserRow
   @Override
   public String getDescription() {
     return description;
+  }
+
+  @Override
+  public long getMaxDownloadSize() {
+    return maxDownloadSize;
   }
 }
