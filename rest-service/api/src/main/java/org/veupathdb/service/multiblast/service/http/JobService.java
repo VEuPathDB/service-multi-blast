@@ -9,7 +9,6 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
-import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.JobStatus;
@@ -32,18 +31,18 @@ import static org.veupathdb.service.multiblast.service.http.Util.wrapException;
 //       service container.
 public class JobService
 {
-  private static final Config conf     = Config.getInstance();
   private static final Logger log      = LogManager.getLogger(JobService.class);
   private static final int    buffSize = 8192;
 
   private static JobService instance;
 
   private JobService() {
-    log.trace("JobService::new");
+    log.trace("JobService::new()");
   }
 
   public static JobService getInstance() {
-    log.trace("JobService::getInstance");
+    log.trace("JobService::getInstance()");
+
     if (instance == null)
       instance = new JobService();
 
@@ -51,6 +50,8 @@ public class JobService
   }
 
   public LongJobResponse getJob(String rawID, UserProfile user) {
+    log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserId());
+
     if (!Format.isHex(rawID))
       throw new NotFoundException();
 
@@ -84,19 +85,35 @@ public class JobService
     }
   }
 
-  public List<ShortJobResponse> getJobs(UserProfile user) {
+  public List<IOShortJobResponse> getJobs(UserProfile user) {
+    log.trace("JobService#getJobs(user={})", user.getUserId());
+
     try {
       var jobs = JobDBManager.getUserJobs(user.getUserId());
-      var out  = new ArrayList<ShortJobResponse>(jobs.size());
+      var out  = new ArrayList<IOShortJobResponse>(jobs.size());
 
       for (var job : jobs) {
         if (job.queueID() == 0)
           throw new InternalServerErrorException("Invalid state, job with queue ID of 0");
 
-        var tmp = new ShortJobResponseImpl();
-        tmp.setId(Format.toHexString(job.jobHash()));
-        tmp.setDescription(job.description());
-        tmp.setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())));
+        var jobStatus = JobQueueManager.jobStatus(job.queueID());
+
+        // Success and some failures == unknown
+        // Need to check the filesystem for the real status.
+        if (jobStatus == JobStatus.Unknown) {
+          if (JobDataManager.reportExists(Format.toHexString(job.jobHash())))
+            jobStatus = JobStatus.Completed;
+          else
+            jobStatus = JobStatus.Errored;
+        }
+
+        var tmp = new IOShortJobResponseImpl()
+          .setId(Format.toHexString(job.jobHash()))
+          .setDescription(job.description())
+          .setStatus(convStatus(jobStatus))
+          .setCreated(Format.toString(job.createdOn()))
+          .setExpires(Format.toString(job.deleteOn()))
+          .setMaxResultSize(job.maxDownloadSize());
         out.add(tmp);
       }
 
@@ -107,6 +124,8 @@ public class JobService
   }
 
   public StreamingOutput getQuery(String jobID) {
+    log.trace("JobService#getQuery(jobID={})", jobID);
+
     if (!Format.isHex(jobID))
       throw new NotFoundException();
 
@@ -142,6 +161,8 @@ public class JobService
     boolean zip,
     List<IOBlastReportField> fields
   ) {
+    log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={})", jobID, format, zip, fields);
+
     try {
       if (!Format.isHex(jobID))
         throw new NotFoundException();
@@ -210,16 +231,19 @@ public class JobService
   }
 
   public NewJobPostResponse createJob(IOJsonJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(NewJobPostRequestJSON, UserProfile, Request)");
+    log.trace("JobService#createJob(input={}, user={})", input, user.getUserId());
+
     return JobCreationService.createJob(input, user.getUserId());
   }
 
   public NewJobPostResponse createJob(IOMultipartJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(NewJobPostRequestMultipart, UserProfile, Request)");
+    log.trace("JobService#createJob(input={}, user={})", input,  user.getUserId());
+
     return JobCreationService.createJob(input, user.getUserId());
   }
 
   static IOJobStatus convStatus(JobStatus stat) {
+    log.trace("JobService#convStatus({})", stat);
     return switch (stat) {
       case Completed -> IOJobStatus.COMPLETED;
       case Errored -> IOJobStatus.ERRORED;
@@ -230,6 +254,7 @@ public class JobService
   }
 
   static void setContentType(ReportWrap wrap, FormatType type) {
+    log.trace("JobService#setContentType(ReportWrap, {})", type);
     switch (type) {
       case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
         wrap.contentType = "application/xml";

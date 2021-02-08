@@ -25,4 +25,9 @@ public enum JobStatus
 
     return JobStatus.Unknown;
   }
+
+  @Override
+  public String toString() {
+    return name();
+  }
 }

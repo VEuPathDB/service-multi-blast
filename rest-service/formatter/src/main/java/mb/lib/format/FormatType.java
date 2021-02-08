@@ -52,4 +52,9 @@ public enum FormatType
 
     throw new IllegalArgumentException("Unrecognized format id: " + id);
   }
+
+  @Override
+  public String toString() {
+    return name();
+  }
 }

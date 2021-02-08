@@ -17,7 +17,7 @@ import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
 import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.model.NewJobPostResponse;
-import org.veupathdb.service.multiblast.generated.model.ShortJobResponse;
+import org.veupathdb.service.multiblast.generated.model.IOShortJobResponse;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
 
 @Path("/jobs")
@@ -69,9 +69,9 @@ public interface Jobs {
       super(response, entity);
     }
 
-    public static GetJobsResponse respond200WithApplicationJson(List<ShortJobResponse> entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<ShortJobResponse>> wrappedEntity = new GenericEntity<List<ShortJobResponse>>(entity){};
+    public static GetJobsResponse respond200WithApplicationJson(List<IOShortJobResponse> entity) {
+      Response.ResponseBuilder                responseBuilder = Response.status(200).header("Content-Type", "application/json");
+      GenericEntity<List<IOShortJobResponse>> wrappedEntity   = new GenericEntity<List<IOShortJobResponse>>(entity){};
       responseBuilder.entity(wrappedEntity);
       return new GetJobsResponse(responseBuilder.build(), wrappedEntity);
     }
