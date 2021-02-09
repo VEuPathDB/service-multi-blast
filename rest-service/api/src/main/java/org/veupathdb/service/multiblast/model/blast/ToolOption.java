@@ -209,10 +209,14 @@ public enum ToolOption
   }
 
   public static ToolOption fromString(String value) {
+    // Handle cases where it's coming from a CLI config.
+    if (value.startsWith("-"))
+      value = value.substring(1);
+
     var out = optionsByName.get(value);
 
     if (out == null) {
-      throw new IllegalArgumentException(); // TODO: print actual value
+      throw new IllegalArgumentException("Unrecognized ToolOption value " + value);
     }
 
     return out;

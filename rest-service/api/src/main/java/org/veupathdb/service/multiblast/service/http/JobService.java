@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.job.JobCreationService;
@@ -174,8 +175,9 @@ public class JobService
 
       FormatType pFormat;
 
+      var config = Job.fromSerial(job.config());
+
       if (format == null) {
-        var config = Job.fromSerial(job.config());
         pFormat = FormatType.fromID(config.getJobConfig().getReportFormat().getType().getValue());
       } else {
         try {
@@ -205,6 +207,9 @@ public class JobService
           };
         }
       }
+
+      if (pFormat == FormatType.SequenceAlignmentMap && config.getTool() != BlastTool.BlastN)
+        throw new BadRequestException("The SAM report format is only available for jobs run with blastn");
 
       if (pFormat == FormatType.MultipleFileBlastJSON || pFormat == FormatType.MultipleFileBlastXML2)
         zip = true;
