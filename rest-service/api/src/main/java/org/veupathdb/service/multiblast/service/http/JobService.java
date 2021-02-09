@@ -157,16 +157,20 @@ public class JobService
 
   public ReportWrap getReport(
     String jobID,
+    long   userId,
     String format,
     boolean zip,
-    List<IOBlastReportField> fields
+    List<IOBlastReportField> fields,
+    Long maxDlSize
   ) {
     log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={})", jobID, format, zip, fields);
 
     try {
       if (!Format.isHex(jobID))
         throw new NotFoundException();
-      var job = JobDBManager.getJob(Format.hexToBytes(jobID)).orElseThrow(NotFoundException::new);
+
+      var job = JobDBManager.getUserJob(Format.hexToBytes(jobID), userId)
+        .orElseThrow(NotFoundException::new);
 
       FormatType pFormat;
 
@@ -207,12 +211,18 @@ public class JobService
 
       var out = new ReportWrap();
       out.zipped = zip;
-      out.stream = FormatterManager.formatAs(
+      var tmp = FormatterManager.formatAs(
         jobID,
         pFormat,
         zip,
+        maxDlSize == null ? job.maxDownloadSize() : maxDlSize, // If the client provided a max size header, prefer that value.
         fields.stream().map(f -> f.name).toArray(String[]::new)
       );
+
+      if (tmp.isRight())
+        throw new BadRequestException(tmp.rightOrThrow().getMessage());
+
+      out.stream = tmp.leftOrThrow();
 
       setContentType(out, pFormat);
 

@@ -43,28 +43,18 @@ func customReport(fmt string, req midl.Request) midl.Response {
 	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
 	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
-	kindNum, err := strconv.Atoi(fmt)
-	if err != nil {
-		log.Info("Rejecting request for non-numeric report type")
-		return midl.MakeResponse(http.StatusNotFound, New404Error("No report format found with the given id", reqID))
-	}
-
-	workspace, err := getWorkspace(params[jobIDParam])
-	if err != nil {
-		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
-	}
-
-	outputDir, err := createTmpDir(workspace)
-	if err != nil {
-		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	doZip := true
+	param, ok := req.Parameter("zip")
+	if ok {
+		if param == "false" || param == "f" || param == "0" {
+			doZip = false
+		}
 	}
 
 	rawInput := req.Body()
 	if req.Error() != nil {
 		log.Info("Rejecting request for request error: ", req.Error())
-		return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
+		return New400Error(req.Error().Error(), reqID)
 	}
 	if len(rawInput) > 0 {
 		body := new(runRequestBody)
@@ -74,7 +64,7 @@ func customReport(fmt string, req midl.Request) midl.Response {
 		}))
 		if req.Error() != nil {
 			log.Info("Rejecting request for deserialization error: ", req.Error())
-			return midl.MakeResponse(http.StatusBadRequest, New400Error(req.Error().Error(), reqID))
+			return New400Error(req.Error().Error(), reqID)
 		}
 
 		if len(body.Delim) > 0 {
@@ -85,23 +75,24 @@ func customReport(fmt string, req midl.Request) midl.Response {
 		}
 	}
 
-	if err = runCommand(fmt, outputName(kindNum), outputDir); err != nil {
-		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+	sizeStr, ok := req.Header(maxSizeHeader)
+	size := uint64(0)
+	if ok {
+		if tmp, err := strconv.ParseUint(sizeStr, 10, 64); err != nil {
+			log.Info("Rejecting request for invalid max file size value: " + sizeStr)
+			return New404Error(req.Error().Error(), reqID)
+		} else {
+			size = tmp
+		}
 	}
 
-	zip, err := zipDir(outputDir)
+	kindNum, err := strconv.Atoi(fmt)
 	if err != nil {
-		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		log.Info("Rejecting request for non-numeric report type")
+		return New404Error("No report format found with the given id", reqID)
 	}
-	res := midl.MakeResponse(http.StatusOK, zip)
-	res.Callback(func() {
-		_ = zip.Close()
-		_ = os.RemoveAll(outputDir)
-	})
 
-	return res
+	return runReport(fmt, params[jobIDParam], reqID, kindNum, doZip, size, log)
 }
 
 func RunReportEndpoint(req midl.Request) midl.Response {
@@ -127,25 +118,46 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 	kindNum, err := strconv.Atoi(kind)
 	if err != nil {
 		log.Info("Rejecting request for non-numeric report type")
-		return midl.MakeResponse(http.StatusNotFound, New404Error("No report format found with the given id", reqID))
+		return New404Error("No report format found with the given id", reqID)
 	}
 
-	workspace, err := getWorkspace(params[jobIDParam])
+	sizeStr, ok := req.Header(maxSizeHeader)
+	size := uint64(0)
+	if ok {
+		if tmp, err := strconv.ParseUint(sizeStr, 10, 64); err != nil {
+			log.Info("Rejecting request for invalid max file size value: " + sizeStr)
+			return New404Error(req.Error().Error(), reqID)
+		} else {
+			size = tmp
+		}
+	}
+
+	return runReport(kind, params[jobIDParam], reqID, kindNum, doZip, size, log)
+}
+
+func runReport(
+	fmt, jobID, reqID string,
+	kind int,
+	doZip bool,
+	size uint64,
+	log *logrus.Entry,
+) midl.Response {
+	workspace, err := getWorkspace(jobID)
 	if err != nil {
 		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		return New500Error(err.Error(), reqID)
 	}
 
 	outputDir, err := createTmpDir(workspace)
 	if err != nil {
 		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		return New500Error(err.Error(), reqID)
 	}
 
-	outFile := outputName(kindNum)
-	if err = runCommand(kind, outFile, outputDir); err != nil {
+	outFile := outputName(kind)
+	if err = runCommand(fmt, outFile, outputDir); err != nil {
 		log.Error(err.Error())
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		return New500Error(err.Error(), reqID)
 	}
 
 	if doZip {
@@ -153,9 +165,26 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 		zip, err := zipDir(outputDir)
 		if err != nil {
 			log.Error(err.Error())
-			return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+			return New500Error(err.Error(), reqID)
 		}
 		res := midl.MakeResponse(http.StatusOK, zip)
+
+		if size > 0 {
+			tmp, err := zip.Stat()
+			if err != nil {
+				log.Error("Failed to stat zip file: ", err.Error())
+				_ = zip.Close()
+				_ = os.RemoveAll(outputDir)
+				return New500Error(err.Error(), reqID)
+			}
+
+			if uint64(tmp.Size()) > size {
+				_ = zip.Close()
+				_ = os.RemoveAll(outputDir)
+				return New400Error("File size exceeds requested size limit.", reqID)
+			}
+		}
+
 		res.Callback(func() {
 			log.Debug("Removing temp dir: ", outputDir)
 			_ = zip.Close()
@@ -169,8 +198,24 @@ func RunReportEndpoint(req midl.Request) midl.Response {
 	if tmp, err := os.Open(filepath.Join(outputDir, outFile)); err != nil {
 		log.Error(err.Error())
 
-		return midl.MakeResponse(http.StatusInternalServerError, New500Error(err.Error(), reqID))
+		return New500Error(err.Error(), reqID)
 	} else {
+		if size > 0 {
+			stt, err := tmp.Stat()
+			if err != nil {
+				log.Error("Failed to stat zip file: ", err.Error())
+				_ = tmp.Close()
+				_ = os.RemoveAll(outputDir)
+				return New500Error(err.Error(), reqID)
+			}
+
+			if uint64(stt.Size()) > size {
+				_ = tmp.Close()
+				_ = os.RemoveAll(outputDir)
+				return New400Error("File size exceeds requested size limit.", reqID)
+			}
+		}
+
 		res := midl.MakeResponse(http.StatusOK, tmp)
 		res.Callback(func() {
 			log.Debug("Removing temp dir: ", outputDir)

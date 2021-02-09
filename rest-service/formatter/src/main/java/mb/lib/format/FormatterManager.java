@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vulpine.lib.iffy.Either;
 import mb.lib.config.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,23 +31,25 @@ public class FormatterManager
     this.baseURI = "http://" + conf.getFormatterURI();
   }
 
-  public static InputStream formatAs(
+  public static Either<InputStream, FormatterError> formatAs(
     String jobID,
     FormatType type,
     boolean zip,
+    long sizeCap,
     String... fields
   ) throws Exception {
-    return getInstance().formatReportAs(jobID, type, null, zip, fields);
+    return getInstance().formatReportAs(jobID, type, null, zip, sizeCap, fields);
   }
 
-  public InputStream formatReportAs(
+  public Either<InputStream, FormatterError> formatReportAs(
     String jobID,
     FormatType type,
     Character delim,
     boolean zip,
+    long sizeCap,
     String... fields
   ) throws Exception {
-    log.trace("FormatterManager#formatReportAs(String, FormatType, Character, boolean, String...)");
+    log.trace("FormatterManager#formatReportAs(jobID={}, type={}, delim={}, zip={}, fields={})", jobID, type, delim, zip, fields);
 
     if (!type.isDelimiterAllowed() && delim != null)
       throw new Exception(String.format(
@@ -73,6 +76,7 @@ public class FormatterManager
           .POST(HttpRequest.BodyPublishers
             .ofString(outBody))
           .header("Content-Type", "application/json")
+          .header("Content-Max-Length", String.valueOf(sizeCap))
           .build(),
         HttpResponse.BodyHandlers.ofInputStream()
     );
@@ -83,6 +87,9 @@ public class FormatterManager
 
       var error = mapper.readValue(tmp, ErrorResponse.class);
 
+      if (res.statusCode() == 400)
+        return Either.ofRight(new FormatterError(error.message));
+
       throw new Exception(String.format(
         "Report format request failed with code %d.  Message: %s",
         res.statusCode(),
@@ -90,7 +97,7 @@ public class FormatterManager
       ));
     }
 
-    return res.body();
+    return Either.ofLeft(res.body());
   }
 
   public static FormatterManager getInstance() {
