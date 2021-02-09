@@ -7,9 +7,9 @@ public enum BlastTool
   BlastN,
   BlastP,
   BlastX,
-  PSIBLAST,
-  RPSBLAST,
-  RPSTBLASTN,
+  PSIBlast,
+  RPSBlast,
+  RPSTBlastN,
   TBlastN,
   TBlastX;
 

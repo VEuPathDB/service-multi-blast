@@ -5,6 +5,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
@@ -16,6 +18,8 @@ import org.veupathdb.service.multiblast.service.http.JobService;
 @Authenticated
 public class JobController implements Jobs
 {
+  private static final Logger log = LogManager.getLogger(JobController.class);
+
   private static final String AttachmentPat = "attachment; filename=\"%s.%s\"";
 
   private final Request request;
@@ -23,6 +27,7 @@ public class JobController implements Jobs
   private final JobService  service;
 
   public JobController(@Context Request request) {
+    log.trace("JobController::new(request={})", request);
     this.request = request;
     this.service = JobService.getInstance();
   }
@@ -32,7 +37,10 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsResponse getJobs() {
+    log.trace("JobController#getJobs()");
+
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+
     return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user));
   }
 
@@ -45,7 +53,10 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(IOJsonJobRequest entity) {
+    log.trace("JobController#postJobs(entity={})", entity);
+
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
@@ -58,7 +69,10 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(IOMultipartJobRequest entity) {
+    log.trace("JobController#postJobs(entity={})", entity);
+
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+
     return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
   }
 
@@ -68,22 +82,23 @@ public class JobController implements Jobs
    * If no job with the given ID was found, or the specified job is not
    * associated with the current user, this endpoint returns a 404.
    *
-   * @param jobId ID of the job to look up.
+   * @param jobID ID of the job to look up.
    *
    * @return Full details about the specified job.
    */
   @Override
-  public GetJobsByJobIdResponse getJobsByJobId(String jobId) {
+  public GetJobsByJobIdResponse getJobsByJobId(String jobID) {
+    log.trace("JobController#getJobByJobId(jobID={})", jobID);
+
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-    return GetJobsByJobIdResponse.respond200WithApplicationJson(
-      service.getJob(jobId, user)
-    );
+
+    return GetJobsByJobIdResponse.respond200WithApplicationJson(service.getJob(jobID, user));
   }
 
   /**
    * Retrieve the raw blast query for a specific job.
    *
-   * @param jobId    ID of the job whose query should be retrieved.
+   * @param jobID    ID of the job whose query should be retrieved.
    * @param download Whether or not the query should be marked as an attachment
    *                 in the HTTP response.
    *
@@ -91,27 +106,31 @@ public class JobController implements Jobs
    * text output, or a file attachment.
    */
   @Override
-  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobId, boolean download) {
+  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobID, boolean download) {
+    log.trace("JobController#getJobsQueryByJobId(jobID={}, download={})", jobID, download);
+
     var head = GetJobsQueryByJobIdResponse.headersFor200();
 
     if (download)
-      head = head.withContentDisposition(String.format(AttachmentPat, (jobId + "-query"), "txt"));
+      head = head.withContentDisposition(String.format(AttachmentPat, (jobID + "-query"), "txt"));
 
     return GetJobsQueryByJobIdResponse.respond200WithTextPlain(
-      service.getQuery(jobId),
+      service.getQuery(jobID),
       head
     );
   }
 
   @Override
   public Response getJobsReportByJobId(
-    String jobId,
+    String jobID,
     String format,
     boolean zip,
     boolean inline,
     List<IOBlastReportField> fields
   ) {
-    var wrap = service.getReport(jobId, format, zip, fields);
+    log.trace("JobController#getJobsReportByJobId(jobID={}, format={}, zip={}, inline={}, fields={})", jobID, format, zip, inline, fields);
+
+    var wrap = service.getReport(jobID, format, zip, fields);
 
     var resp = Response.status(200).header("Content-Type", wrap.contentType);
 

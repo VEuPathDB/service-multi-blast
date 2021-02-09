@@ -707,7 +707,7 @@ class BlastConfigImplTest
         .setDatabase("hi")
         .setOutputFile(new File("test1"))
         .setExpectValue(new BigDecimal(77))
-        .setReportFormat(new ReportFormatImpl(BlastReportType.CSV, "v", BlastReportField.BLAST_TRACEBACK_OPS))
+        .setReportFormat(new ReportFormatImpl(BlastReportType.CSV, "v", BlastReportField.BlastTracebackOps))
         .setNumDescriptions(69)
         .setNumAlignments(777)
         .setLineLength(666)
