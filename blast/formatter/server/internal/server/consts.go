@@ -7,4 +7,5 @@ const (
 
 const (
 	reportExportName = "report.zip"
+	maxSizeHeader    = "Content-Max-Length"
 )

@@ -18,8 +18,23 @@ interface ConfigValidator<C>
 
   ErrorMap validate(C conf);
 
+  /**
+   * Int value validation methods.
+   */
   interface Int
   {
+    /**
+     * Optional value greater than or equal to.
+     * <p>
+     * If the value {@code val} is not null, it will be checked against
+     * {@code min} to verify that {@code val >= min}.  If validation fails, an
+     * error will be appended to the validation err map for the current field.
+     *
+     * @param err Validation error aggregation.
+     * @param val Value to validate.
+     * @param min Minimum value to check against.
+     * @param field Name of the field being validated.
+     */
     static void optGtEq(ErrorMap err, Integer val, int min, String field) {
       if (val != null) gtEq(err, val, min, field);
     }
@@ -32,6 +47,18 @@ interface ConfigValidator<C>
       if (val < min) err.putError(field, String.format(errGtEqD, min));
     }
 
+    /**
+     * Optional value greater than or equal to.
+     * <p>
+     * If the value {@code val} is not null, it will be checked against
+     * {@code min} to verify that {@code val >= min}.  If validation fails, an
+     * error will be appended to the validation err map for the current field.
+     *
+     * @param err Validation error aggregation.
+     * @param val Value to validate.
+     * @param min Minimum value to check against.
+     * @param field Name of the field being validated.
+     */
     static void optGtEq(ErrorMap err, Byte val, byte min, String field) {
       if (val != null) gtEq(err, val, min, field);
     }
@@ -40,6 +67,18 @@ interface ConfigValidator<C>
       if (val < min) err.putError(field, String.format(errGtEqD, min));
     }
 
+    /**
+     * Optional value less than or equal to.
+     * <p>
+     * If the value {@code val} is not null, it will be checked against
+     * {@code max} to verify that {@code val <= max}.  If validation fails, an
+     * error will be appended to the validation err map for the current field.
+     *
+     * @param err Validation error aggregation.
+     * @param val Value to validate.
+     * @param max Maximum value to check against.
+     * @param field Name of the field being validated.
+     */
     static void optLtEq(ErrorMap err, Integer val, int max, String field) {
       if (val != null) ltEq(err, val, max, field);
     }

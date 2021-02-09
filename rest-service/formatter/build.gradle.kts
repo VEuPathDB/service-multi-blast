@@ -19,4 +19,6 @@ dependencies {
   implementation("org.apache.logging.log4j", "log4j-api")
   implementation("org.apache.logging.log4j", "log4j-core")
   implementation("org.apache.logging.log4j", "log4j")
+
+  implementation("io.vulpine.lib", "iffy")
 }

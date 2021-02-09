@@ -41,7 +41,7 @@ public class JobCreationService
   private static final String hashPattern = "%s-%s-%s-%s";
 
   public static NewJobPostResponse createJob(IOJsonJobRequest req, long userID) {
-    log.trace("JobCreationService::createJob(NewJobPostRequestJSON, long)");
+    log.trace("JobCreationService::createJob(req={}, userID={})", req, userID);
     verifyBody(req);
     verifyConfig(req.getConfig());
     verifyQuery(req.getConfig().getQuery());
@@ -57,7 +57,7 @@ public class JobCreationService
   }
 
   public static NewJobPostResponse createJob(IOMultipartJobRequest req, long userID) {
-    log.trace("JobCreationService::createJob(NewJobPostRequestMultipart, long)");
+    log.trace("JobCreationService::createJob(req={}, userID={})", req, userID);
     verifyBody(req);
     verifyProps(req.getProperties());
     verifyConfig(req.getProperties().getConfig());
@@ -76,7 +76,7 @@ public class JobCreationService
 
   static NewJobPostResponse createJob(QueryInfo query, IOJsonJobRequest js, long userID)
   throws Exception {
-    log.trace("JobCreationService::createJob(QueryInfo, NewJobPostRequestJSON, long)");
+    log.trace("JobCreationService::createJob(query={}, js={}, userID={})", query, js, userID);
     {
       var errs = BlastValidator.getInstance().validate(js.getConfig());
       if (!errs.isEmpty())
@@ -153,7 +153,7 @@ public class JobCreationService
   }
 
   static NewJobPostResponse createNew(JobInfo job, UserInfo user) throws Exception {
-    log.trace("JobCreationService::createNew(JobInfo, long)");
+    log.trace("JobCreationService::createNew(job={}, user={})", job, user.userID);
 
     var jobIDString = Format.toHexString(job.jobHash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
@@ -194,7 +194,7 @@ public class JobCreationService
    */
   static NewJobPostResponse handleCollision(byte[] jobHash, long userID, UserInfo usrInfo)
   throws Exception {
-    log.trace("JobCreationService::handleCollision(byte[], long, String)");
+    log.trace("JobCreationService::handleCollision(jobHash={}, userID={}, usrInfo={})", jobHash, userID, usrInfo);
 
     // TODO: what about if a user submits the same job 2x with different descriptions?
     if (JobDBManager.getUserJob(jobHash, userID).isEmpty()) {
@@ -218,7 +218,7 @@ public class JobCreationService
    * @return Info about the temp file that was written.
    */
   static QueryInfo writeQueryToTmp(InputStream query) throws Exception {
-    log.trace("JobCreationService::writeQueryToTmp(InputStream)");
+    log.trace("JobCreationService::writeQueryToTmp(query={})", query);
     var tmp = new File("/tmp/" + UUID.randomUUID().toString());
 
     if (!tmp.createNewFile())

@@ -7,12 +7,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.server.ContainerRequest;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
 import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
+import org.veupathdb.service.multiblast.model.io.Headers;
 import org.veupathdb.service.multiblast.service.http.JobService;
 
 @Authenticated
@@ -27,7 +29,7 @@ public class JobController implements Jobs
   private final JobService  service;
 
   public JobController(@Context Request request) {
-    log.trace("JobController::new(request={})", request);
+    log.trace("::new(request={})", request);
     this.request = request;
     this.service = JobService.getInstance();
   }
@@ -37,7 +39,7 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsResponse getJobs() {
-    log.trace("JobController#getJobs()");
+    log.trace("#getJobs()");
 
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
 
@@ -53,7 +55,7 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(IOJsonJobRequest entity) {
-    log.trace("JobController#postJobs(entity={})", entity);
+    log.trace("#postJobs(entity={})", entity);
 
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
 
@@ -69,7 +71,7 @@ public class JobController implements Jobs
    */
   @Override
   public PostJobsResponse postJobs(IOMultipartJobRequest entity) {
-    log.trace("JobController#postJobs(entity={})", entity);
+    log.trace("#postJobs(entity={})", entity);
 
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
 
@@ -88,7 +90,7 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsByJobIdResponse getJobsByJobId(String jobID) {
-    log.trace("JobController#getJobByJobId(jobID={})", jobID);
+    log.trace("#getJobByJobId(jobID={})", jobID);
 
     var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
 
@@ -107,7 +109,7 @@ public class JobController implements Jobs
    */
   @Override
   public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobID, boolean download) {
-    log.trace("JobController#getJobsQueryByJobId(jobID={}, download={})", jobID, download);
+    log.trace("#getJobsQueryByJobId(jobID={}, download={})", jobID, download);
 
     var head = GetJobsQueryByJobIdResponse.headersFor200();
 
@@ -128,9 +130,14 @@ public class JobController implements Jobs
     boolean inline,
     List<IOBlastReportField> fields
   ) {
-    log.trace("JobController#getJobsReportByJobId(jobID={}, format={}, zip={}, inline={}, fields={})", jobID, format, zip, inline, fields);
+    log.trace("#getJobsReportByJobId(jobID={}, format={}, zip={}, inline={}, fields={})", jobID, format, zip, inline, fields);
 
-    var wrap = service.getReport(jobID, format, zip, fields);
+    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+
+    var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
+    var maxDlSize = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
+
+    var wrap = service.getReport(jobID, user.getUserId(), format, zip, fields, maxDlSize);
 
     var resp = Response.status(200).header("Content-Type", wrap.contentType);
 
