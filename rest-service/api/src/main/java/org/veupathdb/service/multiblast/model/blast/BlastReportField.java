@@ -45,213 +45,213 @@ public enum BlastReportField
   /**
    * All subject GIs
    */
-  SUBJECT_ALL_GI("sallgi"),
+  SubjectAllGenInfo("sallgi"),
 
   /**
    * Subject accession
    */
-  SUBJECT_ACCESSION("sacc"),
+  SubjectAccession("sacc"),
 
   /**
    * Subject accession.version
    */
-  SUBJECT_ACCESSION_VERSION("saccver"),
+  SubjectAccessionVersion("saccver"),
 
   /**
    * All subject accessions
    */
-  SUBJECT_ALL_ACCESSION("sallacc"),
+  SubjectAllAccession("sallacc"),
 
   /**
    * Subject sequence length
    */
-  SUBJECT_SEQUENCE_LENGTH("slen"),
+  SubjectSequenceLength("slen"),
 
   /**
    * Start of alignment in query
    */
-  QUERY_ALIGNMENT_START("qstart"),
+  QueryAlignmentStart("qstart"),
 
   /**
    * End of alignment in query
    */
-  QUERY_ALIGNMENT_END("qend"),
+  QueryAlignmentEnd("qend"),
 
   /**
    * Start of alignment in subject
    */
-  SUBJECT_ALIGNMENT_START("sstart"),
+  SubjectAlignmentStart("sstart"),
 
   /**
    * End of alignment in subject
    */
-  SUBJECT_ALIGNMENT_END("send"),
+  SubjectAlignmentEnd("send"),
 
   /**
    * Aligned part of query sequence
    */
-  QUERY_SEQUENCE("qseq"),
+  QuerySequence("qseq"),
 
   /**
    * Aligned part of subject sequence
    */
-  SUBJECT_SEQUENCE("sseq"),
+  SubjectSequence("sseq"),
 
   /**
    * Expect value
    */
-  EXPECT_VALUE("evalue"),
+  ExpectValue("evalue"),
 
   /**
    * Bit score
    */
-  BIT_SCORE("bitscore"),
+  BitScore("bitscore"),
 
   /**
    * Raw score
    */
-  RAW_SCORE("score"),
+  RawScore("score"),
 
   /**
    * Alignment length
    */
-  ALIGNMENT_LENGTH("length"),
+  AlignmentLength("length"),
 
   /**
    * Percentage of identical matches
    */
-  PERCENT_IDENTICAL_MATCHES("pident"),
+  PercentIdenticalMatches("pident"),
 
   /**
    * Number of identical matches
    */
-  NUMBER_IDENTICAL_MATCHES("nident"),
+  NumberIdenticalMatches("nident"),
 
   /**
    * Number of mismatches
    */
-  NUMBER_MISMATCHES("mismatch"),
+  NumberMismatches("mismatch"),
 
   /**
    * Number of positive-scoring matches
    */
-  NUMBER_POSITIVE_MATCHES("positive"),
+  NumberPositiveMatches("positive"),
 
   /**
    * Number of gap openings
    */
-  NUMBER_GAP_OPENINGS("gapopen"),
+  NumberGapOpenings("gapopen"),
 
   /**
    * Total number of gaps
    */
-  NUMBER_GAPS("gaps"),
+  NumberGaps("gaps"),
 
   /**
    * Percentage of positive-scoring matches
    */
-  PERCENT_POSITIVE_MATCHES("ppos"),
+  PercentPositiveMatches("ppos"),
 
   /**
    * Query and subject frames separated by a '/'
    */
-  FRAMES("frames"),
+  Frames("frames"),
 
   /**
    * Query frame
    */
-  QUERY_FRAME("qframe"),
+  QueryFrame("qframe"),
 
   /**
    * Subject frame
    */
-  SUBJECT_FRAME("sframe"),
+  SubjectFrame("sframe"),
 
   /**
    * Blast traceback operations (BTOP)
    */
-  BLAST_TRACEBACK_OPS("btop"),
+  BlastTracebackOps("btop"),
 
   /**
    * Subject Taxonomy ID
    */
-  SUBJECT_TAXONOMY_ID("staxid"),
+  SubjectTaxonomyID("staxid"),
 
   /**
    * Subject Scientific Name
    */
-  SUBJECT_SCIENTIFIC_NAME("ssciname"),
+  SubjectScientificName("ssciname"),
 
   /**
    * Subject Common Name
    */
-  SUBJECT_COMMON_NAME("scomname"),
+  SubjectCommonName("scomname"),
 
   /**
    * Subject Blast Name
    */
-  SUBJECT_BLAST_NAME("sblastname"),
+  SubjectBlastName("sblastname"),
 
   /**
    * Subject Super Kingdom
    */
-  SUBJECT_SUPER_KINGDOM("sskingdom"),
+  SubjectSuperKingdom("sskingdom"),
 
   /**
    * unique Subject Taxonomy ID(s), separated by a ';' (in numerical order)
    */
-  SUBJECT_UNIQUE_TAXONOMY_IDS("staxids"),
+  SubjectUniqueTaxonomyIDs("staxids"),
 
   /**
    * unique Subject Scientific Name(s), separated by a ';'
    */
-  SUBJECT_SCIENTIFIC_NAMES("sscinames"),
+  SubjectScientificNames("sscinames"),
 
   /**
    * unique Subject Common Name(s), separated by a ';'
    */
-  SUBJECT_COMMON_NAMES("scomnames"),
+  SubjectCommonNames("scomnames"),
 
   /**
    * unique Subject Blast Name(s), separated by a ';' (in alphabetical order)
    */
-  SUBJECT_BLAST_NAMES("sblastnames"),
+  SubjectBlastNames("sblastnames"),
 
   /**
    * unique Subject Super Kingdom(s), separated by a ';' (in alphabetical
    * order)
    */
-  SUBJECT_SUPER_KINGDOMS("sskingdoms"),
+  SubjectSuperKingdoms("sskingdoms"),
 
   /**
    * Subject Title
    */
-  SUBJECT_TITLE("stitle"),
+  SubjectTitle("stitle"),
 
   /**
    * All Subject Title(s), separated by a '<>'
    */
-  SUBJECT_ALL_TITLES("salltitles"),
+  SubjectAllTitles("salltitles"),
 
   /**
    * Subject Strand
    */
-  SUBJECT_STRAND("sstrand"),
+  SubjectStrand("sstrand"),
 
   /**
    * Query Coverage Per Subject
    */
-  QUERY_COVERAGE_PER_SUBJECT("qcovs"),
+  QueryCoveragePerSubject("qcovs"),
 
   /**
    * Query Coverage Per HSP
    */
-  QUERY_COVERAGE_PER_HSP("qcovhsp"),
+  QueryCoveragePerHSP("qcovhsp"),
 
   /**
    * Query Coverage Per Unique Subject (blastn only)
    */
-  QUERY_COVERAGE_PER_UNIQUE_SUBJECT("qcovus"),
+  QueryCoveragePerUniqueSubject("qcovus"),
 
   /**
    * Include Sequence Data

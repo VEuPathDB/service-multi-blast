@@ -1550,7 +1550,7 @@ class BlastNConfigImplTest
         .setReportFormat(new ReportFormatImpl(
           BlastReportType.CSV,
           "v",
-          BlastReportField.BLAST_TRACEBACK_OPS
+          BlastReportField.BlastTracebackOps
         ))
         .setNumDescriptions(69)
         .setNumAlignments(777)

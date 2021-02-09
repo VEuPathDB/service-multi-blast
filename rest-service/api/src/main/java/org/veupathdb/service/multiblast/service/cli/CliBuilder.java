@@ -25,27 +25,36 @@ public class CliBuilder
   }
 
   public CliBuilder set(ToolOption key, String... values) {
+    log.trace("CliBuilder#set(key={}, values={})", key, values);
     return setRaw(key, values);
   }
 
   public CliBuilder set(ToolOption key, Integer... values) {
+    log.trace("CliBuilder#set(key={}, values={})", key, values);
     return setRaw(key, values);
   }
 
   public CliBuilder set(ToolOption key, Double... values) {
+    log.trace("CliBuilder#set(key={}, values={})", key, values);
     return setRaw(key, values);
   }
 
   public CliBuilder set(ToolOption key, Long... values) {
+    log.trace("CliBuilder#set(key={}, values={})", key, values);
     return setRaw(key, values);
   }
 
   public CliBuilder setRaw(ToolOption key, Object[] values) {
+    log.trace("CliBuilder#setRaw(key={}, values={})", key, values);
+
     params.put(key, values);
+
     return this;
   }
 
   public CliBuilder append(ToolOption key, Object... values) {
+    log.trace("CliBuilder#append(key={}, values={})", key, values);
+
     var tmp = params.get(key);
 
     if (tmp != null) {
@@ -62,6 +71,8 @@ public class CliBuilder
 
   @SuppressWarnings("UnusedReturnValue")
   public CliBuilder setNonNull(ToolOption key, Object... values) {
+    log.trace("CliBuilder#setNonNull(key={}, values={})", key, values);
+
     if (hasValues(values))
       params.put(key, values);
 
@@ -70,6 +81,8 @@ public class CliBuilder
 
   @SuppressWarnings("UnusedReturnValue")
   public CliBuilder appendNonNull(ToolOption key, Object... values) {
+    log.trace("CliBuilder#appendNonNull(key={}, values={})", key, values);
+
     if (hasValues(values))
       return this.append(key, values);
 
@@ -79,6 +92,7 @@ public class CliBuilder
   @Override
   public String toString() {
     log.trace("CliBuilder#toString()");
+
     var out = new StringBuilder();
 
     toString(out);
@@ -88,6 +102,8 @@ public class CliBuilder
   }
 
   public void toString(StringBuilder out) {
+    log.trace("CliBuilder#toString(out={})", out);
+
     var it = toComponentStream().iterator();
 
     if (!it.hasNext())
@@ -107,14 +123,20 @@ public class CliBuilder
   }
 
   public String[][] toArgPairs() {
+    log.trace("CliBuilder#toArgPairs()");
+
     return toComponentStream().toArray(String[][]::new);
   }
 
   public String[] toArgArray(boolean quoted) {
+    log.trace("CliBuilder#toArgArray(quoted={})", quoted);
+
     return toJoinedStream(quoted).toArray(String[]::new);
   }
 
   public Stream<String[]> toComponentStream() {
+    log.trace("CliBuilder#toComponentStream()");
+
     return params.entrySet()
         .stream()
         .map(e -> new String[]{
@@ -128,12 +150,16 @@ public class CliBuilder
   }
 
   public Stream<String> toJoinedStream(boolean quoted) {
+    log.trace("CliBuilder#toJoinedStream(quoted={})", quoted);
+
     return quoted
       ? toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "='" + escape(e[1]) + '\''))
       : toComponentStream().map(e -> e[0] + (e[1] == null ? "" : "=" + escape(e[1])));
   }
 
   public static String escape(String in) {
+    log.trace("CliBuilder::escape(in=\"{}\")", in);
+
     if (in == null || in.isBlank())
       return "";
 
@@ -152,6 +178,8 @@ public class CliBuilder
   }
 
   public static String joinArgs(Object[] values) {
+    log.trace("CliBuilder::joinArgs(values={})", values);
+
     if (values == null || values.length == 0)
       return "";
 
@@ -182,6 +210,8 @@ public class CliBuilder
   }
 
   protected static boolean hasValues(Object[] values) {
+    log.trace("CliBuilder::hasValues(values={})", values);
+
     if (values == null || values.length == 0)
       return false;
 

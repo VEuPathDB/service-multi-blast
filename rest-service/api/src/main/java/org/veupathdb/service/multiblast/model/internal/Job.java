@@ -98,7 +98,7 @@ public class Job
       case BlastX -> out.setJobConfig(BlastXConfigImpl.fromSerial(node));
       case TBlastN -> out.setJobConfig(TBlastNConfigImpl.fromSerial(node));
       case TBlastX -> out.setJobConfig(TBlastXConfigImpl.fromSerial(node));
-      case PSIBLAST, RPSBLAST, RPSTBLASTN -> throw new IllegalStateException(
+      case PSIBlast, RPSBlast, RPSTBlastN -> throw new IllegalStateException(
         "The psiblast, rpsblast, and rpstblastn tools are not currently supported."
       );
     }
