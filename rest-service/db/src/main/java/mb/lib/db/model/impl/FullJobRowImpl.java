@@ -23,4 +23,9 @@ public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
   public String config() {
     return config;
   }
+
+  @Override
+  public String toString() {
+    return "FullJobRow{hash=" + printID() + "}";
+  }
 }
