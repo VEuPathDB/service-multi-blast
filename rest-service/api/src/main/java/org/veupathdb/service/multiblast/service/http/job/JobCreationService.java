@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.multiblast.generated.model.*;
+import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.JobCleanup;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
@@ -40,8 +41,8 @@ public class JobCreationService
    */
   private static final String hashPattern = "%s-%s-%s-%s";
 
-  public static NewJobPostResponse createJob(IOJsonJobRequest req, long userID) {
-    log.trace("JobCreationService::createJob(req={}, userID={})", req, userID);
+  public static IOJobPostResponse createJob(IOJsonJobRequest req, long userID) {
+    log.trace("::createJob(req={}, userID={})", req, userID);
     verifyBody(req);
     verifyConfig(req.getConfig());
     verifyQuery(req.getConfig().getQuery());
@@ -56,8 +57,8 @@ public class JobCreationService
     }
   }
 
-  public static NewJobPostResponse createJob(IOMultipartJobRequest req, long userID) {
-    log.trace("JobCreationService::createJob(req={}, userID={})", req, userID);
+  public static IOJobPostResponse createJob(IOMultipartJobRequest req, long userID) {
+    log.trace("::createJob(req={}, userID={})", req, userID);
     verifyBody(req);
     verifyProps(req.getProperties());
     verifyConfig(req.getProperties().getConfig());
@@ -74,9 +75,9 @@ public class JobCreationService
     }
   }
 
-  static NewJobPostResponse createJob(QueryInfo query, IOJsonJobRequest js, long userID)
+  static IOJobPostResponse createJob(QueryInfo query, IOJsonJobRequest js, long userID)
   throws Exception {
-    log.trace("JobCreationService::createJob(query={}, js={}, userID={})", query, js, userID);
+    log.trace("::createJob(query={}, js={}, userID={})", query, js, userID);
     {
       var errs = BlastValidator.getInstance().validate(js.getConfig());
       if (!errs.isEmpty())
@@ -86,7 +87,7 @@ public class JobCreationService
     verifyResultLimit(js, query);
 
     if (js.getTargets() == null || js.getTargets().length == 0)
-      throw new UnprocessableEntityException(Collections.singletonMap("targets", Collections.singletonList("1 or more targets must be selected.")));
+      throw new UnprocessableEntityException(new ErrorMap("targets", "1 or more targets must be selected."));
 
     var jobInfo = new JobInfo();
     var dbPath  = new StringBuilder();
@@ -137,11 +138,11 @@ public class JobCreationService
       return createNew(jobInfo, usrInfo);
 
     // If we've hit a job that is dead but has not yet been cleaned up
-    // automatically, then do it manually before proceeding.
+    // automatically, then do it manually before rerunning.
     if (OffsetDateTime.now().isAfter(collide.get().deleteOn())) {
       new JobCleanup().runChecked();
 
-      return createNew(jobInfo, usrInfo);
+      return rerunJob(jobInfo, usrInfo);
     }
 
     var jobID = Format.toHexString(jobInfo.jobHash);
@@ -152,8 +153,30 @@ public class JobCreationService
     return handleCollision(jobInfo.jobHash, userID, usrInfo);
   }
 
-  static NewJobPostResponse createNew(JobInfo job, UserInfo user) throws Exception {
-    log.trace("JobCreationService::createNew(job={}, user={})", job, user.userID);
+  static IOJobPostResponse rerunJob(JobInfo job, UserInfo user) throws Exception {
+    log.trace("::rerunJob(job={}, user={}", job, user);
+
+    var jobIDString = Format.toHexString(job.jobHash);
+    var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
+    var queueID     = JobQueueManager.submitJob(
+      jobIDString,
+      job.job.getTool().value(),
+      job.cli.toArgArray(false)
+    );
+
+    Files.move(job.query.tmpFile.toPath(), jobPath.resolve("query.txt"));
+
+    JobDBManager.updateJobQueueID(job.jobHash, queueID);
+    JobDBManager.updateJobDeleteTimer(
+      job.jobHash,
+      OffsetDateTime.now().plusDays(conf.getJobTimeout())
+    );
+
+    return new IOJobPostResponseImpl().setJobId(jobIDString);
+  }
+
+  static IOJobPostResponse createNew(JobInfo job, UserInfo user) throws Exception {
+    log.trace("::createNew(job={}, user={})", job, user.userID);
 
     var jobIDString = Format.toHexString(job.jobHash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
@@ -177,9 +200,7 @@ public class JobCreationService
       new UserRowImpl(job.jobHash, user.userID, user.description, user.maxDlSize)
     );
 
-    var out = new NewJobPostResponseImpl();
-    out.setJobId(jobIDString);
-    return out;
+    return new IOJobPostResponseImpl().setJobId(jobIDString);
   }
 
   /**
@@ -192,9 +213,9 @@ public class JobCreationService
    *
    * @return Job creation response
    */
-  static NewJobPostResponse handleCollision(byte[] jobHash, long userID, UserInfo usrInfo)
+  static IOJobPostResponse handleCollision(byte[] jobHash, long userID, UserInfo usrInfo)
   throws Exception {
-    log.trace("JobCreationService::handleCollision(jobHash={}, userID={}, usrInfo={})", jobHash, userID, usrInfo);
+    log.trace("::handleCollision(jobHash={}, userID={}, usrInfo={})", jobHash, userID, usrInfo);
 
     // TODO: what about if a user submits the same job 2x with different descriptions?
     if (JobDBManager.getUserJob(jobHash, userID).isEmpty()) {
@@ -205,7 +226,7 @@ public class JobCreationService
       );
     }
 
-    var out = new NewJobPostResponseImpl();
+    var out = new IOJobPostResponseImpl();
     out.setJobId(Format.toHexString(jobHash));
     return out;
   }
@@ -218,7 +239,7 @@ public class JobCreationService
    * @return Info about the temp file that was written.
    */
   static QueryInfo writeQueryToTmp(InputStream query) throws Exception {
-    log.trace("JobCreationService::writeQueryToTmp(query={})", query);
+    log.trace("::writeQueryToTmp(query={})", query);
     var tmp = new File("/tmp/" + UUID.randomUUID().toString());
 
     if (!tmp.createNewFile())

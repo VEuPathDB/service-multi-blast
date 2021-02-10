@@ -21,18 +21,23 @@ public class JobCleanup implements Runnable
   }
 
   public void runChecked() throws Exception {
-    log.trace("JobCleanup.run()");
+    log.trace("#runChecked()");
     log.info("Job Pruning: start");
+
     try {
       var now = OffsetDateTime.now();
       var jobs = JobDBManager.getStaleJobs(now);
 
       log.info("Job Pruning: found " + jobs.size() + " stale jobs");
 
+      log.debug("deleting stale guest job links");
+      JobDBManager.deleteStaleGuests();
+
+      log.debug("deleting orphan jobs");
+      JobDBManager.deleteOrphanJobs();
+
       for (var job : jobs) {
         var idString = Format.toHexString(job.jobHash());
-        log.debug("deleting job {} from the database", idString);
-        JobDBManager.deleteJob(job.jobHash());
 
         log.debug("deleting job {} workspace", idString);
         JobDataManager.deleteJobData(idString);
@@ -44,6 +49,7 @@ public class JobCleanup implements Runnable
       log.error("Job Pruning: error while attempting to prune jobs: ", ex);
       throw ex;
     }
+
     log.info("Job Pruning: complete");
   }
 }

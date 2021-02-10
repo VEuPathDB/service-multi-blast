@@ -7,12 +7,14 @@ public interface SQL
   {
     interface MultiBlastJobs
     {
-      String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
+      String ByID     = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
+      String Orphaned = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "with-no-users");
     }
 
     interface MultiBlastUsers
     {
-      String ByJobID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "by-job-id");
+      String ByJobID     = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "by-job-id");
+      String StaleGuests = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "stale-guests");
     }
   }
 

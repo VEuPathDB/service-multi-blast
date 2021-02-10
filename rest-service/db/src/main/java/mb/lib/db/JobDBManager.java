@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 import mb.lib.db.delete.DeleteJobQuery;
+import mb.lib.db.delete.DeleteOrphanJobsQuery;
+import mb.lib.db.delete.DeleteStaleGuestsQuery;
 import mb.lib.db.delete.DeleteUsersByJobQuery;
 import mb.lib.db.insert.InsertJobQuery;
 import mb.lib.db.insert.InsertUserQuery;
@@ -27,35 +29,41 @@ public class JobDBManager
   private static final Logger log = LogManager.getLogger(JobDBManager.class);
 
   public static boolean jobExists(byte[] jobID) throws Exception {
-    log.trace("JobDBManager#jobExists(byte[])");
-    return new SelectJob(jobID).execute(DbManager.userDatabase().getDataSource()::getConnection).
-      isPresent();
+    log.trace("::jobExists(jobID={})", jobID);
+
+    return new SelectJob(jobID).execute(DbManager.userDatabase().getDataSource()::getConnection)
+      .isPresent();
   }
 
   public static Optional<FullJobRow> getJob(byte[] jobID) throws Exception {
-    log.trace("JobDBManager#getJob(byte[])");
+    log.trace("::getJob(jobID={})", jobID);
+
     return new SelectJob(jobID).execute(DbManager.userDatabase().getDataSource()::getConnection);
   }
 
   public static void updateJobDeleteTimer(byte[] jobID, OffsetDateTime end) throws Exception {
-    log.trace("JobDBManager#updateJobDeleteTimer(byte[], OffsetDateTime)");
+    log.trace("::updateJobDeleteTimer(jobID={}, end={})", jobID, end);
+
     new UpdateJobDeleteDateQuery(jobID, end).run();
   }
 
   public static void updateJobQueueID(byte[] jobID, int queueID) throws Exception {
-    log.trace("JobDBManager#updateJobQueueID(byte[], int)");
+    log.trace("::updateJobQueueID(jobID={}, queueID={})", jobID, queueID);
+
     new UpdateJobQueueIDQuery(jobID, queueID).run();
   }
 
   public static void linkUserToJob(UserRow user) throws Exception {
-    log.trace("JobDBManager#linkUserToJob(UserRow)");
+    log.trace("::linkUserToJob(user={})", user);
+
     try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
       new InsertUserQuery(con, user).run();
     }
   }
 
   public static void registerJob(FullJobRow job, UserRow user) throws Exception {
-    log.trace("JobDBManager#registerJob(FullJobRow, UserRow)");
+    log.trace("::registerJob(job={}, user={})", job, user);
+
     try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
       new InsertJobQuery(con, job).run();
       new InsertUserQuery(con, user).run();
@@ -63,7 +71,7 @@ public class JobDBManager
   }
 
   public static Collection<FullJobRow> getStaleJobs(OffsetDateTime asOf) throws Exception {
-    log.trace("JobDBManager#getStaleJobs(OffsetDateTime)");
+    log.trace("::getStaleJobs(asOf={})", asOf);
     return new SelectStaleJobsQuery(asOf).run();
   }
 
@@ -73,7 +81,7 @@ public class JobDBManager
    * @param jobID ID of the job to delete.
    */
   public static void deleteJob(byte[] jobID) throws Exception {
-    log.trace("JobDBManager#deleteJob(byte[])");
+    log.trace("::deleteJob(jobID={})", jobID);
     try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
       new DeleteUsersByJobQuery(jobID, con).run();
       new DeleteJobQuery(jobID, con).run();
@@ -92,7 +100,7 @@ public class JobDBManager
    * intersection could be found, the option will be empty.
    */
   public static Optional<FullUserJobRow> getUserJob(byte[] jobID, long userID) throws Exception {
-    log.trace("JobDBManager#getUserJob(byte[], long)");
+    log.trace("::getUserJob(jobID={}, userID={})", jobID, userID);
     return new SelectFullUserJob(DbManager.userDatabase().getDataSource(), jobID, userID).run();
   }
 
@@ -105,7 +113,17 @@ public class JobDBManager
    * @return A collection of jobs associated with the given user ID.
    */
   public static Collection<ShortUserJobRow> getUserJobs(long userID) throws Exception {
-    log.trace("JobDBManager#getUserJobs(long)");
+    log.trace("::getUserJobs(userID={})", userID);
     return new SelectShortUserJobsByUser(DbManager.userDatabase().getDataSource(), userID).run();
+  }
+
+  public static void deleteStaleGuests() throws Exception {
+    log.trace("::deleteStaleGuests()");
+    new DeleteStaleGuestsQuery(DbManager.userDatabase().getDataSource()).run();
+  }
+
+  public static void deleteOrphanJobs() throws Exception {
+    log.trace("::deleteOrphanJobs()");
+    new DeleteOrphanJobsQuery(DbManager.userDatabase().getDataSource()).run();
   }
 }

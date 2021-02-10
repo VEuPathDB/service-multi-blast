@@ -36,4 +36,9 @@ public class ShortJobRowImpl extends RowImpl implements ShortJobRow
   public OffsetDateTime deleteOn() {
     return deleteOn;
   }
+
+  @Override
+  public String toString() {
+    return "ShortJobRow{hash=" + printID() + "}";
+  }
 }

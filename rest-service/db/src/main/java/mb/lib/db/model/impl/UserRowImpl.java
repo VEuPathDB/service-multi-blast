@@ -29,4 +29,9 @@ public class UserRowImpl extends RowImpl implements UserRow
   public long getMaxDownloadSize() {
     return maxDownloadSize;
   }
+
+  @Override
+  public String toString() {
+    return "UserRow{userID=" + userID + '}';
+  }
 }
