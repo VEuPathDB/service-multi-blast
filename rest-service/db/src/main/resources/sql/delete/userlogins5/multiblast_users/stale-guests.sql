@@ -10,4 +10,3 @@ WHERE EXISTS (
     AND j.delete_on <= current_timestamp
     AND a.is_guest = 1
 )
-;
