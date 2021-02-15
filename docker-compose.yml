@@ -49,6 +49,7 @@ services:
       - type: bind # volume
         source: ${BLAST_DATA:-/tmp/blast-data} 
         target: /db
+        read_only: true
     labels:
     - "com.centurylinklabs.watchtower.enable=${SERVICE_WATCHTOWER:-false}"
     - "traefik.http.services.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.loadbalancer.server.port=80"
@@ -86,6 +87,7 @@ services:
       - type: bind # volume
         source: ${BLAST_DATA:-/tmp/blast-data} 
         target: /db
+        read_only: true
 
     networks:
       - internal
@@ -112,6 +114,7 @@ services:
       - type: bind # volume
         source: ${BLAST_DATA:-/tmp/blast-data} 
         target: /db
+        read_only: true
     networks:
       - internal
 
