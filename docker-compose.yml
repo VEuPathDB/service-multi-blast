@@ -82,6 +82,13 @@ services:
         source: ${BLAST_DATA:-/tmp/blast-data} 
         target: /db
         read_only: true
+      # because the ncbi/blast container is based on gcloud-sdk it creates a
+      # volume in /root/.confg.  We don't care about this, we configure a
+      # volume so that it is at least tied to the project, instead of a hash.
+      - type: volume
+        source: gcloud-config
+        target: /root/.config
+        read_only: true
 
     networks:
       - internal
@@ -106,6 +113,14 @@ services:
         source: ${BLAST_DATA:-/tmp/blast-data} 
         target: /db
         read_only: true
+      # because the ncbi/blast container is based on gcloud-sdk it creates a
+      # volume in /root/.confg.  We don't care about this, we configure a
+      # volume so that it is at least tied to the project, instead of a hash.
+      - type: volume
+        source: gcloud-config
+        target: /root/.config
+        read_only: true
+
     networks:
       - internal
 
@@ -164,6 +179,7 @@ services:
 volumes:
   job-data:
   mysql-data:
+  gcloud-config:
 
 
 networks:
