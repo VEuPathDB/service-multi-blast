@@ -5,7 +5,7 @@ services:
   # Public facing REST API
   # #
   service:
-      image: veupathdb/mblast-http-service:${SERVICE_TAG:-latest}
+    image: veupathdb/mblast-http-service:${SERVICE_TAG:-latest}
     ports:
       - 8080:80
     environment:
