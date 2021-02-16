@@ -5,7 +5,7 @@ services:
   # Public facing REST API
   # #
   service:
-    image: veupathdb/mblast-http-service
+      image: veupathdb/mblast-http-service:${SERVICE_TAG:-latest}
     ports:
       - 8080:80
     environment:
@@ -66,7 +66,7 @@ services:
   # Blast Query Runner (Job Queue Managed)
   # #
   blast:
-    image: veupathdb/mblast-blast-query
+    image: veupathdb/mblast-blast-query:${BLAST_TAG:-latest}
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
@@ -90,7 +90,7 @@ services:
   # Blast Result Formatter
   # #
   formatter:
-    image: veupathdb/mblast-blast-formatter
+    image: veupathdb/mblast-blast-formatter:${FORMATTER_TAG:-latest}
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
@@ -113,7 +113,7 @@ services:
   # MySQL backing database queue persistence
   # #
   queue-db:
-    image: veupathdb/mblast-queue-db
+    image: veupathdb/mblast-queue-db:${QUEUE_DB_TAG:-latest}
     environment:
       # Root user password (IT'S A SECRET TO EVERYBODY)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
