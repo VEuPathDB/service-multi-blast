@@ -6,9 +6,6 @@ services:
   # #
   service:
     image: veupathdb/mblast-http-service
-    build:
-      dockerfile: Dockerfile
-      context: rest-service
     ports:
       - 8080:80
     environment:
@@ -70,9 +67,6 @@ services:
   # #
   blast:
     image: veupathdb/mblast-blast-query
-    build:
-      dockerfile: Dockerfile
-      context: blast/querier
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
@@ -97,9 +91,6 @@ services:
   # #
   formatter:
     image: veupathdb/mblast-blast-formatter
-    build:
-      dockerfile: Dockerfile
-      context: blast/formatter
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
@@ -123,9 +114,6 @@ services:
   # #
   queue-db:
     image: veupathdb/mblast-queue-db
-    build:
-      dockerfile: Dockerfile
-      context: databases/queue
     environment:
       # Root user password (IT'S A SECRET TO EVERYBODY)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
