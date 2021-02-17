@@ -1,0 +1,182 @@
+version: "3.5"
+
+services:
+  # #
+  # Public facing REST API
+  # #
+  service:
+    image: veupathdb/mblast-http-service:${SERVICE_TAG:-latest}
+    environment:
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
+      SERVER_PORT: ${SERVER_PORT:-80}
+      LDAP_SERVER: ${LDAP_SERVER}
+      ORACLE_BASE_DN: ${ORACLE_BASE_DN}
+
+      # Account Database
+      ACCT_DB_TNS_NAME: ${ACCT_DB_TNS_NAME}
+      ACCT_DB_USER: ${ACCT_DB_USER}
+      ACCT_DB_PASS: ${ACCT_DB_PASS}
+
+      # User Database
+      USER_DB_TNS_NAME: ${USER_DB_TNS_NAME}
+      USER_DB_USER: ${USER_DB_USER}
+      USER_DB_PASS: ${USER_DB_PASS}
+      MULTIBLAST_SCHEMA: ${MULTIBLAST_SCHEMA}
+
+      # Queue Connection
+      QUEUE_HOST: ${QUEUE_HOST:-queue}
+      JOB_CATEGORY: ${JOB_CATEGORY:-blast}
+      FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
+
+      # Misc Config
+      JOB_MOUNT_PATH: /out
+      DB_MOUNT_PATH: /db
+      DB_BUILD: ${DB_BUILD}
+      BLAST_HOST: ${BLAST_HOST:-blast}
+      FORMATTER_HOST: ${FORMATTER_HOST:-formatter}
+      JOB_TIMEOUT: ${JOB_TIMEOUT:-30} #days
+    volumes:
+      - type: volume
+        source: job-data
+        target: /out
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: ${BLAST_DATA:-/tmp/blast-data} 
+        target: /db
+        read_only: true
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${SERVICE_WATCHTOWER:-false}"
+    - "traefik.http.services.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.loadbalancer.server.port=80"
+    - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.rule=Host(`${TRAEFIK_MBLAST_SERVICE_HOST:-mblast-dev.local.apidb.org}`)"
+    - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.tls=true"
+    - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+    - "traefik.docker.network=traefik"
+
+    depends_on:
+      - queue
+      - formatter
+    networks:
+      - traefik
+      - internal
+
+  # #
+  # Blast Query Runner (Job Queue Managed)
+  # #
+  blast:
+    image: veupathdb/mblast-blast-query:${BLAST_TAG:-latest}
+    environment:
+      DB_MOUNT_PATH: /db
+      JOB_MOUNT_PATH: /out
+    volumes:
+      - type: volume
+        source: job-data
+        target: /out
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: ${BLAST_DATA:-/tmp/blast-data} 
+        target: /db
+        read_only: true
+      # because the ncbi/blast container is based on gcloud-sdk it creates a
+      # volume in /root/.confg.  We don't care about this, we configure a
+      # volume so that it is at least tied to the project, instead of a hash.
+      - type: volume
+        source: gcloud-config
+        target: /root/.config
+        read_only: true
+
+    networks:
+      - internal
+
+  # #
+  # Blast Result Formatter
+  # #
+  formatter:
+    image: veupathdb/mblast-blast-formatter:${FORMATTER_TAG:-latest}
+    environment:
+      DB_MOUNT_PATH: /db
+      JOB_MOUNT_PATH: /out
+    volumes:
+      - type: volume
+        source: job-data
+        target: /out
+        # Replace `source` with the path to the blast db files available in your
+        # work environment.
+      - type: bind # volume
+        source: ${BLAST_DATA:-/tmp/blast-data} 
+        target: /db
+        read_only: true
+      # because the ncbi/blast container is based on gcloud-sdk it creates a
+      # volume in /root/.confg.  We don't care about this, we configure a
+      # volume so that it is at least tied to the project, instead of a hash.
+      - type: volume
+        source: gcloud-config
+        target: /root/.config
+        read_only: true
+
+    networks:
+      - internal
+
+  # #
+  # MySQL backing database queue persistence
+  # #
+  queue-db:
+    image: veupathdb/mblast-queue-db:${QUEUE_DB_TAG:-latest}
+    environment:
+      # Root user password (IT'S A SECRET TO EVERYBODY)
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # Service user username
+      QUEUE_DB_USER: ${QUEUE_DB_USER:-queue}
+      # Service user password
+      QUEUE_DB_PASS: ${QUEUE_DB_PASS}
+    volumes:
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+    networks:
+      - internal
+
+  # #
+  # Job Queue
+  # #
+  queue:
+    image: fireworq/fireworq:1.4
+    environment:
+      # REQUIRED!
+      # Specifies a data source name for the job queue and the repository
+      # database in a form user:password@tcp(mysql_host:mysql_port)/database?options
+      #
+      # The password value here must match the `MYSQL_PASSWORD` value for
+      # the queue-db container.
+      FIREWORQ_MYSQL_DSN: queue:${QUEUE_DB_PASS}@tcp(queue-db:3306)/queue #${FIREWORQ_MYSQL_DSN} # queue:<some password here>@tcp(queue-db:3306)/queue
+
+      # Configures the number of simultaneous blast jobs that can be run
+      FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: ${FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS:-2}
+
+      FIREWORQ_BIND: ${FIREWORQ_BIND:-0.0.0.0:80}
+      FIREWORQ_DRIVER: ${FIREWORQ_DRIVER:-mysql}
+      FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
+      JOB_CATEGORY: ${JOB_CATEGORY:-blast}
+    depends_on:
+      - queue-db
+      - blast
+    entrypoint:
+      - sh
+      - -c
+      - 'while ! nc -z queue-db 3306; do echo "Waiting for MySQL..."; sleep 5s; done; /usr/local/bin/fireworq'
+    networks:
+      - internal
+
+volumes:
+  job-data:
+  mysql-data:
+  gcloud-config:
+
+
+networks:
+  internal:
+    internal: true
+  traefik:
+    external: true
+
