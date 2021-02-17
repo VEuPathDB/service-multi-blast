@@ -44,9 +44,11 @@ public class SelectJob
     return Optional.of(JobRowFactory.newFullJobRow(
       this.hash,
       rs.getInt(Column.MultiBlastJobs.QueueID),
+      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
-      rs.getString(Column.MultiBlastJobs.JobConfig)
+      rs.getString(Column.MultiBlastJobs.JobConfig),
+      rs.getString(Column.MultiBlastJobs.Query)
     ));
   }
 

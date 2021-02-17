@@ -13,7 +13,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
-import org.veupathdb.service.multiblast.generated.model.LongJobResponse;
+import org.veupathdb.service.multiblast.generated.model.IOLongJobResponse;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
 import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.model.IOJobPostResponse;
@@ -94,7 +94,7 @@ public interface Jobs {
       super(response, entity);
     }
 
-    public static GetJobsByJobIdResponse respond200WithApplicationJson(LongJobResponse entity) {
+    public static GetJobsByJobIdResponse respond200WithApplicationJson(IOLongJobResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetJobsByJobIdResponse(responseBuilder.build(), entity);

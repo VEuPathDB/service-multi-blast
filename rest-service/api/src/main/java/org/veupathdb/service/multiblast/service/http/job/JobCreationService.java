@@ -3,9 +3,7 @@ package org.veupathdb.service.multiblast.service.http.job;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.security.MessageDigest;
 import java.time.OffsetDateTime;
-import java.util.*;
 import javax.ws.rs.BadRequestException;
 
 import mb.lib.config.Config;
@@ -34,104 +32,129 @@ public class JobCreationService
 
   /**
    * Params:
-   *   1 - Site
-   *   2 - Target string (space separated list of DBs)
-   *   3 - Tool
-   *   4 - CLI Args
+   * 1 - Site
+   * 2 - Target string (space separated list of DBs)
+   * 3 - Tool
+   * 4 - CLI Args
    */
   private static final String hashPattern = "%s-%s-%s-%s";
 
-  public static IOJobPostResponse createJob(IOJsonJobRequest req, long userID) {
+  public static IOJobPostResponse createJobs(IOJsonJobRequest req, long userID) {
     log.trace("::createJob(req={}, userID={})", req, userID);
     verifyBody(req);
     verifyConfig(req.getConfig());
     verifyQuery(req.getConfig().getQuery());
 
     try {
-      var queryHandle = writeQueryToTmp(
+      var queryHandle = new QuerySplitter().splitQueries(
         new ByteArrayInputStream(req.getConfig().getQuery().getBytes(StandardCharsets.UTF_8))
       );
-      return createJob(queryHandle, req, userID);
+      return createJobs(queryHandle, req, userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
     }
   }
 
-  public static IOJobPostResponse createJob(IOMultipartJobRequest req, long userID) {
+  // TODO: if the base request query is null, pass the props to the createJob
+  //       method above.
+  public static IOJobPostResponse createJobs(IOMultipartJobRequest req, long userID) {
     log.trace("::createJob(req={}, userID={})", req, userID);
+
+    if (req.getQuery() == null) {
+      log.debug("query file is null");
+      return createJobs(req.getProperties(), userID);
+    }
+
     verifyBody(req);
     verifyProps(req.getProperties());
     verifyConfig(req.getProperties().getConfig());
     verifyQuery(req.getQuery());
 
     try {
-      var queryHandle = writeQueryToTmp(new FileInputStream(req.getQuery()));
+      var queryHandle = new QuerySplitter().splitQueries(new FileInputStream(req.getQuery()));
       //noinspection ResultOfMethodCallIgnored
       req.getQuery().delete();
 
-      return createJob(queryHandle, req.getProperties(), userID);
+      return createJobs(queryHandle, req.getProperties(), userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
     }
   }
 
-  static IOJobPostResponse createJob(QueryInfo query, IOJsonJobRequest js, long userID)
+  static IOJobPostResponse createJobs(QuerySplitResult queries, IOJsonJobRequest js, long userID)
   throws Exception {
-    log.trace("::createJob(query={}, js={}, userID={})", query, js, userID);
+    log.trace("::createJob(query={}, js={}, userID={})", queries, js, userID);
     {
       var errs = BlastValidator.getInstance().validate(js.getConfig());
       if (!errs.isEmpty())
         throw new UnprocessableEntityException(errs);
     }
 
-    verifyResultLimit(js, query);
+    verifyResultLimit(js, queries);
 
     if (js.getTargets() == null || js.getTargets().length == 0)
-      throw new UnprocessableEntityException(new ErrorMap("targets", "1 or more targets must be selected."));
+      throw new UnprocessableEntityException(new ErrorMap(
+        "targets",
+        "1 or more targets must be selected."
+      ));
 
     var jobInfo = new JobInfo();
-    var dbPath  = new StringBuilder();
     var usrInfo = new UserInfo();
 
-    for (var db : js.getTargets()) {
-      var path = JobDataManager.makeDBPath(js.getSite(), db.organism(), db.target());
-      if (!JobDataManager.targetDBExists(path))
-        throw new BadRequestException("unrecognized query target");
-      if (!dbPath.isEmpty())
-        dbPath.append(' ');
-      dbPath.append(path);
-    }
-
-    usrInfo.userID = userID;
-    usrInfo.maxDlSize = js.getMaxResultSize() == null ? 0 : js.getMaxResultSize();
+    usrInfo.userID      = userID;
+    usrInfo.maxDlSize   = js.getMaxResultSize() == null ? 0 : js.getMaxResultSize();
     usrInfo.description = js.getDescription();
 
-    jobInfo.query = query;
-    jobInfo.job = JobConverter.toInternal(js.getConfig());
-    jobInfo.cli = new CliBuilder();
-    jobInfo.job.getJobConfig().setDatabase(dbPath.toString());
+    jobInfo.dbPath = makeDBPaths(js.getSite(), js.getTargets());
+    jobInfo.query  = queries;
+    jobInfo.job    = JobConverter.toInternal(js.getConfig());
+    jobInfo.cli    = new CliBuilder();
+    jobInfo.job.getJobConfig().setDatabase(jobInfo.dbPath);
 
-    var queryHashString = Format.toHexString(query.queryHash);
-    log.debug("Query Hash: {}", queryHashString);
+    var rootQueryHashString = Format.toHexString(queries.rootQuery.hash);
+    log.debug("Root Query Hash: {}", rootQueryHashString);
 
     // Overwrite the query value with a hash string containing the sha256
     // checksum of the actual query value.
     // The actual query is stored as a file.
-    jobInfo.job.getJobConfig().setQuery(queryHashString);
+    jobInfo.job.getJobConfig().setQuery(rootQueryHashString);
 
     // Convert the job config to a CLI format (which will be hashed).
     jobInfo.job.getJobConfig().toCli(jobInfo.cli);
 
+    // Hash the root job
     jobInfo.jobHash = hashJob(
       js.getSite(),
-      dbPath.toString(),
+      jobInfo.dbPath,
       js.getConfig().getTool().name,
       jobInfo.cli.toString()
     );
-
     log.debug("Job Hash: {}", () -> Format.toHexString(jobInfo.jobHash));
 
-    // Check if the hash for the current job collides with a pre-existing job.
+    {
+      jobInfo.job.getJobConfig().setQuery(Format.toHexString(queries.rootQuery.hash));
+      var cli = new CliBuilder();
+
+      jobInfo.job.getJobConfig().toCli(cli);
+
+      var dets = new JobDetails();
+      dets.source      = queries.rootQuery.source;
+      dets.hash        = hashJob(
+        js.getSite(),
+        jobInfo.dbPath,
+        js.getConfig().getTool().name,
+        cli.toString()
+      );
+      dets.id          = Format.toHexString(dets.hash);
+      dets.job         = jobInfo.job;
+      dets.cli         = cli;
+      dets.userID      = userID;
+      dets.description = js.getDescription();
+      dets.maxDlSize   = js.getMaxResultSize();
+      dets.parentHash  = null;
+    }
+
+    // Check if the hash for the root job collides with a pre-existing job.
     var collide = JobDBManager.getJob(jobInfo.jobHash);
 
     if (collide.isEmpty())
@@ -150,7 +173,40 @@ public class JobCreationService
     if (!JobDataManager.jobDataExists(jobID))
       throw new IllegalStateException("Job " + jobID + " has no workspace");
 
-    return handleCollision(jobInfo.jobHash, userID, usrInfo);
+    return handleCollision(jobInfo.jobHash, usrInfo);
+
+    // For the root query:
+    //   - check for full job collision (if collides link user and be done)
+    //   - insert root query
+    //   - run root query
+    // For sub queries
+    //   - check for sub-query collision (if collides link single result to existing job)
+    //   - insert sub-query
+    //   - run sub-query
+  }
+
+  static JobDetails prepJob(JobInfo ji, IOJsonJobRequest js, QuerySplitRow row, UserInfo ui)
+  throws Exception {
+    ji.job.getJobConfig().setQuery(Format.toHexString(row.hash));
+    var cli = new CliBuilder();
+
+    ji.job.getJobConfig().toCli(cli);
+
+    var dets = new JobDetails();
+    dets.source      = row.source;
+    dets.hash        = hashJob(
+      js.getSite(),
+      ji.dbPath,
+      js.getConfig().getTool().name,
+      cli.toString()
+    );
+    dets.id          = Format.toHexString(dets.hash);
+    dets.job         = ji.job;
+    dets.cli         = cli;
+    dets.userID      = userID;
+    dets.description = js.getDescription();
+    dets.maxDlSize   = js.getMaxResultSize();
+    dets.parentHash  = null;
   }
 
   static IOJobPostResponse rerunJob(JobInfo job, UserInfo user) throws Exception {
@@ -158,7 +214,7 @@ public class JobCreationService
 
     var jobIDString = Format.toHexString(job.jobHash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
-    var queueID     = JobQueueManager.submitJob(
+    var queueID = JobQueueManager.submitJob(
       jobIDString,
       job.job.getTool().value(),
       job.cli.toArgArray(false)
@@ -175,12 +231,12 @@ public class JobCreationService
     return new IOJobPostResponseImpl().setJobId(jobIDString);
   }
 
-  static IOJobPostResponse createNew(JobInfo job, UserInfo user) throws Exception {
+  static IOJobPostResponse createNew(JobInfo job, QuerySplitRow row, UserInfo user)
+  throws Exception {
     log.trace("::createNew(job={}, user={})", job, user.userID);
-
     var jobIDString = Format.toHexString(job.jobHash);
     var jobPath     = JobDataManager.createJobWorkspace(jobIDString);
-    var queueID     = JobQueueManager.submitJob(
+    var queueID = JobQueueManager.submitJob(
       jobIDString,
       job.job.getTool().value(),
       job.cli.toArgArray(false)
@@ -203,6 +259,10 @@ public class JobCreationService
     return new IOJobPostResponseImpl().setJobId(jobIDString);
   }
 
+  static void createJobEntry(int queryNum, QuerySplitRow row) throws Exception {
+    Files.copy(row.source, )
+  }
+
   /**
    * Links the requesting user to the existing job (if that user is not already
    * linked).
@@ -213,13 +273,18 @@ public class JobCreationService
    *
    * @return Job creation response
    */
-  static IOJobPostResponse handleCollision(byte[] jobHash, long userID, UserInfo usrInfo)
+  static IOJobPostResponse handleCollision(byte[] jobHash, UserInfo usrInfo)
   throws Exception {
-    log.trace("::handleCollision(jobHash={}, userID={}, usrInfo={})", jobHash, userID, usrInfo);
+    log.trace("::handleCollision(jobHash={}, usrInfo={})", jobHash, usrInfo);
 
     // TODO: what about if a user submits the same job 2x with different descriptions?
-    if (JobDBManager.getUserJob(jobHash, userID).isEmpty()) {
-      JobDBManager.linkUserToJob(new UserRowImpl(jobHash, userID, usrInfo.description, usrInfo.maxDlSize));
+    if (JobDBManager.getUserJob(jobHash, usrInfo.userID).isEmpty()) {
+      JobDBManager.linkUserToJob(new UserRowImpl(
+        jobHash,
+        usrInfo.userID,
+        usrInfo.description,
+        usrInfo.maxDlSize
+      ));
       JobDBManager.updateJobDeleteTimer(
         jobHash,
         OffsetDateTime.now().plusDays(conf.getJobTimeout())
@@ -231,43 +296,19 @@ public class JobCreationService
     return out;
   }
 
-  /**
-   * Writes the contents of the request's query to a tmp file on disk.
-   *
-   * @param query Stream containing query contents to write.
-   *
-   * @return Info about the temp file that was written.
-   */
-  static QueryInfo writeQueryToTmp(InputStream query) throws Exception {
-    log.trace("::writeQueryToTmp(query={})", query);
-    var tmp = new File("/tmp/" + UUID.randomUUID().toString());
+  static String makeDBPaths(String site, IOJobTarget[] targets) {
+    var dbPath = new StringBuilder();
 
-    if (!tmp.createNewFile())
-      throw new RuntimeException("Failed to create temp file for query.");
-
-    try (
-      var write = new BufferedWriter(new FileWriter(tmp));
-      var read  = new Scanner(query)
-    ) {
-      var dig     = MessageDigest.getInstance(Format.HASH_TYPE);
-      var queries = 0;
-
-      read.useDelimiter("\r\n|\n|\r");
-
-      while (read.hasNext()) {
-        var line = read.next();
-
-        write.write(line);
-        write.write('\n');
-
-        if (line.startsWith(">"))
-          queries++;
-
-        dig.update(line.getBytes(StandardCharsets.UTF_8));
-      }
-
-      return new QueryInfo(tmp, dig.digest(), queries);
+    for (var db : targets) {
+      var path = JobDataManager.makeDBPath(site, db.organism(), db.target());
+      if (!JobDataManager.targetDBExists(path))
+        throw new BadRequestException("unrecognized query target");
+      if (!dbPath.isEmpty())
+        dbPath.append(' ');
+      dbPath.append(path);
     }
+
+    return dbPath.toString();
   }
 
   static void verifyQuery(Object req) {
@@ -291,39 +332,27 @@ public class JobCreationService
       throw new BadRequestException(msg);
   }
 
-  static void verifyResultLimit(IOJsonJobRequest req, QueryInfo query) {
+  static void verifyResultLimit(IOJsonJobRequest req, QuerySplitResult query) {
     if (req.getMaxResults() != null && req.getMaxResults() > 0)
       ResultLimitValidator.validateResultLimit(
         req.getMaxResults(),
-        query.numQueries,
+        query.subQueries.size() + 1,
         req.getConfig()
       ).ifPresent(m -> { throw new UnprocessableEntityException(m); });
   }
 
   static byte[] hashJob(String site, String dbs, String tool, String cli) {
-    return Format.toSHA256(String.format(hashPattern, site, dbs, tool, cli));
-  }
-}
-
-class QueryInfo
-{
-  final File   tmpFile;
-  final byte[] queryHash;
-  final int    numQueries;
-
-  QueryInfo(File a, byte[] b, int c) {
-    tmpFile    = a;
-    queryHash  = b;
-    numQueries = c;
+    return Format.toHash(String.format(hashPattern, site, dbs, tool, cli));
   }
 }
 
 class JobInfo
 {
-  byte[]     jobHash;
-  Job        job;
-  QueryInfo  query;
-  CliBuilder cli;
+  String           dbPath;
+  byte[]           jobHash;
+  Job              job;
+  QuerySplitResult query;
+  CliBuilder       cli;
 }
 
 class UserInfo

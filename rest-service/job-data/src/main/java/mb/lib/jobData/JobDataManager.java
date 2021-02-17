@@ -52,9 +52,7 @@ public class JobDataManager
   }
 
   public static Path createJobWorkspace(String jobID) throws Exception {
-    var path = Path.of(conf.getJobMountPath(), jobID);
-    Files.createDirectories(path);
-    return path;
+    return Files.createDirectories(Path.of(conf.getJobMountPath(), jobID));
   }
 
   public static File getJobQuery(String jobID) {

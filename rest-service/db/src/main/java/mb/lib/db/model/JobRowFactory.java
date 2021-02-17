@@ -1,7 +1,6 @@
 package mb.lib.db.model;
 
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 import mb.lib.db.model.impl.*;
 import org.apache.logging.log4j.LogManager;
@@ -13,18 +12,15 @@ public class JobRowFactory
 
   private static JobRowFactory instance;
 
-  private ShortUserJobRowConstructor newShortUserJobRow = ShortUserJobRowImpl::new;
-  private FullJobRowConstructor      newFullJobRow      = FullJobRowImpl::new;
-  private FullUserJobRowConstructor  newFullUserJobRow  = FullUserJobRowImpl::new;
-
   public static FullJobRow newFullJobRow(
     byte[] hash,
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String config
+    String config,
+    String query
   ) {
-    return getInstance().createNewFullJobRow(hash, queueID, createdOn, deleteOn, config);
+    return getInstance().createNewFullJobRow(hash, queueID, createdOn, deleteOn, config, query);
   }
 
   public FullJobRow createNewFullJobRow(
@@ -32,19 +28,17 @@ public class JobRowFactory
     int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String config
+    String config,
+    String query
   ) {
-    log.trace("JobRowFactory#createNewFullJobRow(byte[], int, OffsetDateTime, OffsetDateTime, String)");
-    return newFullJobRow.create(hash, queueID, createdOn, deleteOn, config);
-  }
-
-  public void setFullJobRowConstructor(FullJobRowConstructor con) {
-    newFullJobRow = Objects.requireNonNull(con);
+    log.trace("#createNewFullJobRow(...)");
+    return new FullJobRowImpl(hash, queueID, createdOn, deleteOn, config, query);
   }
 
   public static ShortUserJobRow newShortUserJobRow(
     byte[] hash,
     int queueID,
+    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userId,
@@ -54,6 +48,7 @@ public class JobRowFactory
     return getInstance().createNewShortUserJobRow(
       hash,
       queueID,
+      parentJobID,
       createdOn,
       deleteOn,
       userId,
@@ -65,17 +60,18 @@ public class JobRowFactory
   public ShortUserJobRow createNewShortUserJobRow(
     byte[] hash,
     int queueID,
+    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userId,
     String description,
     long maxDlSize
   ) {
-    log.trace(
-      "JobRowFactory#createNewShortUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, long, String)");
-    return newShortUserJobRow.create(
+    log.trace("#createNewShortUserJobRow(...)");
+    return new ShortUserJobRowImpl(
       hash,
       queueID,
+      parentJobID,
       createdOn,
       deleteOn,
       userId,
@@ -84,17 +80,14 @@ public class JobRowFactory
     );
   }
 
-  public void setShortUserJobRowConstructor(ShortUserJobRowConstructor con) {
-    newShortUserJobRow = Objects.requireNonNull(con);
-  }
-
-
   public static FullUserJobRow newFullUserJobRow(
     byte[] hash,
     int queueID,
+    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     String config,
+    String query,
     long userId,
     String description,
     long maxDlSize
@@ -102,9 +95,11 @@ public class JobRowFactory
     return getInstance().createNewFullUserJobRow(
       hash,
       queueID,
+      parentJobID,
       createdOn,
       deleteOn,
       config,
+      query,
       userId,
       description,
       maxDlSize
@@ -114,29 +109,29 @@ public class JobRowFactory
   public FullUserJobRow createNewFullUserJobRow(
     byte[] hash,
     int queueID,
+    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     String config,
+    String query,
     long userId,
     String description,
     long maxDlSize
   ) {
-    log.trace(
-      "JobRowFactory#createNewFullUserJobRow(byte[], int, OffsetDateTime, OffsetDateTime, String, long, String)");
-    return newFullUserJobRow.create(
+    log.trace("#createNewFullUserJobRow(...)");
+
+    return new FullUserJobRowImpl(
       hash,
       queueID,
+      parentJobID,
       createdOn,
       deleteOn,
       config,
+      query,
       userId,
       description,
       maxDlSize
     );
-  }
-
-  public void setFullUserJobRowConstructor(FullUserJobRowConstructor con) {
-    newFullUserJobRow = Objects.requireNonNull(con);
   }
 
   public static JobRowFactory getInstance() {
@@ -144,46 +139,5 @@ public class JobRowFactory
       return instance = new JobRowFactory();
 
     return instance;
-  }
-
-  @FunctionalInterface
-  public interface ShortUserJobRowConstructor
-  {
-    ShortUserJobRow create(
-      byte[] hash,
-      int queueID,
-      OffsetDateTime createdOn,
-      OffsetDateTime deleteOn,
-      long userID,
-      String description,
-      long maxDlSize
-    );
-  }
-
-  @FunctionalInterface
-  public interface FullJobRowConstructor
-  {
-    FullJobRow create(
-      byte[] hash,
-      int queueID,
-      OffsetDateTime createdOn,
-      OffsetDateTime deleteOn,
-      String config
-    );
-  }
-
-  @FunctionalInterface
-  public interface FullUserJobRowConstructor
-  {
-    FullUserJobRow create(
-      byte[] hash,
-      int queueID,
-      OffsetDateTime createdOn,
-      OffsetDateTime deleteOn,
-      String config,
-      long userId,
-      String description,
-      long maxDlSize
-    );
   }
 }

@@ -1,8 +1,5 @@
 package mb.lib.db.model;
 
-public interface ShortUserJobRow extends ShortJobRow
+public interface ShortUserJobRow extends ShortJobRow, UserRow
 {
-  long userID();
-  String description();
-  long maxDownloadSize();
 }

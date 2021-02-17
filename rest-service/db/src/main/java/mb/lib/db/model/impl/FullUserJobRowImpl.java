@@ -6,29 +6,33 @@ import mb.lib.db.model.FullUserJobRow;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
-  private final long   userId;
+  private final long   userID;
   private final String description;
   private final long   maxDlSize;
+  private final byte[] parentJobID;
 
   public FullUserJobRowImpl(
     byte[] hash,
     int queueID,
+    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     String config,
-    long userId,
+    String query,
+    long userID,
     String description,
     long maxDlSize
   ) {
-    super(hash, queueID, createdOn, deleteOn, config);
-    this.userId      = userId;
+    super(hash, queueID, createdOn, deleteOn, config, query);
+    this.userID      = userID;
     this.description = description;
+    this.parentJobID = parentJobID;
     this.maxDlSize   = maxDlSize;
   }
 
   @Override
   public long userID() {
-    return userId;
+    return userID;
   }
 
   @Override
@@ -39,5 +43,15 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
   @Override
   public long maxDownloadSize() {
     return maxDlSize;
+  }
+
+  @Override
+  public byte[] parentHash() {
+    return parentJobID;
+  }
+
+  @Override
+  public String toString() {
+    return "FullUserJobRow{hash="+ printID() +", userID=" + userID + '}';
   }
 }

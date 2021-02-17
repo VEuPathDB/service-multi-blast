@@ -39,6 +39,7 @@ public class SelectShortUserJobsByUser
     return JobRowFactory.newShortUserJobRow(
       rs.getBytes(Column.MultiBlastJobs.JobDigest),
       rs.getInt(Column.MultiBlastJobs.QueueID),
+      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getLong(Column.MultiBlastUsers.UserId),

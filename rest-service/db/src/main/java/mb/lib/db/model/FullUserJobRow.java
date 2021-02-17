@@ -1,5 +1,5 @@
 package mb.lib.db.model;
 
-public interface FullUserJobRow extends FullJobRow, ShortUserJobRow
+public interface FullUserJobRow extends FullJobRow, UserRow
 {
 }
