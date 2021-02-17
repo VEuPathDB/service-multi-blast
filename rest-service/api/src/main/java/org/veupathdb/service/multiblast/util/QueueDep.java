@@ -19,7 +19,7 @@ public class QueueDep extends ServiceDependency
   public static final String Name = "Job Queue";
 
   public QueueDep(Config conf) {
-    super(Name, Address.http(conf.getQueueHost()), 80);
+    super(Name, conf.getQueueHost(), 80);
   }
 
   @Override

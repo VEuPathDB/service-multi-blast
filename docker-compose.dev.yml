@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+  service:
+    build:
+      dockerfile: Dockerfile
+      context: rest-service
+
+  blast:
+    build:
+      dockerfile: Dockerfile
+      context: blast/querier
+
+  formatter:
+    build:
+      dockerfile: Dockerfile
+      context: blast/formatter
+
+  queue-db:
+    build:
+      dockerfile: Dockerfile
+      context: databases/queue
+
