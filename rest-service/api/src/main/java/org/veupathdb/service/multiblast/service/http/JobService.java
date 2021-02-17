@@ -50,7 +50,7 @@ public class JobService
     return instance;
   }
 
-  public LongJobResponse getJob(String rawID, UserProfile user) {
+  public IOLongJobResponse getJob(String rawID, UserProfile user) {
     log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserId());
 
     if (!Format.isHex(rawID))
@@ -67,7 +67,7 @@ public class JobService
 
       var job = opt.get();
 
-      var out = new LongJobResponseImpl();
+      var out = new IOLongJobResponseImpl();
       out.setId(rawID);
       out.setDescription(job.description());
       out.setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())));
@@ -248,13 +248,13 @@ public class JobService
   public IOJobPostResponse createJob(IOJsonJobRequest input, UserProfile user) {
     log.trace("JobService#createJob(input={}, user={})", input, user.getUserId());
 
-    return JobCreationService.createJob(input, user.getUserId());
+    return JobCreationService.createJobs(input, user.getUserId());
   }
 
   public IOJobPostResponse createJob(IOMultipartJobRequest input, UserProfile user) {
     log.trace("JobService#createJob(input={}, user={})", input,  user.getUserId());
 
-    return JobCreationService.createJob(input, user.getUserId());
+    return JobCreationService.createJobs(input, user.getUserId());
   }
 
   static IOJobStatus convStatus(JobStatus stat) {

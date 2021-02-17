@@ -11,6 +11,7 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   private String      created;
   private String      expires;
   private Long        maxResultSize;
+  private String      parentJobID;
 
   @Override
   public String getId() {
@@ -75,6 +76,17 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   @Override
   public IOShortJobResponseImpl setMaxResultSize(Long maxResultSize) {
     this.maxResultSize = maxResultSize;
+    return this;
+  }
+
+  @Override
+  public String getParentJobID() {
+    return parentJobID;
+  }
+
+  @Override
+  public IOShortJobResponse setParentJobID(String parentJobID) {
+    this.parentJobID = parentJobID;
     return this;
   }
 }

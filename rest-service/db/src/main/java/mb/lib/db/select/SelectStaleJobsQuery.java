@@ -34,9 +34,11 @@ public class SelectStaleJobsQuery
     return JobRowFactory.newFullJobRow(
       rs.getBytes(Column.MultiBlastJobs.JobDigest),
       rs.getInt(Column.MultiBlastJobs.QueueID),
+      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
-      rs.getString(Column.MultiBlastJobs.JobConfig)
+      rs.getString(Column.MultiBlastJobs.JobConfig),
+      rs.getString(Column.MultiBlastJobs.Query)
     );
   }
 

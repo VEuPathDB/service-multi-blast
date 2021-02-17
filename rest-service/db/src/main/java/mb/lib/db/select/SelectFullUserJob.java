@@ -40,9 +40,11 @@ public class SelectFullUserJob
     return Optional.of(JobRowFactory.newFullUserJobRow(
       jobID,
       rs.getInt(Column.MultiBlastJobs.QueueID),
+      rs.getBytes(Column.MultiBlastUsers.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getString(Column.MultiBlastJobs.JobConfig),
+      rs.getString(Column.MultiBlastJobs.Query),
       rs.getLong(Column.MultiBlastUsers.UserId),
       rs.getString(Column.MultiBlastUsers.Description),
       rs.getLong(Column.MultiBlastUsers.MaxDownloadSize)

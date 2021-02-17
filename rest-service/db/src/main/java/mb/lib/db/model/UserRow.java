@@ -2,9 +2,14 @@ package mb.lib.db.model;
 
 public interface UserRow extends Row
 {
-  long getUserId();
+  long userID();
 
-  String getDescription();
+  String description();
 
-  long getMaxDownloadSize();
+  /**
+   * @return an optional 32 byte parent job hash.
+   */
+  byte[] parentHash();
+
+  long maxDownloadSize();
 }

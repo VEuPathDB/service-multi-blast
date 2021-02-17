@@ -76,28 +76,13 @@ public class Format
     return true;
   }
 
-  public static byte[] toSHA256(String value) {
+  public static byte[] toHash(String value) {
     log.trace("Format#toSHA256(String)");
 
     try {
       var dig = MessageDigest.getInstance(HASH_TYPE);
       return dig.digest(value.getBytes(StandardCharsets.UTF_8));
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public static byte[] toSHA256(InputStream value) {
-    var buffer = new byte[8192];
-    try {
-      var dig = MessageDigest.getInstance(HASH_TYPE);
-      var buf = new BufferedInputStream(value);
-      int n;
-      while ((n = buf.read(buffer)) > 0) {
-        dig.update(buffer, 0, n);
-      }
-      return dig.digest();
-    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }

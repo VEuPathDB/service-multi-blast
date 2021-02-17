@@ -42,4 +42,10 @@ public interface IOShortJobResponse
 
   @JsonProperty(JsonKeys.MaxResultSize)
   IOShortJobResponse setMaxResultSize(Long val);
+
+  @JsonProperty(JsonKeys.ParentJobID)
+  String getParentJobID();
+
+  @JsonProperty(JsonKeys.ParentJobID)
+  IOShortJobResponse setParentJobID(String parentJobID);
 }

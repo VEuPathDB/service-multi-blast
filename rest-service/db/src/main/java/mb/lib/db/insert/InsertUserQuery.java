@@ -24,9 +24,10 @@ public class InsertUserQuery
 
   private void prepare(PreparedStatement ps) throws SQLException {
     ps.setBytes(1, user.jobHash());
-    ps.setLong(2, user.getUserId());
-    ps.setString(3, user.getDescription());
-    ps.setLong(4, user.getMaxDownloadSize());
+    ps.setLong(2, user.userID());
+    ps.setString(3, user.description());
+    ps.setBytes(4, user.parentHash());
+    ps.setLong(5, user.maxDownloadSize());
   }
 
   public static void execute(Connection con, UserRow user) throws Exception {
