@@ -17,39 +17,7 @@ import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.util.Format;
 
-class SubJobCreator
-{
-  static void createJobs(JobDetails[] jobs) throws Exception {
-    for (var jd : jobs) {
-      createJob(jd);
-    }
-  }
-
-  static void createJob(JobDetails job) throws Exception {
-    var jobPath = JobDataManager.createJobWorkspace(job.id);
-    var queueID = JobQueueManager.submitJob(
-      job.id,
-      job.job.getTool().value(),
-      job.cli.toArgArray(false)
-    );
-    var now   = OffsetDateTime.now();
-    var moved = Files.copy(job.source.toPath(), jobPath.resolve("query.txt"));
-
-    JobDBManager.registerJob(
-      new FullJobRowImpl(
-        job.hash,
-        queueID,
-        now,
-        now.plusDays(Config.getInstance().getJobTimeout()),
-        job.job.toSerial(),
-        Files.readString(moved)
-      ),
-      new UserRowImpl(job.hash, job.userID, job.description, job.parentHash, job.maxDlSize)
-    );
-  }
-}
-
-class JobDetails
+public class JobDetails
 {
   File       source;
   byte[]     hash;
@@ -60,4 +28,19 @@ class JobDetails
   String     description;
   long       maxDlSize;
   byte[]     parentHash;
+
+  @Override
+  public String toString() {
+    return Format.Json.createObjectNode()
+      .put("source", source.getName())
+      .put("hash", id)
+      .put("id", id)
+      .put("job", job.toString())
+      .put("cli", cli.toString())
+      .put("userID", userID)
+      .put("description", description)
+      .put("maxDlSize", maxDlSize)
+      .put("parentHash", parentHash)
+      .toString();
+  }
 }

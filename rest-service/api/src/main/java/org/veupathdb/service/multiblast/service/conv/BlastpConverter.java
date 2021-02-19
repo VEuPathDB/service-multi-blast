@@ -17,11 +17,11 @@ class BlastpConverter
   private static BlastpConverter instance;
 
   private BlastpConverter() {
-    log.trace("BlastpConverter#new()");
+    log.trace("::new()");
   }
 
   static BlastpConverter getInstance() {
-    log.trace("BlastpConverter#getInstance()");
+    log.trace("::getInstance()");
 
     if (instance == null)
       return instance = new BlastpConverter();
@@ -34,7 +34,7 @@ class BlastpConverter
   }
 
   static IOBlastpTask toExternal(BlastpTask val) {
-    log.trace("BlastpConverter#toExternal(BlastpTask)");
+    log.trace("::toExternal(val={})", val);
 
     if (val == null)
       return null;
@@ -47,7 +47,7 @@ class BlastpConverter
   }
 
   static IOBlastpScoringMatrix toExternal(BlastpScoringMatrix val) {
-    log.trace("BlastpConverter#toExternal(BlastpScoringMatrix)");
+    log.trace("::toExternal(val={})", val);
 
     if (val == null)
       return null;
@@ -66,7 +66,7 @@ class BlastpConverter
   }
 
   static BlastpTask toInternal(IOBlastpTask val) {
-    log.trace("BlastpConverter#toInternal(IOBlastpTask)");
+    log.trace("::toInternal(val={})", val);
 
     if (val == null)
       return null;
@@ -79,7 +79,7 @@ class BlastpConverter
   }
 
   static BlastpScoringMatrix toInternal(IOBlastpScoringMatrix val) {
-    log.trace("BlastpConverter#toInternal(IOBlastpScoringMatrix)");
+    log.trace("::toInternal(val={})", val);
 
     if (val == null)
       return null;
@@ -98,13 +98,13 @@ class BlastpConverter
   }
 
   static BlastpConfig toInternal(IOBlastpConfig conf) {
-    log.trace("BlastpConverter#toInternal(IOBlastpConfig)");
+    log.trace("::toInternal(conf={})", conf);
 
     return getInstance().externalToInternal(conf);
   }
 
   BlastpConfig externalToInternal(IOBlastpConfig conf) {
-    log.trace("BlastpConverter#externalToInternal(IOBlastpConfig)");
+    log.trace("#externalToInternal(conf={})", conf);
 
     return new BlastPConfigImpl()
       .setTask(toInternal(conf.getTask()))
@@ -131,7 +131,7 @@ class BlastpConverter
   }
 
   IOBlastpConfig internalToExternal(IOBlastpConfig out, BlastpConfig conf) {
-    log.trace("BlastpConverter#internalToExternal(BlastPConfig)");
+    log.trace("#internalToExternal(out={}, conf={})", out, conf);
 
     if (conf == null)
       return null;

@@ -67,11 +67,22 @@ public class JobService
 
       var job = opt.get();
 
-      var out = new IOLongJobResponseImpl();
-      out.setId(rawID);
-      out.setDescription(job.description());
-      out.setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())));
-      out.setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+      var out = new IOLongJobResponseImpl()
+        .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+      out.setId(rawID)
+        .setDescription(job.description())
+        .setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())))
+        .setCreated(Format.DateFormat.format(job.createdOn()))
+        .setExpires(Format.DateFormat.format(job.deleteOn()))
+        .setMaxResultSize(job.maxDownloadSize())
+        .setParentJobs(
+          JobDBManager.getParentJobs(jobID, user.getUserId())
+            .stream()
+            .map(j -> new IOParentJobLinkImpl()
+              .setId(Format.toHexString(j.parentHash()))
+              .setIndex(j.position()))
+            .toArray(IOParentJobLink[]::new)
+        );
 
       if (out.getStatus() == null) {
         if (JobDataManager.reportExists(rawID))
@@ -114,7 +125,15 @@ public class JobService
           .setStatus(convStatus(jobStatus))
           .setCreated(Format.toString(job.createdOn()))
           .setExpires(Format.toString(job.deleteOn()))
-          .setMaxResultSize(job.maxDownloadSize());
+          .setMaxResultSize(job.maxDownloadSize())
+          .setParentJobs(
+            JobDBManager.getParentJobs(job.jobHash(), user.getUserId())
+              .stream()
+              .map(j -> new IOParentJobLinkImpl()
+                .setId(Format.toHexString(j.parentHash()))
+                .setIndex(j.position()))
+              .toArray(IOParentJobLink[]::new)
+          );
         out.add(tmp);
       }
 

@@ -11,21 +11,29 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import mb.lib.config.Config;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JobDataManager
 {
-  private static final Config conf = Config.getInstance();
+  private static final Logger log = LogManager.getLogger(JobDataManager.class);
+
+  private static final Config conf         = Config.getInstance();
   private static final String jobErrorFile = "error.log";
 
   public static Path makeDBPath(String site, String org, String tgt) {
+    log.trace("::makeDBPath(site={}, org={}, tgt={})", site, org, tgt);
     return Paths.get(conf.getDbMountPath(), site, "build-" + conf.getBuildNum(), org, "blast", tgt);
   }
 
   public static boolean reportExists(String jobID) {
+    log.trace("::reportExists(jobID={})", jobID);
     return Path.of(conf.getJobMountPath(), jobID, "report.asn1").toFile().exists();
   }
 
   public static boolean targetDBExists(Path tgt) {
+    log.trace("::targetDBExists(tgt={})", tgt);
+
     if (!tgt.getParent().toFile().exists())
       return false;
 
@@ -40,6 +48,8 @@ public class JobDataManager
   }
 
   public static boolean jobDataExists(String jobID) {
+    log.trace("::jobDataExists(jobID={})", jobID);
+
     var jobDir = Path.of(conf.getJobMountPath(), jobID).toFile();
 
     if (!jobDir.exists())
@@ -52,14 +62,17 @@ public class JobDataManager
   }
 
   public static Path createJobWorkspace(String jobID) throws Exception {
+    log.trace("::createJobWorkspace(jobID={})", jobID);
     return Files.createDirectories(Path.of(conf.getJobMountPath(), jobID));
   }
 
   public static File getJobQuery(String jobID) {
+    log.trace("::getJobQuery(jobID={})", jobID);
     return getJobFile(jobID, "query.txt");
   }
 
   public static File getJobFile(String jobID, String fileName) {
+    log.trace("::getJobFile(jobID={}, fileName={}", jobID, fileName);
     return Path.of(conf.getJobMountPath(), jobID, fileName).toFile();
   }
 
@@ -76,7 +89,7 @@ public class JobDataManager
    * @param jobID ID of the job to retrieve the error log for.
    *
    * @return An option that may contain a stream over the job's error log
-   *         contents.
+   * contents.
    */
   public static Optional<InputStream> getJobError(String jobID) {
     var errorLog = Path.of(conf.getJobMountPath(), jobID, jobErrorFile).toFile();
@@ -99,7 +112,13 @@ public class JobDataManager
    * @param jobID ID of the job whose directory should be erased.
    */
   public static void deleteJobData(String jobID) throws Exception {
+    log.trace("::deleteJobData(jobID={})", jobID);
+
     var path = Path.of(conf.getJobMountPath(), jobID);
+
+    // If the path doesn't exist, nothing to do.
+    if (!path.toFile().exists())
+      return;
 
     Files.walk(path)
       .sorted(Comparator.reverseOrder())
@@ -108,6 +127,8 @@ public class JobDataManager
   }
 
   public static Collection<File> getJobUserFiles(String jobID) {
+    log.trace("::getJobUserFiles(jobID={})", jobID);
+
     return getAllJobFiles(jobID).stream()
       .filter(file -> !file.getName().equals(jobErrorFile))
       .collect(Collectors.toList());
@@ -121,6 +142,8 @@ public class JobDataManager
    * @return A list of all files associated with that job.
    */
   public static Collection<File> getAllJobFiles(String jobID) {
+    log.trace("::getAllJobFiles(jobID={})", jobID);
+
     var jobDir   = Path.of(Config.getInstance().getJobMountPath(), jobID).toFile();
     var children = jobDir.listFiles();
 

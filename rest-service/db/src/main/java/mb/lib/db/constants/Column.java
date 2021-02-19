@@ -17,7 +17,13 @@ public interface Column
     String JobDigest       = "job_digest";
     String UserId          = "user_id";
     String Description     = "description";
-    String ParentJobID     = "parent_job";
     String MaxDownloadSize = "max_download_size";
+  }
+
+  interface MultiBlastJobToJobs
+  {
+    String JobDigest    = "job_digest";
+    String ParentDigest = "parent_digest";
+    String Position     = "position";
   }
 }

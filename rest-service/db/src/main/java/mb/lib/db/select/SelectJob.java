@@ -11,7 +11,6 @@ import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
-import mb.lib.db.model.JobRowFactory;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import oracle.jdbc.OracleType;
 import oracle.sql.RAW;
@@ -41,14 +40,13 @@ public class SelectJob
     if (!rs.next())
       return Optional.empty();
 
-    return Optional.of(JobRowFactory.newFullJobRow(
+    return Optional.of(new FullJobRowImpl(
       this.hash,
       rs.getInt(Column.MultiBlastJobs.QueueID),
-      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getString(Column.MultiBlastJobs.JobConfig),
-      rs.getString(Column.MultiBlastJobs.Query)
+      Util.queryToFile(rs)
     ));
   }
 

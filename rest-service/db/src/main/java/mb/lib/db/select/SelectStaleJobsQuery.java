@@ -10,7 +10,7 @@ import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
-import mb.lib.db.model.JobRowFactory;
+import mb.lib.db.model.impl.FullJobRowImpl;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class SelectStaleJobsQuery
@@ -31,14 +31,13 @@ public class SelectStaleJobsQuery
   }
 
   FullJobRow parse(ResultSet rs) throws Exception {
-    return JobRowFactory.newFullJobRow(
+    return new FullJobRowImpl(
       rs.getBytes(Column.MultiBlastJobs.JobDigest),
       rs.getInt(Column.MultiBlastJobs.QueueID),
-      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getString(Column.MultiBlastJobs.JobConfig),
-      rs.getString(Column.MultiBlastJobs.Query)
+      Util.queryToFile(rs)
     );
   }
 

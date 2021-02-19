@@ -43,9 +43,9 @@ public interface IOShortJobResponse
   @JsonProperty(JsonKeys.MaxResultSize)
   IOShortJobResponse setMaxResultSize(Long val);
 
-  @JsonProperty(JsonKeys.ParentJobID)
-  String getParentJobID();
+  @JsonProperty(JsonKeys.ParentJobs)
+  IOParentJobLink[] getParentJobs();
 
-  @JsonProperty(JsonKeys.ParentJobID)
-  IOShortJobResponse setParentJobID(String parentJobID);
+  @JsonProperty(JsonKeys.ParentJobs)
+  IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID);
 }
