@@ -23,9 +23,15 @@ CREATE TABLE userlogins5.multiblast_jobs (
 , delete_on TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
+CREATE TABLE userlogins5.multiblast_job_to_jobs (
+  job_digest    RAW(32) REFERENCES userlogins5.multiblast_jobs (job_digest) NOT NULL
+, parent_digest RAW(32) REFERENCES userlogins5.multiblast_jobs (job_digest) NOT NULL
+, index         NUMBER(4) NOT NULL
+);
+
 CREATE TABLE userlogins5.multiblast_users (
   -- SHA256 hash of the job configuration
-  job_digest  RAW(32) REFERENCES userlogins5.multiblast_jobs (job_digest)
+  job_digest  RAW(32) REFERENCES userlogins5.multiblast_jobs (job_digest) NOT NULL
 
   -- User associated with the job.
   -- This user may not be the one who originally created the job, any user that
@@ -43,8 +49,10 @@ CREATE TABLE userlogins5.multiblast_users (
   -- A value of 0 indicates no max size.
 , max_download_size NUMBER(12) DEFAULT 0 NOT NULL
 
-  -- Parent job hash (for sub jobs only)
-, parent_job RAW(32)
+  -- Indicator for whether the linked query was run directly by the user or if
+  -- it was run indirectly as a sub-job.
+  -- Directly = 1, indirectly = 0
+, run_directly NUMBER(1) NOT NULL
 
   -- Unique user-to-job link
 , CONSTRAINT mb_uq_user_job UNIQUE (job_digest, user_id)

@@ -1,5 +1,6 @@
 package mb.lib.db.model.impl;
 
+import java.io.File;
 import java.time.OffsetDateTime;
 
 import mb.lib.db.model.FullJobRow;
@@ -7,7 +8,7 @@ import mb.lib.db.model.FullJobRow;
 public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
 {
   private final String config;
-  private final String query;
+  private final File query;
 
   public FullJobRowImpl(
     byte[] hash,
@@ -15,7 +16,7 @@ public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     String config,
-    String query
+    File query
   ) {
     super(hash, queueID, createdOn, deleteOn);
     this.config = config;
@@ -28,7 +29,7 @@ public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
   }
 
   @Override
-  public String query() {
+  public File query() {
     return query;
   }
 

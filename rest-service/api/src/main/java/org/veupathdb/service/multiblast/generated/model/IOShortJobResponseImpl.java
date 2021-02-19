@@ -2,16 +2,16 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class IOShortJobResponseImpl implements IOShortJobResponse
 {
-  private String      id;
-  private String      description;
-  private IOJobStatus status;
-  private String      created;
-  private String      expires;
-  private Long        maxResultSize;
-  private String      parentJobID;
+  private String            id;
+  private String            description;
+  private IOJobStatus       status;
+  private String            created;
+  private String            expires;
+  private Long              maxResultSize;
+  private IOParentJobLink[] parentJobIDs;
 
   @Override
   public String getId() {
@@ -80,13 +80,13 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   }
 
   @Override
-  public String getParentJobID() {
-    return parentJobID;
+  public IOParentJobLink[] getParentJobs() {
+    return parentJobIDs;
   }
 
   @Override
-  public IOShortJobResponse setParentJobID(String parentJobID) {
-    this.parentJobID = parentJobID;
+  public IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID) {
+    this.parentJobIDs = parentJobID;
     return this;
   }
 }

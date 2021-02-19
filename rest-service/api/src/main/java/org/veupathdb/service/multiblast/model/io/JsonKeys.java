@@ -66,7 +66,7 @@ public final class JsonKeys
     OutAsciiPsiBlastCheckpointFile       = "outAsciiPssm",
     OutPsiBlastCheckpointFile            = "outPssm",
     OutputFile                           = "out",
-    ParentJobID                          = "parentJobID",
+    ParentJobs                           = "parentJobs",
     PARSE_DEF_LINES                      = "parseDefLines",
     Penalty                              = "penalty",
     PercentIdentity                      = "percIdentity",

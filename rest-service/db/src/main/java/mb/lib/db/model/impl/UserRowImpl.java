@@ -4,16 +4,19 @@ import mb.lib.db.model.UserRow;
 
 public class UserRowImpl extends RowImpl implements UserRow
 {
-  private final long   userID;
-  private final String description;
-  private final long   maxDownloadSize;
-  private final byte[] parentJobID;
+  private final long    userID;
+  private final String  description;
+  private final long    maxDownloadSize;
 
-  public UserRowImpl(byte[] hash, long userID, String description, byte[] parentJobID, long maxDlSize) {
+  public UserRowImpl(
+    byte[] hash,
+    long userID,
+    String description,
+    long maxDlSize
+  ) {
     super(hash);
     this.userID          = userID;
     this.description     = description;
-    this.parentJobID     = parentJobID;
     this.maxDownloadSize = maxDlSize;
   }
 
@@ -34,11 +37,6 @@ public class UserRowImpl extends RowImpl implements UserRow
 
   @Override
   public String toString() {
-    return "UserRow{hash="+ printID() +", userID=" + userID + '}';
-  }
-
-  @Override
-  public byte[] parentHash() {
-    return parentJobID;
+    return "UserRow{hash=" + printID() + ", userID=" + userID + '}';
   }
 }

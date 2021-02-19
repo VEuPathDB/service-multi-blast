@@ -9,13 +9,13 @@ import javax.sql.DataSource;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
-import mb.lib.db.model.JobRowFactory;
 import mb.lib.db.model.ShortUserJobRow;
+import mb.lib.db.model.impl.ShortUserJobRowImpl;
 
 public class SelectShortUserJobsByUser
 {
-  private DataSource ds;
-  private final long userID;
+  private final DataSource ds;
+  private final long       userID;
 
   public SelectShortUserJobsByUser(DataSource ds, long userID) {
     this.ds     = ds;
@@ -36,10 +36,9 @@ public class SelectShortUserJobsByUser
   }
 
   ShortUserJobRow parse(ResultSet rs) throws Exception {
-    return JobRowFactory.newShortUserJobRow(
+    return new ShortUserJobRowImpl(
       rs.getBytes(Column.MultiBlastJobs.JobDigest),
       rs.getInt(Column.MultiBlastJobs.QueueID),
-      rs.getBytes(Column.MultiBlastJobs.ParentJobID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getLong(Column.MultiBlastUsers.UserId),

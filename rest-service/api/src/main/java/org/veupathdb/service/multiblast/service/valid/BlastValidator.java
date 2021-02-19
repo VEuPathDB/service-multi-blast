@@ -53,7 +53,7 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
   private final Logger log = LogManager.getLogger(getClass());
 
   private BlastValidator() {
-    log.trace("BlastValidator#new()");
+    log.trace("::new()");
   }
 
   public static BlastValidator getInstance() {
@@ -71,7 +71,7 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
 
   @Override
   public ErrorMap validate(IOBlastConfig conf) {
-    log.trace("BlastValidator#validate(IOBlastConfig)");
+    log.trace("#validate(IOBlastConfig)");
 
     var errors = new ErrorMap();
 

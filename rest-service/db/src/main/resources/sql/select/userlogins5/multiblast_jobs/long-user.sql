@@ -1,6 +1,5 @@
 SELECT
   a.*
-, b.parent_job
 , b.user_id
 , b.description
 , b.max_download_size

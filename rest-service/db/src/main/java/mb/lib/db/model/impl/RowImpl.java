@@ -20,7 +20,7 @@ public class RowImpl implements Row
   protected String printID() {
     var strb = new char[hash.length * 2];
 
-    for (var i = 0; i < strb.length; i++) {
+    for (var i = 0; i < hash.length; i++) {
       var j = i*2;
       var a = (hash[i] >> 4) & 0xF;
       var b = hash[i] & 0xF;

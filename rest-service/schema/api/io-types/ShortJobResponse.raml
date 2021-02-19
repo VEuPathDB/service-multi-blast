@@ -17,4 +17,10 @@ properties:
   expires:
     type: datetime
   maxDownloadSize?: integer
-  parentJobID?: string
+  parentJobs?:
+    type: array
+    items:
+      type: object
+      properties:
+        id: string
+        index: integer

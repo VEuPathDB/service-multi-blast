@@ -1,5 +1,7 @@
 package mb.lib.db.model;
 
+import java.io.File;
+
 public interface FullJobRow extends ShortJobRow
 {
   /**
@@ -10,5 +12,5 @@ public interface FullJobRow extends ShortJobRow
   /**
    * @return the raw query submitted for this job.
    */
-  String query();
+  File query();
 }

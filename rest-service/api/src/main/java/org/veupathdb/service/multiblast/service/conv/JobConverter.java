@@ -22,11 +22,11 @@ public class JobConverter
   private static final Logger log = LogProvider.logger(JobConverter.class);
 
   private JobConverter() {
-    log.trace("JobConverter#new()");
+    log.trace("::new()");
   }
 
   public static JobConverter getInstance() {
-    log.trace("JobConverter#getInstance()");
+    log.trace("::getInstance()");
 
     if (instance == null)
       return instance = new JobConverter();
@@ -41,7 +41,7 @@ public class JobConverter
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   public static BlastTool toInternal(IOBlastTool val) {
-    log.trace("JobConverter#toInternal(IOBlastTool)");
+    log.trace("::toInternal(val={})", val);
 
     return switch(val) {
       case BLASTN -> BlastTool.BlastN;
@@ -53,7 +53,7 @@ public class JobConverter
   }
 
   public static IOBlastTool toExternal(BlastTool val) {
-    log.trace("JobConverter#toExternal(BlastTool)");
+    log.trace("::toExternal(val={})", val);
 
     return switch(val) {
       case BlastN -> IOBlastTool.BLASTN;
@@ -69,6 +69,8 @@ public class JobConverter
   }
 
   public IOJobStatus fromInternal(JobStatus val) {
+    log.trace("#fromInternal(val={})", val);
+
     return switch(val) {
       case Queued -> IOJobStatus.QUEUED;
       case InProgress -> IOJobStatus.INPROGRESS;
@@ -78,6 +80,8 @@ public class JobConverter
   }
 
   public JobStatus toInternal(IOJobStatus val) {
+    log.trace("#toInternal(val={})", val);
+
     return switch(val) {
       case QUEUED -> JobStatus.Queued;
       case INPROGRESS -> JobStatus.InProgress;
@@ -87,21 +91,26 @@ public class JobConverter
   }
 
   public static Job toInternal(IOBlastConfig conf) {
-    log.trace("JobConverter#toInternal(long, IOBlastConfig)");
+    log.trace("::toInternal(conf={})", conf);
 
     return getInstance().externalToInternal(conf);
   }
 
   public Job externalToInternal(IOBlastConfig conf) {
+    log.trace("#externalToInternal(conf={})", conf);
+
     var out = new Job(toInternal(conf.getTool()));
+
     return out.setJobConfig(BlastConverter.toInternal(conf));
   }
 
   public static IOBlastConfig toExternal(Job job) {
+    log.trace("::toExternal(job={})", job);
     return getInstance().internalToExternal(job);
   }
 
   public IOBlastConfig internalToExternal(Job job) {
+    log.trace("#internalToExternal(job={}", job);
     return BlastConverter.toExternal(job.getJobConfig());
   }
 }

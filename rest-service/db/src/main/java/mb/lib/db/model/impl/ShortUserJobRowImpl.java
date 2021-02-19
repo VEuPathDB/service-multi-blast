@@ -6,15 +6,13 @@ import mb.lib.db.model.ShortUserJobRow;
 
 public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJobRow
 {
-  private final long   userID;
-  private final String description;
-  private final long   maxDlSize;
-  private final byte[] parentJobID;
+  private final long    userID;
+  private final String  description;
+  private final long    maxDlSize;
 
   public ShortUserJobRowImpl(
     byte[] hash,
     int queueID,
-    byte[] parentJobID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     long userID,
@@ -24,7 +22,6 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
     super(hash, queueID, createdOn, deleteOn);
     this.userID      = userID;
     this.description = description;
-    this.parentJobID = parentJobID;
     this.maxDlSize   = maxDlSize;
   }
 
@@ -44,12 +41,7 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
   }
 
   @Override
-  public byte[] parentHash() {
-    return parentJobID;
-  }
-
-  @Override
   public String toString() {
-    return "ShortUserJobRow{hash="+ printID() +", userID=" + userID + '}';
+    return "ShortUserJobRow{hash=" + printID() + ", userID=" + userID + '}';
   }
 }
