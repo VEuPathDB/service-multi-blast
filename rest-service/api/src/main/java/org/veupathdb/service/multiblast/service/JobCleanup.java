@@ -38,6 +38,8 @@ public class JobCleanup implements Runnable
 
       for (var job : jobs) {
         var idString = Format.toHexString(job.jobHash());
+        log.debug("deleting stale user job links");
+        JobDBManager.deleteJob(job.jobHash());
 
         log.debug("deleting job {} workspace", idString);
         JobDataManager.deleteJobData(idString);
