@@ -7,14 +7,10 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.util.Format;
 
-class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
+class QuerySplitter
 {
-  private static final Logger log = LogManager.getLogger(QuerySplitter.class);
-
   private final BufferedWriter[] writing;
   private final MessageDigest[]  hashing;
   private final File[]           active;
@@ -24,8 +20,6 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
   private int  queries;
 
   QuerySplitter() {
-    log.trace("::new()");
-
     writing = new BufferedWriter[2];
     hashing = new MessageDigest[2];
     active  = new File[2];
@@ -33,8 +27,6 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
   }
 
   QuerySplitResult splitQueries(InputStream stream) throws Exception {
-    log.trace("#splitQueries(stream={})", stream);
-
     rootFile = newTmpFile();
 
     writing[0] = new BufferedWriter(new FileWriter(rootFile));
@@ -63,21 +55,15 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
       output.rootQuery = new QuerySplitRow(rootFile, hashing[0].digest());
     }
 
-    if (output.subQueries.size() > 0)
-      log.debug("Primary query: {}", output.rootQuery);
-      log.debug("Split queries into subqueries: {}", output.subQueries);
     return output;
   }
 
   private void close() throws Exception {
-    log.trace("#close()");
-
     if (active[1] != null)
       output.subQueries.add(new QuerySplitRow(active[1], hashing[1].digest()));
 
     for (var i = 0; i < active.length; i++) {
       if (writing[i] != null) {
-        log.debug("Closing writer for " + active[i]);
         writing[i].flush();
         writing[i].close();
       }
@@ -85,12 +71,8 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
   }
 
   private void writeLine(String line) throws Exception {
-    log.trace("#writeLine(line={})", line);
-
     for (var i = 0; i < active.length; i++) {
       if (writing[i] != null) {
-        log.debug("Writing to " + active[i]);
-
         writing[i].write(line);
         writing[i].newLine();
         hashing[i].update(line.getBytes(StandardCharsets.UTF_8));
@@ -99,8 +81,6 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
   }
 
   private void forkRoot() throws Exception {
-    log.trace("#forkRoot()");
-
     // We've hit a second query, create a copy of the root query to be
     // the first subquery.
     var subQueryPath = newTmpPath();
@@ -119,12 +99,9 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
     active[1] = second;
     writing[1] = new BufferedWriter(new FileWriter(second));
     hashing[1] = MessageDigest.getInstance(Format.HASH_TYPE);
-    log.warn(Format.toHexString(hashing[1].digest()));
   }
 
   private void nextFile() throws Exception {
-    log.trace("#nextFile()");
-
     // Close the last subquery
     output.subQueries.add(new QuerySplitRow(active[1], hashing[1].digest()));
     writing[1].flush();
@@ -138,13 +115,10 @@ class QuerySplitter // TODO: PARENT JOB SHOULD BE ON THE USER ROW
   }
 
   private static Path newTmpPath() {
-    log.trace("#newTmpPath()");
     return Path.of("/tmp/" + UUID.randomUUID().toString());
   }
 
   private static File newTmpFile() throws Exception {
-    log.trace("#newTmpFile()");
-
     var tmp = newTmpPath().toFile();
 
     if (!tmp.createNewFile())
