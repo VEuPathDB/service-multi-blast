@@ -1,7 +1,5 @@
 package mb.lib.db.model.impl;
 
-import java.util.Arrays;
-
 import mb.lib.db.model.Row;
 
 public class RowImpl implements Row

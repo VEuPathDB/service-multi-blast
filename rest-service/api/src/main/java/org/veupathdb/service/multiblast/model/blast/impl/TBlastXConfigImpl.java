@@ -2,7 +2,6 @@ package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

@@ -1,5 +1,6 @@
 package org.veupathdb.service.multiblast.model.blast;
 
+@SuppressWarnings("SpellCheckingInspection")
 public enum BlastReportField
 {
   /**

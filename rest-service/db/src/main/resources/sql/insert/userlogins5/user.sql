@@ -4,6 +4,7 @@ INSERT INTO
   , user_id
   , description
   , max_download_size
+  , run_directly
   )
 VALUES
-  (?, ?, ?, ?)
+  (?, ?, ?, ?, ?)

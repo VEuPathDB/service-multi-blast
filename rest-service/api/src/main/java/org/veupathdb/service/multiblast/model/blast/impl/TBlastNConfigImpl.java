@@ -2,7 +2,6 @@ package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,6 +37,7 @@ public class TBlastNConfigImpl
    *    Word size for wordfinder algorithm
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EWordSize wordSize;
 
   /**
@@ -48,6 +48,7 @@ public class TBlastNConfigImpl
    *    Cost to extend a gap
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EGapCost gapCost;
 
   /**
@@ -58,6 +59,7 @@ public class TBlastNConfigImpl
    *    Default = `1'
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EDbGenCode dbGenCode;
 
   /**
@@ -78,6 +80,7 @@ public class TBlastNConfigImpl
    *    Minimum word score such that the word is added to the BLAST lookup table
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EScoringMatrix<TBlastNScoringMatrix> matrix;
 
   /**
@@ -111,6 +114,7 @@ public class TBlastNConfigImpl
    *    db_soft_mask, db_hard_mask, remote
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESubject subject;
 
   /**
@@ -121,6 +125,7 @@ public class TBlastNConfigImpl
    *    Default = `12 2.2 2.5'
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESeg seg;
 
   /**
@@ -137,6 +142,7 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EGiList giList;
 
   /**
@@ -153,6 +159,7 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESeqIdList seqIdList;
 
   /**
@@ -171,6 +178,7 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ETaxIds taxIds;
 
   /**
@@ -187,6 +195,7 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ETaxIdList taxIdList;
 
   /**
@@ -223,6 +232,7 @@ public class TBlastNConfigImpl
    *    Turn on best hit per subject sequence
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EBestHit bestHit;
 
   /**
@@ -241,6 +251,7 @@ public class TBlastNConfigImpl
    *    X-dropoff value (in bits) for final gapped alignment
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EGapExtDrop xDrop;
 
   /**
@@ -257,6 +268,7 @@ public class TBlastNConfigImpl
    *    Compute locally optimal Smith-Waterman alignments?
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESWTback sw;
 
   /**

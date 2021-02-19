@@ -3,6 +3,7 @@ package mb.lib.db.delete;
 import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicStatementWriteQuery;
+
 import static mb.lib.db.constants.SQL.Delete;
 
 public class DeleteStaleGuestsQuery

@@ -46,7 +46,8 @@ public class SelectFullUserJob
       Util.queryToFile(rs),
       rs.getLong(Column.MultiBlastUsers.UserId),
       rs.getString(Column.MultiBlastUsers.Description),
-      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize)
+      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize),
+      rs.getBoolean(Column.MultiBlastUsers.RunDirectly)
     ));
   }
 

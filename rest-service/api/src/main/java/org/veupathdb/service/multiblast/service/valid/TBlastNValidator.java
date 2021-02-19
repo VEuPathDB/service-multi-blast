@@ -12,7 +12,7 @@ class TBlastNValidator implements ConfigValidator<IOTBlastnConfig>
 {
   private static TBlastNValidator instance;
 
-  private Logger log = LogProvider.logger(getClass());
+  private final Logger log = LogProvider.logger(getClass());
 
   private TBlastNValidator() {
     log.trace("TBlastNValidator#new()");

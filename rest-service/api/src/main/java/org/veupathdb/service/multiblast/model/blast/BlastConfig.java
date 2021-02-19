@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 
+@SuppressWarnings("UnusedReturnValue")
 public interface BlastConfig <T extends BlastConfig<T>>
 {
   boolean isHelpEnabled();

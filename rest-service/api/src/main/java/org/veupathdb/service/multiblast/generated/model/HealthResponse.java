@@ -1,11 +1,12 @@
 package org.veupathdb.service.multiblast.generated.model;
 
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.List;
-import java.util.Map;
 
 @JsonDeserialize(
     as = HealthResponseImpl.class
@@ -36,7 +37,7 @@ public interface HealthResponse {
     @JsonProperty("unhealthy")
     UNHEALTHY("unhealthy");
 
-    private String name;
+    public final String name;
 
     StatusType(String name) {
       this.name = name;

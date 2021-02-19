@@ -7,17 +7,20 @@ public class UserRowImpl extends RowImpl implements UserRow
   private final long    userID;
   private final String  description;
   private final long    maxDownloadSize;
+  private final boolean runDirectly;
 
   public UserRowImpl(
-    byte[] hash,
-    long userID,
-    String description,
-    long maxDlSize
+    byte[]  hash,
+    long    userID,
+    String  description,
+    long    maxDlSize,
+    boolean runDirectly
   ) {
     super(hash);
     this.userID          = userID;
     this.description     = description;
     this.maxDownloadSize = maxDlSize;
+    this.runDirectly     = runDirectly;
   }
 
   @Override
@@ -33,6 +36,11 @@ public class UserRowImpl extends RowImpl implements UserRow
   @Override
   public long maxDownloadSize() {
     return maxDownloadSize;
+  }
+
+  @Override
+  public boolean runDirectly() {
+    return runDirectly;
   }
 
   @Override

@@ -18,6 +18,7 @@ public interface Column
     String UserId          = "user_id";
     String Description     = "description";
     String MaxDownloadSize = "max_download_size";
+    String RunDirectly     = "run_directly";
   }
 
   interface MultiBlastJobToJobs

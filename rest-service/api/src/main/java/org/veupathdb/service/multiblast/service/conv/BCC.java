@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
 import org.veupathdb.service.multiblast.model.blast.Location;
