@@ -27,6 +27,7 @@ public class InsertUserQuery
     ps.setLong(2, user.userID());
     ps.setString(3, user.description());
     ps.setLong(4, user.maxDownloadSize());
+    ps.setBoolean(5, user.runDirectly());
   }
 
   public static void execute(Connection con, UserRow user) throws Exception {

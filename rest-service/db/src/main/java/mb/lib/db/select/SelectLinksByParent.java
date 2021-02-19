@@ -21,7 +21,7 @@ public class SelectLinksByParent
   }
 
   public Set<JobLink> run() throws Exception {
-    return new BasicPreparedSetReadQuery<JobLink>(
+    return new BasicPreparedSetReadQuery<>(
       SQL.Select.MultiBlastJobToJobs.ByParent,
       ds::getConnection,
       this::rowToJobLink,

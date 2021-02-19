@@ -1,23 +1,11 @@
 package org.veupathdb.service.multiblast.generated.resources;
 
 import java.util.List;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
-import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
-import org.veupathdb.service.multiblast.generated.model.IOLongJobResponse;
-import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
-import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
-import org.veupathdb.service.multiblast.generated.model.IOJobPostResponse;
-import org.veupathdb.service.multiblast.generated.model.IOShortJobResponse;
+import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
 
 @Path("/jobs")

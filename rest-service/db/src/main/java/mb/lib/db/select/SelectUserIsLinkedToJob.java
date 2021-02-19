@@ -19,7 +19,7 @@ public class SelectUserIsLinkedToJob
   }
 
   public boolean run() throws Exception {
-    return new BasicPreparedReadQuery<Boolean>(
+    return new BasicPreparedReadQuery<>(
       SQL.Select.MultiBlastUsers.UserIsLinked,
       ds::getConnection,
       ResultSet::next,

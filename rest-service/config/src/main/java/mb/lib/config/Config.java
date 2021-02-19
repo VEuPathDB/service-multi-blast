@@ -117,6 +117,7 @@ public class  Config extends Options
     arity = "1",
     description = "Number of days to hold onto a completed job's results.\n\nDefaults to 30."
   )
+  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
   private int jobTimeout = 30;
 
   @Option(
@@ -124,6 +125,7 @@ public class  Config extends Options
     arity = "1",
     description = "Max number of queries a user can submit in a single request.\n\nDefaults to 100."
   )
+  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
   private int maxQueries = 100;
 
   @Option(
@@ -131,6 +133,7 @@ public class  Config extends Options
     arity = "1",
     description = "Max number of results a user can request.  This value is calculated as <num_queries> * <max_target_seqs>.\n\nDefaults to 10,000."
   )
+  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
   private int maxResults = 10_000;
 
   private Config() {

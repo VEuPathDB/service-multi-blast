@@ -5,8 +5,8 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
 

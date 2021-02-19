@@ -59,6 +59,11 @@ public interface SQL
       String DeleteDate = Load.update(Schema.MultiBlast, Table.MultiBlast.Jobs, "delete-date");
       String QueueID    = Load.update(Schema.MultiBlast, Table.MultiBlast.Jobs, "queue-id");
     }
+
+    interface MultiBlastUsers
+    {
+      String RunDirectly = Load.update(Schema.MultiBlast, Table.MultiBlast.Users, "run-directly");
+    }
   }
 }
 
