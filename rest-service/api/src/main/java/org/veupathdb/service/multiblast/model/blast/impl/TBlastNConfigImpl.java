@@ -562,17 +562,17 @@ public class TBlastNConfigImpl
 
   @Override
   public TBlastnConfig setNegativeTaxIds(int[] negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
-      negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
-    );
+    (taxIds = lazy(taxIds, ETaxIds::new))
+      .setNegativeTaxIds(
+        negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
+      );
     return this;
   }
 
   @Override
   public TBlastnConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
-      negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds)
-    );
+    (taxIds = lazy(taxIds, ETaxIds::new))
+      .setNegativeTaxIds(negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds));
     return this;
   }
 
