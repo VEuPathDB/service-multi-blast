@@ -17,6 +17,7 @@ public class JobDetails
   String     description;
   long       maxDlSize;
   byte[]     parentHash;
+  boolean    isPrimary;
 
   @Override
   public String toString() {
@@ -30,6 +31,7 @@ public class JobDetails
       .put("description", description)
       .put("maxDlSize", maxDlSize)
       .put("parentHash", parentHash)
+      .put("isPrimary", isPrimary)
       .toString();
   }
 }

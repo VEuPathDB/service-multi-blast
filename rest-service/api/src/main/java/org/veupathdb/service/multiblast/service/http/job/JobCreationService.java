@@ -1,7 +1,7 @@
 package org.veupathdb.service.multiblast.service.http.job;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import mb.lib.db.JobDBManager;
@@ -12,7 +12,6 @@ import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.multiblast.generated.model.IOJobPostResponse;
 import org.veupathdb.service.multiblast.generated.model.IOJobPostResponseImpl;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
-import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
@@ -50,29 +49,24 @@ public class JobCreationService
     }
   }
 
-  // TODO: if the base request query is null, pass the props to the createJob
-  //       method above.
-  public static IOJobPostResponse createJobs(IOMultipartJobRequest req, long userID) {
-    log.trace("::createJob(req={}, userID={})", req, userID);
+  public static IOJobPostResponse createJobs(InputStream query, IOJsonJobRequest props, long userID) {
+    log.trace("::createJob(query={}, props={}, userID={})", query, props, userID);
 
-    if (req.getQuery() == null) {
-      log.debug("query file is null");
-      return createJobs(req.getProperties(), userID);
-    }
-
-    JobUtil.verifyBody(req);
-    JobUtil.verifyProps(req.getProperties());
-    JobUtil.verifyConfig(req.getProperties().getConfig());
-    JobUtil.verifyQuery(req.getQuery());
+    JobUtil.verifyBody(props);
+    JobUtil.verifyProps(props);
+    JobUtil.verifyConfig(props.getConfig());
 
     try {
-      var queryHandle = new QuerySplitter().splitQueries(new FileInputStream(req.getQuery()));
-      //noinspection ResultOfMethodCallIgnored
-      req.getQuery().delete();
-
-      return createJobs(queryHandle, req.getProperties(), userID);
+      return createJobs(new QuerySplitter().splitQueries(query), props, userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
+    } finally {
+      try {
+        query.close();
+      } catch (Exception e) {
+        //noinspection ThrowFromFinallyBlock
+        throw Util.wrapException(e);
+      }
     }
   }
 
@@ -98,7 +92,7 @@ public class JobCreationService
 
     job.getJobConfig().setDatabase(dbPath);
 
-    var rootDets = prepJob(js, job, queries.rootQuery, userID, dbPath);
+    var rootDets = prepJob(js, job, queries.rootQuery, userID, dbPath, null, true);
     log.debug("Job Hash: {}", rootDets.id);
 
     if (handleJob(rootDets) != JobStatus.Linked) {
@@ -106,10 +100,11 @@ public class JobCreationService
 
       for (var query : queries.subQueries) {
         log.debug("Handling subquery #{}", index++);
-        handleJob(prepJob(js, job, query, userID, dbPath, rootDets.hash));
+        handleJob(prepJob(js, job, query, userID, dbPath, rootDets.hash, false));
       }
     } else {
       for (var query : queries.subQueries)
+        //noinspection ResultOfMethodCallIgnored
         query.source.delete();
     }
 
@@ -130,6 +125,7 @@ public class JobCreationService
     if (collision.isPresent()) {
       if (JobDataManager.jobDataExists(dets.id)) {
         log.debug("Job already exists and has cached data.  Linking user to job.");
+        //noinspection ResultOfMethodCallIgnored
         dets.source.delete();
         new JobCreator().handleLink(dets);
         return JobStatus.Linked;
@@ -147,21 +143,12 @@ public class JobCreationService
 
   static JobDetails prepJob(
     IOJsonJobRequest js,
-    Job job,
-    QuerySplitRow row,
-    long userID,
-    String dbPath
-  ) {
-    return prepJob(js, job, row, userID, dbPath, null);
-  }
-
-  static JobDetails prepJob(
-    IOJsonJobRequest js,
-    Job job,
-    QuerySplitRow row,
-    long userID,
-    String dbPath,
-    byte[] parentHash
+    Job              job,
+    QuerySplitRow    row,
+    long             userID,
+    String           dbPath,
+    byte[]           parentHash,
+    boolean          isPrimary
   ) {
     log.debug("prepJob: query={}", row.source);
     // Overwrite the query value with a hash string containing the sha256
@@ -188,6 +175,7 @@ public class JobCreationService
     dets.description = js.getDescription();
     dets.maxDlSize   = js.getMaxResultSize();
     dets.parentHash  = parentHash;
+    dets.isPrimary   = isPrimary;
 
     return dets;
   }

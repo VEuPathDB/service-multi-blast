@@ -48,4 +48,10 @@ public interface IOShortJobResponse
 
   @JsonProperty(JsonKeys.ParentJobs)
   IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID);
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  boolean getIsPrimary();
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  IOShortJobResponse setIsPrimary(boolean isPrimary);
 }

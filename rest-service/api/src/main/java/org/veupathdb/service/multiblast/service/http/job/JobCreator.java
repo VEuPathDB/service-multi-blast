@@ -14,9 +14,6 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// Should job-to-job links be per user?
-// No. Subjobs will only exist on multi-query parents and those links are
-// universal.  They say the parent job contains the sub-jobs.
 public class JobCreator
 {
   private final Logger log;
@@ -33,7 +30,9 @@ public class JobCreator
     JobDBManager.updateJobDeleteTimer(d.hash, exp);
 
     if (!JobDBManager.userIsLinkedToJob(d.userID, d.hash))
-      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize));
+      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
+    else
+      JobDBManager.updateLinkIsPrimary(d.userID, d.hash);
   }
 
   public void handleRerun(JobDetails d) throws Exception {
@@ -52,7 +51,7 @@ public class JobCreator
     JobDBManager.updateJobQueueID(d.hash, queId);
 
     if (!JobDBManager.userIsLinkedToJob(d.userID, d.hash))
-      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize));
+      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
 
     if (d.parentHash != null) {
       var noLinks = JobDBManager.getJobLinks(d.parentHash).stream()
@@ -78,7 +77,7 @@ public class JobCreator
 
     JobDBManager.registerJob(
       new FullJobRowImpl(d.hash, queId, now, exp, d.job.toSerial(), qFile.toFile()),
-      new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize)
+      new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary)
     );
 
     if (d.parentHash != null) {

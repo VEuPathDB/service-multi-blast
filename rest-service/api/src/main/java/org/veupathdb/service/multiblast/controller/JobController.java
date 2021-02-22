@@ -1,6 +1,9 @@
 package org.veupathdb.service.multiblast.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -16,6 +19,7 @@ import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
 import org.veupathdb.service.multiblast.model.io.Headers;
 import org.veupathdb.service.multiblast.service.http.JobService;
+import org.veupathdb.service.multiblast.util.Format;
 
 @Authenticated
 public class JobController implements Jobs
@@ -65,17 +69,25 @@ public class JobController implements Jobs
   /**
    * Create a new job with the blast query uploaded as a separate file.
    *
-   * @param entity New job request parameters.
-   *
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public PostJobsResponse postJobs(IOMultipartJobRequest entity) {
-    log.trace("#postJobs(entity={})", entity);
+  public Response postJobs(InputStream query, InputStream config) {
+    log.trace("#postJobs(query={}, config={})", query, config);
 
-    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+    IOJsonJobRequest props;
 
-    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
+    try {
+      props = Format.Json.readerFor(IOJsonJobRequest.class).readValue(config);
+    } catch (IOException e) {
+      throw new BadRequestException(e);
+    }
+
+    var user  = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+
+    return Response.status(Response.Status.OK)
+      .entity(service.createJob(query, props, user))
+      .build();
   }
 
   /**
