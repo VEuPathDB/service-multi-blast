@@ -239,16 +239,25 @@ public class TBlastXConfigImpl
 
   @Override
   public TBlastXConfig setNegativeTaxIds(int[] negativeTaxIds) {
+    taxIds = lazy(taxIds, ETaxIds::new);
 
-      (taxIds = lazy(taxIds, ETaxIds::new)).
-        setNegativeTaxIds(Arrays.copyOf(negativeTaxIds, negativeTaxIds.length));
+    if (negativeTaxIds == null)
+      taxIds.setNegativeTaxIds((int[]) null);
+    else
+      taxIds.setNegativeTaxIds(Arrays.copyOf(negativeTaxIds, negativeTaxIds.length));
 
     return this;
   }
 
   @Override
   public TBlastXConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-      (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(new ArrayList<>(negativeTaxIds));
+    taxIds = lazy(taxIds, ETaxIds::new);
+
+    if (negativeTaxIds == null)
+      this.taxIds.setNegativeTaxIds((int[]) null);
+    else
+      this.taxIds.setNegativeTaxIds(new ArrayList<>(negativeTaxIds));
+
     return this;
   }
 
@@ -308,20 +317,31 @@ public class TBlastXConfigImpl
 
   @Override
   public TBlastXConfig setTaxIDs(int[] taxIds) {
-      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).
-        setTaxIDs(Arrays.copyOf(taxIds, taxIds.length));
-    return this;
+    this.taxIds = lazy(this.taxIds, ETaxIds::new);
+
+    if (taxIds == null)
+      this.taxIds.setTaxIDs((int[]) null);
+    else
+      this.taxIds.setTaxIDs(Arrays.copyOf(taxIds, taxIds.length));
+
+   return this;
   }
 
   @Override
   public TBlastXConfig setTaxIDs(Collection<Integer> taxIds) {
-      (this.taxIds = lazy(this.taxIds, ETaxIds::new)).setTaxIDs(new ArrayList<>(taxIds));
+    this.taxIds = lazy(this.taxIds, ETaxIds::new);
+
+    if (taxIds == null)
+      this.taxIds.setTaxIDs((int[]) null);
+    else
+      this.taxIds.setTaxIDs(new ArrayList<>(taxIds));
+
     return this;
   }
 
   @Override
   public TBlastXConfig setWordSize(Integer size) {
-      (wordSize = lazy(wordSize, EWordSize::new)).setWordSize(size);
+    (wordSize = lazy(wordSize, EWordSize::new)).setWordSize(size);
     return this;
   }
 
