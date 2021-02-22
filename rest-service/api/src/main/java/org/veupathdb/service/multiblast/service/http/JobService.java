@@ -17,6 +17,8 @@ import mb.lib.format.FormatterManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.grizzly.streams.Input;
+import org.glassfish.jersey.message.internal.Utils;
 import org.gusdb.fgputil.accountdb.UserProfile;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
@@ -126,6 +128,7 @@ public class JobService
           .setCreated(Format.toString(job.createdOn()))
           .setExpires(Format.toString(job.deleteOn()))
           .setMaxResultSize(job.maxDownloadSize())
+          .setIsPrimary(job.runDirectly())
           .setParentJobs(
             JobDBManager.getParentJobs(job.jobHash(), user.getUserId())
               .stream()
@@ -270,10 +273,17 @@ public class JobService
     return JobCreationService.createJobs(input, user.getUserId());
   }
 
-  public IOJobPostResponse createJob(IOMultipartJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(input={}, user={})", input,  user.getUserId());
+  public IOJobPostResponse createJob(InputStream query, IOJsonJobRequest props, UserProfile user) {
+    log.trace("JobService#createJob(query={}, props={}, user={})", query, props, user.getUserId());
 
-    return JobCreationService.createJobs(input, user.getUserId());
+    try {
+      if (query == null)
+        return JobCreationService.createJobs(props, user.getUserId());
+
+      return JobCreationService.createJobs(query, props, user.getUserId());
+    } catch (Exception e) {
+      throw wrapException(e);
+    }
   }
 
   static IOJobStatus convStatus(JobStatus stat) {

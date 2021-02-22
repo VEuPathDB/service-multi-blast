@@ -17,6 +17,7 @@ import mb.lib.db.model.*;
 import mb.lib.db.select.*;
 import mb.lib.db.update.UpdateJobDeleteDateQuery;
 import mb.lib.db.update.UpdateJobQueueIDQuery;
+import mb.lib.db.update.UpdateJobRunDirectly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
@@ -144,6 +145,11 @@ public class JobDBManager
   public static void deleteOrphanJobs() throws Exception {
     log.trace("::deleteOrphanJobs()");
     new DeleteOrphanJobsQuery(DbManager.userDatabase().getDataSource()).run();
+  }
+
+  public static void updateLinkIsPrimary(long userID, byte[] jobHash) throws Exception {
+    log.trace("::updateLinkIsPrimary(userID={}, jobHash={}", userID, h2s(jobHash));
+    new UpdateJobRunDirectly(DbManager.userDatabase().getDataSource(), true, userID, jobHash).run();
   }
 
   private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();

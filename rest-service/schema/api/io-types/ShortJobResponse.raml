@@ -17,6 +17,11 @@ properties:
   expires:
     type: datetime
   maxDownloadSize?: integer
+  isPrimary:
+    type: boolean
+    description: |
+      Indicates whether this job was directly run by a user as opposed to being
+      a sub-job.
   parentJobs?:
     type: array
     items:

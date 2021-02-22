@@ -28,6 +28,7 @@ dependencies {
     api("org.glassfish.jersey.containers:jersey-container-grizzly2-http:${vJersey}")
     api("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:${vJersey}")
     api("org.glassfish.jersey.media:jersey-media-json-jackson:${vJersey}")
+    api("org.glassfish.jersey.media:jersey-media-multipart:${vJersey}")
     runtime("org.glassfish.jersey.inject:jersey-hk2:${vJersey}")
 
     // Jackson

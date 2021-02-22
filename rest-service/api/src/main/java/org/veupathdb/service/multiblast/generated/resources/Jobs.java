@@ -1,10 +1,12 @@
 package org.veupathdb.service.multiblast.generated.resources;
 
+import java.io.InputStream;
 import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.generated.support.ResponseDelegate;
 
@@ -22,7 +24,9 @@ public interface Jobs {
   @POST
   @Produces("application/json")
   @Consumes("multipart/form-data")
-  PostJobsResponse postJobs(IOMultipartJobRequest entity);
+  Response postJobs(
+    @FormDataParam("file")       InputStream upload,
+    @FormDataParam("properties") InputStream config);
 
   @GET
   @Path("/{job-id}")

@@ -12,6 +12,7 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   private String            expires;
   private Long              maxResultSize;
   private IOParentJobLink[] parentJobIDs;
+  private boolean           isPrimary;
 
   @Override
   public String getId() {
@@ -74,7 +75,7 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   }
 
   @Override
-  public IOShortJobResponseImpl setMaxResultSize(Long maxResultSize) {
+  public IOShortJobResponse setMaxResultSize(Long maxResultSize) {
     this.maxResultSize = maxResultSize;
     return this;
   }
@@ -87,6 +88,17 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   @Override
   public IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID) {
     this.parentJobIDs = parentJobID;
+    return this;
+  }
+
+  @Override
+  public boolean getIsPrimary() {
+    return isPrimary;
+  }
+
+  @Override
+  public IOShortJobResponse setIsPrimary(boolean isPrimary) {
+    this.isPrimary = isPrimary;
     return this;
   }
 }

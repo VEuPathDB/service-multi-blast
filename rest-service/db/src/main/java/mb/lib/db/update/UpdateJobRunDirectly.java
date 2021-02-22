@@ -19,7 +19,7 @@ public class UpdateJobRunDirectly
     this.jobHash     = jobHash;
   }
 
-  private void run() throws Exception {
+  public void run() throws Exception {
     new BasicPreparedVoidQuery(
       SQL.Update.MultiBlastUsers.RunDirectly,
       ds::getConnection,
