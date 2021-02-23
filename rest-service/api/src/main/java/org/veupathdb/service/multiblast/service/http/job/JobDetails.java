@@ -15,7 +15,7 @@ public class JobDetails
   CliBuilder cli;
   long       userID;
   String     description;
-  long       maxDlSize;
+  Long       maxDlSize;
   byte[]     parentHash;
   boolean    isPrimary;
 

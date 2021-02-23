@@ -8,7 +8,7 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
 {
   private final long    userID;
   private final String  description;
-  private final long    maxDlSize;
+  private final Long    maxDlSize;
   private final boolean runDirectly;
 
   public ShortUserJobRowImpl(
@@ -18,7 +18,7 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
     OffsetDateTime deleteOn,
     long           userID,
     String         description,
-    long           maxDlSize,
+    Long           maxDlSize,
     boolean        runDirectly
   ) {
     super(hash, queueID, createdOn, deleteOn);
@@ -39,7 +39,7 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
   }
 
   @Override
-  public long maxDownloadSize() {
+  public Long maxDownloadSize() {
     return maxDlSize;
   }
 

@@ -126,7 +126,7 @@ public class BlastNConfigImpl
   /**
    * <pre>
    *  -word_size <Integer, >=4>
-   *    Word size for wordfinder algorithm (length of best perfect match)
+   *    Word size for word-finder algorithm (length of best perfect match)
    * </pre>
    */
   private EWordSize eWordSize;
@@ -832,74 +832,142 @@ public class BlastNConfigImpl
       var curr = node.get(i);
       log.debug("Deserializing option: {}", curr.get(0).asText().substring(1));
       switch (ToolOption.optionsByName.get(curr.get(0).asText().substring(1))) {
-        case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
-        case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
-        case BlastDatabase -> out.setDatabase(curr.get(1).asText());
-        case CullingLimit -> out.setCullingLimit(curr.get(1).asInt());
-        case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
-        case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
-        case Dust -> out.setDust(DustImpl.fromString(curr.get(1).asText()));
-        case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
-        case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
-        case FilteringDatabasePath -> out.setFilteringDbPath(Path.of(curr.get(1).asText()));
-        case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
-        case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
-        case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
-        case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
-        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
-        case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
-        case LineLength -> out.setLineLength(curr.get(1).asInt());
-        case LowercaseMasking -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
-        case MatchReward -> out.setNucleotideMatchReward(curr.get(1).asInt());
-        case MaxHSPs -> out.setMaxHSPs(curr.get(1).asInt());
-        case MaxTargetSequences -> out.setMaxTargetSequences(curr.get(1).asInt());
-        case MegablastIndexName -> out.setMegablastDbIndexName(curr.get(1).asText());
-        case DiscontiguousMegablastTemplateLength -> out.setDiscontiguousMegablastTemplateLength((byte) curr.get(1).asInt());
-        case DiscontiguousMegablastTemplateType -> out.setDiscontiguousMegablastTemplateType(DcTemplateType.unsafeFromString(curr.get(1).asText()));
-        case MinRawGappedScore -> out.setMinRawGappedScore(curr.get(1).asInt());
-        case MismatchPenalty -> out.setNucleotideMismatchPenalty(curr.get(1).asInt());
-        case MultiHitWindowSize -> out.setMultiHitWindowSize(curr.get(1).asInt());
-        case NegativeGIListFile -> out.setNegativeGenInfoIdListFile(new File(curr.get(1).asText()));
-        case NegativeSequenceIDListFile -> out.setNegativeSequenceIDListFile(new File(curr.get(1).asText()));
-        case NegativeTaxonomyIDs -> out.setNegativeTaxIds(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::valueOf).toArray());
-        case NegativeTaxonomyIDListFile -> out.setNegativeTaxIDListFile(new File(curr.get(1).asText()));
-        case NonGreedyExtension -> out.enableNonGreedyDynamicProgramExtension(curr.size() == 1 || curr.get(1).asBoolean());
-        case NumAlignments -> out.setNumAlignments(curr.get(1).asInt());
-        case NumberOfThreads -> out.setThreadCount((byte) curr.get(1).asInt());
-        case NumDescriptions -> out.setNumDescriptions(curr.get(1).asInt());
-        case OffDiagonalRange -> out.setOffDiagonalRange(curr.get(1).asInt());
-        case OutputFile -> out.setOutputFile(new File(curr.get(1).asText()));
-        case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
-        case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
-        case PercentIdentity -> out.setPercentIdentity(curr.get(1).asDouble());
-        case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
-        case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
-        case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
-        case SearchSpaceEffectiveLength -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
-        case SequenceIDListFile -> out.setSequenceIDListFile(new File(curr.get(1).asText()));
-        case ShowNCBIGIs -> out.enableNCBIGenInfoIds(curr.size() == 1 || curr.get(1).asBoolean());
-        case SoftMasking -> out.enableSoftMasking(curr.size() == 1 || curr.get(1).asBoolean());
-        case HSPSorting -> out.setHitSorting(HitSorting.fromString(curr.get(1).asText()));
-        case HitSorting -> out.setHSPSorting(HspSorting.fromString(curr.get(1).asText()));
-        case QueryStrand -> out.setStrand(QueryStrand.fromString(curr.get(1).asText()));
-        case SubjectBestHit -> out.enableSubjectBestHit(curr.size() == 1 || curr.get(1).asBoolean());
-        case SubjectFile -> out.setSubjectFile(new File(curr.get(1).asText()));
-        case SubjectLocation -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
-        case SumStats -> out.enableSumStatistics(curr.size() == 1 || curr.get(1).asBoolean());
-        case Task -> out.setTask(BlastNTask.fromString(curr.get(1).asText()));
-        case TaxonomyIDs -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
-        case TaxonomyIDListFile -> out.setTaxIDListFile(new File(curr.get(1).asText()));
-        case UngappedAlignmentOnly -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());
-        case UseMegablastIndex -> out.enableMegablastDbIndexUsage(curr.size() == 1 || curr.get(1).asBoolean());
-        case Version -> out.enableVersion(curr.size() == 1 || curr.get(1).asBoolean());
-        case WindowMaskerDatabasePath -> out.setWindowMaskerDbPath(Path.of(curr.get(1).asText()));
-        case WindowMaskerTaxonomicID -> out.setWindowMaskerTaxId(curr.get(1).asInt());
-        case WordSize -> out.setWordSize(curr.get(1).asInt());
-        case ExtensionDropoffFinalGapped -> out.setExtensionDropoffFinalGapped(curr.get(1).asDouble());
-        case ExtensionDropoffPrelimGapped -> out.setExtensionDropoffPreliminaryGapped(curr.get(1).asDouble());
-        case ExtensionDropoffUngapped -> out.setExtensionDropoffUngapped(curr.get(1).asDouble());
+        case BestHitOverhang
+          -> out.setBestHitOverhang(curr.get(1).asDouble());
+        case BestHitScoreEdge
+          -> out.setBestHitScoreEdge(curr.get(1).asDouble());
+        case BlastDatabase
+          -> out.setDatabase(curr.get(1).asText());
+        case CullingLimit
+          -> out.setCullingLimit(curr.get(1).asInt());
+        case DatabaseHardMask
+          -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
+        case DatabaseSoftMask
+          -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
+        case Dust
+          -> out.setDust(DustImpl.fromString(curr.get(1).asText()));
+        case EntrezQuery
+          -> out.setEntrezQuery(curr.get(1).asText());
+        case ExpectValue
+          -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExportSearchStrategy
+          -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
+        case FilteringDatabasePath
+          -> out.setFilteringDbPath(Path.of(curr.get(1).asText()));
+        case GapCostExtend
+          -> out.setGapCostExtend(curr.get(1).asInt());
+        case GapCostOpen
+          -> out.setGapCostOpen(curr.get(1).asInt());
+        case GIListFile
+          -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
+        case Help
+          -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput
+          -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case ImportSearchStrategy
+          -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
+        case LineLength
+          -> out.setLineLength(curr.get(1).asInt());
+        case LowercaseMasking
+          -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case MatchReward
+          -> out.setNucleotideMatchReward(curr.get(1).asInt());
+        case MaxHSPs
+          -> out.setMaxHSPs(curr.get(1).asInt());
+        case MaxTargetSequences
+          -> out.setMaxTargetSequences(curr.get(1).asInt());
+        case MegablastIndexName
+          -> out.setMegablastDbIndexName(curr.get(1).asText());
+        case DiscontiguousMegablastTemplateLength
+          -> out.setDiscontiguousMegablastTemplateLength((byte) curr.get(1).asInt());
+        case DiscontiguousMegablastTemplateType
+          -> out.setDiscontiguousMegablastTemplateType(DcTemplateType.unsafeFromString(curr.get(1).asText()));
+        case MinRawGappedScore
+          -> out.setMinRawGappedScore(curr.get(1).asInt());
+        case MismatchPenalty
+          -> out.setNucleotideMismatchPenalty(curr.get(1).asInt());
+        case MultiHitWindowSize
+          -> out.setMultiHitWindowSize(curr.get(1).asInt());
+        case NegativeGIListFile
+          -> out.setNegativeGenInfoIdListFile(new File(curr.get(1).asText()));
+        case NegativeSequenceIDListFile
+          -> out.setNegativeSequenceIDListFile(new File(curr.get(1).asText()));
+        case NegativeTaxonomyIDs
+          -> out.setNegativeTaxIds(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::valueOf).toArray());
+        case NegativeTaxonomyIDListFile
+          -> out.setNegativeTaxIDListFile(new File(curr.get(1).asText()));
+        case NonGreedyExtension
+          -> out.enableNonGreedyDynamicProgramExtension(curr.size() == 1 || curr.get(1).asBoolean());
+        case NumAlignments
+          -> out.setNumAlignments(curr.get(1).asInt());
+        case NumberOfThreads
+          -> out.setThreadCount((byte) curr.get(1).asInt());
+        case NumDescriptions
+          -> out.setNumDescriptions(curr.get(1).asInt());
+        case OffDiagonalRange
+          -> out.setOffDiagonalRange(curr.get(1).asInt());
+        case OutputFile
+          -> out.setOutputFile(new File(curr.get(1).asText()));
+        case OutputFormat
+          -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
+        case ParseDefLines
+          -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
+        case PercentIdentity
+          -> out.setPercentIdentity(curr.get(1).asDouble());
+        case Query
+          -> out.setQuery(curr.get(1).asText());
+        case QueryCoveragePercentHSP
+          -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
+        case QueryLocation
+          -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case Remote
+          -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
+        case SearchSpaceEffectiveLength
+          -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
+        case SequenceIDListFile
+          -> out.setSequenceIDListFile(new File(curr.get(1).asText()));
+        case ShowNCBIGIs
+          -> out.enableNCBIGenInfoIds(curr.size() == 1 || curr.get(1).asBoolean());
+        case SoftMasking
+          -> out.enableSoftMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case HSPSorting
+          -> out.setHitSorting(HitSorting.fromString(curr.get(1).asText()));
+        case HitSorting
+          -> out.setHSPSorting(HspSorting.fromString(curr.get(1).asText()));
+        case QueryStrand
+          -> out.setStrand(QueryStrand.fromString(curr.get(1).asText()));
+        case SubjectBestHit
+          -> out.enableSubjectBestHit(curr.size() == 1 || curr.get(1).asBoolean());
+        case SubjectFile
+          -> out.setSubjectFile(new File(curr.get(1).asText()));
+        case SubjectLocation
+          -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case SumStats
+          -> out.enableSumStatistics(curr.size() == 1 || curr.get(1).asBoolean());
+        case Task
+          -> out.setTask(BlastNTask.fromString(curr.get(1).asText()));
+        case TaxonomyIDs
+          -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
+        case TaxonomyIDListFile
+          -> out.setTaxIDListFile(new File(curr.get(1).asText()));
+        case UngappedAlignmentOnly
+          -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());
+        case UseMegablastIndex
+          -> out.enableMegablastDbIndexUsage(curr.size() == 1 || curr.get(1).asBoolean());
+        case Version
+          -> out.enableVersion(curr.size() == 1 || curr.get(1).asBoolean());
+        case WindowMaskerDatabasePath
+          -> out.setWindowMaskerDbPath(Path.of(curr.get(1).asText()));
+        case WindowMaskerTaxonomicID
+          -> out.setWindowMaskerTaxId(curr.get(1).asInt());
+        case WordSize
+          -> out.setWordSize(curr.get(1).asInt());
+        case ExtensionDropoffFinalGapped
+          -> out.setExtensionDropoffFinalGapped(curr.get(1).asDouble());
+        case ExtensionDropoffPrelimGapped
+          -> out.setExtensionDropoffPreliminaryGapped(curr.get(1).asDouble());
+        case ExtensionDropoffUngapped
+          -> out.setExtensionDropoffUngapped(curr.get(1).asDouble());
       }
     }
 

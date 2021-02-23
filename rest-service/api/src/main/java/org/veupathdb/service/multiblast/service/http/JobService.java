@@ -17,9 +17,7 @@ import mb.lib.format.FormatterManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.grizzly.streams.Input;
-import org.glassfish.jersey.message.internal.Utils;
-import org.gusdb.fgputil.accountdb.UserProfile;
+import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
@@ -52,8 +50,8 @@ public class JobService
     return instance;
   }
 
-  public IOLongJobResponse getJob(String rawID, UserProfile user) {
-    log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserId());
+  public IOLongJobResponse getJob(String rawID, User user) {
+    log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserID());
 
     if (!Format.isHex(rawID))
       throw new NotFoundException();
@@ -62,7 +60,7 @@ public class JobService
 
     try {
 
-      var opt = JobDBManager.getUserJob(jobID, user.getUserId());
+      var opt = JobDBManager.getUserJob(jobID, user.getUserID());
 
       if (opt.isEmpty())
         throw new NotFoundException();
@@ -78,7 +76,7 @@ public class JobService
         .setExpires(Format.DateFormat.format(job.deleteOn()))
         .setMaxResultSize(job.maxDownloadSize())
         .setParentJobs(
-          JobDBManager.getParentJobs(jobID, user.getUserId())
+          JobDBManager.getParentJobs(jobID, user.getUserID())
             .stream()
             .map(j -> new IOParentJobLinkImpl()
               .setId(Format.toHexString(j.parentHash()))
@@ -99,11 +97,11 @@ public class JobService
     }
   }
 
-  public List<IOShortJobResponse> getJobs(UserProfile user) {
-    log.trace("JobService#getJobs(user={})", user.getUserId());
+  public List<IOShortJobResponse> getJobs(User user) {
+    log.trace("JobService#getJobs(user={})", user.getUserID());
 
     try {
-      var jobs = JobDBManager.getUserJobs(user.getUserId());
+      var jobs = JobDBManager.getUserJobs(user.getUserID());
       var out  = new ArrayList<IOShortJobResponse>(jobs.size());
 
       for (var job : jobs) {
@@ -130,7 +128,7 @@ public class JobService
           .setMaxResultSize(job.maxDownloadSize())
           .setIsPrimary(job.runDirectly())
           .setParentJobs(
-            JobDBManager.getParentJobs(job.jobHash(), user.getUserId())
+            JobDBManager.getParentJobs(job.jobHash(), user.getUserID())
               .stream()
               .map(j -> new IOParentJobLinkImpl()
                 .setId(Format.toHexString(j.parentHash()))
@@ -267,20 +265,20 @@ public class JobService
     }
   }
 
-  public IOJobPostResponse createJob(IOJsonJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(input={}, user={})", input, user.getUserId());
+  public IOJobPostResponse createJob(IOJsonJobRequest input, User user) {
+    log.trace("JobService#createJob(input={}, user={})", input, user.getUserID());
 
-    return JobCreationService.createJobs(input, user.getUserId());
+    return JobCreationService.createJobs(input, user.getUserID());
   }
 
-  public IOJobPostResponse createJob(InputStream query, IOJsonJobRequest props, UserProfile user) {
-    log.trace("JobService#createJob(query={}, props={}, user={})", query, props, user.getUserId());
+  public IOJobPostResponse createJob(InputStream query, IOJsonJobRequest props, User user) {
+    log.trace("JobService#createJob(query={}, props={}, user={})", query, props, user.getUserID());
 
     try {
       if (query == null)
-        return JobCreationService.createJobs(props, user.getUserId());
+        return JobCreationService.createJobs(props, user.getUserID());
 
-      return JobCreationService.createJobs(query, props, user.getUserId());
+      return JobCreationService.createJobs(query, props, user.getUserID());
     } catch (Exception e) {
       throw wrapException(e);
     }

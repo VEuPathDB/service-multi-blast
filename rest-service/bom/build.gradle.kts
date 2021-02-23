@@ -11,11 +11,11 @@ repositories {
   mavenCentral()
 }
 
-val vCoreLib = "4.3.0"  // Container core lib version
-val vJersey = "2.33"    // Jersey/JaxRS version
+val vCoreLib = "5.0.5"  // Container core lib version
+val vJersey  = "2.33"   // Jersey/JaxRS version
 val vJackson = "2.12.1" // FasterXML Jackson version
-val junit = "5.7.0"  // JUnit version
-val vLog4j = "2.14.0" // Log4J version
+val junit    = "5.7.0"  // JUnit version
+val vLog4j   = "2.14.0" // Log4J version
 val vMetrics = "0.9.0"  // Prometheus lib version
 
 dependencies {
