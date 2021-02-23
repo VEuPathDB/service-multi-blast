@@ -2,10 +2,14 @@ package org.veupathdb.service.multiblast.service.http.job;
 
 import javax.ws.rs.BadRequestException;
 
+import mb.lib.db.model.ShortJobRow;
+import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.JobStatus;
 import mb.lib.jobData.JobDataManager;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.multiblast.generated.model.IOJobTarget;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
+import org.veupathdb.service.multiblast.util.Format;
 
 class JobUtil
 {
@@ -54,4 +58,13 @@ class JobUtil
       ).ifPresent(m -> { throw new UnprocessableEntityException(m); });
   }
 
+  static boolean jobIsCached(ShortJobRow job) throws Exception {
+    var status = JobQueueManager.jobStatus(job.queueID());
+    var jobID  = Format.toHexString(job.jobHash());
+
+    if (status == JobStatus.Completed || status == JobStatus.Unknown)
+      return JobDataManager.reportExists(jobID);
+
+    return false;
+  }
 }

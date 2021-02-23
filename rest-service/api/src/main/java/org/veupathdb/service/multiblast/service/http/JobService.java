@@ -210,6 +210,8 @@ public class JobService
       if (pFormat == FormatType.MultipleFileBlastJSON || pFormat == FormatType.MultipleFileBlastXML2)
         zip = true;
 
+      JobReportService.ensureJobCache(job, userId);
+
       var out = new ReportWrap();
       out.zipped = zip;
       var tmp = FormatterManager.formatAs(
