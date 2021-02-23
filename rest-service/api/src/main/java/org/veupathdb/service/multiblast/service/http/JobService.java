@@ -24,6 +24,7 @@ import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.job.JobCreationService;
+import org.veupathdb.service.multiblast.service.http.job.JobReportService;
 import org.veupathdb.service.multiblast.util.Format;
 
 import static org.veupathdb.service.multiblast.service.http.Util.wrapException;
@@ -184,7 +185,7 @@ public class JobService
     List<IOBlastReportField> fields,
     Long maxDlSize
   ) {
-    log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={})", jobID, format, zip, fields);
+    log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={}, maxDlSize={})", jobID, format, zip, fields, maxDlSize);
 
     try {
       if (!Format.isHex(jobID))
@@ -200,32 +201,7 @@ public class JobService
       if (format == null) {
         pFormat = FormatType.fromID(config.getJobConfig().getReportFormat().getType().getValue());
       } else {
-        try {
-          pFormat = FormatType.fromID(Integer.parseInt(format));
-        } catch (NumberFormatException ignored) {
-          pFormat = switch(BlastReportType.fromIoName(format)
-            .orElseThrow(() -> new BadRequestException("unrecognized report format"))) {
-            case Pairwise -> FormatType.Pairwise;
-            case QueryAnchoredWithIdentities -> FormatType.QueryAnchoredWithIdentities;
-            case QueryAnchoredWithoutIdentities -> FormatType.QueryAnchoredWithoutIdentities;
-            case FlatQueryAnchoredWithIdentities -> FormatType.FlatQueryAnchoredWithIdentities;
-            case FlatQueryAnchoredWithoutIdentities -> FormatType.FlatQueryAnchoredWithoutIdentities;
-            case XML -> FormatType.BlastXML;
-            case Tabular -> FormatType.Tabular;
-            case TabularWithComments -> FormatType.TabularWithCommentLines;
-            case TextASN1 -> FormatType.SeqAlignTextASN1;
-            case BinaryASN1 -> FormatType.SeqAlignBinaryASN1;
-            case CSV -> FormatType.CommaSeparatedValues;
-            case ArchiveASN1 -> FormatType.BlastArchiveASN1;
-            case SeqAlignJSON -> FormatType.SeqAlignJSON;
-            case MultiFileJSON -> FormatType.MultipleFileBlastJSON;
-            case MultiFileXML2 -> FormatType.MultipleFileBlastXML2;
-            case SingleFileJSON -> FormatType.SingleFileBlastJSON;
-            case SingleFileXML2 -> FormatType.SingleFileBlastXML2;
-            case SAM -> FormatType.SequenceAlignmentMap;
-            case OrganismReport -> FormatType.OrganismReport;
-          };
-        }
+        pFormat = JobReportService.parseFormatString(format);
       }
 
       if (pFormat == FormatType.SequenceAlignmentMap && config.getTool() != BlastTool.BlastN)
