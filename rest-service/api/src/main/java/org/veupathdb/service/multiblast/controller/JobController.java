@@ -143,14 +143,11 @@ public class JobController implements Jobs
   ) {
     log.trace("#getJobsReportByJobId(jobID={}, format={}, zip={}, inline={}, fields={})", jobID, format, zip, inline, fields);
 
-    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-
+    var user         = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
     var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
-    var maxDlSize = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
-
-    var wrap = service.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
-
-    var resp = Response.status(200).header("Content-Type", wrap.contentType);
+    var maxDlSize    = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
+    var wrap         = service.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
+    var resp         = Response.status(200).header("Content-Type", wrap.contentType);
 
     if (!inline)
       resp.header("Content-Disposition", String.format(AttachmentPat, "report", wrap.ext));

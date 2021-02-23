@@ -20,7 +20,7 @@ public class Main extends Server {
     var server = new Main();
 
     bgTasks = Executors.newSingleThreadScheduledExecutor();
-    bgTasks.scheduleWithFixedDelay(new JobCleanup(), 4, 12, TimeUnit.HOURS);
+    bgTasks.scheduleAtFixedRate(new JobCleanup(), 0, 12, TimeUnit.HOURS);
 
     server.enableAccountDB();
     server.enableUserDB();

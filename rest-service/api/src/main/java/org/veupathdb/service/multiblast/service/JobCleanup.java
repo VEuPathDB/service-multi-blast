@@ -17,7 +17,9 @@ public class JobCleanup implements Runnable
   public void run() {
     try {
       runChecked();
-    } catch (Exception ignored) {}
+    } catch (Exception e) {
+      log.error("Job cleanup ended unexpectedly.", e);
+    }
   }
 
   public void runChecked() throws Exception {
