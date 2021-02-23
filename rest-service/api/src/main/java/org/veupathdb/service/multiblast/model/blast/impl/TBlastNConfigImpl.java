@@ -34,10 +34,9 @@ public class TBlastNConfigImpl
   /**
    * <pre>
    * -word_size <Integer, >=2>
-   *    Word size for wordfinder algorithm
+   *    Word size for word-finder algorithm
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private EWordSize wordSize;
 
   /**
@@ -48,7 +47,6 @@ public class TBlastNConfigImpl
    *    Cost to extend a gap
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private EGapCost gapCost;
 
   /**
@@ -59,7 +57,6 @@ public class TBlastNConfigImpl
    *    Default = `1'
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private EDbGenCode dbGenCode;
 
   /**
@@ -114,7 +111,6 @@ public class TBlastNConfigImpl
    *    db_soft_mask, db_hard_mask, remote
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private ESubject subject;
 
   /**
@@ -142,7 +138,6 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private EGiList giList;
 
   /**
@@ -159,7 +154,6 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private ESeqIdList seqIdList;
 
   /**
@@ -178,7 +172,6 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private ETaxIds taxIds;
 
   /**
@@ -195,7 +188,6 @@ public class TBlastNConfigImpl
    *    subject_loc
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private ETaxIdList taxIdList;
 
   /**
@@ -251,7 +243,6 @@ public class TBlastNConfigImpl
    *    X-dropoff value (in bits) for final gapped alignment
    * </pre>
    */
-  @SuppressWarnings("SpellCheckingInspection")
   private EGapExtDrop xDrop;
 
   /**

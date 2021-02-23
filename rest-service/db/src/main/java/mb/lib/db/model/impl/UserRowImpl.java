@@ -6,14 +6,14 @@ public class UserRowImpl extends RowImpl implements UserRow
 {
   private final long    userID;
   private final String  description;
-  private final long    maxDownloadSize;
+  private final Long    maxDownloadSize;
   private final boolean runDirectly;
 
   public UserRowImpl(
     byte[]  hash,
     long    userID,
     String  description,
-    long    maxDlSize,
+    Long    maxDlSize,
     boolean runDirectly
   ) {
     super(hash);
@@ -34,7 +34,7 @@ public class UserRowImpl extends RowImpl implements UserRow
   }
 
   @Override
-  public long maxDownloadSize() {
+  public Long maxDownloadSize() {
     return maxDownloadSize;
   }
 

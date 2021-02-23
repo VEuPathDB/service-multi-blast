@@ -6,7 +6,7 @@ public interface UserRow extends Row
 
   String description();
 
-  long maxDownloadSize();
+  Long maxDownloadSize();
 
   /**
    * @return whether the job linked to this row was run directly by the client

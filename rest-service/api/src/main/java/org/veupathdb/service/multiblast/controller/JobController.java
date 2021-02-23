@@ -15,13 +15,12 @@ import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
-import org.veupathdb.service.multiblast.generated.model.IOMultipartJobRequest;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
 import org.veupathdb.service.multiblast.model.io.Headers;
 import org.veupathdb.service.multiblast.service.http.JobService;
 import org.veupathdb.service.multiblast.util.Format;
 
-@Authenticated
+@Authenticated(allowGuests = true)
 public class JobController implements Jobs
 {
   private static final Logger log = LogManager.getLogger(JobController.class);
@@ -149,7 +148,7 @@ public class JobController implements Jobs
     var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
     var maxDlSize = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
 
-    var wrap = service.getReport(jobID, user.getUserId(), format, zip, fields, maxDlSize);
+    var wrap = service.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
 
     var resp = Response.status(200).header("Content-Type", wrap.contentType);
 

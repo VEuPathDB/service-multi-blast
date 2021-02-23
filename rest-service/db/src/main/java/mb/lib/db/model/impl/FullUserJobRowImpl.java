@@ -9,7 +9,7 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
   private final long    userID;
   private final String  description;
-  private final long    maxDlSize;
+  private final Long    maxDlSize;
   private final boolean runDirectly;
 
   public FullUserJobRowImpl(
@@ -21,7 +21,7 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
     File           query,
     long           userID,
     String         description,
-    long           maxDlSize,
+    Long           maxDlSize,
     boolean        runDirectly
   ) {
     super(hash, queueID, createdOn, deleteOn, config, query);
@@ -42,7 +42,7 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
   }
 
   @Override
-  public long maxDownloadSize() {
+  public Long maxDownloadSize() {
     return maxDlSize;
   }
 
