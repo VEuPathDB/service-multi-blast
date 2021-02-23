@@ -35,7 +35,7 @@ public class JobCreator
       JobDBManager.updateLinkIsPrimary(d.userID, d.hash);
   }
 
-  public void handleRerun(JobDetails d) throws Exception {
+  public int handleRerun(JobDetails d) throws Exception {
     log.trace("#handleRerun(d={})", d);
 
     // Clean up just to be safe.  If the service was reset, there may be orphan
@@ -43,7 +43,7 @@ public class JobCreator
     JobDataManager.deleteJobData(d.id);
 
     var jobDir = JobDataManager.createJobWorkspace(d.id);
-    Files.move(d.source.toPath(), jobDir.resolve("query.txt"));
+    Files.move(d.query.toPath(), jobDir.resolve("query.txt"));
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
@@ -60,6 +60,8 @@ public class JobCreator
       if (noLinks)
         JobDBManager.createJobLink(d.hash, d.parentHash);
     }
+
+    return queId;
   }
 
   public void handleInitialRun(JobDetails d) throws Exception {
@@ -70,7 +72,7 @@ public class JobCreator
     JobDataManager.deleteJobData(d.id);
 
     var jobDir = JobDataManager.createJobWorkspace(d.id);
-    var qFile  = Files.move(d.source.toPath(), jobDir.resolve("query.txt"));
+    var qFile  = Files.move(d.query.toPath(), jobDir.resolve("query.txt"));
     var now    = OffsetDateTime.now();
     var exp    = now.plusDays(Config.getInstance().getJobTimeout());
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));

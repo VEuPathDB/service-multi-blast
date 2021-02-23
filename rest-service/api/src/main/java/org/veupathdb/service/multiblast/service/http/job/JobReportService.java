@@ -2,17 +2,57 @@ package org.veupathdb.service.multiblast.service.http.job;
 
 import javax.ws.rs.BadRequestException;
 
+import mb.lib.db.model.FullUserJobRow;
+import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.JobStatus;
 import mb.lib.format.FormatType;
+import mb.lib.jobData.JobDataManager;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
+import org.veupathdb.service.multiblast.model.internal.Job;
+import org.veupathdb.service.multiblast.service.cli.CliBuilder;
+import org.veupathdb.service.multiblast.util.Format;
 
 public class JobReportService
 {
+  public static void ensureJobCache(FullUserJobRow job, long userID) throws Exception {
+    if (JobUtil.jobIsCached(job))
+      return;
+
+    var dets = new JobDetails();
+    dets.hash   = job.jobHash();
+    dets.query  = job.query();
+    dets.id     = Format.toHexString(dets.hash);
+    dets.job    = Job.fromSerial(job.config());
+    dets.cli    = new CliBuilder();
+    dets.userID = userID;
+
+    dets.job.getJobConfig().toCli(dets.cli);
+
+    var queueID = new JobCreator().handleRerun(dets);
+
+    // Wait for job to complete
+    JobStatus stat;
+    for (
+      stat = JobQueueManager.jobStatus(queueID);
+      stat == JobStatus.Queued || stat == JobStatus.InProgress;
+      stat = JobQueueManager.jobStatus(queueID)
+    ) {
+      Thread.sleep(250);
+    }
+
+    if (stat == JobStatus.Errored) {
+      throw new Exception(JobDataManager.getJobError(dets.id)
+        .orElse("An unknown error occurred"));
+    }
+  }
+
   public static FormatType parseFormatString(String format) {
     try {
       return FormatType.fromID(Integer.parseInt(format));
-    } catch (NumberFormatException ignored) {}
+    } catch (NumberFormatException ignored) {
+    }
 
-    return switch(BlastReportType.fromIoName(format)
+    return switch (BlastReportType.fromIoName(format)
       .orElseThrow(() -> new BadRequestException("unrecognized report format"))) {
       case Pairwise -> FormatType.Pairwise;
       case QueryAnchoredWithIdentities -> FormatType.QueryAnchoredWithIdentities;

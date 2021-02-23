@@ -126,7 +126,7 @@ public class JobCreationService
       if (JobDataManager.jobDataExists(dets.id)) {
         log.debug("Job already exists and has cached data.  Linking user to job.");
         //noinspection ResultOfMethodCallIgnored
-        dets.source.delete();
+        dets.query.delete();
         new JobCreator().handleLink(dets);
         return JobStatus.Linked;
       } else {
@@ -161,8 +161,8 @@ public class JobCreationService
     job.getJobConfig().toCli(cli);
 
     var dets = new JobDetails();
-    dets.source      = row.source;
-    dets.hash        = hashJob(
+    dets.query = row.source;
+    dets.hash  = hashJob(
       js.getSite(),
       dbPath,
       js.getConfig().getTool().name,

@@ -8,7 +8,7 @@ import org.veupathdb.service.multiblast.util.Format;
 
 public class JobDetails
 {
-  File       source;
+  File       query;
   byte[]     hash;
   String     id;
   Job        job;
@@ -22,7 +22,7 @@ public class JobDetails
   @Override
   public String toString() {
     return Format.Json.createObjectNode()
-      .put("source", source.getName())
+      .put("query", query.getName())
       .put("hash", id)
       .put("id", id)
       .put("job", job.toString())

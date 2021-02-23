@@ -1,9 +1,6 @@
 package mb.lib.jobData;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -91,17 +88,18 @@ public class JobDataManager
    * @return An option that may contain a stream over the job's error log
    * contents.
    */
-  public static Optional<InputStream> getJobError(String jobID) {
-    var errorLog = Path.of(conf.getJobMountPath(), jobID, jobErrorFile).toFile();
+  public static Optional<String> getJobError(String jobID) {
+    var errorPath = Path.of(conf.getJobMountPath(), jobID, jobErrorFile);
+    var errorFile = errorPath.toFile();
 
-    if (!errorLog.exists())
+    if (!errorFile.exists())
       return Optional.empty();
-    if (!errorLog.canRead())
+    if (!errorFile.canRead())
       throw new IllegalStateException("Cannot read job error log for job " + jobID);
 
     try {
-      return Optional.of(new FileInputStream(errorLog));
-    } catch (FileNotFoundException e) {
+      return Optional.of(Files.readString(errorPath));
+    } catch (Exception e) {
       throw new IllegalStateException("Failed to open job error log for job " + jobID);
     }
   }
