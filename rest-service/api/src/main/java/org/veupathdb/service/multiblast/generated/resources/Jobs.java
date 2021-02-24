@@ -25,7 +25,7 @@ public interface Jobs {
   @Produces("application/json")
   @Consumes("multipart/form-data")
   Response postJobs(
-    @FormDataParam("file")       InputStream upload,
+    @FormDataParam("query")      InputStream upload,
     @FormDataParam("properties") InputStream config);
 
   @GET
