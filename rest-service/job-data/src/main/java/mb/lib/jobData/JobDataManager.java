@@ -1,9 +1,9 @@
 package mb.lib.jobData;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -149,5 +149,42 @@ public class JobDataManager
       return Collections.emptyList();
 
     return Arrays.asList(children);
+  }
+
+  public static List<Path> getPathsCreatedBefore(OffsetDateTime time)
+  throws Exception {
+    // 50 ~= 10 jobs
+    final var out  = new ArrayList<Path>(50);
+    final var root = Path.of(Config.getInstance().getJobMountPath());
+
+    Files.walkFileTree(root, new SimpleFileVisitor<>(){
+      // Used to keep the directory entries _after_ the file entries per
+      // directory.
+      private final Set<Path> dirs = new HashSet<>();
+
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (attrs.creationTime().toInstant().isBefore(time.toInstant()))
+          out.add(file);
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        if (attrs.creationTime().toInstant().isBefore(time.toInstant()))
+          if (!dir.equals(root))
+            dirs.add(dir);
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        if (dirs.contains(dir))
+          out.add(dir);
+        return FileVisitResult.CONTINUE;
+      }
+    });
+
+    return out;
   }
 }

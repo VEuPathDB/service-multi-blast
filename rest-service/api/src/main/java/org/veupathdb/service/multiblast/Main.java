@@ -20,11 +20,12 @@ public class Main extends Server {
     var server = new Main();
 
     bgTasks = Executors.newSingleThreadScheduledExecutor();
-    bgTasks.scheduleAtFixedRate(new JobCleanup(), 0, 12, TimeUnit.HOURS);
 
     server.enableAccountDB();
     server.enableUserDB();
     server.start(args);
+
+    bgTasks.scheduleAtFixedRate(new JobCleanup(), 0, 24, TimeUnit.HOURS);
   }
 
   @Override

@@ -1,6 +1,10 @@
 package org.veupathdb.service.multiblast.service;
 
+import java.nio.file.Files;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.util.concurrent.TimeUnit;
 
 import mb.lib.db.JobDBManager;
 import mb.lib.extern.JobQueueManager;
@@ -8,6 +12,8 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.util.Format;
+
+import static java.time.temporal.ChronoUnit.HOURS;
 
 public class JobCleanup implements Runnable
 {
@@ -28,19 +34,16 @@ public class JobCleanup implements Runnable
 
     try {
       var now = OffsetDateTime.now();
+
+      deleteOldFiles(now);
+
       var jobs = JobDBManager.getStaleJobs(now);
 
       log.info("Job Pruning: found " + jobs.size() + " stale jobs");
 
-      log.debug("deleting stale guest job links");
-      JobDBManager.deleteStaleGuests();
-
-      log.debug("deleting orphan jobs");
-      JobDBManager.deleteOrphanJobs();
-
       for (var job : jobs) {
         var idString = Format.toHexString(job.jobHash());
-        log.debug("deleting stale user job links");
+        log.debug("deleting job {} db entries", idString);
         JobDBManager.deleteJob(job.jobHash());
 
         log.debug("deleting job {} workspace", idString);
@@ -49,11 +52,29 @@ public class JobCleanup implements Runnable
         log.debug("deleting job {} queue entry", idString);
         JobQueueManager.deleteJob(job.queueID());
       }
+
+      log.info("Job Pruning: deleting stale guest jobs");
+      JobDBManager.deleteStaleGuests();
+
+      log.debug("Job Pruning: deleting orphan jobs");
+      JobDBManager.deleteOrphanJobs();
     } catch (Exception ex) {
       log.error("Job Pruning: error while attempting to prune jobs: ", ex);
       throw ex;
     }
 
     log.info("Job Pruning: complete");
+  }
+
+  private void deleteOldFiles(OffsetDateTime now) throws Exception {
+    // FIXME!!!!!
+    var delPoint = now.minus(5, ChronoUnit.MINUTES);
+
+    var old = JobDataManager.getPathsCreatedBefore(delPoint);
+
+    log.info("Job Pruning: pruning " + old.size() + " files");
+
+    for (var file : old)
+      Files.delete(file);
   }
 }
