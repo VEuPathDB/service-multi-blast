@@ -50,11 +50,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   /**
    * {@code -evalue <real>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private BigDecimal expectValue;
 
   /**
    * {@code -outfmt <string; format>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private BlastReportFormat outFmt;
 
   /**
@@ -85,11 +87,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   /**
    * {@code -sorthits <integer; >= 0 and <= 4>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private HitSorting sortHits;
 
   /**
    * {@code -sorthsps <integer; >= 0 and <= 4>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private HspSorting sortHsps;
 
   /**
@@ -100,6 +104,7 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   /**
    * {@code -qcov_hsp_perc <real; 0..100>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private Double qCovHspPerc;
 
   /**
@@ -110,16 +115,19 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   /**
    * {@code -max_target_seqs <integer; >= 1>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private Integer maxTargetSeqs;
 
   /**
    * {@code -dbsize <int8>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private Byte dbSize;
 
   /**
    * {@code -searchsp <int8; >= 0>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private Byte searchSpace;
 
   /**
@@ -135,11 +143,13 @@ public class BlastConfigImpl<T extends BlastConfig<T>> implements BlastConfig<T>
   /**
    * {@code -xdrop_ungap <real>}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private Double xDropUngap;
 
   /**
    * {@code -parse_deflines}
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private boolean parseDefLines;
 
   /**

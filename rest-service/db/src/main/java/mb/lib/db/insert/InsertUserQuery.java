@@ -3,6 +3,7 @@ package mb.lib.db.insert;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
@@ -24,9 +25,10 @@ public class InsertUserQuery
 
   private void prepare(PreparedStatement ps) throws SQLException {
     ps.setBytes(1, user.jobHash());
-    ps.setLong(2, user.getUserId());
-    ps.setString(3, user.getDescription());
-    ps.setLong(4, user.getMaxDownloadSize());
+    ps.setLong(2, user.userID());
+    ps.setString(3, user.description());
+    ps.setLong(4, user.maxDownloadSize() == null ? 0 : user.maxDownloadSize());
+    ps.setBoolean(5, user.runDirectly());
   }
 
   public static void execute(Connection con, UserRow user) throws Exception {

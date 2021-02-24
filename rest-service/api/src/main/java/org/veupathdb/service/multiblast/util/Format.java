@@ -1,26 +1,17 @@
 package org.veupathdb.service.multiblast.util;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Format
 {
-  private static final Logger log = LogManager.getLogger(Format.class);
-
-  public static final byte   HASH_SIZE = 20;
   public static final String HASH_TYPE = "MD5";
 
-  public static final DecimalFormat     Decimals   = new DecimalFormat("0.##########");
   public static final ObjectMapper      Json       = new ObjectMapper();
   public static final DateTimeFormatter DateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -31,8 +22,6 @@ public class Format
   }
 
   public static String toHexString(byte[] value) {
-    log.trace("Format#toHexString(byte[])");
-
     var tmp = new byte[value.length * 2];
     for (int i = 0, j = 0; i < value.length; i++) {
       tmp[j++] = hexTable[(value[i] >>> 4) & 0xF];
@@ -42,8 +31,6 @@ public class Format
   }
 
   public static byte[] hexToBytes(String value) {
-    log.trace("Format#hexToBytes(String)");
-
     var raw = value.getBytes(StandardCharsets.US_ASCII);
     var out = new byte[raw.length / 2];
 
@@ -65,8 +52,6 @@ public class Format
   }
 
   public static boolean isHex(String val) {
-    log.trace("Format#isHex(String)");
-
     for (var b : val.getBytes(StandardCharsets.UTF_8)) {
       if (b < '0' || b > 'f' || b > '9' && b < 'A' || b > 'F' && b < 'a') {
         return false;
@@ -76,28 +61,11 @@ public class Format
     return true;
   }
 
-  public static byte[] toSHA256(String value) {
-    log.trace("Format#toSHA256(String)");
-
+  public static byte[] toHash(String value) {
     try {
       var dig = MessageDigest.getInstance(HASH_TYPE);
       return dig.digest(value.getBytes(StandardCharsets.UTF_8));
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public static byte[] toSHA256(InputStream value) {
-    var buffer = new byte[8192];
-    try {
-      var dig = MessageDigest.getInstance(HASH_TYPE);
-      var buf = new BufferedInputStream(value);
-      int n;
-      while ((n = buf.read(buffer)) > 0) {
-        dig.update(buffer, 0, n);
-      }
-      return dig.digest();
-    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }

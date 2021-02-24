@@ -3,10 +3,9 @@ package org.veupathdb.service.multiblast.generated.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize(
-    as = DependencyStatusImpl.class
-)
-public interface DependencyStatus {
+@JsonDeserialize(as = DependencyStatusImpl.class)
+public interface DependencyStatus
+{
   @JsonProperty("name")
   String getName();
 
@@ -14,10 +13,10 @@ public interface DependencyStatus {
   void setName(String name);
 
   @JsonProperty("reachable")
-   Boolean getReachable();
+  Boolean getReachable();
 
   @JsonProperty("reachable")
-  void setReachable (Boolean reachable);
+  void setReachable(Boolean reachable);
 
   @JsonProperty("online")
   OnlineType getOnline();
@@ -25,7 +24,8 @@ public interface DependencyStatus {
   @JsonProperty("online")
   void setOnline(OnlineType online);
 
-  enum OnlineType {
+  enum OnlineType
+  {
     @JsonProperty("yes")
     YES("yes"),
 
@@ -35,7 +35,7 @@ public interface DependencyStatus {
     @JsonProperty("no")
     NO("no");
 
-    private String name;
+    public final String name;
 
     OnlineType(String name) {
       this.name = name;

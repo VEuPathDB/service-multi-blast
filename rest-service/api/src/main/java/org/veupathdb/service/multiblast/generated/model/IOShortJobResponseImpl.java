@@ -2,15 +2,17 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class IOShortJobResponseImpl implements IOShortJobResponse
 {
-  private String      id;
-  private String      description;
-  private IOJobStatus status;
-  private String      created;
-  private String      expires;
-  private Long        maxResultSize;
+  private String            id;
+  private String            description;
+  private IOJobStatus       status;
+  private String            created;
+  private String            expires;
+  private Long              maxResultSize;
+  private IOParentJobLink[] parentJobIDs;
+  private boolean           isPrimary;
 
   @Override
   public String getId() {
@@ -73,8 +75,30 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   }
 
   @Override
-  public IOShortJobResponseImpl setMaxResultSize(Long maxResultSize) {
+  public IOShortJobResponse setMaxResultSize(Long maxResultSize) {
     this.maxResultSize = maxResultSize;
+    return this;
+  }
+
+  @Override
+  public IOParentJobLink[] getParentJobs() {
+    return parentJobIDs;
+  }
+
+  @Override
+  public IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID) {
+    this.parentJobIDs = parentJobID;
+    return this;
+  }
+
+  @Override
+  public boolean getIsPrimary() {
+    return isPrimary;
+  }
+
+  @Override
+  public IOShortJobResponse setIsPrimary(boolean isPrimary) {
+    this.isPrimary = isPrimary;
     return this;
   }
 }

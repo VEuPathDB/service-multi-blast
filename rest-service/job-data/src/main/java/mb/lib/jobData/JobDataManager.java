@@ -1,31 +1,36 @@
 package mb.lib.jobData;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import mb.lib.config.Config;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JobDataManager
 {
-  private static final Config conf = Config.getInstance();
+  private static final Logger log = LogManager.getLogger(JobDataManager.class);
+
+  private static final Config conf         = Config.getInstance();
   private static final String jobErrorFile = "error.log";
 
   public static Path makeDBPath(String site, String org, String tgt) {
+    log.trace("::makeDBPath(site={}, org={}, tgt={})", site, org, tgt);
     return Paths.get(conf.getDbMountPath(), site, "build-" + conf.getBuildNum(), org, "blast", tgt);
   }
 
   public static boolean reportExists(String jobID) {
+    log.trace("::reportExists(jobID={})", jobID);
     return Path.of(conf.getJobMountPath(), jobID, "report.asn1").toFile().exists();
   }
 
   public static boolean targetDBExists(Path tgt) {
+    log.trace("::targetDBExists(tgt={})", tgt);
+
     if (!tgt.getParent().toFile().exists())
       return false;
 
@@ -40,6 +45,8 @@ public class JobDataManager
   }
 
   public static boolean jobDataExists(String jobID) {
+    log.trace("::jobDataExists(jobID={})", jobID);
+
     var jobDir = Path.of(conf.getJobMountPath(), jobID).toFile();
 
     if (!jobDir.exists())
@@ -52,16 +59,17 @@ public class JobDataManager
   }
 
   public static Path createJobWorkspace(String jobID) throws Exception {
-    var path = Path.of(conf.getJobMountPath(), jobID);
-    Files.createDirectories(path);
-    return path;
+    log.trace("::createJobWorkspace(jobID={})", jobID);
+    return Files.createDirectories(Path.of(conf.getJobMountPath(), jobID));
   }
 
   public static File getJobQuery(String jobID) {
+    log.trace("::getJobQuery(jobID={})", jobID);
     return getJobFile(jobID, "query.txt");
   }
 
   public static File getJobFile(String jobID, String fileName) {
+    log.trace("::getJobFile(jobID={}, fileName={}", jobID, fileName);
     return Path.of(conf.getJobMountPath(), jobID, fileName).toFile();
   }
 
@@ -78,19 +86,20 @@ public class JobDataManager
    * @param jobID ID of the job to retrieve the error log for.
    *
    * @return An option that may contain a stream over the job's error log
-   *         contents.
+   * contents.
    */
-  public static Optional<InputStream> getJobError(String jobID) {
-    var errorLog = Path.of(conf.getJobMountPath(), jobID, jobErrorFile).toFile();
+  public static Optional<String> getJobError(String jobID) {
+    var errorPath = Path.of(conf.getJobMountPath(), jobID, jobErrorFile);
+    var errorFile = errorPath.toFile();
 
-    if (!errorLog.exists())
+    if (!errorFile.exists())
       return Optional.empty();
-    if (!errorLog.canRead())
+    if (!errorFile.canRead())
       throw new IllegalStateException("Cannot read job error log for job " + jobID);
 
     try {
-      return Optional.of(new FileInputStream(errorLog));
-    } catch (FileNotFoundException e) {
+      return Optional.of(Files.readString(errorPath));
+    } catch (Exception e) {
       throw new IllegalStateException("Failed to open job error log for job " + jobID);
     }
   }
@@ -101,7 +110,13 @@ public class JobDataManager
    * @param jobID ID of the job whose directory should be erased.
    */
   public static void deleteJobData(String jobID) throws Exception {
+    log.trace("::deleteJobData(jobID={})", jobID);
+
     var path = Path.of(conf.getJobMountPath(), jobID);
+
+    // If the path doesn't exist, nothing to do.
+    if (!path.toFile().exists())
+      return;
 
     Files.walk(path)
       .sorted(Comparator.reverseOrder())
@@ -110,6 +125,8 @@ public class JobDataManager
   }
 
   public static Collection<File> getJobUserFiles(String jobID) {
+    log.trace("::getJobUserFiles(jobID={})", jobID);
+
     return getAllJobFiles(jobID).stream()
       .filter(file -> !file.getName().equals(jobErrorFile))
       .collect(Collectors.toList());
@@ -123,6 +140,8 @@ public class JobDataManager
    * @return A list of all files associated with that job.
    */
   public static Collection<File> getAllJobFiles(String jobID) {
+    log.trace("::getAllJobFiles(jobID={})", jobID);
+
     var jobDir   = Path.of(Config.getInstance().getJobMountPath(), jobID).toFile();
     var children = jobDir.listFiles();
 
@@ -130,5 +149,42 @@ public class JobDataManager
       return Collections.emptyList();
 
     return Arrays.asList(children);
+  }
+
+  public static List<Path> getPathsCreatedBefore(OffsetDateTime time)
+  throws Exception {
+    // 50 ~= 10 jobs
+    final var out  = new ArrayList<Path>(50);
+    final var root = Path.of(Config.getInstance().getJobMountPath());
+
+    Files.walkFileTree(root, new SimpleFileVisitor<>(){
+      // Used to keep the directory entries _after_ the file entries per
+      // directory.
+      private final Set<Path> dirs = new HashSet<>();
+
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (attrs.creationTime().toInstant().isBefore(time.toInstant()))
+          out.add(file);
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        if (attrs.creationTime().toInstant().isBefore(time.toInstant()))
+          if (!dir.equals(root))
+            dirs.add(dir);
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        if (dirs.contains(dir))
+          out.add(dir);
+        return FileVisitResult.CONTINUE;
+      }
+    });
+
+    return out;
   }
 }

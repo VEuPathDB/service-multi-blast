@@ -1,7 +1,9 @@
 package org.veupathdb.service.multiblast;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
+import org.veupathdb.service.multiblast.controller.DebugController;
 import org.veupathdb.service.multiblast.controller.JobController;
 import org.veupathdb.service.multiblast.controller.MetaController;
 
@@ -24,8 +26,11 @@ public class Resources extends ContainerResources {
   @Override
   protected Object[] resources() {
     return new Object[] {
+      MultiPartFeature.class,
+
       JobController.class,
       MetaController.class,
+      DebugController.class,
     };
   }
 }

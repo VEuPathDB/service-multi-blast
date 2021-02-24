@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.*;
 import org.veupathdb.service.multiblast.model.blast.impl.ReportFormatImpl;
@@ -19,17 +17,9 @@ import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 
 public class BlastConverter
 {
-  private static final Logger log = LogProvider.logger(BlastConverter.class);
-
   private static BlastConverter instance;
 
-  private BlastConverter() {
-    log.trace("BlastConverter::new()");
-  }
-
   public static BlastConverter getInstance() {
-    log.trace("BlastConverter::getInstance()");
-
     if (instance == null)
       return instance = new BlastConverter();
 
@@ -37,14 +27,10 @@ public class BlastConverter
   }
 
   static BlastConfig<?> toInternal(IOBlastConfig conf) {
-    log.trace("BlastConverter#toInternal(IOBlastConfig)");
-
     return getInstance().externalToInternal(conf);
   }
 
   public BlastConfig<?> externalToInternal(IOBlastConfig conf) {
-    log.trace("BlastConverter#externalToInternal(IOBlastConfig)");
-
     if (conf == null)
       return null;
 
@@ -82,8 +68,6 @@ public class BlastConverter
   }
 
   public IOBlastConfig internalToExternal(BlastConfig<?> conf) {
-    log.trace("BlastConverter#internalToExternal(BlastConfig)");
-
     if (conf == null)
       return null;
 
@@ -116,8 +100,6 @@ public class BlastConverter
   }
 
   static IOBlastConfig newExternal(BlastConfig<?> conf) {
-    log.trace("BlastConverter#newExternal(BlastConfig)");
-
     if (conf instanceof BlastnConfig)
       return new IOBlastnConfigImpl();
     if (conf instanceof BlastpConfig)
@@ -133,8 +115,6 @@ public class BlastConverter
   }
 
   static IOBlastFormat toExternal(BlastReportType val) {
-    log.trace("BlastConverter#toExternal(ReportFormatType)");
-
     if (val == null)
       return null;
 
@@ -162,8 +142,6 @@ public class BlastConverter
   }
 
   static IOBlastReportField toExternal(BlastReportField field) {
-    log.trace("BlastConverter#toExternal(BlastReportField)");
-
     return switch (field) {
       case QuerySequenceID -> IOBlastReportField.QSEQID;
       case QueryGenInfo -> IOBlastReportField.QGI;
@@ -223,8 +201,6 @@ public class BlastConverter
 
 
   static IOHitSorting toExternal(HitSorting val) {
-    log.trace("BlastConverter#toExternal(HitSorting)");
-
     if (val == null)
       return null;
 
@@ -238,8 +214,6 @@ public class BlastConverter
   }
 
   static IOHSPSorting toExternal(HspSorting val) {
-    log.trace("BlastConverter#toExternal(HspSorting)");
-
     if (val == null)
       return null;
 
@@ -253,8 +227,6 @@ public class BlastConverter
   }
 
   static IOBlastReportFormat toExternal(BlastReportFormat fmt) {
-    log.trace("BlastConverter#toExternal(OutFormat)");
-
     if (fmt == null)
       return null;
 
@@ -275,8 +247,6 @@ public class BlastConverter
   }
 
   static BlastReportType toInternal(IOBlastFormat val) {
-    log.trace("BlastConverter#toInternal(IOBlastFormat)");
-
     if (val == null)
       return null;
 
@@ -304,8 +274,6 @@ public class BlastConverter
   }
 
   static BlastReportField[] toInternal(List<IOBlastReportField> vals) {
-    log.trace("BlastConverter#toInternal(List)");
-
     if (vals == null || vals.isEmpty())
       return null;
 
@@ -316,8 +284,6 @@ public class BlastConverter
   }
 
   static BlastReportField toInternal(IOBlastReportField val) {
-    log.trace("BlastConverter#toInternal(IOBlastReportField)");
-
     if (val == null)
       return null;
 
@@ -378,8 +344,6 @@ public class BlastConverter
   }
 
   static BlastReportFormat toInternal(IOBlastReportFormat fmt) {
-    log.trace("BlastConverter#toInternal(IOBlastReportFormat)");
-
     if (fmt == null)
       return null;
 
@@ -391,8 +355,6 @@ public class BlastConverter
   }
 
   static HitSorting toInternal(IOHitSorting val) {
-    log.trace("BlastConverter#toInternal(IOHitSorting)");
-
     if (val == null)
       return null;
 
@@ -406,8 +368,6 @@ public class BlastConverter
   }
 
   static HspSorting toInternal(IOHSPSorting val) {
-    log.trace("BlastConverter#toInternal(IOHSPSorting)");
-
     if (val == null)
       return null;
 

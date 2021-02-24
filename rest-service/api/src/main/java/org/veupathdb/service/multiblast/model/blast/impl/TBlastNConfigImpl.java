@@ -2,7 +2,6 @@ package org.veupathdb.service.multiblast.model.blast.impl;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,7 +34,7 @@ public class TBlastNConfigImpl
   /**
    * <pre>
    * -word_size <Integer, >=2>
-   *    Word size for wordfinder algorithm
+   *    Word size for word-finder algorithm
    * </pre>
    */
   private EWordSize wordSize;
@@ -78,6 +77,7 @@ public class TBlastNConfigImpl
    *    Minimum word score such that the word is added to the BLAST lookup table
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EScoringMatrix<TBlastNScoringMatrix> matrix;
 
   /**
@@ -121,6 +121,7 @@ public class TBlastNConfigImpl
    *    Default = `12 2.2 2.5'
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESeg seg;
 
   /**
@@ -223,6 +224,7 @@ public class TBlastNConfigImpl
    *    Turn on best hit per subject sequence
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private EBestHit bestHit;
 
   /**
@@ -257,6 +259,7 @@ public class TBlastNConfigImpl
    *    Compute locally optimal Smith-Waterman alignments?
    * </pre>
    */
+  @SuppressWarnings("SpellCheckingInspection")
   private ESWTback sw;
 
   /**
@@ -550,17 +553,17 @@ public class TBlastNConfigImpl
 
   @Override
   public TBlastnConfig setNegativeTaxIds(int[] negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
-      negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
-    );
+    (taxIds = lazy(taxIds, ETaxIds::new))
+      .setNegativeTaxIds(
+        negativeTaxIds == null ? null : Arrays.copyOf(negativeTaxIds, negativeTaxIds.length)
+      );
     return this;
   }
 
   @Override
   public TBlastnConfig setNegativeTaxIds(Collection<Integer> negativeTaxIds) {
-    (taxIds = lazy(taxIds, ETaxIds::new)).setNegativeTaxIds(
-      negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds)
-    );
+    (taxIds = lazy(taxIds, ETaxIds::new))
+      .setNegativeTaxIds(negativeTaxIds == null ? null : new ArrayList<>(negativeTaxIds));
     return this;
   }
 

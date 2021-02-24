@@ -1,6 +1,5 @@
 package org.veupathdb.service.multiblast;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,11 +20,12 @@ public class Main extends Server {
     var server = new Main();
 
     bgTasks = Executors.newSingleThreadScheduledExecutor();
-    bgTasks.scheduleWithFixedDelay(new JobCleanup(), 4, 12, TimeUnit.HOURS);
 
     server.enableAccountDB();
     server.enableUserDB();
     server.start(args);
+
+    bgTasks.scheduleAtFixedRate(new JobCleanup(), 0, 24, TimeUnit.HOURS);
   }
 
   @Override

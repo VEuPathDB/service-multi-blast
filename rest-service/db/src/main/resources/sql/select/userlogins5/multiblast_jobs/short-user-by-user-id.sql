@@ -6,6 +6,7 @@ SELECT
 , b.user_id
 , b.description
 , b.max_download_size
+, b.run_directly
 FROM
   userlogins5.multiblast_jobs a
   INNER JOIN userlogins5.multiblast_users b

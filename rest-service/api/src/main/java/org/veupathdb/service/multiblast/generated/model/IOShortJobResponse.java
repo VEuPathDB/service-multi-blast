@@ -42,4 +42,16 @@ public interface IOShortJobResponse
 
   @JsonProperty(JsonKeys.MaxResultSize)
   IOShortJobResponse setMaxResultSize(Long val);
+
+  @JsonProperty(JsonKeys.ParentJobs)
+  IOParentJobLink[] getParentJobs();
+
+  @JsonProperty(JsonKeys.ParentJobs)
+  IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID);
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  boolean getIsPrimary();
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  IOShortJobResponse setIsPrimary(boolean isPrimary);
 }

@@ -1,20 +1,11 @@
 package org.veupathdb.service.multiblast.generated.model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.*;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "status",
-    "dependencies",
-    "info"
-})
 public class HealthResponseImpl implements HealthResponse {
   @JsonProperty("status")
   private HealthResponse.StatusType status;
@@ -56,11 +47,6 @@ public class HealthResponseImpl implements HealthResponse {
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  @JsonPropertyOrder({
-      "threads",
-      "uptime",
-      "uptimeMillis"
-  })
   public static class InfoTypeImpl implements HealthResponse.InfoType {
     @JsonProperty("threads")
     private Integer threads;

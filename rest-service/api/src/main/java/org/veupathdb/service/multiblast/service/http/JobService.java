@@ -17,13 +17,14 @@ import mb.lib.format.FormatterManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gusdb.fgputil.accountdb.UserProfile;
+import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.job.JobCreationService;
+import org.veupathdb.service.multiblast.service.http.job.JobReportService;
 import org.veupathdb.service.multiblast.util.Format;
 
 import static org.veupathdb.service.multiblast.service.http.Util.wrapException;
@@ -50,8 +51,8 @@ public class JobService
     return instance;
   }
 
-  public LongJobResponse getJob(String rawID, UserProfile user) {
-    log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserId());
+  public IOLongJobResponse getJob(String rawID, User user) {
+    log.trace("JobService#getJob(rawID={}, user={})", rawID, user.getUserID());
 
     if (!Format.isHex(rawID))
       throw new NotFoundException();
@@ -60,18 +61,29 @@ public class JobService
 
     try {
 
-      var opt = JobDBManager.getUserJob(jobID, user.getUserId());
+      var opt = JobDBManager.getUserJob(jobID, user.getUserID());
 
       if (opt.isEmpty())
         throw new NotFoundException();
 
       var job = opt.get();
 
-      var out = new LongJobResponseImpl();
-      out.setId(rawID);
-      out.setDescription(job.description());
-      out.setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())));
-      out.setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+      var out = new IOLongJobResponseImpl()
+        .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+      out.setId(rawID)
+        .setDescription(job.description())
+        .setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())))
+        .setCreated(Format.DateFormat.format(job.createdOn()))
+        .setExpires(Format.DateFormat.format(job.deleteOn()))
+        .setMaxResultSize(job.maxDownloadSize())
+        .setParentJobs(
+          JobDBManager.getParentJobs(jobID, user.getUserID())
+            .stream()
+            .map(j -> new IOParentJobLinkImpl()
+              .setId(Format.toHexString(j.parentHash()))
+              .setIndex(j.position()))
+            .toArray(IOParentJobLink[]::new)
+        );
 
       if (out.getStatus() == null) {
         if (JobDataManager.reportExists(rawID))
@@ -86,11 +98,11 @@ public class JobService
     }
   }
 
-  public List<IOShortJobResponse> getJobs(UserProfile user) {
-    log.trace("JobService#getJobs(user={})", user.getUserId());
+  public List<IOShortJobResponse> getJobs(User user) {
+    log.trace("JobService#getJobs(user={})", user.getUserID());
 
     try {
-      var jobs = JobDBManager.getUserJobs(user.getUserId());
+      var jobs = JobDBManager.getUserJobs(user.getUserID());
       var out  = new ArrayList<IOShortJobResponse>(jobs.size());
 
       for (var job : jobs) {
@@ -114,7 +126,16 @@ public class JobService
           .setStatus(convStatus(jobStatus))
           .setCreated(Format.toString(job.createdOn()))
           .setExpires(Format.toString(job.deleteOn()))
-          .setMaxResultSize(job.maxDownloadSize());
+          .setMaxResultSize(job.maxDownloadSize())
+          .setIsPrimary(job.runDirectly())
+          .setParentJobs(
+            JobDBManager.getParentJobs(job.jobHash(), user.getUserID())
+              .stream()
+              .map(j -> new IOParentJobLinkImpl()
+                .setId(Format.toHexString(j.parentHash()))
+                .setIndex(j.position()))
+              .toArray(IOParentJobLink[]::new)
+          );
         out.add(tmp);
       }
 
@@ -164,7 +185,7 @@ public class JobService
     List<IOBlastReportField> fields,
     Long maxDlSize
   ) {
-    log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={})", jobID, format, zip, fields);
+    log.trace("JobService#getReport(jobID={}, format={}, zip={}, fields={}, maxDlSize={})", jobID, format, zip, fields, maxDlSize);
 
     try {
       if (!Format.isHex(jobID))
@@ -180,32 +201,7 @@ public class JobService
       if (format == null) {
         pFormat = FormatType.fromID(config.getJobConfig().getReportFormat().getType().getValue());
       } else {
-        try {
-          pFormat = FormatType.fromID(Integer.parseInt(format));
-        } catch (NumberFormatException ignored) {
-          pFormat = switch(BlastReportType.fromIoName(format)
-            .orElseThrow(() -> new BadRequestException("unrecognized report format"))) {
-            case Pairwise -> FormatType.Pairwise;
-            case QueryAnchoredWithIdentities -> FormatType.QueryAnchoredWithIdentities;
-            case QueryAnchoredWithoutIdentities -> FormatType.QueryAnchoredWithoutIdentities;
-            case FlatQueryAnchoredWithIdentities -> FormatType.FlatQueryAnchoredWithIdentities;
-            case FlatQueryAnchoredWithoutIdentities -> FormatType.FlatQueryAnchoredWithoutIdentities;
-            case XML -> FormatType.BlastXML;
-            case Tabular -> FormatType.Tabular;
-            case TabularWithComments -> FormatType.TabularWithCommentLines;
-            case TextASN1 -> FormatType.SeqAlignTextASN1;
-            case BinaryASN1 -> FormatType.SeqAlignBinaryASN1;
-            case CSV -> FormatType.CommaSeparatedValues;
-            case ArchiveASN1 -> FormatType.BlastArchiveASN1;
-            case SeqAlignJSON -> FormatType.SeqAlignJSON;
-            case MultiFileJSON -> FormatType.MultipleFileBlastJSON;
-            case MultiFileXML2 -> FormatType.MultipleFileBlastXML2;
-            case SingleFileJSON -> FormatType.SingleFileBlastJSON;
-            case SingleFileXML2 -> FormatType.SingleFileBlastXML2;
-            case SAM -> FormatType.SequenceAlignmentMap;
-            case OrganismReport -> FormatType.OrganismReport;
-          };
-        }
+        pFormat = JobReportService.parseFormatString(format);
       }
 
       if (pFormat == FormatType.SequenceAlignmentMap && config.getTool() != BlastTool.BlastN)
@@ -213,6 +209,8 @@ public class JobService
 
       if (pFormat == FormatType.MultipleFileBlastJSON || pFormat == FormatType.MultipleFileBlastXML2)
         zip = true;
+
+      JobReportService.ensureJobCache(job, userId);
 
       var out = new ReportWrap();
       out.zipped = zip;
@@ -245,16 +243,23 @@ public class JobService
     }
   }
 
-  public IOJobPostResponse createJob(IOJsonJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(input={}, user={})", input, user.getUserId());
+  public IOJobPostResponse createJob(IOJsonJobRequest input, User user) {
+    log.trace("JobService#createJob(input={}, user={})", input, user.getUserID());
 
-    return JobCreationService.createJob(input, user.getUserId());
+    return JobCreationService.createJobs(input, user.getUserID());
   }
 
-  public IOJobPostResponse createJob(IOMultipartJobRequest input, UserProfile user) {
-    log.trace("JobService#createJob(input={}, user={})", input,  user.getUserId());
+  public IOJobPostResponse createJob(InputStream query, IOJsonJobRequest props, User user) {
+    log.trace("JobService#createJob(query={}, props={}, user={})", query, props, user.getUserID());
 
-    return JobCreationService.createJob(input, user.getUserId());
+    try {
+      if (query == null)
+        return JobCreationService.createJobs(props, user.getUserID());
+
+      return JobCreationService.createJobs(query, props, user.getUserID());
+    } catch (Exception e) {
+      throw wrapException(e);
+    }
   }
 
   static IOJobStatus convStatus(JobStatus stat) {

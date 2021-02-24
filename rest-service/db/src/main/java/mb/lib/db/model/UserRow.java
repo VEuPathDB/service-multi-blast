@@ -2,9 +2,15 @@ package mb.lib.db.model;
 
 public interface UserRow extends Row
 {
-  long getUserId();
+  long userID();
 
-  String getDescription();
+  String description();
 
-  long getMaxDownloadSize();
+  Long maxDownloadSize();
+
+  /**
+   * @return whether the job linked to this row was run directly by the client
+   * (not a sub-job).
+   */
+  boolean runDirectly();
 }

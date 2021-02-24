@@ -6,6 +6,7 @@ public interface Column
   {
     String JobDigest = "job_digest";
     String JobConfig = "job_config";
+    String Query     = "query";
     String QueueID   = "queue_id";
     String CreatedOn = "created_on";
     String DeleteOn  = "delete_on";
@@ -17,5 +18,13 @@ public interface Column
     String UserId          = "user_id";
     String Description     = "description";
     String MaxDownloadSize = "max_download_size";
+    String RunDirectly     = "run_directly";
+  }
+
+  interface MultiBlastJobToJobs
+  {
+    String JobDigest    = "job_digest";
+    String ParentDigest = "parent_digest";
+    String Position     = "position";
   }
 }

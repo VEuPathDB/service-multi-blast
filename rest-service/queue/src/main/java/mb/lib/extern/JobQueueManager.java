@@ -31,7 +31,7 @@ public class JobQueueManager
   }
 
   public static JobQueueManager getInstance() {
-    log.trace("JobQueueManager::getInstance()");
+    log.trace("::getInstance()");
     if (instance == null)
       return instance = new JobQueueManager();
 
@@ -43,7 +43,7 @@ public class JobQueueManager
   }
 
   public JobStatus getJobStatus(int queueId) throws Exception {
-    log.trace("JobQueueManager#getJobStatus(int)");
+    log.trace("#getJobStatus(queueId={})", queueId);
 
     var con = Config.getInstance();
     var uri = URI.create(prependHTTP(conf.getQueueHost())).
@@ -93,7 +93,7 @@ public class JobQueueManager
    * @return the queue ID for the queued job
    */
   public int submitNewJob(String jobId, String tool, String[] cli) throws Exception {
-    log.trace("JobQueueManager#submitJob(String, String, String[])");
+    log.trace("#submitJob(jobID={}, tool={}, cli={})", jobId, tool, cli);
 
     var uri = URI.create(prependHTTP(conf.getQueueHost()))
       .resolve(String.format(JobEndpoint, conf.getJobCategory()));
@@ -129,7 +129,7 @@ public class JobQueueManager
   }
 
   public static void deleteJob(int queueID) throws Exception {
-    log.trace("JobQueueManager#deleteJob(String)");
+    log.trace("#deleteJob(queueID={})", queueID);
 
     var uri = URI.create(prependHTTP(conf.getQueueHost()))
       .resolve(String.format(QueueJobEndpoint, conf.getQueueName(), queueID));

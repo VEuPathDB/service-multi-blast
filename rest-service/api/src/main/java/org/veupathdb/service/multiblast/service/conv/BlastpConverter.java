@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpScoringMatrix;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpTask;
@@ -12,17 +10,9 @@ import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 
 class BlastpConverter
 {
-  private static final Logger log = LogProvider.logger(BlastpConverter.class);
-
   private static BlastpConverter instance;
 
-  private BlastpConverter() {
-    log.trace("BlastpConverter#new()");
-  }
-
   static BlastpConverter getInstance() {
-    log.trace("BlastpConverter#getInstance()");
-
     if (instance == null)
       return instance = new BlastpConverter();
 
@@ -34,8 +24,6 @@ class BlastpConverter
   }
 
   static IOBlastpTask toExternal(BlastpTask val) {
-    log.trace("BlastpConverter#toExternal(BlastpTask)");
-
     if (val == null)
       return null;
 
@@ -47,8 +35,6 @@ class BlastpConverter
   }
 
   static IOBlastpScoringMatrix toExternal(BlastpScoringMatrix val) {
-    log.trace("BlastpConverter#toExternal(BlastpScoringMatrix)");
-
     if (val == null)
       return null;
 
@@ -66,8 +52,6 @@ class BlastpConverter
   }
 
   static BlastpTask toInternal(IOBlastpTask val) {
-    log.trace("BlastpConverter#toInternal(IOBlastpTask)");
-
     if (val == null)
       return null;
 
@@ -79,8 +63,6 @@ class BlastpConverter
   }
 
   static BlastpScoringMatrix toInternal(IOBlastpScoringMatrix val) {
-    log.trace("BlastpConverter#toInternal(IOBlastpScoringMatrix)");
-
     if (val == null)
       return null;
 
@@ -98,14 +80,10 @@ class BlastpConverter
   }
 
   static BlastpConfig toInternal(IOBlastpConfig conf) {
-    log.trace("BlastpConverter#toInternal(IOBlastpConfig)");
-
     return getInstance().externalToInternal(conf);
   }
 
   BlastpConfig externalToInternal(IOBlastpConfig conf) {
-    log.trace("BlastpConverter#externalToInternal(IOBlastpConfig)");
-
     return new BlastPConfigImpl()
       .setTask(toInternal(conf.getTask()))
       .setWordSize(conf.getWordSize())
@@ -131,8 +109,6 @@ class BlastpConverter
   }
 
   IOBlastpConfig internalToExternal(IOBlastpConfig out, BlastpConfig conf) {
-    log.trace("BlastpConverter#internalToExternal(BlastPConfig)");
-
     if (conf == null)
       return null;
 
