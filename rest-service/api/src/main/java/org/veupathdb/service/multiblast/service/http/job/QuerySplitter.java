@@ -13,23 +13,29 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import org.veupathdb.service.multiblast.service.valid.SequenceValidator;
 import org.veupathdb.service.multiblast.util.Format;
 
 class QuerySplitter
 {
-  private final BufferedWriter[] writing;
-  private final MessageDigest[]  hashing;
-  private final File[]           active;
-  private final QuerySplitResult output;
+  private static final String errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.";
+
+  private final BufferedWriter[]  writing;
+  private final MessageDigest[]   hashing;
+  private final File[]            active;
+  private final QuerySplitResult  output;
+  private final SequenceValidator validator;
 
   private File rootFile;
   private int  queries;
+  private int  lines;
 
-  QuerySplitter() {
-    writing = new BufferedWriter[2];
-    hashing = new MessageDigest[2];
-    active  = new File[2];
-    output  = new QuerySplitResult();
+  QuerySplitter(SequenceValidator val) {
+    writing   = new BufferedWriter[2];
+    hashing   = new MessageDigest[2];
+    active    = new File[2];
+    output    = new QuerySplitResult();
+    validator = val;
   }
 
   QuerySplitResult splitQueries(InputStream stream) throws Exception {
@@ -39,17 +45,36 @@ class QuerySplitter
     hashing[0] = MessageDigest.getInstance(Format.HASH_TYPE);
     active[0]  = rootFile;
 
+    // Header/identifier of the most recently started query.
+    var identifier = "";
+
     try (var read = new Scanner(stream)) {
       while (read.hasNext()) {
         var line = read.nextLine();
+        lines++;
 
         if (line.startsWith(">")) {
           queries++;
+          identifier = line.substring(1).trim().split(" ", 2)[0];
 
           if (queries == 2) {
             forkRoot();
           } else if (queries > 2) {
             nextFile();
+          }
+        } else {
+          var val = validator.validate(line);
+          if (val != null) {
+            output.errors.add(String.format(
+              errInvalidSequence,
+              val.getCharacter(),
+              validator.kind(),
+              queries,
+              identifier,
+              lines,
+              val.getLinePosition()
+              )
+            );
           }
         }
 
@@ -98,11 +123,14 @@ class QuerySplitter
     if (!subQueryFile.exists())
       throw new Exception("Failed to copy first subquery");
 
-    output.subQueries.add(new QuerySplitRow(subQueryFile, ((MessageDigest) hashing[0].clone()).digest()));
+    output.subQueries.add(new QuerySplitRow(
+      subQueryFile,
+      ((MessageDigest) hashing[0].clone()).digest()
+    ));
 
     // Setup a new file for the next query in the input.
     var second = newTmpFile();
-    active[1] = second;
+    active[1]  = second;
     writing[1] = new BufferedWriter(new FileWriter(second));
     hashing[1] = MessageDigest.getInstance(Format.HASH_TYPE);
   }
@@ -115,7 +143,7 @@ class QuerySplitter
 
     // Setup a new subquery file
     var second = newTmpFile();
-    active[1] = second;
+    active[1]  = second;
     writing[1] = new BufferedWriter(new FileWriter(second));
     hashing[1].reset();
   }
@@ -138,6 +166,7 @@ class QuerySplitResult
 {
   QuerySplitRow       rootQuery;
   List<QuerySplitRow> subQueries = new ArrayList<>(3);
+  List<String>        errors     = new ArrayList<>(3);
 }
 
 class QuerySplitRow

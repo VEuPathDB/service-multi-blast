@@ -3,21 +3,24 @@ package org.veupathdb.service.multiblast.service.http.job;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import mb.lib.db.JobDBManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import org.veupathdb.service.multiblast.generated.model.IOJobPostResponse;
-import org.veupathdb.service.multiblast.generated.model.IOJobPostResponseImpl;
-import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
+import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.internal.Job;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.Util;
 import org.veupathdb.service.multiblast.service.valid.BlastValidator;
+import org.veupathdb.service.multiblast.service.valid.NucleotideSequenceValidator;
+import org.veupathdb.service.multiblast.service.valid.ProteinSequenceValidator;
+import org.veupathdb.service.multiblast.service.valid.SequenceValidator;
 import org.veupathdb.service.multiblast.util.Format;
 
 public class JobCreationService
@@ -40,9 +43,12 @@ public class JobCreationService
     JobUtil.verifyQuery(req.getConfig().getQuery());
 
     try {
-      var queryHandle = new QuerySplitter().splitQueries(
-        new ByteArrayInputStream(req.getConfig().getQuery().getBytes(StandardCharsets.UTF_8))
-      );
+      var queryHandle = new QuerySplitter(newSequenceValidator(req.getConfig()))
+        .splitQueries(
+          new ByteArrayInputStream(req.getConfig().getQuery().getBytes(StandardCharsets.UTF_8))
+        );
+      if (!queryHandle.errors.isEmpty())
+        throw new UnprocessableEntityException(Collections.singletonMap(JsonKeys.Query, queryHandle.errors));
       return createJobs(queryHandle, req, userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
@@ -57,7 +63,12 @@ public class JobCreationService
     JobUtil.verifyConfig(props.getConfig());
 
     try {
-      return createJobs(new QuerySplitter().splitQueries(query), props, userID);
+      var result = new QuerySplitter(newSequenceValidator(props.getConfig())).splitQueries(query);
+
+      if (!result.errors.isEmpty())
+        throw new UnprocessableEntityException(Collections.singletonMap(JsonKeys.Query, result.errors));
+
+      return createJobs(result, props, userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
     } finally {
@@ -182,5 +193,16 @@ public class JobCreationService
 
   static byte[] hashJob(String site, String dbs, String tool, String cli) {
     return Format.toHash(String.format(hashPattern, site, dbs, tool, cli));
+  }
+
+  // TODO: this doesn't really belong here.
+  static SequenceValidator newSequenceValidator(IOBlastConfig conf) {
+    if (conf.getTool() == null) // Assume blastn
+      return new NucleotideSequenceValidator();
+
+    return switch (conf.getTool()) {
+      case BLASTP, TBLASTN -> new ProteinSequenceValidator();
+      default -> new NucleotideSequenceValidator();
+    };
   }
 }
