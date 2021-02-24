@@ -6,6 +6,11 @@ package org.veupathdb.service.multiblast.service.valid;
 public class ProteinSequenceValidator implements SequenceValidator
 {
   @Override
+  public String kind() {
+    return "protein";
+  }
+
+  @Override
   public boolean isValid(int c) {
     if (c < '-' || c > 'z')
       return false;
@@ -31,28 +36,5 @@ public class ProteinSequenceValidator implements SequenceValidator
       || ('a' <= c && c <= 'i')
       || ('k' <= c && c <= 'n')
       || ('p' <= c && c <= 'z');
-  }
-
-  @Override
-  public boolean isValid(CharSequence line) {
-    return line.chars().allMatch(this::isValid);
-  }
-
-  @Override
-  public boolean isValid(char[] line) {
-    for (var c : line)
-      if (!isValid(c))
-        return false;
-
-    return true;
-  }
-
-  @Override
-  public boolean isValid(byte[] line) {
-    for (var c : line)
-      if (!isValid(c))
-        return false;
-
-    return true;
   }
 }
