@@ -67,8 +67,7 @@ public class JobCleanup implements Runnable
   }
 
   private void deleteOldFiles(OffsetDateTime now) throws Exception {
-    // FIXME!!!!!
-    var delPoint = now.minus(5, ChronoUnit.MINUTES);
+    var delPoint = now.minus(5, ChronoUnit.DAYS);
 
     var old = JobDataManager.getPathsCreatedBefore(delPoint);
 
