@@ -3,29 +3,11 @@ package org.veupathdb.service.multiblast.service.valid;
 // Legal characters:
 //   ABCDGHKMNRSTUVWY-
 //   abcdghkmnrstuvwy-
-public class NucleicSequenceValidator implements SequenceValidator
+public class NucleotideSequenceValidator implements SequenceValidator
 {
   @Override
-  public boolean isValid(CharSequence seq) {
-    return seq.chars().allMatch(this::isValid);
-  }
-
-  @Override
-  public boolean isValid(char[] chars) {
-    for (var c : chars)
-      if (!isValid(c))
-        return false;
-
-    return true;
-  }
-
-  @Override
-  public boolean isValid(byte[] bytes) {
-    for (var b : bytes)
-      if (!isValid(b))
-        return false;
-
-    return true;
+  public String kind() {
+    return "nucleotide";
   }
 
   @Override
