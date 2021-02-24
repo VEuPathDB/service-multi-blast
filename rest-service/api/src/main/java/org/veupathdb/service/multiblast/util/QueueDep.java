@@ -29,7 +29,7 @@ public class QueueDep extends ServiceDependency
         .connectTimeout(Duration.ofSeconds(2))
         .build()
         .send(
-          HttpRequest.newBuilder().uri(URI.create(getUrl())).GET().build(),
+          HttpRequest.newBuilder().uri(URI.create(Address.http(getUrl()))).GET().build(),
           HttpResponse.BodyHandlers.discarding()
         );
 

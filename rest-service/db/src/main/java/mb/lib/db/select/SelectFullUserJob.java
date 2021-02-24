@@ -10,7 +10,7 @@ import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullUserJobRow;
-import mb.lib.db.model.JobRowFactory;
+import mb.lib.db.model.impl.FullUserJobRowImpl;
 
 public class SelectFullUserJob
 {
@@ -37,15 +37,17 @@ public class SelectFullUserJob
     if (!rs.next())
       return Optional.empty();
 
-    return Optional.of(JobRowFactory.newFullUserJobRow(
+    return Optional.of(new FullUserJobRowImpl(
       jobID,
       rs.getInt(Column.MultiBlastJobs.QueueID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
       rs.getString(Column.MultiBlastJobs.JobConfig),
+      Util.queryToFile(rs),
       rs.getLong(Column.MultiBlastUsers.UserId),
       rs.getString(Column.MultiBlastUsers.Description),
-      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize)
+      rs.getLong(Column.MultiBlastUsers.MaxDownloadSize),
+      rs.getBoolean(Column.MultiBlastUsers.RunDirectly)
     ));
   }
 

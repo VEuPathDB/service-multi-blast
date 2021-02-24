@@ -423,65 +423,124 @@ public class BlastPConfigImpl
       var curr = node.get(i);
 
       switch(ToolOption.fromString(curr.get(0).asText())) {
-        case BestHitOverhang -> out.setBestHitOverhang(curr.get(1).asDouble());
-        case BestHitScoreEdge -> out.setBestHitScoreEdge(curr.get(1).asDouble());
-        case BlastDatabase -> out.setDatabase(curr.get(1).asText());
-        case CompositionBasedStats -> out.setCompBasedStatisticsType(CompBasedStats.fromValue(curr.get(1).asText()));
-        case CullingLimit -> out.setCullingLimit(curr.get(1).asInt());
-        case EffectiveDatabaseSize -> out.setEffectiveDatabaseSize((byte) curr.get(1).asInt());
-        case DatabaseHardMask -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
-        case DatabaseSoftMask -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
-        case EntrezQuery -> out.setEntrezQuery(curr.get(1).asText());
-        case ExpectValue -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
-        case ExportSearchStrategy -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
-        case GapCostExtend -> out.setGapCostExtend(curr.get(1).asInt());
-        case GapCostOpen -> out.setGapCostOpen(curr.get(1).asInt());
-        case GIListFile -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
-        case Help -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
-        case HTMLOutput -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
-        case ImportSearchStrategy -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
-        case IdenticalProteinGroupListFile -> out.setIdenticalProteinGroupListFile(new File(curr.get(1).asText()));
-        case LineLength -> out.setLineLength(curr.get(1).asInt());
-        case LowercaseMasking -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
-        case MaxHSPs -> out.setMaxHSPs(curr.get(1).asInt());
-        case MaxTargetSequences -> out.setMaxTargetSequences(curr.get(1).asInt());
-        case MultiHitWindowSize -> out.setMultiHitWindowSize(curr.get(1).asInt());
-        case NegativeIdenticalProteinGroupListFile -> out.setNegativeIdenticalProteinGroupListFile(new File(curr.get(1).asText()));
-        case NegativeSequenceIDListFile -> out.setNegativeSequenceIDListFile(new File(curr.get(1).asText()));
-        case NegativeTaxonomyIDs -> out.setNegativeTaxIds(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
-        case NegativeTaxonomyIDListFile -> out.setNegativeTaxIDListFile(new File(curr.get(1).asText()));
-        case NumAlignments -> out.setNumAlignments(curr.get(1).asInt());
-        case NumberOfThreads -> out.setThreadCount((byte) curr.get(1).asInt());
-        case NumDescriptions -> out.setNumDescriptions(curr.get(1).asInt());
-        case OutputFile -> out.setOutputFile(new File(curr.get(1).asText()));
-        case OutputFormat -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
-        case ParseDefLines -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
-        case Query -> out.setQuery(curr.get(1).asText());
-        case QueryCoveragePercentHSP -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
-        case QueryLocation -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
-        case Remote -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
-        case ScoringMatrix -> out.setScoringMatrix(BlastpScoringMatrix.fromString(curr.get(1).asText()));
-        case SearchSpaceEffectiveLength -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
-        case SEGFilter -> out.setSeg(SegImpl.fromString(curr.get(1).asText()));
-        case SequenceIDListFile -> out.setSequenceIDListFile(new File(curr.get(1).asText()));
-        case ShowNCBIGIs -> out.enableNCBIGenInfoIds(curr.size() == 1 || curr.get(1).asBoolean());
-        case SoftMasking -> out.enableSoftMasking(curr.size() == 1 || curr.get(1).asBoolean());
-        case HSPSorting -> out.setHitSorting(HitSorting.fromString(curr.get(1).asText()));
-        case HitSorting -> out.setHSPSorting(HspSorting.fromString(curr.get(1).asText()));
-        case SubjectBestHit -> out.enableSubjectBestHit(curr.size() == 1 || curr.get(1).asBoolean());
-        case SubjectFile -> out.setSubjectFile(new File(curr.get(1).asText()));
-        case SubjectLocation -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
-        case Task -> out.setTask(BlastpTask.fromString(curr.get(1).asText()));
-        case TaxonomyIDs -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
-        case TaxonomyIDListFile -> out.setTaxIDListFile(new File(curr.get(1).asText()));
-        case Threshold -> out.setScoreThreshold(curr.get(1).asDouble());
-        case UngappedAlignmentOnly -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());
-        case UseSmithWatermanAlignments -> out.enableSmithWatermanTraceback(curr.size() == 1 || curr.get(1).asBoolean());
-        case Version -> out.enableVersion(curr.size() == 1 || curr.get(1).asBoolean());
-        case WordSize -> out.setWordSize(curr.get(1).asInt());
-        case ExtensionDropoffFinalGapped -> out.setExtensionDropoffFinalGapped(curr.get(1).asDouble());
-        case ExtensionDropoffPrelimGapped -> out.setExtensionDropoffPreliminaryGapped(curr.get(1).asDouble());
-        case ExtensionDropoffUngapped -> out.setExtensionDropoffUngapped(curr.get(1).asDouble());
+        case BestHitOverhang
+          -> out.setBestHitOverhang(curr.get(1).asDouble());
+        case BestHitScoreEdge
+          -> out.setBestHitScoreEdge(curr.get(1).asDouble());
+        case BlastDatabase
+          -> out.setDatabase(curr.get(1).asText());
+        case CompositionBasedStats
+          -> out.setCompBasedStatisticsType(CompBasedStats.fromValue(curr.get(1).asText()));
+        case CullingLimit
+          -> out.setCullingLimit(curr.get(1).asInt());
+        case EffectiveDatabaseSize
+          -> out.setEffectiveDatabaseSize((byte) curr.get(1).asInt());
+        case DatabaseHardMask
+          -> out.setDbHardMaskAlgorithmId(curr.get(1).asText());
+        case DatabaseSoftMask
+          -> out.setDbSoftMaskAlgorithmId(curr.get(1).asText());
+        case EntrezQuery
+          -> out.setEntrezQuery(curr.get(1).asText());
+        case ExpectValue
+          -> out.setExpectValue(new BigDecimal(curr.get(1).asText()));
+        case ExportSearchStrategy
+          -> out.setSearchStrategyExportFile(new File(curr.get(1).asText()));
+        case GapCostExtend
+          -> out.setGapCostExtend(curr.get(1).asInt());
+        case GapCostOpen
+          -> out.setGapCostOpen(curr.get(1).asInt());
+        case GIListFile
+          -> out.setGenInfoIdListFile(new File(curr.get(1).asText()));
+        case Help
+          -> out.enableHelp(curr.size() == 1 || curr.get(1).asBoolean());
+        case HTMLOutput
+          -> out.enableHTMLOutput(curr.size() == 1 || curr.get(1).asBoolean());
+        case ImportSearchStrategy
+          -> out.setSearchStrategyImportFile(new File(curr.get(1).asText()));
+        case IdenticalProteinGroupListFile
+          -> out.setIdenticalProteinGroupListFile(new File(curr.get(1).asText()));
+        case LineLength
+          -> out.setLineLength(curr.get(1).asInt());
+        case LowercaseMasking
+          -> out.enableLowercaseMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case MaxHSPs
+          -> out.setMaxHSPs(curr.get(1).asInt());
+        case MaxTargetSequences
+          -> out.setMaxTargetSequences(curr.get(1).asInt());
+        case MultiHitWindowSize
+          -> out.setMultiHitWindowSize(curr.get(1).asInt());
+        case NegativeIdenticalProteinGroupListFile
+          -> out.setNegativeIdenticalProteinGroupListFile(new File(curr.get(1).asText()));
+        case NegativeSequenceIDListFile
+          -> out.setNegativeSequenceIDListFile(new File(curr.get(1).asText()));
+        case NegativeTaxonomyIDs
+          -> out.setNegativeTaxIds(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
+        case NegativeTaxonomyIDListFile
+          -> out.setNegativeTaxIDListFile(new File(curr.get(1).asText()));
+        case NumAlignments
+          -> out.setNumAlignments(curr.get(1).asInt());
+        case NumberOfThreads
+          -> out.setThreadCount((byte) curr.get(1).asInt());
+        case NumDescriptions
+          -> out.setNumDescriptions(curr.get(1).asInt());
+        case OutputFile
+          -> out.setOutputFile(new File(curr.get(1).asText()));
+        case OutputFormat
+          -> out.setReportFormat(ReportFormatImpl.fromString(curr.get(1).asText()));
+        case ParseDefLines
+          -> out.enableDefLineParsing(curr.size() == 1 || curr.get(1).asBoolean());
+        case Query
+          -> out.setQuery(curr.get(1).asText());
+        case QueryCoveragePercentHSP
+          -> out.setQueryCoveragePercentHSP(curr.get(1).asDouble());
+        case QueryLocation
+          -> out.setQueryLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case Remote
+          -> out.enableRemoteSearchExecution(curr.size() == 1 || curr.get(1).asBoolean());
+        case ScoringMatrix
+          -> out.setScoringMatrix(BlastpScoringMatrix.fromString(curr.get(1).asText()));
+        case SearchSpaceEffectiveLength
+          -> out.setEffectiveSearchSpaceLength((byte) curr.get(1).asInt());
+        case SEGFilter
+          -> out.setSeg(SegImpl.fromString(curr.get(1).asText()));
+        case SequenceIDListFile
+          -> out.setSequenceIDListFile(new File(curr.get(1).asText()));
+        case ShowNCBIGIs
+          -> out.enableNCBIGenInfoIds(curr.size() == 1 || curr.get(1).asBoolean());
+        case SoftMasking
+          -> out.enableSoftMasking(curr.size() == 1 || curr.get(1).asBoolean());
+        case HSPSorting
+          -> out.setHitSorting(HitSorting.fromString(curr.get(1).asText()));
+        case HitSorting
+          -> out.setHSPSorting(HspSorting.fromString(curr.get(1).asText()));
+        case SubjectBestHit
+          -> out.enableSubjectBestHit(curr.size() == 1 || curr.get(1).asBoolean());
+        case SubjectFile
+          -> out.setSubjectFile(new File(curr.get(1).asText()));
+        case SubjectLocation
+          -> out.setSubjectLocation(LocationImpl.fromString(curr.get(1).asText()));
+        case Task
+          -> out.setTask(BlastpTask.fromString(curr.get(1).asText()));
+        case TaxonomyIDs
+          -> out.setTaxIDs(Arrays.stream(curr.get(1).asText().split(",")).mapToInt(Integer::parseInt).toArray());
+        case TaxonomyIDListFile
+          -> out.setTaxIDListFile(new File(curr.get(1).asText()));
+        case Threshold
+          -> out.setScoreThreshold(curr.get(1).asDouble());
+        case UngappedAlignmentOnly
+          -> out.enableUngappedAlignmentOnly(curr.size() == 1 || curr.get(1).asBoolean());
+        case UseSmithWatermanAlignments
+          -> out.enableSmithWatermanTraceback(curr.size() == 1 || curr.get(1).asBoolean());
+        case Version
+          -> out.enableVersion(curr.size() == 1 || curr.get(1).asBoolean());
+        case WordSize
+          -> out.setWordSize(curr.get(1).asInt());
+        case ExtensionDropoffFinalGapped
+          -> out.setExtensionDropoffFinalGapped(curr.get(1).asDouble());
+        case ExtensionDropoffPrelimGapped
+          -> out.setExtensionDropoffPreliminaryGapped(curr.get(1).asDouble());
+        case ExtensionDropoffUngapped
+          -> out.setExtensionDropoffUngapped(curr.get(1).asDouble());
       }
     }
 

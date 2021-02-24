@@ -1,34 +1,39 @@
 package mb.lib.db.model.impl;
 
+import java.io.File;
 import java.time.OffsetDateTime;
 
 import mb.lib.db.model.FullUserJobRow;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
-  private final long   userId;
-  private final String description;
-  private final long   maxDlSize;
+  private final long    userID;
+  private final String  description;
+  private final Long    maxDlSize;
+  private final boolean runDirectly;
 
   public FullUserJobRowImpl(
-    byte[] hash,
-    int queueID,
+    byte[]         hash,
+    int            queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String config,
-    long userId,
-    String description,
-    long maxDlSize
+    String         config,
+    File           query,
+    long           userID,
+    String         description,
+    Long           maxDlSize,
+    boolean        runDirectly
   ) {
-    super(hash, queueID, createdOn, deleteOn, config);
-    this.userId      = userId;
+    super(hash, queueID, createdOn, deleteOn, config, query);
+    this.userID      = userID;
     this.description = description;
     this.maxDlSize   = maxDlSize;
+    this.runDirectly = runDirectly;
   }
 
   @Override
   public long userID() {
-    return userId;
+    return userID;
   }
 
   @Override
@@ -37,7 +42,17 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
   }
 
   @Override
-  public long maxDownloadSize() {
+  public Long maxDownloadSize() {
     return maxDlSize;
+  }
+
+  @Override
+  public boolean runDirectly() {
+    return runDirectly;
+  }
+
+  @Override
+  public String toString() {
+    return "FullUserJobRow{hash="+ printID() +", userID=" + userID + '}';
   }
 }

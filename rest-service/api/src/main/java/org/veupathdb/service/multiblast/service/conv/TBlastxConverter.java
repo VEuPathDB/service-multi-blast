@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastxScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.impl.TBlastXConfigImpl;
@@ -10,16 +8,9 @@ import org.veupathdb.service.multiblast.model.blast.tx.TBlastxScoringMatrix;
 
 class TBlastxConverter
 {
-  private static final Logger           log = LogProvider.logger(TBlastxConverter.class);
-  private static       TBlastxConverter instance;
-
-  private TBlastxConverter() {
-    log.trace("TBlastxConverter#new()");
-  }
+  private static TBlastxConverter instance;
 
   public static TBlastxConverter getInstance() {
-    log.trace("TBlastxConverter#getInstance()");
-
     if (instance == null)
       return instance = new TBlastxConverter();
 
@@ -27,14 +18,10 @@ class TBlastxConverter
   }
 
   static IOTBlastxConfig toExternal(IOTBlastxConfig out, TBlastXConfig conf) {
-    log.trace("TBlastxConverter#toExternal(IOTBlastxConfig, TBlastxConfig)");
-
     return getInstance().internalToExternal(out, conf);
   }
 
   static IOTBlastxScoringMatrix toExternal(TBlastxScoringMatrix val) {
-    log.trace("TBlastxConverter#toExternal(TBlastxScoringMatrix)");
-
     if (val == null)
       return null;
 
@@ -51,8 +38,6 @@ class TBlastxConverter
   }
 
   static TBlastxScoringMatrix toInternal(IOTBlastxScoringMatrix val) {
-    log.trace("TBlastxConverter#toInternal(IOTBlastxScoringMatrix)");
-
     if (val == null)
       return null;
 
@@ -69,14 +54,10 @@ class TBlastxConverter
   }
 
   static TBlastXConfig toInternal(IOTBlastxConfig conf) {
-    log.trace("TBlastxConverter#toInternal(IOTBlastxConfig)");
-
     return getInstance().externalToInternal(conf);
   }
 
   TBlastXConfig externalToInternal(IOTBlastxConfig conf) {
-    log.trace("TBlastxConverter#externalToInternal(IOTBlastxConfig)");
-
     return new TBlastXConfigImpl()
       .setStrand(BCC.toInternal(conf.getStrand()))
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
@@ -100,8 +81,6 @@ class TBlastxConverter
   }
 
   IOTBlastxConfig internalToExternal(IOTBlastxConfig out, TBlastXConfig conf) {
-    log.trace("TBlastxConverter#internalToExternal(IOTBlastxConfig, TBlastxConfig)");
-
     out.setStrand(BCC.toExternal(conf.getStrand()));
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());
     out.setWordSize(conf.getWordSize());

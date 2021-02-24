@@ -1,28 +1,18 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
-import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
 
 class BlastnConverter
 {
-  private static final Logger log = LogProvider.logger(BlastnConverter.class);
-
   private static BlastnConverter instance;
 
-  private BlastnConverter() {
-    log.trace("BlastnConverter#new()");
-  }
-
   static BlastnConverter getInstance() {
-    log.trace("BlastnConverter#getInstance()");
-
     if (instance == null)
       return instance = new BlastnConverter();
 
@@ -30,14 +20,10 @@ class BlastnConverter
   }
 
   static IOBlastnConfig toExternal(IOBlastnConfig out, BlastnConfig conf) {
-    log.trace( "BlastnConverter#toExternal(IOBlastnConfig, BlastNConfig)");
-
     return getInstance().internalToExternal(out, conf);
   }
 
   static IOBlastnDust toExternal(Dust val) {
-    log.trace( "BlastnConverter#toExternal(Dust)");
-
     if (val == null)
       return null;
 
@@ -52,8 +38,6 @@ class BlastnConverter
   }
 
   static IOBlastnTask toExternal(BlastNTask val) {
-    log.trace( "BlastnConverter#toExternal(BlastnTask)");
-
     if (val == null)
       return null;
 
@@ -67,8 +51,6 @@ class BlastnConverter
   }
 
   static IOBlastnDcTemplateType toExternal(DcTemplateType val) {
-    log.trace( "BlastnConverter#toExternal(TemplateType)");
-
     if (val == null)
       return null;
 
@@ -80,8 +62,6 @@ class BlastnConverter
   }
 
   static BlastNTask toInternal(IOBlastnTask val) {
-    log.trace("BlastnConverter#toInternal(IOBlastnTask)");
-
     if (val == null)
       return null;
 
@@ -109,8 +89,6 @@ class BlastnConverter
    * @return internal dust representation
    */
   static Dust toInternal(IOBlastnDust val) {
-    log.trace("BlastnConverter#toInternal(IOBlastnDust)");
-
     if (val == null || !val.getEnable())
       return null;
 
@@ -118,8 +96,6 @@ class BlastnConverter
   }
 
   static DcTemplateType toInternal(IOBlastnDcTemplateType val) {
-    log.trace("BlastnConverter#toInternal(IOBlastnDcTemplateType)");
-
     if (val == null) {
       return null;
     }
@@ -132,14 +108,10 @@ class BlastnConverter
   }
 
   static BlastnConfig toInternal(IOBlastnConfig val) {
-    log.trace("BlastnConverter#toInternal(IOBlastnConfig)");
-
     return getInstance().externalToInternal(val);
   }
 
   BlastnConfig externalToInternal(IOBlastnConfig val) {
-    log.trace("BlastnConverter#externalToInternal(IOBlastnConfig)");
-
     if (val == null) {
       return null;
     }
@@ -179,8 +151,6 @@ class BlastnConverter
   }
 
   IOBlastnConfig internalToExternal(IOBlastnConfig out, BlastnConfig conf) {
-    log.trace("BlastnConverter#internalToExternal(IOBlastnConfig, BlastNConfig)");
-
     if (conf == null)
       return null;
 

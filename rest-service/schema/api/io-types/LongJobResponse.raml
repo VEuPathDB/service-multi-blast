@@ -13,3 +13,13 @@ properties:
   description: string
   status: com.IOJobStatus
   config: blast.IOBlastConfig
+  created: datetime
+  expires: datetime
+  maxDownloadSize?: integer
+  parentJobs?:
+    type: array
+    items:
+      type: object
+      properties:
+        id: string
+        index: integer

@@ -60,6 +60,7 @@ dependencies {
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http")
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet")
   implementation("org.glassfish.jersey.media:jersey-media-json-jackson")
+  implementation("org.glassfish.jersey.media:jersey-media-multipart")
   implementation("jakarta.ws.rs:jakarta.ws.rs-api")
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2")
 
