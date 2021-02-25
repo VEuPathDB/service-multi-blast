@@ -3,6 +3,8 @@ SELECT
 , a.queue_id
 , a.created_on
 , a.delete_on
+, a.project_id
+, a.status
 , b.user_id
 , b.description
 , b.max_download_size

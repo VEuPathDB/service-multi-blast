@@ -3,6 +3,7 @@
 uses:
   com:   ../common/index.raml
   blast: ../blast-types/blast/index.raml
+  ext:   index.raml
 
 type: object
 additionalProperties: false
@@ -23,3 +24,8 @@ properties:
       properties:
         id: string
         index: integer
+  site: string
+  targets:
+    type: array
+    items: ext.IOJobTarget
+    minItems: 1

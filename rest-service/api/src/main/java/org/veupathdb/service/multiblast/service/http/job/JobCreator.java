@@ -7,6 +7,7 @@ import java.util.Arrays;
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.JobLink;
+import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
 import mb.lib.extern.JobQueueManager;
@@ -49,6 +50,7 @@ public class JobCreator
 
     JobDBManager.updateJobDeleteTimer(d.hash, exp);
     JobDBManager.updateJobQueueID(d.hash, queId);
+    JobDBManager.updateJobStatus(d.hash, DBJobStatus.Queued);
 
     if (!JobDBManager.userIsLinkedToJob(d.userID, d.hash))
       JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
@@ -78,8 +80,9 @@ public class JobCreator
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
     JobDBManager.registerJob(
-      new FullJobRowImpl(d.hash, queId, now, exp, d.job.toSerial(), qFile.toFile()),
-      new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary)
+      new FullJobRowImpl(d.hash, queId, now, exp, d.job.toSerial(), qFile.toFile(), d.projectID, DBJobStatus.Queued),
+      new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary),
+      Arrays.asList(d.targets)
     );
 
     if (d.parentHash != null) {

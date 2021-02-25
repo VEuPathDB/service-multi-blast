@@ -4,7 +4,7 @@ import javax.ws.rs.BadRequestException;
 
 import mb.lib.db.model.FullUserJobRow;
 import mb.lib.extern.JobQueueManager;
-import mb.lib.extern.JobStatus;
+import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
 import mb.lib.jobData.JobDataManager;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
@@ -31,16 +31,16 @@ public class JobReportService
     var queueID = new JobCreator().handleRerun(dets);
 
     // Wait for job to complete
-    JobStatus stat;
+    QueueJobStatus stat;
     for (
       stat = JobQueueManager.jobStatus(queueID);
-      stat == JobStatus.Queued || stat == JobStatus.InProgress;
+      stat == QueueJobStatus.Queued || stat == QueueJobStatus.InProgress;
       stat = JobQueueManager.jobStatus(queueID)
     ) {
       Thread.sleep(250);
     }
 
-    if (stat == JobStatus.Errored) {
+    if (stat == QueueJobStatus.Errored) {
       throw new Exception(JobDataManager.getJobError(dets.id)
         .orElse("An unknown error occurred"));
     }

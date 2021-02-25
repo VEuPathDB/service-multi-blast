@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.generated.model;
 
+import java.util.Objects;
+
 public class IOJobTargetImpl implements IOJobTarget
 {
   private String organism;
@@ -33,5 +35,18 @@ public class IOJobTargetImpl implements IOJobTarget
   public IOJobTarget target(String tgt) {
     target = tgt;
     return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    IOJobTargetImpl that = (IOJobTargetImpl) o;
+    return Objects.equals(organism, that.organism) && Objects.equals(target, that.target);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(organism, target);
   }
 }
