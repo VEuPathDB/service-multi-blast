@@ -36,6 +36,8 @@ CREATE TABLE userlogins5.multiblast_users (
 GRANT SELECT ON userlogins5.multiblast_jobs TO useraccts_r;
 GRANT SELECT ON userlogins5.multiblast_users TO useraccts_r;
 GRANT SELECT ON userlogins5.multiblast_job_to_jobs TO useraccts_r;
+GRANT SELECT ON userlogins5.multiblast_job_to_targets TO useraccts_r;
 GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_jobs TO useraccts_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_users TO useraccts_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_jobs TO useraccts_w;
+GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_targets TO useraccts_w;
