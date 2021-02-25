@@ -4,7 +4,7 @@ import java.io.File;
 import java.time.OffsetDateTime;
 
 import mb.lib.db.model.FullUserJobRow;
-import mb.lib.db.model.JobStatus;
+import mb.lib.db.model.DBJobStatus;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
@@ -21,7 +21,7 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
     String         config,
     File           query,
     String         projectID,
-    JobStatus      status,
+    DBJobStatus status,
     long           userID,
     String         description,
     Long           maxDlSize,

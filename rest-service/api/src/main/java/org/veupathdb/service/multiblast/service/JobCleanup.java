@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
 import java.util.concurrent.TimeUnit;
 
+import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.extern.JobQueueManager;
 import mb.lib.jobData.JobDataManager;
@@ -18,6 +19,7 @@ import static java.time.temporal.ChronoUnit.HOURS;
 public class JobCleanup implements Runnable
 {
   private static final Logger log = LogManager.getLogger(JobCleanup.class);
+  private static final Config conf = Config.getInstance();
 
   @Override
   public void run() {
@@ -58,6 +60,9 @@ public class JobCleanup implements Runnable
 
       log.debug("Job Pruning: deleting orphan jobs");
       JobDBManager.deleteOrphanJobs();
+
+      log.debug("Job Pruning: clearing old failed jobs from job queue.");
+      deleteOldFailedJobs(now);
     } catch (Exception ex) {
       log.error("Job Pruning: error while attempting to prune jobs: ", ex);
       throw ex;
@@ -75,5 +80,14 @@ public class JobCleanup implements Runnable
 
     for (var file : old)
       Files.delete(file);
+  }
+
+  private void deleteOldFailedJobs(OffsetDateTime now) throws Exception {
+    var failed = JobQueueManager.getInstance().getFailedJobs();
+    var delPoint = now.minus(conf.getJobTimeout(), ChronoUnit.DAYS);
+
+    for (var job : failed)
+      if (job.getCreatedAt().isBefore(delPoint))
+        JobQueueManager.getInstance().deleteJobFailure(job);
   }
 }

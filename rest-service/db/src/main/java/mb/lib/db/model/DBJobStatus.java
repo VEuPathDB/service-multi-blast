@@ -1,6 +1,6 @@
 package mb.lib.db.model;
 
-public enum JobStatus
+public enum DBJobStatus
 {
   Completed("completed"),
   Running("running"),
@@ -9,7 +9,7 @@ public enum JobStatus
 
   public final String value;
 
-  JobStatus(String value) {
+  DBJobStatus(String value) {
     this.value = value;
   }
 
@@ -18,7 +18,7 @@ public enum JobStatus
     return name();
   }
 
-  public static JobStatus fromString(String value) {
+  public static DBJobStatus fromString(String value) {
     for (var v : values())
       if (v.value.equals(value))
         return v;

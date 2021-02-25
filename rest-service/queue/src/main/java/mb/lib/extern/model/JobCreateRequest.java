@@ -1,8 +1,8 @@
-package mb.lib.extern;
+package mb.lib.extern.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-class JobCreateRequest
+public class JobCreateRequest
 {
   private final String host;
   private final String[] payload;

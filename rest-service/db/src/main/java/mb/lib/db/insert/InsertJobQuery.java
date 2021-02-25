@@ -29,7 +29,9 @@ public class InsertJobQuery
     ps.setClob(2, new StringReader(job.config()));
     ps.setClob(3, new FileReader(job.query()));
     ps.setInt(4, job.queueID());
-    ps.setObject(5, job.createdOn(), Types.TIMESTAMP_WITH_TIMEZONE);
-    ps.setObject(6, job.deleteOn(), Types.TIMESTAMP_WITH_TIMEZONE);
+    ps.setString(5, job.projectID());
+    ps.setString(6, job.status().value);
+    ps.setObject(7, job.createdOn(), Types.TIMESTAMP_WITH_TIMEZONE);
+    ps.setObject(8, job.deleteOn(), Types.TIMESTAMP_WITH_TIMEZONE);
   }
 }

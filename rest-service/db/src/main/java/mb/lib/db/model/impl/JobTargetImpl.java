@@ -1,7 +1,5 @@
 package mb.lib.db.model.impl;
 
-import java.util.List;
-
 import mb.lib.db.model.JobTarget;
 
 public class JobTargetImpl extends RowImpl implements JobTarget

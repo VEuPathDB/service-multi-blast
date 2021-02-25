@@ -20,9 +20,10 @@ public interface SQL
 
   interface Insert
   {
-    String Job  = Load.insert(Schema.MultiBlast, "job");
-    String User = Load.insert(Schema.MultiBlast, "user");
-    String Link = Load.insert(Schema.MultiBlast, "link");
+    String Job    = Load.insert(Schema.MultiBlast, "job");
+    String User   = Load.insert(Schema.MultiBlast, "user");
+    String Link   = Load.insert(Schema.MultiBlast, "link");
+    String Target = Load.insert(Schema.MultiBlast, "target");
   }
 
   interface Select
@@ -63,6 +64,7 @@ public interface SQL
     {
       String DeleteDate = Load.update(Schema.MultiBlast, Table.MultiBlast.Jobs, "delete-date");
       String QueueID    = Load.update(Schema.MultiBlast, Table.MultiBlast.Jobs, "queue-id");
+      String Status     = Load.update(Schema.MultiBlast, Table.MultiBlast.Jobs, "status");
     }
 
     interface MultiBlastUsers

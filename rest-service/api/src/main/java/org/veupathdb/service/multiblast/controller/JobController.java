@@ -5,12 +5,12 @@ import java.io.InputStream;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ContainerRequest;
+import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
@@ -23,30 +23,23 @@ import org.veupathdb.service.multiblast.util.Format;
 @Authenticated(allowGuests = true)
 public class JobController implements Jobs
 {
-  private static final Logger log = LogManager.getLogger(JobController.class);
-
   private static final String AttachmentPat = "attachment; filename=\"%s.%s\"";
 
   private final Request request;
 
-  private final JobService  service;
+  private final JobService svc;
 
   public JobController(@Context Request request) {
-    log.trace("::new(request={})", request);
     this.request = request;
-    this.service = JobService.getInstance();
+    this.svc     = JobService.getInstance();
   }
 
   /**
    * @return A list of jobs associated with the currently logged in user.
    */
   @Override
-  public GetJobsResponse getJobs() {
-    log.trace("#getJobs()");
-
-    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-
-    return GetJobsResponse.respond200WithApplicationJson(service.getJobs(user));
+  public Response getJobs() {
+    return okJSON(svc.getJobs(getUser(request)));
   }
 
   /**
@@ -57,12 +50,8 @@ public class JobController implements Jobs
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public PostJobsResponse postJobs(IOJsonJobRequest entity) {
-    log.trace("#postJobs(entity={})", entity);
-
-    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-
-    return PostJobsResponse.respond200WithApplicationJson(service.createJob(entity, user));
+  public Response postJobs(IOJsonJobRequest entity) {
+    return okJSON(svc.createJob(entity, getUser(request)));
   }
 
   /**
@@ -72,8 +61,6 @@ public class JobController implements Jobs
    */
   @Override
   public Response postJobs(InputStream query, InputStream config) {
-    log.trace("#postJobs(query={}, config={})", query, config);
-
     IOJsonJobRequest props;
 
     try {
@@ -82,11 +69,7 @@ public class JobController implements Jobs
       throw new BadRequestException(e);
     }
 
-    var user  = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-
-    return Response.status(Response.Status.OK)
-      .entity(service.createJob(query, props, user))
-      .build();
+    return okJSON(svc.createJob(query, props, getUser(request)));
   }
 
   /**
@@ -100,12 +83,8 @@ public class JobController implements Jobs
    * @return Full details about the specified job.
    */
   @Override
-  public GetJobsByJobIdResponse getJobsByJobId(String jobID) {
-    log.trace("#getJobByJobId(jobID={})", jobID);
-
-    var user = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
-
-    return GetJobsByJobIdResponse.respond200WithApplicationJson(service.getJob(jobID, user));
+  public Response getJobsByJobId(String jobID) {
+    return okJSON(svc.getJob(jobID, getUser(request)));
   }
 
   /**
@@ -119,18 +98,14 @@ public class JobController implements Jobs
    * text output, or a file attachment.
    */
   @Override
-  public GetJobsQueryByJobIdResponse getJobsQueryByJobId(String jobID, boolean download) {
-    log.trace("#getJobsQueryByJobId(jobID={}, download={})", jobID, download);
-
-    var head = GetJobsQueryByJobIdResponse.headersFor200();
+  public Response getJobsQueryByJobId(String jobID, boolean download) {
+    var res = Response.status(Response.Status.OK)
+      .type(MediaType.TEXT_PLAIN_TYPE);
 
     if (download)
-      head = head.withContentDisposition(String.format(AttachmentPat, (jobID + "-query"), "txt"));
+      res = res.header("Content-Disposition", String.format(AttachmentPat, (jobID + "-query"), "txt"));
 
-    return GetJobsQueryByJobIdResponse.respond200WithTextPlain(
-      service.getQuery(jobID),
-      head
-    );
+    return res.entity(svc.getQuery(jobID)).build();
   }
 
   @Override
@@ -141,17 +116,30 @@ public class JobController implements Jobs
     boolean inline,
     List<IOBlastReportField> fields
   ) {
-    log.trace("#getJobsReportByJobId(jobID={}, format={}, zip={}, inline={}, fields={})", jobID, format, zip, inline, fields);
-
-    var user         = UserProvider.lookupUser(request).orElseThrow(Utils::noUserExcept);
+    var user         = getUser(request);
     var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
     var maxDlSize    = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
-    var wrap         = service.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
+    var wrap         = svc.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
     var resp         = Response.status(200).header("Content-Type", wrap.contentType);
 
     if (!inline)
       resp.header("Content-Disposition", String.format(AttachmentPat, "report", wrap.ext));
 
     return resp.entity(wrap.stream).build();
+  }
+
+  // //////////////////////////////////////////////////////////////////////////////////////////// //
+  // Helper Methods                                                                               //
+  // //////////////////////////////////////////////////////////////////////////////////////////// //
+
+  static User getUser(Request req) {
+    return UserProvider.lookupUser(req).orElseThrow(Utils::noUserExcept);
+  }
+
+  static Response okJSON(Object entity) {
+    return Response.status(Response.Status.OK)
+      .type(MediaType.APPLICATION_JSON_TYPE)
+      .entity(entity)
+      .build();
   }
 }
