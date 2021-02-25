@@ -4,22 +4,31 @@ import mb.lib.db.model.JobTarget;
 
 public class JobTargetImpl extends RowImpl implements JobTarget
 {
-  private final String organisms;
-  private final String targetFiles;
+  private final String organism;
+  private final String targetFile;
 
-  public JobTargetImpl(byte[] jobID, String organisms, String targetFiles) {
+  public JobTargetImpl(byte[] jobID, String organism, String targetFile) {
     super(jobID);
-    this.organisms   = organisms;
-    this.targetFiles = targetFiles;
+    this.organism   = organism;
+    this.targetFile = targetFile;
   }
 
   @Override
   public String organism() {
-    return organisms;
+    return organism;
   }
 
   @Override
   public String targetFile() {
-    return targetFiles;
+    return targetFile;
+  }
+
+  @Override
+  public String toString() {
+    return "JobTarget{" +
+      "hash=" + printID() + '\'' +
+      ", organism='" + organism + '\'' +
+      ", targetFile='" + targetFile + '\'' +
+      '}';
   }
 }

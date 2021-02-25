@@ -10,12 +10,12 @@ import mb.lib.db.constants.SQL;
 import mb.lib.db.model.JobTarget;
 import mb.lib.db.model.impl.JobTargetImpl;
 
-public class SelectJobTargets
+public class SelectTargetsByJob
 {
   private final byte[] jobID;
   private final DataSource ds;
 
-  public SelectJobTargets(DataSource ds, byte[] jobID) {
+  public SelectTargetsByJob(DataSource ds, byte[] jobID) {
     this.jobID = jobID;
     this.ds    = ds;
   }

@@ -1,10 +1,7 @@
 package mb.lib.db;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import mb.lib.db.delete.DeleteJobQuery;
 import mb.lib.db.delete.DeleteOrphanJobsQuery;
@@ -24,6 +21,10 @@ import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class JobDBManager
 {
+  public static Map<String, List<JobLink>> getAllParentJobs(long userID) throws Exception {
+    return new SelectLinksByUser(DbManager.userDatabase().getDataSource(), userID).run();
+  }
+
   /**
    * Attempts to retrieve a job by it's hash.
    */
@@ -131,7 +132,11 @@ public class JobDBManager
   }
 
   public static List<JobTarget> getJobTargetsFor(byte[] jobID) throws Exception {
-    return new SelectJobTargets(DbManager.userDatabase().getDataSource(), jobID).run();
+    return new SelectTargetsByJob(DbManager.userDatabase().getDataSource(), jobID).run();
+  }
+
+  public static Map<String, List<JobTarget>> getJobTargetsFor(long userID) throws Exception {
+    return new SelectTargetsByUser(DbManager.userDatabase().getDataSource(), userID).run();
   }
 
   public static void updateJobStatus(byte[] jobID, DBJobStatus status) throws Exception {

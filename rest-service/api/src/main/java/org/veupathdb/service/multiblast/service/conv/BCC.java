@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import mb.lib.db.model.JobLink;
+import mb.lib.db.model.JobTarget;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
 import org.veupathdb.service.multiblast.model.blast.Location;
@@ -11,9 +13,22 @@ import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.Seg;
 import org.veupathdb.service.multiblast.model.blast.impl.LocationImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.SegImpl;
+import org.veupathdb.service.multiblast.util.Format;
 
-class BCC
+public class BCC
 {
+  public static IOParentJobLink toExternal(JobLink link) {
+    return new IOParentJobLinkImpl()
+      .setId(Format.toHexString(link.parentHash()))
+      .setIndex(link.position());
+  }
+
+  public static IOJobTarget toExternal(JobTarget jt) {
+    return new IOJobTargetImpl()
+      .organism(jt.organism())
+      .target(jt.targetFile());
+  }
+
   static List<Integer> arrayToList(int[] val) {
     if (val == null)
       return null;
