@@ -1,4 +1,4 @@
-package mb.lib.extern;
+package mb.lib.extern.model;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

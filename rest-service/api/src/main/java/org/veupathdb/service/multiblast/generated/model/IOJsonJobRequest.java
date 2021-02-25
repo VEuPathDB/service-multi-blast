@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.generated.model;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -16,10 +18,10 @@ public interface IOJsonJobRequest
   void setSite(String site);
 
   @JsonProperty("targets")
-  IOJobTarget[] getTargets();
+  Set<IOJobTarget> getTargets();
 
   @JsonProperty("targets")
-  void setTargets(IOJobTarget[] targets);
+  void setTargets(Set<IOJobTarget> targets);
 
   @JsonProperty("config")
   IOBlastConfig getConfig();

@@ -19,10 +19,10 @@ public interface IOShortJobResponse
   @JsonProperty("description")
   IOShortJobResponse setDescription(String description);
 
-  @JsonProperty("status")
+  @JsonProperty(JsonKeys.Status)
   IOJobStatus getStatus();
 
-  @JsonProperty("status")
+  @JsonProperty(JsonKeys.Status)
   IOShortJobResponse setStatus(IOJobStatus status);
 
   @JsonProperty(JsonKeys.Created)
@@ -54,4 +54,16 @@ public interface IOShortJobResponse
 
   @JsonProperty(JsonKeys.IsPrimary)
   IOShortJobResponse setIsPrimary(boolean isPrimary);
+
+  @JsonProperty(JsonKeys.Site)
+  String getSite();
+
+  @JsonProperty(JsonKeys.Site)
+  IOShortJobResponse setSite(String site);
+
+  @JsonProperty(JsonKeys.Targets)
+  IOJobTarget[] getTargets();
+
+  @JsonProperty(JsonKeys.Targets)
+  IOShortJobResponse setTargets(IOJobTarget[] targets);
 }

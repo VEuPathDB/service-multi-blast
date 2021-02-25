@@ -9,6 +9,8 @@ FROM ncbi/blast:2.10.1 AS run
 
 COPY --from=build /server/server /server
 
+ENV BLASTDB=/:/db:/blast/blastdb:/blast/blastdb_custom
+
 EXPOSE 80
 
 CMD /server

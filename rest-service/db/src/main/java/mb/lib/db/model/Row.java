@@ -6,4 +6,6 @@ public interface Row
    * @return the 32 byte job hash value.
    */
   byte[] jobHash();
+
+  String printID();
 }

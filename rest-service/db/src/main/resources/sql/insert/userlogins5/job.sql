@@ -4,8 +4,10 @@ INSERT INTO
   , job_config
   , query
   , queue_id
+  , project_id
+  , status
   , created_on
   , delete_on
   )
 VALUES
-  (?, ?, ?, ?, ?, ?)
+  (?, ?, ?, ?, ?, ?, ?, ?)

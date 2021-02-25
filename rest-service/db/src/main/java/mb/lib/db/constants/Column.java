@@ -8,6 +8,8 @@ public interface Column
     String JobConfig = "job_config";
     String Query     = "query";
     String QueueID   = "queue_id";
+    String ProjectID = "project_id";
+    String Status    = "status";
     String CreatedOn = "created_on";
     String DeleteOn  = "delete_on";
   }
@@ -26,5 +28,12 @@ public interface Column
     String JobDigest    = "job_digest";
     String ParentDigest = "parent_digest";
     String Position     = "position";
+  }
+
+  interface MultiBlastJobToTargets
+  {
+    String JobDigest  = "job_digest";
+    String Organism   = "organism";
+    String TargetFile = "target_file";
   }
 }

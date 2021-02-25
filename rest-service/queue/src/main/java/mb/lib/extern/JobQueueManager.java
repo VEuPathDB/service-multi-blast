@@ -1,22 +1,20 @@
 package mb.lib.extern;
 
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mb.lib.config.Config;
+import mb.lib.extern.consts.Format;
+import mb.lib.extern.consts.URL;
+import mb.lib.extern.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class JobQueueManager
 {
-  public static final String
-    JobEndpoint      = "/job/%s",
-    QueueEndpoint    = "/queue",
-    QueueIdEndpoint  = QueueEndpoint + "/%s",
-    QueueJobEndpoint = QueueIdEndpoint + "/job/%d";
 
   private static final Logger log = LogManager.getLogger(JobQueueManager.class);
 
@@ -38,28 +36,57 @@ public class JobQueueManager
     return instance;
   }
 
-  public static JobStatus jobStatus(int queueId) throws Exception {
+  public static QueueJobStatus jobStatus(int queueId) throws Exception {
     return getInstance().getJobStatus(queueId);
   }
 
-  public JobStatus getJobStatus(int queueId) throws Exception {
-    log.trace("#getJobStatus(queueId={})", queueId);
+  public boolean jobInFailList(int queueID) throws Exception {
+    log.debug("Checking failed job list for queue ID {}", queueID);
 
-    var con = Config.getInstance();
-    var uri = URI.create(prependHTTP(conf.getQueueHost())).
-      resolve(String.format(QueueJobEndpoint, con.getQueueName(), queueId));
+    var jobs = getFailedJobs();
 
-    log.debug("Attempting to look up job status for queue element {} at {}", queueId, uri);
+    for (var job : jobs) {
+      if (job.getJobID() == queueID) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public List<FailedJob> getFailedJobs() throws Exception {
     var res = HttpClient.newHttpClient().send(
-      HttpRequest.newBuilder()
-        .uri(uri)
-        .GET()
-        .build(),
+      HttpRequest.newBuilder().uri(URL.failedEndpoint()).GET().build(),
+      HttpResponse.BodyHandlers.ofInputStream()
+    );
+
+    return Format.JSON.readValue(res.body(), FailedJobResponse.class).getFailedJobs();
+  }
+
+  public void deleteJobFailure(FailedJob job) throws Exception {
+    log.debug("Attempting to clear job failure for job {}", job.getJobID());
+
+    HttpClient.newHttpClient().send(
+      HttpRequest.newBuilder().uri(URL.failedIDEndpoint(job.getFailID())).DELETE().build(),
+      HttpResponse.BodyHandlers.discarding()
+    );
+  }
+
+  public QueueJobStatus getJobStatus(int queueID) throws Exception {
+    log.trace("#getJobStatus(queueID={})", queueID);
+
+    log.debug("Looking up job status for queue ID {}", queueID);
+    var res = HttpClient.newHttpClient().send(
+      HttpRequest.newBuilder().uri(URL.queueJobEndpoint(queueID)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
     );
 
     if (res.statusCode() == 404) {
-      return JobStatus.Unknown;
+      if (jobInFailList(queueID)) {
+        return QueueJobStatus.Errored;
+      } else {
+        return QueueJobStatus.Completed;
+      }
     }
 
     if (res.statusCode() != 200) {
@@ -95,11 +122,10 @@ public class JobQueueManager
   public int submitNewJob(String jobId, String tool, String[] cli) throws Exception {
     log.trace("#submitJob(jobID={}, tool={}, cli={})", jobId, tool, cli);
 
-    var uri = URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(JobEndpoint, conf.getJobCategory()));
+    var uri = URL.jobEndpoint();
 
     var sendBody = json.writeValueAsString(new JobCreateRequest(
-      String.join("/", prependHTTP(conf.getBlastHost()), tool, jobId),
+      String.join("/", URL.prependHTTP(conf.getBlastHost()), tool, jobId),
       cli
     ));
 
@@ -129,23 +155,10 @@ public class JobQueueManager
   }
 
   public static void deleteJob(int queueID) throws Exception {
-    log.trace("#deleteJob(queueID={})", queueID);
-
-    var uri = URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(QueueJobEndpoint, conf.getQueueName(), queueID));
-
     log.debug("Attempting to delete queue entry for job {}", queueID);
-    var res = HttpClient.newHttpClient().send(
-      HttpRequest.newBuilder().uri(uri).DELETE().build(),
+    HttpClient.newHttpClient().send(
+      HttpRequest.newBuilder().uri(URL.queueJobEndpoint(queueID)).DELETE().build(),
       HttpResponse.BodyHandlers.discarding()
     );
-
-    // TODO: error handling?
-  }
-
-  static String prependHTTP(String uri) {
-    if (uri.startsWith("http://") || uri.startsWith("https://"))
-      return uri;
-    return "http://" + uri;
   }
 }

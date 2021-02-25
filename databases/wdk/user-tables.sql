@@ -1,10 +1,18 @@
 CREATE TABLE userlogins5.multiblast_jobs (
   job_digest RAW(16) PRIMARY KEY
-, job_config CLOB NOT NULL
-, query CLOB NOT NULL
+, job_config CLOB           NOT NULL
+, query      CLOB           NOT NULL
 , queue_id   NUMBER(7)
-, created_on TIMESTAMP WITH TIME ZONE NOT NULL
-, delete_on TIMESTAMP WITH TIME ZONE NOT NULL
+, project_id VARCHAR2(16)   NOT NULL
+, status     VARCHAR(10)
+, created_on TIMESTAMP      WITH TIME ZONE NOT NULL
+, delete_on  TIMESTAMP      WITH TIME ZONE NOT NULL
+);
+
+CREATE TABLE userlogins5.multiblast_job_to_targets (
+  job_digest  RAW(16) NOT NULL REFERENCES userlogins5.multiblast_jobs (job_digest)
+, organism    VARCHAR2(256)
+, target_file VARCHAR2(256)
 );
 
 CREATE TABLE userlogins5.multiblast_job_to_jobs (

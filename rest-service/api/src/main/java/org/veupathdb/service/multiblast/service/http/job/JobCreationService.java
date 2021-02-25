@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import mb.lib.db.JobDBManager;
+import mb.lib.db.model.JobTarget;
+import mb.lib.db.model.impl.JobTargetImpl;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,8 +49,10 @@ public class JobCreationService
         .splitQueries(
           new ByteArrayInputStream(req.getConfig().getQuery().getBytes(StandardCharsets.UTF_8))
         );
-      if (!queryHandle.errors.isEmpty())
+      if (!queryHandle.errors.isEmpty()) {
+        queryHandle.release();
         throw new UnprocessableEntityException(Collections.singletonMap(JsonKeys.Query, queryHandle.errors));
+      }
       return createJobs(queryHandle, req, userID);
     } catch (Exception e) {
       throw Util.wrapException(e);
@@ -65,8 +69,10 @@ public class JobCreationService
     try {
       var result = new QuerySplitter(newSequenceValidator(props.getConfig())).splitQueries(query);
 
-      if (!result.errors.isEmpty())
+      if (!result.errors.isEmpty()) {
+        result.release();
         throw new UnprocessableEntityException(Collections.singletonMap(JsonKeys.Query, result.errors));
+      }
 
       return createJobs(result, props, userID);
     } catch (Exception e) {
@@ -92,7 +98,7 @@ public class JobCreationService
 
     JobUtil.verifyResultLimit(js, queries);
 
-    if (js.getTargets() == null || js.getTargets().length == 0)
+    if (js.getTargets() == null || js.getTargets().size() == 0)
       throw new UnprocessableEntityException(new ErrorMap(
         "targets",
         "1 or more targets must be selected."
@@ -171,6 +177,7 @@ public class JobCreationService
     // Convert the job config to a CLI format (which will be hashed).
     job.getJobConfig().toCli(cli);
 
+    var tgts = js.getTargets();
     var dets = new JobDetails();
     dets.query = row.source;
     dets.hash  = hashJob(
@@ -187,6 +194,14 @@ public class JobCreationService
     dets.maxDlSize   = js.getMaxResultSize();
     dets.parentHash  = parentHash;
     dets.isPrimary   = isPrimary;
+    dets.projectID   = js.getSite();
+    dets.targets     = new JobTarget[tgts.size()];
+
+    int i = 0;
+    for (var tgt : tgts) {
+      dets.targets[i] = new JobTargetImpl(dets.hash, tgt.organism(), tgt.target());
+      i++;
+    }
 
     return dets;
   }
