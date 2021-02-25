@@ -167,6 +167,12 @@ class QuerySplitResult
   QuerySplitRow       rootQuery;
   List<QuerySplitRow> subQueries = new ArrayList<>(3);
   List<String>        errors     = new ArrayList<>(3);
+
+  void release() throws Exception {
+    rootQuery.source.delete();
+    for (var row : subQueries)
+      row.source.delete();
+  }
 }
 
 class QuerySplitRow

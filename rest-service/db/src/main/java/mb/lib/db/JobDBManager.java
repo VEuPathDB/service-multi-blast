@@ -12,14 +12,14 @@ import mb.lib.db.delete.DeleteStaleGuestsQuery;
 import mb.lib.db.delete.DeleteUsersByJobQuery;
 import mb.lib.db.insert.InsertJobLink;
 import mb.lib.db.insert.InsertJobQuery;
+import mb.lib.db.insert.InsertJobTargets;
 import mb.lib.db.insert.InsertUserQuery;
 import mb.lib.db.model.*;
 import mb.lib.db.select.*;
 import mb.lib.db.update.UpdateJobDeleteDateQuery;
 import mb.lib.db.update.UpdateJobQueueIDQuery;
 import mb.lib.db.update.UpdateJobRunDirectly;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import mb.lib.db.update.UpdateJobStatus;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class JobDBManager
@@ -35,6 +35,7 @@ public class JobDBManager
     return new SelectLinksByParent(DbManager.userDatabase().getDataSource(), parentHash).run();
   }
 
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   public static boolean userIsLinkedToJob(long userID, byte[] jobHash) throws Exception {
     return new SelectUserIsLinkedToJob(DbManager.userDatabase().getDataSource(), userID, jobHash)
       .run();
@@ -58,10 +59,15 @@ public class JobDBManager
     }
   }
 
-  public static void registerJob(FullJobRow job, UserRow user) throws Exception {
+  public static void registerJob(
+    FullJobRow      job,
+    UserRow         user,
+    List<JobTarget> targets
+  ) throws Exception {
     try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
       new InsertJobQuery(con, job).run();
       new InsertUserQuery(con, user).run();
+      new InsertJobTargets(con, targets).run();
     }
   }
 
@@ -122,5 +128,13 @@ public class JobDBManager
 
   public static void updateLinkIsPrimary(long userID, byte[] jobHash) throws Exception {
     new UpdateJobRunDirectly(DbManager.userDatabase().getDataSource(), true, userID, jobHash).run();
+  }
+
+  public static List<JobTarget> getJobTargetsFor(byte[] jobID) throws Exception {
+    return new SelectJobTargets(DbManager.userDatabase().getDataSource(), jobID).run();
+  }
+
+  public static void updateJobStatus(byte[] jobID, DBJobStatus status) throws Exception {
+    new UpdateJobStatus(jobID, status).run();
   }
 }

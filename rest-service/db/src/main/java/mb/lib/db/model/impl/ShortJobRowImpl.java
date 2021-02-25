@@ -2,7 +2,7 @@ package mb.lib.db.model.impl;
 
 import java.time.OffsetDateTime;
 
-import mb.lib.db.model.JobStatus;
+import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.ShortJobRow;
 
 public class ShortJobRowImpl extends RowImpl implements ShortJobRow
@@ -10,8 +10,8 @@ public class ShortJobRowImpl extends RowImpl implements ShortJobRow
   private final int queueID;
   private final OffsetDateTime createdOn;
   private final OffsetDateTime deleteOn;
-  private final String projectID;
-  private final JobStatus status;
+  private final String      projectID;
+  private final DBJobStatus status;
 
   public ShortJobRowImpl(
     byte[] hash,
@@ -19,7 +19,7 @@ public class ShortJobRowImpl extends RowImpl implements ShortJobRow
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
     String projectID,
-    JobStatus status
+    DBJobStatus status
   ) {
     super(hash);
     this.queueID   = queueID;
@@ -45,7 +45,7 @@ public class ShortJobRowImpl extends RowImpl implements ShortJobRow
   }
 
   @Override
-  public JobStatus status() {
+  public DBJobStatus status() {
     return status;
   }
 

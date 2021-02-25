@@ -1,16 +1,18 @@
 package org.veupathdb.service.multiblast.generated.model;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOJsonJobRequestImpl implements IOJsonJobRequest
 {
-  private String        site;
-  private IOJobTarget[] targets;
-  private IOBlastConfig config;
-  private String        description;
-  private Integer       maxResults;
-  private Long          maxResultSize;
+  private String           site;
+  private Set<IOJobTarget> targets;
+  private IOBlastConfig    config;
+  private String           description;
+  private Integer          maxResults;
+  private Long             maxResultSize;
 
   @Override
   public String getSite() {
@@ -23,12 +25,12 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   }
 
   @Override
-  public IOJobTarget[] getTargets() {
+  public Set<IOJobTarget> getTargets() {
     return targets;
   }
 
   @Override
-  public void setTargets(IOJobTarget[] targets) {
+  public void setTargets(Set<IOJobTarget> targets) {
     this.targets = targets;
   }
 

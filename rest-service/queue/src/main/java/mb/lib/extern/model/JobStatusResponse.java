@@ -1,11 +1,11 @@
-package mb.lib.extern;
+package mb.lib.extern.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class JobStatusResponse
+public class JobStatusResponse
 {
   private String status;
 
@@ -16,7 +16,7 @@ class JobStatusResponse
   }
 
   @JsonIgnore
-  public JobStatus getStatus() {
-    return JobStatus.fromString(this.status);
+  public QueueJobStatus getStatus() {
+    return QueueJobStatus.fromString(this.status);
   }
 }

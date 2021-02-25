@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
+import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.ShortUserJobRow;
 import mb.lib.db.model.impl.ShortUserJobRowImpl;
 
@@ -41,6 +42,8 @@ public class SelectShortUserJobsByUser
       rs.getInt(Column.MultiBlastJobs.QueueID),
       rs.getObject(Column.MultiBlastJobs.CreatedOn, OffsetDateTime.class),
       rs.getObject(Column.MultiBlastJobs.DeleteOn, OffsetDateTime.class),
+      rs.getString(Column.MultiBlastJobs.ProjectID),
+      DBJobStatus.fromString(rs.getString(Column.MultiBlastJobs.Status)),
       rs.getLong(Column.MultiBlastUsers.UserId),
       rs.getString(Column.MultiBlastUsers.Description),
       rs.getLong(Column.MultiBlastUsers.MaxDownloadSize),

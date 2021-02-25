@@ -4,7 +4,7 @@ import java.io.File;
 import java.time.OffsetDateTime;
 
 import mb.lib.db.model.FullJobRow;
-import mb.lib.db.model.JobStatus;
+import mb.lib.db.model.DBJobStatus;
 
 public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
 {
@@ -19,7 +19,7 @@ public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
     String         config,
     File           query,
     String         projectID,
-    JobStatus      status
+    DBJobStatus status
   ) {
     super(hash, queueID, createdOn, deleteOn, projectID, status);
     this.config = config;
