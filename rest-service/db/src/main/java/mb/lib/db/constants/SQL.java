@@ -30,8 +30,8 @@ public interface SQL
   {
     interface MultiBlastJobs
     {
-      String ById   = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
-      String Stale  = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
+      String ById  = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
+      String Stale = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
 
       String FullUserRow       = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");
       String ShortUserByUserID = Load.select(
@@ -43,18 +43,24 @@ public interface SQL
 
     interface MultiBlastJobToJobs
     {
-      String ByParent = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-parent");
+      String ByParent  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-parent");
       String GetParent = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "get-parent");
+      String ByUserID  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-user-id");
     }
 
     interface MultiBlastJobToTargets
     {
-      String ByJobID = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-job-id");
+      String ByJobID  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-job-id");
+      String ByUserID = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-user-id");
     }
 
     interface MultiBlastUsers
     {
-      String UserIsLinked = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "user-is-linked");
+      String UserIsLinked = Load.select(
+        Schema.MultiBlast,
+        Table.MultiBlast.Users,
+        "user-is-linked"
+      );
     }
   }
 

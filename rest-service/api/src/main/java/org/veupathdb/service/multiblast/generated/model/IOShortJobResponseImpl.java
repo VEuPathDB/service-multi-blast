@@ -13,6 +13,8 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   private Long              maxResultSize;
   private IOParentJobLink[] parentJobIDs;
   private boolean           isPrimary;
+  private String            site;
+  private IOJobTarget[]     targets;
 
   @Override
   public String getId() {
@@ -99,6 +101,28 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   @Override
   public IOShortJobResponse setIsPrimary(boolean isPrimary) {
     this.isPrimary = isPrimary;
+    return this;
+  }
+
+  @Override
+  public String getSite() {
+    return site;
+  }
+
+  @Override
+  public IOShortJobResponse setSite(String site) {
+    this.site = site;
+    return this;
+  }
+
+  @Override
+  public IOJobTarget[] getTargets() {
+    return targets;
+  }
+
+  @Override
+  public IOShortJobResponse setTargets(IOJobTarget[] targets) {
+    this.targets = targets;
     return this;
   }
 }

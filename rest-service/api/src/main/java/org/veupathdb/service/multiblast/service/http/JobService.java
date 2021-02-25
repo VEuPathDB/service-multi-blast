@@ -2,6 +2,7 @@ package org.veupathdb.service.multiblast.service.http;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
@@ -22,6 +23,7 @@ import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
+import org.veupathdb.service.multiblast.service.conv.BCC;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.job.JobCreationService;
 import org.veupathdb.service.multiblast.service.http.job.JobReportService;
@@ -83,6 +85,13 @@ public class JobService
               .setId(Format.toHexString(j.parentHash()))
               .setIndex(j.position()))
             .toArray(IOParentJobLink[]::new)
+        )
+        .setSite(job.projectID())
+        .setTargets(
+          JobDBManager.getJobTargetsFor(job.jobHash())
+            .stream()
+            .map(BCC::toExternal)
+            .toArray(IOJobTarget[]::new)
         );
 
       if (out.getStatus() == null) {
@@ -103,12 +112,15 @@ public class JobService
 
     try {
       var jobs = JobDBManager.getUserJobs(user.getUserID());
+      var tgts = JobDBManager.getJobTargetsFor(user.getUserID());
+      var pars = JobDBManager.getAllParentJobs(user.getUserID());
       var out  = new ArrayList<IOShortJobResponse>(jobs.size());
 
       for (var job : jobs) {
         if (job.queueID() == 0)
           throw new InternalServerErrorException("Invalid state, job with queue ID of 0");
 
+        var jobID = job.printID();
         var tmp = new IOShortJobResponseImpl()
           .setId(Format.toHexString(job.jobHash()))
           .setDescription(job.description())
@@ -118,12 +130,17 @@ public class JobService
           .setMaxResultSize(job.maxDownloadSize())
           .setIsPrimary(job.runDirectly())
           .setParentJobs(
-            JobDBManager.getParentJobs(job.jobHash(), user.getUserID())
+            pars.getOrDefault(jobID, Collections.emptyList())
               .stream()
-              .map(j -> new IOParentJobLinkImpl()
-                .setId(Format.toHexString(j.parentHash()))
-                .setIndex(j.position()))
+              .map(BCC::toExternal)
               .toArray(IOParentJobLink[]::new)
+          )
+          .setSite(job.projectID())
+          .setTargets(
+            tgts.getOrDefault(jobID, Collections.emptyList())
+              .stream()
+              .map(BCC::toExternal)
+              .toArray(IOJobTarget[]::new)
           );
         out.add(tmp);
       }
@@ -283,11 +300,8 @@ public class JobService
   }
 
   static QueueJobStatus syncJobStatus(ShortJobRow job) throws Exception {
-    log.trace("::syncJobStatus(job={})", job);
     var inStatus = Util.convert(job.status());
 
-    log.debug("DB Job Status = {}", job.status());
-    log.debug("Queue Job Status = {}", inStatus);
     if (inStatus == QueueJobStatus.Completed || inStatus == QueueJobStatus.Errored) {
       return inStatus;
     }
