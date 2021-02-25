@@ -46,6 +46,11 @@ public interface SQL
       String GetParent = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "get-parent");
     }
 
+    interface MultiBlastJobToTargets
+    {
+      String ByJobID = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-job-id");
+    }
+
     interface MultiBlastUsers
     {
       String UserIsLinked = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "user-is-linked");
