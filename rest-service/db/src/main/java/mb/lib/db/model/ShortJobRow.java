@@ -9,4 +9,8 @@ public interface ShortJobRow extends Row
   OffsetDateTime createdOn();
 
   OffsetDateTime deleteOn();
+
+  JobStatus status();
+
+  String projectID();
 }

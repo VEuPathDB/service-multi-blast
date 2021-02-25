@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.OffsetDateTime;
 
 import mb.lib.db.model.FullUserJobRow;
+import mb.lib.db.model.JobStatus;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {
@@ -19,12 +20,14 @@ public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
     OffsetDateTime deleteOn,
     String         config,
     File           query,
+    String         projectID,
+    JobStatus      status,
     long           userID,
     String         description,
     Long           maxDlSize,
     boolean        runDirectly
   ) {
-    super(hash, queueID, createdOn, deleteOn, config, query);
+    super(hash, queueID, createdOn, deleteOn, config, query, projectID, status);
     this.userID      = userID;
     this.description = description;
     this.maxDlSize   = maxDlSize;

@@ -19,7 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
-import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
@@ -109,21 +108,10 @@ public class JobService
         if (job.queueID() == 0)
           throw new InternalServerErrorException("Invalid state, job with queue ID of 0");
 
-        var jobStatus = JobQueueManager.jobStatus(job.queueID());
-
-        // Success and some failures == unknown
-        // Need to check the filesystem for the real status.
-        if (jobStatus == JobStatus.Unknown) {
-          if (JobDataManager.reportExists(Format.toHexString(job.jobHash())))
-            jobStatus = JobStatus.Completed;
-          else
-            jobStatus = JobStatus.Errored;
-        }
-
         var tmp = new IOShortJobResponseImpl()
           .setId(Format.toHexString(job.jobHash()))
           .setDescription(job.description())
-          .setStatus(convStatus(jobStatus))
+          .setStatus(convStatus(JobQueueManager.jobStatus(job.queueID())))
           .setCreated(Format.toString(job.createdOn()))
           .setExpires(Format.toString(job.deleteOn()))
           .setMaxResultSize(job.maxDownloadSize())
@@ -269,7 +257,6 @@ public class JobService
       case Errored -> IOJobStatus.ERRORED;
       case Queued -> IOJobStatus.QUEUED;
       case InProgress -> IOJobStatus.INPROGRESS;
-      case Unknown -> null;
     };
   }
 

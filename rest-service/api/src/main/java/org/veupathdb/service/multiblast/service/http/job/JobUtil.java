@@ -62,7 +62,7 @@ class JobUtil
     var status = JobQueueManager.jobStatus(job.queueID());
     var jobID  = Format.toHexString(job.jobHash());
 
-    if (status == JobStatus.Completed || status == JobStatus.Unknown)
+    if (status == JobStatus.Completed)
       return JobDataManager.reportExists(jobID);
 
     return false;

@@ -27,4 +27,11 @@ public interface Column
     String ParentDigest = "parent_digest";
     String Position     = "position";
   }
+
+  interface MultiBlastJobToTargets
+  {
+    String JobDigest  = "job_digest";
+    String Organism   = "organism";
+    String TargetFile = "target_file";
+  }
 }

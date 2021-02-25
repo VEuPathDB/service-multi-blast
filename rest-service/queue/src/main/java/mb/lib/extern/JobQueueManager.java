@@ -16,7 +16,8 @@ public class JobQueueManager
     JobEndpoint      = "/job/%s",
     QueueEndpoint    = "/queue",
     QueueIdEndpoint  = QueueEndpoint + "/%s",
-    QueueJobEndpoint = QueueIdEndpoint + "/job/%d";
+    QueueJobEndpoint = QueueIdEndpoint + "/job/%d",
+    FailedEndpoint   = QueueIdEndpoint + "/failed/%d";
 
   private static final Logger log = LogManager.getLogger(JobQueueManager.class);
 
@@ -42,24 +43,35 @@ public class JobQueueManager
     return getInstance().getJobStatus(queueId);
   }
 
-  public JobStatus getJobStatus(int queueId) throws Exception {
-    log.trace("#getJobStatus(queueId={})", queueId);
+  public boolean jobInFailList(int queueID) throws Exception {
+    log.trace("#jobInFailList(queueID={})", queueID);
 
-    var con = Config.getInstance();
-    var uri = URI.create(prependHTTP(conf.getQueueHost())).
-      resolve(String.format(QueueJobEndpoint, con.getQueueName(), queueId));
+    log.debug("Checking failed job list for queue ID {}", queueID);
+    var res = HttpClient.newHttpClient().send(
+      HttpRequest.newBuilder().uri(makeURI(FailedEndpoint, queueID)).GET().build(),
+      HttpResponse.BodyHandlers.discarding()
+    );
 
-    log.debug("Attempting to look up job status for queue element {} at {}", queueId, uri);
+    return res.statusCode() == 200;
+  }
+
+  public JobStatus getJobStatus(int queueID) throws Exception {
+    log.trace("#getJobStatus(queueID={})", queueID);
+
+    log.debug("Looking up job status for queue ID {}", queueID);
     var res = HttpClient.newHttpClient().send(
       HttpRequest.newBuilder()
-        .uri(uri)
+        .uri(makeURI(QueueJobEndpoint, queueID))
         .GET()
         .build(),
       HttpResponse.BodyHandlers.ofString()
     );
 
     if (res.statusCode() == 404) {
-      return JobStatus.Unknown;
+      if (jobInFailList(queueID))
+        return JobStatus.Errored;
+      else
+        return JobStatus.Completed;
     }
 
     if (res.statusCode() != 200) {
@@ -135,17 +147,21 @@ public class JobQueueManager
       .resolve(String.format(QueueJobEndpoint, conf.getQueueName(), queueID));
 
     log.debug("Attempting to delete queue entry for job {}", queueID);
-    var res = HttpClient.newHttpClient().send(
+    HttpClient.newHttpClient().send(
       HttpRequest.newBuilder().uri(uri).DELETE().build(),
       HttpResponse.BodyHandlers.discarding()
     );
-
-    // TODO: error handling?
   }
 
   static String prependHTTP(String uri) {
     if (uri.startsWith("http://") || uri.startsWith("https://"))
       return uri;
+
     return "http://" + uri;
+  }
+
+  static URI makeURI(String pat, int queueID) {
+    return URI.create(prependHTTP(conf.getQueueHost())).
+      resolve(String.format(pat, conf.getQueueName(), queueID));
   }
 }
