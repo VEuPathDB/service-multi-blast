@@ -1,5 +1,7 @@
 package mb.lib.extern.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum QueueJobStatus
 {
   Completed,
@@ -7,6 +9,7 @@ public enum QueueJobStatus
   Queued,
   InProgress;
 
+  @JsonCreator
   public static QueueJobStatus fromString(String value) {
     var status = value.toLowerCase();
 
@@ -16,7 +19,7 @@ public enum QueueJobStatus
     if (status.contains("fail"))
       return QueueJobStatus.Errored;
 
-    if ("grabbed".equals(status))
+    if ("grabbed".equals(status) || "claimed".equals(status))
       return QueueJobStatus.InProgress;
 
     if ("waiting".equals(status))

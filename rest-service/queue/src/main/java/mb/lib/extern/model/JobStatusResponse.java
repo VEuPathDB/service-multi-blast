@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JobStatusResponse
 {
-  private String status;
+  private QueueJobStatus status;
 
   @JsonSetter("status")
-  public JobStatusResponse setStatus(String status) {
+  public JobStatusResponse setStatus(QueueJobStatus status) {
     this.status = status;
     return this;
   }
 
   @JsonIgnore
   public QueueJobStatus getStatus() {
-    return QueueJobStatus.fromString(this.status);
+    return this.status;
   }
 }
