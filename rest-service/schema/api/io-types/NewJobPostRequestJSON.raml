@@ -44,6 +44,17 @@ properties:
 
       A value of `0` indicates no size limit for generated reports.
     default: 0
+  maxSequences?:
+    description: |
+      Maximum number of sequences allowed.
+
+      This will alter the service's validation to only allow the specified
+      number of input sequences in the posted query.
+    type: integer
+    format: int8
+    minimum: 1
+    maximum: 100
+    default: 100
   config:
     description: |
       Blast tool configuration.
