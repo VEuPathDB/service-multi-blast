@@ -1,32 +1,33 @@
 package mb.lib.db.select;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
-import mb.lib.db.constants.SQL;
+
+import static mb.lib.db.constants.SQL.Select.MultiBlastUsers.UserIsLinked;
 
 public class SelectUserIsLinkedToJob
 {
-  private final DataSource ds;
-  private final long userID;
+  private final Connection con;
+  private final long       userID;
   private final byte[] jobHash;
 
-  public SelectUserIsLinkedToJob(DataSource ds, long userID, byte[] jobHash) {
-    this.ds      = ds;
+  public SelectUserIsLinkedToJob(Connection con, long userID, byte[] jobHash) {
+    this.con     = con;
     this.userID  = userID;
     this.jobHash = jobHash;
   }
 
   public boolean run() throws Exception {
-    return new BasicPreparedReadQuery<>(
-      SQL.Select.MultiBlastUsers.UserIsLinked,
-      ds::getConnection,
-      ResultSet::next,
-      ps -> {
-        ps.setLong(1, userID);
-        ps.setBytes(2, jobHash);
-      }
-    ).execute().getValue();
+    return new BasicPreparedReadQuery<>(UserIsLinked, con, ResultSet::next, this::prepare)
+      .execute()
+      .getValue();
+  }
+
+  private void prepare(PreparedStatement ps) throws Exception {
+    ps.setLong(1, userID);
+    ps.setBytes(2, jobHash);
   }
 }

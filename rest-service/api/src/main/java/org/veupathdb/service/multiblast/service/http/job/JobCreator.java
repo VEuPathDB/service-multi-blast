@@ -1,6 +1,7 @@
 package org.veupathdb.service.multiblast.service.http.job;
 
 import java.nio.file.Files;
+import java.sql.Connection;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 
@@ -17,10 +18,12 @@ import org.apache.logging.log4j.Logger;
 
 public class JobCreator
 {
-  private final Logger log;
+  private static final Logger log = LogManager.getLogger(JobCreator.class);
 
-  public JobCreator() {
-    this.log = LogManager.getLogger(getClass());
+  private final Connection con;
+
+  public JobCreator(Connection con) {
+    this.con = con;
   }
 
   public void handleLink(JobDetails d) throws Exception {
@@ -28,12 +31,12 @@ public class JobCreator
 
     var exp = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
 
-    JobDBManager.updateJobDeleteTimer(d.hash, exp);
+    JobDBManager.updateJobDeleteTimer(con, d.hash, exp);
 
-    if (!JobDBManager.userIsLinkedToJob(d.userID, d.hash))
-      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
+    if (!JobDBManager.userIsLinkedToJob(con, d.userID, d.hash))
+      JobDBManager.linkUserToJob(con, new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
     else
-      JobDBManager.updateLinkIsPrimary(d.userID, d.hash);
+      JobDBManager.updateLinkIsPrimary(con, d.userID, d.hash);
   }
 
   public int handleRerun(JobDetails d) throws Exception {
@@ -48,19 +51,19 @@ public class JobCreator
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
-    JobDBManager.updateJobDeleteTimer(d.hash, exp);
-    JobDBManager.updateJobQueueID(d.hash, queId);
-    JobDBManager.updateJobStatus(d.hash, DBJobStatus.Queued);
+    JobDBManager.updateJobDeleteTimer(con, d.hash, exp);
+    JobDBManager.updateJobQueueID(con, d.hash, queId);
+    JobDBManager.updateJobStatus(con, d.hash, DBJobStatus.Queued);
 
-    if (!JobDBManager.userIsLinkedToJob(d.userID, d.hash))
-      JobDBManager.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
+    if (!JobDBManager.userIsLinkedToJob(con, d.userID, d.hash))
+      JobDBManager.linkUserToJob(con, new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
 
     if (d.parentHash != null) {
-      var noLinks = JobDBManager.getJobLinks(d.parentHash).stream()
+      var noLinks = JobDBManager.getJobLinks(con, d.parentHash).stream()
         .map(JobLink::jobHash)
         .noneMatch(h -> Arrays.equals(d.hash, h));
       if (noLinks)
-        JobDBManager.createJobLink(d.hash, d.parentHash);
+        JobDBManager.createJobLink(con, d.hash, d.parentHash);
     }
 
     return queId;
@@ -80,17 +83,18 @@ public class JobCreator
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
     JobDBManager.registerJob(
+      con,
       new FullJobRowImpl(d.hash, queId, now, exp, d.job.toSerial(), qFile.toFile(), d.projectID, DBJobStatus.Queued),
       new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary),
       Arrays.asList(d.targets)
     );
 
     if (d.parentHash != null) {
-      var noLinks = JobDBManager.getJobLinks(d.parentHash).stream()
+      var noLinks = JobDBManager.getJobLinks(con, d.parentHash).stream()
         .map(JobLink::jobHash)
         .noneMatch(h -> Arrays.equals(d.hash, h));
       if (noLinks)
-        JobDBManager.createJobLink(d.hash, d.parentHash);
+        JobDBManager.createJobLink(con, d.hash, d.parentHash);
     }
   }
 }

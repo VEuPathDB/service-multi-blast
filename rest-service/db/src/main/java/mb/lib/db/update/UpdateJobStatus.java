@@ -1,5 +1,6 @@
 package mb.lib.db.update;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
@@ -9,20 +10,18 @@ import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class UpdateJobStatus
 {
-  private final byte[]      jobID;
+  private final Connection con;
+  private final byte[]     jobID;
   private final DBJobStatus status;
 
-  public UpdateJobStatus(byte[] jobID, DBJobStatus status) {
-    this.jobID   = jobID;
+  public UpdateJobStatus(Connection con, byte[] jobID, DBJobStatus status) {
+    this.con    = con;
+    this.jobID  = jobID;
     this.status = status;
   }
 
   public void run() throws Exception {
-    new BasicPreparedWriteQuery(
-      SQL.Update.MultiBlastJobs.Status,
-      DbManager.userDatabase().getDataSource()::getConnection,
-      this::prepare
-    ).execute();
+    new BasicPreparedWriteQuery(SQL.Update.MultiBlastJobs.Status, con, this::prepare).execute();
   }
 
   private void prepare(PreparedStatement ps) throws Exception {

@@ -6,15 +6,15 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import io.vulpine.lib.jcfi.CheckedSupplier;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import mb.lib.db.constants.Column;
-import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import oracle.jdbc.OracleType;
 import oracle.sql.RAW;
+
+import static mb.lib.db.constants.SQL.Select.MultiBlastJobs.ById;
 
 public class SelectJob
 {
@@ -24,13 +24,8 @@ public class SelectJob
     this.hash = hash;
   }
 
-  public Optional<FullJobRow> execute(CheckedSupplier<Connection> provider) throws Exception {
-    return new BasicPreparedReadQuery<>(
-      SQL.Select.MultiBlastJobs.ById,
-      provider::get,
-      this::parse,
-      this::prep
-    ).execute().getValue();
+  public Optional<FullJobRow> execute(Connection con) throws Exception {
+    return new BasicPreparedReadQuery<>(ById, con, this::parse, this::prep).execute().getValue();
   }
 
   void prep(PreparedStatement stmt) throws Exception {

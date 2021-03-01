@@ -3,6 +3,7 @@ package org.veupathdb.service.multiblast.service.http.job;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.util.Collections;
 
 import mb.lib.db.JobDBManager;
@@ -12,6 +13,7 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
+import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.internal.Job;
@@ -122,17 +124,19 @@ public class JobCreationService
     var rootDets = prepJob(js, job, queries.rootQuery, userID, dbPath, null, true);
     log.debug("Job Hash: {}", rootDets.id);
 
-    if (handleJob(rootDets) != JobStatus.Linked) {
-      var index = 1;
+    try(var con = DbManager.userDatabase().getDataSource().getConnection()) {
+      if (handleJob(con, rootDets) != JobStatus.Linked) {
+        var index = 1;
 
-      for (var query : queries.subQueries) {
-        log.debug("Handling subquery #{}", index++);
-        handleJob(prepJob(js, job, query, userID, dbPath, rootDets.hash, false));
+        for (var query : queries.subQueries) {
+          log.debug("Handling subquery #{}", index++);
+          handleJob(con, prepJob(js, job, query, userID, dbPath, rootDets.hash, false));
+        }
+      } else {
+        for (var query : queries.subQueries)
+          //noinspection ResultOfMethodCallIgnored
+          query.source.delete();
       }
-    } else {
-      for (var query : queries.subQueries)
-        //noinspection ResultOfMethodCallIgnored
-        query.source.delete();
     }
 
     return new IOJobPostResponseImpl().setJobId(rootDets.id);
@@ -143,10 +147,10 @@ public class JobCreationService
     Created,
     Rerun
   }
-  static JobStatus handleJob(JobDetails dets) throws Exception {
+  static JobStatus handleJob(Connection con, JobDetails dets) throws Exception {
     log.trace("#handleJob(dets={})", dets);
 
-    var collision = JobDBManager.getJob(dets.hash);
+    var collision = JobDBManager.getJob(con, dets.hash);
 
     // If job already exists link it or rerun and link it
     if (collision.isPresent()) {
@@ -154,17 +158,17 @@ public class JobCreationService
         log.debug("Job already exists and has cached data.  Linking user to job.");
         //noinspection ResultOfMethodCallIgnored
         dets.query.delete();
-        new JobCreator().handleLink(dets);
+        new JobCreator(con).handleLink(dets);
         return JobStatus.Linked;
       } else {
         log.debug("Job already exists but does not have cached data.  Rerunning job.");
-        new JobCreator().handleRerun(dets);
+        new JobCreator(con).handleRerun(dets);
         return JobStatus.Rerun;
       }
     }
 
     log.debug("Job did not already exist. Creating new job.");
-    new JobCreator().handleInitialRun(dets);
+    new JobCreator(con).handleInitialRun(dets);
     return JobStatus.Created;
   }
 
