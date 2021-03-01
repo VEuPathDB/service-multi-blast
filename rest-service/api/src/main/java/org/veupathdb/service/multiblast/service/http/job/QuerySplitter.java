@@ -21,7 +21,7 @@ class QuerySplitter
 {
   private static final String
     errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.",
-    errLongSequence    = "Sequence %d (%s) is too long. Sequence size for %s sequences is capped at %dKiB",
+    errLongSequence    = "Sequence %d (%s) is too long. Sequence size for %s sequences is capped at %dbps",
     errQueryCount      = "Too many sequences.  Multi-Blast queries can be at most %d sequences",
     errQuerySize       = "Input query too long.  Multi-Blast query size is capped at %dMiB";
 
@@ -70,7 +70,7 @@ class QuerySplitter
               queries,
               identifier,
               validator.kind(),
-              validator.maxSeqLength() / 1024)
+              validator.maxSeqLength())
             );
 
           chars = 0;
@@ -114,7 +114,7 @@ class QuerySplitter
         queries,
         identifier,
         validator.kind(),
-        validator.maxSeqLength() / 1024)
+        validator.maxSeqLength())
       );
 
     // Validate total query count
