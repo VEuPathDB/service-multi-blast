@@ -46,4 +46,10 @@ public interface IOJsonJobRequest
 
   @JsonProperty(JsonKeys.MaxResultSize)
   void setMaxResultSize(Long maxSize);
+
+  @JsonProperty(JsonKeys.MaxSequences)
+  Byte getMaxSequences();
+
+  @JsonProperty(JsonKeys.MaxSequences)
+  void setMaxSequences(Byte b);
 }

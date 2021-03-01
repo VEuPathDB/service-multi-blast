@@ -13,6 +13,7 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   private String           description;
   private Integer          maxResults;
   private Long             maxResultSize;
+  private Byte             maxSequences;
 
   @Override
   public String getSite() {
@@ -72,5 +73,15 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   @Override
   public void setMaxResultSize(Long maxResultSize) {
     this.maxResultSize = maxResultSize;
+  }
+
+  @Override
+  public Byte getMaxSequences() {
+    return maxSequences;
+  }
+
+  @Override
+  public void setMaxSequences(Byte b) {
+    this.maxSequences = b;
   }
 }
