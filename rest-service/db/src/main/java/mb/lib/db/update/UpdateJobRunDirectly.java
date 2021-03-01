@@ -1,33 +1,33 @@
 package mb.lib.db.update;
 
-import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery;
-import mb.lib.db.constants.SQL;
+
+import static mb.lib.db.constants.SQL.Update.MultiBlastUsers.RunDirectly;
 
 public class UpdateJobRunDirectly
 {
-  private final DataSource ds;
+  private final Connection con;
   private final boolean    runDirectly;
   private final long       userID;
   private final byte[]     jobHash;
 
-  public UpdateJobRunDirectly(DataSource ds, boolean runDirectly, long userID, byte[] jobHash) {
-    this.ds          = ds;
+  public UpdateJobRunDirectly(Connection con, boolean runDirectly, long userID, byte[] jobHash) {
+    this.con         = con;
     this.runDirectly = runDirectly;
     this.userID      = userID;
     this.jobHash     = jobHash;
   }
 
   public void run() throws Exception {
-    new BasicPreparedVoidQuery(
-      SQL.Update.MultiBlastUsers.RunDirectly,
-      ds::getConnection,
-      ps -> {
-        ps.setBoolean(1, runDirectly);
-        ps.setLong(2, userID);
-        ps.setBytes(3, jobHash);
-      }
-    ).execute();
+    new BasicPreparedVoidQuery(RunDirectly, con, this::prepare).execute();
+  }
+
+  private void prepare(PreparedStatement ps) throws Exception {
+    ps.setBoolean(1, runDirectly);
+    ps.setLong(2, userID);
+    ps.setBytes(3, jobHash);
   }
 }

@@ -1,5 +1,6 @@
 package mb.lib.db;
 
+import java.sql.Connection;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -17,62 +18,85 @@ import mb.lib.db.update.UpdateJobDeleteDateQuery;
 import mb.lib.db.update.UpdateJobQueueIDQuery;
 import mb.lib.db.update.UpdateJobRunDirectly;
 import mb.lib.db.update.UpdateJobStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class JobDBManager
 {
+  private static final Logger log = LogManager.getLogger(JobDBManager.class);
+
   public static Map<String, List<JobLink>> getAllParentJobs(long userID) throws Exception {
+    log.trace("::getAllParentJobs(userID={})", userID);
+
     return new SelectLinksByUser(DbManager.userDatabase().getDataSource(), userID).run();
   }
 
   /**
    * Attempts to retrieve a job by it's hash.
    */
-  public static Optional<FullJobRow> getJob(byte[] jobID) throws Exception {
-    return new SelectJob(jobID).execute(DbManager.userDatabase().getDataSource()::getConnection);
+  public static Optional<FullJobRow> getJob(Connection con, byte[] jobID) throws Exception {
+    log.trace("::getJob(con={}, jobID={})", con, jobID);
+
+    return new SelectJob(jobID).execute(con);
   }
 
-  public static Set<JobLink> getJobLinks(byte[] parentHash) throws Exception {
-    return new SelectLinksByParent(DbManager.userDatabase().getDataSource(), parentHash).run();
+  public static Set<JobLink> getJobLinks(Connection con, byte[] parentHash) throws Exception {
+    log.trace("::getJobLinks(con={}, parentHash={})", con, parentHash);
+
+    return new SelectLinksByParent(con, parentHash).run();
   }
 
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  public static boolean userIsLinkedToJob(long userID, byte[] jobHash) throws Exception {
-    return new SelectUserIsLinkedToJob(DbManager.userDatabase().getDataSource(), userID, jobHash)
-      .run();
+  public static boolean userIsLinkedToJob(Connection con, long userID, byte[] jobHash)
+  throws Exception {
+    log.trace("::userIsLinkedToJob(con={}, userID={}, jobHash={})", con, userID, jobHash);
+
+    return new SelectUserIsLinkedToJob(con, userID, jobHash).run();
   }
 
-  public static void createJobLink(byte[] jobHash, byte[] parentHash) throws Exception {
-    new InsertJobLink(DbManager.userDatabase().getDataSource(), jobHash, parentHash).run();
+  public static void createJobLink(Connection con, byte[] jobHash, byte[] parentHash)
+  throws Exception {
+    log.trace("::createJobLink(con={}, jobHash={}, parentHash={})", con, jobHash, parentHash);
+
+    new InsertJobLink(con, jobHash, parentHash).run();
   }
 
-  public static void updateJobDeleteTimer(byte[] jobID, OffsetDateTime end) throws Exception {
-    new UpdateJobDeleteDateQuery(jobID, end).run();
+  public static void updateJobDeleteTimer(Connection con, byte[] jobID, OffsetDateTime end)
+  throws Exception {
+    log.trace("::updateJobDeleteTimer(con={}, jobID={}, end={})", con, jobID, end);
+
+    new UpdateJobDeleteDateQuery(con, jobID, end).run();
   }
 
-  public static void updateJobQueueID(byte[] jobID, int queueID) throws Exception {
-    new UpdateJobQueueIDQuery(jobID, queueID).run();
+  public static void updateJobQueueID(Connection con, byte[] jobID, int queueID) throws Exception {
+    log.trace("::updateJobQueueID(con={}, jobID={}, queueID={})", con, jobID, queueID);
+
+    new UpdateJobQueueIDQuery(con, jobID, queueID).run();
   }
 
-  public static void linkUserToJob(UserRow user) throws Exception {
-    try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
-      new InsertUserQuery(con, user).run();
-    }
+  public static void linkUserToJob(Connection con, UserRow user) throws Exception {
+    log.trace("::linkUserToJob(con={}, user={})", con, user);
+
+    new InsertUserQuery(con, user).run();
   }
 
   public static void registerJob(
+    Connection      con,
     FullJobRow      job,
     UserRow         user,
     List<JobTarget> targets
   ) throws Exception {
-    try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
-      new InsertJobQuery(con, job).run();
-      new InsertUserQuery(con, user).run();
-      new InsertJobTargets(con, targets).run();
-    }
+    log.trace("::registerJob(con={}, job={}, user={}, targets={})", con, job, user, targets);
+
+    new InsertJobQuery(con, job).run();
+    new InsertUserQuery(con, user).run();
+    new InsertJobTargets(con, targets).run();
   }
 
   public static Collection<FullJobRow> getStaleJobs(OffsetDateTime asOf) throws Exception {
+    log.trace("::getStaleJobs(asOf={})", asOf);
+
     return new SelectStaleJobsQuery(asOf).run();
   }
 
@@ -82,6 +106,8 @@ public class JobDBManager
    * @param jobID ID of the job to delete.
    */
   public static void deleteJob(byte[] jobID) throws Exception {
+    log.trace("::deleteJob(jobID={})", jobID);
+
     try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
       new DeleteUsersByJobQuery(jobID, con).run();
       new DeleteJobQuery(jobID, con).run();
@@ -100,6 +126,8 @@ public class JobDBManager
    * intersection could be found, the option will be empty.
    */
   public static Optional<FullUserJobRow> getUserJob(byte[] jobID, long userID) throws Exception {
+    log.trace("::getUserJob(jobID={}, userID={})", jobID, userID);
+
     return new SelectFullUserJob(DbManager.userDatabase().getDataSource(), jobID, userID).run();
   }
 
@@ -112,34 +140,52 @@ public class JobDBManager
    * @return A collection of jobs associated with the given user ID.
    */
   public static Collection<ShortUserJobRow> getUserJobs(long userID) throws Exception {
+    log.trace("::getUserJobs(userID={})", userID);
+
     return new SelectShortUserJobsByUser(DbManager.userDatabase().getDataSource(), userID).run();
   }
 
   public static List<JobLink> getParentJobs(byte[] childHash, long userID) throws Exception {
+    log.trace("::getParentJobs(childHash={}, userID={})", childHash, userID);
+
     return new SelectParentJobs(DbManager.userDatabase().getDataSource(), childHash, userID).run();
   }
 
   public static void deleteStaleGuests() throws Exception {
+    log.trace("::deleteStaleGuests()");
+
     new DeleteStaleGuestsQuery(DbManager.userDatabase().getDataSource()).run();
   }
 
   public static void deleteOrphanJobs() throws Exception {
+    log.trace("::deleteOrphanJobs()");
+
     new DeleteOrphanJobsQuery(DbManager.userDatabase().getDataSource()).run();
   }
 
-  public static void updateLinkIsPrimary(long userID, byte[] jobHash) throws Exception {
-    new UpdateJobRunDirectly(DbManager.userDatabase().getDataSource(), true, userID, jobHash).run();
+  public static void updateLinkIsPrimary(Connection con, long userID, byte[] jobHash)
+  throws Exception {
+    log.trace("::updateLinkIsPrimary(con={}, userID={}, jobHash={})", con, userID, jobHash);
+
+    new UpdateJobRunDirectly(con, true, userID, jobHash).run();
   }
 
   public static List<JobTarget> getJobTargetsFor(byte[] jobID) throws Exception {
+    log.trace("::getJobTargetsFor(jobID={})", jobID);
+
     return new SelectTargetsByJob(DbManager.userDatabase().getDataSource(), jobID).run();
   }
 
   public static Map<String, List<JobTarget>> getJobTargetsFor(long userID) throws Exception {
+    log.trace("::getJobTargetsFor(userID={})", userID);
+
     return new SelectTargetsByUser(DbManager.userDatabase().getDataSource(), userID).run();
   }
 
-  public static void updateJobStatus(byte[] jobID, DBJobStatus status) throws Exception {
-    new UpdateJobStatus(jobID, status).run();
+  public static void updateJobStatus(Connection con, byte[] jobID, DBJobStatus status)
+  throws Exception {
+    log.trace("::updateJobStatus(con={}, jobID={}, status={})", con, jobID, status);
+
+    new UpdateJobStatus(con, jobID, status).run();
   }
 }

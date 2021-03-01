@@ -20,6 +20,7 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.model.User;
+import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
@@ -160,9 +161,11 @@ public class JobService
     var rawID = Format.hexToBytes(jobID);
 
     try {
-      var optJob = JobDBManager.getJob(rawID);
-      if (optJob.isEmpty())
-        throw new NotFoundException();
+      try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
+        var optJob = JobDBManager.getJob(con, rawID);
+        if (optJob.isEmpty())
+          throw new NotFoundException();
+      }
 
       if (!JobDataManager.jobDataExists(jobID))
         throw new IllegalStateException("Job exists but has no workspace.");
@@ -313,7 +316,9 @@ public class JobService
     // If the status _has_ changed, then insert the new status into the database
     if (status != inStatus) {
       log.debug("Updating db status from {} to {}", status, inStatus);
-      JobDBManager.updateJobStatus(job.jobHash(), Util.convert(status));
+      try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
+        JobDBManager.updateJobStatus(con, job.jobHash(), Util.convert(status));
+      }
     }
 
     return status;

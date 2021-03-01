@@ -1,5 +1,6 @@
 package mb.lib.db.update;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.OffsetDateTime;
@@ -10,20 +11,18 @@ import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class UpdateJobDeleteDateQuery
 {
-  private final byte[]     jobID;
+  private final Connection     con;
+  private final byte[]         jobID;
   private final OffsetDateTime deleteOn;
 
-  public UpdateJobDeleteDateQuery(byte[] jobID, OffsetDateTime deleteOn) {
-    this.jobID = jobID;
+  public UpdateJobDeleteDateQuery(Connection con, byte[] jobID, OffsetDateTime deleteOn) {
+    this.con      = con;
+    this.jobID    = jobID;
     this.deleteOn = deleteOn;
   }
 
   public void run() throws Exception {
-    new BasicPreparedWriteQuery(
-      SQL.Update.MultiBlastJobs.DeleteDate,
-      DbManager.userDatabase().getDataSource()::getConnection,
-      this::prepare
-    ).execute();
+    new BasicPreparedWriteQuery(SQL.Update.MultiBlastJobs.DeleteDate, con, this::prepare).execute();
   }
 
   private void prepare(PreparedStatement ps) throws Exception {

@@ -7,6 +7,7 @@ import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
 import mb.lib.jobData.JobDataManager;
+import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.model.blast.BlastReportType;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
@@ -28,7 +29,10 @@ public class JobReportService
 
     dets.job.getJobConfig().toCli(dets.cli);
 
-    var queueID = new JobCreator().handleRerun(dets);
+    int queueID = 0;
+    try(var con = DbManager.userDatabase().getDataSource().getConnection()) {
+      queueID = new JobCreator(con).handleRerun(dets);
+    }
 
     // Wait for job to complete
     QueueJobStatus stat;
