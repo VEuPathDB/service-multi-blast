@@ -30,10 +30,6 @@ public interface SequenceValidator
     return null;
   }
 
-  default boolean isValidQueryCount(int count) {
-    return count <= Config.getInstance().getMaxQueries();
-  }
-
   default SequenceValidationError validate(char[] chars) {
     for (var i = 0; i < chars.length; i++) {
       if (!isValid(chars[i])) {

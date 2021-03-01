@@ -48,6 +48,7 @@ public final class JsonKeys
     MaxIntronLength                      = "maxIntronLength",
     MaxResults                           = "maxResults",
     MaxResultSize                        = "maxResultSize",
+    MaxSequences                         = "maxSequences",
     MaxTargetSequences                   = "maxTargetSeqs",
     MinRawGappedScore                    = "minRawGappedScore",
     MultiSequenceAlignmentMasterIndex    = "msaMasterIndex",

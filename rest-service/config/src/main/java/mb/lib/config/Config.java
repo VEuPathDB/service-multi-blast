@@ -125,7 +125,7 @@ public class  Config extends Options
     names = "--max-queries-per-request",
     arity = "1",
     defaultValue = "${env:MAX_QUERIES_PER_REQUEST}",
-    description = "Max number of queries a user can submit in a single request."
+    description = "Max number of sequences a user can submit in a single request."
   )
   @SuppressWarnings("FieldMayBeFinal")
   private int maxQueries = 100;
@@ -222,7 +222,7 @@ public class  Config extends Options
     return buildNum;
   }
 
-  public int getMaxQueries() {
+  public int getMaxSeqsPerQuery() {
     return maxQueries;
   }
 

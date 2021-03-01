@@ -22,25 +22,29 @@ class QuerySplitter
   private static final String
     errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.",
     errLongSequence    = "Sequence %d (%s) is too long. Sequence size for %s sequences is capped at %dbps",
-    errQueryCount      = "Too many sequences.  Multi-Blast queries can be at most %d sequences",
-    errQuerySize       = "Input query too long.  Multi-Blast query size is capped at %dMiB";
+    errQueryCount      = "Too many sequences.  Queries can be at most %d sequences.",
+    errQuerySize       = "Input query too long.  Query size is capped at %dMiB";
+
+  private static final Config conf = Config.getInstance();
 
   private final BufferedWriter[]  writing;
   private final MessageDigest[]   hashing;
   private final File[]            active;
   private final QuerySplitResult  output;
   private final SequenceValidator validator;
+  private final int               maxSequences;
 
   private File rootFile;
   private int  queries;
   private int  lines;
 
-  QuerySplitter(SequenceValidator val) {
+  QuerySplitter(SequenceValidator val, Byte maxSeqs) {
     writing   = new BufferedWriter[2];
     hashing   = new MessageDigest[2];
     active    = new File[2];
     output    = new QuerySplitResult();
     validator = val;
+    maxSequences = maxSeqs == null ? conf.getMaxSeqsPerQuery() : maxSeqs;
   }
 
   QuerySplitResult splitQueries(InputStream stream) throws Exception {
@@ -52,7 +56,7 @@ class QuerySplitter
 
     // Header/identifier of the most recently started query.
     var identifier = "";
-    var chars = 0;
+    var chars      = 0;
     var totalChars = 0;
 
     try (var read = new Scanner(stream)) {
@@ -70,7 +74,8 @@ class QuerySplitter
               queries,
               identifier,
               validator.kind(),
-              validator.maxSeqLength())
+              validator.maxSeqLength()
+              )
             );
 
           chars = 0;
@@ -114,18 +119,19 @@ class QuerySplitter
         queries,
         identifier,
         validator.kind(),
-        validator.maxSeqLength())
+        validator.maxSeqLength()
+        )
       );
 
     // Validate total query count
-    if (!validator.isValidQueryCount(queries))
-      output.errors.add(String.format(errQueryCount, Config.getInstance().getMaxQueries()));
+    if (queries > maxSequences)
+      output.errors.add(String.format(errQueryCount, maxSequences));
 
     // Validate overall query file size.
-    if (totalChars > Config.getInstance().getMaxInputQuerySize())
+    if (totalChars > conf.getMaxInputQuerySize())
       output.errors.add(String.format(
         errQuerySize,
-        Config.getInstance().getMaxInputQuerySize()/1024/1024
+        conf.getMaxInputQuerySize() / 1024 / 1024
       ));
 
     return output;
