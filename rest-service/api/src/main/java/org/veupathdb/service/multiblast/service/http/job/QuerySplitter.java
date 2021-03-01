@@ -13,12 +13,17 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import mb.lib.config.Config;
 import org.veupathdb.service.multiblast.service.valid.SequenceValidator;
 import org.veupathdb.service.multiblast.util.Format;
 
 class QuerySplitter
 {
-  private static final String errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.";
+  private static final String
+    errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.",
+    errLongSequence    = "Sequence %d (%s) is too long. Sequence size for %s sequences is capped at %dKiB",
+    errQueryCount      = "Too many sequences.  Multi-Blast queries can be at most %d sequences",
+    errQuerySize       = "Input query too long.  Multi-Blast query size is capped at %dMiB";
 
   private final BufferedWriter[]  writing;
   private final MessageDigest[]   hashing;
@@ -47,13 +52,28 @@ class QuerySplitter
 
     // Header/identifier of the most recently started query.
     var identifier = "";
+    var chars = 0;
+    var totalChars = 0;
 
     try (var read = new Scanner(stream)) {
       while (read.hasNext()) {
         var line = read.nextLine();
         lines++;
 
+        totalChars += line.length();
+
         if (line.startsWith(">")) {
+          // Validate last query
+          if (!validator.isValidLength(chars))
+            output.errors.add(String.format(
+              errLongSequence,
+              queries,
+              identifier,
+              validator.kind(),
+              validator.maxSeqLength() / 1024)
+            );
+
+          chars = 0;
           queries++;
           identifier = line.substring(1).trim().split(" ", 2)[0];
 
@@ -63,6 +83,7 @@ class QuerySplitter
             nextFile();
           }
         } else {
+          chars += line.length();
           var val = validator.validate(line);
           if (val != null) {
             output.errors.add(String.format(
@@ -85,6 +106,27 @@ class QuerySplitter
 
       output.rootQuery = new QuerySplitRow(rootFile, hashing[0].digest());
     }
+
+    // Validate last query length
+    if (!validator.isValidLength(chars))
+      output.errors.add(String.format(
+        errLongSequence,
+        queries,
+        identifier,
+        validator.kind(),
+        validator.maxSeqLength() / 1024)
+      );
+
+    // Validate total query count
+    if (!validator.isValidQueryCount(queries))
+      output.errors.add(String.format(errQueryCount, Config.getInstance().getMaxQueries()));
+
+    // Validate overall query file size.
+    if (totalChars > Config.getInstance().getMaxInputQuerySize())
+      output.errors.add(String.format(
+        errQuerySize,
+        Config.getInstance().getMaxInputQuerySize()/1024/1024
+      ));
 
     return output;
   }
@@ -168,7 +210,8 @@ class QuerySplitResult
   List<QuerySplitRow> subQueries = new ArrayList<>(3);
   List<String>        errors     = new ArrayList<>(3);
 
-  void release() throws Exception {
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  void release() {
     rootQuery.source.delete();
     for (var row : subQueries)
       row.source.delete();
