@@ -1,10 +1,14 @@
 package org.veupathdb.service.multiblast.service.valid;
 
+import mb.lib.config.Config;
+
 // Legal Characters
 //   ABCDEFGHIKLMNPQRSTUVWXYZ*-
 //   abcdefghiklmnpqrstuvwxyz*-
 public class ProteinSequenceValidator implements SequenceValidator
 {
+  private static final Config conf = Config.getInstance();
+
   @Override
   public String kind() {
     return "protein";
@@ -36,5 +40,15 @@ public class ProteinSequenceValidator implements SequenceValidator
       || ('a' <= c && c <= 'i')
       || ('k' <= c && c <= 'n')
       || ('p' <= c && c <= 'z');
+  }
+
+  @Override
+  public boolean isValidLength(int len) {
+    return len <= conf.getMaxAASeqSize();
+  }
+
+  @Override
+  public int maxSeqLength() {
+    return conf.getMaxAASeqSize();
   }
 }

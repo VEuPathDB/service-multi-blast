@@ -13,29 +13,38 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import mb.lib.config.Config;
 import org.veupathdb.service.multiblast.service.valid.SequenceValidator;
 import org.veupathdb.service.multiblast.util.Format;
 
 class QuerySplitter
 {
-  private static final String errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.";
+  private static final String
+    errInvalidSequence = "Invalid character \"%s\" in %s sequence %d (%s) on line %d, character %d.",
+    errLongSequence    = "Sequence %d (%s) is too long. Sequence size for %s sequences is capped at %dbps",
+    errQueryCount      = "Too many sequences.  Queries can be at most %d sequences.",
+    errQuerySize       = "Input query too long.  Query size is capped at %dMiB";
+
+  private static final Config conf = Config.getInstance();
 
   private final BufferedWriter[]  writing;
   private final MessageDigest[]   hashing;
   private final File[]            active;
   private final QuerySplitResult  output;
   private final SequenceValidator validator;
+  private final int               maxSequences;
 
   private File rootFile;
   private int  queries;
   private int  lines;
 
-  QuerySplitter(SequenceValidator val) {
+  QuerySplitter(SequenceValidator val, Byte maxSeqs) {
     writing   = new BufferedWriter[2];
     hashing   = new MessageDigest[2];
     active    = new File[2];
     output    = new QuerySplitResult();
     validator = val;
+    maxSequences = maxSeqs == null ? conf.getMaxSeqsPerQuery() : maxSeqs;
   }
 
   QuerySplitResult splitQueries(InputStream stream) throws Exception {
@@ -47,13 +56,29 @@ class QuerySplitter
 
     // Header/identifier of the most recently started query.
     var identifier = "";
+    var chars      = 0;
+    var totalChars = 0;
 
     try (var read = new Scanner(stream)) {
       while (read.hasNext()) {
         var line = read.nextLine();
         lines++;
 
+        totalChars += line.length();
+
         if (line.startsWith(">")) {
+          // Validate last query
+          if (!validator.isValidLength(chars))
+            output.errors.add(String.format(
+              errLongSequence,
+              queries,
+              identifier,
+              validator.kind(),
+              validator.maxSeqLength()
+              )
+            );
+
+          chars = 0;
           queries++;
           identifier = line.substring(1).trim().split(" ", 2)[0];
 
@@ -63,6 +88,7 @@ class QuerySplitter
             nextFile();
           }
         } else {
+          chars += line.length();
           var val = validator.validate(line);
           if (val != null) {
             output.errors.add(String.format(
@@ -85,6 +111,28 @@ class QuerySplitter
 
       output.rootQuery = new QuerySplitRow(rootFile, hashing[0].digest());
     }
+
+    // Validate last query length
+    if (!validator.isValidLength(chars))
+      output.errors.add(String.format(
+        errLongSequence,
+        queries,
+        identifier,
+        validator.kind(),
+        validator.maxSeqLength()
+        )
+      );
+
+    // Validate total query count
+    if (queries > maxSequences)
+      output.errors.add(String.format(errQueryCount, maxSequences));
+
+    // Validate overall query file size.
+    if (totalChars > conf.getMaxInputQuerySize())
+      output.errors.add(String.format(
+        errQuerySize,
+        conf.getMaxInputQuerySize() / 1024 / 1024
+      ));
 
     return output;
   }
@@ -168,7 +216,8 @@ class QuerySplitResult
   List<QuerySplitRow> subQueries = new ArrayList<>(3);
   List<String>        errors     = new ArrayList<>(3);
 
-  void release() throws Exception {
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  void release() {
     rootQuery.source.delete();
     for (var row : subQueries)
       row.source.delete();

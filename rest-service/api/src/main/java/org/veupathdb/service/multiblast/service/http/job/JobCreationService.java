@@ -19,10 +19,7 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 import org.veupathdb.service.multiblast.service.cli.CliBuilder;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.Util;
-import org.veupathdb.service.multiblast.service.valid.BlastValidator;
-import org.veupathdb.service.multiblast.service.valid.NucleotideSequenceValidator;
-import org.veupathdb.service.multiblast.service.valid.ProteinSequenceValidator;
-import org.veupathdb.service.multiblast.service.valid.SequenceValidator;
+import org.veupathdb.service.multiblast.service.valid.*;
 import org.veupathdb.service.multiblast.util.Format;
 
 public class JobCreationService
@@ -44,8 +41,14 @@ public class JobCreationService
     JobUtil.verifyConfig(req.getConfig());
     JobUtil.verifyQuery(req.getConfig().getQuery());
 
+    {
+      var errs = JobPropsValidator.validate(req);
+      if (!errs.isEmpty())
+        throw new UnprocessableEntityException(errs);
+    }
+
     try {
-      var queryHandle = new QuerySplitter(newSequenceValidator(req.getConfig()))
+      var queryHandle = new QuerySplitter(newSequenceValidator(req.getConfig()), req.getMaxSequences())
         .splitQueries(
           new ByteArrayInputStream(req.getConfig().getQuery().getBytes(StandardCharsets.UTF_8))
         );
@@ -66,8 +69,15 @@ public class JobCreationService
     JobUtil.verifyProps(props);
     JobUtil.verifyConfig(props.getConfig());
 
+    {
+      var errs = JobPropsValidator.validate(props);
+      if (!errs.isEmpty())
+        throw new UnprocessableEntityException(errs);
+    }
+
     try {
-      var result = new QuerySplitter(newSequenceValidator(props.getConfig())).splitQueries(query);
+      var result = new QuerySplitter(newSequenceValidator(props.getConfig()), props.getMaxSequences())
+        .splitQueries(query);
 
       if (!result.errors.isEmpty()) {
         result.release();
