@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.service.valid;
 
+import mb.lib.config.Config;
+
 public interface SequenceValidator
 {
   String kind();
@@ -10,6 +12,14 @@ public interface SequenceValidator
 
   boolean isValid(byte c);
 
+  default boolean isValidLength(CharSequence seq) {
+    return isValidLength(seq.length());
+  }
+
+  boolean isValidLength(int seqLen);
+
+  int maxSeqLength();
+
   default SequenceValidationError validate(CharSequence seq) {
     for (var i = 0; i < seq.length(); i++) {
       if (!isValid(seq.charAt(i))) {
@@ -18,6 +28,10 @@ public interface SequenceValidator
     }
 
     return null;
+  }
+
+  default boolean isValidQueryCount(int count) {
+    return count <= Config.getInstance().getMaxQueries();
   }
 
   default SequenceValidationError validate(char[] chars) {

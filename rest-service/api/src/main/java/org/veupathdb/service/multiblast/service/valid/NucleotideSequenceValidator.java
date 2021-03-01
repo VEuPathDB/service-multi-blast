@@ -1,10 +1,14 @@
 package org.veupathdb.service.multiblast.service.valid;
 
+import mb.lib.config.Config;
+
 // Legal characters:
 //   ABCDGHKMNRSTUVWY-
 //   abcdghkmnrstuvwy-
 public class NucleotideSequenceValidator implements SequenceValidator
 {
+  private static final Config conf = Config.getInstance();
+
   @Override
   public String kind() {
     return "nucleotide";
@@ -41,5 +45,15 @@ public class NucleotideSequenceValidator implements SequenceValidator
       || ('m' <= b && b <= 'n')
       || ('r' <= b && b <= 'w')
       || b == 'y';
+  }
+
+  @Override
+  public boolean isValidLength(int len) {
+    return len <= conf.getMaxNASeqSize();
+  }
+
+  @Override
+  public int maxSeqLength() {
+    return conf.getMaxNASeqSize();
   }
 }

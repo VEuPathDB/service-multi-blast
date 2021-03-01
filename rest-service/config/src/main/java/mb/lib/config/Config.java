@@ -115,26 +115,62 @@ public class  Config extends Options
   @Option(
     names = "--job-timeout",
     arity = "1",
-    description = "Number of days to hold onto a completed job's results.\n\nDefaults to 30."
+    defaultValue = "${env:JOB_TIMEOUT}",
+    description = "Number of days to hold onto a completed job's results."
   )
-  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
+  @SuppressWarnings("FieldMayBeFinal")
   private int jobTimeout = 30;
 
   @Option(
     names = "--max-queries-per-request",
     arity = "1",
-    description = "Max number of queries a user can submit in a single request.\n\nDefaults to 100."
+    defaultValue = "${env:MAX_QUERIES_PER_REQUEST}",
+    description = "Max number of queries a user can submit in a single request."
   )
-  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
+  @SuppressWarnings("FieldMayBeFinal")
   private int maxQueries = 100;
 
   @Option(
     names = "--max-results-per-query",
     arity = "1",
+    defaultValue = "${env:MAX_RESULTS_PER_QUERY}",
     description = "Max number of results a user can request.  This value is calculated as <num_queries> * <max_target_seqs>.\n\nDefaults to 10,000."
   )
-  @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
+  @SuppressWarnings("FieldMayBeFinal")
   private int maxResults = 10_000;
+
+  @Option(
+    names = "--max-input-query-size",
+    arity = "1",
+    defaultValue = "${env:MAX_INPUT_QUERY_SIZE}",
+    description = "Max total size for a set of input sequences in bytes."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private int maxInputQuerySize = 3_145_728;
+
+  @Option(
+    names = "--max-na-seq-size",
+    arity = "1",
+    defaultValue = "${env:MAX_NA_SEQ_SIZE}",
+    description = "Max length for an individual nucleotide sequence."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private int maxNASeqSize = 1_048_576;
+
+  @Option(
+    names = "--max-aa-seq-size",
+    arity = "1",
+    defaultValue = "${env:MAX_AA_SEQ_SIZE}",
+    description = "Max length for an individual protein sequence."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private int maxAASeqSize = 102_400;
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
+  // ║    Class Methods                                                     ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   private Config() {
   }
@@ -192,5 +228,17 @@ public class  Config extends Options
 
   public int getMaxResults() {
     return maxResults;
+  }
+
+  public int getMaxInputQuerySize() {
+    return maxInputQuerySize;
+  }
+
+  public int getMaxNASeqSize() {
+    return maxNASeqSize;
+  }
+
+  public int getMaxAASeqSize() {
+    return maxAASeqSize;
   }
 }
