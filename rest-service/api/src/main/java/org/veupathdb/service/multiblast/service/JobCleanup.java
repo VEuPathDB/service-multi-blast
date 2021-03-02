@@ -3,8 +3,6 @@ package org.veupathdb.service.multiblast.service;
 import java.nio.file.Files;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.util.concurrent.TimeUnit;
 
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
@@ -13,8 +11,6 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.util.Format;
-
-import static java.time.temporal.ChronoUnit.HOURS;
 
 public class JobCleanup implements Runnable
 {
@@ -34,19 +30,19 @@ public class JobCleanup implements Runnable
     log.trace("#runChecked()");
     log.info("Job Pruning: start");
 
-    try {
+    try (var db = new JobDBManager()) {
       var now = OffsetDateTime.now();
 
       deleteOldFiles(now);
 
-      var jobs = JobDBManager.getStaleJobs(now);
+      var jobs = db.getStaleJobs(now);
 
       log.info("Job Pruning: found " + jobs.size() + " stale jobs");
 
       for (var job : jobs) {
         var idString = Format.toHexString(job.jobHash());
         log.debug("deleting job {} db entries", idString);
-        JobDBManager.deleteJob(job.jobHash());
+        db.deleteJob(job.jobHash());
 
         log.debug("deleting job {} workspace", idString);
         JobDataManager.deleteJobData(idString);
@@ -56,10 +52,10 @@ public class JobCleanup implements Runnable
       }
 
       log.info("Job Pruning: deleting stale guest jobs");
-      JobDBManager.deleteStaleGuests();
+      db.deleteStaleGuests();
 
       log.debug("Job Pruning: deleting orphan jobs");
-      JobDBManager.deleteOrphanJobs();
+      db.deleteOrphanJobs();
 
       log.debug("Job Pruning: clearing old failed jobs from job queue.");
       deleteOldFailedJobs(now);
