@@ -9,4 +9,9 @@ public interface Table
     String JobToJobs    = "multiblast_job_to_jobs";
     String JobToTargets = "multiblast_job_to_targets";
   }
+
+  interface UserLogins5
+  {
+    String Users = "users";
+  }
 }

@@ -36,4 +36,11 @@ public interface Column
     String Organism   = "organism";
     String TargetFile = "target_file";
   }
+
+  interface Users
+  {
+    String UserID      = "user_id";
+    String IsGuest     = "is_guest";
+    String FirstAccess = "first_access";
+  }
 }

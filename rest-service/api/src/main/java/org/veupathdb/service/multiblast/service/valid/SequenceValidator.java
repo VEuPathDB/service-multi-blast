@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.service.valid;
 
-import mb.lib.config.Config;
-
 public interface SequenceValidator
 {
   String kind();

@@ -6,7 +6,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.veupathdb.service.multiblast.generated.model.*;
+import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
+import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
 
 @Path("/jobs")
 public interface Jobs
