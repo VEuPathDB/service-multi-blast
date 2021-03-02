@@ -8,8 +8,8 @@ import java.util.Optional;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import mb.lib.db.constants.Column;
-import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.DBJobStatus;
+import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import oracle.jdbc.OracleType;
 import oracle.sql.RAW;

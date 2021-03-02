@@ -1,14 +1,13 @@
 package org.veupathdb.service.multiblast.service.http.job;
 
 import java.nio.file.Files;
-import java.sql.Connection;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
-import mb.lib.db.model.JobLink;
 import mb.lib.db.model.DBJobStatus;
+import mb.lib.db.model.JobLink;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
 import mb.lib.extern.JobQueueManager;
@@ -20,10 +19,10 @@ public class JobCreator
 {
   private static final Logger log = LogManager.getLogger(JobCreator.class);
 
-  private final Connection con;
+  private final JobDBManager db;
 
-  public JobCreator(Connection con) {
-    this.con = con;
+  public JobCreator(JobDBManager db) {
+    this.db = db;
   }
 
   public void handleLink(JobDetails d) throws Exception {
@@ -31,12 +30,12 @@ public class JobCreator
 
     var exp = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
 
-    JobDBManager.updateJobDeleteTimer(con, d.hash, exp);
+    db.updateJobDeleteTimer(d.hash, exp);
 
-    if (!JobDBManager.userIsLinkedToJob(con, d.userID, d.hash))
-      JobDBManager.linkUserToJob(con, new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
+    if (!db.userIsLinkedToJob(d.userID, d.hash))
+      db.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
     else
-      JobDBManager.updateLinkIsPrimary(con, d.userID, d.hash);
+      db.updateLinkIsPrimary(d.userID, d.hash);
   }
 
   public int handleRerun(JobDetails d) throws Exception {
@@ -51,19 +50,25 @@ public class JobCreator
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
-    JobDBManager.updateJobDeleteTimer(con, d.hash, exp);
-    JobDBManager.updateJobQueueID(con, d.hash, queId);
-    JobDBManager.updateJobStatus(con, d.hash, DBJobStatus.Queued);
+    db.updateJobDeleteTimer(d.hash, exp);
+    db.updateJobQueueID(d.hash, queId);
+    db.updateJobStatus(d.hash, DBJobStatus.Queued);
 
-    if (!JobDBManager.userIsLinkedToJob(con, d.userID, d.hash))
-      JobDBManager.linkUserToJob(con, new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
+    if (!db.userIsLinkedToJob(d.userID, d.hash))
+      db.linkUserToJob(new UserRowImpl(
+        d.hash,
+        d.userID,
+        d.description,
+        d.maxDlSize,
+        d.isPrimary
+      ));
 
     if (d.parentHash != null) {
-      var noLinks = JobDBManager.getJobLinks(con, d.parentHash).stream()
+      var noLinks = db.getJobLinks(d.parentHash).stream()
         .map(JobLink::jobHash)
         .noneMatch(h -> Arrays.equals(d.hash, h));
       if (noLinks)
-        JobDBManager.createJobLink(con, d.hash, d.parentHash);
+        db.createJobLink(d.hash, d.parentHash);
     }
 
     return queId;
@@ -82,19 +87,27 @@ public class JobCreator
     var exp    = now.plusDays(Config.getInstance().getJobTimeout());
     var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
-    JobDBManager.registerJob(
-      con,
-      new FullJobRowImpl(d.hash, queId, now, exp, d.job.toSerial(), qFile.toFile(), d.projectID, DBJobStatus.Queued),
+    db.registerJob(
+      new FullJobRowImpl(
+        d.hash,
+        queId,
+        now,
+        exp,
+        d.job.toSerial(),
+        qFile.toFile(),
+        d.projectID,
+        DBJobStatus.Queued
+      ),
       new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary),
       Arrays.asList(d.targets)
     );
 
     if (d.parentHash != null) {
-      var noLinks = JobDBManager.getJobLinks(con, d.parentHash).stream()
+      var noLinks = db.getJobLinks(d.parentHash).stream()
         .map(JobLink::jobHash)
         .noneMatch(h -> Arrays.equals(d.hash, h));
       if (noLinks)
-        JobDBManager.createJobLink(con, d.hash, d.parentHash);
+        db.createJobLink(d.hash, d.parentHash);
     }
   }
 }

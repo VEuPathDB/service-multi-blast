@@ -62,6 +62,11 @@ public interface SQL
         "user-is-linked"
       );
     }
+
+    interface Users
+    {
+      String IsGuest = Load.select(Schema.MultiBlast, Table.UserLogins5.Users, "is-guest");
+    }
   }
 
   interface Update
@@ -76,6 +81,7 @@ public interface SQL
     interface MultiBlastUsers
     {
       String RunDirectly = Load.update(Schema.MultiBlast, Table.MultiBlast.Users, "run-directly");
+      String Owner       = Load.update(Schema.MultiBlast, Table.MultiBlast.Users, "owner");
     }
   }
 }
