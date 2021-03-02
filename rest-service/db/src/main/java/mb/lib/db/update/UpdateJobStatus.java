@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.DBJobStatus;
-import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class UpdateJobStatus
 {

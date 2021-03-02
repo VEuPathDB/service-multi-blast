@@ -178,6 +178,21 @@ securitySchemes:
       500:
         body: error.ServerError
 
+/link-guest:
+  displayName: Guest Linking
+  post:
+    body:
+      type: object
+      additionalProperties: false
+      properties:
+        guestID:
+          type: integer
+          format: int64
+          minimum: 0
+        userID:
+          type: integer
+          format: int64
+          minimum: 0
 
 ## BEGIN HACK ##################################################################
 #                                                                              #

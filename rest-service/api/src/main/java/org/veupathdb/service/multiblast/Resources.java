@@ -4,6 +4,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.service.multiblast.controller.DebugController;
+import org.veupathdb.service.multiblast.controller.GuestLinkController;
 import org.veupathdb.service.multiblast.controller.JobController;
 import org.veupathdb.service.multiblast.controller.MetaController;
 
@@ -31,6 +32,7 @@ public class Resources extends ContainerResources {
       JobController.class,
       MetaController.class,
       DebugController.class,
+      GuestLinkController.class,
     };
   }
 }

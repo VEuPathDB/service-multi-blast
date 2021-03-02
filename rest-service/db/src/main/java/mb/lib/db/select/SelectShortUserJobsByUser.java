@@ -1,35 +1,33 @@
 package mb.lib.db.select;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Collection;
-import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
-import mb.lib.db.constants.SQL;
 import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.ShortUserJobRow;
 import mb.lib.db.model.impl.ShortUserJobRowImpl;
 
+import static mb.lib.db.constants.SQL.Select.MultiBlastJobs.ShortUserByUserID;
+
 public class SelectShortUserJobsByUser
 {
-  private final DataSource ds;
+  private final Connection con;
   private final long       userID;
 
-  public SelectShortUserJobsByUser(DataSource ds, long userID) {
-    this.ds     = ds;
+  public SelectShortUserJobsByUser(Connection con, long userID) {
+    this.con    = con;
     this.userID = userID;
   }
 
   public Collection<ShortUserJobRow> run() throws Exception {
-    return new BasicPreparedListReadQuery<>(
-      SQL.Select.MultiBlastJobs.ShortUserByUserID,
-      ds::getConnection,
-      this::parse,
-      this::prep
-    ).execute().getValue();
+    return new BasicPreparedListReadQuery<>(ShortUserByUserID, con, this::parse, this::prep)
+      .execute()
+      .getValue();
   }
 
   void prep(PreparedStatement stmt) throws Exception {

@@ -7,7 +7,6 @@ import java.time.OffsetDateTime;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
-import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 
 public class UpdateJobDeleteDateQuery
 {

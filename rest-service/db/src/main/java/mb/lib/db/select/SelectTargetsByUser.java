@@ -1,10 +1,10 @@
 package mb.lib.db.select;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.sql.DataSource;
 
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.JobTarget;
@@ -16,19 +16,18 @@ public class SelectTargetsByUser
 {
   private final long userID;
 
-  private final DataSource ds;
+  private final Connection con;
 
   private final Map<String, List<JobTarget>> out;
 
-  public SelectTargetsByUser(DataSource ds, long userID) {
+  public SelectTargetsByUser(Connection con, long userID) {
     this.userID = userID;
-    this.ds     = ds;
+    this.con    = con;
     this.out    = new HashMap<>();
   }
 
   public Map<String, List<JobTarget>> run() throws Exception {
     try (
-      var con = ds.getConnection();
       var ps  = con.prepareStatement(SQL.Select.MultiBlastJobToTargets.ByUserID)
     ) {
       ps.setLong(1, userID);

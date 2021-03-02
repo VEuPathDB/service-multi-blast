@@ -3,7 +3,6 @@ package mb.lib.db.insert;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;

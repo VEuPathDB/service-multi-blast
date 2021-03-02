@@ -1,9 +1,7 @@
 package org.veupathdb.service.multiblast.service.http;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
@@ -11,7 +9,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import mb.lib.db.JobDBManager;
-import mb.lib.db.model.ShortJobRow;
+import mb.lib.db.model.*;
 import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
@@ -20,7 +18,6 @@ import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.model.User;
-import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
@@ -62,9 +59,9 @@ public class JobService
 
     var jobID = Format.hexToBytes(rawID);
 
-    try {
+    try (var db = new JobDBManager()) {
 
-      var opt = JobDBManager.getUserJob(jobID, user.getUserID());
+      var opt = db.getUserJob(jobID, user.getUserID());
 
       if (opt.isEmpty())
         throw new NotFoundException();
@@ -80,7 +77,7 @@ public class JobService
         .setExpires(Format.DateFormat.format(job.deleteOn()))
         .setMaxResultSize(job.maxDownloadSize())
         .setParentJobs(
-          JobDBManager.getParentJobs(jobID, user.getUserID())
+          db.getParentJobs(jobID, user.getUserID())
             .stream()
             .map(j -> new IOParentJobLinkImpl()
               .setId(Format.toHexString(j.parentHash()))
@@ -89,7 +86,7 @@ public class JobService
         )
         .setSite(job.projectID())
         .setTargets(
-          JobDBManager.getJobTargetsFor(job.jobHash())
+          db.getJobTargetsFor(job.jobHash())
             .stream()
             .map(BCC::toExternal)
             .toArray(IOJobTarget[]::new)
@@ -112,9 +109,16 @@ public class JobService
     log.trace("#getJobs(user={})", user.getUserID());
 
     try {
-      var jobs = JobDBManager.getUserJobs(user.getUserID());
-      var tgts = JobDBManager.getJobTargetsFor(user.getUserID());
-      var pars = JobDBManager.getAllParentJobs(user.getUserID());
+      Collection<ShortUserJobRow>  jobs;
+      Map<String, List<JobTarget>> tgts;
+      Map<String, List<JobLink>>   pars;
+
+      try (var db = new JobDBManager()) {
+        jobs = db.getUserJobs(user.getUserID());
+        tgts = db.getJobTargetsFor(user.getUserID());
+        pars = db.getAllParentJobs(user.getUserID());
+      }
+
       var out  = new ArrayList<IOShortJobResponse>(jobs.size());
 
       for (var job : jobs) {
@@ -161,8 +165,8 @@ public class JobService
     var rawID = Format.hexToBytes(jobID);
 
     try {
-      try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
-        var optJob = JobDBManager.getJob(con, rawID);
+      try (var db = new JobDBManager()) {
+        var optJob = db.getJob(rawID);
         if (optJob.isEmpty())
           throw new NotFoundException();
       }
@@ -200,8 +204,10 @@ public class JobService
       if (!Format.isHex(jobID))
         throw new NotFoundException();
 
-      var job = JobDBManager.getUserJob(Format.hexToBytes(jobID), userId)
-        .orElseThrow(NotFoundException::new);
+      FullUserJobRow job;
+      try (var db = new JobDBManager()) {
+        job = db.getUserJob(Format.hexToBytes(jobID), userId).orElseThrow(NotFoundException::new);
+      }
 
       FormatType pFormat;
 
@@ -316,8 +322,8 @@ public class JobService
     // If the status _has_ changed, then insert the new status into the database
     if (status != inStatus) {
       log.debug("Updating db status from {} to {}", status, inStatus);
-      try (var con = DbManager.userDatabase().getDataSource().getConnection()) {
-        JobDBManager.updateJobStatus(con, job.jobHash(), Util.convert(status));
+      try (var db = new JobDBManager()) {
+        db.updateJobStatus(job.jobHash(), Util.convert(status));
       }
     }
 

@@ -3,8 +3,8 @@ package mb.lib.db.model.impl;
 import java.io.File;
 import java.time.OffsetDateTime;
 
-import mb.lib.db.model.FullUserJobRow;
 import mb.lib.db.model.DBJobStatus;
+import mb.lib.db.model.FullUserJobRow;
 
 public class FullUserJobRowImpl extends FullJobRowImpl implements FullUserJobRow
 {

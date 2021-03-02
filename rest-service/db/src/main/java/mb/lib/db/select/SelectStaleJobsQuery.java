@@ -9,8 +9,8 @@ import java.util.Collection;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
-import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.DBJobStatus;
+import mb.lib.db.model.FullJobRow;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
 

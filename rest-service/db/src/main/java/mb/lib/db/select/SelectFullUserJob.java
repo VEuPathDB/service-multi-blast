@@ -1,37 +1,35 @@
 package mb.lib.db.select;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Optional;
-import javax.sql.DataSource;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import mb.lib.db.constants.Column;
-import mb.lib.db.constants.SQL;
-import mb.lib.db.model.FullUserJobRow;
 import mb.lib.db.model.DBJobStatus;
+import mb.lib.db.model.FullUserJobRow;
 import mb.lib.db.model.impl.FullUserJobRowImpl;
+
+import static mb.lib.db.constants.SQL.Select.MultiBlastJobs.FullUserRow;
 
 public class SelectFullUserJob
 {
   private final byte[]     jobID;
   private final long       userID;
-  private final DataSource ds;
+  private final Connection con;
 
-  public SelectFullUserJob(DataSource ds, byte[] jobID, long userID) {
-    this.ds     = ds;
+  public SelectFullUserJob(Connection con, byte[] jobID, long userID) {
+    this.con    = con;
     this.jobID  = jobID;
     this.userID = userID;
   }
 
   public Optional<FullUserJobRow> run() throws Exception {
-    return new BasicPreparedReadQuery<>(
-      SQL.Select.MultiBlastJobs.FullUserRow,
-      ds::getConnection,
-      this::parse,
-      this::prepare
-    ).execute().getValue();
+    return new BasicPreparedReadQuery<>(FullUserRow, con, this::parse, this::prepare)
+      .execute()
+      .getValue();
   }
 
   private Optional<FullUserJobRow> parse(ResultSet rs) throws Exception {

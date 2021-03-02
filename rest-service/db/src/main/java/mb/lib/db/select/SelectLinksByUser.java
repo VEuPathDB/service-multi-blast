@@ -1,10 +1,10 @@
 package mb.lib.db.select;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.sql.DataSource;
 
 import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
@@ -16,21 +16,20 @@ import static mb.lib.db.constants.Column.MultiBlastJobToJobs.ParentDigest;
 
 public class SelectLinksByUser
 {
-  private final DataSource ds;
+  private final Connection con;
 
   private final long userID;
 
   private final Map<String, List<JobLink>> links;
 
-  public SelectLinksByUser(DataSource ds, long userID) {
-    this.ds     = ds;
+  public SelectLinksByUser(Connection con, long userID) {
+    this.con    = con;
     this.userID = userID;
     this.links  = new HashMap<>();
   }
 
   public Map<String, List<JobLink>> run() throws Exception {
     try (
-      var con = ds.getConnection();
       var ps = con.prepareStatement(SQL.Select.MultiBlastJobToJobs.ByUserID)
     ) {
       ps.setLong(1, userID);
