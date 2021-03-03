@@ -29,6 +29,12 @@ public class JobDBManager implements AutoCloseable
     this.connection = DbManager.userDatabase().getDataSource().getConnection();
   }
 
+  public Optional<UserRow> getUser(long userID, byte[] jobID) throws Exception {
+    log.trace("#getUser(userID={}, jobID={})", userID, jobID);
+
+    return new SelectUser(connection, userID, jobID).run();
+  }
+
   public void updateJobOwner(long oldUserID, long newUserID) throws Exception {
     log.trace("#updateJobOwner(oldUserID={}, newUserID={})", oldUserID, newUserID);
 
