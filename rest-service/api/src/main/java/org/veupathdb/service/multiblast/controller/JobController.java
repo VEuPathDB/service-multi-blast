@@ -50,7 +50,7 @@ public class JobController implements Jobs
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public Response postJobs(IOJsonJobRequest entity) {
+  public Response postJob(IOJsonJobRequest entity) {
     return okJSON(svc.createJob(entity, getUser(request)));
   }
 
@@ -60,7 +60,7 @@ public class JobController implements Jobs
    * @return Basic info about the newly created job (such as the job id).
    */
   @Override
-  public Response postJobs(InputStream query, InputStream config) {
+  public Response postJob(InputStream query, InputStream config) {
     IOJsonJobRequest props;
 
     try {
@@ -83,7 +83,7 @@ public class JobController implements Jobs
    * @return Full details about the specified job.
    */
   @Override
-  public Response getJobsByJobId(String jobID) {
+  public Response getJob(String jobID) {
     return okJSON(svc.getJob(jobID, getUser(request)));
   }
 
@@ -98,7 +98,7 @@ public class JobController implements Jobs
    * text output, or a file attachment.
    */
   @Override
-  public Response getJobsQueryByJobId(String jobID, boolean download) {
+  public Response getQuery(String jobID, boolean download) {
     var res = Response.status(Response.Status.OK)
       .type(MediaType.TEXT_PLAIN_TYPE);
 
@@ -109,7 +109,7 @@ public class JobController implements Jobs
   }
 
   @Override
-  public Response getJobsReportByJobId(
+  public Response getReport(
     String jobID,
     String format,
     boolean zip,

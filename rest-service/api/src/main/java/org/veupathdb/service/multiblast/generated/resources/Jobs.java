@@ -19,12 +19,12 @@ public interface Jobs
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  Response postJobs(IOJsonJobRequest entity);
+  Response postJob(IOJsonJobRequest entity);
 
   @POST
   @Produces("application/json")
   @Consumes("multipart/form-data")
-  Response postJobs(
+  Response postJob(
     @FormDataParam("query") InputStream upload,
     @FormDataParam("properties") InputStream config
   );
@@ -32,12 +32,12 @@ public interface Jobs
   @GET
   @Path("/{job-id}")
   @Produces("application/json")
-  Response getJobsByJobId(@PathParam("job-id") String jobId);
+  Response getJob(@PathParam("job-id") String jobId);
 
   @GET
   @Path("/{job-id}/query")
   @Produces({"application/json", "text/plain"})
-  Response getJobsQueryByJobId(
+  Response getQuery(
     @PathParam("job-id") String jobId,
     @QueryParam("download") @DefaultValue("false") boolean download
   );
@@ -45,7 +45,7 @@ public interface Jobs
   @GET
   @Path("/{job-id}/report")
   @Produces({"application/json", "application/zip"})
-  Response getJobsReportByJobId(
+  Response getReport(
     @PathParam("job-id") String jobId,
     @QueryParam("format") String format,
     @QueryParam("zip") @DefaultValue("true") boolean zip,

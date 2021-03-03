@@ -61,6 +61,7 @@ public interface SQL
         Table.MultiBlast.Users,
         "user-is-linked"
       );
+      String ByID = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "by-id");
     }
 
     interface Users
