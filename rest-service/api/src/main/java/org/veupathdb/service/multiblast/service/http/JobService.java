@@ -10,6 +10,7 @@ import javax.ws.rs.core.StreamingOutput;
 
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.*;
+import mb.lib.db.model.impl.UserRowImpl;
 import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
@@ -200,13 +201,23 @@ public class JobService
   ) {
     log.trace("#getReport(jobID={}, format={}, zip={}, fields={}, maxDlSize={})", jobID, format, zip, fields, maxDlSize);
 
-    try {
-      if (!Format.isHex(jobID))
-        throw new NotFoundException();
+    if (!Format.isHex(jobID))
+      throw new NotFoundException();
 
-      FullUserJobRow job;
+    var jobHash = Format.hexToBytes(jobID);
+
+    try {
+      FullJobRow job;
+      UserRow    user;
       try (var db = new JobDBManager()) {
-        job = db.getUserJob(Format.hexToBytes(jobID), userId).orElseThrow(NotFoundException::new);
+        job = db.getJob(jobHash).orElseThrow(NotFoundException::new);
+
+        if (db.userIsLinkedToJob(userId, jobHash)) {
+          user = db.getUser(userId, jobHash).orElseThrow(InternalServerErrorException::new);
+        } else {
+          user = new UserRowImpl(jobHash, userId, null, null, true);
+          db.linkUserToJob(user);
+        }
       }
 
       FormatType pFormat;
@@ -233,7 +244,7 @@ public class JobService
         jobID,
         pFormat,
         zip,
-        maxDlSize == null ? job.maxDownloadSize() : maxDlSize, // If the client provided a max size header, prefer that value.
+        maxDlSize == null ? user.maxDownloadSize() : maxDlSize, // If the client provided a max size header, prefer that value.
         fields.stream().map(f -> f.name).toArray(String[]::new)
       );
 

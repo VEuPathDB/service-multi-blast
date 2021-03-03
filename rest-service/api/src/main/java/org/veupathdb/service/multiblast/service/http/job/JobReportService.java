@@ -3,7 +3,7 @@ package org.veupathdb.service.multiblast.service.http.job;
 import javax.ws.rs.BadRequestException;
 
 import mb.lib.db.JobDBManager;
-import mb.lib.db.model.FullUserJobRow;
+import mb.lib.db.model.FullJobRow;
 import mb.lib.extern.JobQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
@@ -15,7 +15,7 @@ import org.veupathdb.service.multiblast.util.Format;
 
 public class JobReportService
 {
-  public static void ensureJobCache(FullUserJobRow job, long userID) throws Exception {
+  public static void ensureJobCache(FullJobRow job, long userID) throws Exception {
     if (JobUtil.jobIsCached(job))
       return;
 
@@ -46,7 +46,7 @@ public class JobReportService
 
     if (stat == QueueJobStatus.Errored) {
       throw new Exception(JobDataManager.getJobError(dets.id)
-        .orElse("An unknown error occurred"));
+        .orElse("An unknown error occurred while running this blast job."));
     }
   }
 
