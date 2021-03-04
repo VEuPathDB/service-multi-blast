@@ -31,7 +31,7 @@ public class Resources extends ContainerResources {
 
       JobController.class,
       MetaController.class,
-      DebugController.class,
+//      DebugController.class,
       GuestLinkController.class,
     };
   }
