@@ -6,14 +6,35 @@ import java.util.List;
 
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
+/**
+ * ErrorMap is a convenience implementation of the map structure used by
+ * {@code UnprocessableEntityException}s.
+ */
 public final class ErrorMap extends HashMap<String, List<String>>
 {
+  /**
+   * Constructs an empty {@code ErrorMap}.
+   */
   public ErrorMap() {}
 
+  /**
+   * Constructs an {@code ErrorMap} containing the given key mapped to a list
+   * containing the given value.
+   *
+   * @param key   Error key.
+   * @param value Error value.
+   */
   public ErrorMap(String key, String value) {
     putError(key, value);
   }
 
+  /**
+   * Constructs an {@code ErrorMap} containing the given key mapped to a list
+   * containing the given value.
+   *
+   * @param key   Error key.
+   * @param value Error value.
+   */
   public ErrorMap(ToolOption key, String value) {
     putError(key, value);
   }
