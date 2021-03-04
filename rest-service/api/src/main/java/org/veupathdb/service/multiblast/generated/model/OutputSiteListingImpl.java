@@ -12,7 +12,7 @@ public class OutputSiteListingImpl implements OutputSiteListing {
   private List<OutputListOrganism> site;
 
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new ExcludingMap();
+  private final Map<String, Object> additionalProperties = new ExcludingMap();
 
   @JsonProperty("Site")
   public List<OutputListOrganism> getSite() {
