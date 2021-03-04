@@ -11,6 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.model.blast.ToolOption;
 
+/**
+ * CliBuilder provides methods for constructing CLI application calls.
+ */
 public class CliBuilder
 {
   private static final Logger log = LogManager.getLogger(CliBuilder.class);
@@ -23,18 +26,62 @@ public class CliBuilder
     this.params = new LinkedHashMap<>();
   }
 
+  /**
+   * Inserts the given flag and arguments into the CLI call string.
+   * <p>
+   * If a flag already exists under the key `{@code key}`, that flag and its
+   * arguments will be replaced with the given values.
+   *
+   * @param key    CLI flag.
+   * @param values Flag arguments
+   *
+   * @return This {@code CliBuilder} instance.
+   */
   public CliBuilder set(ToolOption key, String... values) {
     return setRaw(key, values);
   }
 
+  /**
+   * Inserts the given flag and arguments into the CLI call string.
+   * <p>
+   * If a flag already exists under the key `{@code key}`, that flag and its
+   * arguments will be replaced with the given values.
+   *
+   * @param key    CLI flag.
+   * @param values Flag arguments
+   *
+   * @return This {@code CliBuilder} instance.
+   */
   public CliBuilder set(ToolOption key, Integer... values) {
     return setRaw(key, values);
   }
 
+  /**
+   * Inserts the given flag and arguments into the CLI call string.
+   * <p>
+   * If a flag already exists under the key `{@code key}`, that flag and its
+   * arguments will be replaced with the given values.
+   *
+   * @param key    CLI flag.
+   * @param values Flag arguments
+   *
+   * @return This {@code CliBuilder} instance.
+   */
   public CliBuilder set(ToolOption key, Double... values) {
     return setRaw(key, values);
   }
 
+  /**
+   * Inserts the given flag and arguments into the CLI call string.
+   * <p>
+   * If a flag already exists under the key `{@code key}`, that flag and its
+   * arguments will be replaced with the given values.
+   *
+   * @param key    CLI flag.
+   * @param values Flag arguments
+   *
+   * @return This {@code CliBuilder} instance.
+   */
   public CliBuilder set(ToolOption key, Long... values) {
     return setRaw(key, values);
   }
@@ -45,6 +92,17 @@ public class CliBuilder
     return this;
   }
 
+  /**
+   * Inserts the given flag and arguments into the CLI call string.
+   * <p>
+   * If a flag already exists under the key `{@code key}`, the provided
+   * arguments will be appended to that flag's existing argument list.
+   *
+   * @param key    CLI flag.
+   * @param values Flag arguments
+   *
+   * @return This {@code CliBuilder} instance.
+   */
   public CliBuilder append(ToolOption key, Object... values) {
     var tmp = params.get(key);
 
