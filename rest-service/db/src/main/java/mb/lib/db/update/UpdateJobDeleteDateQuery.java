@@ -8,6 +8,9 @@ import java.time.OffsetDateTime;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
 
+/**
+ * Query for updating a job's expiration date.
+ */
 public class UpdateJobDeleteDateQuery
 {
   private final Connection     con;

@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Logger;
 
 import static mb.lib.db.constants.SQL.Update.MultiBlastUsers.Owner;
 
+/**
+ * Query for updating user-to-job links from one user ID to another.
+ */
 public class UpdateJobOwner
 {
   private static final Logger log = LogManager.getLogger(UpdateJobOwner.class);

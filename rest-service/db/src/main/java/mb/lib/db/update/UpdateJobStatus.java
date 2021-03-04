@@ -7,6 +7,9 @@ import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.DBJobStatus;
 
+/**
+ * Query to update the status field for a target job.
+ */
 public class UpdateJobStatus
 {
   private final Connection con;

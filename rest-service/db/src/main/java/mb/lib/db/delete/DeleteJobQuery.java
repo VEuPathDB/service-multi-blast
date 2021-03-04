@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
 
+/**
+ * Query to delete a job query by job ID (hash).
+ */
 public class DeleteJobQuery
 {
   private final byte[]     jobID;
