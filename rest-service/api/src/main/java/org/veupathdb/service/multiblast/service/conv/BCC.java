@@ -15,6 +15,11 @@ import org.veupathdb.service.multiblast.model.blast.impl.LocationImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.SegImpl;
 import org.veupathdb.service.multiblast.util.Format;
 
+/**
+ * Blast Common Converters
+ * <p>
+ * Conversion methods for translating types between internal and external forms.
+ */
 public class BCC
 {
   public static IOParentJobLink toExternal(JobLink link) {
