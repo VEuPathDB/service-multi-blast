@@ -88,3 +88,29 @@ dependencies {
   testImplementation("org.mockito:mockito-core:2.+")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
 }
+tasks.withType<Test> {
+  testLogging {
+    events.addAll(listOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED))
+
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    showExceptions = true
+    showCauses = true
+    showStackTraces = true
+    showStandardStreams = true
+    enableAssertions = true
+  }
+  ignoreFailures = true // Always try to run all tests for all modules
+}
+
+val test by tasks.getting(Test::class) {
+  // Use junit platform for unit tests
+  useJUnitPlatform()
+}
+
+tasks.test {
+  exclude("org/veupathdb/service/multiblast/generated")
+}
