@@ -1,6 +1,11 @@
 package mb.lib.db.constants;
 
-
+/**
+ * SQL Query Cache
+ * <p>
+ * This interface is a container for the cached query strings loaded from the
+ * resources directory.
+ */
 public interface SQL
 {
   interface Delete
