@@ -26,7 +26,8 @@ public class SelectUserIsGuest
   }
 
   public boolean parse(ResultSet rs) throws Exception {
-    rs.next();
+    if (!rs.next())
+      return false;
     return rs.getBoolean(Column.Users.IsGuest);
   }
 
