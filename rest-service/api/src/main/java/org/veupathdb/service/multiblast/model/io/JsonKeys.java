@@ -1,5 +1,8 @@
 package org.veupathdb.service.multiblast.model.io;
 
+/**
+ * Object keys used when serializing or deserialing Java values to JSON.
+ */
 public final class JsonKeys
 {
   public static final String
