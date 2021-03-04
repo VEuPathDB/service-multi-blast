@@ -8,6 +8,9 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
+/**
+ * Validator for {@code tblastn} CLI arguments.
+ */
 class TBlastNValidator implements ConfigValidator<IOTBlastnConfig>
 {
   private static TBlastNValidator instance;

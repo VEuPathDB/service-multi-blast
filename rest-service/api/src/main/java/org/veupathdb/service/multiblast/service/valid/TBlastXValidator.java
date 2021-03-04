@@ -7,6 +7,9 @@ import org.veupathdb.service.multiblast.model.ErrorMap;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
+/**
+ * Validator for {@code tblastx} CLI arguments.
+ */
 class TBlastXValidator implements ConfigValidator<IOTBlastxConfig>
 {
   private static TBlastXValidator instance;

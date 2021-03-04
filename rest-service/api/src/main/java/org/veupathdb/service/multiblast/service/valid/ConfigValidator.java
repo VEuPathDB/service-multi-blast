@@ -7,14 +7,14 @@ import org.veupathdb.service.multiblast.model.ErrorMap;
 interface ConfigValidator<C>
 {
   String
-    errGtEqD            = "must be greater than or equal to %d",
-    errGtEqF            = "must be greater than or equal to %.1f",
-    errLtEqD            = "must be less than or equal to %d",
-    errBetweenIncD      = "must be between [%d..%d]",
-    errBetweenIncF      = "must be between [%.1f..%.1f]",
-    errBetweenExcD      = "must be between (%d..%d)",
-    errBetweenExcF      = "must be between (%.1f..%.1f)",
-    errIncompat = "is incompatible with field %s";
+    errGtEqD       = "must be greater than or equal to %d",
+    errGtEqF       = "must be greater than or equal to %.1f",
+    errLtEqD       = "must be less than or equal to %d",
+    errBetweenIncD = "must be between [%d..%d]",
+    errBetweenIncF = "must be between [%.1f..%.1f]",
+    errBetweenExcD = "must be between (%d..%d)",
+    errBetweenExcF = "must be between (%.1f..%.1f)",
+    errIncompat    = "is incompatible with field %s";
 
   ErrorMap validate(C conf);
 

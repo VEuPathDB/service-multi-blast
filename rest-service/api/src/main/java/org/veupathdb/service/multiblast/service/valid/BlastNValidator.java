@@ -11,6 +11,9 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
+/**
+ * Validator for {@code blastn} CLI arguments.
+ */
 class BlastNValidator implements ConfigValidator<IOBlastnConfig>
 {
   // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ //

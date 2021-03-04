@@ -2,12 +2,40 @@ package org.veupathdb.service.multiblast.service.valid;
 
 public interface SequenceValidator
 {
+  /**
+   * Returns the kind of sequence the implementing SequenceValidator is
+   * validating against.
+   *
+   * @return the kind of sequence being validating against.
+   */
   String kind();
 
+  /**
+   * Checks whether the given int character is valid for the target sequence
+   * type.
+   *
+   * @param c Character to check.
+   *
+   * @return Whether the given character is valid.
+   */
   boolean isValid(int c);
 
+  /**
+   * Checks whether the given character is valid for the target sequence type.
+   *
+   * @param c Character to check.
+   *
+   * @return Whether the given character is valid.
+   */
   boolean isValid(char c);
 
+  /**
+   * Checks whether the given character is valid for the target sequence type.
+   *
+   * @param c Character to check.
+   *
+   * @return Whether the given character is valid.
+   */
   boolean isValid(byte c);
 
   default boolean isValidLength(CharSequence seq) {
@@ -18,6 +46,14 @@ public interface SequenceValidator
 
   int maxSeqLength();
 
+  /**
+   * Validates the given {@code CharSequence} to confirm all characters are
+   * within the legal character set for sequences of {@link #kind()}.
+   *
+   * @param seq Sequence to validate.
+   *
+   * @return Whether all characters in the input {@code CharSequence} are valid.
+   */
   default SequenceValidationError validate(CharSequence seq) {
     for (var i = 0; i < seq.length(); i++) {
       if (!isValid(seq.charAt(i))) {
@@ -28,6 +64,14 @@ public interface SequenceValidator
     return null;
   }
 
+  /**
+   * Validates the given char array to confirm all characters are within the
+   * legal character set for sequences of {@link #kind()}.
+   *
+   * @param chars Array of characters to validate.
+   *
+   * @return Whether all characters in the input array are valid.
+   */
   default SequenceValidationError validate(char[] chars) {
     for (var i = 0; i < chars.length; i++) {
       if (!isValid(chars[i])) {
@@ -38,6 +82,14 @@ public interface SequenceValidator
     return null;
   }
 
+  /**
+   * Validates the given byte array to confirm all characters are within the
+   * legal character set for sequences of {@link #kind()}.
+   *
+   * @param bytes Array of bytes to validate.
+   *
+   * @return Whether all characters in the input array are valid.
+   */
   default SequenceValidationError validate(byte[] bytes) {
     for (var i = 0; i < bytes.length; i++) {
       if (!isValid(bytes[i])) {

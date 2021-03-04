@@ -7,6 +7,9 @@ import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery;
 
 import static mb.lib.db.constants.SQL.Update.MultiBlastUsers.RunDirectly;
 
+/**
+ * Query to update the 'run directly' flag for a specific user-to-job link.
+ */
 public class UpdateJobRunDirectly
 {
   private final Connection con;

@@ -2,9 +2,16 @@ package org.veupathdb.service.multiblast.service.valid;
 
 import mb.lib.config.Config;
 
-// Legal Characters
-//   ABCDEFGHIKLMNPQRSTUVWXYZ*-
-//   abcdefghiklmnpqrstuvwxyz*-
+/**
+ * Validates that a given character or sequence falls within the legal character
+ * set for protein sequences.
+ * <p>
+ * Legal character set:
+ * <pre>
+ * ABCDEFGHIKLMNPQRSTUVWXYZ*-
+ * abcdefghiklmnpqrstuvwxyz
+ * </pre>
+ */
 public class ProteinSequenceValidator implements SequenceValidator
 {
   private static final Config conf = Config.getInstance();

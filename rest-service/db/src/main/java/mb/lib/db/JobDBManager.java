@@ -110,8 +110,7 @@ public class JobDBManager implements AutoCloseable
    * @return {@code true} if the user has a link to the job identified by
    * {@code jobHash}, else {@code false}.
    */
-  public boolean userIsLinkedToJob(long userID, byte[] jobHash)
-  throws Exception {
+  public boolean userIsLinkedToJob(long userID, byte[] jobHash) throws Exception {
     log.trace("#userIsLinkedToJob(userID={}, jobHash={})", userID, jobHash);
 
     return new SelectUserIsLinkedToJob(connection, userID, jobHash).run();
@@ -136,8 +135,7 @@ public class JobDBManager implements AutoCloseable
    * @param jobID Hash of the job for which the expiration date will be updated.
    * @param end   New expiration date for the target job.
    */
-  public void updateJobDeleteTimer(byte[] jobID, OffsetDateTime end)
-  throws Exception {
+  public void updateJobDeleteTimer(byte[] jobID, OffsetDateTime end) throws Exception {
     log.trace("#updateJobDeleteTimer(jobID={}, end={})", jobID, end);
 
     new UpdateJobDeleteDateQuery(connection, jobID, end).run();
@@ -161,13 +159,20 @@ public class JobDBManager implements AutoCloseable
     new InsertUserQuery(connection, user).run();
   }
 
-  public void updateLinkIsPrimary(long userID, byte[] jobHash)
-  throws Exception {
+  public void updateLinkIsPrimary(long userID, byte[] jobHash) throws Exception {
     log.trace("#updateLinkIsPrimary(userID={}, jobHash={})", userID, jobHash);
 
     new UpdateJobRunDirectly(connection, true, userID, jobHash).run();
   }
 
+  /**
+   * Inserts entries for a new job linked to the given user targeting the given
+   * files.
+   *
+   * @param job     Job to insert.
+   * @param user    User the job will be linked to.
+   * @param targets Target files for the job.
+   */
   public void registerJob(FullJobRow job, UserRow user, List<JobTarget> targets) throws Exception {
     log.trace("#registerJob(job={}, user={}, targets={})", job, user, targets);
 

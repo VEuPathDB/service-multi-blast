@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import mb.lib.db.constants.SQL;
 
+/**
+ * Query for updating the external queue ID for a target job.
+ */
 public class UpdateJobQueueIDQuery
 {
   private final Connection con;

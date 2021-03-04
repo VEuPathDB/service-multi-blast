@@ -5,6 +5,9 @@ import org.veupathdb.service.multiblast.model.ErrorMap;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
 
+/**
+ * Validator for {@code blastx} CLI arguments.
+ */
 class BlastXValidator implements ConfigValidator<IOBlastxConfig>
 {
   private static BlastXValidator instance;
