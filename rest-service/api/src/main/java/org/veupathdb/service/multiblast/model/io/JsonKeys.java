@@ -110,7 +110,7 @@ public final class JsonKeys
     TemplateLength                       = "templateLength",
     TemplateType                         = "templateType",
     Threshold                            = "threshold",
-    TOOL                                 = "tool",
+    Tool                                 = "tool",
     Ungapped                             = "ungapped",
     UseIndex                             = "useIndex",
     UserID                               = "userID",
@@ -121,9 +121,9 @@ public final class JsonKeys
     WindowMaskerTaxID                    = "windowMaskerTaxid",
     MultiHitWindowSize                   = "windowSize",
     WordSize                             = "wordSize",
-    XDROP_GAP                            = "xdropGap",
-    XDROP_GAP_FINAL                      = "xdropGapFinal",
-    XDROP_UNGAP                          = "xdropUngap";
+    XDROP_GAP                            = "xDropGap",
+    XDROP_GAP_FINAL                      = "xDropGapFinal",
+    XDropUngap                           = "xDropUngap";
 
   private JsonKeys() {
   }
