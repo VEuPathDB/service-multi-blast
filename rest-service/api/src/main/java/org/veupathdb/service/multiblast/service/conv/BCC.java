@@ -1,5 +1,6 @@
 package org.veupathdb.service.multiblast.service.conv;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,12 @@ public class BCC
     if (val == null)
       return null;
 
-    return Arrays.stream(val).mapToObj(Integer.class::cast).collect(Collectors.toList());
+    var out = new ArrayList<Integer>(val.length);
+
+    for (var i : val)
+      out.add(i);
+
+    return out;
   }
 
   static int[] listToArray(List<Integer> ints) {
@@ -82,9 +88,9 @@ public class BCC
       return null;
 
     return switch (val) {
-      case None -> IOBlastCompBasedStats.NONE;
-      case CompBasedStats -> IOBlastCompBasedStats.COMPBASEDSTATS;
-      case ConditionalScoreAdjustment -> IOBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT;
+      case None                         -> IOBlastCompBasedStats.NONE;
+      case CompBasedStats               -> IOBlastCompBasedStats.COMPBASEDSTATS;
+      case ConditionalScoreAdjustment   -> IOBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT;
       case UnconditionalScoreAdjustment -> IOBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT;
     };
   }
@@ -94,9 +100,9 @@ public class BCC
       return null;
 
     return switch (val) {
-      case Both -> IOBlastStrand.BOTH;
+      case Both  -> IOBlastStrand.BOTH;
       case Minus -> IOBlastStrand.MINUS;
-      case Plus -> IOBlastStrand.PLUS;
+      case Plus  -> IOBlastStrand.PLUS;
     };
   }
 
@@ -105,9 +111,9 @@ public class BCC
       return null;
 
     return switch (val) {
-      case NONE -> CompBasedStats.None;
-      case COMPBASEDSTATS -> CompBasedStats.CompBasedStats;
-      case CONDITIONALCOMPBASEDSCOREADJUSTMENT -> CompBasedStats.ConditionalScoreAdjustment;
+      case NONE                                  -> CompBasedStats.None;
+      case COMPBASEDSTATS                        -> CompBasedStats.CompBasedStats;
+      case CONDITIONALCOMPBASEDSCOREADJUSTMENT   -> CompBasedStats.ConditionalScoreAdjustment;
       case UNCONDITIONALCOMPBASEDSCOREADJUSTMENT -> CompBasedStats.UnconditionalScoreAdjustment;
     };
   }
@@ -132,9 +138,9 @@ public class BCC
       return null;
 
     return switch (val) {
-      case PLUS -> QueryStrand.Plus;
+      case PLUS  -> QueryStrand.Plus;
       case MINUS -> QueryStrand.Minus;
-      case BOTH -> QueryStrand.Both;
+      case BOTH  -> QueryStrand.Both;
     };
   }
 }
