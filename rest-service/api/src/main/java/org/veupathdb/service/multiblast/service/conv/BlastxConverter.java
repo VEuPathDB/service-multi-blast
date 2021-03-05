@@ -10,7 +10,7 @@ import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 public class BlastxConverter
 {
-  private static       BlastxConverter instance;
+  private static BlastxConverter instance;
 
   public static BlastxConverter getInstance() {
     if (instance == null)
