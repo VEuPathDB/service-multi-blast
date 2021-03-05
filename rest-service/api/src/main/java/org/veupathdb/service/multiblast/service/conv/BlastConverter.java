@@ -199,7 +199,6 @@ public class BlastConverter
     };
   }
 
-
   static IOHitSorting toExternal(HitSorting val) {
     if (val == null)
       return null;
@@ -232,7 +231,7 @@ public class BlastConverter
 
     var out = new IOBlastReportFormatImpl();
 
-    out.setDelim(fmt.getDelimiter() == null ? null : String.valueOf(fmt.getDelimiter()));
+    out.setDelim(fmt.getDelimiter() == null ? null : fmt.getDelimiter());
     out.setFields(
       fmt.getReportFields() == null
         || fmt.getReportFields().length == 1

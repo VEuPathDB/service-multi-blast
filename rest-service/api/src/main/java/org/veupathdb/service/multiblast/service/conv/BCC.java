@@ -1,9 +1,7 @@
 package org.veupathdb.service.multiblast.service.conv;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import mb.lib.db.model.JobLink;
 import mb.lib.db.model.JobTarget;
