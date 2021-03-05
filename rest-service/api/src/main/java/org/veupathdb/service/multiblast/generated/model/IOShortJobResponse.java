@@ -7,16 +7,16 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 @JsonDeserialize(as = IOShortJobResponseImpl.class)
 public interface IOShortJobResponse
 {
-  @JsonProperty("id")
+  @JsonProperty(JsonKeys.ID)
   String getId();
 
-  @JsonProperty("id")
+  @JsonProperty(JsonKeys.ID)
   IOShortJobResponse setId(String id);
 
-  @JsonProperty("description")
+  @JsonProperty(JsonKeys.Description)
   String getDescription();
 
-  @JsonProperty("description")
+  @JsonProperty(JsonKeys.Description)
   IOShortJobResponse setDescription(String description);
 
   @JsonProperty(JsonKeys.Status)

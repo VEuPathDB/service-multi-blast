@@ -6,33 +6,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
-@JsonDeserialize(
-    as = IOJsonJobRequestImpl.class
-)
+@JsonDeserialize(as = IOJsonJobRequestImpl.class)
 public interface IOJsonJobRequest
 {
-  @JsonProperty("site")
+  @JsonProperty(JsonKeys.Site)
   String getSite();
 
-  @JsonProperty("site")
+  @JsonProperty(JsonKeys.Site)
   void setSite(String site);
 
-  @JsonProperty("targets")
+  @JsonProperty(JsonKeys.Targets)
   Set<IOJobTarget> getTargets();
 
-  @JsonProperty("targets")
+  @JsonProperty(JsonKeys.Targets)
   void setTargets(Set<IOJobTarget> targets);
 
-  @JsonProperty("config")
+  @JsonProperty(JsonKeys.Config)
   IOBlastConfig getConfig();
 
-  @JsonProperty("config")
+  @JsonProperty(JsonKeys.Config)
   void setConfig(IOBlastConfig config);
 
-  @JsonProperty("description")
+  @JsonProperty(JsonKeys.Description)
   String getDescription();
 
-  @JsonProperty("description")
+  @JsonProperty(JsonKeys.Description)
   void setDescription(String description);
 
   @JsonProperty(JsonKeys.MaxResults)

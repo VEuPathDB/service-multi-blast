@@ -5,123 +5,125 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeName("tblastx")
 @JsonDeserialize(as = IOTBlastxConfigImpl.class)
-public interface IOTBlastxConfig extends IOBlastConfig {
+public interface IOTBlastxConfig extends IOBlastConfig
+{
   IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.TBLASTX;
 
-  @JsonProperty("strand")
+  @JsonProperty(JsonKeys.Strand)
   IOBlastStrand getStrand();
 
-  @JsonProperty("strand")
+  @JsonProperty(JsonKeys.Strand)
   void setStrand(IOBlastStrand strand);
 
-  @JsonProperty("queryGeneticCode")
-   Byte getQueryGeneticCode();
+  @JsonProperty(JsonKeys.QueryGeneticCode)
+  Byte getQueryGeneticCode();
 
-  @JsonProperty("queryGeneticCode")
-  void setQueryGeneticCode (Byte queryGeneticCode);
+  @JsonProperty(JsonKeys.QueryGeneticCode)
+  void setQueryGeneticCode(Byte queryGeneticCode);
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   Integer getWordSize();
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   void setWordSize(Integer wordSize);
 
-  @JsonProperty("maxIntronLength")
+  @JsonProperty(JsonKeys.MaxIntronLength)
   Integer getMaxIntronLength();
 
-  @JsonProperty("maxIntronLength")
+  @JsonProperty(JsonKeys.MaxIntronLength)
   void setMaxIntronLength(Integer maxIntronLength);
 
-  @JsonProperty("matrix")
+  @JsonProperty(JsonKeys.Matrix)
   IOTBlastxScoringMatrix getMatrix();
 
-  @JsonProperty("matrix")
+  @JsonProperty(JsonKeys.Matrix)
   void setMatrix(IOTBlastxScoringMatrix matrix);
 
-  @JsonProperty("threshold")
-   Double getThreshold();
+  @JsonProperty(JsonKeys.Threshold)
+  Double getThreshold();
 
-  @JsonProperty("threshold")
-  void setThreshold (Double threshold);
+  @JsonProperty(JsonKeys.Threshold)
+  void setThreshold(Double threshold);
 
-  @JsonProperty("dbGencode")
-   Byte getDbGencode();
+  @JsonProperty(JsonKeys.DBGeneticCode)
+  Byte getDbGencode();
 
-  @JsonProperty("dbGencode")
-  void setDbGencode (Byte dbGencode);
+  @JsonProperty(JsonKeys.DBGeneticCode)
+  void setDbGencode(Byte dbGencode);
 
-  @JsonProperty("seg")
+  @JsonProperty(JsonKeys.Seg)
   IOBlastSegMask getSeg();
 
-  @JsonProperty("seg")
+  @JsonProperty(JsonKeys.Seg)
   void setSeg(IOBlastSegMask seg);
 
-  @JsonProperty("softMasking")
-   Boolean getSoftMasking();
+  @JsonProperty(JsonKeys.SoftMasking)
+  Boolean getSoftMasking();
 
-  @JsonProperty("softMasking")
-  void setSoftMasking (Boolean softMasking);
+  @JsonProperty(JsonKeys.SoftMasking)
+  void setSoftMasking(Boolean softMasking);
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   List<Integer> getTaxIds();
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   void setTaxIds(List<Integer> taxIds);
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   List<Integer> getNegativeTaxIds();
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   void setNegativeTaxIds(List<Integer> negativeTaxIds);
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   String getDbSoftMask();
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   void setDbSoftMask(String dbSoftMask);
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   String getDbHardMask();
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   void setDbHardMask(String dbHardMask);
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   Integer getCullingLimit();
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   void setCullingLimit(Integer cullingLimit);
 
-  @JsonProperty("bestHitOverhang")
-   Double getBestHitOverhang();
+  @JsonProperty(JsonKeys.BestHitOverhang)
+  Double getBestHitOverhang();
 
-  @JsonProperty("bestHitOverhang")
-  void setBestHitOverhang (Double bestHitOverhang);
+  @JsonProperty(JsonKeys.BestHitOverhang)
+  void setBestHitOverhang(Double bestHitOverhang);
 
-  @JsonProperty("bestHitScoreEdge")
-   Double getBestHitScoreEdge();
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
+  Double getBestHitScoreEdge();
 
-  @JsonProperty("bestHitScoreEdge")
-  void setBestHitScoreEdge (Double bestHitScoreEdge);
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
+  void setBestHitScoreEdge(Double bestHitScoreEdge);
 
-  @JsonProperty("subjectBestHit")
-   Boolean getSubjectBestHit();
+  @JsonProperty(JsonKeys.SubjectBestHit)
+  Boolean getSubjectBestHit();
 
-  @JsonProperty("subjectBestHit")
-  void setSubjectBestHit (Boolean subjectBestHit);
+  @JsonProperty(JsonKeys.SubjectBestHit)
+  void setSubjectBestHit(Boolean subjectBestHit);
 
-  @JsonProperty("sumStats")
-   Boolean getSumStats();
+  @JsonProperty(JsonKeys.SumStats)
+  Boolean getSumStats();
 
-  @JsonProperty("sumStats")
-  void setSumStats (Boolean sumStats);
+  @JsonProperty(JsonKeys.SumStats)
+  void setSumStats(Boolean sumStats);
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   Integer getWindowSize();
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   void setWindowSize(Integer windowSize);
 }
