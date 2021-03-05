@@ -18,9 +18,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.IOBlastnConfig.class),
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.IOBlastConfig.class)
 })
-@JsonDeserialize(
-    as = IOBlastConfigImpl.class
-)
+@JsonDeserialize(as = IOBlastConfigImpl.class)
 public interface IOBlastConfig {
   IOBlastTool _DISCRIMINATOR_TYPE_NAME = null;
 
