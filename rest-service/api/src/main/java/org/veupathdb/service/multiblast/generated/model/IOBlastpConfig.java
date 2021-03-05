@@ -5,141 +5,142 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeName("blastp")
 @JsonDeserialize(as = IOBlastpConfigImpl.class)
 public interface IOBlastpConfig extends IOBlastConfig {
   IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.BLASTP;
 
-  @JsonProperty("task")
+  @JsonProperty(JsonKeys.Task)
   IOBlastpTask getTask();
 
-  @JsonProperty("task")
+  @JsonProperty(JsonKeys.Task)
   void setTask(IOBlastpTask task);
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   Integer getWordSize();
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   void setWordSize(Integer wordSize);
 
-  @JsonProperty("gapOpen")
+  @JsonProperty(JsonKeys.GapOpen)
   Integer getGapOpen();
 
-  @JsonProperty("gapOpen")
+  @JsonProperty(JsonKeys.GapOpen)
   void setGapOpen(Integer gapOpen);
 
-  @JsonProperty("gapExtend")
+  @JsonProperty(JsonKeys.GapExtend)
   Integer getGapExtend();
 
-  @JsonProperty("gapExtend")
+  @JsonProperty(JsonKeys.GapExtend)
   void setGapExtend(Integer gapExtend);
 
-  @JsonProperty("matrix")
+  @JsonProperty(JsonKeys.Matrix)
   IOBlastpScoringMatrix getMatrix();
 
-  @JsonProperty("matrix")
+  @JsonProperty(JsonKeys.Matrix)
   void setMatrix(IOBlastpScoringMatrix matrix);
 
-  @JsonProperty("threshold")
+  @JsonProperty(JsonKeys.Threshold)
    Double getThreshold();
 
-  @JsonProperty("threshold")
+  @JsonProperty(JsonKeys.Threshold)
   void setThreshold (Double threshold);
 
-  @JsonProperty("compBasedStats")
+  @JsonProperty(JsonKeys.CompositionBasedStats)
   IOBlastCompBasedStats getCompBasedStats();
 
-  @JsonProperty("compBasedStats")
+  @JsonProperty(JsonKeys.CompositionBasedStats)
   void setCompBasedStats(IOBlastCompBasedStats compBasedStats);
 
-  @JsonProperty("seg")
+  @JsonProperty(JsonKeys.Seg)
   IOBlastSegMask getSeg();
 
-  @JsonProperty("seg")
+  @JsonProperty(JsonKeys.Seg)
   void setSeg(IOBlastSegMask seg);
 
-  @JsonProperty("softMasking")
+  @JsonProperty(JsonKeys.SoftMasking)
    Boolean getSoftMasking();
 
-  @JsonProperty("softMasking")
+  @JsonProperty(JsonKeys.SoftMasking)
   void setSoftMasking (Boolean softMasking);
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   List<Integer> getTaxIds();
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   void setTaxIds(List<Integer> taxIds);
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   List<Integer> getNegativeTaxIds();
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   void setNegativeTaxIds(List<Integer> negativeTaxIds);
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   String getDbSoftMask();
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   void setDbSoftMask(String dbSoftMask);
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   String getDbHardMask();
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   void setDbHardMask(String dbHardMask);
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   Integer getCullingLimit();
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   void setCullingLimit(Integer cullingLimit);
 
-  @JsonProperty("bestHitOverhang")
+  @JsonProperty(JsonKeys.BestHitOverhang)
    Double getBestHitOverhang();
 
-  @JsonProperty("bestHitOverhang")
+  @JsonProperty(JsonKeys.BestHitOverhang)
   void setBestHitOverhang (Double bestHitOverhang);
 
-  @JsonProperty("bestHitScoreEdge")
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
    Double getBestHitScoreEdge();
 
-  @JsonProperty("bestHitScoreEdge")
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
   void setBestHitScoreEdge (Double bestHitScoreEdge);
 
-  @JsonProperty("subjectBestHit")
+  @JsonProperty(JsonKeys.SubjectBestHit)
    Boolean getSubjectBestHit();
 
-  @JsonProperty("subjectBestHit")
+  @JsonProperty(JsonKeys.SubjectBestHit)
   void setSubjectBestHit (Boolean subjectBestHit);
 
-  @JsonProperty("xDropGap")
+  @JsonProperty(JsonKeys.XDropGap)
    Double getXDropGap();
 
-  @JsonProperty("xDropGap")
+  @JsonProperty(JsonKeys.XDropGap)
   void setXDropGap (Double xDropGap);
 
-  @JsonProperty("xDropGapFinal")
+  @JsonProperty(JsonKeys.XDropGapFinal)
    Double getXDropGapFinal();
 
-  @JsonProperty("xDropGapFinal")
+  @JsonProperty(JsonKeys.XDropGapFinal)
   void setXDropGapFinal (Double xDropGapFinal);
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   Integer getWindowSize();
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   void setWindowSize(Integer windowSize);
 
-  @JsonProperty("ungapped")
+  @JsonProperty(JsonKeys.Ungapped)
    Boolean getUngapped();
 
-  @JsonProperty("ungapped")
+  @JsonProperty(JsonKeys.Ungapped)
   void setUngapped (Boolean ungapped);
 
-  @JsonProperty("useSWTraceback")
+  @JsonProperty(JsonKeys.UseSmithWatermanAligns)
    Boolean getUseSWTraceback();
 
-  @JsonProperty("useSWTraceback")
+  @JsonProperty(JsonKeys.UseSmithWatermanAligns)
   void setUseSWTraceback (Boolean useSWTraceback);
 }

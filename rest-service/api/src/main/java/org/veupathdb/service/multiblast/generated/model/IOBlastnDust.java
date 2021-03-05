@@ -2,32 +2,31 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
-@JsonDeserialize(
-    as = IOBlastnDustImpl.class
-)
+@JsonDeserialize(as = IOBlastnDustImpl.class)
 public interface IOBlastnDust {
-  @JsonProperty("enable")
+  @JsonProperty(JsonKeys.Enable)
    Boolean getEnable();
 
-  @JsonProperty("enable")
+  @JsonProperty(JsonKeys.Enable)
   void setEnable (Boolean enable);
 
-  @JsonProperty("level")
+  @JsonProperty(JsonKeys.Level)
    Short getLevel();
 
-  @JsonProperty("level")
+  @JsonProperty(JsonKeys.Level)
   void setLevel (Short level);
 
-  @JsonProperty("window")
+  @JsonProperty(JsonKeys.Window)
    Short getWindow();
 
-  @JsonProperty("window")
+  @JsonProperty(JsonKeys.Window)
   void setWindow (Short window);
 
-  @JsonProperty("linker")
+  @JsonProperty(JsonKeys.Linker)
    Short getLinker();
 
-  @JsonProperty("linker")
+  @JsonProperty(JsonKeys.Linker)
   void setLinker (Short linker);
 }

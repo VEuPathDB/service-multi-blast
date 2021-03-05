@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize(
-    as = OutputSiteListingImpl.class
-)
+@JsonDeserialize(as = OutputSiteListingImpl.class)
 public interface OutputSiteListing {
   @JsonProperty("Site")
   List<OutputListOrganism> getSite();

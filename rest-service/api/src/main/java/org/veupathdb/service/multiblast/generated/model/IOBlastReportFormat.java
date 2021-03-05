@@ -4,26 +4,27 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonDeserialize(
     as = IOBlastReportFormatImpl.class
 )
 public interface IOBlastReportFormat {
-  @JsonProperty("format")
+  @JsonProperty(JsonKeys.Format)
   IOBlastFormat getFormat();
 
-  @JsonProperty("format")
+  @JsonProperty(JsonKeys.Format)
   void setFormat(IOBlastFormat format);
 
-  @JsonProperty("delim")
+  @JsonProperty(JsonKeys.Delimiter)
   String getDelim();
 
-  @JsonProperty("delim")
+  @JsonProperty(JsonKeys.Delimiter)
   void setDelim(String delim);
 
-  @JsonProperty("fields")
+  @JsonProperty(JsonKeys.Fields)
   List<IOBlastReportField> getFields();
 
-  @JsonProperty("fields")
+  @JsonProperty(JsonKeys.Fields)
   void setFields(List<IOBlastReportField> fields);
 }

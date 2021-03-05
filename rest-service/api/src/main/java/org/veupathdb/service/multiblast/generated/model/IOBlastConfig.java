@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
-    property = "tool"
+    property = JsonKeys.Tool
 )
 @JsonSubTypes({
     @JsonSubTypes.Type(org.veupathdb.service.multiblast.generated.model.IOTBlastxConfig.class),
@@ -22,108 +23,108 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface IOBlastConfig {
   IOBlastTool _DISCRIMINATOR_TYPE_NAME = null;
 
-  @JsonProperty("tool")
+  @JsonProperty(JsonKeys.Tool)
   IOBlastTool getTool();
 
-  @JsonProperty("query")
+  @JsonProperty(JsonKeys.Query)
   String getQuery();
 
-  @JsonProperty("query")
+  @JsonProperty(JsonKeys.Query)
   void setQuery(String query);
 
-  @JsonProperty("queryLoc")
+  @JsonProperty(JsonKeys.QueryLocation)
   IOBlastLocation getQueryLoc();
 
-  @JsonProperty("queryLoc")
+  @JsonProperty(JsonKeys.QueryLocation)
   void setQueryLoc(IOBlastLocation queryLoc);
 
-  @JsonProperty("eValue")
+  @JsonProperty(JsonKeys.ExpectValue)
   String getEValue();
 
-  @JsonProperty("eValue")
+  @JsonProperty(JsonKeys.ExpectValue)
   void setEValue(String eValue);
 
-  @JsonProperty("outFormat")
+  @JsonProperty(JsonKeys.OutFormat)
   IOBlastReportFormat getOutFormat();
 
-  @JsonProperty("outFormat")
+  @JsonProperty(JsonKeys.OutFormat)
   void setOutFormat(IOBlastReportFormat outFormat);
 
-  @JsonProperty("numDescriptions")
+  @JsonProperty(JsonKeys.NumDescriptions)
   Integer getNumDescriptions();
 
-  @JsonProperty("numDescriptions")
+  @JsonProperty(JsonKeys.NumDescriptions)
   void setNumDescriptions(Integer numDescriptions);
 
-  @JsonProperty("numAlignments")
+  @JsonProperty(JsonKeys.NumAlignments)
   Integer getNumAlignments();
 
-  @JsonProperty("numAlignments")
+  @JsonProperty(JsonKeys.NumAlignments)
   void setNumAlignments(Integer numAlignments);
 
-  @JsonProperty("lineLength")
+  @JsonProperty(JsonKeys.LineLength)
   Integer getLineLength();
 
-  @JsonProperty("lineLength")
+  @JsonProperty(JsonKeys.LineLength)
   void setLineLength(Integer lineLength);
 
-  @JsonProperty("sortHits")
+  @JsonProperty(JsonKeys.SortHits)
   IOHitSorting getSortHits();
 
-  @JsonProperty("sortHits")
+  @JsonProperty(JsonKeys.SortHits)
   void setSortHits(IOHitSorting sortHits);
 
-  @JsonProperty("sortHSPs")
+  @JsonProperty(JsonKeys.SortHSPs)
   IOHSPSorting getSortHSPs();
 
-  @JsonProperty("sortHSPs")
+  @JsonProperty(JsonKeys.SortHSPs)
   void setSortHSPs(IOHSPSorting sortHSPs);
 
-  @JsonProperty("lcaseMasking")
+  @JsonProperty(JsonKeys.LowercaseMasking)
    Boolean getLcaseMasking();
 
-  @JsonProperty("lcaseMasking")
+  @JsonProperty(JsonKeys.LowercaseMasking)
   void setLcaseMasking (Boolean lcaseMasking);
 
-  @JsonProperty("qCovHSPPerc")
+  @JsonProperty(JsonKeys.QueryCoverageHSPPercent)
    Double getQCovHSPPerc();
 
-  @JsonProperty("qCovHSPPerc")
+  @JsonProperty(JsonKeys.QueryCoverageHSPPercent)
   void setQCovHSPPerc (Double qCovHSPPerc);
 
-  @JsonProperty("maxHSPs")
+  @JsonProperty(JsonKeys.MaxHSPs)
   Integer getMaxHSPs();
 
-  @JsonProperty("maxHSPs")
+  @JsonProperty(JsonKeys.MaxHSPs)
   void setMaxHSPs(Integer maxHSPs);
 
-  @JsonProperty("maxTargetSeqs")
+  @JsonProperty(JsonKeys.MaxTargetSequences)
   Integer getMaxTargetSeqs();
 
-  @JsonProperty("maxTargetSeqs")
+  @JsonProperty(JsonKeys.MaxTargetSequences)
   void setMaxTargetSeqs(Integer maxTargetSeqs);
 
-  @JsonProperty("dbSize")
+  @JsonProperty(JsonKeys.DBSize)
    Byte getDbSize();
 
-  @JsonProperty("dbSize")
+  @JsonProperty(JsonKeys.DBSize)
   void setDbSize (Byte dbSize);
 
-  @JsonProperty("searchSpace")
+  @JsonProperty(JsonKeys.SearchSpace)
    Byte getSearchSpace();
 
-  @JsonProperty("searchSpace")
+  @JsonProperty(JsonKeys.SearchSpace)
   void setSearchSpace (Byte searchSpace);
 
-  @JsonProperty("xDropUngap")
+  @JsonProperty(JsonKeys.XDropUngap)
    Double getXDropUngap();
 
-  @JsonProperty("xDropUngap")
+  @JsonProperty(JsonKeys.XDropUngap)
   void setXDropUngap (Double xDropUngap);
 
-  @JsonProperty("parseDefLines")
+  @JsonProperty(JsonKeys.ParseDefLines)
    Boolean getParseDefLines();
 
-  @JsonProperty("parseDefLines")
+  @JsonProperty(JsonKeys.ParseDefLines)
   void setParseDefLines (Boolean parseDefLines);
 }

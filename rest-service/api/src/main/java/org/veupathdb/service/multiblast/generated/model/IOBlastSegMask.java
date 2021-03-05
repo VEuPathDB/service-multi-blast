@@ -2,26 +2,25 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
-@JsonDeserialize(
-    as = IOBlastSegMaskImpl.class
-)
+@JsonDeserialize(as = IOBlastSegMaskImpl.class)
 public interface IOBlastSegMask {
-  @JsonProperty("window")
+  @JsonProperty(JsonKeys.Window)
   Integer getWindow();
 
-  @JsonProperty("window")
+  @JsonProperty(JsonKeys.Window)
   void setWindow(Integer window);
 
-  @JsonProperty("locut")
+  @JsonProperty(JsonKeys.LowCut)
    Double getLocut();
 
-  @JsonProperty("locut")
+  @JsonProperty(JsonKeys.LowCut)
   void setLocut (Double locut);
 
-  @JsonProperty("hicut")
+  @JsonProperty(JsonKeys.HighCut)
    Double getHicut();
 
-  @JsonProperty("hicut")
+  @JsonProperty(JsonKeys.HighCut)
   void setHicut (Double hicut);
 }
