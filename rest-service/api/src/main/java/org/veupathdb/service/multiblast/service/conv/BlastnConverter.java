@@ -92,7 +92,7 @@ class BlastnConverter
     if (val == null || !val.getEnable())
       return null;
 
-    return new DustImpl(val.getLevel(), val.getLinker(), val.getWindow());
+    return new DustImpl(val.getLevel(), val.getWindow(), val.getLinker());
   }
 
   static DcTemplateType toInternal(IOBlastnDcTemplateType val) {
