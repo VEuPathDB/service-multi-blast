@@ -1,7 +1,5 @@
 package org.veupathdb.service.multiblast.service.conv;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnScoringMatrix;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnTask;
@@ -12,8 +10,6 @@ import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
 
 public class TBlastnConverter
 {
-  private static final Logger log = LogProvider.logger(TBlastnConverter.class);
-
   private static TBlastnConverter instance;
 
   public static TBlastnConverter getInstance() {
