@@ -126,29 +126,21 @@ public class JobCreationService
     log.debug("Job Hash: {}", rootDets.id);
 
     try(var db = new JobDBManager()) {
-      if (handleJob(db, rootDets) != JobStatus.Linked) {
-        var index = 1;
+      // Handle root job
+      handleJob(db, rootDets);
 
-        for (var query : queries.subQueries) {
-          log.debug("Handling subquery #{}", index++);
-          handleJob(db, prepJob(js, job, query, userID, dbPath, rootDets.hash, false));
-        }
-      } else {
-        for (var query : queries.subQueries)
-          //noinspection ResultOfMethodCallIgnored
-          query.source.delete();
+      // Handle sub-jobs
+      var index = 1;
+      for (var query : queries.subQueries) {
+        log.debug("Handling subquery #{}", index++);
+        handleJob(db, prepJob(js, job, query, userID, dbPath, rootDets.hash, false));
       }
     }
 
     return new IOJobPostResponseImpl().setJobId(rootDets.id);
   }
 
-  enum JobStatus {
-    Linked,
-    Created,
-    Rerun
-  }
-  static JobStatus handleJob(JobDBManager db, JobDetails dets) throws Exception {
+  static void handleJob(JobDBManager db, JobDetails dets) throws Exception {
     log.trace("#handleJob(dets={})", dets);
 
     var collision = db.getJob(dets.hash);
@@ -160,17 +152,17 @@ public class JobCreationService
         //noinspection ResultOfMethodCallIgnored
         dets.query.delete();
         new JobCreator(db).handleLink(dets);
-        return JobStatus.Linked;
+        return;
       } else {
         log.debug("Job already exists but does not have cached data.  Rerunning job.");
         new JobCreator(db).handleRerun(dets);
-        return JobStatus.Rerun;
+        return;
       }
     }
 
     log.debug("Job did not already exist. Creating new job.");
     new JobCreator(db).handleInitialRun(dets);
-    return JobStatus.Created;
+    return;
   }
 
   static JobDetails prepJob(
