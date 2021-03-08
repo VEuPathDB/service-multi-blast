@@ -4,19 +4,11 @@ import java.io.File;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "query",
-    "properties"
-})
 public class IOMultipartJobRequestImpl implements IOMultipartJobRequest
 {
-  @JsonProperty("query")
-  private File query;
-
-  @JsonProperty("properties")
+  private File             query;
   private IOJsonJobRequest properties;
 
   @JsonProperty("query")

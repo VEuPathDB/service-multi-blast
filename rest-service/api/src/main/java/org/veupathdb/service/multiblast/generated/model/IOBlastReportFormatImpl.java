@@ -4,22 +4,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "format",
-    "delim",
-    "fields"
-})
-public class IOBlastReportFormatImpl implements IOBlastReportFormat {
-  @JsonProperty("format")
-  private IOBlastFormat format;
-
-  @JsonProperty("delim")
-  private String delim;
-
-  @JsonProperty("fields")
+public class IOBlastReportFormatImpl implements IOBlastReportFormat
+{
+  private IOBlastFormat            format;
+  private String                   delim;
   private List<IOBlastReportField> fields;
 
   @JsonProperty("format")

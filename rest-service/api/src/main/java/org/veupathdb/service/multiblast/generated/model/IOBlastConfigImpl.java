@@ -2,83 +2,29 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "tool",
-    "query",
-    "queryLoc",
-    "eValue",
-    "outFormat",
-    "numDescriptions",
-    "numAlignments",
-    "lineLength",
-    "sortHits",
-    "sortHSPs",
-    "lcaseMasking",
-    "qCovHSPPerc",
-    "maxHSPs",
-    "maxTargetSeqs",
-    "dbSize",
-    "searchSpace",
-    "xDropUngap",
-    "parseDefLines"
-})
-public class IOBlastConfigImpl implements IOBlastConfig {
-  @JsonProperty("tool")
+public class IOBlastConfigImpl implements IOBlastConfig
+{
   private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  @JsonProperty("query")
-  private String query;
-
-  @JsonProperty("queryLoc")
-  private IOBlastLocation queryLoc;
-
-  @JsonProperty("eValue")
-  private String eValue;
-
-  @JsonProperty("outFormat")
+  private String              query;
+  private IOBlastLocation     queryLoc;
+  private String              eValue;
   private IOBlastReportFormat outFormat;
-
-  @JsonProperty("numDescriptions")
-  private Integer numDescriptions;
-
-  @JsonProperty("numAlignments")
-  private Integer numAlignments;
-
-  @JsonProperty("lineLength")
-  private Integer lineLength;
-
-  @JsonProperty("sortHits")
-  private IOHitSorting sortHits;
-
-  @JsonProperty("sortHSPs")
-  private IOHSPSorting sortHSPs;
-
-  @JsonProperty("lcaseMasking")
-  private  Boolean lcaseMasking;
-
-  @JsonProperty("qCovHSPPerc")
-  private  Double qCovHSPPerc;
-
-  @JsonProperty("maxHSPs")
-  private Integer maxHSPs;
-
-  @JsonProperty("maxTargetSeqs")
-  private Integer maxTargetSeqs;
-
-  @JsonProperty("dbSize")
-  private  Byte dbSize;
-
-  @JsonProperty("searchSpace")
-  private  Byte searchSpace;
-
-  @JsonProperty("xDropUngap")
-  private  Double xDropUngap;
-
-  @JsonProperty("parseDefLines")
-  private  Boolean parseDefLines;
+  private Integer             numDescriptions;
+  private Integer             numAlignments;
+  private Integer             lineLength;
+  private IOHitSorting        sortHits;
+  private IOHSPSorting        sortHSPs;
+  private Boolean             lcaseMasking;
+  private Double              qCovHSPPerc;
+  private Integer             maxHSPs;
+  private Integer             maxTargetSeqs;
+  private Byte                dbSize;
+  private Byte                searchSpace;
+  private Double              xDropUngap;
+  private Boolean             parseDefLines;
 
   @JsonProperty("tool")
   public IOBlastTool getTool() {
@@ -176,22 +122,22 @@ public class IOBlastConfigImpl implements IOBlastConfig {
   }
 
   @JsonProperty("lcaseMasking")
-  public  Boolean getLcaseMasking() {
+  public Boolean getLcaseMasking() {
     return this.lcaseMasking;
   }
 
   @JsonProperty("lcaseMasking")
-  public void setLcaseMasking (Boolean lcaseMasking) {
+  public void setLcaseMasking(Boolean lcaseMasking) {
     this.lcaseMasking = lcaseMasking;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public  Double getQCovHSPPerc() {
+  public Double getQCovHSPPerc() {
     return this.qCovHSPPerc;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public void setQCovHSPPerc (Double qCovHSPPerc) {
+  public void setQCovHSPPerc(Double qCovHSPPerc) {
     this.qCovHSPPerc = qCovHSPPerc;
   }
 
@@ -216,42 +162,42 @@ public class IOBlastConfigImpl implements IOBlastConfig {
   }
 
   @JsonProperty("dbSize")
-  public  Byte getDbSize() {
+  public Byte getDbSize() {
     return this.dbSize;
   }
 
   @JsonProperty("dbSize")
-  public void setDbSize (Byte dbSize) {
+  public void setDbSize(Byte dbSize) {
     this.dbSize = dbSize;
   }
 
   @JsonProperty("searchSpace")
-  public  Byte getSearchSpace() {
+  public Byte getSearchSpace() {
     return this.searchSpace;
   }
 
   @JsonProperty("searchSpace")
-  public void setSearchSpace (Byte searchSpace) {
+  public void setSearchSpace(Byte searchSpace) {
     this.searchSpace = searchSpace;
   }
 
   @JsonProperty("xDropUngap")
-  public  Double getXDropUngap() {
+  public Double getXDropUngap() {
     return this.xDropUngap;
   }
 
   @JsonProperty("xDropUngap")
-  public void setXDropUngap (Double xDropUngap) {
+  public void setXDropUngap(Double xDropUngap) {
     this.xDropUngap = xDropUngap;
   }
 
   @JsonProperty("parseDefLines")
-  public  Boolean getParseDefLines() {
+  public Boolean getParseDefLines() {
     return this.parseDefLines;
   }
 
   @JsonProperty("parseDefLines")
-  public void setParseDefLines (Boolean parseDefLines) {
+  public void setParseDefLines(Boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
   }
 }

@@ -4,161 +4,50 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("tblastx")
-@JsonPropertyOrder({
-    "tool",
-    "query",
-    "queryLoc",
-    "eValue",
-    "outFormat",
-    "numDescriptions",
-    "numAlignments",
-    "lineLength",
-    "sortHits",
-    "sortHSPs",
-    "lcaseMasking",
-    "qCovHSPPerc",
-    "maxHSPs",
-    "maxTargetSeqs",
-    "dbSize",
-    "searchSpace",
-    "xDropUngap",
-    "parseDefLines",
-    "strand",
-    "queryGeneticCode",
-    "wordSize",
-    "maxIntronLength",
-    "matrix",
-    "threshold",
-    "dbGencode",
-    "seg",
-    "softMasking",
-    "taxIds",
-    "negativeTaxIds",
-    "dbSoftMask",
-    "dbHardMask",
-    "cullingLimit",
-    "bestHitOverhang",
-    "bestHitScoreEdge",
-    "subjectBestHit",
-    "sumStats",
-    "windowSize"
-})
-public class IOTBlastxConfigImpl implements IOTBlastxConfig {
-  @JsonProperty("tool")
+public class IOTBlastxConfigImpl implements IOTBlastxConfig
+{
   private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  @JsonProperty("query")
-  private String query;
-
-  @JsonProperty("queryLoc")
-  private IOBlastLocation queryLoc;
-
-  @JsonProperty("eValue")
-  private String eValue;
-
-  @JsonProperty("outFormat")
-  private IOBlastReportFormat outFormat;
-
-  @JsonProperty("numDescriptions")
-  private Integer numDescriptions;
-
-  @JsonProperty("numAlignments")
-  private Integer numAlignments;
-
-  @JsonProperty("lineLength")
-  private Integer lineLength;
-
-  @JsonProperty("sortHits")
-  private IOHitSorting sortHits;
-
-  @JsonProperty("sortHSPs")
-  private IOHSPSorting sortHSPs;
-
-  @JsonProperty("lcaseMasking")
-  private  Boolean lcaseMasking;
-
-  @JsonProperty("qCovHSPPerc")
-  private  Double qCovHSPPerc;
-
-  @JsonProperty("maxHSPs")
-  private Integer maxHSPs;
-
-  @JsonProperty("maxTargetSeqs")
-  private Integer maxTargetSeqs;
-
-  @JsonProperty("dbSize")
-  private  Byte dbSize;
-
-  @JsonProperty("searchSpace")
-  private  Byte searchSpace;
-
-  @JsonProperty("xDropUngap")
-  private  Double xDropUngap;
-
-  @JsonProperty("parseDefLines")
-  private  Boolean parseDefLines;
-
-  @JsonProperty("strand")
-  private IOBlastStrand strand;
-
-  @JsonProperty("queryGeneticCode")
-  private  Byte queryGeneticCode;
-
-  @JsonProperty("wordSize")
-  private Integer wordSize;
-
-  @JsonProperty("maxIntronLength")
-  private Integer maxIntronLength;
-
-  @JsonProperty("matrix")
+  private String                 query;
+  private IOBlastLocation        queryLoc;
+  private String                 eValue;
+  private IOBlastReportFormat    outFormat;
+  private Integer                numDescriptions;
+  private Integer                numAlignments;
+  private Integer                lineLength;
+  private IOHitSorting           sortHits;
+  private IOHSPSorting           sortHSPs;
+  private Boolean                lcaseMasking;
+  private Double                 qCovHSPPerc;
+  private Integer                maxHSPs;
+  private Integer                maxTargetSeqs;
+  private Byte                   dbSize;
+  private Byte                   searchSpace;
+  private Double                 xDropUngap;
+  private Boolean                parseDefLines;
+  private IOBlastStrand          strand;
+  private Byte                   queryGeneticCode;
+  private Integer                wordSize;
+  private Integer                maxIntronLength;
   private IOTBlastxScoringMatrix matrix;
-
-  @JsonProperty("threshold")
-  private  Double threshold;
-
-  @JsonProperty("dbGencode")
-  private  Byte dbGencode;
-
-  @JsonProperty("seg")
-  private IOBlastSegMask seg;
-
-  @JsonProperty("softMasking")
-  private  Boolean softMasking;
-
-  @JsonProperty("taxIds")
-  private List<Integer> taxIds;
-
-  @JsonProperty("negativeTaxIds")
-  private List<Integer> negativeTaxIds;
-
-  @JsonProperty("dbSoftMask")
-  private String dbSoftMask;
-
-  @JsonProperty("dbHardMask")
-  private String dbHardMask;
-
-  @JsonProperty("cullingLimit")
-  private Integer cullingLimit;
-
-  @JsonProperty("bestHitOverhang")
-  private  Double bestHitOverhang;
-
-  @JsonProperty("bestHitScoreEdge")
-  private  Double bestHitScoreEdge;
-
-  @JsonProperty("subjectBestHit")
-  private  Boolean subjectBestHit;
-
-  @JsonProperty("sumStats")
-  private  Boolean sumStats;
-
-  @JsonProperty("windowSize")
-  private Integer windowSize;
+  private Double                 threshold;
+  private Byte                   dbGencode;
+  private IOBlastSegMask         seg;
+  private Boolean                softMasking;
+  private List<Integer>          taxIds;
+  private List<Integer>          negativeTaxIds;
+  private String                 dbSoftMask;
+  private String                 dbHardMask;
+  private Integer                cullingLimit;
+  private Double                 bestHitOverhang;
+  private Double                 bestHitScoreEdge;
+  private Boolean                subjectBestHit;
+  private Boolean                sumStats;
+  private Integer                windowSize;
 
   @JsonProperty("tool")
   public IOBlastTool getTool() {
@@ -256,22 +145,22 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("lcaseMasking")
-  public  Boolean getLcaseMasking() {
+  public Boolean getLcaseMasking() {
     return this.lcaseMasking;
   }
 
   @JsonProperty("lcaseMasking")
-  public void setLcaseMasking (Boolean lcaseMasking) {
+  public void setLcaseMasking(Boolean lcaseMasking) {
     this.lcaseMasking = lcaseMasking;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public  Double getQCovHSPPerc() {
+  public Double getQCovHSPPerc() {
     return this.qCovHSPPerc;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public void setQCovHSPPerc (Double qCovHSPPerc) {
+  public void setQCovHSPPerc(Double qCovHSPPerc) {
     this.qCovHSPPerc = qCovHSPPerc;
   }
 
@@ -296,42 +185,42 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("dbSize")
-  public  Byte getDbSize() {
+  public Byte getDbSize() {
     return this.dbSize;
   }
 
   @JsonProperty("dbSize")
-  public void setDbSize (Byte dbSize) {
+  public void setDbSize(Byte dbSize) {
     this.dbSize = dbSize;
   }
 
   @JsonProperty("searchSpace")
-  public  Byte getSearchSpace() {
+  public Byte getSearchSpace() {
     return this.searchSpace;
   }
 
   @JsonProperty("searchSpace")
-  public void setSearchSpace (Byte searchSpace) {
+  public void setSearchSpace(Byte searchSpace) {
     this.searchSpace = searchSpace;
   }
 
   @JsonProperty("xDropUngap")
-  public  Double getXDropUngap() {
+  public Double getXDropUngap() {
     return this.xDropUngap;
   }
 
   @JsonProperty("xDropUngap")
-  public void setXDropUngap (Double xDropUngap) {
+  public void setXDropUngap(Double xDropUngap) {
     this.xDropUngap = xDropUngap;
   }
 
   @JsonProperty("parseDefLines")
-  public  Boolean getParseDefLines() {
+  public Boolean getParseDefLines() {
     return this.parseDefLines;
   }
 
   @JsonProperty("parseDefLines")
-  public void setParseDefLines (Boolean parseDefLines) {
+  public void setParseDefLines(Boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
   }
 
@@ -346,12 +235,12 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("queryGeneticCode")
-  public  Byte getQueryGeneticCode() {
+  public Byte getQueryGeneticCode() {
     return this.queryGeneticCode;
   }
 
   @JsonProperty("queryGeneticCode")
-  public void setQueryGeneticCode (Byte queryGeneticCode) {
+  public void setQueryGeneticCode(Byte queryGeneticCode) {
     this.queryGeneticCode = queryGeneticCode;
   }
 
@@ -386,22 +275,22 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("threshold")
-  public  Double getThreshold() {
+  public Double getThreshold() {
     return this.threshold;
   }
 
   @JsonProperty("threshold")
-  public void setThreshold (Double threshold) {
+  public void setThreshold(Double threshold) {
     this.threshold = threshold;
   }
 
   @JsonProperty("dbGencode")
-  public  Byte getDbGencode() {
+  public Byte getDbGencode() {
     return this.dbGencode;
   }
 
   @JsonProperty("dbGencode")
-  public void setDbGencode (Byte dbGencode) {
+  public void setDbGencode(Byte dbGencode) {
     this.dbGencode = dbGencode;
   }
 
@@ -416,12 +305,12 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("softMasking")
-  public  Boolean getSoftMasking() {
+  public Boolean getSoftMasking() {
     return this.softMasking;
   }
 
   @JsonProperty("softMasking")
-  public void setSoftMasking (Boolean softMasking) {
+  public void setSoftMasking(Boolean softMasking) {
     this.softMasking = softMasking;
   }
 
@@ -476,42 +365,42 @@ public class IOTBlastxConfigImpl implements IOTBlastxConfig {
   }
 
   @JsonProperty("bestHitOverhang")
-  public  Double getBestHitOverhang() {
+  public Double getBestHitOverhang() {
     return this.bestHitOverhang;
   }
 
   @JsonProperty("bestHitOverhang")
-  public void setBestHitOverhang (Double bestHitOverhang) {
+  public void setBestHitOverhang(Double bestHitOverhang) {
     this.bestHitOverhang = bestHitOverhang;
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public  Double getBestHitScoreEdge() {
+  public Double getBestHitScoreEdge() {
     return this.bestHitScoreEdge;
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public void setBestHitScoreEdge (Double bestHitScoreEdge) {
+  public void setBestHitScoreEdge(Double bestHitScoreEdge) {
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
   @JsonProperty("subjectBestHit")
-  public  Boolean getSubjectBestHit() {
+  public Boolean getSubjectBestHit() {
     return this.subjectBestHit;
   }
 
   @JsonProperty("subjectBestHit")
-  public void setSubjectBestHit (Boolean subjectBestHit) {
+  public void setSubjectBestHit(Boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
   }
 
   @JsonProperty("sumStats")
-  public  Boolean getSumStats() {
+  public Boolean getSumStats() {
     return this.sumStats;
   }
 
   @JsonProperty("sumStats")
-  public void setSumStats (Boolean sumStats) {
+  public void setSumStats(Boolean sumStats) {
     this.sumStats = sumStats;
   }
 

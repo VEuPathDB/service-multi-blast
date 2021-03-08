@@ -4,18 +4,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "name",
-    "blast"
-})
-public class OutputListOrganismImpl implements OutputListOrganism {
-  @JsonProperty("name")
-  private String name;
-
-  @JsonProperty("blast")
+public class OutputListOrganismImpl implements OutputListOrganism
+{
+  private String       name;
   private List<String> blast;
 
   @JsonProperty("name")
