@@ -2,37 +2,30 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "start",
-    "stop"
-})
-public class IOBlastLocationImpl implements IOBlastLocation {
-  @JsonProperty("start")
-  private  Long start;
-
-  @JsonProperty("stop")
-  private  Long stop;
+public class IOBlastLocationImpl implements IOBlastLocation
+{
+  private Long start;
+  private Long stop;
 
   @JsonProperty("start")
-  public  Long getStart() {
+  public Long getStart() {
     return this.start;
   }
 
   @JsonProperty("start")
-  public void setStart (Long start) {
+  public void setStart(Long start) {
     this.start = start;
   }
 
   @JsonProperty("stop")
-  public  Long getStop() {
+  public Long getStop() {
     return this.stop;
   }
 
   @JsonProperty("stop")
-  public void setStop (Long stop) {
+  public void setStop(Long stop) {
     this.stop = stop;
   }
 }

@@ -8,10 +8,9 @@ import com.fasterxml.jackson.annotation.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("Site")
 public class OutputSiteListingImpl implements OutputSiteListing {
-  @JsonProperty("Site")
   private List<OutputListOrganism> site;
 
-  @JsonIgnore
+  @JsonIgnorez
   private final Map<String, Object> additionalProperties = new ExcludingMap();
 
   @JsonProperty("Site")
