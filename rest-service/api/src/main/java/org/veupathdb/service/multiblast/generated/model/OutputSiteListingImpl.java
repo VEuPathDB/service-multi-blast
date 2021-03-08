@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.*;
 public class OutputSiteListingImpl implements OutputSiteListing {
   private List<OutputListOrganism> site;
 
-  @JsonIgnorez
+  @JsonIgnore
   private final Map<String, Object> additionalProperties = new ExcludingMap();
 
   @JsonProperty("Site")
