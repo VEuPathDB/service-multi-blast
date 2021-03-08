@@ -4,209 +4,62 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("blastn")
-@JsonPropertyOrder({
-    "tool",
-    "query",
-    "queryLoc",
-    "eValue",
-    "outFormat",
-    "numDescriptions",
-    "numAlignments",
-    "lineLength",
-    "sortHits",
-    "sortHSPs",
-    "lcaseMasking",
-    "qCovHSPPerc",
-    "maxHSPs",
-    "maxTargetSeqs",
-    "dbSize",
-    "searchSpace",
-    "xDropUngap",
-    "parseDefLines",
-    "strand",
-    "task",
-    "wordSize",
-    "gapOpen",
-    "gapExtend",
-    "penalty",
-    "reward",
-    "useIndex",
-    "indexName",
-    "dust",
-    "windowMaskerTaxid",
-    "softMasking",
-    "taxIds",
-    "negativeTaxIds",
-    "dbSoftMask",
-    "dbHardMask",
-    "percIdentity",
-    "cullingLimit",
-    "bestHitOverhang",
-    "bestHitScoreEdge",
-    "subjectBestHit",
-    "templateType",
-    "templateLength",
-    "sumStats",
-    "xDropGap",
-    "xDropGapFinal",
-    "noGreedy",
-    "minRawGappedScore",
-    "ungapped",
-    "windowSize",
-    "offDiagonalRange"
-})
-public class IOBlastnConfigImpl implements IOBlastnConfig {
-  @JsonProperty("tool")
+public class IOBlastnConfigImpl implements IOBlastnConfig
+{
   private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  @JsonProperty("query")
-  private String query;
-
-  @JsonProperty("queryLoc")
-  private IOBlastLocation queryLoc;
-
-  @JsonProperty("eValue")
-  private String eValue;
-
-  @JsonProperty("outFormat")
-  private IOBlastReportFormat outFormat;
-
-  @JsonProperty("numDescriptions")
-  private Integer numDescriptions;
-
-  @JsonProperty("numAlignments")
-  private Integer numAlignments;
-
-  @JsonProperty("lineLength")
-  private Integer lineLength;
-
-  @JsonProperty("sortHits")
-  private IOHitSorting sortHits;
-
-  @JsonProperty("sortHSPs")
-  private IOHSPSorting sortHSPs;
-
-  @JsonProperty("lcaseMasking")
-  private  Boolean lcaseMasking;
-
-  @JsonProperty("qCovHSPPerc")
-  private  Double qCovHSPPerc;
-
-  @JsonProperty("maxHSPs")
-  private Integer maxHSPs;
-
-  @JsonProperty("maxTargetSeqs")
-  private Integer maxTargetSeqs;
-
-  @JsonProperty("dbSize")
-  private  Byte dbSize;
-
-  @JsonProperty("searchSpace")
-  private  Byte searchSpace;
-
-  @JsonProperty("xDropUngap")
-  private  Double xDropUngap;
-
-  @JsonProperty("parseDefLines")
-  private  Boolean parseDefLines;
-
-  @JsonProperty("strand")
-  private IOBlastStrand strand;
-
-  @JsonProperty("task")
-  private IOBlastnTask task;
-
-  @JsonProperty("wordSize")
-  private Integer wordSize;
-
-  @JsonProperty("gapOpen")
-  private Integer gapOpen;
-
-  @JsonProperty("gapExtend")
-  private Integer gapExtend;
-
-  @JsonProperty("penalty")
-  private Integer penalty;
-
-  @JsonProperty("reward")
-  private Integer reward;
-
-  @JsonProperty("useIndex")
-  private  Boolean useIndex;
-
-  @JsonProperty("indexName")
-  private String indexName;
-
-  @JsonProperty("dust")
-  private IOBlastnDust dust;
-
-  @JsonProperty("windowMaskerTaxid")
-  private Integer windowMaskerTaxid;
-
-  @JsonProperty("softMasking")
-  private  Boolean softMasking;
-
-  @JsonProperty("taxIds")
-  private List<Integer> taxIds;
-
-  @JsonProperty("negativeTaxIds")
-  private List<Integer> negativeTaxIds;
-
-  @JsonProperty("dbSoftMask")
-  private String dbSoftMask;
-
-  @JsonProperty("dbHardMask")
-  private String dbHardMask;
-
-  @JsonProperty("percIdentity")
-  private  Double percIdentity;
-
-  @JsonProperty("cullingLimit")
-  private Integer cullingLimit;
-
-  @JsonProperty("bestHitOverhang")
-  private  Double bestHitOverhang;
-
-  @JsonProperty("bestHitScoreEdge")
-  private  Double bestHitScoreEdge;
-
-  @JsonProperty("subjectBestHit")
-  private  Boolean subjectBestHit;
-
-  @JsonProperty("templateType")
+  private String                 query;
+  private IOBlastLocation        queryLoc;
+  private String                 eValue;
+  private IOBlastReportFormat    outFormat;
+  private Integer                numDescriptions;
+  private Integer                numAlignments;
+  private Integer                lineLength;
+  private IOHitSorting           sortHits;
+  private IOHSPSorting           sortHSPs;
+  private Boolean                lcaseMasking;
+  private Double                 qCovHSPPerc;
+  private Integer                maxHSPs;
+  private Integer                maxTargetSeqs;
+  private Byte                   dbSize;
+  private Byte                   searchSpace;
+  private Double                 xDropUngap;
+  private Boolean                parseDefLines;
+  private IOBlastStrand          strand;
+  private IOBlastnTask           task;
+  private Integer                wordSize;
+  private Integer                gapOpen;
+  private Integer                gapExtend;
+  private Integer                penalty;
+  private Integer                reward;
+  private Boolean                useIndex;
+  private String                 indexName;
+  private IOBlastnDust           dust;
+  private Integer                windowMaskerTaxid;
+  private Boolean                softMasking;
+  private List<Integer>          taxIds;
+  private List<Integer>          negativeTaxIds;
+  private String                 dbSoftMask;
+  private String                 dbHardMask;
+  private Double                 percIdentity;
+  private Integer                cullingLimit;
+  private Double                 bestHitOverhang;
+  private Double                 bestHitScoreEdge;
+  private Boolean                subjectBestHit;
   private IOBlastnDcTemplateType templateType;
-
-  @JsonProperty("templateLength")
-  private  Byte templateLength;
-
-  @JsonProperty("sumStats")
-  private  Boolean sumStats;
-
-  @JsonProperty("xDropGap")
-  private  Double xDropGap;
-
-  @JsonProperty("xDropGapFinal")
-  private  Double xDropGapFinal;
-
-  @JsonProperty("noGreedy")
-  private  Boolean noGreedy;
-
-  @JsonProperty("minRawGappedScore")
-  private Integer minRawGappedScore;
-
-  @JsonProperty("ungapped")
-  private  Boolean ungapped;
-
-  @JsonProperty("windowSize")
-  private Integer windowSize;
-
-  @JsonProperty("offDiagonalRange")
-  private Integer offDiagonalRange;
+  private Byte                   templateLength;
+  private Boolean                sumStats;
+  private Double                 xDropGap;
+  private Double                 xDropGapFinal;
+  private Boolean                noGreedy;
+  private Integer                minRawGappedScore;
+  private Boolean                ungapped;
+  private Integer                windowSize;
+  private Integer                offDiagonalRange;
 
   @JsonProperty("tool")
   public IOBlastTool getTool() {
@@ -304,22 +157,22 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("lcaseMasking")
-  public  Boolean getLcaseMasking() {
+  public Boolean getLcaseMasking() {
     return this.lcaseMasking;
   }
 
   @JsonProperty("lcaseMasking")
-  public void setLcaseMasking (Boolean lcaseMasking) {
+  public void setLcaseMasking(Boolean lcaseMasking) {
     this.lcaseMasking = lcaseMasking;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public  Double getQCovHSPPerc() {
+  public Double getQCovHSPPerc() {
     return this.qCovHSPPerc;
   }
 
   @JsonProperty("qCovHSPPerc")
-  public void setQCovHSPPerc (Double qCovHSPPerc) {
+  public void setQCovHSPPerc(Double qCovHSPPerc) {
     this.qCovHSPPerc = qCovHSPPerc;
   }
 
@@ -344,42 +197,42 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("dbSize")
-  public  Byte getDbSize() {
+  public Byte getDbSize() {
     return this.dbSize;
   }
 
   @JsonProperty("dbSize")
-  public void setDbSize (Byte dbSize) {
+  public void setDbSize(Byte dbSize) {
     this.dbSize = dbSize;
   }
 
   @JsonProperty("searchSpace")
-  public  Byte getSearchSpace() {
+  public Byte getSearchSpace() {
     return this.searchSpace;
   }
 
   @JsonProperty("searchSpace")
-  public void setSearchSpace (Byte searchSpace) {
+  public void setSearchSpace(Byte searchSpace) {
     this.searchSpace = searchSpace;
   }
 
   @JsonProperty("xDropUngap")
-  public  Double getXDropUngap() {
+  public Double getXDropUngap() {
     return this.xDropUngap;
   }
 
   @JsonProperty("xDropUngap")
-  public void setXDropUngap (Double xDropUngap) {
+  public void setXDropUngap(Double xDropUngap) {
     this.xDropUngap = xDropUngap;
   }
 
   @JsonProperty("parseDefLines")
-  public  Boolean getParseDefLines() {
+  public Boolean getParseDefLines() {
     return this.parseDefLines;
   }
 
   @JsonProperty("parseDefLines")
-  public void setParseDefLines (Boolean parseDefLines) {
+  public void setParseDefLines(Boolean parseDefLines) {
     this.parseDefLines = parseDefLines;
   }
 
@@ -454,12 +307,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("useIndex")
-  public  Boolean getUseIndex() {
+  public Boolean getUseIndex() {
     return this.useIndex;
   }
 
   @JsonProperty("useIndex")
-  public void setUseIndex (Boolean useIndex) {
+  public void setUseIndex(Boolean useIndex) {
     this.useIndex = useIndex;
   }
 
@@ -494,12 +347,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("softMasking")
-  public  Boolean getSoftMasking() {
+  public Boolean getSoftMasking() {
     return this.softMasking;
   }
 
   @JsonProperty("softMasking")
-  public void setSoftMasking (Boolean softMasking) {
+  public void setSoftMasking(Boolean softMasking) {
     this.softMasking = softMasking;
   }
 
@@ -544,12 +397,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("percIdentity")
-  public  Double getPercIdentity() {
+  public Double getPercIdentity() {
     return this.percIdentity;
   }
 
   @JsonProperty("percIdentity")
-  public void setPercIdentity (Double percIdentity) {
+  public void setPercIdentity(Double percIdentity) {
     this.percIdentity = percIdentity;
   }
 
@@ -564,32 +417,32 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("bestHitOverhang")
-  public  Double getBestHitOverhang() {
+  public Double getBestHitOverhang() {
     return this.bestHitOverhang;
   }
 
   @JsonProperty("bestHitOverhang")
-  public void setBestHitOverhang (Double bestHitOverhang) {
+  public void setBestHitOverhang(Double bestHitOverhang) {
     this.bestHitOverhang = bestHitOverhang;
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public  Double getBestHitScoreEdge() {
+  public Double getBestHitScoreEdge() {
     return this.bestHitScoreEdge;
   }
 
   @JsonProperty("bestHitScoreEdge")
-  public void setBestHitScoreEdge (Double bestHitScoreEdge) {
+  public void setBestHitScoreEdge(Double bestHitScoreEdge) {
     this.bestHitScoreEdge = bestHitScoreEdge;
   }
 
   @JsonProperty("subjectBestHit")
-  public  Boolean getSubjectBestHit() {
+  public Boolean getSubjectBestHit() {
     return this.subjectBestHit;
   }
 
   @JsonProperty("subjectBestHit")
-  public void setSubjectBestHit (Boolean subjectBestHit) {
+  public void setSubjectBestHit(Boolean subjectBestHit) {
     this.subjectBestHit = subjectBestHit;
   }
 
@@ -604,52 +457,52 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("templateLength")
-  public  Byte getTemplateLength() {
+  public Byte getTemplateLength() {
     return this.templateLength;
   }
 
   @JsonProperty("templateLength")
-  public void setTemplateLength (Byte templateLength) {
+  public void setTemplateLength(Byte templateLength) {
     this.templateLength = templateLength;
   }
 
   @JsonProperty("sumStats")
-  public  Boolean getSumStats() {
+  public Boolean getSumStats() {
     return this.sumStats;
   }
 
   @JsonProperty("sumStats")
-  public void setSumStats (Boolean sumStats) {
+  public void setSumStats(Boolean sumStats) {
     this.sumStats = sumStats;
   }
 
   @JsonProperty("xDropGap")
-  public  Double getXDropGap() {
+  public Double getXDropGap() {
     return this.xDropGap;
   }
 
   @JsonProperty("xDropGap")
-  public void setXDropGap (Double xDropGap) {
+  public void setXDropGap(Double xDropGap) {
     this.xDropGap = xDropGap;
   }
 
   @JsonProperty("xDropGapFinal")
-  public  Double getXDropGapFinal() {
+  public Double getXDropGapFinal() {
     return this.xDropGapFinal;
   }
 
   @JsonProperty("xDropGapFinal")
-  public void setXDropGapFinal (Double xDropGapFinal) {
+  public void setXDropGapFinal(Double xDropGapFinal) {
     this.xDropGapFinal = xDropGapFinal;
   }
 
   @JsonProperty("noGreedy")
-  public  Boolean getNoGreedy() {
+  public Boolean getNoGreedy() {
     return this.noGreedy;
   }
 
   @JsonProperty("noGreedy")
-  public void setNoGreedy (Boolean noGreedy) {
+  public void setNoGreedy(Boolean noGreedy) {
     this.noGreedy = noGreedy;
   }
 
@@ -664,12 +517,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig {
   }
 
   @JsonProperty("ungapped")
-  public  Boolean getUngapped() {
+  public Boolean getUngapped() {
     return this.ungapped;
   }
 
   @JsonProperty("ungapped")
-  public void setUngapped (Boolean ungapped) {
+  public void setUngapped(Boolean ungapped) {
     this.ungapped = ungapped;
   }
 
