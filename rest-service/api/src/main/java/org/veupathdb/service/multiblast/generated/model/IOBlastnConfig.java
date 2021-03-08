@@ -5,197 +5,196 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeName("blastn")
-@JsonDeserialize(
-    as = IOBlastnConfigImpl.class
-)
+@JsonDeserialize(as = IOBlastnConfigImpl.class)
 public interface IOBlastnConfig extends IOBlastConfig {
   IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.BLASTN;
 
-  @JsonProperty("strand")
+  @JsonProperty(JsonKeys.Strand)
   IOBlastStrand getStrand();
 
-  @JsonProperty("strand")
+  @JsonProperty(JsonKeys.Strand)
   void setStrand(IOBlastStrand strand);
 
-  @JsonProperty("task")
+  @JsonProperty(JsonKeys.Task)
   IOBlastnTask getTask();
 
-  @JsonProperty("task")
+  @JsonProperty(JsonKeys.Task)
   void setTask(IOBlastnTask task);
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   Integer getWordSize();
 
-  @JsonProperty("wordSize")
+  @JsonProperty(JsonKeys.WordSize)
   void setWordSize(Integer wordSize);
 
-  @JsonProperty("gapOpen")
+  @JsonProperty(JsonKeys.GapOpen)
   Integer getGapOpen();
 
-  @JsonProperty("gapOpen")
+  @JsonProperty(JsonKeys.GapOpen)
   void setGapOpen(Integer gapOpen);
 
-  @JsonProperty("gapExtend")
+  @JsonProperty(JsonKeys.GapExtend)
   Integer getGapExtend();
 
-  @JsonProperty("gapExtend")
+  @JsonProperty(JsonKeys.GapExtend)
   void setGapExtend(Integer gapExtend);
 
-  @JsonProperty("penalty")
+  @JsonProperty(JsonKeys.Penalty)
   Integer getPenalty();
 
-  @JsonProperty("penalty")
+  @JsonProperty(JsonKeys.Penalty)
   void setPenalty(Integer penalty);
 
-  @JsonProperty("reward")
+  @JsonProperty(JsonKeys.Reward)
   Integer getReward();
 
-  @JsonProperty("reward")
+  @JsonProperty(JsonKeys.Reward)
   void setReward(Integer reward);
 
-  @JsonProperty("useIndex")
+  @JsonProperty(JsonKeys.UseIndex)
    Boolean getUseIndex();
 
-  @JsonProperty("useIndex")
+  @JsonProperty(JsonKeys.UseIndex)
   void setUseIndex (Boolean useIndex);
 
-  @JsonProperty("indexName")
+  @JsonProperty(JsonKeys.IndexName)
   String getIndexName();
 
-  @JsonProperty("indexName")
+  @JsonProperty(JsonKeys.IndexName)
   void setIndexName(String indexName);
 
-  @JsonProperty("dust")
+  @JsonProperty(JsonKeys.Dust)
   IOBlastnDust getDust();
 
-  @JsonProperty("dust")
+  @JsonProperty(JsonKeys.Dust)
   void setDust(IOBlastnDust dust);
 
-  @JsonProperty("windowMaskerTaxid")
+  @JsonProperty(JsonKeys.WindowMaskerTaxID)
   Integer getWindowMaskerTaxid();
 
-  @JsonProperty("windowMaskerTaxid")
+  @JsonProperty(JsonKeys.WindowMaskerTaxID)
   void setWindowMaskerTaxid(Integer windowMaskerTaxid);
 
-  @JsonProperty("softMasking")
+  @JsonProperty(JsonKeys.SoftMasking)
    Boolean getSoftMasking();
 
-  @JsonProperty("softMasking")
+  @JsonProperty(JsonKeys.SoftMasking)
   void setSoftMasking (Boolean softMasking);
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   List<Integer> getTaxIds();
 
-  @JsonProperty("taxIds")
+  @JsonProperty(JsonKeys.TaxIDs)
   void setTaxIds(List<Integer> taxIds);
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   List<Integer> getNegativeTaxIds();
 
-  @JsonProperty("negativeTaxIds")
+  @JsonProperty(JsonKeys.NegativeTaxIDs)
   void setNegativeTaxIds(List<Integer> negativeTaxIds);
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   String getDbSoftMask();
 
-  @JsonProperty("dbSoftMask")
+  @JsonProperty(JsonKeys.DBSoftMask)
   void setDbSoftMask(String dbSoftMask);
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   String getDbHardMask();
 
-  @JsonProperty("dbHardMask")
+  @JsonProperty(JsonKeys.DBHardMask)
   void setDbHardMask(String dbHardMask);
 
-  @JsonProperty("percIdentity")
+  @JsonProperty(JsonKeys.PercentIdentity)
    Double getPercIdentity();
 
-  @JsonProperty("percIdentity")
+  @JsonProperty(JsonKeys.PercentIdentity)
   void setPercIdentity (Double percIdentity);
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   Integer getCullingLimit();
 
-  @JsonProperty("cullingLimit")
+  @JsonProperty(JsonKeys.CullingLimit)
   void setCullingLimit(Integer cullingLimit);
 
-  @JsonProperty("bestHitOverhang")
+  @JsonProperty(JsonKeys.BestHitOverhang)
    Double getBestHitOverhang();
 
-  @JsonProperty("bestHitOverhang")
+  @JsonProperty(JsonKeys.BestHitOverhang)
   void setBestHitOverhang (Double bestHitOverhang);
 
-  @JsonProperty("bestHitScoreEdge")
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
    Double getBestHitScoreEdge();
 
-  @JsonProperty("bestHitScoreEdge")
+  @JsonProperty(JsonKeys.BestHitScoreEdge)
   void setBestHitScoreEdge (Double bestHitScoreEdge);
 
-  @JsonProperty("subjectBestHit")
+  @JsonProperty(JsonKeys.SubjectBestHit)
    Boolean getSubjectBestHit();
 
-  @JsonProperty("subjectBestHit")
+  @JsonProperty(JsonKeys.SubjectBestHit)
   void setSubjectBestHit (Boolean subjectBestHit);
 
-  @JsonProperty("templateType")
+  @JsonProperty(JsonKeys.TemplateType)
   IOBlastnDcTemplateType getTemplateType();
 
-  @JsonProperty("templateType")
+  @JsonProperty(JsonKeys.TemplateType)
   void setTemplateType(IOBlastnDcTemplateType templateType);
 
-  @JsonProperty("templateLength")
+  @JsonProperty(JsonKeys.TemplateLength)
    Byte getTemplateLength();
 
-  @JsonProperty("templateLength")
+  @JsonProperty(JsonKeys.TemplateLength)
   void setTemplateLength (Byte templateLength);
 
-  @JsonProperty("sumStats")
+  @JsonProperty(JsonKeys.SumStats)
    Boolean getSumStats();
 
-  @JsonProperty("sumStats")
+  @JsonProperty(JsonKeys.SumStats)
   void setSumStats (Boolean sumStats);
 
-  @JsonProperty("xDropGap")
+  @JsonProperty(JsonKeys.XDropGap)
    Double getXDropGap();
 
-  @JsonProperty("xDropGap")
+  @JsonProperty(JsonKeys.XDropGap)
   void setXDropGap (Double xDropGap);
 
-  @JsonProperty("xDropGapFinal")
+  @JsonProperty(JsonKeys.XDropGapFinal)
    Double getXDropGapFinal();
 
-  @JsonProperty("xDropGapFinal")
+  @JsonProperty(JsonKeys.XDropGapFinal)
   void setXDropGapFinal (Double xDropGapFinal);
 
-  @JsonProperty("noGreedy")
+  @JsonProperty(JsonKeys.NonGreedy)
    Boolean getNoGreedy();
 
-  @JsonProperty("noGreedy")
+  @JsonProperty(JsonKeys.NonGreedy)
   void setNoGreedy (Boolean noGreedy);
 
-  @JsonProperty("minRawGappedScore")
+  @JsonProperty(JsonKeys.MinRawGappedScore)
   Integer getMinRawGappedScore();
 
-  @JsonProperty("minRawGappedScore")
+  @JsonProperty(JsonKeys.MinRawGappedScore)
   void setMinRawGappedScore(Integer minRawGappedScore);
 
-  @JsonProperty("ungapped")
+  @JsonProperty(JsonKeys.Ungapped)
    Boolean getUngapped();
 
-  @JsonProperty("ungapped")
+  @JsonProperty(JsonKeys.Ungapped)
   void setUngapped (Boolean ungapped);
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   Integer getWindowSize();
 
-  @JsonProperty("windowSize")
+  @JsonProperty(JsonKeys.MultiHitWindowSize)
   void setWindowSize(Integer windowSize);
 
-  @JsonProperty("offDiagonalRange")
+  @JsonProperty(JsonKeys.OffDiagonalRange)
   Integer getOffDiagonalRange();
 
-  @JsonProperty("offDiagonalRange")
+  @JsonProperty(JsonKeys.OffDiagonalRange)
   void setOffDiagonalRange(Integer offDiagonalRange);
 }
