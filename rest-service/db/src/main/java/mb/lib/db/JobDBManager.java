@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-import mb.lib.db.delete.DeleteJobQuery;
-import mb.lib.db.delete.DeleteOrphanJobsQuery;
-import mb.lib.db.delete.DeleteStaleGuestsQuery;
-import mb.lib.db.delete.DeleteUsersByJobQuery;
+import mb.lib.db.delete.*;
 import mb.lib.db.insert.InsertJobLink;
 import mb.lib.db.insert.InsertJobQuery;
 import mb.lib.db.insert.InsertJobTargets;
@@ -314,7 +311,7 @@ public class JobDBManager implements AutoCloseable
     log.trace("#deleteJob(jobID={})", jobID);
 
     new DeleteUsersByJobQuery(jobID, connection).run();
-    new DeleteJobQuery(jobID, connection).run();
+    new DeleteJobQuery(connection, jobID).run();
   }
 
   /**
@@ -326,13 +323,19 @@ public class JobDBManager implements AutoCloseable
     new DeleteStaleGuestsQuery(DbManager.userDatabase().getDataSource()).run();
   }
 
-  /**
-   * Deletes jobs that have no users attached.
-   */
-  public void deleteOrphanJobs() throws Exception {
-    log.trace("#deleteOrphanJobs()");
+  public void deleteJobToJobLinks(byte[] jobID) throws Exception {
+    log.trace("#deleteJobToJobLinks(jobID={})", jobID);
+    new DeleteJobToJobLinks(connection, jobID).run();
+  }
 
-    new DeleteOrphanJobsQuery(DbManager.userDatabase().getDataSource()).run();
+  public void deleteJobToTargetLinks(byte[] jobID) throws Exception {
+    log.trace("#deleteJobToTargetLinks(jobID={})", jobID);
+    new DeleteJobToTargetLinks(connection, jobID).run();
+  }
+
+  public List<byte[]> getOrphanedJobs() throws Exception {
+    log.trace("#getOrphanedJobs()");
+    return new SelectOrphanedJobs(connection).run();
   }
 
   @Override

@@ -12,14 +12,23 @@ public interface SQL
   {
     interface MultiBlastJobs
     {
-      String ByID     = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
-      String Orphaned = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "with-no-users");
+      String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
     }
 
     interface MultiBlastUsers
     {
       String ByJobID     = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "by-job-id");
       String StaleGuests = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "stale-guests");
+    }
+
+    interface MultiBlastJobToJobs
+    {
+      String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-id");
+    }
+
+    interface MultiBlastJobToTargets
+    {
+      String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-id");
     }
   }
 
@@ -35,9 +44,9 @@ public interface SQL
   {
     interface MultiBlastJobs
     {
-      String ById  = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
-      String Stale = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
-
+      String ById              = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
+      String Stale             = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
+      String Orphaned          = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "orphaned");
       String FullUserRow       = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");
       String ShortUserByUserID = Load.select(
         Schema.MultiBlast,
@@ -66,7 +75,7 @@ public interface SQL
         Table.MultiBlast.Users,
         "user-is-linked"
       );
-      String ByID = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "by-id");
+      String ByID         = Load.select(Schema.MultiBlast, Table.MultiBlast.Users, "by-id");
     }
 
     interface Users

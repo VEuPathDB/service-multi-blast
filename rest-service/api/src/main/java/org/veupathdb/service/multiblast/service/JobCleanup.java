@@ -54,8 +54,15 @@ public class JobCleanup implements Runnable
       log.info("Job Pruning: deleting stale guest jobs");
       db.deleteStaleGuests();
 
-      log.debug("Job Pruning: deleting orphan jobs");
-      db.deleteOrphanJobs();
+      log.debug("Job Pruning: fetching orphaned jobs");
+      var orphans = db.getOrphanedJobs();
+
+      log.debug("Job Pruning: found {} orphan jobs.", orphans.size());
+      for (var id : orphans) {
+        db.deleteJobToJobLinks(id);
+        db.deleteJobToTargetLinks(id);
+        db.deleteJob(id);
+      }
 
       log.debug("Job Pruning: clearing old failed jobs from job queue.");
       deleteOldFailedJobs(now);
