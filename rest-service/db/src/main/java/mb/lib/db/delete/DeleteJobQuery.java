@@ -14,7 +14,7 @@ public class DeleteJobQuery
   private final byte[]     jobID;
   private final Connection con;
 
-  public DeleteJobQuery(byte[] jobID, Connection con) {
+  public DeleteJobQuery(Connection con, byte[] jobID) {
     this.jobID = jobID;
     this.con   = con;
   }
