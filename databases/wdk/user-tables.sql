@@ -33,11 +33,11 @@ CREATE TABLE userlogins5.multiblast_users (
   , CONSTRAINT mb_uq_user_job UNIQUE (job_digest, user_id)
 );
 
-GRANT SELECT ON userlogins5.multiblast_jobs TO gus_r;
-GRANT SELECT ON userlogins5.multiblast_users TO gus_r;
-GRANT SELECT ON userlogins5.multiblast_job_to_jobs TO gus_r;
-GRANT SELECT ON userlogins5.multiblast_job_to_targets TO gus_r;
-GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_jobs TO gus_w;
-GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_users TO gus_w;
-GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_jobs TO gus_w;
-GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_targets TO gus_w;
+GRANT SELECT ON userlogins5.multiblast_jobs TO webwww;
+GRANT SELECT ON userlogins5.multiblast_users TO webwww;
+GRANT SELECT ON userlogins5.multiblast_job_to_jobs TO webwww;
+GRANT SELECT ON userlogins5.multiblast_job_to_targets TO webwww;
+GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_jobs TO webwww;
+GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_users TO webwww;
+GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_jobs TO webwww;
+GRANT SELECT, INSERT, UPDATE, DELETE ON userlogins5.multiblast_job_to_targets TO webwww;
