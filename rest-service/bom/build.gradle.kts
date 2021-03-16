@@ -11,7 +11,7 @@ repositories {
   mavenCentral()
 }
 
-val vCoreLib = "5.0.5"  // Container core lib version
+val vCoreLib = "5.1.1"  // Container core lib version
 val vJersey  = "2.33"   // Jersey/JaxRS version
 val vJackson = "2.12.1" // FasterXML Jackson version
 val junit    = "5.7.0"  // JUnit version
