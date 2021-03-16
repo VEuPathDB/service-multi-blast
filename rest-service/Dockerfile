@@ -5,7 +5,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM veupathdb/alpine-dev-base:jdk-15 AS prep
 
-LABEL service="demo-service"
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
 
 WORKDIR /workspace
 RUN jlink --compress=2 --module-path /opt/jdk/jmods \

@@ -32,9 +32,12 @@ public class JobCreator
 
     db.updateJobDeleteTimer(d.hash, exp);
 
+    if (d.parentHash != null && !db.jobToJobLinkExists(d.parentHash, d.hash))
+      db.createJobLink(d.hash, d.parentHash);
+
     if (!db.userIsLinkedToJob(d.userID, d.hash))
       db.linkUserToJob(new UserRowImpl(d.hash, d.userID, d.description, d.maxDlSize, d.isPrimary));
-    else
+    else if (d.parentHash == null)
       db.updateLinkIsPrimary(d.userID, d.hash);
   }
 
@@ -63,12 +66,8 @@ public class JobCreator
         d.isPrimary
       ));
 
-    if (d.parentHash != null) {
-      var noLinks = db.getJobLinks(d.parentHash).stream()
-        .map(JobLink::jobHash)
-        .noneMatch(h -> Arrays.equals(d.hash, h));
-      if (noLinks)
-        db.createJobLink(d.hash, d.parentHash);
+    if (d.parentHash != null && !db.jobToJobLinkExists(d.parentHash, d.hash)) {
+      db.createJobLink(d.hash, d.parentHash);
     }
 
     return queId;

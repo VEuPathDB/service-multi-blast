@@ -57,9 +57,10 @@ public interface SQL
 
     interface MultiBlastJobToJobs
     {
-      String ByParent  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-parent");
-      String GetParent = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "get-parent");
-      String ByUserID  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-user-id");
+      String ByParent   = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-parent");
+      String GetParent  = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "get-parent");
+      String ByUserID   = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-user-id");
+      String LinkExists = Load.select(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "link-exists");
     }
 
     interface MultiBlastJobToTargets
