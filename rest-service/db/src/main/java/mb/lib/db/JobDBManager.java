@@ -323,6 +323,12 @@ public class JobDBManager implements AutoCloseable
     new DeleteStaleGuestsQuery(DbManager.userDatabase().getDataSource()).run();
   }
 
+  public boolean jobToJobLinkExists(byte[] parent, byte[] child) throws Exception {
+    log.trace("#jobToJobLinkExists(parent={}, child={})", parent, child);
+
+    return new SelectJobLinkExists(connection, parent, child).run();
+  }
+
   public void deleteJobToJobLinks(byte[] jobID) throws Exception {
     log.trace("#deleteJobToJobLinks(jobID={})", jobID);
     new DeleteJobToJobLinks(connection, jobID).run();
