@@ -22,8 +22,6 @@ RUN make install-dev-env
 
 COPY . .
 
-RUN echo $GITHUB_USERNAME > secrets && echo $GITHUB_TOKEN >> secrets
-
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
