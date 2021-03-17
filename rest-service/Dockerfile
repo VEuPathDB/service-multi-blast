@@ -25,8 +25,8 @@ COPY . .
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
-    && ./gradlew dependencies --info --configuration runtimeClasspath \
-    && GITHUB_USERNAME="$GITHUB_USERNAME" GITHUB_TOKEN="$GITHUB_TOKEN" make jar
+    && GITHUB_USERNAME="$GITHUB_USERNAME" GITHUB_TOKEN="$GITHUB_TOKEN" ./gradlew dependencies --info --configuration runtimeClasspath \
+    && make jar
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
