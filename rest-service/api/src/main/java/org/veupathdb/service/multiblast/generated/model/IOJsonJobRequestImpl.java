@@ -3,14 +3,10 @@ package org.veupathdb.service.multiblast.generated.model;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOJsonJobRequestImpl implements IOJsonJobRequest
 {
-  private static final Logger log = LogManager.getLogger(IOJsonJobRequestImpl.class);
-
   private String           site;
   private Set<IOJobTarget> targets;
   private IOBlastConfig    config;
@@ -97,7 +93,6 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
 
   @Override
   public void setIsPrimary(boolean val) {
-    log.warn("#setIsPrimary(val={})", val);
     this.isPrimary = val;
   }
 }
