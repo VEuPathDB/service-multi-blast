@@ -22,6 +22,9 @@ RUN make install-dev-env
 
 COPY . .
 
+RUN echo -n $GITHUB_USERNAME | wc -c; \
+    echo -n $GITHUB_TOKEN    | wc -c
+
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
