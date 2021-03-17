@@ -50,4 +50,10 @@ public interface IOJsonJobRequest
 
   @JsonProperty(JsonKeys.MaxSequences)
   void setMaxSequences(Byte b);
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  boolean getIsPrimary();
+
+  @JsonProperty(JsonKeys.IsPrimary)
+  void setIsPrimary(boolean val);
 }

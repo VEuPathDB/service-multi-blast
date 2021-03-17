@@ -3,10 +3,14 @@ package org.veupathdb.service.multiblast.generated.model;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOJsonJobRequestImpl implements IOJsonJobRequest
 {
+  private static final Logger log = LogManager.getLogger(IOJsonJobRequestImpl.class);
+
   private String           site;
   private Set<IOJobTarget> targets;
   private IOBlastConfig    config;
@@ -14,6 +18,7 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   private Integer          maxResults;
   private Long             maxResultSize;
   private Byte             maxSequences;
+  private boolean          isPrimary = true;
 
   @Override
   public String getSite() {
@@ -83,5 +88,16 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   @Override
   public void setMaxSequences(Byte b) {
     this.maxSequences = b;
+  }
+
+  @Override
+  public boolean getIsPrimary() {
+    return isPrimary;
+  }
+
+  @Override
+  public void setIsPrimary(boolean val) {
+    log.warn("#setIsPrimary(val={})", val);
+    this.isPrimary = val;
   }
 }
