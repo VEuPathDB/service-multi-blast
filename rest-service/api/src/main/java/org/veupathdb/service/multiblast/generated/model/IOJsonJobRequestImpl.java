@@ -14,6 +14,7 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   private Integer          maxResults;
   private Long             maxResultSize;
   private Byte             maxSequences;
+  private boolean          isPrimary = true;
 
   @Override
   public String getSite() {
@@ -83,5 +84,15 @@ public class IOJsonJobRequestImpl implements IOJsonJobRequest
   @Override
   public void setMaxSequences(Byte b) {
     this.maxSequences = b;
+  }
+
+  @Override
+  public boolean getIsPrimary() {
+    return isPrimary;
+  }
+
+  @Override
+  public void setIsPrimary(boolean val) {
+    this.isPrimary = val;
   }
 }
