@@ -101,12 +101,8 @@ public class JobCreator
       Arrays.asList(d.targets)
     );
 
-    if (d.parentHash != null) {
-      var noLinks = db.getJobLinks(d.parentHash).stream()
-        .map(JobLink::jobHash)
-        .noneMatch(h -> Arrays.equals(d.hash, h));
-      if (noLinks)
-        db.createJobLink(d.hash, d.parentHash);
+    if (d.parentHash != null && !db.jobToJobLinkExists(d.parentHash, d.hash)) {
+      db.createJobLink(d.hash, d.parentHash);
     }
   }
 }
