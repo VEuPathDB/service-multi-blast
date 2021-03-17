@@ -122,7 +122,7 @@ public class JobCreationService
 
     job.getJobConfig().setDatabase(dbPath);
 
-    var rootDets = prepJob(js, job, queries.rootQuery, userID, dbPath, null, true);
+    var rootDets = prepJob(js, job, queries.rootQuery, userID, dbPath, null, js.getIsPrimary());
     log.debug("Job Hash: {}", rootDets.id);
 
     try(var db = new JobDBManager()) {
@@ -162,7 +162,6 @@ public class JobCreationService
 
     log.debug("Job did not already exist. Creating new job.");
     new JobCreator(db).handleInitialRun(dets);
-    return;
   }
 
   static JobDetails prepJob(

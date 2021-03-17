@@ -71,3 +71,9 @@ properties:
     description: |
       User provided description of the job.
     type: string
+  isPrimary?:
+    description: |
+      Set whether this job should be treated as a "primary".  Non-primary, jobs
+      are hidden in the UI.
+    type: boolean
+    default: true

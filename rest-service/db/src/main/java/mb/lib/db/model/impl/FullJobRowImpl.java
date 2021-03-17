@@ -19,7 +19,7 @@ public class FullJobRowImpl extends ShortJobRowImpl implements FullJobRow
     String         config,
     File           query,
     String         projectID,
-    DBJobStatus status
+    DBJobStatus    status
   ) {
     super(hash, queueID, createdOn, deleteOn, projectID, status);
     this.config = config;
