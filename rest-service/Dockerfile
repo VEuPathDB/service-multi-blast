@@ -22,10 +22,11 @@ RUN make install-dev-env
 
 COPY . .
 
-RUN echo -n $GITHUB_USERNAME | wc -c; \
-    echo -n $GITHUB_TOKEN    | wc -c
-
-RUN mkdir -p vendor \
+RUN mkdir /root/.gradle \
+    && echo "gpr.user=$GITHUB_USERNAME" > /root/.gradle/gradle.properties \
+    && echo "gpr.key=$GITHUB_TOKEN" >> /root/.gradle/gradle.properties \
+    && (cat /root/.gradle/gradle.properties | wc -l) \
+    && mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
     && ./gradlew dependencies --info --configuration runtimeClasspath \
