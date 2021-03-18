@@ -50,6 +50,18 @@ class JobUtil
       throw new BadRequestException(msg);
   }
 
+  /**
+   * Verifies that the given request + query set is not attempting to create a
+   * larger result set than the client specified max result limit.
+   * <p>
+   * If the client did not specify a max result limit, this method does nothing.
+   *
+   * @param req   Client request job configuration.
+   * @param query Split set of queries.
+   *
+   * @throws UnprocessableEntityException if the request configuration could
+   * create a result set larger than the client specified limit.
+   */
   static void verifyResultLimit(IOJsonJobRequest req, QuerySplitResult query) {
     if (req.getMaxResults() != null && req.getMaxResults() > 0)
       ResultLimitValidator.validateResultLimit(

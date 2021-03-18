@@ -288,7 +288,6 @@ public class JobService
     }
   }
 
-
   static void setContentType(ReportWrap wrap, FormatType type) {
     log.trace("#setContentType(ReportWrap, {})", type);
     switch (type) {
