@@ -166,16 +166,15 @@ public class JobService
     var rawID = Format.hexToBytes(jobID);
 
     try {
+      FullJobRow job;
       try (var db = new JobDBManager()) {
         var optJob = db.getJob(rawID);
         if (optJob.isEmpty())
           throw new NotFoundException();
+        job = optJob.get();
       }
 
-      if (!JobDataManager.jobDataExists(jobID))
-        throw new IllegalStateException("Job exists but has no workspace.");
-
-      var queryFile = JobDataManager.getJobQuery(jobID);
+      var queryFile = job.query();
 
       return out -> {
         var buf = new byte[buffSize];
