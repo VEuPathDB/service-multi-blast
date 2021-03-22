@@ -147,6 +147,8 @@ public class JobCreationService
 
     // If job already exists link it or rerun and link it
     if (collision.isPresent()) {
+      collision.get().close();
+
       if (JobDataManager.jobDataExists(dets.id)) {
         log.debug("Job already exists and has cached data.  Linking user to job.");
         //noinspection ResultOfMethodCallIgnored

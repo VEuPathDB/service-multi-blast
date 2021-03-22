@@ -60,15 +60,10 @@ public class JobService
 
     var jobID = Format.hexToBytes(rawID);
 
-    try (var db = new JobDBManager()) {
-
-      var opt = db.getUserJob(jobID, user.getUserID());
-
-      if (opt.isEmpty())
-        throw new NotFoundException();
-
-      var job = opt.get();
-
+    try (
+      var db  = new JobDBManager();
+      var job = db.getUserJob(jobID, user.getUserID()).orElseThrow(NotFoundException::new);
+    ) {
       var out = new IOLongJobResponseImpl()
         .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
       out.setId(rawID)
@@ -165,31 +160,21 @@ public class JobService
 
     var rawID = Format.hexToBytes(jobID);
 
-    try {
-      FullJobRow job;
-      try (var db = new JobDBManager()) {
-        var optJob = db.getJob(rawID);
-        if (optJob.isEmpty())
-          throw new NotFoundException();
-        job = optJob.get();
-      }
-
+    try (
+      var db  = new JobDBManager();
+      var job = db.getJob(rawID).orElseThrow(NotFoundException::new)
+    ) {
       var queryFile = job.query();
 
-      try {
-        return out -> {
-          var buf = new byte[buffSize];
-          var n   = 0;
-          try (var in = new BufferedInputStream(new FileInputStream(queryFile))) {
-            while ((n = in.read(buf)) > 0) {
-              out.write(buf, 0, n);
-            }
+      return out -> {
+        var buf = new byte[buffSize];
+        var n   = 0;
+        try (var in = new BufferedInputStream(new FileInputStream(queryFile))) {
+          while ((n = in.read(buf)) > 0) {
+            out.write(buf, 0, n);
           }
-        };
-      } finally {
-        //noinspection ResultOfMethodCallIgnored
-        queryFile.delete();
-      }
+        }
+      };
     } catch (Exception ex) {
       throw wrapException(ex);
     }
@@ -241,6 +226,7 @@ public class JobService
         zip = true;
 
       JobReportService.ensureJobCache(job, userId);
+      job.close(); // Release file resource(s)
 
       var out = new ReportWrap();
       out.zipped = zip;

@@ -7,7 +7,6 @@ import java.util.Arrays;
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.DBJobStatus;
-import mb.lib.db.model.JobLink;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
 import mb.lib.extern.JobQueueManager;

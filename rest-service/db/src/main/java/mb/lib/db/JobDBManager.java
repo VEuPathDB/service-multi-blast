@@ -83,21 +83,6 @@ public class JobDBManager implements AutoCloseable
   }
 
   /**
-   * Retrieves a list of all child-to-parent job links for the job identified by
-   * the given hash value.
-   *
-   * @param parentHash Hash of the job for which child links should be
-   *                   retrieved.
-   *
-   * @return A set of zero or more child links.
-   */
-  public Set<JobLink> getJobLinks(byte[] parentHash) throws Exception {
-    log.trace("#getJobLinks(parentHash={})", parentHash);
-
-    return new SelectLinksByParent(connection, parentHash).run();
-  }
-
-  /**
    * Looks up whether the user identified by {@code userID} is linked to the job
    * identified by {@code jobHash}.
    *
