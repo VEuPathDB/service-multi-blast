@@ -165,6 +165,8 @@ public class JobService
 
     var rawID = Format.hexToBytes(jobID);
 
+    File queryFile = null;
+
     try {
       FullJobRow job;
       try (var db = new JobDBManager()) {
@@ -174,7 +176,7 @@ public class JobService
         job = optJob.get();
       }
 
-      var queryFile = job.query();
+      queryFile = job.query();
 
       return out -> {
         var buf = new byte[buffSize];
@@ -187,6 +189,9 @@ public class JobService
       };
     } catch (Exception ex) {
       throw wrapException(ex);
+    } finally {
+      if (queryFile != null)
+        queryFile.delete();
     }
   }
 
