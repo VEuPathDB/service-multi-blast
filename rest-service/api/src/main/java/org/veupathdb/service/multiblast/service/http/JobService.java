@@ -165,8 +165,6 @@ public class JobService
 
     var rawID = Format.hexToBytes(jobID);
 
-    File queryFile = null;
-
     try {
       FullJobRow job;
       try (var db = new JobDBManager()) {
@@ -176,22 +174,24 @@ public class JobService
         job = optJob.get();
       }
 
-      queryFile = job.query();
+      var queryFile = job.query();
 
-      return out -> {
-        var buf = new byte[buffSize];
-        var n   = 0;
-        try (var in = new BufferedInputStream(new FileInputStream(queryFile))) {
-          while ((n = in.read(buf)) > 0) {
-            out.write(buf, 0, n);
+      try {
+        return out -> {
+          var buf = new byte[buffSize];
+          var n   = 0;
+          try (var in = new BufferedInputStream(new FileInputStream(queryFile))) {
+            while ((n = in.read(buf)) > 0) {
+              out.write(buf, 0, n);
+            }
           }
-        }
-      };
+        };
+      } finally {
+        //noinspection ResultOfMethodCallIgnored
+        queryFile.delete();
+      }
     } catch (Exception ex) {
       throw wrapException(ex);
-    } finally {
-      if (queryFile != null)
-        queryFile.delete();
     }
   }
 
