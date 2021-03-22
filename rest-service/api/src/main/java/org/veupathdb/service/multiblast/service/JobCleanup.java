@@ -49,6 +49,8 @@ public class JobCleanup implements Runnable
 
         log.debug("deleting job {} queue entry", idString);
         JobQueueManager.deleteJob(job.queueID());
+
+        job.close();
       }
 
       log.info("Job Pruning: deleting stale guest jobs");
