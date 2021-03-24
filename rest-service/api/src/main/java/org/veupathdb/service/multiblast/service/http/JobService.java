@@ -62,7 +62,7 @@ public class JobService
 
     try (
       var db  = new JobDBManager();
-      var job = db.getUserJob(jobID, user.getUserID()).orElseThrow(NotFoundException::new);
+      var job = db.getUserJob(jobID, user.getUserID()).orElseThrow(NotFoundException::new)
     ) {
       var out = new IOLongJobResponseImpl()
         .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
@@ -160,10 +160,8 @@ public class JobService
 
     var rawID = Format.hexToBytes(jobID);
 
-    try (
-      var db  = new JobDBManager();
-      var job = db.getJob(rawID).orElseThrow(NotFoundException::new)
-    ) {
+    try (var db  = new JobDBManager()) {
+      var job = db.getJob(rawID).orElseThrow(NotFoundException::new);
       var queryFile = job.query();
 
       return out -> {
@@ -172,6 +170,12 @@ public class JobService
         try (var in = new BufferedInputStream(new FileInputStream(queryFile))) {
           while ((n = in.read(buf)) > 0) {
             out.write(buf, 0, n);
+          }
+        } finally {
+          try {
+            job.close();
+          } catch(Exception e) {
+            log.error("Failed to remove temporary query file.", e);
           }
         }
       };
