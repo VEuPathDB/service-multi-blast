@@ -45,6 +45,7 @@ public interface SQL
     interface MultiBlastJobs
     {
       String ById              = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
+      String ByParent          = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-parent");
       String Stale             = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "stale");
       String Orphaned          = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "orphaned");
       String FullUserRow       = Load.select(Schema.MultiBlast, Table.MultiBlast.Jobs, "long-user");

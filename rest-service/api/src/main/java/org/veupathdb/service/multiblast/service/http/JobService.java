@@ -69,6 +69,11 @@ public class JobService
       } else {
         userRow = new UserRowImpl(jobID, user.getUserID(), null, null, true);
         db.linkUserToJob(userRow);
+
+        for (var tJob : db.getChildJobsFor(jobID)) {
+          var tUser = new UserRowImpl(tJob.jobHash(), user.getUserID(), null, null, false);
+          db.linkUserToJob(tUser);
+        }
       }
 
       var out = new IOLongJobResponseImpl()
@@ -218,6 +223,11 @@ public class JobService
         } else {
           user = new UserRowImpl(jobHash, userId, null, null, true);
           db.linkUserToJob(user);
+
+          for (var tJob : db.getChildJobsFor(jobHash)) {
+            var tUser = new UserRowImpl(tJob.jobHash(), userId, null, null, false);
+            db.linkUserToJob(tUser);
+          }
         }
       }
 

@@ -329,6 +329,12 @@ public class JobDBManager implements AutoCloseable
     return new SelectOrphanedJobs(connection).run();
   }
 
+  public Collection<FullJobRow> getChildJobsFor(byte[] parentID) throws Exception {
+    log.trace("#getChildJobs(parentID={})", parentID);
+
+    return new SelectChildJobsQuery(connection, parentID).run();
+  }
+
   @Override
   public void close() throws Exception {
     this.connection.close();
