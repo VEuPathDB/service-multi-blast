@@ -60,18 +60,26 @@ public class JobService
 
     var jobID = Format.hexToBytes(rawID);
 
-    try (
-      var db  = new JobDBManager();
-      var job = db.getUserJob(jobID, user.getUserID()).orElseThrow(NotFoundException::new)
-    ) {
+    try (var db  = new JobDBManager()) {
+      var job = db.getJob(jobID).orElseThrow(NotFoundException::new);
+      UserRow userRow;
+
+      if (db.userIsLinkedToJob(user.getUserID(), jobID)) {
+        userRow = db.getUser(user.getUserID(), jobID).orElseThrow(InternalServerErrorException::new);
+      } else {
+        userRow = new UserRowImpl(jobID, user.getUserID(), null, null, true);
+        db.linkUserToJob(userRow);
+      }
+
       var out = new IOLongJobResponseImpl()
         .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+
       out.setId(rawID)
-        .setDescription(job.description())
+        .setDescription(userRow.description())
         .setStatus(Util.convStatus(syncJobStatus(job)))
         .setCreated(Format.DateFormat.format(job.createdOn()))
         .setExpires(Format.DateFormat.format(job.deleteOn()))
-        .setMaxResultSize(job.maxDownloadSize())
+        .setMaxResultSize(userRow.maxDownloadSize())
         .setParentJobs(
           db.getParentJobs(jobID, user.getUserID())
             .stream()
