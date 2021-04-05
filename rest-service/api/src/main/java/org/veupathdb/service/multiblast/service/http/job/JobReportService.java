@@ -15,6 +15,13 @@ import org.veupathdb.service.multiblast.util.Format;
 
 public class JobReportService
 {
+  /**
+   * Ensures the job is cached by first checking to see if it exists, and if it
+   * does not, synchronously re-runs the job to populate the cache.
+   *
+   * @param job    Job to check.
+   * @param userID ID of the user requesting the cache check.
+   */
   public static void ensureJobCache(FullJobRow job, long userID) throws Exception {
     if (JobUtil.jobIsCached(job))
       return;
