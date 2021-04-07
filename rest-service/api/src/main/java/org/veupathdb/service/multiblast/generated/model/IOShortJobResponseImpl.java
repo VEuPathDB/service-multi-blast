@@ -15,6 +15,7 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   private boolean           isPrimary;
   private String            site;
   private IOJobTarget[]     targets;
+  private boolean           isCached;
 
   @Override
   public String getId() {
@@ -123,6 +124,17 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   @Override
   public IOShortJobResponse setTargets(IOJobTarget[] targets) {
     this.targets = targets;
+    return this;
+  }
+
+  @Override
+  public boolean isCached() {
+    return isCached;
+  }
+
+  @Override
+  public IOShortJobResponse setIsCached(boolean value) {
+    this.isCached = value;
     return this;
   }
 }

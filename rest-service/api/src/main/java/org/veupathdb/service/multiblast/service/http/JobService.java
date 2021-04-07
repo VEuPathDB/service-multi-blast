@@ -99,7 +99,8 @@ public class JobService
             .stream()
             .map(BCC::toExternal)
             .toArray(IOJobTarget[]::new)
-        );
+        )
+        .setIsCached(JobDataManager.jobDataExists(rawID));
 
       if (out.getStatus() == null) {
         if (JobDataManager.reportExists(rawID))
@@ -155,7 +156,8 @@ public class JobService
               .stream()
               .map(BCC::toExternal)
               .toArray(IOJobTarget[]::new)
-          );
+          )
+          .setIsCached(JobDataManager.jobDataExists(jobID));
         out.add(tmp);
       }
 
