@@ -1,0 +1,27 @@
+#%RAML 1.0 DataType
+
+uses:
+  ext: index.raml
+
+type: object
+properties:
+  pairwise?: ext.FormatStatus
+  query-anchored-with-identities?: ext.FormatStatus
+  query-anchored-without-identities?: ext.FormatStatus
+  flat-query-anchored-with-identities?: ext.FormatStatus
+  flat-query-anchored-without-identities?: ext.FormatStatus
+  xml?: ext.FormatStatus
+  tabular?: ext.FormatStatus
+  tabular-with-comments?: ext.FormatStatus
+  text-asn-1?: ext.FormatStatus
+  binary-asn-1?: ext.FormatStatus
+  csv?: ext.FormatStatus
+  archive-asn-1?: ext.FormatStatus
+  seqalign-json?: ext.FormatStatus
+  multi-file-json?: ext.FormatStatus
+  multi-file-xml2?: ext.FormatStatus
+  single-file-json?: ext.FormatStatus
+  single-file-xml2?: ext.FormatStatus
+  sam?: ext.FormatStatus
+  organism-report?: ext.FormatStatus
+additionalProperties: false
