@@ -45,6 +45,7 @@ public final class JsonKeys
     IndexName                            = "indexName",
     InputMultiSequenceAlignment          = "inMsa",
     InputPsiBlastCheckpointFile          = "inPssm",
+    IsCached                             = "isCached",
     IsPrimary                            = "isPrimary",
     JobID                                = "jobId",
     Level                                = "level",

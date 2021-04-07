@@ -35,3 +35,9 @@ properties:
     type: array
     items: ext.IOJobTarget
     minItems: 1
+  isCached:
+    description: |
+      Indicates whether this job's data is in the service cache.  If this value
+      is false, requesting a job result directly will force a synchronous
+      re-run of the job to populate the cache.
+    type: boolean

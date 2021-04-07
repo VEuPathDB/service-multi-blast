@@ -1,6 +1,8 @@
 package org.veupathdb.service.multiblast.generated.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
@@ -66,4 +68,10 @@ public interface IOShortJobResponse
 
   @JsonProperty(JsonKeys.Targets)
   IOShortJobResponse setTargets(IOJobTarget[] targets);
+
+  @JsonGetter(JsonKeys.IsCached)
+  boolean isCached();
+
+  @JsonSetter(JsonKeys.IsCached)
+  IOShortJobResponse setIsCached(boolean value);
 }
