@@ -5,12 +5,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 @JsonTypeName("blastx")
 @JsonDeserialize(as = IOBlastxConfigImpl.class)
 public interface IOBlastxConfig extends IOBlastConfig {
-  IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.BLASTX;
+  BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastX;
 
   @JsonProperty("strand")
   IOBlastStrand getStrand();

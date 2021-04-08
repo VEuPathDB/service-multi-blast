@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
@@ -13,7 +14,7 @@ import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 @JsonTypeName("tblastn")
 public class IOTBlastnConfigImpl implements IOTBlastnConfig
 {
-  private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
+  private final BlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
   private String                query;
   private IOBlastLocation       queryLoc;
@@ -59,7 +60,7 @@ public class IOTBlastnConfigImpl implements IOTBlastnConfig
   private Boolean               useSWTraceback;
 
   @JsonProperty("tool")
-  public IOBlastTool getTool() {
+  public BlastTool getTool() {
     return this.tool;
   }
 

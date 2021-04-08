@@ -5,13 +5,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeName("blastp")
 @JsonDeserialize(as = IOBlastpConfigImpl.class)
 public interface IOBlastpConfig extends IOBlastConfig {
-  IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.BLASTP;
+  BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastP;
 
   @JsonProperty(JsonKeys.Task)
   BlastpTask getTask();

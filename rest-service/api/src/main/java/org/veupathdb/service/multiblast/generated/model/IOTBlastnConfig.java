@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -12,7 +13,7 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 @JsonTypeName("tblastn")
 @JsonDeserialize(as = IOTBlastnConfigImpl.class)
 public interface IOTBlastnConfig extends IOBlastConfig {
-  IOBlastTool _DISCRIMINATOR_TYPE_NAME = IOBlastTool.TBLASTN;
+  BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.TBlastN;
 
   @JsonProperty(JsonKeys.Task)
   TBlastNTask getTask();

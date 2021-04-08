@@ -191,7 +191,7 @@ public class JobCreationService
     dets.hash  = hashJob(
       js.getSite(),
       dbPath,
-      js.getConfig().getTool().name,
+      js.getConfig().getTool().value(),
       cli.toString()
     );
     dets.id          = Format.toHexString(dets.hash);
@@ -224,7 +224,7 @@ public class JobCreationService
       return new NucleotideSequenceValidator();
 
     return switch (conf.getTool()) {
-      case BLASTP, TBLASTN -> new ProteinSequenceValidator();
+      case BlastP, TBlastN -> new ProteinSequenceValidator();
       default -> new NucleotideSequenceValidator();
     };
   }
