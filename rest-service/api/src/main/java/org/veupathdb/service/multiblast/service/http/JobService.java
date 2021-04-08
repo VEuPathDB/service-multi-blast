@@ -22,6 +22,7 @@ import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
+import org.veupathdb.service.multiblast.model.internal.JobStatus;
 import org.veupathdb.service.multiblast.service.conv.BCC;
 import org.veupathdb.service.multiblast.service.conv.JobConverter;
 import org.veupathdb.service.multiblast.service.http.job.JobCreationService;
@@ -100,14 +101,17 @@ public class JobService
             .map(BCC::toExternal)
             .toArray(IOJobTarget[]::new)
         )
-        .setIsCached(JobDataManager.jobDataExists(rawID));
+        .setIsCached(JobDataManager.reportExists(rawID));
 
       if (out.getStatus() == null) {
         if (JobDataManager.reportExists(rawID))
-          out.setStatus(IOJobStatus.COMPLETED);
+          out.setStatus(JobStatus.Completed);
         else
-          out.setStatus(IOJobStatus.ERRORED);
+          out.setStatus(JobStatus.Errored);
       }
+
+      if (out.getStatus() == JobStatus.Completed && !out.isCached())
+        out.setStatus(JobStatus.Expired);
 
       return out;
     } catch (Exception e) {
@@ -157,7 +161,7 @@ public class JobService
               .map(BCC::toExternal)
               .toArray(IOJobTarget[]::new)
           )
-          .setIsCached(JobDataManager.jobDataExists(jobID));
+          .setIsCached(JobDataManager.reportExists(jobID));
         out.add(tmp);
       }
 

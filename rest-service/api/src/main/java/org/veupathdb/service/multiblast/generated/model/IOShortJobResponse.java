@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.internal.JobStatus;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonDeserialize(as = IOShortJobResponseImpl.class)
@@ -22,10 +23,10 @@ public interface IOShortJobResponse
   IOShortJobResponse setDescription(String description);
 
   @JsonProperty(JsonKeys.Status)
-  IOJobStatus getStatus();
+  JobStatus getStatus();
 
   @JsonProperty(JsonKeys.Status)
-  IOShortJobResponse setStatus(IOJobStatus status);
+  IOShortJobResponse setStatus(JobStatus status);
 
   @JsonProperty(JsonKeys.Created)
   String getCreated();
@@ -36,37 +37,37 @@ public interface IOShortJobResponse
   @JsonProperty(JsonKeys.Expires)
   String getExpires();
 
-  @JsonProperty(JsonKeys.Expires)
+  @JsonSetter(JsonKeys.Expires)
   IOShortJobResponse setExpires(String date);
 
   @JsonProperty(JsonKeys.MaxResultSize)
   Long getMaxResultSize();
 
-  @JsonProperty(JsonKeys.MaxResultSize)
+  @JsonSetter(JsonKeys.MaxResultSize)
   IOShortJobResponse setMaxResultSize(Long val);
 
   @JsonProperty(JsonKeys.ParentJobs)
   IOParentJobLink[] getParentJobs();
 
-  @JsonProperty(JsonKeys.ParentJobs)
+  @JsonSetter(JsonKeys.ParentJobs)
   IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID);
 
   @JsonProperty(JsonKeys.IsPrimary)
   boolean getIsPrimary();
 
-  @JsonProperty(JsonKeys.IsPrimary)
+  @JsonSetter(JsonKeys.IsPrimary)
   IOShortJobResponse setIsPrimary(boolean isPrimary);
 
   @JsonProperty(JsonKeys.Site)
   String getSite();
 
-  @JsonProperty(JsonKeys.Site)
+  @JsonSetter(JsonKeys.Site)
   IOShortJobResponse setSite(String site);
 
   @JsonProperty(JsonKeys.Targets)
   IOJobTarget[] getTargets();
 
-  @JsonProperty(JsonKeys.Targets)
+  @JsonSetter(JsonKeys.Targets)
   IOShortJobResponse setTargets(IOJobTarget[] targets);
 
   @JsonGetter(JsonKeys.IsCached)

@@ -5,7 +5,7 @@ import javax.ws.rs.WebApplicationException;
 
 import mb.lib.db.model.DBJobStatus;
 import mb.lib.extern.model.QueueJobStatus;
-import org.veupathdb.service.multiblast.generated.model.IOJobStatus;
+import org.veupathdb.service.multiblast.model.internal.JobStatus;
 
 public class Util
 {
@@ -34,12 +34,12 @@ public class Util
     };
   }
 
-  static IOJobStatus convStatus(QueueJobStatus stat) {
+  static JobStatus convStatus(QueueJobStatus stat) {
     return switch (stat) {
-      case Completed  -> IOJobStatus.COMPLETED;
-      case Errored    -> IOJobStatus.ERRORED;
-      case Queued     -> IOJobStatus.QUEUED;
-      case InProgress -> IOJobStatus.INPROGRESS;
+      case Completed  -> JobStatus.Completed;
+      case Errored    -> JobStatus.Errored;
+      case Queued     -> JobStatus.Queued;
+      case InProgress -> JobStatus.InProgress;
     };
   }
 
