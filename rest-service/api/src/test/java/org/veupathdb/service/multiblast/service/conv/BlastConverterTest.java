@@ -111,27 +111,6 @@ class BlastConverterTest
   }
 
   @Nested
-  @DisplayName("::toExternal(HitSorting)")
-  class ToExternal3
-  {
-    @Test
-    @DisplayName("Correctly converts HitSorting values.")
-    void test1() {
-      assertEquals(IOHitSorting.BYEVAL, BlastConverter.toExternal(HitSorting.ByExpectValue));
-      assertEquals(IOHitSorting.BYBITSCORE, BlastConverter.toExternal(HitSorting.ByBitScore));
-      assertEquals(IOHitSorting.BYTOTALSCORE, BlastConverter.toExternal(HitSorting.ByTotalScore));
-      assertEquals(IOHitSorting.BYPERCENTIDENTITY, BlastConverter.toExternal(HitSorting.ByPercentIdentity));
-      assertEquals(IOHitSorting.BYQUERYCOVERAGE, BlastConverter.toExternal(HitSorting.ByQueryCoverage));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastConverter.toExternal((HitSorting) null));
-    }
-  }
-
-  @Nested
   @DisplayName("::toExternal(HspSorting)")
   class ToExternal4
   {
@@ -299,27 +278,6 @@ class BlastConverterTest
     @DisplayName("Returns null when input is null")
     void test2() {
       assertNull(BlastConverter.toInternal((IOBlastReportField) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toInternal(IOHitSorting)")
-  class ToInternal3
-  {
-    @Test
-    @DisplayName("Correctly converts IOHitSorting values.")
-    void test1() {
-      assertEquals(HitSorting.ByExpectValue, BlastConverter.toInternal(IOHitSorting.BYEVAL));
-      assertEquals(HitSorting.ByBitScore, BlastConverter.toInternal(IOHitSorting.BYBITSCORE));
-      assertEquals(HitSorting.ByTotalScore, BlastConverter.toInternal(IOHitSorting.BYTOTALSCORE));
-      assertEquals(HitSorting.ByPercentIdentity, BlastConverter.toInternal(IOHitSorting.BYPERCENTIDENTITY));
-      assertEquals(HitSorting.ByQueryCoverage, BlastConverter.toInternal(IOHitSorting.BYQUERYCOVERAGE));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastConverter.toInternal((IOHitSorting) null));
     }
   }
 

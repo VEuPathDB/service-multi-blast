@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,14 +14,14 @@ public class IOBlastpConfigImpl implements IOBlastpConfig
 {
   private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  private String              query;
-  private IOBlastLocation     queryLoc;
-  private String              eValue;
-  private IOBlastReportFormat outFormat;
+  private String                query;
+  private IOBlastLocation       queryLoc;
+  private String                eValue;
+  private IOBlastReportFormat   outFormat;
   private Integer               numDescriptions;
   private Integer               numAlignments;
   private Integer               lineLength;
-  private IOHitSorting          sortHits;
+  private HitSorting            sortHits;
   private IOHSPSorting          sortHSPs;
   private Boolean               lcaseMasking;
   private Double                qCovHSPPerc;
@@ -29,9 +30,9 @@ public class IOBlastpConfigImpl implements IOBlastpConfig
   private Byte                  dbSize;
   private Byte                  searchSpace;
   private Double                xDropUngap;
-  private Boolean             parseDefLines;
-  private BlastpTask          task;
-  private Integer             wordSize;
+  private Boolean               parseDefLines;
+  private BlastpTask            task;
+  private Integer               wordSize;
   private Integer               gapOpen;
   private Integer               gapExtend;
   private IOBlastpScoringMatrix matrix;
@@ -129,12 +130,12 @@ public class IOBlastpConfigImpl implements IOBlastpConfig
   }
 
   @JsonProperty("sortHits")
-  public IOHitSorting getSortHits() {
+  public HitSorting getSortHits() {
     return this.sortHits;
   }
 
   @JsonProperty("sortHits")
-  public void setSortHits(IOHitSorting sortHits) {
+  public void setSortHits(HitSorting sortHits) {
     this.sortHits = sortHits;
   }
 

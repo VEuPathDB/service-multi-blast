@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeInfo(
@@ -69,10 +70,10 @@ public interface IOBlastConfig {
   void setLineLength(Integer lineLength);
 
   @JsonProperty(JsonKeys.SortHits)
-  IOHitSorting getSortHits();
+  HitSorting getSortHits();
 
   @JsonProperty(JsonKeys.SortHits)
-  void setSortHits(IOHitSorting sortHits);
+  void setSortHits(HitSorting sortHits);
 
   @JsonProperty(JsonKeys.SortHSPs)
   IOHSPSorting getSortHSPs();

@@ -2,6 +2,7 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.veupathdb.service.multiblast.model.blast.HitSorting;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOBlastConfigImpl implements IOBlastConfig
@@ -15,7 +16,7 @@ public class IOBlastConfigImpl implements IOBlastConfig
   private Integer             numDescriptions;
   private Integer             numAlignments;
   private Integer             lineLength;
-  private IOHitSorting        sortHits;
+  private HitSorting          sortHits;
   private IOHSPSorting        sortHSPs;
   private Boolean             lcaseMasking;
   private Double              qCovHSPPerc;
@@ -102,12 +103,12 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("sortHits")
-  public IOHitSorting getSortHits() {
+  public HitSorting getSortHits() {
     return this.sortHits;
   }
 
   @JsonProperty("sortHits")
-  public void setSortHits(IOHitSorting sortHits) {
+  public void setSortHits(HitSorting sortHits) {
     this.sortHits = sortHits;
   }
 
