@@ -13,9 +13,9 @@ import org.glassfish.jersey.server.ContainerRequest;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
-import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
 import org.veupathdb.service.multiblast.generated.resources.Jobs;
+import org.veupathdb.service.multiblast.model.blast.BlastReportField;
 import org.veupathdb.service.multiblast.model.io.Headers;
 import org.veupathdb.service.multiblast.service.http.JobService;
 import org.veupathdb.service.multiblast.util.Format;
@@ -114,7 +114,7 @@ public class JobController implements Jobs
     String format,
     boolean zip,
     boolean inline,
-    List<IOBlastReportField> fields
+    List<BlastReportField> fields
   ) {
     var user         = getUser(request);
     var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);

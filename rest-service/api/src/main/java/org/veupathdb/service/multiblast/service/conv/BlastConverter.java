@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.*;
@@ -147,64 +146,6 @@ public class BlastConverter
     };
   }
 
-  static IOBlastReportField toExternal(BlastReportField field) {
-    return switch (field) {
-      case QuerySequenceID -> IOBlastReportField.QSEQID;
-      case QueryGenInfo -> IOBlastReportField.QGI;
-      case QueryAccession -> IOBlastReportField.QACC;
-      case QueryAccessionVersion -> IOBlastReportField.QACCVER;
-      case QuerySequenceLength -> IOBlastReportField.QLEN;
-      case SubjectSequenceID -> IOBlastReportField.SSEQID;
-      case SubjectAllSequenceID -> IOBlastReportField.SALLSEQID;
-      case SubjectGenInfo -> IOBlastReportField.SGI;
-      case SubjectAllGenInfo -> IOBlastReportField.SALLGI;
-      case SubjectAccession -> IOBlastReportField.SACC;
-      case SubjectAccessionVersion -> IOBlastReportField.SACCVER;
-      case SubjectAllAccession -> IOBlastReportField.SALLACC;
-      case SubjectSequenceLength -> IOBlastReportField.SLEN;
-      case QueryAlignmentStart -> IOBlastReportField.QSTART;
-      case QueryAlignmentEnd -> IOBlastReportField.QEND;
-      case SubjectAlignmentStart -> IOBlastReportField.SSTART;
-      case SubjectAlignmentEnd -> IOBlastReportField.SEND;
-      case QuerySequence -> IOBlastReportField.QSEQ;
-      case SubjectSequence -> IOBlastReportField.SSEQ;
-      case ExpectValue -> IOBlastReportField.EVALUE;
-      case BitScore -> IOBlastReportField.BITSCORE;
-      case RawScore -> IOBlastReportField.SCORE;
-      case AlignmentLength -> IOBlastReportField.LENGTH;
-      case PercentIdenticalMatches -> IOBlastReportField.PIDENT;
-      case NumberIdenticalMatches -> IOBlastReportField.NIDENT;
-      case NumberMismatches -> IOBlastReportField.MISMATCH;
-      case NumberPositiveMatches -> IOBlastReportField.POSITIVE;
-      case NumberGapOpenings -> IOBlastReportField.GAPOPEN;
-      case NumberGaps -> IOBlastReportField.GAPS;
-      case PercentPositiveMatches -> IOBlastReportField.PPOS;
-      case Frames -> IOBlastReportField.FRAMES;
-      case QueryFrame -> IOBlastReportField.QFRAME;
-      case SubjectFrame -> IOBlastReportField.SFRAME;
-      case BlastTracebackOps -> IOBlastReportField.BTOP;
-      case SubjectTaxonomyID -> IOBlastReportField.STAXID;
-      case SubjectScientificName -> IOBlastReportField.SSCINAME;
-      case SubjectCommonName -> IOBlastReportField.SCOMNAME;
-      case SubjectBlastName -> IOBlastReportField.SBLASTNAME;
-      case SubjectSuperKingdom -> IOBlastReportField.SSKINGDOM;
-      case SubjectUniqueTaxonomyIDs -> IOBlastReportField.STAXIDS;
-      case SubjectScientificNames -> IOBlastReportField.SSCINAMES;
-      case SubjectCommonNames -> IOBlastReportField.SCOMNAMES;
-      case SubjectBlastNames -> IOBlastReportField.SBLASTNAMES;
-      case SubjectSuperKingdoms -> IOBlastReportField.SSKINGDOMS;
-      case SubjectTitle -> IOBlastReportField.STITLE;
-      case SubjectAllTitles -> IOBlastReportField.SALLTITLES;
-      case SubjectStrand -> IOBlastReportField.SSTRAND;
-      case QueryCoveragePerSubject -> IOBlastReportField.QCOVS;
-      case QueryCoveragePerHSP -> IOBlastReportField.QCOVHSP;
-      case QueryCoveragePerUniqueSubject -> IOBlastReportField.QCOVUS;
-      case SQ -> IOBlastReportField.SQ;
-      case SR -> IOBlastReportField.SR;
-      case Standard -> null;
-    };
-  }
-
   static IOHSPSorting toExternal(HspSorting val) {
     if (val == null)
       return null;
@@ -230,9 +171,7 @@ public class BlastConverter
         || fmt.getReportFields().length == 1
         && fmt.getReportFields()[0] == BlastReportField.Standard
       ? null
-      : Arrays.stream(fmt.getReportFields())
-        .map(BlastConverter::toExternal)
-        .collect(Collectors.toList()));
+      : Arrays.asList(fmt.getReportFields()));
     out.setFormat(toExternal(fmt.getType()));
 
     return out;
@@ -265,76 +204,6 @@ public class BlastConverter
     };
   }
 
-  static BlastReportField[] toInternal(List<IOBlastReportField> vals) {
-    if (vals == null || vals.isEmpty())
-      return null;
-
-    return vals.stream()
-      .filter(Objects::nonNull)
-      .map(BlastConverter::toInternal)
-      .toArray(BlastReportField[]::new);
-  }
-
-  static BlastReportField toInternal(IOBlastReportField val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BITSCORE -> BlastReportField.BitScore;
-      case BTOP -> BlastReportField.BlastTracebackOps;
-      case EVALUE -> BlastReportField.ExpectValue;
-      case FRAMES -> BlastReportField.Frames;
-      case GAPOPEN -> BlastReportField.NumberGapOpenings;
-      case GAPS -> BlastReportField.NumberGaps;
-      case LENGTH -> BlastReportField.AlignmentLength;
-      case MISMATCH -> BlastReportField.NumberMismatches;
-      case NIDENT -> BlastReportField.NumberIdenticalMatches;
-      case PIDENT -> BlastReportField.PercentIdenticalMatches;
-      case POSITIVE -> BlastReportField.NumberPositiveMatches;
-      case PPOS -> BlastReportField.PercentPositiveMatches;
-      case QACC -> BlastReportField.QueryAccession;
-      case QACCVER -> BlastReportField.QueryAccessionVersion;
-      case QCOVHSP -> BlastReportField.QueryCoveragePerHSP;
-      case QCOVS -> BlastReportField.QueryCoveragePerSubject;
-      case QCOVUS -> BlastReportField.QueryCoveragePerUniqueSubject;
-      case QEND -> BlastReportField.QueryAlignmentEnd;
-      case QFRAME -> BlastReportField.QueryFrame;
-      case QGI -> BlastReportField.QueryGenInfo;
-      case QLEN -> BlastReportField.QuerySequenceLength;
-      case QSEQ -> BlastReportField.QuerySequence;
-      case QSEQID -> BlastReportField.QuerySequenceID;
-      case QSTART -> BlastReportField.QueryAlignmentStart;
-      case SACC -> BlastReportField.SubjectAccession;
-      case SACCVER -> BlastReportField.SubjectAccessionVersion;
-      case SALLACC -> BlastReportField.SubjectAllAccession;
-      case SALLGI -> BlastReportField.SubjectAllGenInfo;
-      case SALLSEQID -> BlastReportField.SubjectAllSequenceID;
-      case SALLTITLES -> BlastReportField.SubjectAllTitles;
-      case SBLASTNAME -> BlastReportField.SubjectBlastName;
-      case SBLASTNAMES -> BlastReportField.SubjectBlastNames;
-      case SCOMNAME -> BlastReportField.SubjectCommonName;
-      case SCOMNAMES -> BlastReportField.SubjectCommonNames;
-      case SCORE -> BlastReportField.RawScore;
-      case SEND -> BlastReportField.SubjectAlignmentEnd;
-      case SFRAME -> BlastReportField.SubjectFrame;
-      case SGI -> BlastReportField.SubjectGenInfo;
-      case SLEN -> BlastReportField.SubjectSequenceLength;
-      case SQ -> BlastReportField.SQ;
-      case SR -> BlastReportField.SR;
-      case SSCINAME -> BlastReportField.SubjectScientificName;
-      case SSCINAMES -> BlastReportField.SubjectScientificNames;
-      case SSEQ -> BlastReportField.SubjectSequence;
-      case SSEQID -> BlastReportField.SubjectSequenceID;
-      case SSKINGDOM -> BlastReportField.SubjectSuperKingdom;
-      case SSKINGDOMS -> BlastReportField.SubjectSuperKingdoms;
-      case SSTART -> BlastReportField.SubjectAlignmentStart;
-      case SSTRAND -> BlastReportField.SubjectStrand;
-      case STAXID -> BlastReportField.SubjectTaxonomyID;
-      case STAXIDS -> BlastReportField.SubjectUniqueTaxonomyIDs;
-      case STITLE -> BlastReportField.SubjectTitle;
-    };
-  }
-
   static BlastReportFormat toInternal(IOBlastReportFormat fmt) {
     if (fmt == null)
       return null;
@@ -342,7 +211,7 @@ public class BlastConverter
     return new ReportFormatImpl(
       toInternal(fmt.getFormat()),
       fmt.getDelim(),
-      toInternal(fmt.getFields())
+      fmt.getFields().toArray(BlastReportField[]::new)
     );
   }
 

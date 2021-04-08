@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.veupathdb.service.multiblast.model.blast.BlastReportField;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOBlastReportFormatImpl implements IOBlastReportFormat
 {
-  private IOBlastFormat            format;
-  private String                   delim;
-  private List<IOBlastReportField> fields;
+  private IOBlastFormat          format;
+  private String                 delim;
+  private List<BlastReportField> fields;
 
   @JsonProperty("format")
   public IOBlastFormat getFormat() {
@@ -33,12 +34,12 @@ public class IOBlastReportFormatImpl implements IOBlastReportFormat
   }
 
   @JsonProperty("fields")
-  public List<IOBlastReportField> getFields() {
+  public List<BlastReportField> getFields() {
     return this.fields;
   }
 
   @JsonProperty("fields")
-  public void setFields(List<IOBlastReportField> fields) {
+  public void setFields(List<BlastReportField> fields) {
     this.fields = fields;
   }
 }

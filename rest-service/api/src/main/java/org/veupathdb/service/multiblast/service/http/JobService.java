@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.service.multiblast.generated.model.*;
+import org.veupathdb.service.multiblast.model.blast.BlastReportField;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 import org.veupathdb.service.multiblast.model.internal.JobStatus;
@@ -208,7 +209,7 @@ public class JobService
     long   userId,
     String format,
     boolean zip,
-    List<IOBlastReportField> fields,
+    List<BlastReportField> fields,
     Long maxDlSize
   ) {
     log.trace("#getReport(jobID={}, format={}, zip={}, fields={}, maxDlSize={})", jobID, format, zip, fields, maxDlSize);
@@ -263,7 +264,7 @@ public class JobService
         pFormat,
         zip,
         maxDlSize == null ? user.maxDownloadSize() : maxDlSize, // If the client provided a max size header, prefer that value.
-        fields.stream().map(f -> f.name).toArray(String[]::new)
+        fields.stream().map(BlastReportField::getValue).toArray(String[]::new)
       );
 
       if (tmp.isRight())
