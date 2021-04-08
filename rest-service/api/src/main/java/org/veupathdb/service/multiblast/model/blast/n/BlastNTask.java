@@ -1,5 +1,10 @@
 package org.veupathdb.service.multiblast.model.blast.n;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
+import org.veupathdb.service.multiblast.util.ErrorText;
+
 public enum BlastNTask
 {
   BlastN("blastn"),
@@ -14,16 +19,22 @@ public enum BlastNTask
     this.value = value;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }
 
+  @JsonCreator
   public static BlastNTask fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))
         return e;
 
-    throw new IllegalArgumentException(); // TODO: print actual value
+    throw new IllegalArgumentException(String.format(
+      ErrorText.InvalidEnumValue,
+      value,
+      BlastNTask.class.getSimpleName()
+    ));
   }
 
   @Override

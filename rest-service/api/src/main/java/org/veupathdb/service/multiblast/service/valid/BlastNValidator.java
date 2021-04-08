@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDcTemplateType;
-import org.veupathdb.service.multiblast.generated.model.IOBlastnTask;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
@@ -94,7 +93,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
   }
 
   static void validateNoGreedy(ErrorMap err, IOBlastnConfig conf) {
-    if (conf.getNoGreedy() != null && conf.getTask() != IOBlastnTask.MEGABLAST)
+    if (conf.getNoGreedy() != null && conf.getTask() != BlastNTask.Megablast)
       err.putError(NonGreedy, String.format(BlastValidator.errOnlyTask, BlastNTask.Megablast));
   }
 
@@ -105,7 +104,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
     if (conf.getTemplateType() == null)
       conf.setTemplateType(IOBlastnDcTemplateType.CODING);
 
-    if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
+    if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
       err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
 
     if (
@@ -123,7 +122,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
     if (conf.getTemplateLength() == null)
       conf.setTemplateLength((byte) 18);
 
-    if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
+    if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
       err.putError(TemplateType, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
   }
 
@@ -157,7 +156,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
 
     Int.gtEq(err, conf.getWindowSize(), 0, MultiHitWindowSize);
 
-    if (conf.getTask() != IOBlastnTask.DCMEGABLAST)
+    if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
       err.putError(
         MultiHitWindowSize,
         String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast)
