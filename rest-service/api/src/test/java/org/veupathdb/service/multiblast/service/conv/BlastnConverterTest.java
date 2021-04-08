@@ -3,11 +3,9 @@ package org.veupathdb.service.multiblast.service.conv;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.veupathdb.service.multiblast.generated.model.IOBlastnDcTemplateType;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDust;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDustImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
-import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,25 +32,6 @@ class BlastnConverterTest
     @DisplayName("Returns null when input is null")
     void test2() {
       assertNull(BlastnConverter.toExternal((Dust) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toExternal(DcTemplateType)")
-  class ToExternal3
-  {
-    @Test
-    @DisplayName("Correctly converts DcTemplateType values.")
-    void test1() {
-      assertEquals(IOBlastnDcTemplateType.CODING, BlastnConverter.toExternal(DcTemplateType.Coding));
-      assertEquals(IOBlastnDcTemplateType.OPTIMAL, BlastnConverter.toExternal(DcTemplateType.Optimal));
-      assertEquals(IOBlastnDcTemplateType.BOTH, BlastnConverter.toExternal(DcTemplateType.Both));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastnConverter.toExternal((DcTemplateType) null));
     }
   }
 
@@ -92,25 +71,6 @@ class BlastnConverterTest
     @DisplayName("Returns null when input is null")
     void test3() {
       assertNull(BlastnConverter.toInternal((IOBlastnDust) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toInternal(IOBlastnDcTemplateType)")
-  class ToInternal3
-  {
-    @Test
-    @DisplayName("Correctly converts IOBlastnDcTemplateType values.")
-    void test1() {
-      assertEquals(DcTemplateType.Coding, BlastnConverter.toInternal(IOBlastnDcTemplateType.CODING));
-      assertEquals(DcTemplateType.Optimal, BlastnConverter.toInternal(IOBlastnDcTemplateType.OPTIMAL));
-      assertEquals(DcTemplateType.Both, BlastnConverter.toInternal(IOBlastnDcTemplateType.BOTH));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastnConverter.toInternal((IOBlastnDcTemplateType) null));
     }
   }
 }

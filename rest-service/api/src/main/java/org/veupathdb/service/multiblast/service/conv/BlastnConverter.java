@@ -4,7 +4,6 @@ import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
-import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
 
 class BlastnConverter
@@ -36,17 +35,6 @@ class BlastnConverter
     return out;
   }
 
-  static IOBlastnDcTemplateType toExternal(DcTemplateType val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case Coding -> IOBlastnDcTemplateType.CODING;
-      case Optimal -> IOBlastnDcTemplateType.OPTIMAL;
-      case Both -> IOBlastnDcTemplateType.BOTH;
-    };
-  }
-
   /**
    * Converts a raml generated Dust representation to the representation used
    * internally by the service.
@@ -67,18 +55,6 @@ class BlastnConverter
       return null;
 
     return new DustImpl(val.getLevel(), val.getWindow(), val.getLinker());
-  }
-
-  static DcTemplateType toInternal(IOBlastnDcTemplateType val) {
-    if (val == null) {
-      return null;
-    }
-
-    return switch (val) {
-      case CODING -> DcTemplateType.Coding;
-      case OPTIMAL -> DcTemplateType.Optimal;
-      case BOTH -> DcTemplateType.Both;
-    };
   }
 
   static BlastnConfig toInternal(IOBlastnConfig val) {
@@ -112,7 +88,7 @@ class BlastnConverter
       .setBestHitOverhang(val.getBestHitOverhang())
       .setBestHitScoreEdge(val.getBestHitScoreEdge())
       .enableSubjectBestHit(BCC.nullToFalse(val.getSubjectBestHit()))
-      .setDiscontiguousMegablastTemplateType(toInternal(val.getTemplateType()))
+      .setDiscontiguousMegablastTemplateType(val.getTemplateType())
       .setDiscontiguousMegablastTemplateLength(val.getTemplateLength())
       .enableSumStatistics(val.getSumStats())
       .setExtensionDropoffPreliminaryGapped(val.getXDropGap())
@@ -149,7 +125,7 @@ class BlastnConverter
     out.setBestHitOverhang(conf.getBestHitOverhang());
     out.setBestHitScoreEdge(conf.getBestHitScoreEdge());
     out.setSubjectBestHit(conf.isSubjectBestHitEnabled() ? true : null);
-    out.setTemplateType(toExternal(conf.getDiscontiguousMegablastTemplateType()));
+    out.setTemplateType(conf.getDiscontiguousMegablastTemplateType());
     out.setTemplateLength(conf.getDiscontiguousMegablastTemplateLength());
     out.setSumStats(conf.isSumStatisticsEnabled());
     out.setXDropGap(conf.getExtensionDropoffPreliminaryGapped());

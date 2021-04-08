@@ -9,6 +9,7 @@ import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("blastn")
@@ -16,54 +17,54 @@ public class IOBlastnConfigImpl implements IOBlastnConfig
 {
   private final BlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  private String                 query;
-  private IOBlastLocation        queryLoc;
-  private String                 eValue;
-  private IOBlastReportFormat    outFormat;
-  private Integer                numDescriptions;
-  private Integer                numAlignments;
-  private Integer                lineLength;
-  private HitSorting             sortHits;
-  private IOHSPSorting           sortHSPs;
-  private Boolean                lcaseMasking;
-  private Double                 qCovHSPPerc;
-  private Integer                maxHSPs;
-  private Integer                maxTargetSeqs;
-  private Byte                   dbSize;
-  private Byte                   searchSpace;
-  private Double                 xDropUngap;
-  private Boolean                parseDefLines;
-  private QueryStrand            strand;
-  private BlastNTask             task;
-  private Integer                wordSize;
-  private Integer                gapOpen;
-  private Integer                gapExtend;
-  private Integer                penalty;
-  private Integer                reward;
-  private Boolean                useIndex;
-  private String                 indexName;
-  private IOBlastnDust           dust;
-  private Integer                windowMaskerTaxid;
-  private Boolean                softMasking;
-  private List<Integer>          taxIds;
-  private List<Integer>          negativeTaxIds;
-  private String                 dbSoftMask;
-  private String                 dbHardMask;
-  private Double                 percIdentity;
-  private Integer                cullingLimit;
-  private Double                 bestHitOverhang;
-  private Double                 bestHitScoreEdge;
-  private Boolean                subjectBestHit;
-  private IOBlastnDcTemplateType templateType;
-  private Byte                   templateLength;
-  private Boolean                sumStats;
-  private Double                 xDropGap;
-  private Double                 xDropGapFinal;
-  private Boolean                noGreedy;
-  private Integer                minRawGappedScore;
-  private Boolean                ungapped;
-  private Integer                windowSize;
-  private Integer                offDiagonalRange;
+  private String              query;
+  private IOBlastLocation     queryLoc;
+  private String              eValue;
+  private IOBlastReportFormat outFormat;
+  private Integer             numDescriptions;
+  private Integer             numAlignments;
+  private Integer             lineLength;
+  private HitSorting          sortHits;
+  private IOHSPSorting        sortHSPs;
+  private Boolean             lcaseMasking;
+  private Double              qCovHSPPerc;
+  private Integer             maxHSPs;
+  private Integer             maxTargetSeqs;
+  private Byte                dbSize;
+  private Byte                searchSpace;
+  private Double              xDropUngap;
+  private Boolean             parseDefLines;
+  private QueryStrand         strand;
+  private BlastNTask          task;
+  private Integer             wordSize;
+  private Integer             gapOpen;
+  private Integer             gapExtend;
+  private Integer             penalty;
+  private Integer             reward;
+  private Boolean             useIndex;
+  private String              indexName;
+  private IOBlastnDust        dust;
+  private Integer             windowMaskerTaxid;
+  private Boolean             softMasking;
+  private List<Integer>       taxIds;
+  private List<Integer>       negativeTaxIds;
+  private String              dbSoftMask;
+  private String              dbHardMask;
+  private Double              percIdentity;
+  private Integer             cullingLimit;
+  private Double              bestHitOverhang;
+  private Double              bestHitScoreEdge;
+  private Boolean             subjectBestHit;
+  private DcTemplateType      templateType;
+  private Byte                templateLength;
+  private Boolean             sumStats;
+  private Double              xDropGap;
+  private Double              xDropGapFinal;
+  private Boolean             noGreedy;
+  private Integer             minRawGappedScore;
+  private Boolean             ungapped;
+  private Integer             windowSize;
+  private Integer             offDiagonalRange;
 
   @JsonProperty("tool")
   public BlastTool getTool() {
@@ -451,12 +452,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig
   }
 
   @JsonProperty("templateType")
-  public IOBlastnDcTemplateType getTemplateType() {
+  public DcTemplateType getTemplateType() {
     return this.templateType;
   }
 
   @JsonProperty("templateType")
-  public void setTemplateType(IOBlastnDcTemplateType templateType) {
+  public void setTemplateType(DcTemplateType templateType) {
     this.templateType = templateType;
   }
 
