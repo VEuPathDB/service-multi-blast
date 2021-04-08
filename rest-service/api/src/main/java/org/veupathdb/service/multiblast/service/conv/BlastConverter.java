@@ -49,7 +49,7 @@ public class BlastConverter
       .setNumDescriptions(conf.getNumDescriptions())
       .setNumAlignments(conf.getNumAlignments())
       .setLineLength(conf.getLineLength())
-      .setHitSorting(toInternal(conf.getSortHits()))
+      .setHitSorting(conf.getSortHits())
       .setHSPSorting(toInternal(conf.getSortHSPs()))
       .enableLowercaseMasking(BCC.nullToFalse(conf.getLcaseMasking()))
       .setQueryCoveragePercentHSP(conf.getQCovHSPPerc())
@@ -79,7 +79,7 @@ public class BlastConverter
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(toExternal(conf.getHitSorting()));
+    out.setSortHits(conf.getHitSorting());
     out.setSortHSPs(toExternal(conf.getHspSorting()));
     out.setLcaseMasking(conf.isLowercaseMaskingEnabled() ? true : null);
     out.setQCovHSPPerc(conf.getQueryCoverageHspPercent());
@@ -196,19 +196,6 @@ public class BlastConverter
       case SQ -> IOBlastReportField.SQ;
       case SR -> IOBlastReportField.SR;
       case Standard -> null;
-    };
-  }
-
-  static IOHitSorting toExternal(HitSorting val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case ByExpectValue -> IOHitSorting.BYEVAL;
-      case ByBitScore -> IOHitSorting.BYBITSCORE;
-      case ByTotalScore -> IOHitSorting.BYTOTALSCORE;
-      case ByPercentIdentity -> IOHitSorting.BYPERCENTIDENTITY;
-      case ByQueryCoverage -> IOHitSorting.BYQUERYCOVERAGE;
     };
   }
 
@@ -351,19 +338,6 @@ public class BlastConverter
       fmt.getDelim(),
       toInternal(fmt.getFields())
     );
-  }
-
-  static HitSorting toInternal(IOHitSorting val) {
-    if (val == null)
-      return null;
-
-    return switch(val) {
-      case BYEVAL -> HitSorting.ByExpectValue;
-      case BYBITSCORE -> HitSorting.ByBitScore;
-      case BYTOTALSCORE -> HitSorting.ByTotalScore;
-      case BYPERCENTIDENTITY -> HitSorting.ByPercentIdentity;
-      case BYQUERYCOVERAGE -> HitSorting.ByQueryCoverage;
-    };
   }
 
   static HspSorting toInternal(IOHSPSorting val) {

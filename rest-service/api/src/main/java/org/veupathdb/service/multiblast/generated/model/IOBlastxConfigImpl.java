@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +21,7 @@ public class IOBlastxConfigImpl implements IOBlastxConfig
   private Integer               numDescriptions;
   private Integer               numAlignments;
   private Integer               lineLength;
-  private IOHitSorting          sortHits;
+  private HitSorting            sortHits;
   private IOHSPSorting          sortHSPs;
   private Boolean               lcaseMasking;
   private Double                qCovHSPPerc;
@@ -133,12 +134,12 @@ public class IOBlastxConfigImpl implements IOBlastxConfig
   }
 
   @JsonProperty("sortHits")
-  public IOHitSorting getSortHits() {
+  public HitSorting getSortHits() {
     return this.sortHits;
   }
 
   @JsonProperty("sortHits")
-  public void setSortHits(IOHitSorting sortHits) {
+  public void setSortHits(HitSorting sortHits) {
     this.sortHits = sortHits;
   }
 
