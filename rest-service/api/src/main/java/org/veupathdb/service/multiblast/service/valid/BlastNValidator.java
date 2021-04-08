@@ -3,9 +3,9 @@ package org.veupathdb.service.multiblast.service.valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnConfig;
-import org.veupathdb.service.multiblast.generated.model.IOBlastnDcTemplateType;
 import org.veupathdb.service.multiblast.model.ErrorMap;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
@@ -102,7 +102,7 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
       return;
 
     if (conf.getTemplateType() == null)
-      conf.setTemplateType(IOBlastnDcTemplateType.CODING);
+      conf.setTemplateType(DcTemplateType.Coding);
 
     if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
       err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
+import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 @JsonTypeName("blastn")
@@ -142,10 +143,10 @@ public interface IOBlastnConfig extends IOBlastConfig {
   void setSubjectBestHit (Boolean subjectBestHit);
 
   @JsonProperty(JsonKeys.TemplateType)
-  IOBlastnDcTemplateType getTemplateType();
+  DcTemplateType getTemplateType();
 
   @JsonProperty(JsonKeys.TemplateType)
-  void setTemplateType(IOBlastnDcTemplateType templateType);
+  void setTemplateType(DcTemplateType templateType);
 
   @JsonProperty(JsonKeys.TemplateLength)
    Byte getTemplateLength();
