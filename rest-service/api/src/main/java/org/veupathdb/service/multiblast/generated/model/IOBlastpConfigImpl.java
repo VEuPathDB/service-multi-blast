@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
+import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 
@@ -38,7 +39,7 @@ public class IOBlastpConfigImpl implements IOBlastpConfig
   private Integer               gapExtend;
   private IOBlastpScoringMatrix matrix;
   private Double                threshold;
-  private IOBlastCompBasedStats compBasedStats;
+  private CompBasedStats        compBasedStats;
   private IOBlastSegMask        seg;
   private Boolean               softMasking;
   private List<Integer>         taxIds;
@@ -291,12 +292,12 @@ public class IOBlastpConfigImpl implements IOBlastpConfig
   }
 
   @JsonProperty("compBasedStats")
-  public IOBlastCompBasedStats getCompBasedStats() {
+  public CompBasedStats getCompBasedStats() {
     return this.compBasedStats;
   }
 
   @JsonProperty("compBasedStats")
-  public void setCompBasedStats(IOBlastCompBasedStats compBasedStats) {
+  public void setCompBasedStats(CompBasedStats compBasedStats) {
     this.compBasedStats = compBasedStats;
   }
 

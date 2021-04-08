@@ -81,30 +81,6 @@ public class BCC
     return out;
   }
 
-  static IOBlastCompBasedStats toExternal(CompBasedStats val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case None                         -> IOBlastCompBasedStats.NONE;
-      case CompBasedStats               -> IOBlastCompBasedStats.COMPBASEDSTATS;
-      case ConditionalScoreAdjustment   -> IOBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT;
-      case UnconditionalScoreAdjustment -> IOBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT;
-    };
-  }
-
-  static CompBasedStats toInternal(IOBlastCompBasedStats val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case NONE                                  -> CompBasedStats.None;
-      case COMPBASEDSTATS                        -> CompBasedStats.CompBasedStats;
-      case CONDITIONALCOMPBASEDSCOREADJUSTMENT   -> CompBasedStats.ConditionalScoreAdjustment;
-      case UNCONDITIONALCOMPBASEDSCOREADJUSTMENT -> CompBasedStats.UnconditionalScoreAdjustment;
-    };
-  }
-
   static Seg toInternal(IOBlastSegMask val) {
     if (val == null)
       return null;

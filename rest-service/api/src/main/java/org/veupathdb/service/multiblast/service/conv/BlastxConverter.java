@@ -72,7 +72,7 @@ public class BlastxConverter
       .setMaxIntronLength(conf.getMaxIntronLength())
       .setScoringMatrix(toInternal(conf.getMatrix()))
       .setScoreThreshold(conf.getThreshold())
-      .setCompBasedStatisticsType(BCC.toInternal(conf.getCompBasedStats()))
+      .setCompBasedStatisticsType(conf.getCompBasedStats())
       .setSeg(BCC.toInternal(conf.getSeg()))
       .enableSoftMasking(conf.getSoftMasking())
       .setTaxIDs(BCC.listToArray(conf.getTaxIds()))
@@ -102,7 +102,7 @@ public class BlastxConverter
     out.setMaxIntronLength(conf.getMaxIntronLength());
     out.setMatrix(toExternal(conf.getScoringMatrix()));
     out.setThreshold(conf.getScoreThreshold());
-    out.setCompBasedStats(BCC.toExternal(conf.getCompBasedStatisticsType()));
+    out.setCompBasedStats(conf.getCompBasedStatisticsType());
     out.setSeg(BCC.toExternal(conf.getSeg()));
     out.setSoftMasking(conf.isSoftMaskingEnabled());
     out.setTaxIds(BCC.arrayToList(conf.getTaxIds()));

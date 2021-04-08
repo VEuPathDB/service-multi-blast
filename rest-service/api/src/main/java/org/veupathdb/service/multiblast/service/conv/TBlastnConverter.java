@@ -35,7 +35,7 @@ public class TBlastnConverter
     out.setMaxIntronLength(conf.getMaxIntronLength());
     out.setMatrix(conf.getScoringMatrix());
     out.setThreshold(conf.getScoreThreshold());
-    out.setCompBasedStats(BCC.toExternal(conf.getCompBasedStatisticsType()));
+    out.setCompBasedStats(conf.getCompBasedStatisticsType());
     out.setSeg(BCC.toExternal(conf.getSeg()));
     out.setSoftMasking(conf.isSoftMaskingEnabled());
     out.setTaxIds(BCC.arrayToList(conf.getTaxIds()));
@@ -69,7 +69,7 @@ public class TBlastnConverter
       .setMaxIntronLength(val.getMaxIntronLength())
       .setScoringMatrix(val.getMatrix())
       .setScoreThreshold(val.getThreshold())
-      .setCompBasedStatisticsType(BCC.toInternal(val.getCompBasedStats()))
+      .setCompBasedStatisticsType(val.getCompBasedStats())
       .setSeg(BCC.toInternal(val.getSeg()))
       .enableSoftMasking(val.getSoftMasking())
       .setTaxIDs(val.getTaxIds())

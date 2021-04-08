@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
+import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
 import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
@@ -69,10 +70,10 @@ public interface IOBlastxConfig extends IOBlastConfig {
   void setThreshold (Double threshold);
 
   @JsonProperty("compBasedStats")
-  IOBlastCompBasedStats getCompBasedStats();
+  CompBasedStats getCompBasedStats();
 
   @JsonProperty("compBasedStats")
-  void setCompBasedStats(IOBlastCompBasedStats compBasedStats);
+  void setCompBasedStats(CompBasedStats compBasedStats);
 
   @JsonProperty("seg")
   IOBlastSegMask getSeg();

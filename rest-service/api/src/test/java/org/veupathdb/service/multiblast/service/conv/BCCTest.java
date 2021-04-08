@@ -222,44 +222,4 @@ class BCCTest
       assertNull(BCC.toInternal((IOBlastSegMask) null));
     }
   }
-
-  @Nested
-  @DisplayName("::toInternal(IOBlastCompBasedStats)")
-  class ToInternal4
-  {
-    @Test
-    @DisplayName("Correctly translates IOBlastCompBasedStats value.")
-    void test1() {
-      assertEquals(CompBasedStats.None, BCC.toInternal(IOBlastCompBasedStats.NONE));
-      assertEquals(CompBasedStats.CompBasedStats, BCC.toInternal(IOBlastCompBasedStats.COMPBASEDSTATS));
-      assertEquals(CompBasedStats.ConditionalScoreAdjustment, BCC.toInternal(IOBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT));
-      assertEquals(CompBasedStats.UnconditionalScoreAdjustment, BCC.toInternal(IOBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT));
-    }
-
-    @Test
-    @DisplayName("Returns null on null input")
-    void test2() {
-      assertNull(BCC.toInternal((IOBlastCompBasedStats) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toExternal(CompBasedStats)")
-  class ToExternal6
-  {
-    @Test
-    @DisplayName("Correctly translates CompBasedStats value.")
-    void test1() {
-      assertEquals(IOBlastCompBasedStats.NONE, BCC.toExternal(CompBasedStats.None));
-      assertEquals(IOBlastCompBasedStats.COMPBASEDSTATS, BCC.toExternal(CompBasedStats.CompBasedStats));
-      assertEquals(IOBlastCompBasedStats.CONDITIONALCOMPBASEDSCOREADJUSTMENT, BCC.toExternal(CompBasedStats.ConditionalScoreAdjustment));
-      assertEquals(IOBlastCompBasedStats.UNCONDITIONALCOMPBASEDSCOREADJUSTMENT, BCC.toExternal(CompBasedStats.UnconditionalScoreAdjustment));
-    }
-
-    @Test
-    @DisplayName("Returns null on null input")
-    void test2() {
-      assertNull(BCC.toExternal((CompBasedStats) null));
-    }
-  }
 }
