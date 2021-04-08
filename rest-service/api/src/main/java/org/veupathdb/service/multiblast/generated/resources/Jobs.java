@@ -6,8 +6,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.veupathdb.service.multiblast.generated.model.IOBlastReportField;
 import org.veupathdb.service.multiblast.generated.model.IOJsonJobRequest;
+import org.veupathdb.service.multiblast.model.blast.BlastReportField;
 
 @Path("/jobs")
 public interface Jobs
@@ -50,7 +50,7 @@ public interface Jobs
     @QueryParam("format") String format,
     @QueryParam("zip") @DefaultValue("true") boolean zip,
     @QueryParam("inline") @DefaultValue("false") boolean inline,
-    @QueryParam("fields") List<IOBlastReportField> fields
+    @QueryParam("fields") List<BlastReportField> fields
   );
 
 }

@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast;
 
+import org.veupathdb.service.multiblast.util.ErrorText;
+
 @SuppressWarnings("SpellCheckingInspection")
 public enum BlastReportField
 {
@@ -289,6 +291,10 @@ public enum BlastReportField
       if (e.value.equals(value))
         return e;
 
-    throw new IllegalArgumentException("Unrecognized BlastReportField value: " + value);
+    throw new IllegalArgumentException(String.format(
+      ErrorText.InvalidEnumValue,
+      value,
+      BlastReportField.class.getSimpleName()
+    ));
   }
 }
