@@ -2,12 +2,16 @@ package org.veupathdb.service.multiblast.model.internal;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum JobStatus
 {
   Queued("queued"),
   InProgress("in-progress"),
   Errored("errored"),
-  Completed("completed");
+  Completed("completed"),
+  Expired("expired");
 
   private final String value;
 
@@ -15,6 +19,7 @@ public enum JobStatus
     this.value = name;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }
@@ -27,6 +32,7 @@ public enum JobStatus
     return Optional.empty();
   }
 
+  @JsonCreator
   public static JobStatus unsafeFromString(String name) {
     return fromString(name)
       .orElseThrow(() -> new IllegalArgumentException("Unrecognized JobStatus value: " + name));

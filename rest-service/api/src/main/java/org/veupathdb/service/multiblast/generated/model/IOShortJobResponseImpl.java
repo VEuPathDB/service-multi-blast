@@ -1,13 +1,14 @@
 package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.veupathdb.service.multiblast.model.internal.JobStatus;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class IOShortJobResponseImpl implements IOShortJobResponse
 {
   private String            id;
   private String            description;
-  private IOJobStatus       status;
+  private JobStatus         status;
   private String            created;
   private String            expires;
   private Long              maxResultSize;
@@ -40,12 +41,12 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   }
 
   @Override
-  public IOJobStatus getStatus() {
+  public JobStatus getStatus() {
     return this.status;
   }
 
   @Override
-  public IOShortJobResponse setStatus(IOJobStatus status) {
+  public IOShortJobResponse setStatus(JobStatus status) {
     this.status = status;
     return this;
   }
