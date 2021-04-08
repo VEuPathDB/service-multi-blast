@@ -2,6 +2,7 @@ package org.veupathdb.service.multiblast.model.blast.p;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.veupathdb.service.multiblast.util.ErrorText;
 
 public enum BlastpTask
 {
@@ -31,6 +32,10 @@ public enum BlastpTask
       if (e.value.equals(value))
         return e;
 
-    throw new IllegalArgumentException(); // TODO: print actual value
+    throw new IllegalArgumentException(String.format(
+      ErrorText.InvalidEnumValue,
+      value,
+      BlastpTask.class.getSimpleName()
+    ));
   }
 }
