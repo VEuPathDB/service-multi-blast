@@ -35,11 +35,14 @@ public class BlastConverter
       return null;
 
     BlastConfig<?> out = switch (conf.getTool()) {
-      case BLASTN -> BlastnConverter.toInternal((IOBlastnConfig) conf);
-      case BLASTP -> BlastpConverter.toInternal((IOBlastpConfig) conf);
-      case BLASTX -> BlastxConverter.toInternal((IOBlastxConfig) conf);
-      case TBLASTN -> TBlastnConverter.toInternal((IOTBlastnConfig) conf);
-      case TBLASTX -> TBlastxConverter.toInternal((IOTBlastxConfig) conf);
+      case BlastN -> BlastnConverter.toInternal((IOBlastnConfig) conf);
+      case BlastP -> BlastpConverter.toInternal((IOBlastpConfig) conf);
+      case BlastX -> BlastxConverter.toInternal((IOBlastxConfig) conf);
+      case TBlastN -> TBlastnConverter.toInternal((IOTBlastnConfig) conf);
+      case TBlastX -> TBlastxConverter.toInternal((IOTBlastxConfig) conf);
+      case PSIBlast -> throw new RuntimeException("psiblast is currently disallowed");
+      case RPSBlast -> throw new RuntimeException("rpsblast is currently disallowed");
+      case RPSTBlastN -> throw new RuntimeException("rpstblastn is currently disallowed");
     };
 
     out.setQuery(conf.getQuery())
@@ -91,11 +94,14 @@ public class BlastConverter
     out.setParseDefLines(conf.isDefLineParsingEnabled() ? true : null);
 
     return switch (out.getTool()) {
-      case BLASTN -> BlastnConverter.toExternal((IOBlastnConfig) out, (BlastnConfig) conf);
-      case BLASTP -> BlastpConverter.toExternal((IOBlastpConfig) out, (BlastpConfig) conf);
-      case BLASTX -> BlastxConverter.toExternal((IOBlastxConfig) out, (BlastxConfig) conf);
-      case TBLASTN -> TBlastnConverter.toExternal((IOTBlastnConfig) out, (TBlastnConfig) conf);
-      case TBLASTX -> TBlastxConverter.toExternal((IOTBlastxConfig) out, (TBlastXConfig) conf);
+      case BlastN -> BlastnConverter.toExternal((IOBlastnConfig) out, (BlastnConfig) conf);
+      case BlastP -> BlastpConverter.toExternal((IOBlastpConfig) out, (BlastpConfig) conf);
+      case BlastX -> BlastxConverter.toExternal((IOBlastxConfig) out, (BlastxConfig) conf);
+      case TBlastN -> TBlastnConverter.toExternal((IOTBlastnConfig) out, (TBlastnConfig) conf);
+      case TBlastX -> TBlastxConverter.toExternal((IOTBlastxConfig) out, (TBlastXConfig) conf);
+      case PSIBlast -> throw new RuntimeException("psiblast is currently disallowed");
+      case RPSBlast -> throw new RuntimeException("rpsblast is currently disallowed");
+      case RPSTBlastN -> throw new RuntimeException("rpstblastn is currently disallowed");
     };
   }
 

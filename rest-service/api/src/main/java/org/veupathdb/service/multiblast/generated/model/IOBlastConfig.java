@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
@@ -22,10 +23,10 @@ import org.veupathdb.service.multiblast.model.io.JsonKeys;
 })
 @JsonDeserialize(as = IOBlastConfigImpl.class)
 public interface IOBlastConfig {
-  IOBlastTool _DISCRIMINATOR_TYPE_NAME = null;
+  BlastTool _DISCRIMINATOR_TYPE_NAME = null;
 
   @JsonProperty(JsonKeys.Tool)
-  IOBlastTool getTool();
+  BlastTool getTool();
 
   @JsonProperty(JsonKeys.Query)
   String getQuery();

@@ -1,8 +1,6 @@
 package org.veupathdb.service.multiblast.service.conv;
 
 import org.veupathdb.service.multiblast.generated.model.IOBlastConfig;
-import org.veupathdb.service.multiblast.generated.model.IOBlastTool;
-import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.internal.Job;
 
 public class JobConverter
@@ -29,24 +27,6 @@ public class JobConverter
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   /**
-   * Translates the given external blast tool enum into the internal
-   * representation.
-   *
-   * @param val Enum value to translate.
-   *
-   * @return Translated enum value.
-   */
-  public static BlastTool toInternal(IOBlastTool val) {
-    return switch(val) {
-      case BLASTN  -> BlastTool.BlastN;
-      case BLASTP  -> BlastTool.BlastP;
-      case BLASTX  -> BlastTool.BlastX;
-      case TBLASTN -> BlastTool.TBlastN;
-      case TBLASTX -> BlastTool.TBlastX;
-    };
-  }
-
-  /**
    * @see #externalToInternal(IOBlastConfig)
    */
   public static Job toInternal(IOBlastConfig conf) {
@@ -62,7 +42,7 @@ public class JobConverter
    * @return Translated blast config.
    */
   public Job externalToInternal(IOBlastConfig conf) {
-    var out = new Job(toInternal(conf.getTool()));
+    var out = new Job(conf.getTool());
 
     return out.setJobConfig(BlastConverter.toInternal(conf));
   }

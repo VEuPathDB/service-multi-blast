@@ -89,11 +89,14 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
     Int.optGtEq(errors, conf.getSearchSpace(), (byte) 0, JsonKeys.SearchSpace);
 
     errors.putAll(switch (conf.getTool()) {
-      case BLASTN -> BlastNValidator.getInstance().validate((IOBlastnConfig) conf);
-      case BLASTP -> BlastPValidator.getInstance().validate((IOBlastpConfig) conf);
-      case BLASTX -> BlastXValidator.getInstance().validate((IOBlastxConfig) conf);
-      case TBLASTN -> TBlastNValidator.getInstance().validate((IOTBlastnConfig) conf);
-      case TBLASTX -> TBlastXValidator.getInstance().validate((IOTBlastxConfig) conf);
+      case BlastN -> BlastNValidator.getInstance().validate((IOBlastnConfig) conf);
+      case BlastP -> BlastPValidator.getInstance().validate((IOBlastpConfig) conf);
+      case BlastX -> BlastXValidator.getInstance().validate((IOBlastxConfig) conf);
+      case TBlastN -> TBlastNValidator.getInstance().validate((IOTBlastnConfig) conf);
+      case TBlastX -> TBlastXValidator.getInstance().validate((IOTBlastxConfig) conf);
+      case PSIBlast -> throw new RuntimeException("psiblast is currently disallowed");
+      case RPSBlast -> throw new RuntimeException("rpsblast is currently disallowed");
+      case RPSTBlastN -> throw new RuntimeException("rpstblastn is currently disallowed");
     });
 
     return errors;

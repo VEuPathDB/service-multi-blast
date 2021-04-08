@@ -2,6 +2,10 @@ package org.veupathdb.service.multiblast.model.blast;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.veupathdb.service.multiblast.util.ErrorText;
+
 public enum BlastTool
 {
   BlastN,
@@ -13,6 +17,7 @@ public enum BlastTool
   TBlastN,
   TBlastX;
 
+  @JsonValue
   public String value() {
     return name().toLowerCase();
   }
@@ -33,5 +38,14 @@ public enum BlastTool
         return Optional.of(e);
 
     return Optional.empty();
+  }
+
+  @JsonCreator
+  public static BlastTool unsafeFromString(String value) {
+    return fromString(value).orElseThrow(() -> new IllegalArgumentException(String.format(
+      ErrorText.InvalidEnumValue,
+      value,
+      BlastTool.class.getSimpleName()
+    )));
   }
 }

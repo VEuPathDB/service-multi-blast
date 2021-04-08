@@ -2,12 +2,13 @@ package org.veupathdb.service.multiblast.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOBlastConfigImpl implements IOBlastConfig
 {
-  private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
+  private final BlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
   private String              query;
   private IOBlastLocation     queryLoc;
@@ -28,7 +29,7 @@ public class IOBlastConfigImpl implements IOBlastConfig
   private Boolean             parseDefLines;
 
   @JsonProperty("tool")
-  public IOBlastTool getTool() {
+  public BlastTool getTool() {
     return this.tool;
   }
 
