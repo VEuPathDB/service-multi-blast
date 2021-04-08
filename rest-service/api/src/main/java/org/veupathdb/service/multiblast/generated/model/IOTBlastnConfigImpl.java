@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
+import org.veupathdb.service.multiblast.model.blast.CompBasedStats;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
@@ -16,48 +17,48 @@ public class IOTBlastnConfigImpl implements IOTBlastnConfig
 {
   private final BlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  private String                query;
-  private IOBlastLocation       queryLoc;
-  private String                eValue;
-  private IOBlastReportFormat   outFormat;
-  private Integer               numDescriptions;
-  private Integer               numAlignments;
-  private Integer               lineLength;
-  private HitSorting            sortHits;
-  private IOHSPSorting          sortHSPs;
-  private Boolean               lcaseMasking;
-  private Double                qCovHSPPerc;
-  private Integer               maxHSPs;
-  private Integer               maxTargetSeqs;
-  private Byte                  dbSize;
-  private Byte                  searchSpace;
-  private Double                xDropUngap;
-  private Boolean               parseDefLines;
-  private TBlastNTask           task;
-  private Integer               wordSize;
-  private Integer               gapOpen;
-  private Integer               gapExtend;
-  private Byte                  dbGencode;
-  private Integer               maxIntronLength;
-  private TBlastNScoringMatrix  matrix;
-  private Double                threshold;
-  private IOBlastCompBasedStats compBasedStats;
-  private IOBlastSegMask        seg;
-  private Boolean               softMasking;
-  private List<Integer>         taxIds;
-  private List<Integer>         negativeTaxIds;
-  private String                dbSoftMask;
-  private String                dbHardMask;
-  private Integer               cullingLimit;
-  private Double                bestHitOverhang;
-  private Double                bestHitScoreEdge;
-  private Boolean               subjectBestHit;
-  private Boolean               sumStats;
-  private Double                xDropGap;
-  private Double                xDropGapFinal;
-  private Boolean               ungapped;
-  private Integer               windowSize;
-  private Boolean               useSWTraceback;
+  private String               query;
+  private IOBlastLocation      queryLoc;
+  private String               eValue;
+  private IOBlastReportFormat  outFormat;
+  private Integer              numDescriptions;
+  private Integer              numAlignments;
+  private Integer              lineLength;
+  private HitSorting           sortHits;
+  private IOHSPSorting         sortHSPs;
+  private Boolean              lcaseMasking;
+  private Double               qCovHSPPerc;
+  private Integer              maxHSPs;
+  private Integer              maxTargetSeqs;
+  private Byte                 dbSize;
+  private Byte                 searchSpace;
+  private Double               xDropUngap;
+  private Boolean              parseDefLines;
+  private TBlastNTask          task;
+  private Integer              wordSize;
+  private Integer              gapOpen;
+  private Integer              gapExtend;
+  private Byte                 dbGencode;
+  private Integer              maxIntronLength;
+  private TBlastNScoringMatrix matrix;
+  private Double               threshold;
+  private CompBasedStats       compBasedStats;
+  private IOBlastSegMask       seg;
+  private Boolean              softMasking;
+  private List<Integer>        taxIds;
+  private List<Integer>        negativeTaxIds;
+  private String               dbSoftMask;
+  private String               dbHardMask;
+  private Integer              cullingLimit;
+  private Double               bestHitOverhang;
+  private Double               bestHitScoreEdge;
+  private Boolean              subjectBestHit;
+  private Boolean              sumStats;
+  private Double               xDropGap;
+  private Double               xDropGapFinal;
+  private Boolean              ungapped;
+  private Integer              windowSize;
+  private Boolean              useSWTraceback;
 
   @JsonProperty("tool")
   public BlastTool getTool() {
@@ -315,12 +316,12 @@ public class IOTBlastnConfigImpl implements IOTBlastnConfig
   }
 
   @JsonProperty("compBasedStats")
-  public IOBlastCompBasedStats getCompBasedStats() {
+  public CompBasedStats getCompBasedStats() {
     return this.compBasedStats;
   }
 
   @JsonProperty("compBasedStats")
-  public void setCompBasedStats(IOBlastCompBasedStats compBasedStats) {
+  public void setCompBasedStats(CompBasedStats compBasedStats) {
     this.compBasedStats = compBasedStats;
   }
 
