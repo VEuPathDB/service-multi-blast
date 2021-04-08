@@ -174,25 +174,6 @@ class BCCTest
   }
 
   @Nested
-  @DisplayName("::toInternal(IOBlastStrand)")
-  class ToInternal1
-  {
-    @Test
-    @DisplayName("Correctly translates IOBlastStrand value.")
-    void test1() {
-      assertEquals(QueryStrand.Plus, BCC.toInternal(IOBlastStrand.PLUS));
-      assertEquals(QueryStrand.Minus, BCC.toInternal(IOBlastStrand.MINUS));
-      assertEquals(QueryStrand.Both, BCC.toInternal(IOBlastStrand.BOTH));
-    }
-
-    @Test
-    @DisplayName("Returns null on null input")
-    void test2() {
-      assertNull(BCC.toInternal((IOBlastStrand) null));
-    }
-  }
-
-  @Nested
   @DisplayName("::toInternal(IOBlastLocation)")
   class ToInternal2
   {
@@ -259,25 +240,6 @@ class BCCTest
     @DisplayName("Returns null on null input")
     void test2() {
       assertNull(BCC.toInternal((IOBlastCompBasedStats) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toExternal(QueryStrand)")
-  class ToExternal5
-  {
-    @Test
-    @DisplayName("Correctly translates QueryStrand value.")
-    void test1() {
-      assertEquals(IOBlastStrand.BOTH, BCC.toExternal(QueryStrand.Both));
-      assertEquals(IOBlastStrand.MINUS, BCC.toExternal(QueryStrand.Minus));
-      assertEquals(IOBlastStrand.PLUS, BCC.toExternal(QueryStrand.Plus));
-    }
-
-    @Test
-    @DisplayName("Returns null on null input")
-    void test2() {
-      assertNull(BCC.toExternal((QueryStrand) null));
     }
   }
 
