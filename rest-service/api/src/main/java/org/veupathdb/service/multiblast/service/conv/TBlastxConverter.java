@@ -59,7 +59,7 @@ class TBlastxConverter
 
   TBlastXConfig externalToInternal(IOTBlastxConfig conf) {
     return new TBlastXConfigImpl()
-      .setStrand(BCC.toInternal(conf.getStrand()))
+      .setStrand(conf.getStrand())
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
       .setWordSize(conf.getWordSize())
       .setMaxIntronLength(conf.getMaxIntronLength())
@@ -81,7 +81,7 @@ class TBlastxConverter
   }
 
   IOTBlastxConfig internalToExternal(IOTBlastxConfig out, TBlastXConfig conf) {
-    out.setStrand(BCC.toExternal(conf.getStrand()));
+    out.setStrand(conf.getStrand());
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());
     out.setWordSize(conf.getWordSize());
     out.setMaxIntronLength(conf.getMaxIntronLength());

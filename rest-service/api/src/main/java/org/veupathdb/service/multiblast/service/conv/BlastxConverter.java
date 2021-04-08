@@ -63,7 +63,7 @@ public class BlastxConverter
       return null;
 
     return new BlastXConfigImpl()
-      .setStrand(BCC.toInternal(conf.getStrand()))
+      .setStrand(conf.getStrand())
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
       .setTask(conf.getTask())
       .setWordSize(conf.getWordSize())
@@ -93,7 +93,7 @@ public class BlastxConverter
   }
 
   IOBlastxConfig internalToExternal(IOBlastxConfig out, BlastxConfig conf) {
-    out.setStrand(BCC.toExternal(conf.getStrand()));
+    out.setStrand(conf.getStrand());
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());
     out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());

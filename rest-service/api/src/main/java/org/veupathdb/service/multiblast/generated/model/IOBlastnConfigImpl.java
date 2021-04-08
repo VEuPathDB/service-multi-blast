@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
 import org.veupathdb.service.multiblast.model.blast.HitSorting;
+import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -32,7 +33,7 @@ public class IOBlastnConfigImpl implements IOBlastnConfig
   private Byte                   searchSpace;
   private Double                 xDropUngap;
   private Boolean                parseDefLines;
-  private IOBlastStrand          strand;
+  private QueryStrand            strand;
   private BlastNTask             task;
   private Integer                wordSize;
   private Integer                gapOpen;
@@ -240,12 +241,12 @@ public class IOBlastnConfigImpl implements IOBlastnConfig
   }
 
   @JsonProperty("strand")
-  public IOBlastStrand getStrand() {
+  public QueryStrand getStrand() {
     return this.strand;
   }
 
   @JsonProperty("strand")
-  public void setStrand(IOBlastStrand strand) {
+  public void setStrand(QueryStrand strand) {
     this.strand = strand;
   }
 

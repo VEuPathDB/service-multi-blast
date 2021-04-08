@@ -91,7 +91,7 @@ class BlastnConverter
     }
 
     return new BlastNConfigImpl()
-      .setStrand(BCC.toInternal(val.getStrand()))
+      .setStrand(val.getStrand())
       .setTask(val.getTask())
       .setWordSize(val.getWordSize())
       .setGapCostOpen(val.getGapOpen())
@@ -128,7 +128,7 @@ class BlastnConverter
     if (conf == null)
       return null;
 
-    out.setStrand(BCC.toExternal(conf.getStrand()));
+    out.setStrand(conf.getStrand());
     out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapCostOpen());

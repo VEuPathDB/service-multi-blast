@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.veupathdb.service.multiblast.model.blast.BlastTool;
+import org.veupathdb.service.multiblast.model.blast.QueryStrand;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 @JsonTypeName("blastx")
@@ -14,10 +15,10 @@ public interface IOBlastxConfig extends IOBlastConfig {
   BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastX;
 
   @JsonProperty("strand")
-  IOBlastStrand getStrand();
+  QueryStrand getStrand();
 
   @JsonProperty("strand")
-  void setStrand(IOBlastStrand strand);
+  void setStrand(QueryStrand strand);
 
   @JsonProperty("queryGeneticCode")
    Byte getQueryGeneticCode();

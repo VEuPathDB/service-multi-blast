@@ -93,17 +93,6 @@ public class BCC
     };
   }
 
-  static IOBlastStrand toExternal(QueryStrand val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case Both  -> IOBlastStrand.BOTH;
-      case Minus -> IOBlastStrand.MINUS;
-      case Plus  -> IOBlastStrand.PLUS;
-    };
-  }
-
   static CompBasedStats toInternal(IOBlastCompBasedStats val) {
     if (val == null)
       return null;
@@ -129,16 +118,5 @@ public class BCC
     }
 
     return new LocationImpl(val.getStart(), val.getStop());
-  }
-
-  static QueryStrand toInternal(IOBlastStrand val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case PLUS  -> QueryStrand.Plus;
-      case MINUS -> QueryStrand.Minus;
-      case BOTH  -> QueryStrand.Both;
-    };
   }
 }
