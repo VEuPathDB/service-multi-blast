@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDcTemplateType;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDust;
 import org.veupathdb.service.multiblast.generated.model.IOBlastnDustImpl;
-import org.veupathdb.service.multiblast.generated.model.IOBlastnTask;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
-import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
 
@@ -40,27 +38,6 @@ class BlastnConverterTest
   }
 
   @Nested
-  @DisplayName("::toExternal(BlastNTask)")
-  class ToExternal2
-  {
-    @Test
-    @DisplayName("Correctly converts BlastNTask values.")
-    void test1() {
-      assertEquals(IOBlastnTask.BLASTN, BlastnConverter.toExternal(BlastNTask.BlastN));
-      assertEquals(IOBlastnTask.BLASTNSHORT, BlastnConverter.toExternal(BlastNTask.BlastNShort));
-      assertEquals(IOBlastnTask.DCMEGABLAST, BlastnConverter.toExternal(BlastNTask.DiscontiguousMegablast));
-      assertEquals(IOBlastnTask.MEGABLAST, BlastnConverter.toExternal(BlastNTask.Megablast));
-      assertThrows(RuntimeException.class, () -> BlastnConverter.toExternal(BlastNTask.RMBlastN));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastnConverter.toExternal((BlastNTask) null));
-    }
-  }
-
-  @Nested
   @DisplayName("::toExternal(DcTemplateType)")
   class ToExternal3
   {
@@ -76,26 +53,6 @@ class BlastnConverterTest
     @DisplayName("Returns null when input is null")
     void test2() {
       assertNull(BlastnConverter.toExternal((DcTemplateType) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toInternal(IOBlastnTask")
-  class ToInternal1
-  {
-    @Test
-    @DisplayName("Correctly converts IOBlastnTask values.")
-    void test1() {
-      assertEquals(BlastNTask.Megablast, BlastnConverter.toInternal(IOBlastnTask.MEGABLAST));
-      assertEquals(BlastNTask.DiscontiguousMegablast, BlastnConverter.toInternal(IOBlastnTask.DCMEGABLAST));
-      assertEquals(BlastNTask.BlastN, BlastnConverter.toInternal(IOBlastnTask.BLASTN));
-      assertEquals(BlastNTask.BlastNShort, BlastnConverter.toInternal(IOBlastnTask.BLASTNSHORT));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastnConverter.toInternal((IOBlastnTask) null));
     }
   }
 

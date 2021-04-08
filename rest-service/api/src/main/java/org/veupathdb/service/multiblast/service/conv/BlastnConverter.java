@@ -3,7 +3,6 @@ package org.veupathdb.service.multiblast.service.conv;
 import org.veupathdb.service.multiblast.generated.model.*;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.impl.DustImpl;
-import org.veupathdb.service.multiblast.model.blast.n.BlastNTask;
 import org.veupathdb.service.multiblast.model.blast.n.BlastnConfig;
 import org.veupathdb.service.multiblast.model.blast.n.DcTemplateType;
 import org.veupathdb.service.multiblast.model.blast.n.Dust;
@@ -37,19 +36,6 @@ class BlastnConverter
     return out;
   }
 
-  static IOBlastnTask toExternal(BlastNTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BlastN -> IOBlastnTask.BLASTN;
-      case BlastNShort -> IOBlastnTask.BLASTNSHORT;
-      case DiscontiguousMegablast -> IOBlastnTask.DCMEGABLAST;
-      case Megablast -> IOBlastnTask.MEGABLAST;
-      case RMBlastN -> throw new RuntimeException("rmblastn is currently disallowed.");
-    };
-  }
-
   static IOBlastnDcTemplateType toExternal(DcTemplateType val) {
     if (val == null)
       return null;
@@ -58,18 +44,6 @@ class BlastnConverter
       case Coding -> IOBlastnDcTemplateType.CODING;
       case Optimal -> IOBlastnDcTemplateType.OPTIMAL;
       case Both -> IOBlastnDcTemplateType.BOTH;
-    };
-  }
-
-  static BlastNTask toInternal(IOBlastnTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case MEGABLAST -> BlastNTask.Megablast;
-      case DCMEGABLAST -> BlastNTask.DiscontiguousMegablast;
-      case BLASTN -> BlastNTask.BlastN;
-      case BLASTNSHORT -> BlastNTask.BlastNShort;
     };
   }
 
@@ -118,7 +92,7 @@ class BlastnConverter
 
     return new BlastNConfigImpl()
       .setStrand(BCC.toInternal(val.getStrand()))
-      .setTask(toInternal(val.getTask()))
+      .setTask(val.getTask())
       .setWordSize(val.getWordSize())
       .setGapCostOpen(val.getGapOpen())
       .setGapCostExtend(val.getGapExtend())
@@ -155,7 +129,7 @@ class BlastnConverter
       return null;
 
     out.setStrand(BCC.toExternal(conf.getStrand()));
-    out.setTask(toExternal(conf.getTask()));
+    out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapCostOpen());
     out.setGapExtend(conf.getGapCostExtend());
