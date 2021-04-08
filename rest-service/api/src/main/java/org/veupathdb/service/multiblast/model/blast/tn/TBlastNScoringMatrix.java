@@ -2,6 +2,8 @@ package org.veupathdb.service.multiblast.model.blast.tn;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.veupathdb.service.multiblast.util.ErrorText;
 
 public enum TBlastNScoringMatrix
@@ -17,6 +19,7 @@ public enum TBlastNScoringMatrix
   Identity
   ;
 
+  @JsonValue
   public String value() {
     return name().toUpperCase();
   }
@@ -39,6 +42,7 @@ public enum TBlastNScoringMatrix
     return Optional.empty();
   }
 
+  @JsonCreator
   public static TBlastNScoringMatrix unsafeFromString(String value) {
     return fromString(value).orElseThrow(() -> new IllegalArgumentException(String.format(
       ErrorText.InvalidEnumValue,

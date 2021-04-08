@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
@@ -50,10 +51,10 @@ public interface IOTBlastnConfig extends IOBlastConfig {
   void setMaxIntronLength(Integer maxIntronLength);
 
   @JsonProperty(JsonKeys.Matrix)
-  IOTBlastnScoringMatrix getMatrix();
+  TBlastNScoringMatrix getMatrix();
 
   @JsonProperty(JsonKeys.Matrix)
-  void setMatrix(IOTBlastnScoringMatrix matrix);
+  void setMatrix(TBlastNScoringMatrix matrix);
 
   @JsonProperty(JsonKeys.Threshold)
    Double getThreshold();

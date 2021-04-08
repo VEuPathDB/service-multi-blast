@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,48 +14,48 @@ public class IOTBlastnConfigImpl implements IOTBlastnConfig
 {
   private final IOBlastTool tool = _DISCRIMINATOR_TYPE_NAME;
 
-  private String                 query;
-  private IOBlastLocation        queryLoc;
-  private String                 eValue;
-  private IOBlastReportFormat    outFormat;
-  private Integer                numDescriptions;
-  private Integer                numAlignments;
-  private Integer                lineLength;
-  private IOHitSorting           sortHits;
-  private IOHSPSorting           sortHSPs;
-  private Boolean                lcaseMasking;
-  private Double                 qCovHSPPerc;
-  private Integer                maxHSPs;
-  private Integer                maxTargetSeqs;
-  private Byte                   dbSize;
-  private Byte                   searchSpace;
-  private Double                 xDropUngap;
-  private Boolean                parseDefLines;
-  private TBlastNTask            task;
-  private Integer                wordSize;
-  private Integer                gapOpen;
-  private Integer                gapExtend;
-  private Byte                   dbGencode;
-  private Integer                maxIntronLength;
-  private IOTBlastnScoringMatrix matrix;
-  private Double                 threshold;
-  private IOBlastCompBasedStats  compBasedStats;
-  private IOBlastSegMask         seg;
-  private Boolean                softMasking;
-  private List<Integer>          taxIds;
-  private List<Integer>          negativeTaxIds;
-  private String                 dbSoftMask;
-  private String                 dbHardMask;
-  private Integer                cullingLimit;
-  private Double                 bestHitOverhang;
-  private Double                 bestHitScoreEdge;
-  private Boolean                subjectBestHit;
-  private Boolean                sumStats;
-  private Double                 xDropGap;
-  private Double                 xDropGapFinal;
-  private Boolean                ungapped;
-  private Integer                windowSize;
-  private Boolean                useSWTraceback;
+  private String                query;
+  private IOBlastLocation       queryLoc;
+  private String                eValue;
+  private IOBlastReportFormat   outFormat;
+  private Integer               numDescriptions;
+  private Integer               numAlignments;
+  private Integer               lineLength;
+  private IOHitSorting          sortHits;
+  private IOHSPSorting          sortHSPs;
+  private Boolean               lcaseMasking;
+  private Double                qCovHSPPerc;
+  private Integer               maxHSPs;
+  private Integer               maxTargetSeqs;
+  private Byte                  dbSize;
+  private Byte                  searchSpace;
+  private Double                xDropUngap;
+  private Boolean               parseDefLines;
+  private TBlastNTask           task;
+  private Integer               wordSize;
+  private Integer               gapOpen;
+  private Integer               gapExtend;
+  private Byte                  dbGencode;
+  private Integer               maxIntronLength;
+  private TBlastNScoringMatrix  matrix;
+  private Double                threshold;
+  private IOBlastCompBasedStats compBasedStats;
+  private IOBlastSegMask        seg;
+  private Boolean               softMasking;
+  private List<Integer>         taxIds;
+  private List<Integer>         negativeTaxIds;
+  private String                dbSoftMask;
+  private String                dbHardMask;
+  private Integer               cullingLimit;
+  private Double                bestHitOverhang;
+  private Double                bestHitScoreEdge;
+  private Boolean               subjectBestHit;
+  private Boolean               sumStats;
+  private Double                xDropGap;
+  private Double                xDropGapFinal;
+  private Boolean               ungapped;
+  private Integer               windowSize;
+  private Boolean               useSWTraceback;
 
   @JsonProperty("tool")
   public IOBlastTool getTool() {
@@ -292,12 +293,12 @@ public class IOTBlastnConfigImpl implements IOTBlastnConfig
   }
 
   @JsonProperty("matrix")
-  public IOTBlastnScoringMatrix getMatrix() {
+  public TBlastNScoringMatrix getMatrix() {
     return this.matrix;
   }
 
   @JsonProperty("matrix")
-  public void setMatrix(IOTBlastnScoringMatrix matrix) {
+  public void setMatrix(TBlastNScoringMatrix matrix) {
     this.matrix = matrix;
   }
 
