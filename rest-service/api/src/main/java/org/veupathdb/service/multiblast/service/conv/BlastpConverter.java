@@ -2,11 +2,9 @@ package org.veupathdb.service.multiblast.service.conv;
 
 import org.veupathdb.service.multiblast.generated.model.IOBlastpConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpScoringMatrix;
-import org.veupathdb.service.multiblast.generated.model.IOBlastpTask;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastPConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpConfig;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 
 class BlastpConverter
 {
@@ -23,17 +21,6 @@ class BlastpConverter
     return getInstance().internalToExternal(out, conf);
   }
 
-  static IOBlastpTask toExternal(BlastpTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BlastP -> IOBlastpTask.BLASTP;
-      case BlastPFast -> IOBlastpTask.BLASTPFAST;
-      case BlastPShort -> IOBlastpTask.BLASTPSHORT;
-    };
-  }
-
   static IOBlastpScoringMatrix toExternal(BlastpScoringMatrix val) {
     if (val == null)
       return null;
@@ -48,17 +35,6 @@ class BlastpConverter
       case Pam70 -> IOBlastpScoringMatrix.PAM70;
       case Pam250 -> IOBlastpScoringMatrix.PAM250;
       case Identity -> IOBlastpScoringMatrix.IDENTITY;
-    };
-  }
-
-  static BlastpTask toInternal(IOBlastpTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BLASTP -> BlastpTask.BlastP;
-      case BLASTPSHORT -> BlastpTask.BlastPShort;
-      case BLASTPFAST -> BlastpTask.BlastPFast;
     };
   }
 
@@ -85,7 +61,7 @@ class BlastpConverter
 
   BlastpConfig externalToInternal(IOBlastpConfig conf) {
     return new BlastPConfigImpl()
-      .setTask(toInternal(conf.getTask()))
+      .setTask(conf.getTask())
       .setWordSize(conf.getWordSize())
       .setGapCostOpen(conf.getGapOpen())
       .setGapCostExtend(conf.getGapExtend())
@@ -112,7 +88,7 @@ class BlastpConverter
     if (conf == null)
       return null;
 
-    out.setTask(toExternal(conf.getTask()));
+    out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapCostOpen());
     out.setGapExtend(conf.getGapCostExtend());

@@ -1,5 +1,7 @@
 package org.veupathdb.service.multiblast.model.blast.tn;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.veupathdb.service.multiblast.util.ErrorText;
 
 public enum TBlastNTask
@@ -24,10 +26,12 @@ public enum TBlastNTask
   }
 
   @Override
+  @JsonValue
   public String toString() {
     return value;
   }
 
+  @JsonCreator
   public static TBlastNTask fromString(String value) {
     for (var e : values())
       if (e.value.equals(value))

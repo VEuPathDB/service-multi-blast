@@ -4,34 +4,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpScoringMatrix;
-import org.veupathdb.service.multiblast.generated.model.IOBlastpTask;
 import org.veupathdb.service.multiblast.model.blast.p.BlastpScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("BlastpConverter")
 class BlastpConverterTest
 {
-  @Nested
-  @DisplayName("::toExternal(BlastpTask)")
-  class ToExternal1
-  {
-    @Test
-    @DisplayName("Correctly converts BlastpTask values.")
-    void test1() {
-      assertEquals(IOBlastpTask.BLASTP, BlastpConverter.toExternal(BlastpTask.BlastP));
-      assertEquals(IOBlastpTask.BLASTPFAST, BlastpConverter.toExternal(BlastpTask.BlastPFast));
-      assertEquals(IOBlastpTask.BLASTPSHORT, BlastpConverter.toExternal(BlastpTask.BlastPShort));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastpConverter.toExternal((BlastpTask) null));
-    }
-  }
-
   @Nested
   @DisplayName("::toExternal(BlastpScoringMatrix)")
   class ToExternal2
@@ -54,25 +33,6 @@ class BlastpConverterTest
     @DisplayName("Returns null when input is null")
     void test2() {
       assertNull(BlastpConverter.toExternal((BlastpScoringMatrix) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toInternal(IOBlastpTask)")
-  class ToInternal1
-  {
-    @Test
-    @DisplayName("Correctly converst IOBlastpTask values.")
-    void test1() {
-      assertEquals(BlastpTask.BlastP, BlastpConverter.toInternal(IOBlastpTask.BLASTP));
-      assertEquals(BlastpTask.BlastPShort, BlastpConverter.toInternal(IOBlastpTask.BLASTPSHORT));
-      assertEquals(BlastpTask.BlastPFast, BlastpConverter.toInternal(IOBlastpTask.BLASTPFAST));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastpConverter.toInternal((IOBlastpTask) null));
     }
   }
 
