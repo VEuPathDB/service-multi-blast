@@ -3,8 +3,8 @@ package org.veupathdb.service.multiblast.service.valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.multiblast.generated.model.IOBlastpConfig;
-import org.veupathdb.service.multiblast.generated.model.IOBlastpTask;
 import org.veupathdb.service.multiblast.model.ErrorMap;
+import org.veupathdb.service.multiblast.model.blast.p.BlastpTask;
 import org.veupathdb.service.multiblast.model.io.JsonKeys;
 
 import static org.veupathdb.service.multiblast.model.io.JsonKeys.*;
@@ -96,10 +96,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getSoftMasking() == null || !conf.getSoftMasking())
       return;
 
-    if (conf.getTask() != IOBlastpTask.BLASTP)
+    if (conf.getTask() != BlastpTask.BlastP)
       err.putError(
         SoftMasking,
-        String.format(BlastValidator.errOnlyTask, IOBlastpTask.BLASTP.name)
+        String.format(BlastValidator.errOnlyTask, BlastpTask.BlastP.getValue())
       );
   }
 
@@ -107,10 +107,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getMatrix() == null)
       return;
 
-    if (conf.getTask() == IOBlastpTask.BLASTPFAST)
+    if (conf.getTask() == BlastpTask.BlastPFast)
       err.putError(
         JsonKeys.Matrix,
-        String.format(BlastValidator.errNotTask, IOBlastpTask.BLASTPFAST.name)
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
       );
   }
 
@@ -118,10 +118,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getGapExtend() == null)
       return;
 
-    if (conf.getTask() == IOBlastpTask.BLASTPFAST)
+    if (conf.getTask() == BlastpTask.BlastPFast)
       err.putError(
         JsonKeys.GapExtend,
-        String.format(BlastValidator.errNotTask, IOBlastpTask.BLASTPFAST.name)
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
       );
   }
 
@@ -129,10 +129,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getGapOpen() == null)
       return;
 
-    if (conf.getTask() == IOBlastpTask.BLASTPFAST)
+    if (conf.getTask() == BlastpTask.BlastPFast)
       err.putError(
         JsonKeys.GapOpen,
-        String.format(BlastValidator.errNotTask, IOBlastpTask.BLASTPFAST.name)
+        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
       );
   }
 }

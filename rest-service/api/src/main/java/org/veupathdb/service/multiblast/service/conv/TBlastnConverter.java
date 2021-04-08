@@ -2,10 +2,8 @@ package org.veupathdb.service.multiblast.service.conv;
 
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnConfig;
 import org.veupathdb.service.multiblast.generated.model.IOTBlastnScoringMatrix;
-import org.veupathdb.service.multiblast.generated.model.IOTBlastnTask;
 import org.veupathdb.service.multiblast.model.blast.impl.TBlastNConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastNScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.tn.TBlastNTask;
 import org.veupathdb.service.multiblast.model.blast.tn.TBlastnConfig;
 
 public class TBlastnConverter
@@ -17,16 +15,6 @@ public class TBlastnConverter
       return instance = new TBlastnConverter();
 
     return instance;
-  }
-
-  static IOTBlastnTask toExternal(TBlastNTask task) {
-    if (task == null)
-      return null;
-
-    return switch (task) {
-      case TBlastN -> IOTBlastnTask.TBLASTN;
-      case TBlastNFast -> IOTBlastnTask.TBLASTNFAST;
-    };
   }
 
   static IOTBlastnScoringMatrix toExternal(TBlastNScoringMatrix matrix) {
@@ -48,16 +36,6 @@ public class TBlastnConverter
 
   static IOTBlastnConfig toExternal(IOTBlastnConfig out, TBlastnConfig conf) {
     return getInstance().internalToExternal(out, conf);
-  }
-
-  static TBlastNTask toInternal(IOTBlastnTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case TBLASTN -> TBlastNTask.TBlastN;
-      case TBLASTNFAST -> TBlastNTask.TBlastNFast;
-    };
   }
 
   static TBlastNScoringMatrix toInternal(IOTBlastnScoringMatrix val) {
@@ -85,7 +63,7 @@ public class TBlastnConverter
     if (conf == null)
       return null;
 
-    out.setTask(toExternal(conf.getTask()));
+    out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapCostOpen());
     out.setGapExtend(conf.getGapCostExtend());
@@ -119,7 +97,7 @@ public class TBlastnConverter
       return null;
 
     return new TBlastNConfigImpl()
-      .setTask(toInternal(val.getTask()))
+      .setTask(val.getTask())
       .setWordSize(val.getWordSize())
       .setGapCostOpen(val.getGapOpen())
       .setGapCostExtend(val.getGapExtend())
