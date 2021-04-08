@@ -2,11 +2,9 @@ package org.veupathdb.service.multiblast.service.conv;
 
 import org.veupathdb.service.multiblast.generated.model.IOBlastxConfig;
 import org.veupathdb.service.multiblast.generated.model.IOBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.generated.model.IOBlastxTask;
 import org.veupathdb.service.multiblast.model.blast.impl.BlastXConfigImpl;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxConfig;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 public class BlastxConverter
 {
@@ -17,16 +15,6 @@ public class BlastxConverter
       return instance = new BlastxConverter();
 
     return instance;
-  }
-
-  static IOBlastxTask toExternal(BlastxTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BlastX -> IOBlastxTask.BLASTX;
-      case BlastXFast -> IOBlastxTask.BLASTXFAST;
-    };
   }
 
   static IOBlastxScoringMatrix toExternal(BlastxScoringMatrix val) {
@@ -62,16 +50,6 @@ public class BlastxConverter
     };
   }
 
-  static BlastxTask toInternal(IOBlastxTask val) {
-    if (val == null)
-      return null;
-
-    return switch (val) {
-      case BLASTX -> BlastxTask.BlastX;
-      case BLASTXFAST -> BlastxTask.BlastXFast;
-    };
-  }
-
   static IOBlastxConfig toExternal(IOBlastxConfig out, BlastxConfig conf) {
     return getInstance().internalToExternal(out, conf);
   }
@@ -87,7 +65,7 @@ public class BlastxConverter
     return new BlastXConfigImpl()
       .setStrand(BCC.toInternal(conf.getStrand()))
       .setQueryTranslationGeneticCode(conf.getQueryGeneticCode())
-      .setTask(toInternal(conf.getTask()))
+      .setTask(conf.getTask())
       .setWordSize(conf.getWordSize())
       .setGapCostOpen(conf.getGapOpen())
       .setGapCostExtend(conf.getGapExtend())
@@ -117,7 +95,7 @@ public class BlastxConverter
   IOBlastxConfig internalToExternal(IOBlastxConfig out, BlastxConfig conf) {
     out.setStrand(BCC.toExternal(conf.getStrand()));
     out.setQueryGeneticCode(conf.getQueryTranslationGeneticCode());
-    out.setTask(toExternal(conf.getTask()));
+    out.setTask(conf.getTask());
     out.setWordSize(conf.getWordSize());
     out.setGapOpen(conf.getGapCostOpen());
     out.setGapExtend(conf.getGapCostExtend());

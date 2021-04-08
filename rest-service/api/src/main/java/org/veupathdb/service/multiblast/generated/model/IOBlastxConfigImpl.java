@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("blastx")
@@ -31,7 +32,7 @@ public class IOBlastxConfigImpl implements IOBlastxConfig
   private Boolean               parseDefLines;
   private IOBlastStrand         strand;
   private Byte                  queryGeneticCode;
-  private IOBlastxTask          task;
+  private BlastxTask            task;
   private Integer               wordSize;
   private Integer               gapOpen;
   private Integer               gapExtend;
@@ -252,12 +253,12 @@ public class IOBlastxConfigImpl implements IOBlastxConfig
   }
 
   @JsonProperty("task")
-  public IOBlastxTask getTask() {
+  public BlastxTask getTask() {
     return this.task;
   }
 
   @JsonProperty("task")
-  public void setTask(IOBlastxTask task) {
+  public void setTask(BlastxTask task) {
     this.task = task;
   }
 

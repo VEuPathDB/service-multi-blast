@@ -4,33 +4,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.multiblast.generated.model.IOBlastxScoringMatrix;
-import org.veupathdb.service.multiblast.generated.model.IOBlastxTask;
 import org.veupathdb.service.multiblast.model.blast.x.BlastxScoringMatrix;
-import org.veupathdb.service.multiblast.model.blast.x.BlastxTask;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("BlastxConverter")
 class BlastxConverterTest
 {
-  @Nested
-  @DisplayName("::toExternal(BlastxTask)")
-  class ToExternal1
-  {
-    @Test
-    @DisplayName("Correctly converts BlastxTask values.")
-    void test1() {
-      assertEquals(IOBlastxTask.BLASTX, BlastxConverter.toExternal(BlastxTask.BlastX));
-      assertEquals(IOBlastxTask.BLASTXFAST, BlastxConverter.toExternal(BlastxTask.BlastXFast));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastxConverter.toExternal((BlastxTask) null));
-    }
-  }
-
   @Nested
   @DisplayName("::toExternal(BlastxScoringMatrix)")
   class ToExternal2
@@ -76,24 +56,6 @@ class BlastxConverterTest
     @DisplayName("Returns null when input is null")
     void test2() {
       assertNull(BlastxConverter.toInternal((IOBlastxScoringMatrix) null));
-    }
-  }
-
-  @Nested
-  @DisplayName("::toInternal(IOBlastxTask)")
-  class ToInternal2
-  {
-    @Test
-    @DisplayName("Correctly converts IOBlastxTask values.")
-    void test1() {
-      assertEquals(BlastxTask.BlastX, BlastxConverter.toInternal(IOBlastxTask.BLASTX));
-      assertEquals(BlastxTask.BlastXFast, BlastxConverter.toInternal(IOBlastxTask.BLASTXFAST));
-    }
-
-    @Test
-    @DisplayName("Returns null when input is null")
-    void test2() {
-      assertNull(BlastxConverter.toInternal((IOBlastxTask) null));
     }
   }
 }
