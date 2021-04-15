@@ -95,6 +95,8 @@ services:
         source: gcloud-config
         target: /root/.config
         read_only: true
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${BLAST_WATCHTOWER:-false}"
 
     networks:
       - internal
@@ -125,6 +127,8 @@ services:
         source: gcloud-config
         target: /root/.config
         read_only: true
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${FORMATTER_WATCHTOWER:-false}"
 
     networks:
       - internal
@@ -146,6 +150,9 @@ services:
       - type: volume
         source: mysql-data
         target: /var/lib/mysql
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
+
     networks:
       - internal
 
