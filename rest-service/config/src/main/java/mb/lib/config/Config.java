@@ -74,13 +74,31 @@ public class  Config extends Options
   private String blastHost;
 
   @Option(
-    names = "--queue-name",
+    names = "--formatter-host",
     arity = "1",
     required = true,
-    defaultValue = "${env:FIREWORQ_QUEUE_DEFAULT}",
+    defaultValue = "${env:FORMATTER_HOST}",
+    description = "Blast formatter service host address"
+  )
+  private String formatterHost;
+
+  @Option(
+    names = "--blast-queue-name",
+    arity = "1",
+    required = true,
     description = "Name of the queue new blast jobs will be added to."
   )
-  private String queueName;
+  @SuppressWarnings("FieldMayBeFinal")
+  private String blastQueueName = "blast";
+
+  @Option(
+    names = "--format-queue-name",
+    arity = "1",
+    required = true,
+    description = "Name of the queue new formatter jobs will be added to."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String formatQueueName = "format";
 
   @Option(
     names = "--job-category",
@@ -202,8 +220,8 @@ public class  Config extends Options
     return blastHost;
   }
 
-  public String getQueueName() {
-    return queueName;
+  public String getBlastQueueName() {
+    return blastQueueName;
   }
 
   public String getJobCategory() {
@@ -240,5 +258,13 @@ public class  Config extends Options
 
   public int getMaxAASeqSize() {
     return maxAASeqSize;
+  }
+
+  public String getFormatQueueName() {
+    return formatQueueName;
+  }
+
+  public String getFormatterHost() {
+    return formatterHost;
   }
 }

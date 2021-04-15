@@ -4,7 +4,7 @@ import javax.ws.rs.BadRequestException;
 
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.FullJobRow;
-import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.BlastQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
 import mb.lib.jobData.JobDataManager;
@@ -44,9 +44,9 @@ public class JobReportService
     // Wait for job to complete
     QueueJobStatus stat;
     for (
-      stat = JobQueueManager.jobStatus(queueID);
+      stat = BlastQueueManager.jobStatus(queueID);
       stat == QueueJobStatus.Queued || stat == QueueJobStatus.InProgress;
-      stat = JobQueueManager.jobStatus(queueID)
+      stat = BlastQueueManager.jobStatus(queueID)
     ) {
       Thread.sleep(250);
     }

@@ -21,28 +21,19 @@ public class URL
       .resolve(String.format(JobEndpoint, conf.getJobCategory()));
   }
 
-  public static URI queueEndpoint() {
-    return URI.create(prependHTTP(conf.getQueueHost())).resolve(QueueEndpoint);
+  public static URI queueJobEndpoint(String queueName, int jobID) {
+    return URI.create(prependHTTP(conf.getQueueHost()))
+      .resolve(String.format(QueueJobEndpoint, queueName, jobID));
   }
 
-  public static URI queueIDEndpoint() {
+  public static URI failedEndpoint(String queueName) {
     return URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(QueueIdEndpoint, conf.getQueueName()));
+      .resolve(String.format(FailedEndpoint, queueName));
   }
 
-  public static URI queueJobEndpoint(int jobID) {
+  public static URI failedIDEndpoint(String queueName, int failID) {
     return URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(QueueJobEndpoint, conf.getQueueName(), jobID));
-  }
-
-  public static URI failedEndpoint() {
-    return URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(FailedEndpoint, conf.getQueueName()));
-  }
-
-  public static URI failedIDEndpoint(int failID) {
-    return URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(FailedIDEndpoint, conf.getQueueName(), failID));
+      .resolve(String.format(FailedIDEndpoint, queueName, failID));
   }
 
   public static String prependHTTP(String uri) {

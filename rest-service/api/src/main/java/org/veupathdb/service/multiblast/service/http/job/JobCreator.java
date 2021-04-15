@@ -9,7 +9,7 @@ import mb.lib.db.JobDBManager;
 import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
-import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.BlastQueueManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +50,7 @@ public class JobCreator
     var jobDir = JobDataManager.createJobWorkspace(d.id);
     Files.move(d.query.toPath(), jobDir.resolve("query.txt"));
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
-    var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
     db.updateJobDeleteTimer(d.hash, exp);
     db.updateJobQueueID(d.hash, queId);
@@ -83,7 +83,7 @@ public class JobCreator
     var qFile  = Files.move(d.query.toPath(), jobDir.resolve("query.txt"));
     var now    = OffsetDateTime.now();
     var exp    = now.plusDays(Config.getInstance().getJobTimeout());
-    var queId  = JobQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
 
     db.registerJob(
       new FullJobRowImpl(

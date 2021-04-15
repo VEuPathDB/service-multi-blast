@@ -4,7 +4,7 @@ import java.util.Collection;
 import javax.ws.rs.BadRequestException;
 
 import mb.lib.db.model.ShortJobRow;
-import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.BlastQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.jobData.JobDataManager;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
@@ -72,7 +72,7 @@ class JobUtil
   }
 
   static boolean jobIsCached(ShortJobRow job) throws Exception {
-    var status = JobQueueManager.jobStatus(job.queueID());
+    var status = BlastQueueManager.jobStatus(job.queueID());
     var jobID  = Format.toHexString(job.jobHash());
 
     if (status == QueueJobStatus.Completed)
