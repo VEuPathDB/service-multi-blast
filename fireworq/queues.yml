@@ -1,0 +1,7 @@
+queues:
+  - name: blast
+    pollingInterval: 200
+    maxWorkers: 3
+  - name: format
+    pollingInterval: 200
+    maxWorkers: 5

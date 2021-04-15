@@ -1,0 +1,151 @@
+#%RAML 1.0
+
+title: Blast Formatter Worker Node
+version: 2.0.0
+mediaType: application/json
+
+/format:
+  post:
+    body: JobRequest
+    responses:
+      200:
+        body: Success
+      400:
+        body: Error
+      500:
+        body: Error
+
+types:
+  Success:
+    type: object
+    additionalProperties: false
+    properties:
+      status:
+        type: string
+        enum: [success]
+      message: string
+
+  Error:
+    type: object
+    additionalProperties: false
+    properties:
+      status:
+        type: string
+        enum: [permanent-failure]
+      message: string
+
+  JobRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      jobID:
+        type: string
+        minLength: 32
+        maxLength: 32
+      format?:
+        type: integer
+        format: int8
+        minimum: 0
+        maximum: 18
+        default: 0
+      fields?:
+        type: array
+        items: BlastField
+        minItems: 1
+        default: [std]
+      fieldDelim?:
+        type: string
+        minLength: 1
+        maxLength: 1
+      showGIs?:
+        type: boolean
+        default: false
+      numDescriptions?:
+        type: integer
+        default: 500
+        minimum: 0
+      numAlignments?:
+        type: integer
+        default: 250
+        minimum: 0
+      lineLength?:
+        type: integer
+        default: 60
+        minimum: 1
+      html?:
+        type: boolean
+        default: false
+      sortHits?:
+        type: integer
+        format: int8
+        minimum: 0
+        maximum: 4
+      sortHSPs?:
+        type: integer
+        format: int8
+        minimum: 0
+        maximum: 5
+      maxTargetSeqs?:
+        type: integer
+        minimum: 1
+        default: 500
+      parseDeflines?:
+        type: boolean
+        default: false
+
+  BlastField:
+    type: string
+    enum:
+      - qseqid
+      - qgi
+      - qacc
+      - qaccver
+      - qlen
+      - sseqid
+      - sallseqid
+      - sgi
+      - sallgi
+      - sacc
+      - saccver
+      - sallacc
+      - slen
+      - qstart
+      - qend
+      - sstart
+      - send
+      - qseq
+      - sseq
+      - evalue
+      - bitscore
+      - score
+      - length
+      - pident
+      - nident
+      - mismatch
+      - positive
+      - gapopen
+      - gaps
+      - ppos
+      - frames
+      - qframe
+      - sframe
+      - btop
+      - staxid
+      - ssciname
+      - scomname
+      - sblastname
+      - sskingdom
+      - staxids
+      - sscinames
+      - scomnames
+      - sblastnames
+      - sskingdoms
+      - stitle
+      - salltitles
+      - sstrand
+      - qcovs
+      - qcovhsp
+      - qcovus
+      - SQ
+      - SR
+      - std

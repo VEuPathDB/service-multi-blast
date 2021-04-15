@@ -133,7 +133,8 @@ services:
   # Job Queue
   # #
   queue:
-    image: fireworq/fireworq:1.4
+    build:
+      context: ../fireworq
     environment:
       # REQUIRED!
       # Specifies a data source name for the job queue and the repository
@@ -148,17 +149,13 @@ services:
 
       FIREWORQ_BIND: 0.0.0.0:80
       FIREWORQ_DRIVER: mysql
-      FIREWORQ_QUEUE_DEFAULT: blast
       JOB_CATEGORY: blast
     ports:
       - 8083:80
     depends_on:
       - queue-db
       - blast
-    entrypoint:
-      - sh
-      - -c
-      - 'while ! nc -z queue-db 3306; do echo "Waiting for MySQL..."; sleep 5s; done; /usr/local/bin/fireworq'
+      - formatter
 
 volumes:
   blast-data:
