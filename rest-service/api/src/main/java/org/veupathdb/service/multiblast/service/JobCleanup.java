@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 
 import mb.lib.config.Config;
 import mb.lib.db.JobDBManager;
-import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.BlastQueueManager;
 import mb.lib.jobData.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +48,7 @@ public class JobCleanup implements Runnable
         JobDataManager.deleteJobData(idString);
 
         log.debug("deleting job {} queue entry", idString);
-        JobQueueManager.deleteJob(job.queueID());
+        BlastQueueManager.getInstance().deleteJob(job.queueID());
 
         job.close();
       }
@@ -88,11 +88,11 @@ public class JobCleanup implements Runnable
   }
 
   private void deleteOldFailedJobs(OffsetDateTime now) throws Exception {
-    var failed = JobQueueManager.getInstance().getFailedJobs();
+    var failed = BlastQueueManager.getInstance().getFailedJobs();
     var delPoint = now.minus(conf.getJobTimeout(), ChronoUnit.DAYS);
 
     for (var job : failed)
       if (job.getCreatedAt().isBefore(delPoint))
-        JobQueueManager.getInstance().deleteJobFailure(job);
+        BlastQueueManager.getInstance().deleteJobFailure(job);
   }
 }

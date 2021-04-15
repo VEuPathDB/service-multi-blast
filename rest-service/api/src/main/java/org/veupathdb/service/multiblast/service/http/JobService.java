@@ -11,7 +11,7 @@ import javax.ws.rs.core.StreamingOutput;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.*;
 import mb.lib.db.model.impl.UserRowImpl;
-import mb.lib.extern.JobQueueManager;
+import mb.lib.extern.BlastQueueManager;
 import mb.lib.extern.model.QueueJobStatus;
 import mb.lib.format.FormatType;
 import mb.lib.format.FormatterManager;
@@ -346,7 +346,7 @@ public class JobService
 
     // Since we have a queued or in-progress status, hit the queue to see if the
     // status has changed.
-    var status = JobQueueManager.jobStatus(job.queueID());
+    var status = BlastQueueManager.jobStatus(job.queueID());
 
     // If the status _has_ changed, then insert the new status into the database
     if (status != inStatus) {

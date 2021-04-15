@@ -1,7 +1,6 @@
 package org.veupathdb.service.multiblast.model.external;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.veupathdb.service.multiblast.util.ErrorText;
 
 public enum ReportStatus
 {
@@ -29,7 +28,7 @@ public enum ReportStatus
         return v;
 
     throw new IllegalArgumentException(String.format(
-      ErrorText.InvalidEnumValue,
+      "Unrecognized enum value \"%s\" for enum %s",
       value,
       ReportStatus.class.getSimpleName()
     ));
