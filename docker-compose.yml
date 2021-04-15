@@ -153,7 +153,7 @@ services:
   # Job Queue
   # #
   queue:
-    image: fireworq/fireworq:1.4
+    image: veupathdb/mblast-blast-queue:${FORMATTER_TAG:-latest}
     environment:
       # REQUIRED!
       # Specifies a data source name for the job queue and the repository
@@ -173,12 +173,11 @@ services:
     depends_on:
       - queue-db
       - blast
-    entrypoint:
-      - sh
-      - -c
-      - 'while ! nc -z queue-db 3306; do echo "Waiting for MySQL..."; sleep 5s; done; /usr/local/bin/fireworq'
+      - formatter
     networks:
       - internal
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${QUEUE_WATCHTOWER:-false}"
 
 volumes:
   job-data:
