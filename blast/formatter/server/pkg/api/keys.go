@@ -10,7 +10,7 @@ const (
 	KeyMaxTargetSeqs   = "maxTargetSeqs"
 	KeyNumAlignments   = "numAlignments"
 	KeyNumDescriptions = "numDescriptions"
-	KeyParseDeflines   = "parseDeflines"
+	KeyParseDeflines   = "parseDefLines"
 	KeyShowGIs         = "showGIs"
 	KeySortHits        = "sortHits"
 	KeySortHSPs        = "sortHSPs"
