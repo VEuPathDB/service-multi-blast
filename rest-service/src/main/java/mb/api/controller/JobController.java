@@ -1,0 +1,194 @@
+package mb.api.controller;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+
+import mb.api.model.reports.ReportRequest;
+import mb.api.service.http.report.ReportService;
+import mb.lib.model.HashID;
+import org.glassfish.jersey.server.ContainerRequest;
+import org.veupathdb.lib.container.jaxrs.model.User;
+import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
+import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
+import mb.api.model.IOJsonJobRequest;
+import mb.api.controller.resources.Jobs;
+import mb.lib.blast.model.BlastReportField;
+import mb.api.model.io.Headers;
+import mb.api.service.http.JobService;
+import mb.api.service.util.Format;
+
+@Authenticated(allowGuests = true)
+public class JobController implements Jobs
+{
+  private static final String AttachmentPat = "attachment; filename=\"%s.%s\"";
+
+  private final Request request;
+
+  private final JobService svc;
+
+  public JobController(@Context Request request) {
+    this.request = request;
+    this.svc     = JobService.getInstance();
+  }
+
+  /**
+   * @return A list of jobs associated with the currently logged in user.
+   */
+  @Override
+  public Response getJobs() {
+    return okJSON(svc.getJobs(getUser(request)));
+  }
+
+  /**
+   * Create a new job by JSON body.
+   *
+   * @param entity New job request parameters.
+   *
+   * @return Basic info about the newly created job (such as the job id).
+   */
+  @Override
+  public Response postJob(IOJsonJobRequest entity) {
+    return okJSON(svc.createJob(entity, getUser(request)));
+  }
+
+  /**
+   * Create a new job with the blast query uploaded as a separate file.
+   *
+   * @return Basic info about the newly created job (such as the job id).
+   */
+  @Override
+  public Response postJob(InputStream query, InputStream config) {
+    IOJsonJobRequest props;
+
+    try {
+      props = Format.Json.readerFor(IOJsonJobRequest.class).readValue(config);
+    } catch (IOException e) {
+      throw new BadRequestException(e);
+    }
+
+    return okJSON(svc.createJob(query, props, getUser(request)));
+  }
+
+  /**
+   * Attempt to retrieve a specific job associated with the logged in user.
+   * <p>
+   * If no job with the given ID was found, or the specified job is not
+   * associated with the current user, this endpoint returns a 404.
+   *
+   * @param jobID ID of the job to look up.
+   *
+   * @return Full details about the specified job.
+   */
+  @Override
+  public Response getJob(String jobID) {
+    return okJSON(svc.getJob(jobID, getUser(request)));
+  }
+
+  /**
+   * Retrieve the raw blast query for a specific job.
+   *
+   * @param jobID    ID of the job whose query should be retrieved.
+   * @param download Whether or not the query should be marked as an attachment
+   *                 in the HTTP response.
+   *
+   * @return The query file associated with the specific job, either as a raw
+   * text output, or a file attachment.
+   */
+  @Override
+  public Response getQuery(String jobID, boolean download) {
+    var res = Response.status(Response.Status.OK)
+      .type(MediaType.TEXT_PLAIN_TYPE);
+
+    if (download)
+      res = res.header("Content-Disposition", String.format(AttachmentPat, (jobID + "-query"), "txt"));
+
+    return res.entity(svc.getQuery(jobID)).build();
+  }
+
+  @Override
+  public Response getReport(
+    String jobID,
+    String format,
+    boolean zip,
+    boolean inline,
+    List<BlastReportField> fields
+  ) {
+    var user         = getUser(request);
+    var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
+    var maxDlSize    = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
+    var wrap         = svc.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
+    var resp         = Response.status(200).header("Content-Type", wrap.contentType);
+
+    if (!inline)
+      resp.header("Content-Disposition", String.format(AttachmentPat, "report", wrap.ext));
+
+    return resp.entity(wrap.stream).build();
+  }
+
+  @Override
+  public Response createReport(String rawJobID, ReportRequest config) {
+    return Response.ok(ReportService.runReport(
+      HashID.fromStringOrThrow(rawJobID, NotFoundException::new),
+      config
+    )).build();
+  }
+
+  @Override
+  public Response listReports(String rawJobID) {
+    return Response.ok(ReportService.listReports(HashID.fromStringOrThrow(
+      rawJobID,
+      NotFoundException::new
+    ))).build();
+  }
+
+  @Override
+  public Response getReport(String jobID, String reportID) {
+    return Response.ok(ReportService.getReport(
+      HashID.fromStringOrThrow(jobID, NotFoundException::new),
+      HashID.fromStringOrThrow(reportID, NotFoundException::new)
+    )).build();
+  }
+
+  @Override
+  public Response rerunReport(String jobID, String reportID) {
+    return Response.ok(ReportService.rerunReport(
+      HashID.fromStringOrThrow(jobID, NotFoundException::new),
+      HashID.fromStringOrThrow(reportID, NotFoundException::new)
+    )).build();
+  }
+
+  @Override
+  public Response getReportData(String jobID, String reportID, boolean download, boolean zip) {
+    return null;
+  }
+
+  // //////////////////////////////////////////////////////////////////////////////////////////// //
+  // Helper Methods                                                                               //
+  // //////////////////////////////////////////////////////////////////////////////////////////// //
+
+  static User getUser(Request req) {
+    return UserProvider.lookupUser(req).orElseThrow(Utils::noUserExcept);
+  }
+
+  static HashID convertID(String rawJobID) {
+    try {
+      return new HashID(rawJobID);
+    } catch (Exception e) {
+      throw new NotFoundException();
+    }
+  }
+
+  static Response okJSON(Object entity) {
+    return Response.status(Response.Status.OK)
+      .type(MediaType.APPLICATION_JSON_TYPE)
+      .entity(entity)
+      .build();
+  }
+}

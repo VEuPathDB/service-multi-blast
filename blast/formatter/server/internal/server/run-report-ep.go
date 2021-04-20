@@ -36,7 +36,7 @@ func ReportEndpoint(req midl.Request) midl.Response {
 }
 
 
-func runReport(job *api.JobPayload, log *logrus.Entry, ) midl.Response {
+func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	workspace, err := getWorkspace(job.JobID)
 	if err != nil {
 		log.Error(err.Error())

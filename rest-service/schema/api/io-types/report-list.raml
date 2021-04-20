@@ -3,25 +3,5 @@
 uses:
   ext: index.raml
 
-type: object
-properties:
-  pairwise: ext.FormatStatus
-  queryAnchoredWithIdentities: ext.FormatStatus
-  queryAnchoredWithoutIdentities: ext.FormatStatus
-  flatQueryAnchoredWithIdentities: ext.FormatStatus
-  flatQueryAnchoredWithoutIdentities: ext.FormatStatus
-  xml: ext.FormatStatus
-  tabular: ext.FormatStatus
-  tabularWithComments: ext.FormatStatus
-  textAsn1: ext.FormatStatus
-  binaryAsn1: ext.FormatStatus
-  csv: ext.FormatStatus
-  archiveAsn1: ext.FormatStatus
-  seqalignJson: ext.FormatStatus
-  multiFileJson: ext.FormatStatus
-  multiFileXml2: ext.FormatStatus
-  singleFileJson: ext.FormatStatus
-  singleFileXml2: ext.FormatStatus
-  sam: ext.FormatStatus
-  organismReport: ext.FormatStatus
-additionalProperties: false
+type: array
+items: ext.ReportDetails
