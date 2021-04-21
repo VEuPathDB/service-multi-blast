@@ -2,7 +2,6 @@ package mb.api.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
@@ -10,19 +9,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+import mb.api.controller.resources.Jobs;
+import mb.api.model.IOJsonJobRequest;
 import mb.api.model.reports.ReportRequest;
+import mb.api.service.http.JobService;
 import mb.api.service.http.report.ReportService;
+import mb.api.service.util.Format;
 import mb.lib.model.HashID;
-import org.glassfish.jersey.server.ContainerRequest;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
-import mb.api.model.IOJsonJobRequest;
-import mb.api.controller.resources.Jobs;
-import mb.lib.blast.model.BlastReportField;
-import mb.api.model.io.Headers;
-import mb.api.service.http.JobService;
-import mb.api.service.util.Format;
 
 @Authenticated(allowGuests = true)
 public class JobController implements Jobs
@@ -113,46 +109,31 @@ public class JobController implements Jobs
   }
 
   @Override
-  public Response getReport(
-    String jobID,
-    String format,
-    boolean zip,
-    boolean inline,
-    List<BlastReportField> fields
-  ) {
-    var user         = getUser(request);
-    var maxDlSizeStr = ((ContainerRequest)request).getHeaderString(Headers.ContentMaxLength);
-    var maxDlSize    = maxDlSizeStr == null ? null : Long.parseLong(maxDlSizeStr);
-    var wrap         = svc.getReport(jobID, user.getUserID(), format, zip, fields, maxDlSize);
-    var resp         = Response.status(200).header("Content-Type", wrap.contentType);
-
-    if (!inline)
-      resp.header("Content-Disposition", String.format(AttachmentPat, "report", wrap.ext));
-
-    return resp.entity(wrap.stream).build();
-  }
-
-  @Override
   public Response createReport(String rawJobID, ReportRequest config) {
     return Response.ok(ReportService.runReport(
       HashID.fromStringOrThrow(rawJobID, NotFoundException::new),
+      getUser(request).getUserID(),
       config
     )).build();
   }
 
   @Override
   public Response listReports(String rawJobID) {
-    return Response.ok(ReportService.listReports(HashID.fromStringOrThrow(
-      rawJobID,
-      NotFoundException::new
-    ))).build();
+    return Response.ok(ReportService.listReports(
+      HashID.fromStringOrThrow(
+        rawJobID,
+        NotFoundException::new
+      ),
+      getUser(request).getUserID()
+    )).build();
   }
 
   @Override
   public Response getReport(String jobID, String reportID) {
     return Response.ok(ReportService.getReport(
       HashID.fromStringOrThrow(jobID, NotFoundException::new),
-      HashID.fromStringOrThrow(reportID, NotFoundException::new)
+      HashID.fromStringOrThrow(reportID, NotFoundException::new),
+      getUser(request).getUserID()
     )).build();
   }
 
@@ -160,13 +141,20 @@ public class JobController implements Jobs
   public Response rerunReport(String jobID, String reportID) {
     return Response.ok(ReportService.rerunReport(
       HashID.fromStringOrThrow(jobID, NotFoundException::new),
-      HashID.fromStringOrThrow(reportID, NotFoundException::new)
+      HashID.fromStringOrThrow(reportID, NotFoundException::new),
+      getUser(request).getUserID()
     )).build();
   }
 
   @Override
   public Response getReportData(String jobID, String reportID, boolean download, boolean zip) {
-    return null;
+    return ReportService.downloadReport(
+      HashID.fromStringOrThrow(jobID, NotFoundException::new),
+      HashID.fromStringOrThrow(reportID, NotFoundException::new),
+      getUser(request).getUserID(),
+      download,
+      zip
+    ).toResponse();
   }
 
   // //////////////////////////////////////////////////////////////////////////////////////////// //
@@ -175,14 +163,6 @@ public class JobController implements Jobs
 
   static User getUser(Request req) {
     return UserProvider.lookupUser(req).orElseThrow(Utils::noUserExcept);
-  }
-
-  static HashID convertID(String rawJobID) {
-    try {
-      return new HashID(rawJobID);
-    } catch (Exception e) {
-      throw new NotFoundException();
-    }
   }
 
   static Response okJSON(Object entity) {

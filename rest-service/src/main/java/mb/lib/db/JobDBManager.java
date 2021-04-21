@@ -339,21 +339,20 @@ public class JobDBManager implements AutoCloseable
     new InsertFormatJob(connection, stat).run();
   }
 
-  public List<FormatJobStatus> selectFormatJobStatuses(HashID jobID) throws Exception {
-    Log.trace("#selectFormatJobStatuses(jobID={})", jobID);
-    return new SelectReportJobs(connection, jobID).run();
+  public List<FormatJobStatus> selectFormatJobStatuses(HashID jobID, long userID) throws Exception {
+    Log.trace("#selectFormatJobStatuses(jobID={}, userID={})", jobID, userID);
+    return new SelectReportJobs(connection, jobID, userID).run();
   }
 
-  public Optional<FormatJobStatus> selectFormatJobStatus(HashID jobID, HashID reportID)
+  public Optional<FormatJobStatus> selectFormatJobStatus(HashID jobID, HashID reportID, long userID)
   throws Exception {
-    Log.trace("#selectFormatJobStatus(jobID={}, reportID={})", jobID, reportID);
-    return new SelectReportJob(connection, jobID, reportID).run();
+    Log.trace("#selectFormatJobStatus(jobID={}, reportID={}, userID={})", jobID, reportID, userID);
+    return new SelectReportJob(connection, jobID, reportID, userID).run();
   }
 
-  public void updateFormatJobStatus(HashID jobID, HashID reportID, JobStatus status)
-  throws Exception {
-    Log.trace("#updateFormatJobStatus(jobID={}, reportID={}, status={})", jobID, reportID, status);
-    new UpdateFormatJobStatus(connection, jobID, reportID, status).run();
+  public void updateFormatJobStatus(FormatJobStatus row) throws Exception {
+    Log.trace("#updateFormatJobStatus(row={})", row);
+    new UpdateFormatJobStatus(connection, row).run();
   }
 
   public void updateFormatJobStatusAndQueueID(FormatJobStatus row) throws Exception {

@@ -7,7 +7,6 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.StreamingOutput;
 
 import mb.api.model.reports.ReportRequest;
 import mb.api.model.reports.ReportResponse;
@@ -28,19 +27,6 @@ public class ReportService
 {
   private static final Logger Log = LogManager.getLogger(ReportService.class);
 
-  private final HashID jobID;
-
-  public ReportService(String jobID) {
-    Log.trace("::new(jobID={})", jobID);
-
-    try {
-      this.jobID = new HashID(jobID);
-    } catch (Exception e) {
-      Log.debug("Invalid job ID value.");
-      throw new NotFoundException();
-    }
-  }
-
   /**
    * Retrieves a list of all the report jobs created for the given {@code jobID}
    * value.
@@ -50,12 +36,12 @@ public class ReportService
    *
    * @return A list of all the report jobs created for the given {@code jobID}.
    */
-  public static List<ReportResponse> listReports(HashID jobID) {
-    Log.trace("::listReports(jobID={})", jobID);
+  public static List<ReportResponse> listReports(HashID jobID, long userID) {
+    Log.trace("::listReports(jobID={}, userID={})", jobID, userID);
 
 
     try (var man = new JobDBManager()) {
-      var reports = man.selectFormatJobStatuses(jobID);
+      var reports = man.selectFormatJobStatuses(jobID, userID);
       var out     = new ArrayList<ReportResponse>(reports.size());
 
       for (int i = 0; i < reports.size(); i++) {
@@ -84,11 +70,11 @@ public class ReportService
    *
    * @return Report job metadata response.
    */
-  public static ReportResponse getReport(HashID jobID, HashID reportID) {
-    Log.trace("::getReport(jobID={}, reportID={})", jobID, reportID);
+  public static ReportResponse getReport(HashID jobID, HashID reportID, long userID) {
+    Log.trace("::getReport(jobID={}, reportID={}, userID={})", jobID, reportID, userID);
     try (var man = new JobDBManager()) {
        return convert(updateReportStatus(
-         man.selectFormatJobStatus(jobID, reportID).orElseThrow(NotFoundException::new),
+         man.selectFormatJobStatus(jobID, reportID, userID).orElseThrow(NotFoundException::new),
          man
        ));
     } catch (Exception e) {
@@ -97,12 +83,12 @@ public class ReportService
     }
   }
 
-  public static ReportResponse rerunReport(HashID jobID, HashID reportID) {
-    Log.trace("::rerunReport(jobID={}, reportID={})", jobID, reportID);
+  public static ReportResponse rerunReport(HashID jobID, HashID reportID, long userID) {
+    Log.trace("::rerunReport(jobID={}, reportID={}, userID={})", jobID, reportID, userID);
     try (var man = new JobDBManager()) {
       // Fetch the matching report (or 404) and update it's status
       var val = updateReportStatus(
-        man.selectFormatJobStatus(jobID, reportID).orElseThrow(NotFoundException::new),
+        man.selectFormatJobStatus(jobID, reportID, userID).orElseThrow(NotFoundException::new),
         man
       );
 
@@ -123,6 +109,7 @@ public class ReportService
       val = new FormatJobStatusImpl(
         jobID,
         reportID,
+        userID,
         val.config(),
         queueID,
         JobStatus.Queued
@@ -136,8 +123,8 @@ public class ReportService
     }
   }
 
-  public static ReportResponse runReport(HashID jobID, ReportRequest req) {
-    Log.trace("::runReport(jobID={}, req={})", jobID, req);
+  public static ReportResponse runReport(HashID jobID, long userID, ReportRequest req) {
+    Log.trace("::runReport(jobID={}, userID={}, req={})", jobID, userID, req);
     try (var db = new JobDBManager()) {
       var queryJob = JobUtil.updateJobStatus(
         db.getQueryJob(jobID).orElseThrow(NotFoundException::new),
@@ -151,6 +138,7 @@ public class ReportService
       var row     = new FormatJobStatusImpl(
         jobID,
         new HashID(req.hashConfig()),
+        userID,
         req,
         queueID,
         JobStatus.Queued
@@ -165,13 +153,19 @@ public class ReportService
   }
 
   public static ReportDownload downloadReport(
-    HashID jobID,
-    HashID reportID,
+    HashID  jobID,
+    HashID  reportID,
+    long    userID,
     boolean download,
     boolean zip
   ) {
+    Log.trace("::downloadReport(jobID={}, reportID={}, userID={}, download={}, zip={})", jobID, reportID, userID, download, zip);
+
     try (var db = new JobDBManager()) {
-      var rep = updateReportStatus(db.selectFormatJobStatus(jobID, reportID).orElseThrow(NotFoundException::new), db);
+      var rep = updateReportStatus(
+        db.selectFormatJobStatus(jobID, reportID, userID).orElseThrow(NotFoundException::new),
+        db
+      );
 
       if (rep.status() == JobStatus.Expired)
         throw new BadRequestException("Cannot download an expired report. ");
@@ -188,6 +182,8 @@ public class ReportService
       // return more than one file in the response so it must be zipped.
       if (meta.files().size() > 1 && !zip)
         throw new BadRequestException("Multi-file reports must be zipped.");
+      if (meta.files().size() < 1)
+        throw new InternalServerErrorException("Invalid state: report generated 0 files.");
 
       // If the requester wants a zip output, enable download no matter what.
       if (zip) {
@@ -196,13 +192,10 @@ public class ReportService
         if (!ws.zipFileExists())
           throw new InternalServerErrorException("Invalid state: report is completed but output is missing.")
 
-
+        return new ReportDownload(rep.config().getType(), true, true, ws.getZipStream());
+      } else {
+        return new ReportDownload(rep.config().getType(), false, download, ws.getFileStream(meta.files().get(0)));
       }
-
-
-
-
-
     } catch (Exception e) {
       Log.debug("Error while setting up report download: ", e);
       throw Util.wrapException(e);
@@ -248,25 +241,14 @@ public class ReportService
       case Completed -> {
         // If the job itself has expired, the report is also expired.
         if (!JobDataManager.workspaceExists(stat.jobID())) {
-          db.updateFormatJobStatus(stat.jobID(), stat.reportID(), JobStatus.Expired);
-          yield new FormatJobStatusImpl(
-            stat.jobID(),
-            stat.reportID(),
-            stat.config(),
-            stat.queueID(),
-            JobStatus.Expired
-          );
+          var row = copyWithNewStatus(stat, JobStatus.Expired);
+          db.updateFormatJobStatus(row);
+          yield row;
         }
 
         // The job may have been re-run, check that the report exists.
         if (!JobDataManager.jobWorkspace(stat.jobID()).reportExists(stat.reportID()))
-          yield new FormatJobStatusImpl(
-            stat.jobID(),
-            stat.reportID(),
-            stat.config(),
-            stat.queueID(),
-            JobStatus.Expired
-          );
+          yield copyWithNewStatus(stat, JobStatus.Expired);
 
         yield stat;
       }
@@ -280,14 +262,9 @@ public class ReportService
             yield stat;
 
           // It went from last known "in-progress" to "queued"
-          db.updateFormatJobStatus(stat.jobID(), stat.reportID(), JobStatus.Queued);
-          yield new FormatJobStatusImpl(
-            stat.jobID(),
-            stat.reportID(),
-            stat.config(),
-            stat.queueID(),
-            JobStatus.Queued
-          );
+          var row = copyWithNewStatus(stat, JobStatus.Queued);
+          db.updateFormatJobStatus(row);
+          yield row;
         }
 
         // From queued/in-progress to in-progress.
@@ -297,37 +274,25 @@ public class ReportService
             yield stat;
 
           // It went from last known "queued" to "in-progress"
-          db.updateFormatJobStatus(stat.jobID(), stat.reportID(), JobStatus.InProgress);
-          yield new FormatJobStatusImpl(
-            stat.jobID(),
-            stat.reportID(),
-            stat.config(),
-            stat.queueID(),
-            JobStatus.InProgress
-          );
+          var row = copyWithNewStatus(stat, JobStatus.InProgress);
+          db.updateFormatJobStatus(row);
+          yield row;
         }
 
         // From queued/in-progress to completed.
-        case Completed -> updateReportStatus(new FormatJobStatusImpl(
-          stat.jobID(),
-          stat.reportID(),
-          stat.config(),
-          stat.queueID(),
-          JobStatus.Completed
-        ), db);
+        case Completed -> updateReportStatus(copyWithNewStatus(stat, JobStatus.Completed), db);
 
         // From queued/in-progress to errored.
         case Errored -> {
-          db.updateFormatJobStatus(stat.jobID(), stat.reportID(), JobStatus.Errored);
-          yield new FormatJobStatusImpl(
-            stat.jobID(),
-            stat.reportID(),
-            stat.config(),
-            stat.queueID(),
-            JobStatus.Errored
-          );
+          var row = copyWithNewStatus(stat, JobStatus.Errored);
+          db.updateFormatJobStatus(row);
+          yield row;
         }
       };
     };
+  }
+
+  private static FormatJobStatus copyWithNewStatus(FormatJobStatus r, JobStatus s) {
+    return new FormatJobStatusImpl(r.jobID(), r.reportID(), r.userID(), r.config(), r.queueID(), s);
   }
 }

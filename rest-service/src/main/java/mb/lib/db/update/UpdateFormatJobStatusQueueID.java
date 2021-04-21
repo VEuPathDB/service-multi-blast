@@ -37,5 +37,6 @@ public class UpdateFormatJobStatusQueueID
     ps.setInt(2, stat.queueID());
     ps.setBytes(3, stat.jobID().bytes());
     ps.setBytes(4, stat.reportID().bytes());
+    ps.setLong(5, stat.userID());
   }
 }

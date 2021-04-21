@@ -21,11 +21,13 @@ public class SelectReportJob
   private final Connection con;
   private final HashID     jobID;
   private final HashID     reportID;
+  private final long       userID;
 
-  public SelectReportJob(Connection con, HashID jobID, HashID reportID) {
+  public SelectReportJob(Connection con, HashID jobID, HashID reportID, long userID) {
     this.con      = con;
     this.jobID    = jobID;
     this.reportID = reportID;
+    this.userID   = userID;
   }
 
   public Optional<FormatJobStatus> run() throws Exception {
@@ -37,6 +39,7 @@ public class SelectReportJob
   private void prepare(PreparedStatement ps) throws Exception {
     ps.setBytes(1, jobID.bytes());
     ps.setBytes(2, reportID.bytes());
+    ps.setLong(3, userID);
   }
 
   public Optional<FormatJobStatus> parse(ResultSet rs) throws Exception {
@@ -46,6 +49,7 @@ public class SelectReportJob
     return Optional.of(new FormatJobStatusImpl(
       jobID,
       reportID,
+      userID,
       JSON.parse(rs.getString(Column.MultiBlastFormatJobs.Config), ReportRequest.class),
       rs.getInt(Column.MultiBlastFormatJobs.QueueID),
       JobStatus.unsafeFromString(rs.getString(Column.MultiBlastFormatJobs.Status))
