@@ -6,3 +6,4 @@ FROM
 WHERE
   job_digest = ?
   AND report_digest = ?
+  AND user_id = ?

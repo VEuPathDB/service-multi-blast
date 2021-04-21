@@ -51,30 +51,35 @@ public class ReportDownload implements StreamingOutput
   public Response.ResponseBuilder configureResponse(Response.ResponseBuilder b) {
     String ct, ext;
 
-    switch (format) {
-      case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
-        ct = MimeType.ApplicationXML;
-        ext = "xml";
-      }
-      case Tabular -> {
-        ct = MimeType.TextPlain;
-        ext = "tsv";
-      }
-      case SeqAlignTextASN1, SeqAlignBinaryASN1, BlastArchiveASN1 -> {
-        ct = MimeType.TextPlain;
-        ext = "asn";
-      }
-      case CommaSeparatedValues -> {
-        ct = MimeType.TextPlain;
-        ext = "csv";
-      }
-      case SeqAlignJSON, SingleFileBlastJSON, MultipleFileBlastJSON -> {
-        ct = MimeType.ApplicationJSON;
-        ext = "json";
-      }
-      default -> {
-        ct = MimeType.TextPlain;
-        ext = "txt";
+    if (zipped) {
+      ct = MimeType.ApplicationZip;
+      ext = "zip";
+    } else {
+      switch (format) {
+        case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
+          ct  = MimeType.ApplicationXML;
+          ext = "xml";
+        }
+        case Tabular -> {
+          ct  = MimeType.TextPlain;
+          ext = "tsv";
+        }
+        case SeqAlignTextASN1, SeqAlignBinaryASN1, BlastArchiveASN1 -> {
+          ct  = MimeType.TextPlain;
+          ext = "asn";
+        }
+        case CommaSeparatedValues -> {
+          ct  = MimeType.TextPlain;
+          ext = "csv";
+        }
+        case SeqAlignJSON, SingleFileBlastJSON, MultipleFileBlastJSON -> {
+          ct  = MimeType.ApplicationJSON;
+          ext = "json";
+        }
+        default -> {
+          ct  = MimeType.TextPlain;
+          ext = "txt";
+        }
       }
     }
 

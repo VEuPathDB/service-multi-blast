@@ -8,19 +8,22 @@ import mb.lib.model.JobStatus;
 public class FormatJobStatusImpl extends RowImpl implements FormatJobStatus
 {
   private final HashID        reportID;
+  private final long          userID;
   private final ReportRequest config;
   private final int           queueID;
   private final JobStatus     status;
 
   public FormatJobStatusImpl(
-    HashID jobID,
-    HashID reportID,
+    HashID        jobID,
+    HashID        reportID,
+    long          userID,
     ReportRequest config,
-    int queueID,
-    JobStatus status
+    int           queueID,
+    JobStatus     status
   ) {
     super(jobID);
     this.reportID = reportID;
+    this.userID   = userID;
     this.config   = config;
     this.queueID  = queueID;
     this.status   = status;
@@ -47,10 +50,15 @@ public class FormatJobStatusImpl extends RowImpl implements FormatJobStatus
   }
 
   @Override
+  public long userID() {
+    return userID;
+  }
+
+  @Override
   public String toString() {
     return "FormatJobStatusImpl{" +
       "jobID=" + jobID() + ", " +
       "reportID=" + reportID +
-    '}';
+      '}';
   }
 }
