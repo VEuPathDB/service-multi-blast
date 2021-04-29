@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastConfigImpl;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.HitSorting;
 import mb.api.model.io.JsonKeys;
+import mb.lib.blast.model.IOHitSorting;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.Location;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -24,8 +25,6 @@ import mb.api.model.io.JsonKeys;
 })
 @JsonDeserialize(as = IOBlastConfigImpl.class)
 public interface IOBlastConfig {
-  BlastTool _DISCRIMINATOR_TYPE_NAME = null;
-
   @JsonProperty(JsonKeys.Tool)
   BlastTool getTool();
 
@@ -36,10 +35,10 @@ public interface IOBlastConfig {
   void setQuery(String query);
 
   @JsonProperty(JsonKeys.QueryLocation)
-  IOBlastLocation getQueryLoc();
+  Location getQueryLoc();
 
   @JsonProperty(JsonKeys.QueryLocation)
-  void setQueryLoc(IOBlastLocation queryLoc);
+  void setQueryLoc(Location queryLoc);
 
   @JsonProperty(JsonKeys.ExpectValue)
   String getEValue();
@@ -54,16 +53,16 @@ public interface IOBlastConfig {
   void setOutFormat(IOBlastReportFormat outFormat);
 
   @JsonProperty(JsonKeys.NumDescriptions)
-  Integer getNumDescriptions();
+  Long getNumDescriptions();
 
   @JsonProperty(JsonKeys.NumDescriptions)
-  void setNumDescriptions(Integer numDescriptions);
+  void setNumDescriptions(Long numDescriptions);
 
   @JsonProperty(JsonKeys.NumAlignments)
-  Integer getNumAlignments();
+  Long getNumAlignments();
 
   @JsonProperty(JsonKeys.NumAlignments)
-  void setNumAlignments(Integer numAlignments);
+  void setNumAlignments(Long numAlignments);
 
   @JsonProperty(JsonKeys.LineLength)
   Integer getLineLength();
@@ -72,10 +71,10 @@ public interface IOBlastConfig {
   void setLineLength(Integer lineLength);
 
   @JsonProperty(JsonKeys.SortHits)
-  HitSorting getSortHits();
+  IOHitSorting getSortHits();
 
   @JsonProperty(JsonKeys.SortHits)
-  void setSortHits(HitSorting sortHits);
+  void setSortHits(IOHitSorting sortHits);
 
   @JsonProperty(JsonKeys.SortHSPs)
   IOHSPSorting getSortHSPs();
@@ -96,16 +95,16 @@ public interface IOBlastConfig {
   void setQCovHSPPerc (Double qCovHSPPerc);
 
   @JsonProperty(JsonKeys.MaxHSPs)
-  Integer getMaxHSPs();
+  Long getMaxHSPs();
 
   @JsonProperty(JsonKeys.MaxHSPs)
-  void setMaxHSPs(Integer maxHSPs);
+  void setMaxHSPs(Long maxHSPs);
 
   @JsonProperty(JsonKeys.MaxTargetSequences)
-  Integer getMaxTargetSeqs();
+  Long getMaxTargetSeqs();
 
   @JsonProperty(JsonKeys.MaxTargetSequences)
-  void setMaxTargetSeqs(Integer maxTargetSeqs);
+  void setMaxTargetSeqs(Long maxTargetSeqs);
 
   @JsonProperty(JsonKeys.DBSize)
    Byte getDbSize();
@@ -114,10 +113,10 @@ public interface IOBlastConfig {
   void setDbSize (Byte dbSize);
 
   @JsonProperty(JsonKeys.SearchSpace)
-   Byte getSearchSpace();
+  Short getSearchSpace();
 
   @JsonProperty(JsonKeys.SearchSpace)
-  void setSearchSpace (Byte searchSpace);
+  void setSearchSpace (Short searchSpace);
 
   @JsonProperty(JsonKeys.XDropUngap)
    Double getXDropUngap();

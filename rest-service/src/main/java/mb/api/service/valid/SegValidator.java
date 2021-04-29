@@ -1,10 +1,10 @@
 package mb.api.service.valid;
 
+import mb.api.model.blast.IOBlastSegMask;
+import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import mb.api.model.blast.IOBlastSegMask;
-import mb.api.service.model.ErrorMap;
-import mb.api.model.io.JsonKeys;
 
 class SegValidator implements ConfigValidator<IOBlastSegMask>
 {

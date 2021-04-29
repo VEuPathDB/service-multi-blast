@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 	"github.com/x-cray/logrus-prefixed-formatter"
-
-	"server/pkg/h2c"
+	"server/internal/config"
+	"server/internal/server/blast"
 )
 
 var version = "development-build"
@@ -24,17 +25,13 @@ func init() {
 }
 
 func main() {
-	config := new(h2c.Config)
-	config.Version = version
-	h2c.InitCLI(config)
+	config := config.ParseCLIConfig(version)
 
 	r := mux.NewRouter()
-	r.Handle("/{tool}/{job-id}", h2c.NewJobController(config)).
-		Methods(http.MethodPost)
-	r.Handle("/", h2c.NewMetaController(config)).
-		Methods(http.MethodGet)
+	blast.NewBlastEndpoint(&config).Register("/blast", r)
+	r.Handle("/metrics", promhttp.Handler())
 
-	sPort := strconv.FormatUint(uint64(config.ServerPort), 10)
+	sPort := strconv.FormatUint(uint64(config.Port), 10)
 	logrus.Info("Starting server on port " + sPort)
 	logrus.Fatal(http.ListenAndServe("0.0.0.0:"+sPort, r))
 }

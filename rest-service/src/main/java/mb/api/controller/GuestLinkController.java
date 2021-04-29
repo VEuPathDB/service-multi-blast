@@ -5,11 +5,11 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
+import mb.api.controller.resources.LinkGuest;
+import mb.api.model.IOGuestLink;
 import mb.lib.db.JobDBManager;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
-import mb.api.model.IOGuestLink;
-import mb.api.controller.resources.LinkGuest;
 
 @Authenticated
 public class GuestLinkController implements LinkGuest

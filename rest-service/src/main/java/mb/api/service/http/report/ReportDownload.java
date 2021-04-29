@@ -8,21 +8,21 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import mb.lib.blast.model.BlastReportType;
 import mb.lib.http.Header;
 import mb.lib.http.MimeType;
+import org.veupathdb.lib.blast.field.FormatType;
 
 public class ReportDownload implements StreamingOutput
 {
   private static final String AttachmentPat = "attachment; filename=\"report.%s\"";
 
-  private final BlastReportType format;
+  private final FormatType format;
   private final boolean         zipped;
   private final boolean         download;
   private final InputStream     stream;
 
   public ReportDownload(
-    BlastReportType format,
+    FormatType format,
     boolean zipped,
     boolean download,
     InputStream stream
@@ -48,7 +48,7 @@ public class ReportDownload implements StreamingOutput
     return configureResponse(Response.status(200)).entity(this).build();
   }
 
-  public Response.ResponseBuilder configureResponse(Response.ResponseBuilder b) {
+  private Response.ResponseBuilder configureResponse(Response.ResponseBuilder b) {
     String ct, ext;
 
     if (zipped) {

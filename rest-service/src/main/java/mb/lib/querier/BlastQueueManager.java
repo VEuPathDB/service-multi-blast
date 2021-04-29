@@ -3,14 +3,16 @@ package mb.lib.querier;
 import java.util.List;
 
 import mb.lib.config.Config;
+import mb.lib.model.HashID;
+import mb.lib.model.JobStatus;
 import mb.lib.queue.QueueManager;
 import mb.lib.queue.consts.URL;
+import mb.lib.queue.model.CreateRequest;
 import mb.lib.queue.model.FailedJob;
-import mb.lib.querier.model.JobCreateRequest;
-import mb.lib.queue.model.QueueJobStatus;
-import mb.lib.model.HashID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.blast.BlastConfig;
+import org.veupathdb.lib.blast.BlastTool;
 
 public class BlastQueueManager extends QueueManager
 {
@@ -33,6 +35,8 @@ public class BlastQueueManager extends QueueManager
     return instance;
   }
 
+  // ------------------------------------------------------------------------------------------ //
+
   /**
    * Retrieves and returns the status for a given job ID in the blast job queue.
    *
@@ -40,7 +44,7 @@ public class BlastQueueManager extends QueueManager
    *
    * @return Status of the checked job.
    */
-  public static QueueJobStatus jobStatus(int queueJobID) throws Exception {
+  public static JobStatus jobStatus(int queueJobID) throws Exception {
     log.trace("::jobStatus(queueJobID={})", queueJobID);
     return getInstance().getJobStatus(queueJobID);
   }
@@ -52,10 +56,12 @@ public class BlastQueueManager extends QueueManager
    *
    * @return Status of the checked job.
    */
-  public QueueJobStatus getJobStatus(int jobID) throws Exception {
+  public JobStatus getJobStatus(int jobID) throws Exception {
     log.trace("#getJobStatus(jobID={})", jobID);
     return getJobStatus(conf.getBlastQueueName(), jobID);
   }
+
+  // ------------------------------------------------------------------------------------------ //
 
   public boolean jobInFailList(int jobID) throws Exception {
     log.trace("#jobInFailList(jobID={})", jobID);
@@ -72,30 +78,34 @@ public class BlastQueueManager extends QueueManager
     deleteJobFailure(conf.getBlastQueueName(), job);
   }
 
-  public static int submitJob(HashID jobId, String tool, String[] cli) throws Exception {
+  // ------------------------------------------------------------------------------------------ //
+
+  public static int submitJob(HashID jobId, BlastTool tool, BlastConfig cli) throws Exception {
     return getInstance().submitNewJob(jobId, tool, cli);
   }
 
   /**
    * Submits a new Blast job to the job queue.
    *
-   * @param jobId Job configuration digest (used as a unique identifier)
-   * @param cli   Blast tool CLI parameters (starting with the blast tool
-   *              itself).
+   * @param jobId  Job configuration digest (used as a unique identifier)
+   * @param config Blast tool CLI parameters (starting with the blast tool
+   *               itself).
    *
    * @return the queue ID for the queued job
    */
-  public int submitNewJob(HashID jobId, String tool, String[] cli) throws Exception {
-    log.trace("#submitJob(jobID={}, tool={}, cli={})", jobId, tool, cli);
+  public int submitNewJob(HashID jobId, BlastTool tool, BlastConfig config) throws Exception {
+    log.trace("#submitJob(jobID={}, tool={}, config={})", jobId, tool, config);
 
     return submitNewJob(
       conf.getBlastQueueName(),
-      new JobCreateRequest(
-        String.join("/", URL.prependHTTP(conf.getBlastHost()), tool, jobId.string()),
-        cli
+      new CreateRequest<>(
+        URL.prependHTTP(conf.getBlastHost()),
+        new BlastRequest(jobId, tool, config)
       )
     );
   }
+
+  // ------------------------------------------------------------------------------------------ //
 
   public void deleteJob(int jobID) throws Exception {
     log.trace("#deleteJob(jobID={})", jobID);

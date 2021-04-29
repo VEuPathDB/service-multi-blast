@@ -1,35 +1,29 @@
 package mb.api.service.http;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.util.*;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import mb.api.model.*;
+import mb.api.service.conv.BCC;
+import mb.api.service.http.job.JobCreationService;
+import mb.api.service.util.Format;
+import mb.lib.data.JobDataManager;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.*;
 import mb.lib.db.model.impl.UserRowImpl;
-import mb.lib.querier.BlastQueueManager;
-import mb.lib.queue.model.QueueJobStatus;
-import mb.lib.blast.model.BlastReportType;
-import mb.lib.data.JobDataManager;
 import mb.lib.model.HashID;
+import mb.lib.model.JobStatus;
+import mb.lib.querier.BlastQueueManager;
+import mb.lib.util.BlastConv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.model.User;
-import mb.lib.blast.model.BlastReportField;
-import mb.lib.blast.model.BlastTool;
-import mb.api.model.internal.Job;
-import mb.lib.model.JobStatus;
-import mb.api.service.conv.BCC;
-import mb.api.service.conv.JobConverter;
-import mb.api.service.http.job.JobCreationService;
-import mb.api.service.http.job.JobReportService;
-import mb.api.service.util.Format;
 
 import static mb.api.service.http.Util.wrapException;
 
@@ -79,8 +73,8 @@ public class JobService
         }
       }
 
-      var out = new IOLongJobResponseImpl()
-        .setConfig(JobConverter.toExternal(Job.fromSerial(job.config())));
+      var out = new IOLongJobResponseImpl();
+      out.setConfig(BlastConv.convert(BlastConv.convertJobConfig(job.config())));
 
       // Update the modified date to avoid deleting actively used jobs in the
       // job cleanup.
@@ -89,7 +83,7 @@ public class JobService
 
       out.setId(rawID)
         .setDescription(userRow.description())
-        .setStatus(Util.convStatus(syncJobStatus(job)))
+        .setStatus(syncJobStatus(job))
         .setCreated(Format.DateFormat.format(job.createdOn()))
         .setExpires(Format.DateFormat.format(job.deleteOn()))
         .setMaxResultSize(userRow.maxDownloadSize())
@@ -126,7 +120,7 @@ public class JobService
     }
   }
 
-  public List<IOShortJobResponse> getJobs(User user) {
+  public List<IOShortJobResponse> getShortJobList(User user) {
     log.trace("#getJobs(user={})", user.getUserID());
 
     try {
@@ -151,7 +145,7 @@ public class JobService
         var tmp = new IOShortJobResponseImpl()
           .setId(job.jobID().string())
           .setDescription(job.description())
-          .setStatus(Util.convStatus(syncJobStatus(job)))
+          .setStatus(syncJobStatus(job))
           .setCreated(Format.toString(job.createdOn()))
           .setExpires(Format.toString(job.deleteOn()))
           .setMaxResultSize(job.maxDownloadSize())
@@ -211,90 +205,6 @@ public class JobService
     }
   }
 
-  public ReportWrap getReport(
-    String rawID,
-    long   userId,
-    String format,
-    boolean zip,
-    List<BlastReportField> fields,
-    Long maxDlSize
-  ) {
-    log.trace("#getReport(rawID={}, format={}, zip={}, fields={}, maxDlSize={})", rawID, format, zip, fields, maxDlSize);
-
-    if (!Format.isHex(rawID))
-      throw new NotFoundException();
-
-    var jobID = new HashID(rawID);
-
-    try {
-      FullJobRow job;
-      UserRow    user;
-      try (var db = new JobDBManager()) {
-        job = db.getQueryJob(jobID).orElseThrow(NotFoundException::new);
-
-        if (db.userIsLinkedToJob(userId, jobID)) {
-          user = db.getUser(userId, jobID).orElseThrow(InternalServerErrorException::new);
-        } else {
-          user = new UserRowImpl(jobID, userId, null, null, true);
-          db.linkUserToJob(user);
-
-          for (var tJob : db.getChildJobsFor(jobID)) {
-            var tUser = new UserRowImpl(tJob.jobID(), userId, null, null, false);
-            db.linkUserToJob(tUser);
-          }
-        }
-      }
-
-      BlastReportType pFormat;
-
-      var config = Job.fromSerial(job.config());
-
-      if (format == null) {
-        pFormat = config.getJobConfig().getReportFormat().getType();
-      } else {
-        pFormat = JobReportService.parseFormatString(format);
-      }
-
-      if (pFormat == BlastReportType.SequenceAlignmentMap && config.getTool() != BlastTool.BlastN)
-        throw new BadRequestException("The SAM report format is only available for jobs run with blastn");
-
-      if (pFormat == BlastReportType.MultipleFileBlastJSON || pFormat == BlastReportType.MultipleFileBlastXML2)
-        zip = true;
-
-      JobReportService.ensureJobCache(job, userId);
-      job.close(); // Release file resource(s)
-
-      var out = new ReportWrap();
-      out.zipped = zip;
-      var tmp = FormatterManager.formatAs(
-        rawID,
-        pFormat,
-        zip,
-        maxDlSize == null ? user.maxDownloadSize() : maxDlSize, // If the client provided a max size header, prefer that value.
-        fields.stream().map(BlastReportField::getValue).toArray(String[]::new)
-      );
-
-      if (tmp.isRight())
-        throw new BadRequestException(tmp.rightOrThrow().getMessage());
-
-      out.stream = tmp.leftOrThrow();
-
-      setContentType(out, pFormat);
-
-      return out;
-    } catch (Exception e) {
-      var eOut = wrapException(e);
-
-      if (eOut instanceof InternalServerErrorException) {
-        log.error(String.format("Failed to get report for job %s.", rawID), e);
-      } else {
-        log.info(String.format("Failed to get report for job %s.", rawID), e);
-      }
-
-      throw eOut;
-    }
-  }
-
   public IOJobPostResponse createJob(IOJsonJobRequest input, User user) {
     log.trace("#createJob(input={}, user={})", input, user.getUserID());
 
@@ -314,40 +224,10 @@ public class JobService
     }
   }
 
-  static void setContentType(ReportWrap wrap, BlastReportType type) {
-    log.trace("#setContentType(ReportWrap, {})", type);
-    switch (type) {
-      case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
-        wrap.contentType = "application/xml";
-        wrap.ext = "xml";
-      }
-      case Tabular -> {
-        wrap.contentType = "text/plain";
-        wrap.ext = "tsv";
-      }
-      case SeqAlignTextASN1, SeqAlignBinaryASN1, BlastArchiveASN1 -> {
-        wrap.contentType = "text/plain";
-        wrap.ext = "asn";
-      }
-      case CommaSeparatedValues -> {
-        wrap.contentType = "text/plain";
-        wrap.ext = "csv";
-      }
-      case SeqAlignJSON, SingleFileBlastJSON, MultipleFileBlastJSON -> {
-        wrap.contentType = "application/json";
-        wrap.ext = "json";
-      }
-      default -> {
-        wrap.contentType = "text/plain";
-        wrap.ext = "txt";
-      }
-    }
-  }
+  static JobStatus syncJobStatus(ShortJobRow job) throws Exception {
+    var inStatus = job.status();
 
-  static QueueJobStatus syncJobStatus(ShortJobRow job) throws Exception {
-    var inStatus = Util.convert(job.status());
-
-    if (inStatus == QueueJobStatus.Completed || inStatus == QueueJobStatus.Errored) {
+    if (inStatus == JobStatus.Completed || inStatus == JobStatus.Errored) {
       return inStatus;
     }
 
@@ -359,29 +239,10 @@ public class JobService
     if (status != inStatus) {
       log.debug("Updating db status from {} to {}", status, inStatus);
       try (var db = new JobDBManager()) {
-        db.updateJobStatus(job.jobID(), Util.convert(status));
+        db.updateJobStatus(job.jobID(), status);
       }
     }
 
     return status;
-  }
-
-  public static class ReportWrap implements StreamingOutput
-  {
-    public String      ext;
-    public String      contentType;
-    public boolean     zipped;
-    public InputStream stream;
-
-    @Override
-    public void write(OutputStream output) throws IOException, WebApplicationException {
-      try (var b = new BufferedInputStream(stream)) {
-        var n = 0;
-        var a = new byte[8192];
-
-        while ((n = b.read(a)) > 0)
-          output.write(a, 0, n);
-      }
-    }
   }
 }

@@ -1,12 +1,11 @@
 package mb.api;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.veupathdb.lib.container.jaxrs.config.Options;
-import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
-import org.veupathdb.service.mb.controller.DebugController;
 import mb.api.controller.GuestLinkController;
 import mb.api.controller.JobController;
 import mb.api.controller.MetaController;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.veupathdb.lib.container.jaxrs.config.Options;
+import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 
 /**
  * Service Resource Registration.

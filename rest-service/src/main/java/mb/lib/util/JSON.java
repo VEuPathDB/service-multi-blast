@@ -25,4 +25,8 @@ public class JSON
   public static String stringify(Object any) throws Exception {
     return Mapper.writeValueAsString(any);
   }
+
+  public static <I, O> O cast(I value, Class<O> type) {
+    return Mapper.convertValue(value, type);
+  }
 }

@@ -77,6 +77,7 @@ dependencies {
 
   // Core lib, prefers local checkout if available
   implementation("org.veupathdb.lib:jaxrs-container-core")
+  implementation("org.veupathdb.lib:java-blast")
 
 
   // Jersey

@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.FormatJobStatus;
-import mb.lib.model.HashID;
 import mb.lib.util.JSON;
 
 public class InsertFormatJob

@@ -28,6 +28,7 @@ public interface JsonKeys
   String ExportSearchStrategy               = "exportSearchStrategy";
   String FieldDelim                         = "fieldDelim";
   String Fields                             = "fields";
+  String Files                              = "files";
   String FilteringDB                        = "filteringDb";
   String Format                             = "format";
   String GIList                             = "giList";
@@ -87,6 +88,7 @@ public interface JsonKeys
   String Penalty                              = "penalty";
   String PercentIdentity                      = "percIdentity";
   String PhiBlastPatternFile                  = "phiPattern";
+  String ProjectID                            = "projectID";
   String Properties                           = "properties";
   String PseudoCount                          = "pseudoCount";
   String Query                                = "query";

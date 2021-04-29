@@ -4,13 +4,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import mb.api.service.JobCleanup;
+import mb.api.service.util.QueueDep;
 import mb.lib.config.Config;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.health.Dependency;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.lib.container.jaxrs.server.Server;
-import mb.api.service.JobCleanup;
-import mb.api.service.util.QueueDep;
 
 public class Main extends Server {
   private static final Config config = Config.getInstance();

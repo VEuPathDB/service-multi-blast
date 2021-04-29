@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import mb.api.model.blast.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import mb.api.model.io.JsonKeys;
 import mb.api.service.model.ErrorMap;
 import mb.lib.blast.model.BlastReportType;
-import mb.api.model.io.JsonKeys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static mb.api.model.io.JsonKeys.*;
 
@@ -22,9 +22,7 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
   // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ //
 
   public static final String
-    errRequired         = "is required",
     ErrGenCode          = "must be equal to 33 or in one of the following inclusive ranges: [1..6], [9..16], [21-31]",
-    ErrQueryLoc         = "start position must be less than stop position",
     errFmt0             = "only valid for the "
       + BlastReportType.Pairwise.externalName()
       + " output format",
@@ -75,7 +73,6 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
 
     var errors = new ErrorMap();
 
-    validateQueryLocation(errors, conf);
     validateEValue(errors, conf);
     validateOutFormat(errors, conf);
     validateNumDescriptions(errors, conf);
@@ -86,7 +83,7 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
     validateQCovHspPerc(errors, conf);
     Int.optGtEq(errors, conf.getMaxHSPs(), 1, JsonKeys.MaxHSPs);
     validateMaxTargetSeqs(errors, conf);
-    Int.optGtEq(errors, conf.getSearchSpace(), (byte) 0, JsonKeys.SearchSpace);
+    Int.optGtEq(errors, conf.getSearchSpace(), (short) 0, JsonKeys.SearchSpace);
 
     errors.putAll(switch (conf.getTool()) {
       case BlastN -> BlastNValidator.getInstance().validate((IOBlastnConfig) conf);
@@ -97,6 +94,8 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
       case PSIBlast -> throw new RuntimeException("psiblast is currently disallowed");
       case RPSBlast -> throw new RuntimeException("rpsblast is currently disallowed");
       case RPSTBlastN -> throw new RuntimeException("rpstblastn is currently disallowed");
+      case DeltaBlast -> throw new RuntimeException("deltablast is currently disallowed");
+      case BlastFormatter -> throw new RuntimeException("blast_formatter is currently disallowed");
     });
 
     return errors;
@@ -132,22 +131,6 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
 
     if (conf.getOutFormat().getFormat() != IOBlastFormat.PAIRWISE)
       err.putError(JsonKeys.SortHSPs, errFmt0);
-  }
-
-  static void validateQueryLocation(ErrorMap err, IOBlastConfig conf) {
-    if (conf.getQueryLoc() == null)
-      return;
-
-    var ha = conf.getQueryLoc().getStart() == null;
-    var ho = conf.getQueryLoc().getStop() == null;
-
-    if (ha)
-      err.putError(QueryLocation, Start, errRequired);
-    if (ho)
-      err.putError(QueryLocation, Stop, errRequired);
-
-    if (!ha && !ho && conf.getQueryLoc().getStart() >= conf.getQueryLoc().getStop())
-      err.putError(QueryLocation, ErrQueryLoc);
   }
 
   static final Pattern EValuePat = Pattern.compile("^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$");
@@ -206,7 +189,7 @@ public class BlastValidator implements ConfigValidator<IOBlastConfig>
       err.putError(MaxTargetSequences, errOnlyFmtGt4);
   }
 
-  static void validateGenCode(ErrorMap err, Byte gc, String field) {
+  static void validateGenCode(ErrorMap err, Short gc, String field) {
     if (gc == null)
       return;
 

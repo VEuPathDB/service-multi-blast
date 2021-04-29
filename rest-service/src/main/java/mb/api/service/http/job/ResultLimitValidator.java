@@ -3,9 +3,9 @@ package mb.api.service.http.job;
 import java.util.Optional;
 
 import mb.api.model.blast.IOBlastConfig;
+import mb.api.model.io.JsonKeys;
 import mb.api.service.model.ErrorMap;
 import mb.lib.blast.model.ToolOption;
-import mb.api.model.io.JsonKeys;
 
 /**
  * {@code ResultLimitValidator} enforces that the given blast configuration

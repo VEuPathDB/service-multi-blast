@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastnConfigImpl;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.QueryStrand;
-import mb.lib.blast.model.n.BlastNTask;
-import mb.lib.blast.model.n.DcTemplateType;
 import mb.api.model.io.JsonKeys;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.*;
 
 @JsonTypeName("blastn")
 @JsonDeserialize(as = IOBlastnConfigImpl.class)
@@ -19,10 +17,10 @@ public interface IOBlastnConfig extends IOBlastConfig
   BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastN;
 
   @JsonProperty(JsonKeys.Strand)
-  QueryStrand getStrand();
+  Strand getStrand();
 
   @JsonProperty(JsonKeys.Strand)
-  void setStrand(QueryStrand strand);
+  void setStrand(Strand strand);
 
   @JsonProperty(JsonKeys.Task)
   BlastNTask getTask();
@@ -31,10 +29,10 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setTask(BlastNTask task);
 
   @JsonProperty(JsonKeys.WordSize)
-  Integer getWordSize();
+  Long getWordSize();
 
   @JsonProperty(JsonKeys.WordSize)
-  void setWordSize(Integer wordSize);
+  void setWordSize(Long wordSize);
 
   @JsonProperty(JsonKeys.GapOpen)
   Integer getGapOpen();
@@ -55,10 +53,10 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setPenalty(Integer penalty);
 
   @JsonProperty(JsonKeys.Reward)
-  Integer getReward();
+  Long getReward();
 
   @JsonProperty(JsonKeys.Reward)
-  void setReward(Integer reward);
+  void setReward(Long reward);
 
   @JsonProperty(JsonKeys.UseIndex)
    Boolean getUseIndex();
@@ -73,10 +71,10 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setIndexName(String indexName);
 
   @JsonProperty(JsonKeys.Dust)
-  IOBlastnDust getDust();
+  Dust getDust();
 
   @JsonProperty(JsonKeys.Dust)
-  void setDust(IOBlastnDust dust);
+  void setDust(Dust dust);
 
   @JsonProperty(JsonKeys.WindowMaskerTaxID)
   Integer getWindowMaskerTaxid();
@@ -121,10 +119,10 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setPercIdentity (Double percIdentity);
 
   @JsonProperty(JsonKeys.CullingLimit)
-  Integer getCullingLimit();
+  Long getCullingLimit();
 
   @JsonProperty(JsonKeys.CullingLimit)
-  void setCullingLimit(Integer cullingLimit);
+  void setCullingLimit(Long cullingLimit);
 
   @JsonProperty(JsonKeys.BestHitOverhang)
    Double getBestHitOverhang();
@@ -145,16 +143,16 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setSubjectBestHit (Boolean subjectBestHit);
 
   @JsonProperty(JsonKeys.TemplateType)
-  DcTemplateType getTemplateType();
+  TemplateType getTemplateType();
 
   @JsonProperty(JsonKeys.TemplateType)
-  void setTemplateType(DcTemplateType templateType);
+  void setTemplateType(TemplateType templateType);
 
   @JsonProperty(JsonKeys.TemplateLength)
-   Byte getTemplateLength();
+  TemplateLength getTemplateLength();
 
   @JsonProperty(JsonKeys.TemplateLength)
-  void setTemplateLength (Byte templateLength);
+  void setTemplateLength (TemplateLength templateLength);
 
   @JsonProperty(JsonKeys.SumStats)
    Boolean getSumStats();
@@ -193,14 +191,14 @@ public interface IOBlastnConfig extends IOBlastConfig
   void setUngapped (Boolean ungapped);
 
   @JsonProperty(JsonKeys.MultiHitWindowSize)
-  Integer getWindowSize();
+  Long getWindowSize();
 
   @JsonProperty(JsonKeys.MultiHitWindowSize)
-  void setWindowSize(Integer windowSize);
+  void setWindowSize(Long windowSize);
 
   @JsonProperty(JsonKeys.OffDiagonalRange)
-  Integer getOffDiagonalRange();
+  Long getOffDiagonalRange();
 
   @JsonProperty(JsonKeys.OffDiagonalRange)
-  void setOffDiagonalRange(Integer offDiagonalRange);
+  void setOffDiagonalRange(Long offDiagonalRange);
 }

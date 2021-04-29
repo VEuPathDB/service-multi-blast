@@ -1,11 +1,11 @@
 package mb.api.service.valid;
 
+import mb.api.model.blast.IOBlastpConfig;
+import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import mb.api.model.blast.IOBlastpConfig;
-import mb.api.service.model.ErrorMap;
-import mb.lib.blast.model.p.BlastpTask;
-import mb.api.model.io.JsonKeys;
+import org.veupathdb.lib.blast.field.BlastPTask;
 
 import static mb.api.model.io.JsonKeys.*;
 
@@ -96,10 +96,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getSoftMasking() == null || !conf.getSoftMasking())
       return;
 
-    if (conf.getTask() != BlastpTask.BlastP)
+    if (conf.getTask() != BlastPTask.BlastP)
       err.putError(
         SoftMasking,
-        String.format(BlastValidator.errOnlyTask, BlastpTask.BlastP.getValue())
+        String.format(BlastValidator.errOnlyTask, BlastPTask.BlastP.getValue())
       );
   }
 
@@ -107,10 +107,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getMatrix() == null)
       return;
 
-    if (conf.getTask() == BlastpTask.BlastPFast)
+    if (conf.getTask() == BlastPTask.BlastPFast)
       err.putError(
         JsonKeys.Matrix,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
+        String.format(BlastValidator.errNotTask, BlastPTask.BlastPFast.getValue())
       );
   }
 
@@ -118,10 +118,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getGapExtend() == null)
       return;
 
-    if (conf.getTask() == BlastpTask.BlastPFast)
+    if (conf.getTask() == BlastPTask.BlastPFast)
       err.putError(
         JsonKeys.GapExtend,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
+        String.format(BlastValidator.errNotTask, BlastPTask.BlastPFast.getValue())
       );
   }
 
@@ -129,10 +129,10 @@ class BlastPValidator implements ConfigValidator<IOBlastpConfig>
     if (conf.getGapOpen() == null)
       return;
 
-    if (conf.getTask() == BlastpTask.BlastPFast)
+    if (conf.getTask() == BlastPTask.BlastPFast)
       err.putError(
         JsonKeys.GapOpen,
-        String.format(BlastValidator.errNotTask, BlastpTask.BlastPFast.getValue())
+        String.format(BlastValidator.errNotTask, BlastPTask.BlastPFast.getValue())
       );
   }
 }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import mb.lib.model.JobStatus;
 import mb.api.model.io.JsonKeys;
+import mb.lib.model.JobStatus;
 
 @JsonDeserialize(as = IOShortJobResponseImpl.class)
 public interface IOShortJobResponse

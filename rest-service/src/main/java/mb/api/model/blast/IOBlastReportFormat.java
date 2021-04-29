@@ -1,16 +1,16 @@
 package mb.api.model.blast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastReportFormatImpl;
-import mb.lib.blast.model.BlastReportField;
 import mb.api.model.io.JsonKeys;
+import org.veupathdb.lib.blast.field.FormatField;
+import org.veupathdb.lib.blast.field.OutFormat;
 
-@JsonDeserialize(
-    as = IOBlastReportFormatImpl.class
-)
+@JsonDeserialize(as = IOBlastReportFormatImpl.class)
 public interface IOBlastReportFormat {
   @JsonProperty(JsonKeys.Format)
   IOBlastFormat getFormat();
@@ -25,8 +25,25 @@ public interface IOBlastReportFormat {
   void setDelim(String delim);
 
   @JsonProperty(JsonKeys.Fields)
-  List<BlastReportField> getFields();
+  List<FormatField> getFields();
 
   @JsonProperty(JsonKeys.Fields)
-  void setFields(List<BlastReportField> fields);
+  void setFields(List<FormatField> fields);
+
+  default OutFormat toInternalValue() {
+    return new OutFormat().
+      setType(getFormat().toInternalValue()).
+      setDelimiter(getDelim()).
+      setFields(new ArrayList<>(getFields()));
+  }
+
+  static IOBlastReportFormat fromInternalValue(OutFormat fmt) {
+    var out = new IOBlastReportFormatImpl();
+
+    out.setFormat(IOBlastFormat.fromInternalValue(fmt.getType()));
+    out.setDelim(fmt.getDelimiter());
+    out.setFields(new ArrayList<>(fmt.getFields()));
+
+    return out;
+  }
 }

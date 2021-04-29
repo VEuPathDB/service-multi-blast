@@ -35,6 +35,26 @@ interface ConfigValidator<C>
      * @param min Minimum value to check against.
      * @param field Name of the field being validated.
      */
+    static void optGtEq(ErrorMap err, Long val, long min, String field) {
+      if (val != null) gtEq(err, val, min, field);
+    }
+
+    static void gtEq(ErrorMap err, long val, long min, String field) {
+      if (val < min) err.putError(field, String.format(errGtEqD, min));
+    }
+
+    /**
+     * Optional value greater than or equal to.
+     * <p>
+     * If the value {@code val} is not null, it will be checked against
+     * {@code min} to verify that {@code val >= min}.  If validation fails, an
+     * error will be appended to the validation err map for the current field.
+     *
+     * @param err Validation error aggregation.
+     * @param val Value to validate.
+     * @param min Minimum value to check against.
+     * @param field Name of the field being validated.
+     */
     static void optGtEq(ErrorMap err, Integer val, int min, String field) {
       if (val != null) gtEq(err, val, min, field);
     }
@@ -65,6 +85,22 @@ interface ConfigValidator<C>
 
     static void gtEq(ErrorMap err, byte val, byte min, String field) {
       if (val < min) err.putError(field, String.format(errGtEqD, min));
+    }
+
+    /**
+     * Optional value greater than or equal to.
+     * <p>
+     * If the value {@code val} is not null, it will be checked against
+     * {@code min} to verify that {@code val >= min}.  If validation fails, an
+     * error will be appended to the validation err map for the current field.
+     *
+     * @param err Validation error aggregation.
+     * @param val Value to validate.
+     * @param min Minimum value to check against.
+     * @param field Name of the field being validated.
+     */
+    static void optGtEq(ErrorMap err, Short val, short min, String field) {
+      if (val != null) gtEq(err, val, min, field);
     }
 
     /**

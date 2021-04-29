@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-import mb.lib.config.Config;
-import mb.api.service.valid.SequenceValidator;
 import mb.api.service.util.Format;
+import mb.api.service.valid.SequenceValidator;
+import mb.lib.config.Config;
 
 class QuerySplitter
 {

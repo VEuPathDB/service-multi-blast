@@ -2,107 +2,79 @@ package mb.api.model.internal;
 
 import java.time.OffsetDateTime;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import mb.lib.blast.model.impl.*;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import mb.api.model.io.JsonKeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import mb.lib.blast.model.BlastConfig;
-import mb.lib.blast.model.BlastTool;
-import mb.api.service.cli.CliBuilder;
-import mb.api.service.util.Format;
+import org.veupathdb.lib.blast.BlastConfig;
+import org.veupathdb.lib.blast.BlastTool;
 
 public class Job
 {
-  private static final Logger log = LogManager.getLogger(Job.class);
+  private static final Logger Log = LogManager.getLogger(Job.class);
 
   private final BlastTool tool;
 
   private OffsetDateTime createdOn;
 
-  private BlastConfig<?> config;
+  private BlastConfig config;
+
+  private String project;
 
   public Job(BlastTool tool) {
+    Log.trace("::new(tool={})", tool);
     this.tool = tool;
   }
 
-  public OffsetDateTime createdOn() {
+  @JsonIgnore
+  public OffsetDateTime getCreatedOn() {
+    Log.trace("#getCreatedOn()");
     return createdOn;
   }
 
+  @JsonIgnore
   public Job setCreatedOn(OffsetDateTime createdOn) {
+    Log.trace("#setCreatedOn(createdOn={})", createdOn);
     this.createdOn = createdOn;
     return this;
   }
 
+  @JsonIgnore
   public boolean hasConfig() {
+    Log.trace("#hasConfig()");
     return config != null;
   }
 
-  public BlastConfig<?> getJobConfig() {
+  @JsonGetter(JsonKeys.Config)
+  public BlastConfig getJobConfig() {
+    Log.trace("#getJobConfig()");
     return config;
   }
 
-  public Job setJobConfig(BlastConfig<?> config) {
+  @JsonSetter(JsonKeys.Config)
+  public Job setJobConfig(BlastConfig config) {
+    Log.trace("#setJobConfig(config={})", config);
     this.config = config;
     return this;
   }
 
+  @JsonGetter(JsonKeys.Tool)
   public BlastTool getTool() {
+    Log.trace("#getTool()");
     return tool;
   }
 
-  @Override
-  public String toString() {
-    var str = new StringBuilder(tool.value()).append(' ');
-    var cli = new CliBuilder();
-
-    config.toCli(cli);
-
-    cli.toString(str);
-    return str.toString();
+  @JsonGetter(JsonKeys.ProjectID)
+  public String getProject() {
+    Log.trace("#getProject()");
+    return project;
   }
 
-  public String toSerial() {
-    log.trace("Job#toSerial()");
-    var cli = new CliBuilder();
-
-    config.toCli(cli);
-
-    var out = Format.Json.createArrayNode();
-    out.add(Format.Json.createArrayNode().add(tool.value()));
-
-    return cli.toComponentStream().collect(
-      () -> out,
-      (a, v) -> {
-        if (v[1] == null)
-          a.add(Format.Json.createArrayNode().add(v[0]));
-        else
-          a.add(Format.Json.createArrayNode().add(v[0]).add(v[1]));
-      },
-      (a, b) -> {}
-    ).toString();
-  }
-
-  // TODO: this is a bad place for this
-  public static Job fromSerial(String cli) throws Exception {
-    log.trace("Job#fromSerial(String)");
-    log.debug("Deserializing from {}", cli);
-    var node = (ArrayNode) Format.Json.readTree(cli);
-    var tool = BlastTool.fromString(node.get(0).get(0).asText())
-      .orElseThrow(() -> new IllegalStateException("Unrecognized blast tool in serialized job: " + node.get(0).get(0).asText()));
-    var out  = new Job(tool);
-
-    switch (tool) {
-      case BlastN -> out.setJobConfig(BlastNConfigImpl.fromSerial(node));
-      case BlastP -> out.setJobConfig(BlastPConfigImpl.fromSerial(node));
-      case BlastX -> out.setJobConfig(BlastXConfigImpl.fromSerial(node));
-      case TBlastN -> out.setJobConfig(TBlastNConfigImpl.fromSerial(node));
-      case TBlastX -> out.setJobConfig(TBlastXConfigImpl.fromSerial(node));
-      case PSIBlast, RPSBlast, RPSTBlastN -> throw new IllegalStateException(
-        "The psiblast, rpsblast, and rpstblastn tools are not currently supported."
-      );
-    }
-
-    return out;
+  @JsonSetter(JsonKeys.ProjectID)
+  public void setProject(String project) {
+    Log.trace("#setProject(project={})", project);
+    this.project = project;
   }
 }

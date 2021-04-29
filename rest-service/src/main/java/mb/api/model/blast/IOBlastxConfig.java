@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastxConfigImpl;
-import mb.lib.blast.model.BlastTool;
 import mb.lib.blast.model.CompBasedStats;
-import mb.lib.blast.model.QueryStrand;
-import mb.lib.blast.model.x.BlastxTask;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.BlastXTask;
+import org.veupathdb.lib.blast.field.ScoringMatrix;
+import org.veupathdb.lib.blast.field.Seg;
+import org.veupathdb.lib.blast.field.Strand;
 
 @JsonTypeName("blastx")
 @JsonDeserialize(as = IOBlastxConfigImpl.class)
@@ -18,22 +20,22 @@ public interface IOBlastxConfig extends IOBlastConfig
   BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastX;
 
   @JsonProperty("strand")
-  QueryStrand getStrand();
+  Strand getStrand();
 
   @JsonProperty("strand")
-  void setStrand(QueryStrand strand);
+  void setStrand(Strand strand);
 
   @JsonProperty("queryGeneticCode")
-   Byte getQueryGeneticCode();
+  Short getQueryGeneticCode();
 
   @JsonProperty("queryGeneticCode")
-  void setQueryGeneticCode (Byte queryGeneticCode);
+  void setQueryGeneticCode (Short queryGeneticCode);
 
   @JsonProperty("task")
-  BlastxTask getTask();
+  BlastXTask getTask();
 
   @JsonProperty("task")
-  void setTask(BlastxTask task);
+  void setTask(BlastXTask task);
 
   @JsonProperty("wordSize")
   Integer getWordSize();
@@ -60,10 +62,10 @@ public interface IOBlastxConfig extends IOBlastConfig
   void setMaxIntronLength(Integer maxIntronLength);
 
   @JsonProperty("matrix")
-  IOBlastxScoringMatrix getMatrix();
+  ScoringMatrix getMatrix();
 
   @JsonProperty("matrix")
-  void setMatrix(IOBlastxScoringMatrix matrix);
+  void setMatrix(ScoringMatrix matrix);
 
   @JsonProperty("threshold")
    Double getThreshold();
@@ -78,10 +80,10 @@ public interface IOBlastxConfig extends IOBlastConfig
   void setCompBasedStats(CompBasedStats compBasedStats);
 
   @JsonProperty("seg")
-  IOBlastSegMask getSeg();
+  Seg getSeg();
 
   @JsonProperty("seg")
-  void setSeg(IOBlastSegMask seg);
+  void setSeg(Seg seg);
 
   @JsonProperty("softMasking")
    Boolean getSoftMasking();

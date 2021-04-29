@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOTBlastxConfigImpl;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.QueryStrand;
 import mb.api.model.io.JsonKeys;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.ScoringMatrix;
+import org.veupathdb.lib.blast.field.Seg;
+import org.veupathdb.lib.blast.field.Strand;
 
 @JsonTypeName("tblastx")
 @JsonDeserialize(as = IOTBlastxConfigImpl.class)
@@ -17,10 +19,10 @@ public interface IOTBlastxConfig extends IOBlastConfig
   BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.TBlastX;
 
   @JsonProperty(JsonKeys.Strand)
-  QueryStrand getStrand();
+  Strand getStrand();
 
   @JsonProperty(JsonKeys.Strand)
-  void setStrand(QueryStrand strand);
+  void setStrand(Strand strand);
 
   @JsonProperty(JsonKeys.QueryGeneticCode)
   Byte getQueryGeneticCode();
@@ -41,10 +43,10 @@ public interface IOTBlastxConfig extends IOBlastConfig
   void setMaxIntronLength(Integer maxIntronLength);
 
   @JsonProperty(JsonKeys.Matrix)
-  IOTBlastxScoringMatrix getMatrix();
+  ScoringMatrix getMatrix();
 
   @JsonProperty(JsonKeys.Matrix)
-  void setMatrix(IOTBlastxScoringMatrix matrix);
+  void setMatrix(ScoringMatrix matrix);
 
   @JsonProperty(JsonKeys.Threshold)
   Double getThreshold();
@@ -59,10 +61,10 @@ public interface IOTBlastxConfig extends IOBlastConfig
   void setDbGencode(Byte dbGencode);
 
   @JsonProperty(JsonKeys.Seg)
-  IOBlastSegMask getSeg();
+  Seg getSeg();
 
   @JsonProperty(JsonKeys.Seg)
-  void setSeg(IOBlastSegMask seg);
+  void setSeg(Seg seg);
 
   @JsonProperty(JsonKeys.SoftMasking)
   Boolean getSoftMasking();

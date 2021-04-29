@@ -1,42 +1,66 @@
 package mb.api.model.reports;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import mb.api.model.io.JsonKeys;
-import mb.lib.blast.model.BlastReportField;
-import mb.lib.blast.model.BlastReportType;
-import mb.lib.blast.model.HitSorting;
-import mb.lib.blast.model.HSPSorting;
-import mb.lib.util.MD5;
+import mb.lib.blast.model.IOHSPSorting;
+import mb.lib.blast.model.IOHitSorting;
+import mb.lib.model.HashID;
+import org.veupathdb.lib.blast.BlastFormatter;
+import org.veupathdb.lib.blast.field.FormatField;
+import org.veupathdb.lib.blast.field.FormatType;
+import org.veupathdb.lib.blast.field.OutFormat;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportRequest
 {
-  private BlastReportType        type;
-  private String                 delim;
-  private List<BlastReportField> fields;
-  private Boolean                showGIs;
-  private Integer                numDescriptions;
-  private Integer                numAlignments;
-  private Integer                lineLength;
-  private Boolean                html;
-  private HitSorting             sortHits;
-  private HSPSorting             sortHSPs;
-  private Integer                maxTargetSeqs;
-  private Boolean                parseDefLines;
+  private HashID            jobID;
+  private String            description;
+  private FormatType        type;
+  private String            delim;
+  private List<FormatField> fields;
+  private Boolean           showGIs;
+  private Long              numDescriptions;
+  private Long              numAlignments;
+  private Integer           lineLength;
+  private Boolean           html;
+  private IOHitSorting      sortHits;
+  private IOHSPSorting      sortHSPs;
+  private Long              maxTargetSeqs;
+  private Boolean           parseDefLines;
+
+  @JsonGetter(JsonKeys.JobID)
+  public HashID getJobID() {
+    return jobID;
+  }
+
+  @JsonSetter(JsonKeys.JobID)
+  public ReportRequest setJobID(HashID jobID) {
+    this.jobID = jobID;
+    return this;
+  }
+
+  @JsonGetter(JsonKeys.Description)
+  public String getDescription() {
+    return description;
+  }
+
+  @JsonSetter(JsonKeys.Description)
+  public ReportRequest setDescription(String description) {
+    this.description = description;
+    return this;
+  }
 
   @JsonGetter(JsonKeys.Format)
-  public BlastReportType getType() {
+  public FormatType getType() {
     return type;
   }
 
   @JsonSetter(JsonKeys.Format)
-  public ReportRequest setType(BlastReportType type) {
+  public ReportRequest setType(FormatType type) {
     this.type = type;
     return this;
   }
@@ -53,12 +77,12 @@ public class ReportRequest
   }
 
   @JsonGetter(JsonKeys.Fields)
-  public List<BlastReportField> getFields() {
+  public List<FormatField> getFields() {
     return fields;
   }
 
   @JsonSetter(JsonKeys.Fields)
-  public ReportRequest setFields(List<BlastReportField> fields) {
+  public ReportRequest setFields(List<FormatField> fields) {
     this.fields = fields;
     return this;
   }
@@ -75,23 +99,23 @@ public class ReportRequest
   }
 
   @JsonGetter(JsonKeys.NumDescriptions)
-  public Integer getNumDescriptions() {
+  public Long getNumDescriptions() {
     return numDescriptions;
   }
 
   @JsonSetter(JsonKeys.NumDescriptions)
-  public ReportRequest setNumDescriptions(Integer numDescriptions) {
+  public ReportRequest setNumDescriptions(Long numDescriptions) {
     this.numDescriptions = numDescriptions;
     return this;
   }
 
   @JsonGetter(JsonKeys.NumAlignments)
-  public Integer getNumAlignments() {
+  public Long getNumAlignments() {
     return numAlignments;
   }
 
   @JsonSetter(JsonKeys.NumAlignments)
-  public ReportRequest setNumAlignments(Integer numAlignments) {
+  public ReportRequest setNumAlignments(Long numAlignments) {
     this.numAlignments = numAlignments;
     return this;
   }
@@ -119,34 +143,34 @@ public class ReportRequest
   }
 
   @JsonGetter(JsonKeys.SortHits)
-  public HitSorting getSortHits() {
+  public IOHitSorting getSortHits() {
     return sortHits;
   }
 
   @JsonSetter(JsonKeys.SortHits)
-  public ReportRequest setSortHits(HitSorting sortHits) {
+  public ReportRequest setSortHits(IOHitSorting sortHits) {
     this.sortHits = sortHits;
     return this;
   }
 
   @JsonSetter(JsonKeys.SortHSPs)
-  public HSPSorting getSortHSPs() {
+  public IOHSPSorting getSortHSPs() {
     return sortHSPs;
   }
 
   @JsonSetter(JsonKeys.SortHSPs)
-  public ReportRequest setSortHSPs(HSPSorting sortHSPs) {
+  public ReportRequest setSortHSPs(IOHSPSorting sortHSPs) {
     this.sortHSPs = sortHSPs;
     return this;
   }
 
   @JsonGetter(JsonKeys.MaxTargetSequences)
-  public Integer getMaxTargetSeqs() {
+  public Long getMaxTargetSeqs() {
     return maxTargetSeqs;
   }
 
   @JsonSetter(JsonKeys.MaxTargetSequences)
-  public ReportRequest setMaxTargetSeqs(Integer maxTargetSeqs) {
+  public ReportRequest setMaxTargetSeqs(Long maxTargetSeqs) {
     this.maxTargetSeqs = maxTargetSeqs;
     return this;
   }
@@ -162,28 +186,43 @@ public class ReportRequest
     return this;
   }
 
-  @JsonIgnore
-  public byte[] hashConfig() {
-    return MD5.hash(hashString());
+  public BlastFormatter toInternalValue() {
+    var out = new BlastFormatter();
+
+    out.setOutFormat(new OutFormat().setType(type).setDelimiter(delim).setFields(fields));
+    out.setShowGIs(showGIs);
+    out.setNumDescriptions(numDescriptions);
+    out.setNumAlignments(numAlignments);
+    out.setLineLength(lineLength);
+    out.setHTML(html);
+    out.setSortHits(sortHits.toInternalValue());
+    out.setSortHSPs(sortHSPs.toInternalValue());
+    out.setMaxTargetSequences(maxTargetSeqs);
+    out.setParseDefLines(parseDefLines);
+
+    return out;
   }
 
-  private String hashString() {
-    return "ReportRequest{" +
-      "type=" + type.externalName() +
-      ", delim='" + delim + '\'' +
-      ", fields=" + fields.stream()
-      .map(BlastReportField::toString)
-      .sorted()
-      .collect(Collectors.joining(",", "[", "]"))+
-      ", showGIs=" + showGIs +
-      ", numDescriptions=" + numDescriptions +
-      ", numAlignments=" + numAlignments +
-      ", lineLength=" + lineLength +
-      ", html=" + html +
-      ", sortHits=" + sortHits +
-      ", sortHSPs=" + sortHSPs +
-      ", maxTargetSeqs=" + maxTargetSeqs +
-      ", parseDefLines=" + parseDefLines +
-      '}';
+  public static ReportRequest fromInternalValue(BlastFormatter val) {
+    var out = new ReportRequest();
+
+    if (val.getOutFormat() != null) {
+      out.setType(val.getOutFormat().getType());
+      out.setDelim(val.getOutFormat().getDelimiter());
+      if (val.getOutFormat().getFields() != null && val.getOutFormat().getFields().size() > 0)
+        out.setFields(val.getOutFormat().getFields());
+    }
+
+    out.setShowGIs(val.getShowGIs());
+    out.setNumDescriptions(val.getNumDescriptions());
+    out.setNumAlignments(val.getNumAlignments());
+    out.setLineLength(val.getLineLength());
+    out.setHTML(val.getHTML());
+    out.setSortHits(IOHitSorting.fromInternalValue(val.getSortHits()));
+    out.setSortHSPs(IOHSPSorting.fromInternalValue(val.getSortHSPs()));
+    out.setMaxTargetSeqs(val.getMaxTargetSequences());
+    out.setParseDefLines(val.getParseDefLines());
+
+    return out;
   }
 }

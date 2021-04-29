@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastpConfigImpl;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.CompBasedStats;
-import mb.lib.blast.model.p.BlastpTask;
 import mb.api.model.io.JsonKeys;
+import mb.lib.blast.model.CompBasedStats;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.BlastPTask;
+import org.veupathdb.lib.blast.field.ScoringMatrix;
+import org.veupathdb.lib.blast.field.Seg;
 
 @JsonTypeName("blastp")
 @JsonDeserialize(as = IOBlastpConfigImpl.class)
@@ -18,10 +20,10 @@ public interface IOBlastpConfig extends IOBlastConfig
   BlastTool _DISCRIMINATOR_TYPE_NAME = BlastTool.BlastP;
 
   @JsonProperty(JsonKeys.Task)
-  BlastpTask getTask();
+  BlastPTask getTask();
 
   @JsonProperty(JsonKeys.Task)
-  void setTask(BlastpTask task);
+  void setTask(BlastPTask task);
 
   @JsonProperty(JsonKeys.WordSize)
   Integer getWordSize();
@@ -42,10 +44,10 @@ public interface IOBlastpConfig extends IOBlastConfig
   void setGapExtend(Integer gapExtend);
 
   @JsonProperty(JsonKeys.Matrix)
-  IOBlastpScoringMatrix getMatrix();
+  ScoringMatrix getMatrix();
 
   @JsonProperty(JsonKeys.Matrix)
-  void setMatrix(IOBlastpScoringMatrix matrix);
+  void setMatrix(ScoringMatrix matrix);
 
   @JsonProperty(JsonKeys.Threshold)
    Double getThreshold();
@@ -60,10 +62,10 @@ public interface IOBlastpConfig extends IOBlastConfig
   void setCompBasedStats(CompBasedStats compBasedStats);
 
   @JsonProperty(JsonKeys.Seg)
-  IOBlastSegMask getSeg();
+  Seg getSeg();
 
   @JsonProperty(JsonKeys.Seg)
-  void setSeg(IOBlastSegMask seg);
+  void setSeg(Seg seg);
 
   @JsonProperty(JsonKeys.SoftMasking)
    Boolean getSoftMasking();

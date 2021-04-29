@@ -5,26 +5,26 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
+import mb.api.model.IOJobPostResponse;
+import mb.api.model.IOJobPostResponseImpl;
+import mb.api.model.IOJsonJobRequest;
+import mb.api.model.blast.IOBlastConfig;
+import mb.api.model.internal.Job;
+import mb.api.model.io.JsonKeys;
+import mb.api.service.cli.CliBuilder_;
+import mb.api.service.conv.JobConverter;
+import mb.api.service.http.Util;
+import mb.api.service.model.ErrorMap;
+import mb.api.service.util.Format;
 import mb.api.service.valid.*;
+import mb.lib.data.JobDataManager;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.JobTarget;
 import mb.lib.db.model.impl.JobTargetImpl;
-import mb.lib.data.JobDataManager;
 import mb.lib.model.HashID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import mb.api.model.blast.IOBlastConfig;
-import mb.api.model.IOJobPostResponse;
-import mb.api.model.IOJobPostResponseImpl;
-import mb.api.model.IOJsonJobRequest;
-import mb.api.service.model.ErrorMap;
-import mb.api.model.internal.Job;
-import mb.api.model.io.JsonKeys;
-import mb.api.service.cli.CliBuilder;
-import mb.api.service.conv.JobConverter;
-import mb.api.service.http.Util;
-import mb.api.service.util.Format;
 
 public class JobCreationService
 {
@@ -155,12 +155,12 @@ public class JobCreationService
         //noinspection ResultOfMethodCallIgnored
         dets.query.delete();
         new JobCreator(db).handleLink(dets);
-        return;
       } else {
         log.debug("Job already exists but does not have cached data.  Rerunning job.");
         new JobCreator(db).handleRerun(dets);
-        return;
       }
+
+      return;
     }
 
     log.debug("Job did not already exist. Creating new job.");
@@ -181,7 +181,7 @@ public class JobCreationService
     // checksum of the actual query value.
     // The actual query is stored as a file.
     job.getJobConfig().setQuery(Format.toHexString(row.hash));
-    var cli = new CliBuilder();
+    var cli = new CliBuilder_();
 
     // Convert the job config to a CLI format (which will be hashed).
     job.getJobConfig().toCli(cli);

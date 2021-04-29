@@ -1,14 +1,12 @@
 package mb.api.service.valid;
 
+import mb.api.model.blast.IOBlastnConfig;
+import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import mb.api.model.blast.IOBlastnConfig;
-import mb.api.service.model.ErrorMap;
-import mb.lib.blast.model.n.BlastNTask;
-import mb.lib.blast.model.n.DcTemplateType;
-import mb.api.model.io.JsonKeys;
-
-import static mb.api.model.io.JsonKeys.*;
+import org.veupathdb.lib.blast.field.BlastNTask;
+import org.veupathdb.lib.blast.field.TemplateType;
 
 /**
  * Validator for {@code blastn} CLI arguments.
@@ -72,29 +70,29 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
 
   static void validateBestHitScoreEdge(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getBestHitScoreEdge() != null) {
-      Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0.0, 0.5, BestHitScoreEdge);
-      Obj.incompat(err, conf.getCullingLimit(), BestHitScoreEdge, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitScoreEdge(), 0.0, 0.5, JsonKeys.BestHitScoreEdge);
+      Obj.incompat(err, conf.getCullingLimit(), JsonKeys.BestHitScoreEdge, JsonKeys.CullingLimit);
     }
   }
 
   static void validateBestHitOverhang(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getBestHitOverhang() != null) {
-      Dec.betweenExc(err, conf.getBestHitOverhang(), 0.0, 0.5, BestHitOverhang);
-      Obj.incompat(err, conf.getCullingLimit(), BestHitOverhang, CullingLimit);
+      Dec.betweenExc(err, conf.getBestHitOverhang(), 0.0, 0.5, JsonKeys.BestHitOverhang);
+      Obj.incompat(err, conf.getCullingLimit(), JsonKeys.BestHitOverhang, JsonKeys.CullingLimit);
     }
   }
 
   static void validateCullingLimit(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getCullingLimit() != null) {
-      Int.gtEq(err, conf.getCullingLimit(), 0, CullingLimit);
-      Obj.incompat(err, conf.getBestHitOverhang(), CullingLimit, BestHitOverhang);
-      Obj.incompat(err, conf.getBestHitScoreEdge(), CullingLimit, BestHitScoreEdge);
+      Int.gtEq(err, conf.getCullingLimit(), 0, JsonKeys.CullingLimit);
+      Obj.incompat(err, conf.getBestHitOverhang(), JsonKeys.CullingLimit, JsonKeys.BestHitOverhang);
+      Obj.incompat(err, conf.getBestHitScoreEdge(), JsonKeys.CullingLimit, JsonKeys.BestHitScoreEdge);
     }
   }
 
   static void validateNoGreedy(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getNoGreedy() != null && conf.getTask() != BlastNTask.Megablast)
-      err.putError(NonGreedy, String.format(BlastValidator.errOnlyTask, BlastNTask.Megablast));
+      err.putError(JsonKeys.NonGreedy, String.format(BlastValidator.errOnlyTask, BlastNTask.Megablast));
   }
 
   static void validateTemplateLength(ErrorMap err, IOBlastnConfig conf) {
@@ -102,17 +100,17 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
       return;
 
     if (conf.getTemplateType() == null)
-      conf.setTemplateType(DcTemplateType.Coding);
+      conf.setTemplateType(TemplateType.Coding);
 
     if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
-      err.putError(TemplateLength, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
+      err.putError(JsonKeys.TemplateLength, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
 
     if (
       conf.getTemplateLength() != 16
         && conf.getTemplateLength() != 18
         && conf.getTemplateLength() != 21
     )
-      err.putError(TemplateLength, "must be one of 16, 18, or 21");
+      err.putError(JsonKeys.TemplateLength, "must be one of 16, 18, or 21");
   }
 
   static void validateTemplateType(ErrorMap err, IOBlastnConfig conf) {
@@ -123,30 +121,30 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
       conf.setTemplateLength((byte) 18);
 
     if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
-      err.putError(TemplateType, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
+      err.putError(JsonKeys.TemplateType, String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast));
   }
 
   static void validateDbHardMask(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getDbHardMask() != null) {
-      Obj.incompat(err, conf.getDbSoftMask(), DBHardMask, DBSoftMask);
+      Obj.incompat(err, conf.getDbSoftMask(), JsonKeys.DBHardMask, JsonKeys.DBSoftMask);
     }
   }
 
   static void validateDbSoftMask(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getDbSoftMask() != null) {
-      Obj.incompat(err, conf.getDbHardMask(), DBSoftMask, DBHardMask);
+      Obj.incompat(err, conf.getDbHardMask(), JsonKeys.DBSoftMask, JsonKeys.DBHardMask);
     }
   }
 
   static void validateTaxIds(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getTaxIds() != null && !conf.getTaxIds().isEmpty()) {
-      Obj.colIncompat(err, conf.getNegativeTaxIds(), TaxIDs, NegativeTaxIDs);
+      Obj.colIncompat(err, conf.getNegativeTaxIds(), JsonKeys.TaxIDs, JsonKeys.NegativeTaxIDs);
     }
   }
 
   static void validateNegativeTaxIds(ErrorMap err, IOBlastnConfig conf) {
     if (conf.getNegativeTaxIds() != null && !conf.getNegativeTaxIds().isEmpty()) {
-      Obj.colIncompat(err, conf.getTaxIds(), NegativeTaxIDs, TaxIDs);
+      Obj.colIncompat(err, conf.getTaxIds(), JsonKeys.NegativeTaxIDs, JsonKeys.TaxIDs);
     }
   }
 
@@ -154,11 +152,11 @@ class BlastNValidator implements ConfigValidator<IOBlastnConfig>
     if (conf.getWindowSize() == null)
       return;
 
-    Int.gtEq(err, conf.getWindowSize(), 0, MultiHitWindowSize);
+    Int.gtEq(err, conf.getWindowSize(), 0, JsonKeys.MultiHitWindowSize);
 
     if (conf.getTask() != BlastNTask.DiscontiguousMegablast)
       err.putError(
-        MultiHitWindowSize,
+        JsonKeys.MultiHitWindowSize,
         String.format(BlastValidator.errOnlyTask, BlastNTask.DiscontiguousMegablast)
       );
   }

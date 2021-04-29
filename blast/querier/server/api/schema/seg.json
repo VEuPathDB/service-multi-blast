@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "oneOf": [
+    {
+      "type": "string",
+      "enum": ["yes", "no"]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "window": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "locut": {
+          "type": "number"
+        },
+        "hicut": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "window",
+        "locut",
+        "hicut"
+      ]
+    }
+  ],
+  "default": "no"
+}

@@ -5,6 +5,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import mb.lib.model.JobStatus;
 import mb.lib.queue.consts.URL;
 import mb.lib.queue.model.*;
 import mb.lib.util.JSON;
@@ -28,9 +29,9 @@ public abstract class QueueManager
     return JSON.parse(res.body(), FailedJobResponse.class).getFailedJobs();
   }
 
-  public abstract QueueJobStatus getJobStatus(int jobID) throws Exception;
+  public abstract JobStatus getJobStatus(int jobID) throws Exception;
 
-  protected QueueJobStatus getJobStatus(String queueName, int jobID) throws Exception {
+  protected JobStatus getJobStatus(String queueName, int jobID) throws Exception {
     log.trace("#getJobStatus(queueName={}, jobID={})", queueName, jobID);
 
     var res = HttpClient.newHttpClient().send(
@@ -40,9 +41,9 @@ public abstract class QueueManager
 
     if (res.statusCode() == 404) {
       if (jobInFailList(jobID)) {
-        return QueueJobStatus.Errored;
+        return JobStatus.Errored;
       } else {
-        return QueueJobStatus.Completed;
+        return JobStatus.Completed;
       }
     }
 
