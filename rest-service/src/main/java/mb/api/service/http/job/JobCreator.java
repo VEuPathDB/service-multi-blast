@@ -5,12 +5,13 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 
 import mb.lib.config.Config;
+import mb.lib.data.JobDataManager;
 import mb.lib.db.JobDBManager;
 import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
+import mb.lib.model.JobStatus;
 import mb.lib.querier.BlastQueueManager;
-import mb.lib.data.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,11 +51,11 @@ public class JobCreator
     var jobDir = JobDataManager.createJobWorkspace(d.id);
     Files.move(d.query.toPath(), jobDir.filePath("query.txt"));
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
-    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.cli.toArgArray(false));
 
     db.updateJobDeleteTimer(d.id, exp);
     db.updateJobQueueID(d.id, queId);
-    db.updateJobStatus(d.id, DBJobStatus.Queued);
+    db.updateJobStatus(d.id, JobStatus.Queued);
 
     if (!db.userIsLinkedToJob(d.userID, d.id))
       db.linkUserToJob(new UserRowImpl(
@@ -83,7 +84,7 @@ public class JobCreator
     var qFile  = Files.move(d.query.toPath(), jobDir.filePath("query.txt"));
     var now    = OffsetDateTime.now();
     var exp    = now.plusDays(Config.getInstance().getJobTimeout());
-    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool().value(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.cli.toArgArray(false));
 
     db.registerJob(
       new FullJobRowImpl(

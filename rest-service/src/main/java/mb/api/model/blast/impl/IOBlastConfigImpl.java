@@ -2,40 +2,31 @@ package mb.api.model.blast.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import mb.api.model.blast.IOHSPSorting;
 import mb.api.model.blast.IOBlastConfig;
-import mb.api.model.blast.IOBlastLocation;
 import mb.api.model.blast.IOBlastReportFormat;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.HitSorting;
+import mb.lib.blast.model.IOHitSorting;
+import org.veupathdb.lib.blast.field.Location;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class IOBlastConfigImpl implements IOBlastConfig
+abstract public class IOBlastConfigImpl implements IOBlastConfig
 {
-  private final BlastTool tool = _DISCRIMINATOR_TYPE_NAME;
-
-  private String          query;
-  private IOBlastLocation queryLoc;
+  private String              query;
+  private Location            queryLoc;
   private String              eValue;
   private IOBlastReportFormat outFormat;
-  private Integer             numDescriptions;
-  private Integer             numAlignments;
+  private Long                numDescriptions;
+  private Long                numAlignments;
   private Integer             lineLength;
-  private HitSorting   sortHits;
-  private IOHSPSorting sortHSPs;
-  private Boolean      lcaseMasking;
+  private IOHitSorting        sortHits;
+  private IOHSPSorting        sortHSPs;
+  private Boolean             lcaseMasking;
   private Double              qCovHSPPerc;
-  private Integer             maxHSPs;
-  private Integer             maxTargetSeqs;
+  private Long                maxHSPs;
+  private Long                maxTargetSeqs;
   private Byte                dbSize;
-  private Byte                searchSpace;
+  private Short               searchSpace;
   private Double              xDropUngap;
   private Boolean             parseDefLines;
-
-  @JsonProperty("tool")
-  public BlastTool getTool() {
-    return this.tool;
-  }
 
   @JsonProperty("query")
   public String getQuery() {
@@ -48,12 +39,12 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("queryLoc")
-  public IOBlastLocation getQueryLoc() {
+  public Location getQueryLoc() {
     return this.queryLoc;
   }
 
   @JsonProperty("queryLoc")
-  public void setQueryLoc(IOBlastLocation queryLoc) {
+  public void setQueryLoc(Location queryLoc) {
     this.queryLoc = queryLoc;
   }
 
@@ -78,22 +69,22 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("numDescriptions")
-  public Integer getNumDescriptions() {
+  public Long getNumDescriptions() {
     return this.numDescriptions;
   }
 
   @JsonProperty("numDescriptions")
-  public void setNumDescriptions(Integer numDescriptions) {
+  public void setNumDescriptions(Long numDescriptions) {
     this.numDescriptions = numDescriptions;
   }
 
   @JsonProperty("numAlignments")
-  public Integer getNumAlignments() {
+  public Long getNumAlignments() {
     return this.numAlignments;
   }
 
   @JsonProperty("numAlignments")
-  public void setNumAlignments(Integer numAlignments) {
+  public void setNumAlignments(Long numAlignments) {
     this.numAlignments = numAlignments;
   }
 
@@ -108,12 +99,12 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("sortHits")
-  public HitSorting getSortHits() {
+  public IOHitSorting getSortHits() {
     return this.sortHits;
   }
 
   @JsonProperty("sortHits")
-  public void setSortHits(HitSorting sortHits) {
+  public void setSortHits(IOHitSorting sortHits) {
     this.sortHits = sortHits;
   }
 
@@ -148,22 +139,22 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("maxHSPs")
-  public Integer getMaxHSPs() {
+  public Long getMaxHSPs() {
     return this.maxHSPs;
   }
 
   @JsonProperty("maxHSPs")
-  public void setMaxHSPs(Integer maxHSPs) {
+  public void setMaxHSPs(Long maxHSPs) {
     this.maxHSPs = maxHSPs;
   }
 
   @JsonProperty("maxTargetSeqs")
-  public Integer getMaxTargetSeqs() {
+  public Long getMaxTargetSeqs() {
     return this.maxTargetSeqs;
   }
 
   @JsonProperty("maxTargetSeqs")
-  public void setMaxTargetSeqs(Integer maxTargetSeqs) {
+  public void setMaxTargetSeqs(Long maxTargetSeqs) {
     this.maxTargetSeqs = maxTargetSeqs;
   }
 
@@ -178,12 +169,12 @@ public class IOBlastConfigImpl implements IOBlastConfig
   }
 
   @JsonProperty("searchSpace")
-  public Byte getSearchSpace() {
+  public Short getSearchSpace() {
     return this.searchSpace;
   }
 
   @JsonProperty("searchSpace")
-  public void setSearchSpace(Byte searchSpace) {
+  public void setSearchSpace(Short searchSpace) {
     this.searchSpace = searchSpace;
   }
 

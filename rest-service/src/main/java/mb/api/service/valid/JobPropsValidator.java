@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import mb.api.model.IOJobTarget;
 import mb.api.model.IOJsonJobRequest;
-import mb.api.service.model.ErrorMap;
 import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
 
 public class JobPropsValidator
 {

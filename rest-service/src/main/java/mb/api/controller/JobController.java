@@ -3,7 +3,6 @@ package mb.api.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -11,11 +10,8 @@ import javax.ws.rs.core.Response;
 
 import mb.api.controller.resources.Jobs;
 import mb.api.model.IOJsonJobRequest;
-import mb.api.model.reports.ReportRequest;
 import mb.api.service.http.JobService;
-import mb.api.service.http.report.ReportService;
 import mb.api.service.util.Format;
-import mb.lib.model.HashID;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
@@ -39,7 +35,7 @@ public class JobController implements Jobs
    */
   @Override
   public Response getJobs() {
-    return okJSON(svc.getJobs(getUser(request)));
+    return okJSON(svc.getShortJobList(getUser(request)));
   }
 
   /**
@@ -106,55 +102,6 @@ public class JobController implements Jobs
       res = res.header("Content-Disposition", String.format(AttachmentPat, (jobID + "-query"), "txt"));
 
     return res.entity(svc.getQuery(jobID)).build();
-  }
-
-  @Override
-  public Response createReport(String rawJobID, ReportRequest config) {
-    return Response.ok(ReportService.runReport(
-      HashID.fromStringOrThrow(rawJobID, NotFoundException::new),
-      getUser(request).getUserID(),
-      config
-    )).build();
-  }
-
-  @Override
-  public Response listReports(String rawJobID) {
-    return Response.ok(ReportService.listReports(
-      HashID.fromStringOrThrow(
-        rawJobID,
-        NotFoundException::new
-      ),
-      getUser(request).getUserID()
-    )).build();
-  }
-
-  @Override
-  public Response getReport(String jobID, String reportID) {
-    return Response.ok(ReportService.getReport(
-      HashID.fromStringOrThrow(jobID, NotFoundException::new),
-      HashID.fromStringOrThrow(reportID, NotFoundException::new),
-      getUser(request).getUserID()
-    )).build();
-  }
-
-  @Override
-  public Response rerunReport(String jobID, String reportID) {
-    return Response.ok(ReportService.rerunReport(
-      HashID.fromStringOrThrow(jobID, NotFoundException::new),
-      HashID.fromStringOrThrow(reportID, NotFoundException::new),
-      getUser(request).getUserID()
-    )).build();
-  }
-
-  @Override
-  public Response getReportData(String jobID, String reportID, boolean download, boolean zip) {
-    return ReportService.downloadReport(
-      HashID.fromStringOrThrow(jobID, NotFoundException::new),
-      HashID.fromStringOrThrow(reportID, NotFoundException::new),
-      getUser(request).getUserID(),
-      download,
-      zip
-    ).toResponse();
   }
 
   // //////////////////////////////////////////////////////////////////////////////////////////// //

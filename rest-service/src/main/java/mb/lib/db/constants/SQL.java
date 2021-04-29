@@ -10,27 +10,42 @@ public interface SQL
 {
   interface Delete
   {
+    /**
+     * Delete queries for MultiBlast Jobs
+     */
     interface MultiBlastJobs
     {
       String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.Jobs, "by-id");
     }
 
+    /**
+     * Delete queries for MultiBlast user to job links.
+     */
     interface MultiBlastUsers
     {
       String ByJobID     = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "by-job-id");
       String StaleGuests = Load.delete(Schema.MultiBlast, Table.MultiBlast.Users, "stale-guests");
     }
 
+    /**
+     * Delete queries for MultiBlast job to job links.
+     */
     interface MultiBlastJobToJobs
     {
       String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.JobToJobs, "by-id");
     }
 
+    /**
+     * Delete queries for MultiBlast job to target links.
+     */
     interface MultiBlastJobToTargets
     {
       String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.JobToTargets, "by-id");
     }
 
+    /**
+     * Delete queries for MultiBlast format jobs.
+     */
     interface MultiBlastFmtJobs
     {
       String ByID = Load.delete(Schema.MultiBlast, Table.MultiBlast.FormatJobs, "by-id");
@@ -98,6 +113,16 @@ public interface SQL
         Table.MultiBlast.FormatJobs,
         "by-job-report-id.sql"
       );
+    }
+
+    interface MultiBlastUserToFormatJobs
+    {
+
+    }
+
+    interface MultiBlastMeta
+    {
+      String ByKey = Load.select(Schema.MultiBlast, Table.MultiBlast.Meta, "value");
     }
 
     interface Users

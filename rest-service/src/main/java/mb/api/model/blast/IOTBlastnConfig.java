@@ -6,11 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOTBlastnConfigImpl;
-import mb.lib.blast.model.BlastTool;
-import mb.lib.blast.model.CompBasedStats;
-import mb.lib.blast.model.tn.TBlastNScoringMatrix;
-import mb.lib.blast.model.tn.TBlastNTask;
 import mb.api.model.io.JsonKeys;
+import mb.lib.blast.model.CompBasedStats;
+import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.field.ScoringMatrix;
+import org.veupathdb.lib.blast.field.Seg;
+import org.veupathdb.lib.blast.field.TBlastNTask;
 
 @JsonTypeName("tblastn")
 @JsonDeserialize(as = IOTBlastnConfigImpl.class)
@@ -55,10 +56,10 @@ public interface IOTBlastnConfig extends IOBlastConfig
   void setMaxIntronLength(Integer maxIntronLength);
 
   @JsonProperty(JsonKeys.Matrix)
-  TBlastNScoringMatrix getMatrix();
+  ScoringMatrix getMatrix();
 
   @JsonProperty(JsonKeys.Matrix)
-  void setMatrix(TBlastNScoringMatrix matrix);
+  void setMatrix(ScoringMatrix matrix);
 
   @JsonProperty(JsonKeys.Threshold)
    Double getThreshold();
@@ -73,10 +74,10 @@ public interface IOTBlastnConfig extends IOBlastConfig
   void setCompBasedStats(CompBasedStats compBasedStats);
 
   @JsonProperty(JsonKeys.Seg)
-  IOBlastSegMask getSeg();
+  Seg getSeg();
 
   @JsonProperty(JsonKeys.Seg)
-  void setSeg(IOBlastSegMask seg);
+  void setSeg(Seg seg);
 
   @JsonProperty(JsonKeys.SoftMasking)
    Boolean getSoftMasking();

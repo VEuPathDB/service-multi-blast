@@ -25,9 +25,6 @@ class BlastXValidator implements ConfigValidator<IOBlastxConfig>
     Int.optGtEq(err, conf.getWordSize(), (byte) 2, WordSize);
     Int.optGtEq(err, conf.getMaxIntronLength(), 0, MaxIntronLength);
     Dec.optGtEq(err, conf.getThreshold(), 0, Threshold);
-    SegValidator.getInstance()
-      .validate(conf.getSeg())
-      .forEach((k, v) -> err.putError(Seg, k, v));
     validateTaxIDs(err, conf);
     validateNegativeTaxIDs(err, conf);
     validateDbSoftMask(err, conf);

@@ -4,13 +4,13 @@ import java.nio.file.Files;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
+import mb.api.service.util.Format;
 import mb.lib.config.Config;
+import mb.lib.data.JobDataManager;
 import mb.lib.db.JobDBManager;
 import mb.lib.querier.BlastQueueManager;
-import mb.lib.data.JobDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import mb.api.service.util.Format;
 
 public class JobCleanup implements Runnable
 {

@@ -1,12 +1,9 @@
 package mb.api.service.cli;
 
+import mb.lib.blast.model.ToolOption;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import mb.lib.blast.model.ToolOption;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("CliBuilder")
 class CliBuilderTest
@@ -18,7 +15,7 @@ class CliBuilderTest
     @Test
     @DisplayName("Returns the keys and values joined with '=' in a space delimited string")
     void test1() {
-      var target = new CliBuilder();
+      var target = new CliBuilder_();
 
       target.set(ToolOption.OutputFile, "hello")
         .set(ToolOption.CullingLimit, 1234)
@@ -39,7 +36,7 @@ class CliBuilderTest
     @Test
     @DisplayName("Returns the keys and values joined with '=' in an array")
     void test1() {
-      var target = new CliBuilder();
+      var target = new CliBuilder_();
 
       target.set(ToolOption.OutputFile, "hello")
         .set(ToolOption.CullingLimit, 1234)
@@ -63,7 +60,7 @@ class CliBuilderTest
       var in  = "They're";
       var out = "They'\"'\"'re";
 
-      Assertions.assertEquals(out, CliBuilder.escape(in));
+      Assertions.assertEquals(out, CliBuilder_.escape(in));
     }
 
     @Test
@@ -72,7 +69,7 @@ class CliBuilderTest
       var in  = "They''''re";
       var out = "They'\"''''\"'re";
 
-      Assertions.assertEquals(out, CliBuilder.escape(in));
+      Assertions.assertEquals(out, CliBuilder_.escape(in));
     }
 
     @Test
@@ -81,25 +78,25 @@ class CliBuilderTest
       var in  = "They''re we've";
       var out = "They'\"''\"'re we'\"'\"'ve";
 
-      Assertions.assertEquals(out, CliBuilder.escape(in));
+      Assertions.assertEquals(out, CliBuilder_.escape(in));
     }
 
     @Test
     @DisplayName("Returns an empty string when given a null value")
     void test4() {
-      Assertions.assertEquals("", CliBuilder.escape(null));
+      Assertions.assertEquals("", CliBuilder_.escape(null));
     }
 
     @Test
     @DisplayName("Returns an empty string when given an empty string")
     void test5() {
-      Assertions.assertEquals("", CliBuilder.escape(""));
+      Assertions.assertEquals("", CliBuilder_.escape(""));
     }
 
     @Test
     @DisplayName("Returns an empty string when given a blank string")
     void test6() {
-      Assertions.assertEquals("", CliBuilder.escape("    "));
+      Assertions.assertEquals("", CliBuilder_.escape("    "));
     }
   }
 
@@ -114,25 +111,25 @@ class CliBuilderTest
       @Test
       @DisplayName("given a null input")
       void test1() {
-        Assertions.assertEquals("", CliBuilder.joinArgs(null));
+        Assertions.assertEquals("", CliBuilder_.joinArgs(null));
       }
 
       @Test
       @DisplayName("given an empty array")
       void test2() {
-        Assertions.assertEquals("", CliBuilder.joinArgs(new Object[0]));
+        Assertions.assertEquals("", CliBuilder_.joinArgs(new Object[0]));
       }
 
       @Test
       @DisplayName("given an array with a single null value")
       void test3() {
-        Assertions.assertEquals("", CliBuilder.joinArgs(new Object[]{null}));
+        Assertions.assertEquals("", CliBuilder_.joinArgs(new Object[]{null}));
       }
 
       @Test
       @DisplayName("given an array containing only null values")
       void test4() {
-        Assertions.assertEquals("", CliBuilder.joinArgs(new Object[]{null, null, null}));
+        Assertions.assertEquals("", CliBuilder_.joinArgs(new Object[]{null, null, null}));
       }
     }
 
@@ -143,7 +140,7 @@ class CliBuilderTest
       @Test
       @DisplayName("all non-null input values joined in a comma separated list")
       void test1() {
-        Assertions.assertEquals("='foo,bar'", CliBuilder.joinArgs(new Object[]{
+        Assertions.assertEquals("='foo,bar'", CliBuilder_.joinArgs(new Object[]{
           null,
           "foo",
           null,
@@ -166,7 +163,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Does not add it to the argument list")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         Assertions.assertEquals("", target.toString());
 
@@ -178,7 +175,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Does not overwrite a previously set value")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
         target.set(ToolOption.CullingLimit, 123);
 
         Assertions.assertEquals("-culling_limit='123'", target.toString());
@@ -196,7 +193,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Adds the argument to the builder")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         Assertions.assertEquals("", target.toString());
 
@@ -208,7 +205,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Overwrites existing values")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         target.set(ToolOption.Dust, "hey");
 
@@ -232,7 +229,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Does not add it to the argument list")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         Assertions.assertEquals("", target.toString());
 
@@ -249,7 +246,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Adds the argument to the builder")
       void test1() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         Assertions.assertEquals("", target.toString());
 
@@ -261,7 +258,7 @@ class CliBuilderTest
       @Test
       @DisplayName("Adds the argument to the existing values")
       void test2() {
-        var target = new CliBuilder();
+        var target = new CliBuilder_();
 
         target.set(ToolOption.Dust, "hey", "man", "nice");
 

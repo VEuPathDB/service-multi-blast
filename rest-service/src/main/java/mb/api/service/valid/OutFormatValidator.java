@@ -2,8 +2,8 @@ package mb.api.service.valid;
 
 import mb.api.model.blast.IOBlastFormat;
 import mb.api.model.blast.IOBlastReportFormat;
-import mb.api.service.model.ErrorMap;
 import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
 
 public class OutFormatValidator
 {

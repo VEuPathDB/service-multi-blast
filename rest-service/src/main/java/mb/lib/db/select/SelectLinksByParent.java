@@ -10,6 +10,7 @@ import mb.lib.db.constants.Column;
 import mb.lib.db.constants.SQL;
 import mb.lib.db.model.JobLink;
 import mb.lib.db.model.impl.JobLinkImpl;
+import mb.lib.model.HashID;
 
 public class SelectLinksByParent
 {
@@ -32,8 +33,8 @@ public class SelectLinksByParent
 
   JobLink rowToJobLink(ResultSet rs) throws Exception {
     return new JobLinkImpl(
-      rs.getBytes(Column.MultiBlastJobToJobs.JobDigest),
-      rs.getBytes(Column.MultiBlastJobToJobs.ParentDigest),
+      new HashID(rs.getBytes(Column.MultiBlastJobToJobs.JobDigest)),
+      new HashID(rs.getBytes(Column.MultiBlastJobToJobs.ParentDigest)),
       rs.getInt(Column.MultiBlastJobToJobs.Position)
     );
   }

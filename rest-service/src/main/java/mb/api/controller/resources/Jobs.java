@@ -4,12 +4,11 @@ import java.io.InputStream;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-import mb.api.model.reports.ReportRequest;
+import mb.api.model.IOJsonJobRequest;
 import mb.lib.http.MimeType;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import mb.api.model.IOJsonJobRequest;
 
-@Path("/jobs")
+@Path(Paths.Jobs)
 public interface Jobs
 {
   String JobIDKey   = "job-id";
@@ -52,48 +51,5 @@ public interface Jobs
   Response getQuery(
     @PathParam(JobIDKey) String jobId,
     @QueryParam("download") @DefaultValue("false") boolean download
-  );
-
-  @POST
-  @Path(ReportsPath)
-  @Produces(MimeType.ApplicationJSON)
-  @Consumes(MimeType.ApplicationJSON)
-  Response createReport(@PathParam(JobIDKey) String jobID, ReportRequest config);
-
-  @GET
-  @Path(ReportsPath)
-  @Produces(MimeType.ApplicationJSON)
-  Response listReports(@PathParam(JobIDKey) String jobID);
-
-  @GET
-  @Path(ReportPath)
-  @Produces(MimeType.ApplicationJSON)
-  Response getReport(
-    @PathParam(JobIDKey) String jobID,
-    @PathParam(ReportIDKey) String reportID
-  );
-
-  @POST
-  @Path(ReportPath)
-  @Produces(MimeType.ApplicationJSON)
-  Response rerunReport(
-    @PathParam(JobIDKey) String jobID,
-    @PathParam(ReportIDKey) String reportID
-  );
-
-  @GET
-  @Path(ReportDataPath)
-  @Produces({
-    MimeType.ApplicationBinary,
-    MimeType.ApplicationJSON,
-    MimeType.ApplicationXML,
-    MimeType.ApplicationZip,
-    MimeType.TextPlain
-  })
-  Response getReportData(
-    @PathParam(JobIDKey) String jobID,
-    @PathParam(ReportIDKey) String reportID,
-    @QueryParam("download") @DefaultValue("true") boolean download,
-    @QueryParam("zip") @DefaultValue("true") boolean zip
   );
 }

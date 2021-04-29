@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import mb.api.model.blast.IOBlastFormat;
 import mb.api.model.blast.IOBlastReportFormat;
-import mb.lib.blast.model.BlastReportField;
+import org.veupathdb.lib.blast.field.FormatField;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IOBlastReportFormatImpl implements IOBlastReportFormat
 {
-  private IOBlastFormat format;
-  private String        delim;
-  private List<BlastReportField> fields;
+  private IOBlastFormat     format;
+  private String            delim;
+  private List<FormatField> fields;
 
   @JsonProperty("format")
   public IOBlastFormat getFormat() {
@@ -36,12 +36,12 @@ public class IOBlastReportFormatImpl implements IOBlastReportFormat
   }
 
   @JsonProperty("fields")
-  public List<BlastReportField> getFields() {
+  public List<FormatField> getFields() {
     return this.fields;
   }
 
   @JsonProperty("fields")
-  public void setFields(List<BlastReportField> fields) {
+  public void setFields(List<FormatField> fields) {
     this.fields = fields;
   }
 }

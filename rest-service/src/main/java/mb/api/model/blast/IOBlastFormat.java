@@ -1,68 +1,55 @@
 package mb.api.model.blast;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.veupathdb.lib.blast.field.FormatType;
 
 public enum IOBlastFormat {
-  @JsonProperty("pairwise")
   PAIRWISE("pairwise"),
-
-  @JsonProperty("query-anchored-with-identities")
   QUERYANCHOREDWITHIDENTITIES("query-anchored-with-identities"),
-
-  @JsonProperty("query-anchored-without-identities")
   QUERYANCHOREDWITHOUTIDENTITIES("query-anchored-without-identities"),
-
-  @JsonProperty("flat-query-anchored-with-identities")
   FLATQUERYANCHOREDWITHIDENTITIES("flat-query-anchored-with-identities"),
-
-  @JsonProperty("flat-query-anchored-without-identities")
   FLATQUERYANCHOREDWITHOUTIDENTITIES("flat-query-anchored-without-identities"),
-
-  @JsonProperty("xml")
   XML("xml"),
-
-  @JsonProperty("tabular")
   TABULAR("tabular"),
-
-  @JsonProperty("tabular-with-comments")
   TABULARWITHCOMMENTS("tabular-with-comments"),
-
-  @JsonProperty("text-asn-1")
   TEXTASN_1("text-asn-1"),
-
-  @JsonProperty("binary-asn-1")
   BINARYASN_1("binary-asn-1"),
-
-  @JsonProperty("csv")
   CSV("csv"),
-
-  @JsonProperty("archive-asn-1")
   ARCHIVEASN_1("archive-asn-1"),
-
-  @JsonProperty("seqalign-json")
   SEQALIGNJSON("seqalign-json"),
-
-  @JsonProperty("multi-file-json")
   MULTIFILEJSON("multi-file-json"),
-
-  @JsonProperty("multi-file-xml2")
   MULTIFILEXML2("multi-file-xml2"),
-
-  @JsonProperty("single-file-json")
   SINGLEFILEJSON("single-file-json"),
-
-  @JsonProperty("single-file-xml2")
   SINGLEFILEXML2("single-file-xml2"),
-
-  @JsonProperty("sam")
   SAM("sam"),
-
-  @JsonProperty("organism-report")
   ORGANISMREPORT("organism-report");
 
   public final String name;
 
   IOBlastFormat(String name) {
     this.name = name;
+  }
+
+  @JsonValue
+  public String getName() {
+    return name;
+  }
+
+  public FormatType toInternalValue() {
+    return FormatType.values()[ordinal()];
+  }
+
+  @JsonCreator
+  public static IOBlastFormat fromString(String value) {
+    for (var val : values())
+      if (val.name.equals(value))
+        return val;
+
+    throw new IllegalArgumentException();
+  }
+
+  public static IOBlastFormat fromInternalValue(FormatType value) {
+    return value == null ? null : IOBlastFormat.values()[value.ordinal()];
   }
 }

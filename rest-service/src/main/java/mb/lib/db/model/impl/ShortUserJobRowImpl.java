@@ -2,9 +2,9 @@ package mb.lib.db.model.impl;
 
 import java.time.OffsetDateTime;
 
-import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.ShortUserJobRow;
 import mb.lib.model.HashID;
+import mb.lib.model.JobStatus;
 
 public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJobRow
 {
@@ -15,15 +15,15 @@ public class ShortUserJobRowImpl extends ShortJobRowImpl implements ShortUserJob
 
   public ShortUserJobRowImpl(
     HashID hash,
-    int            queueID,
+    int queueID,
     OffsetDateTime createdOn,
     OffsetDateTime deleteOn,
-    String         projectID,
-    DBJobStatus status,
-    long           userID,
-    String         description,
-    Long           maxDlSize,
-    boolean        runDirectly
+    String projectID,
+    JobStatus status,
+    long userID,
+    String description,
+    Long maxDlSize,
+    boolean runDirectly
   ) {
     super(hash, queueID, createdOn, deleteOn, projectID, status);
     this.userID      = userID;

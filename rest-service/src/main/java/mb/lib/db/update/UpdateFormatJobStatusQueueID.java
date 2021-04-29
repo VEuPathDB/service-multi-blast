@@ -5,12 +5,9 @@ import java.sql.PreparedStatement;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery;
 import mb.lib.db.model.FormatJobStatus;
-import mb.lib.model.HashID;
-import mb.lib.model.JobStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static mb.lib.db.constants.SQL.Update.MultiBlastFmtJobs.Status;
 import static mb.lib.db.constants.SQL.Update.MultiBlastFmtJobs.StatusQueueID;
 
 public class UpdateFormatJobStatusQueueID

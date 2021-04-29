@@ -52,7 +52,7 @@ public class HashID
     return Arrays.hashCode(byteVal);
   }
 
-  public static <T extends Throwable> HashID fromStringOrThrow(
+  public static <T extends Throwable> HashID parseOrThrow(
     String val,
     Supplier<T> fn
   ) throws T {

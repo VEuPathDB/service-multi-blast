@@ -1,9 +1,9 @@
 package mb.api.service.valid;
 
-import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import mb.api.model.blast.IOTBlastxConfig;
 import mb.api.service.model.ErrorMap;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 
 import static mb.api.model.io.JsonKeys.*;
 
