@@ -22,8 +22,10 @@ import mb.lib.db.JobDBManager;
 import mb.lib.db.model.JobTarget;
 import mb.lib.db.model.impl.JobTargetImpl;
 import mb.lib.model.HashID;
+import mb.lib.util.BlastConv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.blast.BlastBase;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 
 public class JobCreationService
@@ -45,11 +47,7 @@ public class JobCreationService
     JobUtil.verifyConfig(req.getConfig());
     JobUtil.verifyQuery(req.getConfig().getQuery());
 
-    {
-      var errs = JobPropsValidator.validate(req);
-      if (!errs.isEmpty())
-        throw new UnprocessableEntityException(errs);
-    }
+
 
     try {
       var queryHandle = new QuerySplitter(newSequenceValidator(req.getConfig()), req.getMaxSequences())
@@ -173,15 +171,14 @@ public class JobCreationService
     QuerySplitRow    row,
     long             userID,
     String           dbPath,
-    HashID parentHash,
+    HashID           parentHash,
     boolean          isPrimary
   ) {
     log.debug("prepJob: query={}", row.source);
     // Overwrite the query value with a hash string containing the sha256
     // checksum of the actual query value.
     // The actual query is stored as a file.
-    job.getJobConfig().setQuery(Format.toHexString(row.hash));
-    var cli = new CliBuilder_();
+    ((BlastBase) job.getJobConfig()).setQueryFile(Format.toHexString(row.hash));
 
     // Convert the job config to a CLI format (which will be hashed).
     job.getJobConfig().toCli(cli);

@@ -47,10 +47,16 @@ public interface IOShortJobResponse
   IOShortJobResponse setMaxResultSize(Long val);
 
   @JsonProperty(JsonKeys.ParentJobs)
-  IOParentJobLink[] getParentJobs();
+  IOJobLink[] getParentJobs();
 
   @JsonSetter(JsonKeys.ParentJobs)
-  IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID);
+  IOShortJobResponse setParentJobs(IOJobLink[] parentJobID);
+
+  @JsonProperty(JsonKeys.ChildJobs)
+  IOJobLink[] getChildJobs();
+
+  @JsonSetter(JsonKeys.ChildJobs)
+  IOShortJobResponse setChildJobs(IOJobLink[] parentJobID);
 
   @JsonProperty(JsonKeys.IsPrimary)
   boolean getIsPrimary();
@@ -69,10 +75,4 @@ public interface IOShortJobResponse
 
   @JsonSetter(JsonKeys.Targets)
   IOShortJobResponse setTargets(IOJobTarget[] targets);
-
-  @JsonGetter(JsonKeys.IsCached)
-  boolean isCached();
-
-  @JsonSetter(JsonKeys.IsCached)
-  IOShortJobResponse setIsCached(boolean value);
 }

@@ -17,6 +17,10 @@ public final class ErrorMap extends HashMap<String, List<String>>
    */
   public ErrorMap() {}
 
+  public ErrorMap(int size) {
+    super(size);
+  }
+
   /**
    * Constructs an {@code ErrorMap} containing the given key mapped to a list
    * containing the given value.

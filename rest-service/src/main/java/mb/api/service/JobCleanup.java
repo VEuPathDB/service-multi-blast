@@ -8,7 +8,7 @@ import mb.api.service.util.Format;
 import mb.lib.config.Config;
 import mb.lib.data.JobDataManager;
 import mb.lib.db.JobDBManager;
-import mb.lib.querier.BlastQueueManager;
+import mb.lib.query.BlastQueueManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

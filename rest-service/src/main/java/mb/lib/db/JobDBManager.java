@@ -14,6 +14,8 @@ import mb.lib.db.select.*;
 import mb.lib.db.update.*;
 import mb.lib.model.HashID;
 import mb.lib.model.JobStatus;
+import mb.lib.query.db.SelectBlastJob;
+import mb.lib.query.db.SelectUserBlastJob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager;
@@ -81,7 +83,7 @@ public class JobDBManager implements AutoCloseable
   public Optional<FullJobRow> getQueryJob(HashID jobID) throws Exception {
     Log.trace("#getJob(jobID={})", jobID);
 
-    return new SelectJob(jobID).execute(connection);
+    return new SelectBlastJob(con, jobID).run(connection);
   }
 
   /**
@@ -271,7 +273,7 @@ public class JobDBManager implements AutoCloseable
   public Optional<FullUserJobRow> getUserJob(HashID jobID, long userID) throws Exception {
     Log.trace("#getUserJob(jobID={}, userID={})", jobID, userID);
 
-    return new SelectFullUserJob(connection, jobID, userID).run();
+    return new SelectUserBlastJob(connection, jobID, userID).run();
   }
 
   /**

@@ -22,7 +22,7 @@ dependencies {
   constraints {
     // Core Library
     api("org.veupathdb.lib:jaxrs-container-core:${vCoreLib}")
-    api("org.veupathdb.lib:java-blast:2.4.0")
+    api("org.veupathdb.lib:java-blast:2.5.0")
 
     // Jersey/Grizzly
     api("org.glassfish.jersey.containers:jersey-container-grizzly2-http:${vJersey}")

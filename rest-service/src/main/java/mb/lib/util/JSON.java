@@ -22,6 +22,10 @@ public class JSON
     return Mapper.readValue(raw, cls);
   }
 
+  public static <T> T parse(String raw, T into) throws Exception {
+    return Mapper.readerForUpdating(into).readValue(raw);
+  }
+
   public static String stringify(Object any) throws Exception {
     return Mapper.writeValueAsString(any);
   }
