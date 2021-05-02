@@ -3,20 +3,20 @@ package mb.api.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import mb.lib.model.JobStatus;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class IOShortJobResponseImpl implements IOShortJobResponse
 {
-  private String            id;
-  private String            description;
-  private JobStatus         status;
-  private String            created;
-  private String            expires;
-  private Long              maxResultSize;
-  private IOParentJobLink[] parentJobIDs;
-  private boolean           isPrimary;
-  private String            site;
-  private IOJobTarget[]     targets;
-  private boolean           isCached;
+  private String        id;
+  private String        description;
+  private JobStatus     status;
+  private String        created;
+  private String        expires;
+  private Long          maxResultSize;
+  private IOJobLink[]   parentJobs;
+  private IOJobLink[]   childJobs;
+  private boolean       isPrimary;
+  private String        site;
+  private IOJobTarget[] targets;
 
   @Override
   public String getId() {
@@ -85,13 +85,13 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
   }
 
   @Override
-  public IOParentJobLink[] getParentJobs() {
-    return parentJobIDs;
+  public IOJobLink[] getParentJobs() {
+    return parentJobs;
   }
 
   @Override
-  public IOShortJobResponse setParentJobs(IOParentJobLink[] parentJobID) {
-    this.parentJobIDs = parentJobID;
+  public IOShortJobResponse setParentJobs(IOJobLink[] parentJobID) {
+    this.parentJobs = parentJobID;
     return this;
   }
 
@@ -128,14 +128,12 @@ public class IOShortJobResponseImpl implements IOShortJobResponse
     return this;
   }
 
-  @Override
-  public boolean isCached() {
-    return isCached;
+  public IOJobLink[] getChildJobs() {
+    return childJobs;
   }
 
-  @Override
-  public IOShortJobResponse setIsCached(boolean value) {
-    this.isCached = value;
+  public IOShortJobResponse setChildJobs(IOJobLink[] childJobs) {
+    this.childJobs = childJobs;
     return this;
   }
 }

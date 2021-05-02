@@ -9,6 +9,7 @@ public interface JsonKeys
   String BestHitScoreEdge                   = "bestHitScoreEdge";
   String Blast                              = "blast";
   String BlastDatabase                      = "db";
+  String ChildJobs                          = "childJobs";
   String CompositionBasedStats              = "compBasedStats";
   String Config                             = "config";
   String Created                            = "created";
@@ -35,7 +36,7 @@ public interface JsonKeys
   String GapExtend                          = "gapExtend";
   String GapOpen                            = "gapOpen";
   String GuestID                            = "guestID";
-  String Help                               = "help";
+  String LongHelp                           = "help";
   String HighCut                            = "hicut";
   String HTML                               = "html";
   String ID                                 = "id";
@@ -103,6 +104,7 @@ public interface JsonKeys
   String SearchSpace                          = "searchSpace";
   String Seg                                  = "seg";
   String SeqIDList                            = "seqIdList";
+  String ShortHelp                            = "h";
   String ShowNCBIGIs                          = "showGIs";
   String Site                                 = "site";
   String SoftMasking                          = "softMasking";

@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 
 import mb.api.controller.resources.Jobs;
 import mb.api.model.IOJsonJobRequest;
-import mb.api.service.http.JobService;
+import mb.api.service.http.job.JobService;
 import mb.api.service.util.Format;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;

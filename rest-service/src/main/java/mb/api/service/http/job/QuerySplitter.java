@@ -197,7 +197,7 @@ class QuerySplitter
   }
 
   private static Path newTmpPath() {
-    return Path.of("/tmp/" + UUID.randomUUID().toString());
+    return Path.of("/tmp/" + UUID.randomUUID());
   }
 
   private static File newTmpFile() throws Exception {

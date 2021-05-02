@@ -11,7 +11,8 @@ import mb.lib.db.model.DBJobStatus;
 import mb.lib.db.model.impl.FullJobRowImpl;
 import mb.lib.db.model.impl.UserRowImpl;
 import mb.lib.model.JobStatus;
-import mb.lib.querier.BlastQueueManager;
+import mb.lib.query.BlastQueueManager;
+import mb.lib.util.JSON;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +52,7 @@ public class JobCreator
     var jobDir = JobDataManager.createJobWorkspace(d.id);
     Files.move(d.query.toPath(), jobDir.filePath("query.txt"));
     var exp    = OffsetDateTime.now().plusDays(Config.getInstance().getJobTimeout());
-    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.job.getJobConfig());
 
     db.updateJobDeleteTimer(d.id, exp);
     db.updateJobQueueID(d.id, queId);
@@ -84,7 +85,7 @@ public class JobCreator
     var qFile  = Files.move(d.query.toPath(), jobDir.filePath("query.txt"));
     var now    = OffsetDateTime.now();
     var exp    = now.plusDays(Config.getInstance().getJobTimeout());
-    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.cli.toArgArray(false));
+    var queId  = BlastQueueManager.submitJob(d.id, d.job.getTool(), d.job.getJobConfig());
 
     db.registerJob(
       new FullJobRowImpl(
@@ -92,10 +93,10 @@ public class JobCreator
         queId,
         now,
         exp,
-        d.job.toSerial(),
+        JSON.stringify(d.job.getJobConfig()),
         qFile.toFile(),
         d.projectID,
-        DBJobStatus.Queued
+        JobStatus.Queued
       ),
       new UserRowImpl(d.id, d.userID, d.description, d.maxDlSize, d.isPrimary),
       Arrays.asList(d.targets)

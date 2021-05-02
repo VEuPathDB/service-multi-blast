@@ -2,8 +2,8 @@ package mb.api.service.conv;
 
 import mb.api.model.IOJobTarget;
 import mb.api.model.IOJobTargetImpl;
-import mb.api.model.IOParentJobLink;
-import mb.api.model.IOParentJobLinkImpl;
+import mb.api.model.IOJobLink;
+import mb.api.model.IOJobLinkImpl;
 import mb.lib.db.model.JobLink;
 import mb.lib.db.model.JobTarget;
 
@@ -14,8 +14,8 @@ import mb.lib.db.model.JobTarget;
  */
 public class BCC
 {
-  public static IOParentJobLink toExternal(JobLink link) {
-    return new IOParentJobLinkImpl()
+  public static IOJobLink toExternal(JobLink link) {
+    return new IOJobLinkImpl()
       .setId(link.parentID().string())
       .setIndex(link.position());
   }

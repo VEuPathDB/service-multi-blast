@@ -74,15 +74,6 @@ public class  Config extends Options
   private String blastHost;
 
   @Option(
-    names = "--formatter-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:FORMATTER_HOST}",
-    description = "Blast formatter service host address"
-  )
-  private String formatterHost;
-
-  @Option(
     names = "--blast-queue-name",
     arity = "1",
     required = true,
@@ -111,6 +102,22 @@ public class  Config extends Options
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                      ║ //
+  // ║    Validator Config                                                  ║ //
+  // ║                                                                      ║ //
+  // ╚══════════════════════════════════════════════════════════════════════╝ //
+
+  @Option(
+    names = "--valiator-host",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:VALIDATOR_HOST}",
+    description = "Host for the Blast+ config validator service"
+  )
+  private String validatorHost;
+
+
+  // ╔══════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                      ║ //
   // ║    Formatter Config                                                  ║ //
   // ║                                                                      ║ //
   // ╚══════════════════════════════════════════════════════════════════════╝ //
@@ -120,9 +127,9 @@ public class  Config extends Options
     arity = "1",
     required = true,
     defaultValue = "${env:FORMATTER_HOST}",
-    description = "Host for the Blast+ formatter service"
+    description = "Blast formatter service host address"
   )
-  private String formatterURI;
+  private String formatterHost;
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                      ║ //
@@ -232,10 +239,6 @@ public class  Config extends Options
     return jobTimeout;
   }
 
-  public String getFormatterURI() {
-    return formatterURI;
-  }
-
   public int getBuildNum() {
     return buildNum;
   }
@@ -266,5 +269,9 @@ public class  Config extends Options
 
   public String getFormatterHost() {
     return formatterHost;
+  }
+
+  public String getValidatorHost() {
+    return validatorHost;
   }
 }
