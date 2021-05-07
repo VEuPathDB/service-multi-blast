@@ -299,7 +299,14 @@ public class ReportManager
   public static List<ReportRow> getAllReportsForJob(HashID jobID) throws Exception {
     Log.trace("::getAllReportsForJob(jobID={})", jobID);
     try (var db = new ReportDBManager()) {
-      return db.getJobReports(jobID);
+      var out = db.getJobReports(jobID);
+
+      for (var rep : out) {
+        if (rep.getStatus() == JobStatus.Queued || rep.getStatus() == JobStatus.InProgress)
+          updateJobStatus(rep);
+      }
+
+      return out;
     }
   }
 
@@ -307,24 +314,29 @@ public class ReportManager
   throws Exception {
     Log.trace("::getUserReportsForJob(jobID={}, userID={})", jobID, userID);
     try (var db = new ReportDBManager()) {
-      return db.getUserJobReports(jobID, userID);
+      var out = db.getUserJobReports(jobID, userID);
+
+      for (var rep : out) {
+        if (rep.getStatus() == JobStatus.Queued || rep.getStatus() == JobStatus.InProgress)
+          updateJobStatus(rep);
+      }
+
+      return out;
     }
   }
 
   public static List<UserReportRow> getAllReportsForUser(long userID) throws Exception {
     Log.trace("::getAllReportsForUser(userID={})", userID);
     try (var db = new ReportDBManager()) {
-      return db.getUserJobReports(userID);
-    }
-  }
+      var out = db.getUserJobReports(userID);
 
-  /**
-   * Unlinks a user from a report job.
-   *
-   * @param reportID ID of the report job the user should be unlinked from.
-   * @param userID   ID of the user to unlink.
-   */
-  public static void unlinkUserReport(HashID reportID, long userID) throws Exception {
+      for (var rep : out) {
+        if (rep.getStatus() == JobStatus.Queued || rep.getStatus() == JobStatus.InProgress)
+          updateJobStatus(rep);
+      }
+
+      return out;
+    }
   }
 
   /**
