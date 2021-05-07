@@ -25,7 +25,7 @@ public class SelectUserReportRow
         INNER JOIN userlogins5.multiblast_users_to_fmt_jobs b
           ON a.report_digest = b.report_digest
       WHERE
-        report_digest = ?
+        a.report_digest = ?
         AND user_id = ?
       """;
 

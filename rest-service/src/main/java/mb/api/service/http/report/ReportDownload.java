@@ -14,21 +14,18 @@ import org.veupathdb.lib.blast.field.FormatType;
 
 public class ReportDownload implements StreamingOutput
 {
-  private static final String AttachmentPat = "attachment; filename=\"report.%s\"";
+  private static final String AttachmentPat = "attachment; filename=\"%s\"";
 
-  private final FormatType format;
-  private final boolean         zipped;
-  private final boolean         download;
-  private final InputStream     stream;
+  private final String      fileName;
+  private final boolean     download;
+  private final InputStream stream;
 
   public ReportDownload(
-    FormatType format,
-    boolean zipped,
-    boolean download,
+    String      fileName,
+    boolean     download,
     InputStream stream
   ) {
-    this.format   = format;
-    this.zipped   = zipped;
+    this.fileName = fileName;
     this.download = download;
     this.stream   = stream;
   }
@@ -49,44 +46,22 @@ public class ReportDownload implements StreamingOutput
   }
 
   private Response.ResponseBuilder configureResponse(Response.ResponseBuilder b) {
-    String ct, ext;
+    String ct;
 
-    if (zipped) {
+    if (fileName.endsWith(".xml")) {
+      ct = MimeType.ApplicationXML;
+    } else if (fileName.endsWith(".json")) {
+      ct = MimeType.ApplicationJSON;
+    } else if (fileName.endsWith(".zip")) {
       ct = MimeType.ApplicationZip;
-      ext = "zip";
     } else {
-      switch (format) {
-        case BlastXML, SingleFileBlastXML2, MultipleFileBlastXML2 -> {
-          ct  = MimeType.ApplicationXML;
-          ext = "xml";
-        }
-        case Tabular -> {
-          ct  = MimeType.TextPlain;
-          ext = "tsv";
-        }
-        case SeqAlignTextASN1, SeqAlignBinaryASN1, BlastArchiveASN1 -> {
-          ct  = MimeType.TextPlain;
-          ext = "asn";
-        }
-        case CommaSeparatedValues -> {
-          ct  = MimeType.TextPlain;
-          ext = "csv";
-        }
-        case SeqAlignJSON, SingleFileBlastJSON, MultipleFileBlastJSON -> {
-          ct  = MimeType.ApplicationJSON;
-          ext = "json";
-        }
-        default -> {
-          ct  = MimeType.TextPlain;
-          ext = "txt";
-        }
-      }
+      ct = MimeType.TextPlain;
     }
 
     b = b.header(Header.ContentType, ct);
 
     if (download)
-      b = b.header(Header.ContentDisposition, String.format(AttachmentPat, ext));
+      b = b.header(Header.ContentDisposition, String.format(AttachmentPat, fileName));
 
     return b;
   }

@@ -1,5 +1,6 @@
 package mb.lib.queue;
 
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -16,9 +17,29 @@ public abstract class QueueManager
 {
   private static final Logger log = LogManager.getLogger(QueueManager.class);
 
-  public abstract List<FailedJob> getFailedJobs() throws Exception;
+  public abstract List<? extends FailedJob<?>> getFailedJobs() throws Exception;
 
-  protected List<FailedJob> getFailedJobs(String queueName) throws Exception {
+  public abstract JobStatus getJobStatus(int jobID) throws Exception;
+
+  public abstract boolean jobInFailList(int jobID) throws Exception;
+
+  public abstract void deleteJobFailure(int failID) throws Exception;
+
+  public abstract void deleteJob(int jobID) throws Exception;
+
+  /**
+   * @return The URL to use when submitting jobs to the managed queue.
+   */
+  protected abstract URI submissionURL();
+
+  protected <
+    T extends FailedJobResponse<U>,
+    U extends FailedJob<V>,
+    V
+  > FailedJobResponse<U> getFailedJobs(
+    String queueName,
+    Class<T> type
+  ) throws Exception {
     log.trace("#getFailedJobs(queueName={})", queueName);
 
     var res = HttpClient.newHttpClient().send(
@@ -26,10 +47,8 @@ public abstract class QueueManager
       HttpResponse.BodyHandlers.ofInputStream()
     );
 
-    return JSON.parse(res.body(), FailedJobResponse.class).getFailedJobs();
+    return JSON.parse(res.body(), type);
   }
-
-  public abstract JobStatus getJobStatus(int jobID) throws Exception;
 
   protected JobStatus getJobStatus(String queueName, int jobID) throws Exception {
     log.trace("#getJobStatus(queueName={}, jobID={})", queueName, jobID);
@@ -61,12 +80,14 @@ public abstract class QueueManager
     return body.getStatus();
   }
 
-  public abstract boolean jobInFailList(int jobID) throws Exception;
-
-  protected boolean jobInFailList(String queueName, int jobID) throws Exception {
+  protected <
+    T extends FailedJobResponse<U>,
+    U extends FailedJob<V>,
+    V
+  > boolean jobInFailList(String queueName, int jobID, Class<T> type) throws Exception {
     log.trace("#jobInFailList(queueName={}, jobID={})", queueName, jobID);
 
-    var jobs = getFailedJobs(queueName);
+    var jobs = getFailedJobs(queueName, type).getFailedJobs();
 
     for (var job : jobs) {
       if (job.getJobID() == jobID) {
@@ -77,14 +98,12 @@ public abstract class QueueManager
     return false;
   }
 
-  public abstract void deleteJobFailure(FailedJob job) throws Exception;
-
-  protected void deleteJobFailure(String queueName, FailedJob job) throws Exception {
-    log.trace("#deleteJobFailure(queueName={}, job={})", queueName, job);
+  protected void deleteJobFailure(String queueName, int failID) throws Exception {
+    log.trace("#deleteJobFailure(queueName={}, failID={})", queueName, failID);
 
     HttpClient.newHttpClient().send(
       HttpRequest.newBuilder().
-        uri(URL.failedIDEndpoint(queueName, job.getFailID())).
+        uri(URL.failedIDEndpoint(queueName, failID)).
         DELETE().
         build(),
       HttpResponse.BodyHandlers.discarding()
@@ -94,13 +113,11 @@ public abstract class QueueManager
   protected int submitNewJob(String queueName, CreateRequest<?> req) throws Exception {
     log.trace("#submitNewJob(queueName={}, req={})", queueName, req);
 
-    var uri = URL.jobEndpoint();
-
     var sendBody = JSON.stringify(req);
 
     var res = HttpClient.newHttpClient().send(
       HttpRequest.newBuilder()
-        .uri(uri)
+        .uri(submissionURL())
         .POST(HttpRequest.BodyPublishers.ofString(sendBody))
         .build(),
       HttpResponse.BodyHandlers.ofString()
@@ -119,8 +136,6 @@ public abstract class QueueManager
 
     return body.getId();
   }
-
-  public abstract void deleteJob(int jobID) throws Exception;
 
   protected void deleteJob(String queueName, int jobID) throws Exception {
     log.trace("#deleteJob(queueName={}, jobID={})", queueName, jobID);

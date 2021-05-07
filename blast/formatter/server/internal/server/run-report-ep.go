@@ -2,39 +2,37 @@ package server
 
 import (
 	"archive/zip"
+	"bytes"
 	"compress/flate"
 	"crypto/md5"
 	"encoding/hex"
 	"io"
-	"net/http"
+	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/francoispqt/gojay"
 	"github.com/sirupsen/logrus"
+	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl-layers/request-id/short-id/v1/pkg/midlid"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
 	"server/pkg/api"
-	"server/pkg/bfmt"
-	"server/pkg/blast"
 )
 
 func ReportEndpoint(req midl.Request) midl.Response {
 	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
-	log   := logrus.WithField(midlid.KeyRequestId, reqID)
+	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
 	log.Trace("server.ReportEndpoint(")
 
-	dec     := gojay.BorrowDecoder(req.RawRequest().Body)
-	payload := api.NewJobPayload()
-
-	if err := dec.DecodeObject(payload); err != nil {
+	payload, err := DecodePayload(req.RawRequest().Body)
+	if err != nil {
 		return New400Error(err.Error())
 	}
 
 	return runReport(payload, log)
 }
-
 
 func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	workspace, err := getWorkspace(job.JobID)
@@ -43,9 +41,16 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		return New500Error(err.Error())
 	}
 
-	cmd       := job.ToCmd()
-	hash, err := hashCommand(cmd)
-	outputDir := filepath.Join(workspace, hash)
+	job.Config.ArchiveFile.Set("../report.asn1")
+	job.Config.OutFile.Set(OutputName(job.Config.Format.Type))
+
+	cmd  := job.Config.ToCLI()
+	cmd.Path = "/blast/bin/" + cmd.Args[0]
+	cmd.Stderr = os.Stderr
+
+	log.Debug(cmd)
+
+	outputDir := filepath.Join(workspace, job.ReportID)
 
 	// If the directory already exists, this report has already been run.
 	// If the directory does not exist, create it and run the report.
@@ -60,10 +65,15 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		log.Error(err.Error())
 		return New500Error(err.Error())
 	}
-	res := midl.MakeResponse(http.StatusOK, `{"status":"success","message":"Job completed successfully"}`)
-	res.AddHeader("Content-Type", "application/json")
 
-	return res
+	log.Debug("Writing out meta.json")
+
+	if err = WriteMeta(outputDir); err != nil {
+		log.Error(err.Error())
+		return New500Error(err.Error())
+	}
+
+	return New200Response("Job completed successfully")
 }
 
 func zipDir(path string) (err error) {
@@ -127,7 +137,7 @@ func copyFileInto(path string, w io.Writer) error {
 	return nil
 }
 
-func outputName(kind blast.FormatType) string {
+func OutputName(kind field.FormatType) string {
 	out := "report"
 
 	switch kind {
@@ -149,7 +159,7 @@ func outputName(kind blast.FormatType) string {
 }
 
 // runIfNeeded runs the blast_formatter job if it has not already been run.
-func runIfNeeded(cmd *bfmt.CLICall, outDir string, log *logrus.Entry) error {
+func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 	log.Tracef("server.runIfNeeded(cmd=..., outDir=%s, log=...)", outDir)
 
 	_, err := os.Stat(outDir)
@@ -162,8 +172,7 @@ func runIfNeeded(cmd *bfmt.CLICall, outDir string, log *logrus.Entry) error {
 			return err
 		}
 
-		outFile := outputName(cmd.OutFormat.Type)
-		if err = runCommand(cmd, outFile, outDir); err != nil {
+		if err = runCommand(cmd, outDir); err != nil {
 			return err
 		}
 	}
@@ -171,22 +180,94 @@ func runIfNeeded(cmd *bfmt.CLICall, outDir string, log *logrus.Entry) error {
 	return nil
 }
 
-func runCommand(cmd *bfmt.CLICall, out, dir string) error {
-	cmd.Archive = "../report.asn1"
-	cmd.WorkDirectory = dir
-	cmd.OutFile = out
-	cmd.Environment = os.Environ()
+func runCommand(cmd *exec.Cmd, dir string) error {
+	cmd.Dir = dir
+	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	return cmd.Execute(os.Stdout, os.Stderr)
+	return cmd.Run()
 }
 
-func hashCommand(cmd *bfmt.CLICall) (string, error) {
-	raw, err := cmd.ToCLIString()
-	if err != nil {
-		return "", err
+func hashCommand(cmd *exec.Cmd) string {
+	return hashSlice(cmd.Args)
+}
+
+func hashSlice(val []string) string {
+	size := 0
+	for i := range val {
+		size += len(val[i])
 	}
 
-	hash := md5.Sum([]byte(raw))
+	buf := bytes.NewBuffer(make([]byte, size))
 
-	return hex.EncodeToString(hash[:]), nil
+	for i := range val {
+		buf.WriteString(val[i])
+	}
+
+	hash := md5.Sum(buf.Bytes())
+
+	return hex.EncodeToString(hash[:])
+}
+
+type meta struct {
+	files fileList
+}
+
+func (m *meta) MarshalJSONObject(enc *gojay.Encoder) {
+	enc.ArrayKey("files", m.files)
+}
+
+func (m *meta) IsNil() bool {
+	return m == nil
+}
+
+type fileList []string
+
+func (f fileList) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := range f {
+		enc.String(f[i])
+	}
+}
+
+func (f fileList) IsNil() bool {
+	return f == nil
+}
+
+// ---------------------------------------------------------------------------------------------- //
+
+// WriteMeta collects a list of all the files in `dir` and writes out a JSON
+// file with a list of those files.
+func WriteMeta(dir string) error {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	meta := meta{}
+	meta.files = make([]string, 0, len(files))
+
+	for i := range files {
+		meta.files = append(meta.files, files[i].Name())
+	}
+
+	metaFile, err := os.Create(filepath.Join(dir, "meta.json"))
+	if err != nil {
+		return err
+	}
+	defer metaFile.Close()
+
+	enc := gojay.BorrowEncoder(metaFile)
+	defer enc.Release()
+
+	return enc.EncodeObject(&meta)
+}
+
+func DecodePayload(body io.Reader) (*api.JobPayload, error) {
+	payload := api.NewJobPayload()
+
+	dec := gojay.BorrowDecoder(body)
+	defer dec.Release()
+
+	return payload, dec.Object(payload)
 }

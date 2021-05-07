@@ -34,35 +34,35 @@ public class XBlastWithLists
   }
 
   public static void setGIList(BlastWithLists b, JsonNode giList) {
-    b.setGIList(giList.textValue());
+    b.setGIList(giList.asText());
   }
 
   public static void setSequenceIDList(BlastWithLists b, JsonNode sequenceIDList) {
-    b.setSequenceIDList(sequenceIDList.textValue());
+    b.setSequenceIDList(sequenceIDList.asText());
   }
 
   public static void setNegativeGIList(BlastWithLists b, JsonNode negativeGIList) {
-    b.setNegativeGIList(negativeGIList.textValue());
+    b.setNegativeGIList(negativeGIList.asText());
   }
 
   public static void setNegativeSequenceIDList(BlastWithLists b, JsonNode negativeSequenceIDList) {
-    b.setNegativeSequenceIDList(negativeSequenceIDList.textValue());
+    b.setNegativeSequenceIDList(negativeSequenceIDList.asText());
   }
 
   public static void setTaxIDs(BlastWithLists b, JsonNode taxIDs) {
-    b.setTaxIDs(Arrays.asList(taxIDs.textValue().split(" *, *")));
+    b.setTaxIDs(Arrays.asList(taxIDs.asText().split(" *, *")));
   }
 
   public static void setNegativeTaxIDs(BlastWithLists b, JsonNode negativeTaxIDs) {
-    b.setNegativeTaxIDs(Arrays.asList(negativeTaxIDs.textValue().split(" *, *")));
+    b.setNegativeTaxIDs(Arrays.asList(negativeTaxIDs.asText().split(" *, *")));
   }
 
   public static void setTaxIDList(BlastWithLists b, JsonNode taxIDList) {
-    b.setTaxIDList(taxIDList.textValue());
+    b.setTaxIDList(taxIDList.asText());
   }
 
   public static void setNegativeTaxIDList(BlastWithLists b, JsonNode negativeTaxIDList) {
-    b.setNegativeTaxIDList(negativeTaxIDList.textValue());
+    b.setNegativeTaxIDList(negativeTaxIDList.asText());
   }
 
 }

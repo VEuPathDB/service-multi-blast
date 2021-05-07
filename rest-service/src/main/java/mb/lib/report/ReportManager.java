@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import mb.lib.data.JobDataManager;
-import mb.lib.report.model.Payload;
+import mb.lib.report.model.ReportPayload;
 import mb.lib.report.model.ReportJob;
 import mb.lib.report.model.ReportRow;
 import mb.lib.report.model.UserReportRow;
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ReportManager
 {
-  private static final Logger Log = LogManager.getLogger();
+  private static final Logger Log = LogManager.getLogger(ReportManager.class);
 
   public static Optional<UserReportRow> rerunJob(HashID reportID, long userID) throws Exception {
     Log.trace("::rerunJob(reportID={}, userID={})", reportID, userID);
@@ -38,8 +38,9 @@ public class ReportManager
           return try1;
 
         // Submit the job to be re-run
-        var queueID = ReportQueueManager.submitJob(new Payload(
+        var queueID = ReportQueueManager.submitJob(new ReportPayload(
           job.getJobID(),
+          job.getReportID(),
           job.getConfig()
         ));
 
@@ -71,7 +72,7 @@ public class ReportManager
           return Optional.of(job);
 
         // Resubmit the job.
-        var queueID = ReportQueueManager.submitJob(new Payload(job.getJobID(), job.getConfig()));
+        var queueID = ReportQueueManager.submitJob(new ReportPayload(job.getJobID(), job.getReportID(), job.getConfig()));
         job.setStatus(JobStatus.Queued)
           .setQueueID(queueID);
 
@@ -118,7 +119,7 @@ public class ReportManager
         // If the job is expired, rerun it for the new requesting user.
         if (oldJob.getStatus() == JobStatus.Expired) {
           // Queue the job
-          ReportQueueManager.submitJob(new Payload(job.getJobID(), job.getConfig()));
+          ReportQueueManager.submitJob(new ReportPayload(job.getJobID(), job.getReportID(), job.getConfig()));
           // Update the status in the DB
           oldJob.setStatus(JobStatus.Queued);
           db.updateReportRow(oldJob);
@@ -163,8 +164,9 @@ public class ReportManager
 
       // No report with that hash exists
 
-      var queueID = ReportQueueManager.submitJob(new Payload(
+      var queueID = ReportQueueManager.submitJob(new ReportPayload(
         job.getJobID(),
+        job.getReportID(),
         job.getConfig()
       ));
 
@@ -216,8 +218,10 @@ public class ReportManager
       // See if the user is already linked to the report job.
       var userRow = db.getUserReportJob(reportID, userID);
 
-      if (userRow.isPresent())
+      if (userRow.isPresent()) {
+        refreshJobStatus(db, userRow.get());
         return userRow;
+      }
 
       // If we're here, then we don't yet know if the report job even exists.
       // Check for the job's existence.
@@ -231,6 +235,8 @@ public class ReportManager
       db.linkUserToReport(reportID, userID, null);
 
       var raw = rawRow.get();
+
+      refreshJobStatus(db, raw);
 
       return Optional.of(new UserReportRow(
         reportID,

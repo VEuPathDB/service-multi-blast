@@ -68,6 +68,16 @@ class BlastDBManager extends MBlastDBManager
     new InsertUserLink(getConnection(), row).run();
   }
 
+  void linkTargets(HashID jobID, JobTarget... targets) throws Exception {
+    Log.trace("#linkTargets(jobID={}, targets={})", jobID, targets);
+    new InsertBlastTargets(getConnection(), jobID, targets).run();
+  }
+
+  void linkJobs(HashID child, HashID parent) throws Exception {
+    Log.trace("#linkJobs(child={}, parent={})", child, parent);
+    new InsertBlastJobLink(getConnection(), child, parent).run();
+  }
+
   /**
    * Retrieves a list of target blast DB files linked to the job identified by
    * {@code jobID}.

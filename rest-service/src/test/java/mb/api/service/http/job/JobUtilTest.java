@@ -2,6 +2,7 @@ package mb.api.service.http.job;
 
 import javax.ws.rs.BadRequestException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

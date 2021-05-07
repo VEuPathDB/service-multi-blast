@@ -13,6 +13,7 @@ node('centos8') {
     [ name: 'mblast-http-service',    path: 'rest-service'    ],
     [ name: 'mblast-blast-query',     path: 'blast/querier'   ],
     [ name: 'mblast-blast-formatter', path: 'blast/formatter' ],
+    [ name: 'mblast-blast-validator', path: 'blast/validator' ],
     [ name: 'mblast-queue-db',        path: 'databases/queue' ],
   ])
 }

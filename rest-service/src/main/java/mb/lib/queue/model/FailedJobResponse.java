@@ -8,17 +8,17 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import mb.lib.queue.consts.JsonKeys;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FailedJobResponse
+public class FailedJobResponse<T extends FailedJob<?>>
 {
-  private List<FailedJob> failedJobs;
+  private List<T> failedJobs;
 
   @JsonGetter(JsonKeys.FailedJobs)
-  public List<FailedJob> getFailedJobs() {
+  public List<T> getFailedJobs() {
     return failedJobs;
   }
 
   @JsonSetter(JsonKeys.FailedJobs)
-  public FailedJobResponse setFailedJobs(List<FailedJob> failedJobs) {
+  public FailedJobResponse<T> setFailedJobs(List<T> failedJobs) {
     this.failedJobs = failedJobs;
     return this;
   }

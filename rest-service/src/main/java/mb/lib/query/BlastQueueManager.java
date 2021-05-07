@@ -1,11 +1,14 @@
 package mb.lib.query;
 
+import java.net.URI;
 import java.util.List;
 
+import mb.api.service.util.Address;
 import mb.lib.config.Config;
 import mb.lib.model.HashID;
 import mb.lib.model.JobStatus;
 import mb.lib.query.model.BlastRequest;
+import mb.lib.query.model.FailedQueryJobResponse;
 import mb.lib.queue.QueueManager;
 import mb.lib.queue.consts.URL;
 import mb.lib.queue.model.CreateRequest;
@@ -19,8 +22,8 @@ class BlastQueueManager extends QueueManager
 {
 
   private static final Logger log = LogManager.getLogger(BlastQueueManager.class);
-
   private static final Config conf = Config.getInstance();
+  private static final String Path = "blast";
 
   private static BlastQueueManager instance;
 
@@ -34,6 +37,11 @@ class BlastQueueManager extends QueueManager
       return instance = new BlastQueueManager();
 
     return instance;
+  }
+
+  @Override
+  protected URI submissionURL() {
+    return URL.jobSubmissionEndpoint(conf.getBlastJobCategory());
   }
 
   // ------------------------------------------------------------------------------------------ //
@@ -66,17 +74,17 @@ class BlastQueueManager extends QueueManager
 
   public boolean jobInFailList(int jobID) throws Exception {
     log.trace("#jobInFailList(jobID={})", jobID);
-    return jobInFailList(conf.getBlastQueueName(), jobID);
+    return jobInFailList(conf.getBlastQueueName(), jobID, FailedQueryJobResponse.class);
   }
 
-  public List<FailedJob> getFailedJobs() throws Exception {
+  public List<? extends FailedJob<?>> getFailedJobs() throws Exception {
     log.trace("#getFailedJobs()");
-    return getFailedJobs(conf.getBlastQueueName());
+    return getFailedJobs(conf.getBlastQueueName(), FailedQueryJobResponse.class).getFailedJobs();
   }
 
-  public void deleteJobFailure(FailedJob job) throws Exception {
-    log.trace("#deleteJobFailure(job={})", job);
-    deleteJobFailure(conf.getBlastQueueName(), job);
+  public void deleteJobFailure(int failID) throws Exception {
+    log.trace("#deleteJobFailure(failID={})", failID);
+    deleteJobFailure(conf.getBlastQueueName(), failID);
   }
 
   // ------------------------------------------------------------------------------------------ //
@@ -102,7 +110,7 @@ class BlastQueueManager extends QueueManager
     return submitNewJob(
       conf.getBlastQueueName(),
       new CreateRequest<>(
-        URL.prependHTTP(conf.getBlastHost()),
+        String.join("/", Address.http(conf.getBlastHost()), Path),
         new BlastRequest(jobId, tool, config)
       )
     );

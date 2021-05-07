@@ -51,37 +51,37 @@ class Util
   }
 
   static IOJobTarget[] translateTargets(List<BlastTargetLink> links) {
-    return links.stream()
+    return links == null ? null : links.stream()
       .map(Util::translateTarget)
       .toArray(IOJobTarget[]::new);
   }
 
   static IOJobTarget translateTarget(BlastTargetLink link) {
-    return new IOJobTargetImpl()
+    return link == null ? null : new IOJobTargetImpl()
       .target(link.getTargetFile())
       .organism(link.getOrganism());
   }
 
   static IOJobLink[] translateParentLinks(List<BlastJobLink> links) {
-    return links.stream()
+    return links == null ? null : links.stream()
       .map(Util::translateParentLink)
       .toArray(IOJobLink[]::new);
   }
 
   static IOJobLink translateParentLink(BlastJobLink link) {
-    return new IOJobLinkImpl()
+    return link == null ? null : new IOJobLinkImpl()
       .setId(link.getParentJobID().string())
       .setIndex(link.getPosition());
   }
 
   static IOJobLink[] translateChildLinks(List<BlastJobLink> links) {
-    return links.stream()
+    return links == null ? null : links.stream()
       .map(Util::translateChildLink)
       .toArray(IOJobLink[]::new);
   }
 
   static IOJobLink translateChildLink(BlastJobLink link) {
-    return new IOJobLinkImpl()
+    return link == null ? null : new IOJobLinkImpl()
       .setId(link.getChildJobID().string())
       .setIndex(link.getPosition());
   }

@@ -68,7 +68,7 @@ public class ResultLimitValidator
       .putError(ToolOption.NumAlignments, err));
   }
 
-  Optional<ErrorMap> validateResultLimits(int limit, int queries, int maxSeqs) {
+  Optional<ErrorMap> validateResultLimits(int limit, int queries, long maxSeqs) {
     if (queries * maxSeqs > limit) {
       var err = "Number of query sequences * max_target_seqs cannot exceed " + limit;
       return Optional.of(new ErrorMap()
@@ -80,7 +80,7 @@ public class ResultLimitValidator
     return Optional.empty();
   }
 
-  Optional<ErrorMap> validateResultLimits(int limit, int queries, int descs, int aligns) {
+  Optional<ErrorMap> validateResultLimits(int limit, int queries, long descs, long aligns) {
     var max = Math.max(descs, aligns);
 
     if (queries * Math.max(descs, aligns) > limit) {

@@ -79,7 +79,6 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core")
   implementation("org.veupathdb.lib:java-blast")
 
-
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http")
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet")
@@ -107,6 +106,8 @@ dependencies {
   implementation("io.vulpine.lib:Jackfish")
   implementation("io.vulpine.lib:iffy")
   implementation("com.devskiller.friendly-id:friendly-id")
+  implementation("info.picocli:picocli:4.6.1")
+  annotationProcessor("info.picocli:picocli-codegen:4.6.1")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
@@ -115,9 +116,13 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
 }
 
+tasks.compileJava {
+  options.compilerArgs.add("-Aproject=${project.group}/${project.name}")
+}
+
 tasks.jar {
   manifest {
-    attributes["Main-Class"] = "${fullPack}.${buildProps["app.main-class"]}"
+    attributes["Main-Class"] = "mb.Main"
     attributes["Implementation-Title"] = buildProps["project.name"]
     attributes["Implementation-Version"] = buildProps["project.version"]
   }

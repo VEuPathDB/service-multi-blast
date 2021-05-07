@@ -3,6 +3,7 @@ package mb.api.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -12,6 +13,7 @@ import mb.api.controller.resources.Jobs;
 import mb.api.model.IOJsonJobRequest;
 import mb.api.service.http.job.JobService;
 import mb.api.service.util.Format;
+import mb.lib.model.HashID;
 import org.veupathdb.lib.container.jaxrs.model.User;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
@@ -35,7 +37,7 @@ public class JobController implements Jobs
    */
   @Override
   public Response getJobs() {
-    return okJSON(svc.getShortJobList(getUser(request)));
+    return okJSON(svc.getShortJobList(getUser(request).getUserID()));
   }
 
   /**
@@ -47,7 +49,7 @@ public class JobController implements Jobs
    */
   @Override
   public Response postJob(IOJsonJobRequest entity) {
-    return okJSON(svc.createJob(entity, getUser(request)));
+    return okJSON(svc.createJob(entity, getUser(request).getUserID()));
   }
 
   /**
@@ -80,7 +82,10 @@ public class JobController implements Jobs
    */
   @Override
   public Response getJob(String jobID) {
-    return okJSON(svc.getJob(jobID, getUser(request)));
+    return okJSON(svc.getJob(
+      HashID.parseOrThrow(jobID, NotFoundException::new),
+      getUser(request).getUserID())
+    );
   }
 
   /**
@@ -101,7 +106,7 @@ public class JobController implements Jobs
     if (download)
       res = res.header("Content-Disposition", String.format(AttachmentPat, (jobID + "-query"), "txt"));
 
-    return res.entity(svc.getQuery(jobID)).build();
+    return res.entity(svc.getQuery(HashID.parseOrThrow(jobID, NotFoundException::new))).build();
   }
 
   // //////////////////////////////////////////////////////////////////////////////////////////// //

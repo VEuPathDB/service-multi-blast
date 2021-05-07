@@ -2,6 +2,7 @@ package mb.lib.queue.consts;
 
 import java.net.URI;
 
+import mb.api.service.util.Address;
 import mb.lib.config.Config;
 
 public class URL
@@ -16,23 +17,23 @@ public class URL
     FailedEndpoint   = QueueIdEndpoint + "/failed",
     FailedIDEndpoint = QueueIdEndpoint + "/failed/%d";
 
-  public static URI jobEndpoint() {
-    return URI.create(prependHTTP(conf.getQueueHost()))
-      .resolve(String.format(JobEndpoint, conf.getJobCategory()));
+  public static URI jobSubmissionEndpoint(String category) {
+    return URI.create(Address.http(conf.getQueueHost()))
+      .resolve(String.format(JobEndpoint, category));
   }
 
   public static URI queueJobEndpoint(String queueName, int jobID) {
-    return URI.create(prependHTTP(conf.getQueueHost()))
+    return URI.create(Address.http(conf.getQueueHost()))
       .resolve(String.format(QueueJobEndpoint, queueName, jobID));
   }
 
   public static URI failedEndpoint(String queueName) {
-    return URI.create(prependHTTP(conf.getQueueHost()))
+    return URI.create(Address.http(conf.getQueueHost()))
       .resolve(String.format(FailedEndpoint, queueName));
   }
 
   public static URI failedIDEndpoint(String queueName, int failID) {
-    return URI.create(prependHTTP(conf.getQueueHost()))
+    return URI.create(Address.http(conf.getQueueHost()))
       .resolve(String.format(FailedIDEndpoint, queueName, failID));
   }
 

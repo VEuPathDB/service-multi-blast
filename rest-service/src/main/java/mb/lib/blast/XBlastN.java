@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import mb.api.model.io.JsonKeys;
 import org.veupathdb.lib.blast.BlastN;
+import org.veupathdb.lib.blast.BlastTool;
 import org.veupathdb.lib.blast.consts.Flag;
 import org.veupathdb.lib.blast.field.*;
 
@@ -52,60 +56,65 @@ public class XBlastN extends BlastN
     put(Flag.SubjectBestHit, XBlastN::setSubjectBestHit);
   }};
 
+  @JsonGetter(JsonKeys.Tool)
+  public BlastTool tool() {
+    return super.getTool();
+  }
+
   public void setStrand(JsonNode strand) {
-    super.setStrand(Strand.fromString(strand.textValue()));
+    super.setStrand(Strand.fromString(strand.asText()));
   }
 
   public void setTask(JsonNode task) {
-    super.setTask(BlastNTask.fromString(task.textValue()));
+    super.setTask(BlastNTask.fromString(task.asText()));
   }
 
   public void setWordSize(JsonNode wordSize) {
-    super.setWordSize(wordSize.longValue());
+    super.setWordSize(wordSize.asLong());
   }
 
   public void setGapOpen(JsonNode gapOpen) {
-    super.setGapOpen(gapOpen.intValue());
+    super.setGapOpen(gapOpen.asInt());
   }
 
   public void setGapExtend(JsonNode gapExtend) {
-    super.setGapExtend(gapExtend.intValue());
+    super.setGapExtend(gapExtend.asInt());
   }
 
   public void setPenalty(JsonNode penalty) {
-    super.setPenalty(penalty.intValue());
+    super.setPenalty(penalty.asInt());
   }
 
   public void setReward(JsonNode reward) {
-    super.setReward(reward.longValue());
+    super.setReward(reward.asLong());
   }
 
   public void setUseIndex(JsonNode useIndex) {
-    super.setUseIndex(useIndex.booleanValue());
+    super.setUseIndex(useIndex.asBoolean());
   }
 
   public void setIndexName(JsonNode indexName) {
-    super.setIndexName(indexName.textValue());
+    super.setIndexName(indexName.asText());
   }
 
   public void setSubjectFile(JsonNode subjectFile) {
-    super.setSubjectFile(subjectFile.textValue());
+    super.setSubjectFile(subjectFile.asText());
   }
 
   public void setSubjectLocation(JsonNode subjectLocation) {
-    super.setSubjectLocation(Location.fromString(subjectLocation.textValue()));
+    super.setSubjectLocation(Location.fromString(subjectLocation.asText()));
   }
 
   public void setDust(JsonNode dust) {
-    super.setDust(Dust.fromString(dust.textValue()));
+    super.setDust(Dust.fromString(dust.asText()));
   }
 
   public void setFilteringDB(JsonNode filteringDB) {
-    super.setFilteringDB(filteringDB.textValue());
+    super.setFilteringDB(filteringDB.asText());
   }
 
   public void setWindowMaskerTaxID(JsonNode windowMaskerTaxID) {
-    super.setWindowMaskerTaxID(windowMaskerTaxID.intValue());
+    super.setWindowMaskerTaxID(windowMaskerTaxID.asInt());
   }
 
   public void setWindowMaskerDB(JsonNode windowMaskerDB) {
@@ -121,68 +130,71 @@ public class XBlastN extends BlastN
   }
 
   public void setPercentIdentity(JsonNode percentIdentity) {
-    super.setPercentIdentity(percentIdentity.doubleValue());
+    super.setPercentIdentity(percentIdentity.asDouble());
   }
 
   public void setCullingLimit(JsonNode cullingLimit) {
-    super.setCullingLimit(cullingLimit.longValue());
+    super.setCullingLimit(cullingLimit.asLong());
   }
 
   public void setTemplateType(JsonNode templateType) {
-    super.setTemplateType(TemplateType.fromString(templateType.textValue()));
+    super.setTemplateType(TemplateType.fromString(templateType.asText()));
   }
 
   public void setTemplateLength(JsonNode templateLength) {
-    super.setTemplateLength(TemplateLength.fromIntValue(templateLength.intValue()));
+    super.setTemplateLength(TemplateLength.fromIntValue(templateLength.asInt()));
   }
 
   public void setSumStats(JsonNode sumStats) {
-    super.setSumStats(sumStats.booleanValue());
+    super.setSumStats(sumStats.asBoolean());
   }
 
   public void setExtensionDropoffPrelimGapped(JsonNode extensionDropoffPrelimGapped) {
-    super.setExtensionDropoffPrelimGapped(extensionDropoffPrelimGapped.doubleValue());
+    super.setExtensionDropoffPrelimGapped(extensionDropoffPrelimGapped.asDouble());
   }
 
   public void setExtensionDropoffFinalGapped(JsonNode extensionDropoffFinalGapped) {
-    super.setExtensionDropoffFinalGapped(extensionDropoffFinalGapped.doubleValue());
+    super.setExtensionDropoffFinalGapped(extensionDropoffFinalGapped.asDouble());
   }
 
   public void setNonGreedy(JsonNode nonGreedy) {
-    super.setNonGreedy(nonGreedy.booleanValue());
+    super.setNonGreedy(nonGreedy.asBoolean());
   }
 
   public void setMinRawGappedScore(JsonNode minRawGappedScore) {
-    super.setMinRawGappedScore(minRawGappedScore.intValue());
+    super.setMinRawGappedScore(minRawGappedScore.asInt());
   }
 
   public void setUngappedAlignmentsOnly(JsonNode ungappedAlignmentsOnly) {
-    super.setUngappedAlignmentsOnly(ungappedAlignmentsOnly.booleanValue());
+    super.setUngappedAlignmentsOnly(ungappedAlignmentsOnly.asBoolean());
   }
 
   public void setOffDiagonalRange(JsonNode offDiagonalRange) {
-    super.setOffDiagonalRange(offDiagonalRange.longValue());
+    super.setOffDiagonalRange(offDiagonalRange.asLong());
   }
 
   public void setNumThreads(JsonNode numThreads) {
-    super.setNumThreads(numThreads.shortValue());
+    super.setNumThreads((short) numThreads.asInt());
   }
 
   public void setBestHitOverhang(JsonNode bestHitOverhang) {
-    super.setBestHitOverhang(bestHitOverhang.doubleValue());
+    super.setBestHitOverhang(bestHitOverhang.asDouble());
   }
 
   public void setBestHitScoreEdge(JsonNode bestHitScoreEdge) {
-    super.setBestHitScoreEdge(bestHitScoreEdge.doubleValue());
+    super.setBestHitScoreEdge(bestHitScoreEdge.asDouble());
   }
 
   public void setSubjectBestHit(JsonNode subjectBestHit) {
-    super.setSubjectBestHit(subjectBestHit.booleanValue());
+    super.setSubjectBestHit(subjectBestHit.asBoolean());
   }
 
   public static BlastN fromLegacyJSON(ArrayNode node) {
     var out = new XBlastN();
     var it  = node.elements();
+
+    // Skip the first entry as it is just the blast tool name
+    it.next();
 
     while (it.hasNext()) {
       var arr = it.next();
@@ -196,7 +208,10 @@ public class XBlastN extends BlastN
       if (XBlastWithLists.fromLegacyJSON(out, key, val))
         continue;
 
-      map.get(key).accept(out, val);
+      var fn = map.get(key);
+      if (fn == null)
+        throw new RuntimeException("Invalid key: " + key);
+      fn.accept(out, val);
     }
 
     return out;

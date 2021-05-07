@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import mb.lib.queue.consts.JsonKeys;
 
-public class FailedJob
+public class FailedJob<T>
 {
-  private int failID;
-  private int jobID;
-  private String category;
-  private String url;
-  private String[] payload;
-  private JobResult result;
+  private int            failID;
+  private int            jobID;
+  private String         category;
+  private String         url;
+  private T              payload;
+  private JobResult      result;
   private int            failCount;
   private OffsetDateTime failedAt;
   private OffsetDateTime createdAt;
@@ -63,12 +63,12 @@ public class FailedJob
   }
 
   @JsonGetter(JsonKeys.Payload)
-  public String[] getPayload() {
+  public T getPayload() {
     return payload;
   }
 
   @JsonSetter(JsonKeys.Payload)
-  public FailedJob setPayload(String[] payload) {
+  public FailedJob setPayload(T payload) {
     this.payload = payload;
     return this;
   }

@@ -7,9 +7,13 @@ import java.time.OffsetDateTime;
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery;
 import mb.lib.query.model.BlastRow;
 import mb.lib.util.JSON;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class InsertBlastJob
 {
+  private static final Logger Log = LogManager.getLogger(InsertBlastJob.class);
+
   private static final String Query = """
     INSERT INTO
       userlogins5.multiblast_jobs (
@@ -30,19 +34,26 @@ public class InsertBlastJob
   private final BlastRow row;
 
   public InsertBlastJob(Connection con, BlastRow row) {
+    Log.trace("::new(con={}, row={})", con, row);
     this.con = con;
     this.row = row;
   }
 
   public void run() throws Exception {
+    Log.trace("#run()");
     new BasicPreparedVoidQuery(Query, con, this::prep).execute();
   }
 
   private void prep(PreparedStatement ps) throws Exception {
+    Log.trace("#prep(ps={})", ps);
     var time = OffsetDateTime.now();
+    var json = JSON.stringify(row.getConfig());
+
+    Log.debug(row.getConfig().getClass());
+    Log.debug("Inserting job config: {}", json);
 
     ps.setBytes(1, row.getJobID().bytes());
-    ps.setString(2, JSON.stringify(row.getConfig()));
+    ps.setString(2, json);
     ps.setString(3, row.getQuery());
     ps.setInt(4, row.getQueueID());
     ps.setString(5, row.getProjectID());

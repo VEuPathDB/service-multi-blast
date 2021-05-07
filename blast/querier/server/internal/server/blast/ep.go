@@ -2,15 +2,16 @@ package blast
 
 import (
 	"encoding/json"
+	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"github.com/veupathdb/lib-go-blast/v1/pkg/blast"
-	"github.com/veupathdb/lib-go-blast/v1/pkg/blast/field"
-	"github.com/vulpine-io/midl-layers/request-id/short-id/v1/pkg/midlid"
+	"github.com/veupathdb/lib-go-blast/v2/pkg/blast"
+	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
 
 	"server/internal/config"
@@ -19,16 +20,17 @@ import (
 	"server/internal/server/middleware"
 )
 
-func NewBlastEndpoint(config *config.Config) *BlastEndpoint {
-	return &BlastEndpoint{config}
+func NewBlastEndpoint(conf *config.Config) *Endpoint {
+	return &Endpoint{config: conf}
 }
 
-type BlastEndpoint struct {
+type Endpoint struct {
 	config *config.Config
 }
 
-func (b *BlastEndpoint) Handle(req midl.Request) midl.Response {
+func (b Endpoint) Handle(req midl.Request) midl.Response {
 	mtx.RecordRequest()
+	log.Println("Config: ", b.config)
 
 	log := req.AdditionalContext()[middleware.KeyLogger].(*logrus.Entry)
 
@@ -49,13 +51,16 @@ func (b *BlastEndpoint) Handle(req midl.Request) midl.Response {
 	}
 
 	// Query file is created outside of this service.
-	config.SetQuery("query.txt")
+	config.(blast.BlastQueryConfig).GetQueryFile().Set("query.txt")
+
 	// Override format value to always output format 11
-	config.SetFormat(field.Format{Type: field.FormatTypeBLASTArchiveASN1})
+	config.SetFormat(field.Format{Type: field.FormatTypeBlastArchiveASN1})
+
 	// Output to a standard file
-	config.SetOut("report.asn1")
+	config.GetOutFile().Set("report.asn1")
 
 	workDir := filepath.Join(b.config.OutDir, request.JobID)
+	log.Debug("Work directory: ", workDir)
 
 	// Check that the workspace exists
 	if _, err = os.Stat(workDir); err != nil {
@@ -78,8 +83,10 @@ func (b *BlastEndpoint) Handle(req midl.Request) midl.Response {
 	defer stderr.Close()
 
 	cmd := config.ToCLI()
-	cmd.Dir = workDir
+	cmd.Path = "/blast/bin/" + cmd.Args[0]
+	log.Debugf(`Command "%s"`, cmd.Args[0])
 	cmd.Env = os.Environ()
+	cmd.Dir = workDir
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 
@@ -97,12 +104,18 @@ func (b *BlastEndpoint) Handle(req midl.Request) midl.Response {
 	return server.NewSuccessResponse("success")
 }
 
-func (b *BlastEndpoint) Register(path string, r *mux.Router) {
-	r.Handle(path, midl.JSONAdapter(
-		midlid.NewRequestIdProvider(),
-		new(BlastEndpoint),
-	).AddWrappers(
-		middleware.RequestLogger{},
-		middleware.RequestTimer{},
-	))
+func (b Endpoint) Register(path string, r *mux.Router) {
+	r.Handle(path, midl.JSONAdapter(b).
+		AddWrappers(
+			middleware.RequestIdentifier{},
+			middleware.RequestLogger{},
+			middleware.RequestTimer{},
+		))
+}
+func isCommandAvailable(name string) bool {
+	cmd := exec.Command("command", "-v", name)
+	if err := cmd.Run(); err != nil {
+		return false
+	}
+	return true
 }

@@ -49,4 +49,12 @@ public class IOJobTargetImpl implements IOJobTarget
   public int hashCode() {
     return Objects.hash(organism, target);
   }
+
+  @Override
+  public String toString() {
+    return "IOJobTargetImpl{" +
+      "organism='" + organism + '\'' +
+      ", target='" + target + '\'' +
+      '}';
+  }
 }

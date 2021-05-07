@@ -8,13 +8,14 @@ import javax.ws.rs.NotFoundException;
 import mb.api.model.reports.ReportRequest;
 import mb.api.model.reports.ReportResponse;
 import mb.api.service.http.Util;
+import mb.lib.model.JobStatus;
+import mb.lib.query.BlastManager;
 import mb.lib.report.ReportManager;
 import mb.lib.report.model.ReportJob;
 import mb.lib.report.model.UserReportRow;
 import mb.lib.model.HashID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.veupathdb.lib.blast.field.FormatType;
 
 public class ReportService
 {
@@ -77,7 +78,7 @@ public class ReportService
    * @return The matching report.
    */
   public static ReportResponse getReport(HashID reportID, long userID) {
-    Log.trace("::listAllReports(reportID={}, userID={})", reportID, userID);
+    Log.trace("::getReport(reportID={}, userID={})", reportID, userID);
 
     try {
       var tmp = ReportManager.getAndLinkReport(reportID, userID)
@@ -94,12 +95,19 @@ public class ReportService
   }
 
   public static ReportResponse submitReport(ReportRequest req, long userID) {
-    Log.trace("::submitJob(req={}, userID={})", req, userID);
+    Log.trace("::submitReport(req={}, userID={})", req, userID);
 
     if (req.getJobID() == null)
       throw new BadRequestException();
 
     try {
+      // Verify job's existence and status.
+      var job = BlastManager.getAndLinkUserBlastJob(req.getJobID(), userID)
+        .orElseThrow(NotFoundException::new);
+
+      if (job.getStatus() != JobStatus.Completed)
+        throw new BadRequestException();
+
       return convert(ReportManager.newReportJob(new ReportJob(
         req.getJobID(),
         userID,
@@ -128,10 +136,9 @@ public class ReportService
     HashID  reportID,
     long    userID,
     String  file,
-    boolean download,
-    boolean zip
+    boolean download
   ) {
-    Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={}, zip={})", reportID, userID, file, download, zip);
+    Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={})", reportID, userID, file, download);
     try {
       var rep = ReportManager.getAndLinkReport(reportID, userID)
         .orElseThrow(NotFoundException::new);
@@ -140,11 +147,11 @@ public class ReportService
         .orElseThrow(NotFoundException::new);
 
       if (rep.getConfig().getOutFormat() == null)
-        return new ReportDownload(FormatType.Pairwise, zip, download, out);
+        return new ReportDownload(file, download, out);
       if (rep.getConfig().getOutFormat().getType() == null)
-        return new ReportDownload(FormatType.Pairwise, zip, download, out);
+        return new ReportDownload(file, download, out);
 
-      return new ReportDownload(rep.getConfig().getOutFormat().getType(), zip, download, out);
+      return new ReportDownload(file, download, out);
     } catch (Exception e) {
       throw Util.wrapException(e);
     }
