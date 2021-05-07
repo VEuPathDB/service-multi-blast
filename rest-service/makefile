@@ -78,16 +78,7 @@ fix-path:
 	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_TEST_DIR) $(TEST_DIR)
 
 gen-jaxrs: api.raml merge-raml
-	# Performing hack to make doc-gen work...
-	@grep -n '# BEGIN HACK #' api.raml | cut -d: -f1 | xargs -I'{}' head -n{} api.raml > api2.raml
-	@tail -n+3 schema/library.raml >> api2.raml
-	@mv api2.raml api.raml
-	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
-	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
-	# Performing hack to correct nullable input fields
-	@find $(GEN_DIR)/model -type f -name '*.java' | xargs -I'{}' sed -i 's/\([ (]\)\(double\|byte\|boolean\|short\|long\) / \1\u\2 /g;s/\([ (]\)int /\1Integer /g' '{}'
-	# Performing hack to correct enum name visibility
-	@grep -rl '^public enum' $(GEN_DIR)/model | xargs -I'{}' sed -i 's/private String name;/public final String name;/' '{}'
+	@echo "JAX-RS code generation disabled for this project."
 
 gen-docs: api.raml merge-raml
 	# Performing hack to make doc-gen work...
@@ -98,6 +89,7 @@ gen-docs: api.raml merge-raml
 	@rm -rf ../docs
 	@mv docs ../docs
 
+.PHONY: merge-raml
 merge-raml:
 	@$(BIN_DIR)/merge-raml -vv schema > schema/library.raml
 

@@ -3,7 +3,7 @@ package server
 import (
 	"encoding/json"
 
-	"server/pkg/blast"
+	"github.com/veupathdb/lib-go-blast/v2/pkg/blast"
 )
 
 type Request struct {

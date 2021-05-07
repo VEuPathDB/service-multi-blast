@@ -11,24 +11,39 @@ import mb.lib.http.MimeType;
 @Path(Paths.Reports)
 public interface Reports
 {
+  /**
+   * GET /reports
+   */
   @GET
   @Produces(MimeType.ApplicationJSON)
   List<ReportResponse> getAllReports(@QueryParam(Vars.JobID) String jobID);
 
+  /**
+   * POST /reports
+   */
   @POST
   @Produces(MimeType.ApplicationJSON)
   ReportResponse newReport(ReportRequest req);
 
+  /**
+   * GET /reports/{report-id}
+   */
   @GET
   @Path(Paths.ReportByID)
   @Produces(MimeType.ApplicationJSON)
   ReportResponse getReport(@PathParam(Vars.ReportID) String reportID);
 
+  /**
+   * POST /reports/{report-id}
+   */
   @POST
   @Path(Paths.ReportByID)
   @Produces(MimeType.ApplicationJSON)
   ReportResponse rerunReport(@PathParam(Vars.ReportID) String reportID);
 
+  /**
+   * GET /reports/{report-id}/files/{filename}
+   */
   @GET
   @Path(Paths.ReportData)
   @Produces({
@@ -41,7 +56,6 @@ public interface Reports
   Response getReportData(
     @PathParam(Vars.ReportID) String reportID,
     @PathParam(Vars.FileName) String fileName,
-    @QueryParam("download") @DefaultValue("true") boolean download,
-    @QueryParam("zip") @DefaultValue("true") boolean zip
+    @QueryParam("download") @DefaultValue("true") boolean download
   );
 }

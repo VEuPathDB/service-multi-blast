@@ -11,18 +11,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path(Paths.Jobs)
 public interface Jobs
 {
-  String JobIDKey   = "job-id";
-  String JobIDParam = "{" + JobIDKey + "}";
-  String JobIDPath  = "/" + JobIDParam;
-  String QueryPath  = JobIDPath + "/query";
-
-  String ReportsPath   = JobIDPath + "/reports";
-  String ReportIDKey   = "report-id";
-  String ReportIDParam = "{" + ReportIDKey + "}";
-  String ReportPath    = ReportsPath + "/" + ReportIDParam;
-
-  String ReportDataPath = ReportPath + "/report";
-
   @GET
   @Produces(MimeType.ApplicationJSON)
   Response getJobs();
@@ -41,15 +29,15 @@ public interface Jobs
   );
 
   @GET
-  @Path(JobIDPath)
+  @Path(Paths.JobByID)
   @Produces(MimeType.ApplicationJSON)
-  Response getJob(@PathParam(JobIDKey) String jobId);
+  Response getJob(@PathParam(Vars.JobID) String jobId);
 
   @GET
-  @Path(QueryPath)
+  @Path(Paths.JobQuery)
   @Produces({MimeType.ApplicationJSON, MimeType.TextPlain})
   Response getQuery(
-    @PathParam(JobIDKey) String jobId,
+    @PathParam(Vars.JobID) String jobId,
     @QueryParam("download") @DefaultValue("false") boolean download
   );
 }

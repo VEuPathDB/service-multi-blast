@@ -27,11 +27,11 @@ public class XBlastWithIPGList
   }
 
   public static void setIPGList(BlastWithIPGList b, JsonNode giList) {
-    b.setIPGList(giList.textValue());
+    b.setIPGList(giList.asText());
   }
 
 
   public static void setNegativeIPGList(BlastWithIPGList b, JsonNode negativeIPGList) {
-    b.setNegativeIPGList(negativeIPGList.textValue());
+    b.setNegativeIPGList(negativeIPGList.asText());
   }
 }

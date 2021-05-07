@@ -4,8 +4,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-
-	"github.com/teris-io/shortid"
 )
 
 func getWorkspace(jobKey string) (string, error) {
@@ -18,18 +16,4 @@ func getWorkspace(jobKey string) (string, error) {
 	}
 
 	return workspace, nil
-}
-
-func createTmpDir(root string) (path string, err error) {
-	// Generate unique temp dir name
-	id, err := shortid.Generate()
-	if err != nil {
-		return
-	}
-
-	// Create output directory
-	path = filepath.Join(root, id)
-	err = os.Mkdir(path, 0775)
-
-	return
 }

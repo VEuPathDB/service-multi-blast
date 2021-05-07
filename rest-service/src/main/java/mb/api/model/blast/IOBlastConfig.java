@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import mb.api.model.blast.impl.IOBlastConfigImpl;
 import mb.api.model.io.JsonKeys;
+import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
 import org.veupathdb.lib.blast.BlastTool;
 import org.veupathdb.lib.blast.field.Location;

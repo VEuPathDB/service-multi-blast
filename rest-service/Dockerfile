@@ -20,12 +20,17 @@ COPY makefile .
 
 RUN make install-dev-env
 
+COPY ["service.properties", "build.gradle.kts", "settings.gradle.kts", "gradlew", "./"]
+COPY gradle gradle
+COPY bom bom/
+
+RUN ./gradlew dependencies --info --configuration runtimeClasspath
+
 COPY . .
 
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
-    && ./gradlew dependencies --info --configuration runtimeClasspath \
     && make jar
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

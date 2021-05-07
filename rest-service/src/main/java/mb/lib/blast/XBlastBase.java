@@ -42,66 +42,66 @@ public class XBlastBase
   }
 
   public static void setQueryFile(BlastBase b, JsonNode queryFile) {
-    b.setQueryFile(queryFile.textValue());
+    b.setQueryFile(queryFile.asText());
   }
 
   public static void setQueryLocation(BlastBase b, JsonNode queryLocation) {
-    b.setQueryLocation(Location.fromString(queryLocation.textValue()));
+    b.setQueryLocation(Location.fromString(queryLocation.asText()));
   }
 
   public static void setDBFile(BlastBase b, JsonNode dbFile) {
-    b.setDBFile(dbFile.textValue());
+    b.setDBFile(dbFile.asText());
   }
 
   public static void setExpectValue(BlastBase b, JsonNode expectValue) {
-    b.setExpectValue(expectValue.textValue());
+    b.setExpectValue(expectValue.asText());
   }
 
   public static void setSoftMasking(BlastBase b, JsonNode softMasking) {
-    b.setSoftMasking(softMasking.booleanValue());
+    b.setSoftMasking(softMasking.asBoolean());
   }
 
   public static void setLowercaseMasking(BlastBase b, JsonNode lowercaseMasking) {
-    b.setLowercaseMasking(lowercaseMasking.booleanValue());
+    b.setLowercaseMasking(lowercaseMasking.asBoolean());
   }
 
   public static void setEntrezQuery(BlastBase b, JsonNode entrezQuery) {
-    b.setEntrezQuery(entrezQuery.textValue());
+    b.setEntrezQuery(entrezQuery.asText());
   }
 
   public static void setQueryCoverageHSPPercent(BlastBase b, JsonNode queryCoverageHSPPercent) {
-    b.setQueryCoverageHSPPercent(queryCoverageHSPPercent.doubleValue());
+    b.setQueryCoverageHSPPercent(queryCoverageHSPPercent.asDouble());
   }
 
   public static void setMaxHSPs(BlastBase b, JsonNode maxHSPs) {
-    b.setMaxHSPs(maxHSPs.longValue());
+    b.setMaxHSPs(maxHSPs.asLong());
   }
 
   public static void setDBSize(BlastBase b, JsonNode dbSize) {
-    b.setDBSize((byte) dbSize.intValue());
+    b.setDBSize((byte) dbSize.asInt());
   }
 
   public static void setSearchSpace(BlastBase b, JsonNode searchSpace) {
-    b.setSearchSpace(searchSpace.shortValue());
+    b.setSearchSpace((short) searchSpace.asInt());
   }
 
   public static void setImportSearchStrategy(BlastBase b, JsonNode importSearchStrategy) {
-    b.setImportSearchStrategy(importSearchStrategy.textValue());
+    b.setImportSearchStrategy(importSearchStrategy.asText());
   }
 
   public static void setExportSearchStrategy(BlastBase b, JsonNode exportSearchStrategy) {
-    b.setExportSearchStrategy(exportSearchStrategy.textValue());
+    b.setExportSearchStrategy(exportSearchStrategy.asText());
   }
 
   public static void setExtensionDropoffUngapped(BlastBase b, JsonNode extensionDropoffUngapped) {
-    b.setExtensionDropoffUngapped(extensionDropoffUngapped.doubleValue());
+    b.setExtensionDropoffUngapped(extensionDropoffUngapped.asDouble());
   }
 
   public static void setWindowSize(BlastBase b, JsonNode windowSize) {
-    b.setWindowSize(windowSize.longValue());
+    b.setWindowSize(windowSize.asLong());
   }
 
   public static void setRemote(BlastBase b, JsonNode remote) {
-    b.setRemote(remote.booleanValue());
+    b.setRemote(remote.asBoolean());
   }
 }

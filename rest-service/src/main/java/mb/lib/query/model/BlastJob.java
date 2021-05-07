@@ -1,90 +1,102 @@
 package mb.lib.query.model;
 
+import mb.lib.blast.model.BlastQuery;
 import mb.lib.model.HashID;
 import mb.lib.util.JSON;
 import mb.lib.util.MD5;
-import org.veupathdb.lib.blast.BlastBase;
 import org.veupathdb.lib.blast.BlastQueryConfig;
 import org.veupathdb.lib.blast.BlastTool;
 
 public class BlastJob
 {
-  private final String           site;
-  private final long             userID;
-  private final BlastQueryConfig config;
-  private final String           query;
-  private final String           projectID;
-  private final String           description;
-  private final long             maxDownloadSize;
+  private BlastQueryConfig config;
+  private BlastQuery       query;
+  private String           site;
+  private String           description;
+  private long             userID;
+  private long             maxDLSize;
+  private HashID           parentID;
+  private JobTarget[]      targets;
 
-  private HashID jobID;
-
-  public BlastJob(
-    String site,
-    long userID,
-    BlastQueryConfig config,
-    String query,
-    String projectID,
-    String description,
-    long maxDownloadSize
-  ) {
-    this.site            = site;
-    this.userID          = userID;
-    this.config          = config;
-    this.query           = query;
-    this.projectID       = projectID;
-    this.description     = description;
-    this.maxDownloadSize = maxDownloadSize;
+  public String getSite() {
+    return site;
   }
 
-  public BlastJob(
-    String site,
-    long userID,
-    BlastQueryConfig config,
-    String query,
-    String projectID,
-    long maxDownloadSize
-  ) {
-    this(site, userID, config, null, query, projectID, maxDownloadSize);
+  public BlastJob setSite(String site) {
+    this.site = site;
+    return this;
   }
 
-  public long getUserID() {
-    return userID;
+  public BlastQuery getQuery() {
+    return query;
   }
 
-  public BlastQueryConfig getConfig() {
-    return config;
+  public BlastJob setQuery(BlastQuery query) {
+    this.query = query;
+    return this;
   }
 
   public String getDescription() {
     return description;
   }
 
-  public String getSite() {
-    return site;
+  public BlastJob setDescription(String description) {
+    this.description = description;
+    return this;
   }
 
-  public long getMaxDownloadSize() {
-    return maxDownloadSize;
+  public long getUserID() {
+    return userID;
   }
 
-  public HashID getJobID() {
-    if (jobID == null)
-      jobID = generateJobID();
-    return jobID;
+  public BlastJob setUserID(long userID) {
+    this.userID = userID;
+    return this;
   }
 
-  public String getQuery() {
-    return query;
+  public long getMaxDLSize() {
+    return maxDLSize;
   }
 
-  public String getProjectID() {
-    return projectID;
+  public BlastJob setMaxDLSize(long maxDLSize) {
+    this.maxDLSize = maxDLSize;
+    return this;
   }
 
-  private HashID generateJobID() {
+  public boolean isPrimary() {
+    return parentID == null;
+  }
+
+  public HashID getParentID() {
+    return parentID;
+  }
+
+  public BlastJob setParentID(HashID parentID) {
+    this.parentID = parentID;
+    return this;
+  }
+
+  public JobTarget[] getTargets() {
+    return targets;
+  }
+
+  public BlastJob setTargets(JobTarget[] targets) {
+    this.targets = targets;
+    return this;
+  }
+
+  public BlastQueryConfig getConfig() {
+    return config;
+  }
+
+  public BlastJob setConfig(BlastQueryConfig config) {
+    this.config = config;
+    return this;
+  }
+
+  public HashID digest(String query) {
     try {
-      return new HashID(MD5.hash(JSON.stringify(new HashWrapper(site, config))));
+      return new HashID(MD5.hash(JSON.stringify(new HashWrapper(site, query, config))));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -92,15 +104,17 @@ public class BlastJob
 
   static class HashWrapper
   {
-    private final BlastTool   tool;
-    private final String      site;
-    private final String      dbFiles;
+    private final BlastTool        tool;
+    private final String           site;
+    private final String           dbFiles;
+    private final String           query;
     private final BlastQueryConfig config;
 
-    public HashWrapper(String site, BlastQueryConfig config) {
+    public HashWrapper(String site, String query, BlastQueryConfig config) {
       this.tool    = config.getTool();
       this.site    = site;
-      this.dbFiles = ((BlastBase) config).getDBFile();
+      this.query   = query;
+      this.dbFiles = config.getDBFile();
       this.config  = config;
     }
 
@@ -114,6 +128,10 @@ public class BlastJob
 
     public String getDbFiles() {
       return dbFiles;
+    }
+
+    public String getQuery() {
+      return query;
     }
 
     public BlastQueryConfig getConfig() {

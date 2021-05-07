@@ -19,6 +19,14 @@ public class JobWorkspace
     this.workspace = workspace;
   }
 
+  public boolean exists() {
+    return workspace.toFile().exists();
+  }
+
+  public void updateLastModified() {
+    this.updateLastModified(OffsetDateTime.now());
+  }
+
   public Path filePath(String file) {
     return workspace.resolve(file);
   }
@@ -89,7 +97,7 @@ public class JobWorkspace
     return new ReportWorkspace(jobID, reportID, reportPath(reportID));
   }
 
-  public void updateLastModified(OffsetDateTime time) throws Exception {
+  public void updateLastModified(OffsetDateTime time) {
     workspace.toFile().setLastModified(time.toInstant().toEpochMilli());
   }
 }

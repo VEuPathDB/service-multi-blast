@@ -45,58 +45,58 @@ public class XCLIBase
   }
 
   private static void setShortHelp(CLIBase b, JsonNode j) {
-    b.setShortHelp(j.booleanValue());
+    b.setShortHelp(j.asBoolean());
   }
 
   private static void setLongHelp(CLIBase b, JsonNode j) {
-    b.setLongHelp(j.booleanValue());
+    b.setLongHelp(j.asBoolean());
   }
 
   private static void setVersion(CLIBase b, JsonNode j) {
-    b.setVersion(j.booleanValue());
+    b.setVersion(j.asBoolean());
   }
 
   private static void setOutFile(CLIBase b, JsonNode j) {
-    b.setOutFile(j.textValue());
+    b.setOutFile(j.asText());
   }
 
   private static void setOutFormat(CLIBase b, JsonNode j) {
-    b.setOutFormat(OutFormat.fromString(j.textValue()));
+    b.setOutFormat(OutFormat.fromString(j.asText()));
   }
 
   private static void setShowGIs(CLIBase b, JsonNode j) {
-    b.setShowGIs(j.booleanValue());
+    b.setShowGIs(j.asBoolean());
   }
 
   private static void setNumDescriptions(CLIBase b, JsonNode j) {
-    b.setNumDescriptions(j.longValue());
+    b.setNumDescriptions(j.asLong());
   }
 
   private static void setNumAlignments(CLIBase b, JsonNode j) {
-    b.setNumAlignments(j.longValue());
+    b.setNumAlignments(j.asLong());
   }
 
   private static void setLineLength(CLIBase b, JsonNode j) {
-    b.setLineLength(j.intValue());
+    b.setLineLength(j.asInt());
   }
 
   private static void setHTML(CLIBase b, JsonNode j) {
-    b.setHTML(j.booleanValue());
+    b.setHTML(j.asBoolean());
   }
 
   private static void setSortHits(CLIBase b, JsonNode j) {
-    b.setSortHits(HitSorting.fromIntValue(j.intValue()));
+    b.setSortHits(HitSorting.fromIntValue(j.asInt()));
   }
 
   private static void setSortHSPs(CLIBase b, JsonNode j) {
-    b.setSortHSPs(HSPSorting.fromIntValue(j.intValue()));
+    b.setSortHSPs(HSPSorting.fromIntValue(j.asInt()));
   }
 
   private static void setMaxTargetSequences(CLIBase b, JsonNode j) {
-    b.setMaxTargetSequences(j.longValue());
+    b.setMaxTargetSequences(j.asLong());
   }
 
   private static void setParseDefLines(CLIBase b, JsonNode j) {
-    b.setParseDefLines(j.booleanValue());
+    b.setParseDefLines(j.asBoolean());
   }
 }

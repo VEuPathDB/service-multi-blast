@@ -17,30 +17,6 @@ class Load
   private static final Pattern   envPat = Pattern.compile("\\$\\{([\\w]+)}");
 
   /**
-   * Loads a delete query from the resources directory and injects environment
-   * variables.
-   *
-   * @param path Array of path segments to the query file to load.
-   *
-   * @return The loaded query text.
-   */
-  static String delete(String... path) {
-    return injectVars(loader.delete(join(path)).orElseThrow(makeError("delete", path)));
-  }
-
-  /**
-   * Loads an insert query from the resources directory and injects environment
-   * variables.
-   *
-   * @param path Array of path segments to the query file to load.
-   *
-   * @return The loaded query text.
-   */
-  static String insert(String... path) {
-    return injectVars(loader.insert(join(path)).orElseThrow(makeError("insert", path)));
-  }
-
-  /**
    * Loads a select query from the resources directory and injects environment
    * variables.
    *

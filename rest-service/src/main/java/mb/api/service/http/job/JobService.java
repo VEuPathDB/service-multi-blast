@@ -1,22 +1,22 @@
 package mb.api.service.http.job;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.StreamingOutput;
 
-import mb.api.model.IOJobPostResponse;
-import mb.api.model.IOJsonJobRequest;
-import mb.api.model.IOLongJobResponse;
-import mb.api.model.IOShortJobResponse;
-import mb.api.service.util.Format;
-import mb.lib.db.JobDBManager;
+import mb.api.model.*;
+import mb.api.model.io.JsonKeys;
+import mb.api.service.model.ErrorMap;
+import mb.lib.blast.model.BlastQuery;
+import mb.lib.config.Config;
 import mb.lib.model.HashID;
 import mb.lib.query.BlastManager;
+import mb.lib.query.model.BlastJob;
+import mb.lib.util.BlastConv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.lib.container.jaxrs.model.User;
 
 import static mb.api.service.http.Util.wrapException;
@@ -25,17 +25,17 @@ import static mb.api.service.http.Util.wrapException;
 //       service container.
 public class JobService
 {
-  private static final Logger log      = LogManager.getLogger(JobService.class);
-  private static final int    buffSize = 8192;
+  private static final Logger Log  = LogManager.getLogger(JobService.class);
+  private static final Config Conf = Config.getInstance();
 
   private static JobService instance;
 
   private JobService() {
-    log.trace("::new()");
+    Log.trace("::new()");
   }
 
   public static JobService getInstance() {
-    log.trace("::getInstance()");
+    Log.trace("::getInstance()");
 
     if (instance == null)
       instance = new JobService();
@@ -44,7 +44,7 @@ public class JobService
   }
 
   public IOLongJobResponse getJob(HashID jobID, long userID) {
-    log.trace("#getJob(jobID={}, userID={})", jobID, userID);
+    Log.trace("#getJob(jobID={}, userID={})", jobID, userID);
 
     try {
       return Util.translateLongResponse(BlastManager.getAndLinkUserBlastJob(jobID, userID)
@@ -55,7 +55,7 @@ public class JobService
   }
 
   public List<IOShortJobResponse> getShortJobList(long userID) {
-    log.trace("#getJobs(userID={})", userID);
+    Log.trace("#getJobs(userID={})", userID);
 
     try {
       return Util.translateShortResponses(BlastManager.getUserBlastJobs(userID));
@@ -65,7 +65,7 @@ public class JobService
   }
 
   public String getQuery(HashID jobID) {
-    log.trace("#getQuery(jobID={})", jobID);
+    Log.trace("#getQuery(jobID={})", jobID);
 
     try {
       return BlastManager.getJobQuery(jobID).orElseThrow(NotFoundException::new);
@@ -74,20 +74,78 @@ public class JobService
     }
   }
 
-  public IOJobPostResponse createJob(IOJsonJobRequest input, User user) {
-    log.trace("#createJob(input={}, user={})", input, user.getUserID());
+  private static final String ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences.";
 
-    return JobCreationService.createJobs(input, user.getUserID());
+  public IOJobPostResponse createJob(IOJsonJobRequest input, long userID) {
+    Log.trace("#createJob(input={}, userID={})", input, userID);
+
+    try {
+      var rawQuery = input.getConfig().getQuery();
+
+      // We are abusing the config query file field, null it out so it doesn't
+      // get stored or sent anywhere with the query in this field.
+      input.getConfig().setQuery(null);
+
+      if (rawQuery == null)
+        throw new UnprocessableEntityException(new ErrorMap(JsonKeys.Query, "Query is required."));
+
+      rawQuery = rawQuery.trim();
+
+      if (rawQuery.length() > Conf.getMaxInputQuerySize())
+        throw new UnprocessableEntityException(new ErrorMap(JsonKeys.Query, "Query is too large."));
+
+      var query = BlastQuery.parse(input.getConfig().getTool(), rawQuery);
+
+
+      // Limit input sequence count
+      if (query.getSequenceCount() > Conf.getMaxSeqsPerQuery())
+        throw new UnprocessableEntityException(
+          String.format(ErrTooManySeqs, Conf.getMaxSeqsPerQuery())
+        );
+
+      JobUtil.verifyResultLimit(input, (int) rawQuery.codePoints()
+        .filter(c -> c == '>')
+        .count());
+
+      if (input.getTargets() == null || input.getTargets().size() == 0)
+        throw new UnprocessableEntityException(new ErrorMap(
+          "targets",
+          "1 or more targets must be selected."
+        ));
+
+      var conv = BlastConv.convert(input.getConfig());
+      BlastManager.validateConfig(conv)
+        .ifPresent(e -> {throw new UnprocessableEntityException(e);});
+
+      var dbPath = JobUtil.makeDBPaths(input.getSite(), input.getTargets());
+      conv.setDBFile(dbPath);
+
+      var res = BlastManager.submitJob(new BlastJob()
+        .setConfig(conv)
+        .setQuery(query)
+        .setSite(input.getSite())
+        .setDescription(input.getDescription())
+        .setUserID(userID)
+        .setMaxDLSize(input.getMaxResultSize())
+        .setTargets(BlastConv.convert(input.getTargets()))
+      );
+
+      return new IOJobPostResponseImpl().setJobId(res.getJobID().string());
+    } catch (Exception ex) {
+      throw wrapException(ex);
+    }
   }
 
   public IOJobPostResponse createJob(InputStream query, IOJsonJobRequest props, User user) {
-    log.trace("#createJob(query={}, props={}, user={})", query, props, user.getUserID());
+    Log.trace("#createJob(query={}, props={}, user={})", query, props, user.getUserID());
 
-    try {
+    try (query) {
       if (query == null)
-        return JobCreationService.createJobs(props, user.getUserID());
+        return createJob(props, user.getUserID());
 
-      return JobCreationService.createJobs(query, props, user.getUserID());
+      props.getConfig().setQuery(new String(query.readAllBytes(), StandardCharsets.UTF_8));
+
+      return createJob(props, user.getUserID());
     } catch (Exception e) {
       throw wrapException(e);
     }

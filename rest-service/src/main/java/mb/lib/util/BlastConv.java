@@ -1,21 +1,33 @@
 package mb.lib.util;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import mb.api.model.IOJobTarget;
+import mb.api.model.IOJobTargetImpl;
 import mb.api.model.blast.*;
 import mb.api.model.blast.impl.*;
 import mb.api.model.io.JsonKeys;
 import mb.lib.blast.*;
 import mb.lib.blast.model.CompBasedStats;
+import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
+import mb.lib.query.model.JobTarget;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.blast.*;
 
 public class BlastConv
 {
+  private static final Logger Log = LogManager.getLogger(BlastConv.class);
+
   public static BlastFormatter convertReportConfig(String json) {
+    Log.trace("::convertReportConfig(json={})", json);
     try {
       return JSON.parse(json, BlastFormatter.class);
     } catch (Exception e) {
@@ -24,42 +36,68 @@ public class BlastConv
   }
 
   public static BlastConfig convertJobConfig(String json) {
+    Log.trace("::convertJobConfig(json={})", json);
     try {
-      var tmp = JSON.parse(json, JsonNode.class);
-
-      if (tmp.isArray())
-        return convertLegacy((ArrayNode) tmp);
-      if (!tmp.isObject())
-        throw new RuntimeException("Invalid record JSON configuration.");
-      if (!tmp.has(JsonKeys.Tool))
-        throw new RuntimeException("Invalid record JSON configuration.  Tool field is missing.");
-
-      return switch(BlastTool.fromString(tmp.get(JsonKeys.Tool).textValue())) {
-        case BlastN -> convertNJSON((ObjectNode) tmp);
-        case BlastP -> convertPJSON((ObjectNode) tmp);
-        case BlastX -> convertXJSON((ObjectNode) tmp);
-        case TBlastN -> convertTNJSON((ObjectNode) tmp);
-        case TBlastX -> convertTXJSON((ObjectNode) tmp);
-        default -> throw new RuntimeException("Unsupported blast tool.");
-      };
-
+      return convertJobConfig(JSON.parse(json, JsonNode.class));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
+  public static BlastConfig convertJobConfig(JsonNode json) {
+    Log.trace("::convertJobConfig(json={})", json);
+    if (json.isArray())
+      return convertLegacy((ArrayNode) json);
+    if (!json.isObject())
+      throw new RuntimeException("Invalid record JSON configuration.");
+    if (!json.has(JsonKeys.Tool))
+      throw new RuntimeException("Invalid record JSON configuration.  Tool field is missing.");
+
+    return switch(BlastTool.fromString(json.get(JsonKeys.Tool).textValue())) {
+      case BlastN -> convertNJSON((ObjectNode) json);
+      case BlastP -> convertPJSON((ObjectNode) json);
+      case BlastX -> convertXJSON((ObjectNode) json);
+      case TBlastN -> convertTNJSON((ObjectNode) json);
+      case TBlastX -> convertTXJSON((ObjectNode) json);
+      default -> throw new RuntimeException("Unsupported blast tool.");
+    };
+  }
+
+  public static IOJobTarget convert(JobTarget tgt) {
+    Log.trace("::convert(tgt={})", tgt);
+    return new IOJobTargetImpl()
+      .organism(tgt.getOrganism())
+      .target(tgt.getTarget());
+  }
+
+  public static JobTarget[] convert(Collection<IOJobTarget> tgts) {
+    Log.trace("::convert(tgts={})", tgts);
+    return tgts.stream()
+      .map(BlastConv::convert)
+      .toArray(JobTarget[]::new);
+  }
+
+  public static JobTarget convert(IOJobTarget tgt) {
+    Log.trace("::convert(tgt={})", tgt);
+    return new JobTarget()
+      .setOrganism(tgt.organism())
+      .setTarget(tgt.target());
+  }
+
   public static IOBlastConfig convert(BlastConfig val) {
+    Log.trace("::convert(val={})", val);
     return switch (val.getTool()) {
-      case BlastN -> convert((BlastN) val);
-      case BlastP -> convert((BlastP) val);
-      case BlastX -> convert((BlastX) val);
-      case TBlastN -> convert((TBlastN) val);
-      case TBlastX -> convert((TBlastX) val);
+      case BlastN -> convert((XBlastN) val);
+      case BlastP -> convert((XBlastP) val);
+      case BlastX -> convert((XBlastX) val);
+      case TBlastN -> convert((XTBlastN) val);
+      case TBlastX -> convert((XTBlastX) val);
       case DeltaBlast, PSIBlast, RPSBlast, RPSTBlastN, BlastFormatter -> throw new IllegalArgumentException();
     };
   }
 
   static BlastConfig convertLegacy(ArrayNode json) {
+    Log.trace("::convertLegacy(json={})", json);
     return switch (BlastTool.fromString(json.get(0).get(0).textValue())) {
       case BlastN -> XBlastN.fromLegacyJSON(json);
       case BlastP -> XBlastP.fromLegacyJSON(json);
@@ -71,23 +109,40 @@ public class BlastConv
   }
 
   static BlastConfig convertNJSON(ObjectNode json) {
-    return JSON.cast(json, BlastN.class);
+    Log.trace("::convertNJSON(json=...)");
+    return JSON.cast(json, XBlastN.class);
   }
 
   static BlastConfig convertPJSON(ObjectNode json) {
-    return JSON.cast(json, BlastP.class);
+    Log.trace("::convertPJSON(json=...)");
+    return JSON.cast(json, XBlastP.class);
   }
 
   static BlastConfig convertXJSON(ObjectNode json) {
-    return JSON.cast(json, BlastX.class);
+    Log.trace("::convertXJSON(json=...)");
+    return JSON.cast(json, XBlastX.class);
   }
 
   static BlastConfig convertTNJSON(ObjectNode json) {
-    return JSON.cast(json, TBlastN.class);
+    Log.trace("::convertTNJSON(json=...)");
+    return JSON.cast(json, XTBlastN.class);
   }
 
   static BlastConfig convertTXJSON(ObjectNode json) {
-    return JSON.cast(json, TBlastX.class);
+    Log.trace("::convertTXJSON(json=...)");
+    return JSON.cast(json, XTBlastX.class);
+  }
+
+  public static BlastQueryConfig convert(IOBlastConfig conf) {
+    Log.trace("::convert(conf={})", conf);
+    return switch (conf.getTool()) {
+      case BlastN -> convert((IOBlastnConfig) conf);
+      case BlastP -> convert((IOBlastpConfig) conf);
+      case BlastX -> convert((IOBlastxConfig) conf);
+      case TBlastN -> convert((IOTBlastnConfig) conf);
+      case TBlastX -> convert((IOTBlastxConfig) conf);
+      case DeltaBlast, PSIBlast, RPSBlast, RPSTBlastN, BlastFormatter -> throw new IllegalArgumentException();
+    };
   }
 
   /**
@@ -98,7 +153,9 @@ public class BlastConv
    * @return Converted internal blast config.
    */
   public static BlastN convert(IOBlastnConfig bn) {
-    var out = new BlastN();
+    Log.trace("::convert(bn=...)");
+
+    var out = new XBlastN();
 
     out.setQueryFile(bn.getQuery());
     out.setQueryLocation(bn.getQueryLoc());
@@ -130,8 +187,8 @@ public class BlastConv
     out.setDust(bn.getDust());
     out.setWindowMaskerTaxID(bn.getWindowMaskerTaxid());
     out.setSoftMasking(bn.getSoftMasking());
-    out.setTaxIDs(bn.getTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(bn.getNegativeTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(null2List(bn.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setNegativeTaxIDs(null2List(bn.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
     out.setDBSoftMask(bn.getDbSoftMask());
     out.setDBHardMask(bn.getDbHardMask());
     out.setPercentIdentity(bn.getPercIdentity());
@@ -154,6 +211,7 @@ public class BlastConv
   }
 
   public static IOBlastnConfig convert(BlastN bn) {
+    Log.trace("::convert(bn=...)");
     var out = new IOBlastnConfigImpl();
 
     out.setQueryLoc(bn.getQueryLocation());
@@ -184,8 +242,8 @@ public class BlastConv
     out.setDust(bn.getDust());
     out.setWindowMaskerTaxid(bn.getWindowMaskerTaxID());
     out.setSoftMasking(bn.getSoftMasking());
-    out.setTaxIds(bn.getTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(bn.getNegativeTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(null2List(bn.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setNegativeTaxIds(null2List(bn.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
     out.setDbSoftMask(bn.getDBSoftMask());
     out.setDbHardMask(bn.getDBHardMask());
     out.setPercIdentity(bn.getPercentIdentity());
@@ -210,17 +268,18 @@ public class BlastConv
   // ---------------------------------------------------------------------- //
 
   public static BlastP convert(IOBlastpConfig conf) {
-    var out = new BlastP();
+    Log.trace("::convert(conf=...)");
+    var out = new XBlastP();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat().toInternalValue());
+    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs().toInternalValue());
+    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
+    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -236,11 +295,11 @@ public class BlastConv
     out.setGapExtend(conf.getGapExtend());
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(conf.getTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(conf.getNegativeTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -257,6 +316,7 @@ public class BlastConv
   }
 
   public static IOBlastpConfig convert(BlastP bp) {
+    Log.trace("::convert(bp=...)");
     var out = new IOBlastpConfigImpl();
 
     out.setQueryLoc(bp.getQueryLocation());
@@ -284,8 +344,8 @@ public class BlastConv
     out.setCompBasedStats(CompBasedStats.fromValue(bp.getCompBasedStats()));
     out.setSeg(bp.getSeg());
     out.setSoftMasking(bp.getSoftMasking());
-    out.setTaxIds(bp.getTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(bp.getNegativeTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(null2List(bp.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setNegativeTaxIds(null2List(bp.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
     out.setDbSoftMask(bp.getDBSoftMask());
     out.setDbHardMask(bp.getDBHardMask());
     out.setCullingLimit(l2i(bp.getCullingLimit()));
@@ -303,17 +363,18 @@ public class BlastConv
   // ---------------------------------------------------------------------- //
 
   public static BlastX convert(IOBlastxConfig conf) {
-    var out = new BlastX();
+    Log.trace("::convert(conf=...)");
+    var out = new XBlastX();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat().toInternalValue());
+    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs().toInternalValue());
+    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
+    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -332,11 +393,11 @@ public class BlastConv
     out.setMaxIntronLength(i2l(conf.getMaxIntronLength()));
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(conf.getTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(conf.getNegativeTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -354,6 +415,7 @@ public class BlastConv
   }
 
   public static IOBlastxConfig convert(BlastX bx) {
+    Log.trace("::convert(bx=...)");
     var out = new IOBlastxConfigImpl();
 
     out.setQueryLoc(bx.getQueryLocation());
@@ -384,8 +446,8 @@ public class BlastConv
     out.setCompBasedStats(CompBasedStats.fromValue(bx.getCompBasedStats()));
     out.setSeg(bx.getSeg());
     out.setSoftMasking(bx.getSoftMasking());
-    out.setTaxIds(bx.getTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(bx.getNegativeTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(null2List(bx.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setNegativeTaxIds(null2List(bx.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
     out.setDbSoftMask(bx.getDBSoftMask());
     out.setDbHardMask(bx.getDBHardMask());
     out.setCullingLimit(l2i(bx.getCullingLimit()));
@@ -405,17 +467,18 @@ public class BlastConv
   // ---------------------------------------------------------------------- //
 
   public static TBlastN convert(IOTBlastnConfig conf) {
-    var out = new TBlastN();
+    Log.trace("::convert(conf=...)");
+    var out = new XTBlastN();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat().toInternalValue());
+    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs().toInternalValue());
+    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
+    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -433,11 +496,11 @@ public class BlastConv
     out.setMaxIntronLength(i2l(conf.getMaxIntronLength()));
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(conf.getTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(conf.getNegativeTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -455,6 +518,7 @@ public class BlastConv
   }
 
   public static IOTBlastnConfig convert(TBlastN b) {
+    Log.trace("::convert(b=...)");
     var out = new IOTBlastnConfigImpl();
 
     out.setQueryLoc(b.getQueryLocation());
@@ -484,8 +548,8 @@ public class BlastConv
     out.setCompBasedStats(CompBasedStats.fromValue(b.getCompBasedStats()));
     out.setSeg(b.getSeg());
     out.setSoftMasking(b.getSoftMasking());
-    out.setTaxIds(b.getTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(b.getNegativeTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(null2List(b.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setNegativeTaxIds(null2List(b.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
     out.setDbSoftMask(b.getDBSoftMask());
     out.setDbHardMask(b.getDBHardMask());
     out.setCullingLimit(l2i(b.getCullingLimit()));
@@ -505,17 +569,18 @@ public class BlastConv
   // ---------------------------------------------------------------------- //
 
   public static TBlastX convert(IOTBlastxConfig conf) {
-    var out = new TBlastX();
+    Log.trace("::convert(conf=...)");
+    var out = new XTBlastX();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat().toInternalValue());
+    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs().toInternalValue());
+    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
+    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -533,8 +598,8 @@ public class BlastConv
     out.setDBGenCode(b2s(conf.getDbGencode()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(conf.getTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(conf.getNegativeTaxIds().stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -548,6 +613,7 @@ public class BlastConv
   }
 
   public static IOTBlastxConfig convert(TBlastX b) {
+    Log.trace("::convert(b=...)");
     var out = new IOTBlastxConfigImpl();
 
     out.setQueryLoc(b.getQueryLocation());
@@ -575,8 +641,8 @@ public class BlastConv
     out.setDbGencode(s2b(b.getDBGenCode()));
     out.setSeg(b.getSeg());
     out.setSoftMasking(b.getSoftMasking());
-    out.setTaxIds(b.getTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(b.getNegativeTaxIDs().stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(null2List(b.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setNegativeTaxIds(null2List(b.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
     out.setDbSoftMask(b.getDBSoftMask());
     out.setDbHardMask(b.getDBHardMask());
     out.setCullingLimit(l2i(b.getCullingLimit()));
@@ -592,18 +658,27 @@ public class BlastConv
   // ---------------------------------------------------------------------- //
 
   public static Long i2l(Integer in) {
+    Log.trace("::i2l(in={})", in);
     return in == null ? null : in.longValue();
   }
 
   public static Short b2s(Byte b) {
+    Log.trace("::b2s(b={})", b);
     return b == null ? null : b.shortValue();
   }
 
   public static Integer l2i(Long l) {
+    Log.trace("::l2i(l={})", l);
     return l == null ? null : l.intValue();
   }
 
   public static Byte s2b(Short v) {
+    Log.trace("::s2b(v={})", v);
     return v == null ? null : v.byteValue();
+  }
+
+  public static <T> List<T> null2List(List<T> val) {
+    Log.trace("::null2List(val={})", val);
+    return val == null ? Collections.emptyList() : val;
   }
 }

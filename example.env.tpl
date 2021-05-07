@@ -1,148 +1,162 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#  Postgres Service DB Configuration
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# # Core Lib Options
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# <required> Postgres root user password
-#
-# Used by containers:
-#   - service-db
-POSTGRES_PASSWORD=
+# User Login Auth (Salt Hash)
+AUTH_SECRET_KEY=
 
-# [optional] Postgres service-user username
-#
-# Used by containers:
-#   - service-db
-#   - service
-SVC_DB_USER=service
+# HTTP Server bind port
+SERVER_PORT=80
 
-# <required> Postgres service-user password
+# LDAP servers used to fetch DB connection details.
 #
-# Used by containers:
-#   - service-db
-#   - service
-SVC_DB_PASS=
+# Comma separated list of url:port combinations.
+#
+# For example: ldap.server1.com:888,ldap.server2.com:898
+LDAP_SERVER=
 
-# [optional] Postgres container hostname/alias
-#
-# Used by containers:
-#   - service
-SVC_DB_HOST=service-db
+# LDAP Base Distinguished Name
+ORACLE_BASE_DN=
 
-# [optional] Postgres port
-#
-# Used by containers:
-#   - service
-SVC_DB_PORT=5432
+# Account DB TNS Name (used for LDAP lookup)
+ACCT_DB_TNS_NAME=
 
-# [optional] Postgres database name
-#
-# Used by containers:
-#   - service
-SVC_DB_NAME=postgres
+# Account DB Username
+ACCT_DB_USER=
 
+# Account DB Password
+ACCT_DB_PASS=
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#  Blast Configuration
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# User DB TNS Name (used for LDAP lookup)
+USER_DB_TNS_NAME=
 
-# [optional] Blast job workspace directory (mount path)
-#
-# Used by containers:
-#   - blast
-#   - service
-MOUNT_PATH=/jobs
+# User DB Username
+USER_DB_USER=
 
-# [optional] Blast container hostname/alias
-#
-# Used by containers:
-#   - service
-BLAST_HOST=blast
+# User DB Password
+USER_DB_PASS=
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# # Multiblast Options
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#  MySQL Queue DB Configuration
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# # Filesystem Config
+# #
 
-# <required> MySQL root user password
-#
-# Used by containers:
-#   - queue-db
-MYSQL_ROOT_PASSWORD=
+# Job data workspace mount point.
+JOB_MOUNT_PATH=/out
 
-# [optional] MySQL queue-user username
-#
-# Used by containers:
-#   - queue-db
-QUEUE_DB_USER=queue
+# Blast file mount point.
+DB_MOUNT_POINT=/db
 
-# <required> MySQL queue-user password
-#
-# Used by containers:
-#   - queue-db
-QUEUE_DB_PASS=
+# #
+# # Service Hosts
+# #
 
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#  Queue Configuration
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# <required> Queue DB connection string.
-#
-# Specifies a data source name for the job queue and the repository
-# database in the form: ${QUEUE_DB_USER}:${QUEUE_DB_PASS}@tcp(queue-db:3306)/queue
-#
-# Used by containers:
-#   - queue
-FIREWORQ_MYSQL_DSN=
-
-# [optional] Job queue container hostname/alias
-#
-# Used by containers:
-#   - service
+# Docker container name/URL for the Fireworq server.
 QUEUE_HOST=queue
 
-# [optional] Name of the route used to add jobs to the default queue.
-#
-# Used by containers:
-#   - queue
-#   - service
-QUEUE_ROUTE=blast
+# Docker container name/URL for the blast worker node.
+BLAST_HOST=blast
 
-# [optional] Queue worker pool size
-#
-# Used by containers:
-#   - queue
-FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS=2
+# Docker container name/url for the formatter worker node.
+FORMATTER_HOST=formatter
 
-# [optional] Default job queue for new blast jobs
-#
-# Used by containers:
-#   - queue
-#   - service
-FIREWORQ_QUEUE_DEFAULT=blast-jobs
+# Docker container name/URL for the validation service.
+VALIDATOR_HOST=validator
 
-# [optional] The time in milliseconds between new job polls.
-#
-# Used by containers:
-#   - queue
-FIREWORQ_QUEUE_DEFAULT_POLLING_INTERVAL=1000
+# #
+# # Blast Query Job Config
+# #
 
-# [optional] The host/port the queue server should bind to in it's container.
+# Name of the queue for blast jobs.
 #
-# Used by containers:
-#   - queue
-FIREWORQ_BIND=0.0.0.0:80
+# This value should mirror the blast queue's name as set in
+# the fireworq/queues.yml file.
+BLAST_QUEUE_NAME=blast
 
-# [optional] Queue DB driver name
+# Name of the route/category for blast jobs.
 #
-# Used by containers:
-#   - queue
-FIREWORQ_DRIVER=mysql
+# This value should mirror the blast queue's category as set
+# in the fireworq/queues.yml file.
+BLAST_JOB_CATEGORY=blast
+
+# #
+# # Blast Format Job Config
+# #
+
+# Name of the queue for formatter jobs.
+#
+# This value should mirror the formatter queue's name as set
+# in the fireworq/queues.yml file.
+FORMAT_QUEUE_NAME=format
+
+# Name of the route/category for formatter jobs.
+#
+# This value should mirror the formatter queue's category as
+# set in the fireworq/queues.yml file.
+FORMAT_JOB_CATEGORY=format
+
+# #
+# # Blast Service Options
+# #
+
+# Length of time a job's results will be held after the last
+# usage.
+JOB_TIMEOUT=5
+
+# Maximum number of sequences that may be submitted in a
+# single query.
+MAX_QUERIES_PER_REQUEST=100
+
+# Maximum number of results that a user is allowed to
+# request in a single job.  This is not a hard rule, as
+# there is no way to guarantee it.  Instead the number of
+# sequences is multiplied by the number of requested hits.
+# Additionally requesters may override this value with a
+# lower limit when submitting a job.
+MAX_RESULTS_PER_QUERY=10000
+
+# Maximum allowed total query length in bytes for a single
+# job.
+MAX_INPUT_QUERY_SIZE=3145728
+
+# Maximum allowed length for an individual nucleotide query
+# sequence.
+MAX_NA_SEQ_SIZE=1048576
+
+# Maximum allowed length for an individual protein query
+# sequence.
+MAX_AA_SEQ_SIZE=102400
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# #
+# # Fireworq Options
+# #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Root password for the queue server's mysql database.
+#
+# This value should only be known by ops, if anyone at all.
+MYSQL_ROOT_PASSWORD=
+
+# Queue service DB user (used by the queue server to access
+# the database)
+QUEUE_DB_USER=queue
+
+# Queue service DB password. (Should only be known by ops).
+QUEUE_DB_PASS=
+
+# Specifies a data source name for the job queue and the
+# repository database in the form:
+#   user:password@tcp(mysql_host:mysql_port)/database?options
+#
+# The username and password value here must match the
+# `QUEUE_DB_USER` and `QUEUE_DB_PASS` value for the queue-db
+# container.
+FIREWORQ_MYSQL_DSN=

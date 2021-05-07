@@ -11,18 +11,27 @@ import mb.api.model.reports.ReportRequest;
 import mb.api.model.reports.ReportResponse;
 import mb.api.service.http.report.ReportService;
 import mb.lib.model.HashID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
+import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 
+@Authenticated
 public class ReportController implements Reports
 {
+  private static final Logger Log = LogManager.getLogger(ReportController.class);
+
   private final Request request;
 
   public ReportController(@Context Request request) {
+    Log.trace("::ReportController(request={})", request);
     this.request = request;
   }
 
   @Override
   public List<ReportResponse> getAllReports(String jobID) {
+    Log.trace("#getAllReports(jobID={})", jobID);
+
     var userID = UserProvider.lookupUser(request)
       .orElseThrow(Utils::noUserExcept)
       .getUserID();
@@ -35,6 +44,8 @@ public class ReportController implements Reports
 
   @Override
   public ReportResponse getReport(String reportID) {
+    Log.trace("#getReport(reportID={})", reportID);
+
     var userID = UserProvider.lookupUser(request)
       .orElseThrow(Utils::noUserExcept)
       .getUserID();
@@ -44,6 +55,8 @@ public class ReportController implements Reports
 
   @Override
   public ReportResponse newReport(ReportRequest req) {
+    Log.trace("#newReport(req={})", req);
+
     var userID = UserProvider.lookupUser(request)
       .orElseThrow(Utils::noUserExcept)
       .getUserID();
@@ -53,6 +66,8 @@ public class ReportController implements Reports
 
   @Override
   public ReportResponse rerunReport(String reportID) {
+    Log.trace("#rerunReport(reportID={})", reportID);
+
     var userID = UserProvider.lookupUser(request)
       .orElseThrow(Utils::noUserExcept)
       .getUserID();
@@ -61,7 +76,9 @@ public class ReportController implements Reports
   }
 
   @Override
-  public Response getReportData(String reportID, String fileName, boolean download, boolean zip) {
+  public Response getReportData(String reportID, String fileName, boolean download) {
+    Log.trace("getReportData(reportID={}, fileName={}, download={})", reportID, fileName, download);
+
     var userID = UserProvider.lookupUser(request)
       .orElseThrow(Utils::noUserExcept)
       .getUserID();
@@ -70,8 +87,7 @@ public class ReportController implements Reports
       HashID.parseOrThrow(reportID, NotFoundException::new),
       userID,
       fileName,
-      download,
-      zip
+      download
     ).toResponse();
   }
 }

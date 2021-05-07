@@ -60,7 +60,7 @@ func ParseCLIConfig(version string) Config {
 				Bind(&config.Port).
 				Require().
 				Name("port").
-				Default(80))).
+				Default(uint16(80)))).
 		Flag(cli.NewFlag().
 			Short('V').
 			Long("version").

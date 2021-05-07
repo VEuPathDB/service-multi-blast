@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import mb.api.model.blast.IOBlastFormat;
 import mb.api.model.io.JsonKeys;
 import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
@@ -19,7 +20,7 @@ public class ReportRequest
 {
   private HashID            jobID;
   private String            description;
-  private FormatType        type;
+  private IOBlastFormat     type;
   private String            delim;
   private List<FormatField> fields;
   private Boolean           showGIs;
@@ -55,12 +56,12 @@ public class ReportRequest
   }
 
   @JsonGetter(JsonKeys.Format)
-  public FormatType getType() {
+  public IOBlastFormat getType() {
     return type;
   }
 
   @JsonSetter(JsonKeys.Format)
-  public ReportRequest setType(FormatType type) {
+  public ReportRequest setType(IOBlastFormat type) {
     this.type = type;
     return this;
   }
@@ -189,14 +190,17 @@ public class ReportRequest
   public BlastFormatter toInternalValue() {
     var out = new BlastFormatter();
 
-    out.setOutFormat(new OutFormat().setType(type).setDelimiter(delim).setFields(fields));
+    out.setOutFormat(new OutFormat()
+      .setType(FormatType.values()[type.ordinal()])
+      .setDelimiter(delim)
+      .setFields(fields));
     out.setShowGIs(showGIs);
     out.setNumDescriptions(numDescriptions);
     out.setNumAlignments(numAlignments);
     out.setLineLength(lineLength);
     out.setHTML(html);
-    out.setSortHits(sortHits.toInternalValue());
-    out.setSortHSPs(sortHSPs.toInternalValue());
+    out.setSortHits(sortHits == null ? null : sortHits.toInternalValue());
+    out.setSortHSPs(sortHSPs == null ? null : sortHSPs.toInternalValue());
     out.setMaxTargetSequences(maxTargetSeqs);
     out.setParseDefLines(parseDefLines);
 
@@ -207,7 +211,7 @@ public class ReportRequest
     var out = new ReportRequest();
 
     if (val.getOutFormat() != null) {
-      out.setType(val.getOutFormat().getType());
+      out.setType(IOBlastFormat.values()[val.getOutFormat().getType().ordinal()]);
       out.setDelim(val.getOutFormat().getDelimiter());
       if (val.getOutFormat().getFields() != null && val.getOutFormat().getFields().size() > 0)
         out.setFields(val.getOutFormat().getFields());

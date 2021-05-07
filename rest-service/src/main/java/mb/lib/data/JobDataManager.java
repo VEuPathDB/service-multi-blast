@@ -1,6 +1,8 @@
 package mb.lib.data;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -23,6 +25,8 @@ public class JobDataManager
   private static final String Build     = "build-" + Config.getInstance().getBuildNum();
   private static final String BlastPath = "blast";
 
+  private static final Config conf = Config.getInstance();
+
   /**
    * Creates a path string to the target blast DB.
    *
@@ -35,6 +39,17 @@ public class JobDataManager
   public static Path makeDBPath(String site, String org, String tgt) {
     Log.trace("::makeDBPath(site={}, org={}, tgt={})", site, org, tgt);
     return DBRoot.resolve(site).resolve(Build).resolve(org).resolve(BlastPath).resolve(tgt);
+  }
+
+  public static void createQueryFile(HashID jobID, String query) throws Exception {
+    var queryFile = Path.of(conf.getJobMountPath(), jobID.string(), "query.txt").toFile();
+
+    queryFile.createNewFile();
+    var writer = new FileWriter(queryFile);
+
+    writer.write(query);
+    writer.flush();
+    writer.close();
   }
 
   /**

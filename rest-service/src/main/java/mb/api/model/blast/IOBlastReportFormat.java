@@ -34,7 +34,7 @@ public interface IOBlastReportFormat {
     return new OutFormat().
       setType(getFormat().toInternalValue()).
       setDelimiter(getDelim()).
-      setFields(new ArrayList<>(getFields()));
+      setFields(getFields() == null ? new ArrayList<>() : new ArrayList<>(getFields()));
   }
 
   static IOBlastReportFormat fromInternalValue(OutFormat fmt) {
@@ -42,7 +42,7 @@ public interface IOBlastReportFormat {
 
     out.setFormat(IOBlastFormat.fromInternalValue(fmt.getType()));
     out.setDelim(fmt.getDelimiter());
-    out.setFields(new ArrayList<>(fmt.getFields()));
+    out.setFields(fmt.getFields() == null ? new ArrayList<>() : new ArrayList<>(fmt.getFields()));
 
     return out;
   }

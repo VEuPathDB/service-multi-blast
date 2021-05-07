@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import mb.api.model.blast.IOBlastConfig;
 import mb.api.model.blast.IOBlastReportFormat;
+import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
 import org.veupathdb.lib.blast.field.Location;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 abstract public class IOBlastConfigImpl implements IOBlastConfig
 {
   private String              query;

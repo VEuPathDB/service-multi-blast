@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import mb.api.model.io.JsonKeys;
+import org.veupathdb.lib.blast.BlastTool;
 import org.veupathdb.lib.blast.TBlastX;
 import org.veupathdb.lib.blast.consts.Flag;
 import org.veupathdb.lib.blast.field.Location;
+import org.veupathdb.lib.blast.field.ScoringMatrix;
 import org.veupathdb.lib.blast.field.Seg;
 import org.veupathdb.lib.blast.field.Strand;
 
@@ -35,81 +39,89 @@ public class XTBlastX extends TBlastX
     put(Flag.SubjectBestHit, XTBlastX::setSubjectBestHit);
   }};
 
+  @JsonGetter(JsonKeys.Tool)
+  public BlastTool tool() {
+    return super.getTool();
+  }
+
   public void setStrand(JsonNode j) {
-    super.setStrand(Strand.fromString(j.textValue()));
+    super.setStrand(Strand.fromString(j.asText()));
   }
 
   public void setQueryGenCode(JsonNode j) {
-    super.setQueryGenCode(j.shortValue());
+    super.setQueryGenCode((short) j.asInt());
   }
 
   public void setWordSize(JsonNode j) {
-    super.setWordSize(j.longValue());
+    super.setWordSize(j.asLong());
   }
 
   public void setMaxIntronLength(JsonNode j) {
-    super.setMaxIntronLength(j.longValue());
+    super.setMaxIntronLength(j.asLong());
   }
 
   public void setMatrix(JsonNode j) {
-    super.setMatrix(j.textValue());
+    super.setMatrix(ScoringMatrix.fromString(j.asText()));
   }
 
   public void setThreshold(JsonNode j) {
-    super.setThreshold(j.doubleValue());
+    super.setThreshold(j.asDouble());
   }
 
   public void setDBGenCode(JsonNode j) {
-    super.setDBGenCode(j.shortValue());
+    super.setDBGenCode((short) j.asInt());
   }
 
   public void setSubjectFile(JsonNode j) {
-    super.setSubjectFile(j.textValue());
+    super.setSubjectFile(j.asText());
   }
 
   public void setSubjectLocation(JsonNode j) {
-    super.setSubjectLocation(Location.fromString(j.textValue()));
+    super.setSubjectLocation(Location.fromString(j.asText()));
   }
 
   public void setSeg(JsonNode j) {
-    super.setSeg(Seg.fromString(j.textValue()));
+    super.setSeg(Seg.fromString(j.asText()));
   }
 
   public void setDBSoftMask(JsonNode j) {
-    super.setDBSoftMask(j.textValue());
+    super.setDBSoftMask(j.asText());
   }
 
   public void setDBHardMask(JsonNode j) {
-    super.setDBHardMask(j.textValue());
+    super.setDBHardMask(j.asText());
   }
 
   public void setCullingLimit(JsonNode j) {
-    super.setCullingLimit(j.longValue());
+    super.setCullingLimit(j.asLong());
   }
 
   public void setSumStats(JsonNode j) {
-    super.setSumStats(j.booleanValue());
+    super.setSumStats(j.asBoolean());
   }
 
   public void setNumThreads(JsonNode j) {
-    super.setNumThreads(j.shortValue());
+    super.setNumThreads((short) j.asInt());
   }
 
   public void setBestHitOverhang(JsonNode j) {
-    super.setBestHitOverhang(j.doubleValue());
+    super.setBestHitOverhang(j.asDouble());
   }
 
   public void setBestHitScoreEdge(JsonNode j) {
-    super.setBestHitScoreEdge(j.doubleValue());
+    super.setBestHitScoreEdge(j.asDouble());
   }
 
   public void setSubjectBestHit(JsonNode j) {
-    super.setSubjectBestHit(j.booleanValue());
+    super.setSubjectBestHit(j.asBoolean());
   }
 
   public static TBlastX fromLegacyJSON(ArrayNode node) {
     var out = new XTBlastX();
     var it  = node.elements();
+
+    // Skip the first entry as it is just the blast tool name
+    it.next();
 
     while (it.hasNext()) {
       var arr = it.next();

@@ -7,26 +7,13 @@ public class  Config extends Options
 {
   private static Config instance;
 
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    WDK User Database                                                 ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
-  @Option(
-    names = "--multiblast-schema",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:MULTIBLAST_SCHEMA}",
-    description = "User DB schema where the multiblast tables reside."
-  )
-  private String multiBlastSchema;
+  // ╔══════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                          ║ //
+  // ║    Filesystem Mounts                                                                     ║ //
+  // ║                                                                                          ║ //
+  // ╚══════════════════════════════════════════════════════════════════════════════════════════╝ //
 
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Job Running                                                       ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   @Option(
     names = "--job-mount-path",
@@ -35,7 +22,16 @@ public class  Config extends Options
     defaultValue = "${env:JOB_MOUNT_PATH}",
     description = "Job data workspace mount point."
   )
-  private String jobMountPath;
+  @SuppressWarnings("FieldMayBeFinal")
+  private String jobMountPath = "/out";
+
+  public String getJobMountPath() {
+    return jobMountPath;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
 
   @Option(
     names = "--db-mount-path",
@@ -44,7 +40,172 @@ public class  Config extends Options
     defaultValue = "${env:DB_MOUNT_PATH}",
     description = "Blast file mount point."
   )
-  private String dbMountPath;
+  @SuppressWarnings("FieldMayBeFinal")
+  private String dbMountPath = "/db";
+
+  public String getDbMountPath() {
+    return dbMountPath;
+  }
+
+
+  // ╔════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                        ║ //
+  // ║    Job Queue Config                                                                    ║ //
+  // ║                                                                                        ║ //
+  // ╚════════════════════════════════════════════════════════════════════════════════════════╝ //
+
+
+  @Option(
+    names = "--queue-host",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:QUEUE_HOST}",
+    description = "Job queue host address"
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String queueHost = "queue";
+
+  public String getQueueHost() {
+    return queueHost;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--blast-queue-name",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:BLAST_QUEUE_NAME}",
+    description = "Name of the queue new blast jobs will be added to."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String blastQueueName = "blast";
+
+  public String getBlastQueueName() {
+    return blastQueueName;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--blast-job-category",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:BLAST_JOB_CATEGORY}",
+    description = "Routing category for blast jobs in the job queue."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String blastJobCategory = "blast";
+
+  public String getBlastJobCategory() {
+    return blastJobCategory;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--format-queue-name",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:FORMAT_QUEUE_NAME}",
+    description = "Name of the queue new formatter jobs will be added to."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String formatQueueName = "format";
+
+  public String getFormatQueueName() {
+    return formatQueueName;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--format-job-category",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:FORMAT_JOB_CATEGORY}",
+    description = "Routing category for format jobs in the job queue."
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String formatJobCategory = "format";
+
+  public String getFormatJobCategory() {
+    return formatJobCategory;
+  }
+
+
+  // ╔════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                        ║ //
+  // ║    External Services                                                                   ║ //
+  // ║                                                                                        ║ //
+  // ╚════════════════════════════════════════════════════════════════════════════════════════╝ //
+
+
+  @Option(
+    names = "--blast-host",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:BLAST_HOST}",
+    description = "Blast service host address"
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String blastHost = "blast";
+
+  public String getBlastHost() {
+    return blastHost;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--validator-host",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:VALIDATOR_HOST}",
+    description = "Host for the Blast+ config validator service"
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String validatorHost = "validator";
+
+  public String getValidatorHost() {
+    return validatorHost;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
+  @Option(
+    names = "--formatter-host",
+    arity = "1",
+    required = true,
+    defaultValue = "${env:FORMATTER_HOST}",
+    description = "Blast formatter service host address"
+  )
+  @SuppressWarnings("FieldMayBeFinal")
+  private String formatterHost = "formatter";
+
+  public String getFormatterHost() {
+    return formatterHost;
+  }
+
+
+  // ╔════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                        ║ //
+  // ║    WDK/Site Options                                                                    ║ //
+  // ║                                                                                        ║ //
+  // ╚════════════════════════════════════════════════════════════════════════════════════════╝ //
+
 
   @Option(
     names = "--db-build",
@@ -55,87 +216,17 @@ public class  Config extends Options
   )
   private int buildNum;
 
-  @Option(
-    names = "--queue-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:QUEUE_HOST}",
-    description = "Job queue host address"
-  )
-  private String queueHost;
-
-  @Option(
-    names = "--blast-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:BLAST_HOST}",
-    description = "Blast service host address"
-  )
-  private String blastHost;
-
-  @Option(
-    names = "--blast-queue-name",
-    arity = "1",
-    required = true,
-    description = "Name of the queue new blast jobs will be added to."
-  )
-  @SuppressWarnings("FieldMayBeFinal")
-  private String blastQueueName = "blast";
-
-  @Option(
-    names = "--format-queue-name",
-    arity = "1",
-    required = true,
-    description = "Name of the queue new formatter jobs will be added to."
-  )
-  @SuppressWarnings("FieldMayBeFinal")
-  private String formatQueueName = "format";
-
-  @Option(
-    names = "--job-category",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:JOB_CATEGORY}",
-    description = "Endpoint (including category"
-  )
-  private String jobCategory;
-
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Validator Config                                                  ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
-
-  @Option(
-    names = "--valiator-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:VALIDATOR_HOST}",
-    description = "Host for the Blast+ config validator service"
-  )
-  private String validatorHost;
+  public int getBuildNum() {
+    return buildNum;
+  }
 
 
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Formatter Config                                                  ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
+  // ╔════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                        ║ //
+  // ║    Misc Config                                                                         ║ //
+  // ║                                                                                        ║ //
+  // ╚════════════════════════════════════════════════════════════════════════════════════════╝ //
 
-  @Option(
-    names = "--formatter-host",
-    arity = "1",
-    required = true,
-    defaultValue = "${env:FORMATTER_HOST}",
-    description = "Blast formatter service host address"
-  )
-  private String formatterHost;
-
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Misc Config                                                       ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
 
   @Option(
     names = "--job-timeout",
@@ -144,7 +235,15 @@ public class  Config extends Options
     description = "Number of days to hold onto a completed job's results."
   )
   @SuppressWarnings("FieldMayBeFinal")
-  private int jobTimeout = 30;
+  private int jobTimeout = 5;
+
+  public int getJobTimeout() {
+    return jobTimeout;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
 
   @Option(
     names = "--max-queries-per-request",
@@ -155,6 +254,14 @@ public class  Config extends Options
   @SuppressWarnings("FieldMayBeFinal")
   private int maxQueries = 100;
 
+  public int getMaxSeqsPerQuery() {
+    return maxQueries;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
   @Option(
     names = "--max-results-per-query",
     arity = "1",
@@ -163,6 +270,14 @@ public class  Config extends Options
   )
   @SuppressWarnings("FieldMayBeFinal")
   private int maxResults = 10_000;
+
+  public int getMaxResults() {
+    return maxResults;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
 
   @Option(
     names = "--max-input-query-size",
@@ -173,6 +288,14 @@ public class  Config extends Options
   @SuppressWarnings("FieldMayBeFinal")
   private int maxInputQuerySize = 3_145_728;
 
+  public int getMaxInputQuerySize() {
+    return maxInputQuerySize;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+
   @Option(
     names = "--max-na-seq-size",
     arity = "1",
@@ -181,6 +304,14 @@ public class  Config extends Options
   )
   @SuppressWarnings("FieldMayBeFinal")
   private int maxNASeqSize = 1_048_576;
+
+  public int getMaxNASeqSize() {
+    return maxNASeqSize;
+  }
+
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
 
   @Option(
     names = "--max-aa-seq-size",
@@ -191,11 +322,17 @@ public class  Config extends Options
   @SuppressWarnings("FieldMayBeFinal")
   private int maxAASeqSize = 102_400;
 
-  // ╔══════════════════════════════════════════════════════════════════════╗ //
-  // ║                                                                      ║ //
-  // ║    Class Methods                                                     ║ //
-  // ║                                                                      ║ //
-  // ╚══════════════════════════════════════════════════════════════════════╝ //
+  public int getMaxAASeqSize() {
+    return maxAASeqSize;
+  }
+
+
+  // ╔════════════════════════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                                        ║ //
+  // ║    Class Methods                                                                       ║ //
+  // ║                                                                                        ║ //
+  // ╚════════════════════════════════════════════════════════════════════════════════════════╝ //
+
 
   private Config() {
   }
@@ -205,73 +342,5 @@ public class  Config extends Options
       return instance = new Config();
 
     return instance;
-  }
-
-  public String getJobMountPath() {
-    return jobMountPath;
-  }
-
-  public String getDbMountPath() {
-    return dbMountPath;
-  }
-
-  public String getMultiBlastSchema() {
-    return multiBlastSchema;
-  }
-
-  public String getQueueHost() {
-    return queueHost;
-  }
-
-  public String getBlastHost() {
-    return blastHost;
-  }
-
-  public String getBlastQueueName() {
-    return blastQueueName;
-  }
-
-  public String getJobCategory() {
-    return jobCategory;
-  }
-
-  public int getJobTimeout() {
-    return jobTimeout;
-  }
-
-  public int getBuildNum() {
-    return buildNum;
-  }
-
-  public int getMaxSeqsPerQuery() {
-    return maxQueries;
-  }
-
-  public int getMaxResults() {
-    return maxResults;
-  }
-
-  public int getMaxInputQuerySize() {
-    return maxInputQuerySize;
-  }
-
-  public int getMaxNASeqSize() {
-    return maxNASeqSize;
-  }
-
-  public int getMaxAASeqSize() {
-    return maxAASeqSize;
-  }
-
-  public String getFormatQueueName() {
-    return formatQueueName;
-  }
-
-  public String getFormatterHost() {
-    return formatterHost;
-  }
-
-  public String getValidatorHost() {
-    return validatorHost;
   }
 }

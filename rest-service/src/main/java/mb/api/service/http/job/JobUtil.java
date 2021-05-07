@@ -5,11 +5,14 @@ import javax.ws.rs.BadRequestException;
 
 import mb.api.model.IOJobTarget;
 import mb.api.model.IOJsonJobRequest;
+import mb.lib.config.Config;
 import mb.lib.data.JobDataManager;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 
 public class JobUtil
 {
+  private static final Config Conf = Config.getInstance();
+
   public static String makeDBPaths(String site, Collection<IOJobTarget> targets) {
     var dbPath = new StringBuilder();
 
@@ -52,17 +55,16 @@ public class JobUtil
    * <p>
    * If the client did not specify a max result limit, this method does nothing.
    *
-   * @param req   Client request job configuration.
-   * @param query Split set of queries.
-   *
    * @throws UnprocessableEntityException if the request configuration could
    * create a result set larger than the client specified limit.
    */
-  public static void verifyResultLimit(IOJsonJobRequest req, QuerySplitResult query) {
+  public static void verifyResultLimit(IOJsonJobRequest req, int numQueries) {
     if (req.getMaxResults() != null && req.getMaxResults() > 0)
       ResultLimitValidator.validateResultLimit(
-        req.getMaxResults(),
-        query.subQueries.size() + 1,
+        req.getMaxResults() == null
+          ? Conf.getMaxResults()
+          : Math.min(req.getMaxResults(), Conf.getMaxResults()),
+        numQueries + 1,
         req.getConfig()
       ).ifPresent(m -> { throw new UnprocessableEntityException(m); });
   }
