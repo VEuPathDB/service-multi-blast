@@ -28,18 +28,6 @@ public class JobUtil
     return dbPath.toString();
   }
 
-  public static void verifyQuery(Object req) {
-    nullCheck(req, "query cannot be null");
-  }
-
-  public static void verifyBody(Object req) {
-    nullCheck(req, "request body cannot be null");
-  }
-
-  public static void verifyProps(Object req) {
-    nullCheck(req, "job properties cannot be null");
-  }
-
   public static void verifyConfig(Object req) {
     nullCheck(req, "blast config cannot be null");
   }
