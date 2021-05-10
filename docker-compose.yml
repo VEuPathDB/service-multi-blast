@@ -197,6 +197,8 @@ services:
     image: veupathdb/mblast-blast-validator:${VALIDATOR_TAG:-latest}
     networks:
       - internal
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${VALIDATOR_WATCHTOWER:-false}"
 
 volumes:
   job-data:
