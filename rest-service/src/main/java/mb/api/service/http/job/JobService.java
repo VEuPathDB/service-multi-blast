@@ -21,8 +21,6 @@ import org.veupathdb.lib.container.jaxrs.model.User;
 
 import static mb.api.service.http.Util.wrapException;
 
-// TODO: Job mount path should be the same for both the blast container and the
-//       service container.
 public class JobService
 {
   private static final Logger Log  = LogManager.getLogger(JobService.class);
@@ -146,6 +144,16 @@ public class JobService
       props.getConfig().setQuery(new String(query.readAllBytes(), StandardCharsets.UTF_8));
 
       return createJob(props, user.getUserID());
+    } catch (Exception e) {
+      throw wrapException(e);
+    }
+  }
+
+  public void rerunJob(HashID jobID, long userID) {
+    Log.trace("#rerunJob(jobID={}, userID={})", jobID, userID);
+
+    try {
+      BlastManager.rerunJob(jobID, userID);
     } catch (Exception e) {
       throw wrapException(e);
     }
