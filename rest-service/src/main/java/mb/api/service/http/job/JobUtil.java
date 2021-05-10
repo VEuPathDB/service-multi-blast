@@ -19,7 +19,7 @@ public class JobUtil
     for (var db : targets) {
       var path = JobDataManager.makeDBPath(site, db.organism(), db.target());
       if (!JobDataManager.targetDBExists(path))
-        throw new BadRequestException("unrecognized query target");
+        throw new BadRequestException("unrecognized query target: (" + db.organism() + ", " + db.target() + ")");
       if (!dbPath.isEmpty())
         dbPath.append(' ');
       dbPath.append(path);
