@@ -21,6 +21,9 @@ import mb.lib.query.model.JobTarget;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.blast.*;
+import org.veupathdb.lib.blast.field.HSPSorting;
+import org.veupathdb.lib.blast.field.HitSorting;
+import org.veupathdb.lib.blast.field.OutFormat;
 
 public class BlastConv
 {
@@ -152,7 +155,7 @@ public class BlastConv
    *
    * @return Converted internal blast config.
    */
-  public static BlastN convert(IOBlastnConfig bn) {
+  static BlastN convert(IOBlastnConfig bn) {
     Log.trace("::convert(bn=...)");
 
     var out = new XBlastN();
@@ -160,12 +163,12 @@ public class BlastConv
     out.setQueryFile(bn.getQuery());
     out.setQueryLocation(bn.getQueryLoc());
     out.setExpectValue(bn.getEValue());
-    out.setOutFormat(bn.getOutFormat().toInternalValue());
+    out.setOutFormat(convert(bn.getOutFormat()));
     out.setNumDescriptions(bn.getNumDescriptions());
     out.setNumAlignments(bn.getNumAlignments());
     out.setLineLength(bn.getLineLength());
-    out.setSortHits(bn.getSortHits().toInternalValue());
-    out.setSortHSPs(bn.getSortHSPs().toInternalValue());
+    out.setSortHits(convert(bn.getSortHits()));
+    out.setSortHSPs(convert(bn.getSortHSPs()));
     out.setLowercaseMasking(bn.getLcaseMasking());
     out.setQueryCoverageHSPPercent(bn.getQCovHSPPerc());
     out.setMaxHSPs(bn.getMaxHSPs());
@@ -187,8 +190,8 @@ public class BlastConv
     out.setDust(bn.getDust());
     out.setWindowMaskerTaxID(bn.getWindowMaskerTaxid());
     out.setSoftMasking(bn.getSoftMasking());
-    out.setTaxIDs(null2List(bn.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(null2List(bn.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(convertTaxIDsToInternal(bn.getTaxIds()));
+    out.setNegativeTaxIDs(convertTaxIDsToInternal(bn.getNegativeTaxIds()));
     out.setDBSoftMask(bn.getDbSoftMask());
     out.setDBHardMask(bn.getDbHardMask());
     out.setPercentIdentity(bn.getPercIdentity());
@@ -210,18 +213,18 @@ public class BlastConv
     return out;
   }
 
-  public static IOBlastnConfig convert(BlastN bn) {
+  static IOBlastnConfig convert(BlastN bn) {
     Log.trace("::convert(bn=...)");
     var out = new IOBlastnConfigImpl();
 
     out.setQueryLoc(bn.getQueryLocation());
     out.setEValue(bn.getExpectValue());
-    out.setOutFormat(IOBlastReportFormat.fromInternalValue(bn.getOutFormat()));
+    out.setOutFormat(convert(bn.getOutFormat()));
     out.setNumDescriptions(bn.getNumDescriptions());
     out.setNumAlignments(bn.getNumAlignments());
     out.setLineLength(bn.getLineLength());
-    out.setSortHits(IOHitSorting.fromInternalValue(bn.getSortHits()));
-    out.setSortHSPs(IOHSPSorting.fromInternalValue(bn.getSortHSPs()));
+    out.setSortHits(convert(bn.getSortHits()));
+    out.setSortHSPs(convert(bn.getSortHSPs()));
     out.setLcaseMasking(bn.getLowercaseMasking());
     out.setQCovHSPPerc(bn.getQueryCoverageHSPPercent());
     out.setMaxHSPs(bn.getMaxHSPs());
@@ -242,8 +245,8 @@ public class BlastConv
     out.setDust(bn.getDust());
     out.setWindowMaskerTaxid(bn.getWindowMaskerTaxID());
     out.setSoftMasking(bn.getSoftMasking());
-    out.setTaxIds(null2List(bn.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(null2List(bn.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(convertTaxIDsToExternal(bn.getTaxIDs()));
+    out.setNegativeTaxIds(convertTaxIDsToExternal(bn.getNegativeTaxIDs()));
     out.setDbSoftMask(bn.getDBSoftMask());
     out.setDbHardMask(bn.getDBHardMask());
     out.setPercIdentity(bn.getPercentIdentity());
@@ -267,19 +270,19 @@ public class BlastConv
 
   // ---------------------------------------------------------------------- //
 
-  public static BlastP convert(IOBlastpConfig conf) {
+  static BlastP convert(IOBlastpConfig conf) {
     Log.trace("::convert(conf=...)");
     var out = new XBlastP();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
+    out.setOutFormat(convert(conf.getOutFormat()));
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
+    out.setSortHits(convert(conf.getSortHits()));
+    out.setSortHSPs(convert(conf.getSortHSPs()));
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -295,11 +298,11 @@ public class BlastConv
     out.setGapExtend(conf.getGapExtend());
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(convertCBS(conf.getCompBasedStats()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(convertTaxIDsToInternal(conf.getTaxIds()));
+    out.setNegativeTaxIDs(convertTaxIDsToInternal(conf.getNegativeTaxIds()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -315,18 +318,18 @@ public class BlastConv
     return out;
   }
 
-  public static IOBlastpConfig convert(BlastP bp) {
+  static IOBlastpConfig convert(BlastP bp) {
     Log.trace("::convert(bp=...)");
     var out = new IOBlastpConfigImpl();
 
     out.setQueryLoc(bp.getQueryLocation());
     out.setEValue(bp.getExpectValue());
-    out.setOutFormat(IOBlastReportFormat.fromInternalValue(bp.getOutFormat()));
+    out.setOutFormat(convert(bp.getOutFormat()));
     out.setNumDescriptions(bp.getNumDescriptions());
     out.setNumAlignments(bp.getNumAlignments());
     out.setLineLength(bp.getLineLength());
-    out.setSortHits(IOHitSorting.fromInternalValue(bp.getSortHits()));
-    out.setSortHSPs(IOHSPSorting.fromInternalValue(bp.getSortHSPs()));
+    out.setSortHits(convert(bp.getSortHits()));
+    out.setSortHSPs(convert(bp.getSortHSPs()));
     out.setLcaseMasking(bp.getLowercaseMasking());
     out.setQCovHSPPerc(bp.getQueryCoverageHSPPercent());
     out.setMaxHSPs(bp.getMaxHSPs());
@@ -341,11 +344,11 @@ public class BlastConv
     out.setGapExtend(bp.getGapExtend());
     out.setMatrix(bp.getMatrix());
     out.setThreshold(bp.getThreshold());
-    out.setCompBasedStats(CompBasedStats.fromValue(bp.getCompBasedStats()));
+    out.setCompBasedStats(convertCBS(bp.getCompBasedStats()));
     out.setSeg(bp.getSeg());
     out.setSoftMasking(bp.getSoftMasking());
-    out.setTaxIds(null2List(bp.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(null2List(bp.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(convertTaxIDsToExternal(bp.getTaxIDs()));
+    out.setNegativeTaxIds(convertTaxIDsToExternal(bp.getNegativeTaxIDs()));
     out.setDbSoftMask(bp.getDBSoftMask());
     out.setDbHardMask(bp.getDBHardMask());
     out.setCullingLimit(l2i(bp.getCullingLimit()));
@@ -362,19 +365,19 @@ public class BlastConv
 
   // ---------------------------------------------------------------------- //
 
-  public static BlastX convert(IOBlastxConfig conf) {
+  static BlastX convert(IOBlastxConfig conf) {
     Log.trace("::convert(conf=...)");
     var out = new XBlastX();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
+    out.setOutFormat(convert(conf.getOutFormat()));
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
+    out.setSortHits(convert(conf.getSortHits()));
+    out.setSortHSPs(convert(conf.getSortHSPs()));
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -393,11 +396,11 @@ public class BlastConv
     out.setMaxIntronLength(i2l(conf.getMaxIntronLength()));
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(convertCBS(conf.getCompBasedStats()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(convertTaxIDsToInternal(conf.getTaxIds()));
+    out.setNegativeTaxIDs(convertTaxIDsToInternal(conf.getNegativeTaxIds()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -414,18 +417,18 @@ public class BlastConv
     return out;
   }
 
-  public static IOBlastxConfig convert(BlastX bx) {
+  static IOBlastxConfig convert(BlastX bx) {
     Log.trace("::convert(bx=...)");
     var out = new IOBlastxConfigImpl();
 
     out.setQueryLoc(bx.getQueryLocation());
-    out.setEValue(bx.getExpectValue().toString());
-    out.setOutFormat(IOBlastReportFormat.fromInternalValue(bx.getOutFormat()));
+    out.setEValue(bx.getExpectValue());
+    out.setOutFormat(convert(bx.getOutFormat()));
     out.setNumDescriptions(bx.getNumDescriptions());
     out.setNumAlignments(bx.getNumAlignments());
     out.setLineLength(bx.getLineLength());
-    out.setSortHits(IOHitSorting.fromInternalValue(bx.getSortHits()));
-    out.setSortHSPs(IOHSPSorting.fromInternalValue(bx.getSortHSPs()));
+    out.setSortHits(convert(bx.getSortHits()));
+    out.setSortHSPs(convert(bx.getSortHSPs()));
     out.setLcaseMasking(bx.getLowercaseMasking());
     out.setQCovHSPPerc(bx.getQueryCoverageHSPPercent());
     out.setMaxHSPs(bx.getMaxHSPs());
@@ -443,11 +446,11 @@ public class BlastConv
     out.setMaxIntronLength(l2i(bx.getMaxIntronLength()));
     out.setMatrix(bx.getMatrix());
     out.setThreshold(bx.getThreshold());
-    out.setCompBasedStats(CompBasedStats.fromValue(bx.getCompBasedStats()));
+    out.setCompBasedStats(convertCBS(bx.getCompBasedStats()));
     out.setSeg(bx.getSeg());
     out.setSoftMasking(bx.getSoftMasking());
-    out.setTaxIds(null2List(bx.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(null2List(bx.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(convertTaxIDsToExternal(bx.getTaxIDs()));
+    out.setNegativeTaxIds(convertTaxIDsToExternal(bx.getNegativeTaxIDs()));
     out.setDbSoftMask(bx.getDBSoftMask());
     out.setDbHardMask(bx.getDBHardMask());
     out.setCullingLimit(l2i(bx.getCullingLimit()));
@@ -466,19 +469,19 @@ public class BlastConv
 
   // ---------------------------------------------------------------------- //
 
-  public static TBlastN convert(IOTBlastnConfig conf) {
+  static TBlastN convert(IOTBlastnConfig conf) {
     Log.trace("::convert(conf=...)");
     var out = new XTBlastN();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
+    out.setOutFormat(convert(conf.getOutFormat()));
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
+    out.setSortHits(convert(conf.getSortHits()));
+    out.setSortHSPs(convert(conf.getSortHSPs()));
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -496,11 +499,11 @@ public class BlastConv
     out.setMaxIntronLength(i2l(conf.getMaxIntronLength()));
     out.setMatrix(conf.getMatrix());
     out.setThreshold(conf.getThreshold());
-    out.setCompBasedStats(conf.getCompBasedStats() == null ? null : String.valueOf(conf.getCompBasedStats().ordinal()));
+    out.setCompBasedStats(convertCBS(conf.getCompBasedStats()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(convertTaxIDsToInternal(conf.getTaxIds()));
+    out.setNegativeTaxIDs(convertTaxIDsToInternal(conf.getNegativeTaxIds()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -517,18 +520,18 @@ public class BlastConv
     return out;
   }
 
-  public static IOTBlastnConfig convert(TBlastN b) {
+  static IOTBlastnConfig convert(TBlastN b) {
     Log.trace("::convert(b=...)");
     var out = new IOTBlastnConfigImpl();
 
     out.setQueryLoc(b.getQueryLocation());
     out.setEValue(b.getExpectValue());
-    out.setOutFormat(IOBlastReportFormat.fromInternalValue(b.getOutFormat()));
+    out.setOutFormat(convert(b.getOutFormat()));
     out.setNumDescriptions(b.getNumDescriptions());
     out.setNumAlignments(b.getNumAlignments());
     out.setLineLength(b.getLineLength());
-    out.setSortHits(IOHitSorting.fromInternalValue(b.getSortHits()));
-    out.setSortHSPs(IOHSPSorting.fromInternalValue(b.getSortHSPs()));
+    out.setSortHits(convert(b.getSortHits()));
+    out.setSortHSPs(convert(b.getSortHSPs()));
     out.setLcaseMasking(b.getLowercaseMasking());
     out.setQCovHSPPerc(b.getQueryCoverageHSPPercent());
     out.setMaxHSPs(b.getMaxHSPs());
@@ -545,11 +548,11 @@ public class BlastConv
     out.setMaxIntronLength(l2i(b.getMaxIntronLength()));
     out.setMatrix(b.getMatrix());
     out.setThreshold(b.getThreshold());
-    out.setCompBasedStats(CompBasedStats.fromValue(b.getCompBasedStats()));
+    out.setCompBasedStats(convertCBS(b.getCompBasedStats()));
     out.setSeg(b.getSeg());
     out.setSoftMasking(b.getSoftMasking());
-    out.setTaxIds(null2List(b.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(null2List(b.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(convertTaxIDsToExternal(b.getTaxIDs()));
+    out.setNegativeTaxIds(convertTaxIDsToExternal(b.getNegativeTaxIDs()));
     out.setDbSoftMask(b.getDBSoftMask());
     out.setDbHardMask(b.getDBHardMask());
     out.setCullingLimit(l2i(b.getCullingLimit()));
@@ -568,19 +571,19 @@ public class BlastConv
 
   // ---------------------------------------------------------------------- //
 
-  public static TBlastX convert(IOTBlastxConfig conf) {
+  static TBlastX convert(IOTBlastxConfig conf) {
     Log.trace("::convert(conf=...)");
     var out = new XTBlastX();
 
     out.setQueryFile(conf.getQuery());
     out.setQueryLocation(conf.getQueryLoc());
     out.setExpectValue(conf.getEValue());
-    out.setOutFormat(conf.getOutFormat() == null ? null : conf.getOutFormat().toInternalValue());
+    out.setOutFormat(convert(conf.getOutFormat()));
     out.setNumDescriptions(conf.getNumDescriptions());
     out.setNumAlignments(conf.getNumAlignments());
     out.setLineLength(conf.getLineLength());
-    out.setSortHits(conf.getSortHits() == null ? null : conf.getSortHits().toInternalValue());
-    out.setSortHSPs(conf.getSortHSPs() == null ? null : conf.getSortHSPs().toInternalValue());
+    out.setSortHits(convert(conf.getSortHits()));
+    out.setSortHSPs(convert(conf.getSortHSPs()));
     out.setLowercaseMasking(conf.getLcaseMasking());
     out.setQueryCoverageHSPPercent(conf.getQCovHSPPerc());
     out.setMaxHSPs(conf.getMaxHSPs());
@@ -598,8 +601,8 @@ public class BlastConv
     out.setDBGenCode(b2s(conf.getDbGencode()));
     out.setSeg(conf.getSeg());
     out.setSoftMasking(conf.getSoftMasking());
-    out.setTaxIDs(null2List(conf.getTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
-    out.setNegativeTaxIDs(null2List(conf.getNegativeTaxIds()).stream().map(String::valueOf).collect(Collectors.toList()));
+    out.setTaxIDs(convertTaxIDsToInternal(conf.getTaxIds()));
+    out.setNegativeTaxIDs(convertTaxIDsToInternal(conf.getNegativeTaxIds()));
     out.setDBSoftMask(conf.getDbSoftMask());
     out.setDBHardMask(conf.getDbHardMask());
     out.setCullingLimit(i2l(conf.getCullingLimit()));
@@ -612,18 +615,18 @@ public class BlastConv
     return out;
   }
 
-  public static IOTBlastxConfig convert(TBlastX b) {
+  static IOTBlastxConfig convert(TBlastX b) {
     Log.trace("::convert(b=...)");
     var out = new IOTBlastxConfigImpl();
 
     out.setQueryLoc(b.getQueryLocation());
     out.setEValue(b.getExpectValue());
-    out.setOutFormat(IOBlastReportFormat.fromInternalValue(b.getOutFormat()));
+    out.setOutFormat(convert(b.getOutFormat()));
     out.setNumDescriptions(b.getNumDescriptions());
     out.setNumAlignments(b.getNumAlignments());
     out.setLineLength(b.getLineLength());
-    out.setSortHits(IOHitSorting.fromInternalValue(b.getSortHits()));
-    out.setSortHSPs(IOHSPSorting.fromInternalValue(b.getSortHSPs()));
+    out.setSortHits(convert(b.getSortHits()));
+    out.setSortHSPs(convert(b.getSortHSPs()));
     out.setLcaseMasking(b.getLowercaseMasking());
     out.setQCovHSPPerc(b.getQueryCoverageHSPPercent());
     out.setMaxHSPs(b.getMaxHSPs());
@@ -641,8 +644,8 @@ public class BlastConv
     out.setDbGencode(s2b(b.getDBGenCode()));
     out.setSeg(b.getSeg());
     out.setSoftMasking(b.getSoftMasking());
-    out.setTaxIds(null2List(b.getTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
-    out.setNegativeTaxIds(null2List(b.getNegativeTaxIDs()).stream().map(Integer::parseInt).collect(Collectors.toList()));
+    out.setTaxIds(convertTaxIDsToExternal(b.getTaxIDs()));
+    out.setNegativeTaxIds(convertTaxIDsToExternal(b.getNegativeTaxIDs()));
     out.setDbSoftMask(b.getDBSoftMask());
     out.setDbHardMask(b.getDBHardMask());
     out.setCullingLimit(l2i(b.getCullingLimit()));
@@ -657,27 +660,51 @@ public class BlastConv
 
   // ---------------------------------------------------------------------- //
 
-  public static Long i2l(Integer in) {
+  static CompBasedStats convertCBS(String in) { return in == null ? null : CompBasedStats.fromValue(in); }
+  static String convertCBS(CompBasedStats in) { return in == null ? null : in.toString(); }
+
+  static IOBlastReportFormat convert(OutFormat in) { return in == null ? null : IOBlastReportFormat.fromInternalValue(in); }
+  static OutFormat convert(IOBlastReportFormat in) { return in == null ? null : in.toInternalValue(); }
+
+  static IOHitSorting convert(HitSorting in) { return in == null ? null : IOHitSorting.fromInternalValue(in); }
+  static HitSorting convert(IOHitSorting in) { return in == null ? null : in.toInternalValue(); }
+
+  static IOHSPSorting convert(HSPSorting in) { return in == null ? null : IOHSPSorting.fromInternalValue(in); }
+  static HSPSorting convert(IOHSPSorting in) { return in == null ? null : in.toInternalValue(); }
+
+  private static List<Integer> convertTaxIDsToExternal(List<String> in) {
+    return null2List(in).stream()
+      .map(Integer::parseInt)
+      .collect(Collectors.toList());
+  }
+
+  private static List<String> convertTaxIDsToInternal(List<Integer> in) {
+    return null2List(in).stream()
+      .map(String::valueOf)
+      .collect(Collectors.toList());
+  }
+
+  private static Long i2l(Integer in) {
     Log.trace("::i2l(in={})", in);
     return in == null ? null : in.longValue();
   }
 
-  public static Short b2s(Byte b) {
+  private static Short b2s(Byte b) {
     Log.trace("::b2s(b={})", b);
     return b == null ? null : b.shortValue();
   }
 
-  public static Integer l2i(Long l) {
+  private static Integer l2i(Long l) {
     Log.trace("::l2i(l={})", l);
     return l == null ? null : l.intValue();
   }
 
-  public static Byte s2b(Short v) {
+  private static Byte s2b(Short v) {
     Log.trace("::s2b(v={})", v);
     return v == null ? null : v.byteValue();
   }
 
-  public static <T> List<T> null2List(List<T> val) {
+  private static <T> List<T> null2List(List<T> val) {
     Log.trace("::null2List(val={})", val);
     return val == null ? Collections.emptyList() : val;
   }

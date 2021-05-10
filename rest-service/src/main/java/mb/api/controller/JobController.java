@@ -109,6 +109,11 @@ public class JobController implements Jobs
     return res.entity(svc.getQuery(HashID.parseOrThrow(jobID, NotFoundException::new))).build();
   }
 
+  @Override
+  public void rerunJob(String jobID) {
+    svc.rerunJob(HashID.parseOrThrow(jobID, NotFoundException::new), getUser(request).getUserID());
+  }
+
   // //////////////////////////////////////////////////////////////////////////////////////////// //
   // Helper Methods                                                                               //
   // //////////////////////////////////////////////////////////////////////////////////////////// //

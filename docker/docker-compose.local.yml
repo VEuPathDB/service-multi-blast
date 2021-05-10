@@ -12,10 +12,10 @@ services:
     ports:
       - 8080:80
     environment:
-      AUTH_SECRET_KEY:
-      SERVER_PORT: 80
-      LDAP_SERVER:
-      ORACLE_BASE_DN:
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
+      SERVER_PORT: ${SERVER_PORT:-80}
+      LDAP_SERVER: ${LDAP_SERVER}
+      ORACLE_BASE_DN: ${ORACLE_BASE_DN}
 
       # Account Database
       ACCT_DB_TNS_NAME:
@@ -35,7 +35,7 @@ services:
       # Misc Config
       JOB_MOUNT_PATH: /out
       DB_MOUNT_PATH: /db
-      DB_BUILD: 50
+      DB_BUILD: ${DB_BUILD:-52}
       BLAST_HOST: ${BLAST_HOST:-blast}
       BLAST_QUEUE_NAME: ${BLAST_QUEUE_NAME:-blast}
       BLAST_JOB_CATEGORY: ${BLAST_JOB_CATEGORY:-blast}

@@ -133,6 +133,52 @@ public class BlastManager
     }
   }
 
+  public static void rerunJob(HashID jobID, long userID) throws Exception {
+    Log.trace("::rerunJob(jobID={}, userID={})", jobID, userID);
+
+    var opt1 = getAndLinkUserBlastJob(jobID, userID);
+
+    // If no job with the given ID exists, bail here.
+    if (opt1.isEmpty()) {
+      return;
+    }
+
+    var job = opt1.get();
+
+    try (var db = new BlastDBManager()) {
+      // If the job is not expired then there is nothing to do
+      if (job.getStatus() == JobStatus.Expired) {
+        Log.debug("Resubmitting parent job {}", jobID);
+
+        JobDataManager.createJobWorkspace(jobID);
+        JobDataManager.createQueryFile(jobID, job.getQuery());
+
+        var qID = BlastQueueManager.submitJob(jobID, job.getConfig());
+
+        db.updateJobQueue(jobID, qID, JobStatus.Queued);
+      }
+
+      // For each child job, do the same
+      for (var link : db.getChildJobLinks(jobID)) {
+        var child = db.getBlastRow(link.getChildJobID()).orElseThrow();
+        refreshJobStatus(db, child);
+
+        if (child.getStatus() == JobStatus.Expired) {
+          Log.debug("Resubmitting child job {} of parent {}", child.getJobID(), jobID);
+
+          JobDataManager.createJobWorkspace(child.getJobID());
+          JobDataManager.createQueryFile(child.getJobID(), job.getQuery());
+
+          var qID = BlastQueueManager.submitJob(child.getJobID(), job.getConfig());
+
+          db.updateJobQueue(child.getJobID(), qID, JobStatus.Queued);
+        }
+      }
+    }
+
+
+  }
+
   private static FullUserBlastRow populateLinks(BlastDBManager db, UserBlastRow row) throws Exception {
     var tmp = new FullUserBlastRow(row);
 
