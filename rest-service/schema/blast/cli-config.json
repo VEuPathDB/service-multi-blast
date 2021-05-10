@@ -41,29 +41,7 @@
       "additionalProperties": false,
       "properties": {
         "format": {
-          "type": "string",
-          "enum": [
-            "pairwise",
-            "query-anchored-with-identities",
-            "query-anchored-without-identities",
-            "flat-query-anchored-with-identities",
-            "flat-query-anchored-without-identities",
-            "xml",
-            "tabular",
-            "tabular-with-comments",
-            "text-asn-1",
-            "binary-asn-1",
-            "csv",
-            "archive-asn-1",
-            "seqalign-json",
-            "multi-file-json",
-            "multi-file-xml2",
-            "single-file-json",
-            "single-file-xml2",
-            "sam",
-            "organism-report"
-          ],
-          "default": "pairwise"
+          "$ref": "./format-type.json"
         },
         "delim": {
           "type": "string",
@@ -71,62 +49,10 @@
           "maxLength": 2
         },
         "fields": {
-          "type": "string",
-          "enum": [
-            "bitscore",
-            "btop",
-            "evalue",
-            "frames",
-            "gapopen",
-            "gaps",
-            "length",
-            "mismatch",
-            "nident",
-            "pident",
-            "positive",
-            "ppos",
-            "qacc",
-            "qaccver",
-            "qcovhsp",
-            "qcovs",
-            "qcovus",
-            "qend",
-            "qframe",
-            "qgi",
-            "qlen",
-            "qseq",
-            "qseqid",
-            "qstart",
-            "sacc",
-            "saccver",
-            "sallacc",
-            "sallgi",
-            "sallseqid",
-            "salltitles",
-            "sblastname",
-            "sblastnames",
-            "scomname",
-            "scomnames",
-            "score",
-            "send",
-            "sframe",
-            "sgi",
-            "slen",
-            "sq",
-            "sr",
-            "ssciname",
-            "sscinames",
-            "sseq",
-            "sseqid",
-            "sskingdom",
-            "sskingdoms",
-            "sstart",
-            "sstrand",
-            "staxid",
-            "staxids",
-            "stitle",
-            "std"
-          ]
+          "type": "array",
+          "items": {
+            "$ref": "format-field.json"
+          }
         }
       }
     },

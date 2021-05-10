@@ -69,9 +69,6 @@ install-dev-env:
 	@$(BIN_DIR)/check-env.sh
 	@$(BIN_DIR)/install-fgputil.sh
 	@$(BIN_DIR)/install-oracle.sh
-	@$(BIN_DIR)/install-raml2jaxrs.sh
-	@$(BIN_DIR)/install-raml-merge.sh
-	@$(BIN_DIR)/install-npm.sh
 
 fix-path:
 	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_DIR) $(MAIN_DIR)
@@ -80,14 +77,9 @@ fix-path:
 gen-jaxrs: api.raml merge-raml
 	@echo "JAX-RS code generation disabled for this project."
 
-gen-docs: api.raml merge-raml
-	# Performing hack to make doc-gen work...
-	@grep -n '# BEGIN HACK #' api.raml | cut -d: -f1 | xargs -I'{}' head -n{} api.raml > api2.raml
-	@tail -n+3 schema/library.raml >> api2.raml
-	@mv api2.raml api.raml
-	@$(BIN_DIR)/generate-docs.sh
-	@rm -rf ../docs
-	@mv docs ../docs
+gen-docs: node_modules/.bin/redoc-cli
+	@node_modules/.bin/redoc-cli bundle openapi.yml -o ../docs/api.html
+	@cp ../docs/api.html src/main/resources/api.html
 
 .PHONY: merge-raml
 merge-raml:
@@ -100,3 +92,6 @@ merge-raml:
 build/libs/service.jar: vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
 	@./gradlew clean test jar
+
+node_modules/.bin/redoc-cli:
+	@npm install --dev
