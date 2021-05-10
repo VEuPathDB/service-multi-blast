@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "allOf": [
+    {
+      "$ref": "./cli-config.json"
+    },
+    {
+      "properties": {
+        "task": {
+          "type": "string",
+          "enum": [
+            "blastp",
+            "blastp-fast",
+            "blastp-short"
+          ]
+        },
+        "wordSize": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "gapOpen": {
+          "type": "integer"
+        },
+        "gapExtend": {
+          "type": "integer"
+        },
+        "matrix": {
+          "type": "string",
+          "enum": [
+            "BLOSUM45",
+            "BLOSUM50",
+            "BLOSUM62",
+            "BLOSUM80",
+            "BLOSUM90",
+            "PAM30",
+            "PAM70",
+            "PAM250",
+            "IDENTITY"
+          ]
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0
+        },
+        "compBasedStats": {
+          "$ref": "comp-based-stats.json"
+        },
+        "seg": {
+          "$ref": "seg.json"
+        },
+        "softMasking": {
+          "type": "boolean",
+          "default": false
+        },
+        "taxIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "negativeTaxIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "dbSoftMask": {
+          "type": "string"
+        },
+        "dbHardMask": {
+          "type": "string"
+        },
+        "cullingLimit": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bestHitOverhang": {
+          "type": "number",
+          "exclusiveMinimum": 0.0,
+          "exclusiveMaximum": 0.5
+        },
+        "bestHitScoreEdge": {
+          "type": "number",
+          "exclusiveMinimum": 0.0,
+          "exclusiveMaximum": 0.5
+        },
+        "subjectBestHit": {
+          "type": "boolean",
+          "default": false
+        },
+        "xDropGap": {
+          "type": "number",
+          "default": 30.0
+        },
+        "xDropGapFinal": {
+          "type": "number",
+          "default": 100.0
+        },
+        "ungapped": {
+          "type": "boolean"
+        },
+        "windowSize": {
+          "type": "integer",
+          "default": 40
+        },
+        "useSWTraceback": {
+          "type": "boolean"
+        }
+      }
+    }
+  ]
+}

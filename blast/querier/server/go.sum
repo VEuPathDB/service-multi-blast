@@ -364,10 +364,8 @@ github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf/go.mod h1:M8agBzg
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
-github.com/veupathdb/lib-go-blast v1.0.4 h1:yOlwtyrXWCtKHRUFAhOpBen5xgL0eyFh970z02B9cyc=
-github.com/veupathdb/lib-go-blast v1.0.4/go.mod h1:PU/eqFug4fkOfT7IyiYOI8dcBefPIYbdeLaOQvfeBzg=
-github.com/veupathdb/lib-go-blast/v2 v2.0.4 h1:+XBF57AqtVN7aphhEZZ0jDPbomnU/yH+eSnG3kkPDew=
-github.com/veupathdb/lib-go-blast/v2 v2.0.4/go.mod h1:lxMy/BWqYnLzcLqs2fcrqBJ6DTrLwcZT4AylnLJ8Ncw=
+github.com/veupathdb/lib-go-blast/v2 v2.0.5 h1:lbyxJyMG6caXnYBAGhxfvufQHOT/mIZj0N03VOLXja0=
+github.com/veupathdb/lib-go-blast/v2 v2.0.5/go.mod h1:lxMy/BWqYnLzcLqs2fcrqBJ6DTrLwcZT4AylnLJ8Ncw=
 github.com/viant/assertly v0.4.8/go.mod h1:aGifi++jvCrUaklKEKT0BU95igDNaqkvz+49uaYMPRU=
 github.com/viant/toolbox v0.24.0/go.mod h1:OxMCG57V0PXuIP2HNQrtJf2CjqdmbrOx5EkMILuUhzM=
 github.com/vulpine-io/midl v1.1.1/go.mod h1:7hxF0KIfLAjgB73MInhYaoXlHNv1Q4t81zi5Pqz7f28=

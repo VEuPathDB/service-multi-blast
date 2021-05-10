@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "tool": {
+      "type": "string",
+      "enum": [
+        "blastn",
+        "blastp",
+        "blastx",
+        "tblastn",
+        "tblastx"
+      ]
+    },
+    "query": {
+      "type": "string"
+    },
+    "queryLoc": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "integer"
+        },
+        "stop": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "stop"
+      ]
+    },
+    "eValue": {
+      "type": "string",
+      "pattern": "^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$",
+      "default": "10"
+    },
+    "outFormat": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": [
+            "pairwise",
+            "query-anchored-with-identities",
+            "query-anchored-without-identities",
+            "flat-query-anchored-with-identities",
+            "flat-query-anchored-without-identities",
+            "xml",
+            "tabular",
+            "tabular-with-comments",
+            "text-asn-1",
+            "binary-asn-1",
+            "csv",
+            "archive-asn-1",
+            "seqalign-json",
+            "multi-file-json",
+            "multi-file-xml2",
+            "single-file-json",
+            "single-file-xml2",
+            "sam",
+            "organism-report"
+          ],
+          "default": "pairwise"
+        },
+        "delim": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2
+        },
+        "fields": {
+          "type": "string",
+          "enum": [
+            "bitscore",
+            "btop",
+            "evalue",
+            "frames",
+            "gapopen",
+            "gaps",
+            "length",
+            "mismatch",
+            "nident",
+            "pident",
+            "positive",
+            "ppos",
+            "qacc",
+            "qaccver",
+            "qcovhsp",
+            "qcovs",
+            "qcovus",
+            "qend",
+            "qframe",
+            "qgi",
+            "qlen",
+            "qseq",
+            "qseqid",
+            "qstart",
+            "sacc",
+            "saccver",
+            "sallacc",
+            "sallgi",
+            "sallseqid",
+            "salltitles",
+            "sblastname",
+            "sblastnames",
+            "scomname",
+            "scomnames",
+            "score",
+            "send",
+            "sframe",
+            "sgi",
+            "slen",
+            "sq",
+            "sr",
+            "ssciname",
+            "sscinames",
+            "sseq",
+            "sseqid",
+            "sskingdom",
+            "sskingdoms",
+            "sstart",
+            "sstrand",
+            "staxid",
+            "staxids",
+            "stitle",
+            "std"
+          ]
+        }
+      }
+    },
+    "numDescriptions": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 500
+    },
+    "numAlignments": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 250
+    },
+    "lineLength": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 60
+    },
+    "sortHits": {
+      "type": "string",
+      "enum": [
+        "by-eval",
+        "by-bit-score",
+        "by-total-score",
+        "by-percent-identity",
+        "by-query-coverage"
+      ]
+    },
+    "sortHSPs": {
+      "type": "string",
+      "enum": [
+        "by-hsp-evalue",
+        "by-hsp-score",
+        "by-hsp-query-start",
+        "by-hsp-percent-identity",
+        "by-hsp-subject-start"
+      ]
+    },
+    "lcaseMasking": {
+      "type": "boolean",
+      "default": false
+    },
+    "qCovHSPPerc": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "maxHSPs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "maxTargetSeqs": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 500
+    },
+    "dbSize": {
+      "type": "integer",
+      "minimum": -128,
+      "maximum": 127
+    },
+    "searchSpace": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 127
+    },
+    "xDropUngap": {
+      "type": "number"
+    },
+    "parseDefLines": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "tool"
+  ]
+}
