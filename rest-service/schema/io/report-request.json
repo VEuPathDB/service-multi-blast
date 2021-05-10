@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "jobID": {
+      "description": "ID of the blast job this report should be generated for.",
+      "$ref": "hash-id.json"
+    },
+    "description": {
+      "description": "User description for this report job.",
+      "type": "string"
+    },
+    "format": {
+      "$ref": "../blast/format-type.json"
+    },
+    "fieldDelim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "../blast/format-field.json"
+      }
+    },
+    "numDescriptions": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 500
+    },
+    "numAlignments": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 250
+    },
+    "lineLength": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 60
+    },
+    "sortHits": {
+      "type": "string",
+      "enum": [
+        "by-eval",
+        "by-bit-score",
+        "by-total-score",
+        "by-percent-identity",
+        "by-query-coverage"
+      ]
+    },
+    "sortHSPs": {
+      "type": "string",
+      "enum": [
+        "by-hsp-evalue",
+        "by-hsp-score",
+        "by-hsp-query-start",
+        "by-hsp-percent-identity",
+        "by-hsp-subject-start"
+      ]
+    },
+    "maxTargetSeqs": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 500
+    },
+    "parseDefLines": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "jobID"
+  ]
+}
