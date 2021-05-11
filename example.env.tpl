@@ -52,7 +52,7 @@ USER_DB_PASS=
 JOB_MOUNT_PATH=/out
 
 # Blast file mount point.
-DB_MOUNT_POINT=/db
+DB_MOUNT_PATH=/db
 
 # Site build (used to resolve blast target paths)
 DB_BUILD=51
@@ -110,7 +110,7 @@ FORMAT_JOB_CATEGORY=format
 # #
 
 # Length of time a job's results will be held after the last
-# usage.
+# usage (in days).
 JOB_TIMEOUT=5
 
 # Maximum number of sequences that may be submitted in a
@@ -163,3 +163,13 @@ QUEUE_DB_PASS=
 # `QUEUE_DB_USER` and `QUEUE_DB_PASS` value for the queue-db
 # container.
 FIREWORQ_MYSQL_DSN=
+
+# Default job queue
+FIREWORQ_QUEUE_DEFAULT=blast
+
+# Max workers on the default queue
+FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS=5
+
+FIREWORQ_BIND=0.0.0.0:80
+
+FIREWORQ_DRIVER=mysql
