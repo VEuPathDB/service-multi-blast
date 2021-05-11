@@ -21,15 +21,14 @@ services:
       USER_DB_TNS_NAME: ${USER_DB_TNS_NAME}
       USER_DB_USER: ${USER_DB_USER}
       USER_DB_PASS: ${USER_DB_PASS}
-      MULTIBLAST_SCHEMA: ${MULTIBLAST_SCHEMA}
 
       # Queue Connection
       QUEUE_HOST: ${QUEUE_HOST:-queue}
       FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
 
       # Misc Config
-      JOB_MOUNT_PATH: /out
-      DB_MOUNT_PATH: /db
+      JOB_MOUNT_PATH: ${JOB_MOUNT_PATH:-/out}
+      DB_MOUNT_PATH: ${DB_MOUNT_PATH:-/db}
       DB_BUILD: ${DB_BUILD}
       BLAST_HOST: ${BLAST_HOST:-blast}
       BLAST_QUEUE_NAME: ${BLAST_QUEUE_NAME:-blast}
@@ -177,12 +176,11 @@ services:
       FIREWORQ_MYSQL_DSN: queue:${QUEUE_DB_PASS}@tcp(queue-db:3306)/queue #${FIREWORQ_MYSQL_DSN} # queue:<some password here>@tcp(queue-db:3306)/queue
 
       # Configures the number of simultaneous blast jobs that can be run
-      FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: ${FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS:-2}
+      FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS: ${FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS:-5}
 
       FIREWORQ_BIND: ${FIREWORQ_BIND:-0.0.0.0:80}
       FIREWORQ_DRIVER: ${FIREWORQ_DRIVER:-mysql}
       FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
-      JOB_CATEGORY: ${JOB_CATEGORY:-blast}
     depends_on:
       - queue-db
       - blast
