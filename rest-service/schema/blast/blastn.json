@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "allOf": [
+    {
+      "$ref": "./cli-config.json"
+    },
+    {
+      "properties": {
+        "strand": {
+          "$ref": "./strand.json"
+        },
+        "task": {
+          "type": "string",
+          "enum": [
+            "megablast",
+            "dc-megablast",
+            "blastn",
+            "blastn-short"
+          ]
+        },
+        "wordSize": {
+          "type": "integer",
+          "minimum": 4
+        },
+        "gapOpen": {
+          "type": "integer"
+        },
+        "gapExtend": {
+          "type": "integer"
+        },
+        "penalty": {
+          "type": "integer",
+          "maximum": 0
+        },
+        "reward": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "useIndex": {
+          "type": "boolean",
+          "default": false
+        },
+        "indexName": {
+          "type": "string"
+        },
+        "dust": {
+          "type": "object",
+          "properties": {
+            "enable": {
+              "type": "boolean"
+            },
+            "level": {
+              "type": "integer",
+              "default": 20
+            },
+            "window": {
+              "type": "integer",
+              "default": 64
+            },
+            "linker": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "windowMaskerTaxid": {
+          "type": "integer"
+        },
+        "softMasking": {
+          "type": "boolean",
+          "default": true
+        },
+        "taxIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "negativeTaxIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "dbSoftMask": {
+          "type": "string"
+        },
+        "dbHardMask": {
+          "type": "string"
+        },
+        "percIdentity": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 100.0
+        },
+        "cullingLimit": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bestHitOverhang": {
+          "type": "number",
+          "exclusiveMinimum": 0.0,
+          "exclusiveMaximum": 0.5
+        },
+        "bestHitScoreEdge": {
+          "type": "number",
+          "exclusiveMinimum": 0.0,
+          "exclusiveMaximum": 0.5
+        },
+        "subjectBestHit": {
+          "type": "boolean",
+          "default": false
+        },
+        "templateType": {
+          "type": "string",
+          "enum": [
+            "coding",
+            "optimal",
+            "both"
+          ]
+        },
+        "templateLength": {
+          "type": "integer",
+          "enum": [16,18,21]
+        },
+        "sumStats": {
+          "type": "boolean"
+        },
+        "xDropGap": {
+          "type": "number",
+          "default": 30.0
+        },
+        "xDropGapFinal": {
+          "type": "number",
+          "default": 100.0
+        },
+        "noGreedy": {
+          "type": "boolean"
+        },
+        "minRawGappedScore": {
+          "type": "integer"
+        },
+        "ungapped": {
+          "type": "boolean"
+        },
+        "windowSize": {
+          "type": "integer",
+          "default": 40
+        },
+        "offDiagonalRange": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      }
+    }
+  ]
+}

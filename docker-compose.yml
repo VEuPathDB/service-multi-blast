@@ -25,7 +25,6 @@ services:
 
       # Queue Connection
       QUEUE_HOST: ${QUEUE_HOST:-queue}
-      JOB_CATEGORY: ${JOB_CATEGORY:-blast}
       FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
 
       # Misc Config
@@ -33,17 +32,24 @@ services:
       DB_MOUNT_PATH: /db
       DB_BUILD: ${DB_BUILD}
       BLAST_HOST: ${BLAST_HOST:-blast}
+      BLAST_QUEUE_NAME: ${BLAST_QUEUE_NAME:-blast}
+      BLAST_JOB_CATEGORY: ${BLAST_JOB_CATEGORY:-blast}
+
       FORMATTER_HOST: ${FORMATTER_HOST:-formatter}
+      FORMAT_QUEUE_NAME: ${FORMAT_QUEUE_NAME:-format}
+      FORMAT_JOB_CATEGORY: ${FORMAT_JOB_CATEGORY:-format}
+
+      VALIDATOR_HOST: ${VALIDATOR_HOST:-validator}
 
       # Job Config
       #
       # These options configure the validation/management of jobs.
-      JOB_TIMEOUT: ${JOB_TIMEOUT:-30} #days
-      MAX_QUERIES_PER_REQUEST: 100
-      MAX_RESULTS_PER_QUERY: 10000
-      MAX_INPUT_QUERY_SIZE: 3145728 # 3MiB
-      MAX_NA_SEQ_SIZE: 1048576 # 1MiB
-      MAX_AA_SEQ_SIZE: 102400 # 100KiB
+      JOB_TIMEOUT: ${JOB_TIMEOUT:-5} #days
+      MAX_QUERIES_PER_REQUEST: ${MAX_QUERIES_PER_RESULT:-100}
+      MAX_RESULTS_PER_QUERY: ${MAX_RESULTS_PER_QUERY:-10000}
+      MAX_INPUT_QUERY_SIZE: ${MAX_INPUT_QUERY_SIZE:-3145728} # 3MiB
+      MAX_NA_SEQ_SIZE: ${MAX_NA_SEQ_SIZE:-1048576} # 1MiB
+      MAX_AA_SEQ_SIZE: ${MAX_AA_SEQ_SIZE:-102400} # 100KiB
 
     volumes:
       - type: volume
@@ -160,7 +166,7 @@ services:
   # Job Queue
   # #
   queue:
-    image: fireworq/fireworq:1.4
+    image: veupathdb/mblast-blast-queue:${QUEUE_TAG:-latest}
     environment:
       # REQUIRED!
       # Specifies a data source name for the job queue and the repository
@@ -180,12 +186,19 @@ services:
     depends_on:
       - queue-db
       - blast
-    entrypoint:
-      - sh
-      - -c
-      - 'while ! nc -z queue-db 3306; do echo "Waiting for MySQL..."; sleep 5s; done; /usr/local/bin/fireworq'
+      - formatter
+      - validator
     networks:
       - internal
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${QUEUE_WATCHTOWER:-false}"
+
+  validator:
+    image: veupathdb/mblast-blast-validator:${VALIDATOR_TAG:-latest}
+    networks:
+      - internal
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${VALIDATOR_WATCHTOWER:-false}"
 
 volumes:
   job-data:

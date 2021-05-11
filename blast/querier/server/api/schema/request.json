@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "jobID": {
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 32
+        }
+      },
+      "required": ["jobID"]
+    },
+    {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["blastn"]
+            },
+            "config": {
+              "$ref": "./blastn.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["blastp"]
+            },
+            "config": {
+              "$ref": "./blastp.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["blastx"]
+            },
+            "config": {
+              "$ref": "./blastx.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["deltablast"]
+            },
+            "config": {
+              "$ref": "./deltablast.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["psiblast"]
+            },
+            "config": {
+              "$ref": "./psiblast.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["rpsblast"]
+            },
+            "config": {
+              "$ref": "./rpsblast.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["rpstblastn"]
+            },
+            "config": {
+              "$ref": "./rpstblastn.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["tblastn"]
+            },
+            "config": {
+              "$ref": "./tblastn.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "enum": ["tblastx"]
+            },
+            "config": {
+              "$ref": "./tblastx.json"
+            }
+          },
+          "required": [
+            "tool",
+            "config"
+          ]
+        }
+      ]
+    }
+  ]
+}

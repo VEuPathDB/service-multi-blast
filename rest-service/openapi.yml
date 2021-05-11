@@ -1,0 +1,355 @@
+openapi: 3.0.3
+
+info:
+  title: Multi Blast
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+
+servers:
+  - url: https://amoebadb.org/multi-blast
+  - url: https://cryptodb.org/multi-blast
+  - url: https://fungidb.org/multi-blast
+  - url: https://giardiadb.org/multi-blast
+  - url: https://hostdb.org/multi-blast
+  - url: https://microsporidiadb.org/multi-blast
+  - url: https://piroplasmadb.org/multi-blast
+  - url: https://plasmodb.org/multi-blast
+  - url: https://toxodb.org/multi-blast
+  - url: https://trichdb.org/multi-blast
+  - url: https://tritrypdb.org/multi-blast
+  - url: https://vectorbase.org/multi-blast
+  - url: https://veupathdb.org/multi-blast
+
+paths:
+
+  /jobs:
+    get:
+      summary: List Blast Jobs
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./schema/io/short-job-response.json"
+        401:
+          $ref: "#/components/responses/err401"
+        500:
+          $ref: "#/components/responses/err500"
+
+    post:
+      summary: New Blast Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "./schema/io/json-blast-request.json"
+          multipart/form-data:
+            schema:
+              $ref: "./schema/io/multipart-blast-request.json"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "./schema/io/new-blast-job-response.json"
+        400:
+          $ref: "#/components/responses/err400"
+        401:
+          $ref: "#/components/responses/err401"
+        422:
+          $ref: "#/components/responses/err422"
+        500:
+          $ref: "#/components/responses/err500"
+
+
+
+  /jobs/{job-id}:
+    parameters:
+      - $ref: "#/components/parameters/job-id"
+    get:
+      summary: Blast Job Details
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "./schema/io/long-job-response.json"
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+    post:
+      summary: Rerun Blast Job
+      responses:
+        204:
+          description: Success
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+
+
+  /jobs/{job-id}/query:
+    parameters:
+      - $ref: "#/components/parameters/job-id"
+      - name: download
+        description: "Force Download"
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+    get:
+      summary: Blast Job Query
+      responses:
+        200:
+          description: Success
+          headers:
+            Content-Disposition:
+              required: false
+              description: Sent if ?download=true was set.
+          content:
+            text/plain:
+              schema:
+                type: string
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+
+
+  /reports:
+    get:
+      summary: List Report Jobs
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./schema/io/short-report-response.json"
+        401:
+          $ref: "#/components/responses/err401"
+        500:
+          $ref: "#/components/responses/err500"
+
+    post:
+      summary: New Report Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "./schema/io/report-request.json"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "./schema/io/short-report-response.json"
+        400:
+          $ref: "#/components/responses/err400"
+        401:
+          $ref: "#/components/responses/err401"
+        422:
+          $ref: "#/components/responses/err422"
+        500:
+          $ref: "#/components/responses/err500"
+
+
+  /reports/{report-id}:
+    parameters:
+      - $ref: "#/components/parameters/report-id"
+    get:
+      summary: Report Job Details
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "./schema/io/long-report-response.json"
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+
+    post:
+      summary: Rerun Report Job
+      responses:
+        204:
+          description: Success
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+
+
+  /reports/{report-id}/files/{filename}:
+    parameters:
+      - $ref: "#/components/parameters/report-id"
+      - name: filename
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: download
+        description: "Force download"
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+    get:
+      summary: Report File Download
+      responses:
+        200:
+          description: Success
+          headers:
+            Content-Disposition:
+              required: false
+              description: Present if ?download=true
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                  - type: array
+                  - type: string
+                  - type: boolean
+                  - type: integer
+                  - type: number
+            application/xml:
+              schema:
+                oneOf:
+                  - type: object
+                  - type: array
+                  - type: string
+                  - type: boolean
+                  - type: integer
+                  - type: number
+            application/zip:
+              schema:
+                type: string
+                format: binary
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+
+  /meta:
+    get:
+      summary: Service Meta
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "./schema/io/meta-response.json"
+
+
+  /api:
+    get:
+      summary: API Docs
+      responses:
+        200:
+          description: Success
+          content:
+            text/html:
+              schema:
+                type: string
+
+
+  /health:
+    get:
+      summary: Service Health
+      responses:
+        200:
+          description: Success
+
+
+  /metrics:
+    get:
+      summary: Prometheus Metrics
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  parameters:
+    job-id:
+      name: job-id
+      in: path
+      required: true
+      schema:
+        $ref: "./schema/io/hash-id.json"
+    report-id:
+      name: report-id
+      in: path
+      required: true
+      schema:
+        $ref: "./schema/io/hash-id.json"
+  responses:
+    err400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/400.json
+    err401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/401.json
+    err403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/403.json
+    err404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/404.json
+    err422:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/422.json
+    err500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/500.json
