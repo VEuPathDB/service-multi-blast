@@ -54,6 +54,9 @@ JOB_MOUNT_PATH=/out
 # Blast file mount point.
 DB_MOUNT_POINT=/db
 
+# Site build (used to resolve blast target paths)
+DB_BUILD=51
+
 # #
 # # Service Hosts
 # #
