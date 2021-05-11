@@ -277,6 +277,12 @@ paths:
               schema:
                 type: string
                 format: binary
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
 
 
   /meta:
@@ -289,6 +295,8 @@ paths:
             application/json:
               schema:
                 $ref: "./schema/io/meta-response.json"
+        500:
+          $ref: "#/components/responses/err500"
 
 
   /api:
@@ -301,6 +309,8 @@ paths:
             text/html:
               schema:
                 type: string
+        500:
+          $ref: "#/components/responses/err500"
 
 
   /health:
@@ -309,6 +319,8 @@ paths:
       responses:
         200:
           description: Success
+        500:
+          $ref: "#/components/responses/err500"
 
 
   /metrics:
@@ -321,6 +333,8 @@ paths:
             text/plain:
               schema:
                 type: string
+        500:
+          $ref: "#/components/responses/err500"
 
 components:
   securitySchemes:
@@ -328,6 +342,7 @@ components:
       type: apiKey
       in: header
       name: Auth-Key
+      description: WDK auth token or valid guest user ID.
 
   parameters:
     job-id:
