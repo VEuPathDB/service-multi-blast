@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	basePath = "/translate/{jobHash}"
+	basePath = "/report"
 )
 
 func init() {
@@ -40,40 +40,9 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.Handle(basePath + "/6", midl.StreamAdapter(
-		"application/zip",
-		midl.DefaultJSONErrorSerializer()).
-		AddHandlers(
-			midlid.NewRequestIdProvider(),
-			midl.MiddlewareFunc(server.RunReport6Endpoint))).
-		Methods(http.MethodPost)
-	router.Handle(basePath + "/7", midl.StreamAdapter(
-		"application/zip",
-		midl.DefaultJSONErrorSerializer()).
-		AddHandlers(
-			midlid.NewRequestIdProvider(),
-			midl.MiddlewareFunc(server.RunReport7Endpoint))).
-		Methods(http.MethodPost)
-	router.Handle(basePath + "/10", midl.StreamAdapter(
-		"application/zip",
-		midl.DefaultJSONErrorSerializer()).
-		AddHandlers(
-			midlid.NewRequestIdProvider(),
-			midl.MiddlewareFunc(server.RunReport10Endpoint))).
-		Methods(http.MethodPost)
-	router.Handle(basePath + "/17", midl.StreamAdapter(
-		"application/zip",
-		midl.DefaultJSONErrorSerializer()).
-		AddHandlers(
-			midlid.NewRequestIdProvider(),
-			midl.MiddlewareFunc(server.RunReport17Endpoint))).
-		Methods(http.MethodPost)
-	router.Handle(basePath + "/{reportType}", midl.StreamAdapter(
-		"application/zip",
-		midl.DefaultJSONErrorSerializer()).
-		AddHandlers(
-			midlid.NewRequestIdProvider(),
-			midl.MiddlewareFunc(server.RunReportEndpoint))).
+	router.Handle(basePath, midl.JSONAdapter(
+		midlid.NewRequestIdProvider(),
+		midl.MiddlewareFunc(server.ReportEndpoint))).
 		Methods(http.MethodPost)
 
 	logrus.Info("Starting server on port 80")

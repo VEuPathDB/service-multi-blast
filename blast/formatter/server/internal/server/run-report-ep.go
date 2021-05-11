@@ -2,244 +2,87 @@ package server
 
 import (
 	"archive/zip"
+	"bytes"
 	"compress/flate"
-	"encoding/json"
+	"crypto/md5"
+	"encoding/hex"
 	"io"
-	"net/http"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
-	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/francoispqt/gojay"
 	"github.com/sirupsen/logrus"
+	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl-layers/request-id/short-id/v1/pkg/midlid"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
+	"server/pkg/api"
 )
 
-func RunReport6Endpoint(req midl.Request) midl.Response {
-	return customReport("6", req)
-}
-
-func RunReport7Endpoint(req midl.Request) midl.Response {
-	return customReport("7", req)
-}
-
-func RunReport10Endpoint(req midl.Request) midl.Response {
-	return customReport("10", req)
-}
-
-func RunReport17Endpoint(req midl.Request) midl.Response {
-	return customReport("17", req)
-}
-
-func customReport(fmt string, req midl.Request) midl.Response {
-	if req.RawRequest().Body != nil {
-		defer req.RawRequest().Body.Close()
-	}
-
-	params := mux.Vars(req.RawRequest())
+func ReportEndpoint(req midl.Request) midl.Response {
 	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
 	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
-	doZip := true
-	param, ok := req.Parameter("zip")
-	if ok {
-		if param == "false" || param == "f" || param == "0" {
-			doZip = false
-		}
-	}
+	log.Trace("server.ReportEndpoint(")
 
-	rawInput := req.Body()
-	if req.Error() != nil {
-		log.Info("Rejecting request for request error: ", req.Error())
-		return New400Error(req.Error().Error(), reqID)
-	}
-	if len(rawInput) > 0 {
-		body := new(runRequestBody)
-
-		req.ProcessBody(midl.BodyProcessorFunc(func(bytes []byte) error {
-			return json.Unmarshal(bytes, body)
-		}))
-		if req.Error() != nil {
-			log.Info("Rejecting request for deserialization error: ", req.Error())
-			return New400Error(req.Error().Error(), reqID)
-		}
-
-		if len(body.Delim) > 0 {
-			fmt += " delim=" + body.Delim
-		}
-		if len(body.Fields) > 0 {
-			fmt += " " + strings.Join(body.Fields, " ")
-		}
-	}
-
-	sizeStr, ok := req.Header(maxSizeHeader)
-	size := uint64(0)
-	if ok {
-		if tmp, err := strconv.ParseUint(sizeStr, 10, 64); err != nil {
-			log.Info("Rejecting request for invalid max file size value: " + sizeStr)
-			return New404Error(req.Error().Error(), reqID)
-		} else {
-			size = tmp
-		}
-	}
-
-	kindNum, err := strconv.Atoi(fmt)
+	payload, err := DecodePayload(req.RawRequest().Body)
 	if err != nil {
-		log.Info("Rejecting request for non-numeric report type")
-		return New404Error("No report format found with the given id", reqID)
+		return New400Error(err.Error())
 	}
 
-	return runReport(fmt, params[jobIDParam], reqID, kindNum, doZip, size, log)
+	return runReport(payload, log)
 }
 
-func RunReportEndpoint(req midl.Request) midl.Response {
-	if req.RawRequest().Body != nil {
-		defer req.RawRequest().Body.Close()
-	}
-
-	params := mux.Vars(req.RawRequest())
-	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
-	kind := params[reportTypeParam]
-	log := logrus.WithField(midlid.KeyRequestId, reqID)
-
-	doZip := true
-	param, ok := req.Parameter("zip")
-	if ok {
-		if param == "false" || param == "f" || param == "0" {
-			doZip = false
-		}
-	}
-
-	log.Debug("Handling request for report type ", kind)
-
-	kindNum, err := strconv.Atoi(kind)
-	if err != nil {
-		log.Info("Rejecting request for non-numeric report type")
-		return New404Error("No report format found with the given id", reqID)
-	}
-
-	sizeStr, ok := req.Header(maxSizeHeader)
-	size := uint64(0)
-	if ok {
-		if tmp, err := strconv.ParseUint(sizeStr, 10, 64); err != nil {
-			log.Info("Rejecting request for invalid max file size value: " + sizeStr)
-			return New404Error(req.Error().Error(), reqID)
-		} else {
-			size = tmp
-		}
-	}
-
-	return runReport(kind, params[jobIDParam], reqID, kindNum, doZip, size, log)
-}
-
-func runReport(
-	fmt, jobID, reqID string,
-	kind int,
-	doZip bool,
-	size uint64,
-	log *logrus.Entry,
-) midl.Response {
-	workspace, err := getWorkspace(jobID)
+func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
+	workspace, err := getWorkspace(job.JobID)
 	if err != nil {
 		log.Error(err.Error())
-		return New500Error(err.Error(), reqID)
+		return New500Error(err.Error())
 	}
 
-	outputDir, err := createTmpDir(workspace)
+	job.Config.ArchiveFile.Set("../report.asn1")
+	job.Config.OutFile.Set(OutputName(job.Config.Format.Type))
+
+	cmd  := job.Config.ToCLI()
+	cmd.Path = "/blast/bin/" + cmd.Args[0]
+	cmd.Stderr = os.Stderr
+
+	log.Debug(cmd)
+
+	outputDir := filepath.Join(workspace, job.ReportID)
+
+	// If the directory already exists, this report has already been run.
+	// If the directory does not exist, create it and run the report.
+	if err = runIfNeeded(cmd, outputDir, log); err != nil {
+		log.Error(err)
+		return New500Error(err.Error())
+	}
+
+	log.Debug("Zipping command output.")
+	err = zipDir(outputDir)
 	if err != nil {
 		log.Error(err.Error())
-		return New500Error(err.Error(), reqID)
+		return New500Error(err.Error())
 	}
 
-	outFile := outputName(kind)
-	if err = runCommand(fmt, outFile, outputDir); err != nil {
+	log.Debug("Writing out meta.json")
+
+	if err = WriteMeta(outputDir); err != nil {
 		log.Error(err.Error())
-		return New500Error(err.Error(), reqID)
+		return New500Error(err.Error())
 	}
 
-	if doZip {
-		log.Debug("Zipping command output.")
-		zip, err := zipDir(outputDir)
-		if err != nil {
-			log.Error(err.Error())
-			return New500Error(err.Error(), reqID)
-		}
-		res := midl.MakeResponse(http.StatusOK, zip)
-
-		if size > 0 {
-			tmp, err := zip.Stat()
-			if err != nil {
-				log.Error("Failed to stat zip file: ", err.Error())
-				_ = zip.Close()
-				_ = os.RemoveAll(outputDir)
-				return New500Error(err.Error(), reqID)
-			}
-
-			if uint64(tmp.Size()) > size {
-				_ = zip.Close()
-				_ = os.RemoveAll(outputDir)
-				return New400Error("File size exceeds requested size limit.", reqID)
-			}
-		}
-
-		res.Callback(func() {
-			log.Debug("Removing temp dir: ", outputDir)
-			_ = zip.Close()
-			_ = os.RemoveAll(outputDir)
-		})
-		res.AddHeader("Content-Type", "application/zip")
-		return res
-	}
-
-	// Not zipping output
-	if tmp, err := os.Open(filepath.Join(outputDir, outFile)); err != nil {
-		log.Error(err.Error())
-
-		return New500Error(err.Error(), reqID)
-	} else {
-		if size > 0 {
-			stt, err := tmp.Stat()
-			if err != nil {
-				log.Error("Failed to stat zip file: ", err.Error())
-				_ = tmp.Close()
-				_ = os.RemoveAll(outputDir)
-				return New500Error(err.Error(), reqID)
-			}
-
-			if uint64(stt.Size()) > size {
-				_ = tmp.Close()
-				_ = os.RemoveAll(outputDir)
-				return New400Error("File size exceeds requested size limit.", reqID)
-			}
-		}
-
-		res := midl.MakeResponse(http.StatusOK, tmp)
-		res.Callback(func() {
-			log.Debug("Removing temp dir: ", outputDir)
-			_ = tmp.Close()
-			_ = os.RemoveAll(outputDir)
-		})
-		res.AddHeader("Content-Type", "application/binary")
-
-		return res
-	}
+	return New200Response("Job completed successfully")
 }
 
-type runRequestBody struct {
-	Fields []string `json:"fields"`
-	Delim  string   `json:"delim"`
-}
-
-func zipDir(path string) (file *os.File, err error) {
+func zipDir(path string) (err error) {
 	matches, err := filepath.Glob(filepath.Join(path, "*"))
 	if err != nil {
 		return
 	}
 
-	file, err = os.Create(filepath.Join(path, reportExportName))
+	file, err := os.Create(filepath.Join(path, reportExportName))
 	if err != nil {
 		return
 	}
@@ -294,7 +137,7 @@ func copyFileInto(path string, w io.Writer) error {
 	return nil
 }
 
-func outputName(kind int) string {
+func OutputName(kind field.FormatType) string {
 	out := "report"
 
 	switch kind {
@@ -315,16 +158,116 @@ func outputName(kind int) string {
 	return out
 }
 
-func runCommand(fmt, out, dir string) (err error) {
-	cmd := exec.Command(
-		"/blast/bin/blast_formatter",
-		"-archive", "../report.asn1",
-		"-outfmt", fmt,
-		"-out", out)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+// runIfNeeded runs the blast_formatter job if it has not already been run.
+func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
+	log.Tracef("server.runIfNeeded(cmd=..., outDir=%s, log=...)", outDir)
+
+	_, err := os.Stat(outDir)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		}
+
+		if err = os.Mkdir(outDir, 0775); err != nil {
+			return err
+		}
+
+		if err = runCommand(cmd, outDir); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func runCommand(cmd *exec.Cmd, dir string) error {
 	cmd.Dir = dir
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
+}
+
+func hashCommand(cmd *exec.Cmd) string {
+	return hashSlice(cmd.Args)
+}
+
+func hashSlice(val []string) string {
+	size := 0
+	for i := range val {
+		size += len(val[i])
+	}
+
+	buf := bytes.NewBuffer(make([]byte, size))
+
+	for i := range val {
+		buf.WriteString(val[i])
+	}
+
+	hash := md5.Sum(buf.Bytes())
+
+	return hex.EncodeToString(hash[:])
+}
+
+type meta struct {
+	files fileList
+}
+
+func (m *meta) MarshalJSONObject(enc *gojay.Encoder) {
+	enc.ArrayKey("files", m.files)
+}
+
+func (m *meta) IsNil() bool {
+	return m == nil
+}
+
+type fileList []string
+
+func (f fileList) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := range f {
+		enc.String(f[i])
+	}
+}
+
+func (f fileList) IsNil() bool {
+	return f == nil
+}
+
+// ---------------------------------------------------------------------------------------------- //
+
+// WriteMeta collects a list of all the files in `dir` and writes out a JSON
+// file with a list of those files.
+func WriteMeta(dir string) error {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+
+	meta := meta{}
+	meta.files = make([]string, 0, len(files))
+
+	for i := range files {
+		meta.files = append(meta.files, files[i].Name())
+	}
+
+	metaFile, err := os.Create(filepath.Join(dir, "meta.json"))
+	if err != nil {
+		return err
+	}
+	defer metaFile.Close()
+
+	enc := gojay.BorrowEncoder(metaFile)
+	defer enc.Release()
+
+	return enc.EncodeObject(&meta)
+}
+
+func DecodePayload(body io.Reader) (*api.JobPayload, error) {
+	payload := api.NewJobPayload()
+
+	dec := gojay.BorrowDecoder(body)
+	defer dec.Release()
+
+	return payload, dec.Object(payload)
 }
