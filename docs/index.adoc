@@ -1,0 +1,152 @@
+= Multi-Blast Service
+:toc: left
+
+== Goal
+
+Expose an API allowing users to submit multi-sequence blast
+queries against one or more VEuPathDB blast databases and
+view/download the result in any of the blast+ supported
+formats.
+
+Additionally, due to the time and processor cost of running
+these queries, the API should cache results and only ever
+run unique or expired queries.  Multiple requests with
+identical configurations should only result in 1 job being
+created and cached.
+
+== Architecture
+
+The multi-blast project (mblast) consists of 6 Docker
+containers and 2 volumes.  Additionally the project depends
+on tables in an Oracle "user DB".
+
+image::assets/network.svg[]
+
+Of the 6 containers, only 1 is exposed publicly and handles
+all communications with external clients.  The remaining
+containers communicate internally on a Docker managed
+private network.
+
+The containers are:
+
+. The publicly exposed HTTP server
+. A job queue server (https://github.com/fireworq/fireworq[Fireworq])
+. A queue persistance database (MySQL)
+. 2 NCBI/Blast containers with internal HTTP services
+. A blast config validation service
+
+The volumes used are 1 shared volume containing the mblast
+workspaces, and 1 mounted filesystem containing the target
+blast databases.
+
+=== Containers
+
+==== Public HTTP Server
+
+This container is the root or primary service for the
+project and orchestrates the operations for the other
+services.
+
+The responsibilities for this service include:
+
+* Authenticating user requests
+* Applying VEuPathDB specific validation to blast configurations.
+* Submitting jobs to the Fireworq queue.
+* Reading and writing data from/to the Oracle user DB.
+
+===== Exposed Endpoints
+
+https://veupathdb.github.io/service-multi-blast/api.html[Full API Documentation]
+
+.Endpoint Overview
+[cols="2m,1m,4"]
+|===
+| Endpoint | Method | Purpose
+
+| /api
+| GET
+| Prints API Docs
+
+| /health
+| GET
+| Prints service health
+
+| /jobs
+| GET\|POST
+| List or create blast jobs
+
+| /jobs/{:jobID}
+| GET\|POST
+| View or rerun an individual blast job
+
+| /jobs/{:jobID}/query
+| GET
+| Retrieve a blast job's query text
+
+| /meta
+| GET
+| Prints a tree of available target Blast DBs
+
+| /metrics
+| GET
+| Prints https://prometheus.io/[Prometheus] service metrics
+
+| /reports
+| GET\|POST
+| List or create report jobs
+
+| /reports/{:jobID}
+| GET\|POST
+| View or rerun an individual report job
+
+| /reports/{:jobID}/files/{:filename}
+| GET
+| View or download a generated report
+|===
+
+==== "Blast" Server
+
+The blast container is based on the `ncbi/blast` Docker
+image and is extended with a simple HTTP server that accepts
+a configuration via a `POST` request and returns a Fireworq
+compatible response.
+
+The server translates the posted configuration into a CLI
+call to a target blast+ CLI tool, then runs that tool with
+all output stored in a job specific workspace.
+
+===== Internal Endpoints
+
+https://veupathdb.github.io/service-multi-blast/querier-api.html[Full API Documentation]
+
+.Endpoint Overview
+[cols="2m,1m,4"]
+|===
+| Endpoint | Method | Purpose
+
+| /blast
+| POST
+| Run a blast+ tool with the given configuration
+
+| /metrics
+| GET
+| Prints https://prometheus.io/[Prometheus] service metrics
+
+|===
+
+==== "Formatter" Server
+
+==== Validation Server
+
+==== Queue Server
+
+The queue container is a custom image that pulls in a target
+Fireworq version along with a
+https://github.com/VEuPathDB/util-fireworq-init[custom initialization tool]
+that ensures the job queues are set up correctly.
+
+==== Queue DB
+
+A small MySQL server managed by Fireworq.  This DB is
+populated on init by the scripts in `./databases/queue/ddl`
+in the repository root.
