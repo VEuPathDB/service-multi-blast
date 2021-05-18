@@ -446,6 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_architecture">Architecture</a>
 <ul class="sectlevel2">
 <li><a href="#_containers">Containers</a></li>
+<li><a href="#_database">Database</a></li>
 </ul>
 </li>
 <li><a href="#_workflow">Workflow</a>
@@ -454,6 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_formatter_jobs">Formatter Jobs</a></li>
 </ul>
 </li>
+<li><a href="#_todos">TODOS</a></li>
 </ul>
 </div>
 </div>
@@ -742,6 +744,317 @@ in the repository root.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_database">Database</h3>
+<div class="paragraph">
+<p>In addition to the 6 containers the mblast project also uses
+several tables currently parked in the Oracle user DB.</p>
+</div>
+<div class="paragraph">
+<p>The definitions for these tables can be found in
+<code>./databases/wdk/user-tables.sql</code>.</p>
+</div>
+<details>
+<summary class="title"><code>multiblast_jobs</code></summary>
+<div class="content">
+<div class="paragraph">
+<p>Root blast job table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Primary key (digest of the job configuration)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clob</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parsed job configuration</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>query</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clob</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">input query string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>queue_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(7)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID of the job in the Fireworq queue.  This value is
+  updated when jobs are re-run.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(16)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project ID for the site the job was run on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(10)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Last known status for the job.  This value is updated only
+  when a client requests info about a job from the service.<br>
+  <strong>WARNING</strong>: This column is for internal service usage and
+  cannot be used to accurately derive overall assessments.
+  For example, it is a normal case for this field to
+  indicate that a job is "queued" when in reality the job
+  has completed or failed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_on</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamptz</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp for the job creation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>delete_on</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamptz</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(DEPRECATED) timestamp for when the job will "expire".
+  This column is not currently used and should be dropped in
+  a later update.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title"><code>multiblast_job_to_targets</code></summary>
+<div class="content">
+<div class="paragraph">
+<p>Table linking mblast jobs to target blast DBs.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Foreign key to <code>multiblast_jobs.job_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>organism</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(256)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Organism name WDK internal value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>target_file</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(256)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Target blast DB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title"><code>multiblast_job_to_jobs</code></summary>
+<div class="content">
+<div class="paragraph">
+<p>Table linking mblast jobs to one another (job hierarchy).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Child job digest. Foreign key to <code>multiblast_jobs.job_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parent_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parent job digest. Foreign key to <code>multiblast_jobs.job_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>position</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(4)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Position of a child job under it&#8217;s parent job.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title"><code>multiblast_users</code></summary>
+<div class="content">
+<div class="paragraph">
+<p>Table linking users to mblast jobs.  (More than one user may
+be linked to a single job).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Foreign key to <code>multiblast_jobs.job_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(12)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WDK Site user ID.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(1024)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User provided description for the job this record links
+  to.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>max_download_size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(12)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Max size (in bytes) a client is willing to handle for a
+  job result.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>run_directly</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether the user intentionally and directly ran
+  this job, or if it was created as a sub-job or by another
+  service.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title"><code>multiblast_fmt_jobs</code></summary>
+<div class="content">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Primary key.  Digest of the report configuration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>job_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Foreign key to <code>multiblast_jobs.job_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(10)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Last known status for the job.  This value is updated only
+  when a client requests info about a job from the service.<br>
+  <strong>WARNING</strong>: This column is for internal service usage and
+  cannot be used to accurately derive overall assessments.
+  For example, it is a normal case for this field to
+  indicate that a job is "queued" when in reality the job
+  has completed or failed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>config</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clob</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parsed report configuration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>queue_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(7)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID of the job in the Fireworq queue.  This value is
+  updated when jobs are re-run.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_on</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamptz</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp for the job creation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title"><code>multiblast_users_to_fmt_jobs</code></summary>
+<div class="content">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_digest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byte[16]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Foreign key to <code>multiblast_fmt_jobs.report_digest</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int(12)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WDK Site user ID.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>varchar(1024)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User provided description for the job this record links
+  to.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -775,10 +1088,19 @@ in the repository root.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_todos">TODOS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Describe:
+. job hierarchy</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-18 15:01:38 -0400
+Last updated 2021-05-18 15:49:03 -0400
 </div>
 </div>
 </body>
