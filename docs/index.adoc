@@ -164,6 +164,10 @@ https://veupathdb.github.io/service-multi-blast/formatter-api.html[Full API Docu
 
 ==== Validation Server
 
+A simple server that validates the POSTed configuration
+against the rules outlined in the blast+ tool help
+documentation.
+
 ==== Queue Server
 
 The queue container is a custom image that pulls in a target
@@ -176,3 +180,19 @@ that ensures the job queues are set up correctly.
 A small MySQL server managed by Fireworq.  This DB is
 populated on init by the scripts in `./databases/queue/ddl`
 in the repository root.
+
+== Workflow
+
+=== Blast Jobs
+
+.Basic Blast Workflow
+--
+image::assets/blast-job.svg[]
+--
+
+=== Formatter Jobs
+
+.Basic Formatter Workflow
+--
+image::assets/format-job.svg[]
+--
