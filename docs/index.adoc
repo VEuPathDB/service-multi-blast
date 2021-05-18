@@ -106,14 +106,15 @@ https://veupathdb.github.io/service-multi-blast/api.html[Full API Documentation]
 
 ==== "Blast" Server
 
-The blast container is based on the `ncbi/blast` Docker
-image and is extended with a simple HTTP server that accepts
-a configuration via a `POST` request and returns a Fireworq
+The blast container is based on the
+https://hub.docker.com/r/ncbi/blast[`ncbi/blast` Docker image]
+and is extended with a simple HTTP server that accepts a
+configuration via a `POST` request and returns a Fireworq
 compatible response.
 
 The server translates the posted configuration into a CLI
-call to a target blast+ CLI tool, then runs that tool with
-all output stored in a job specific workspace.
+call to a target blast+ CLI tool with all output stored in a
+job specific workspace.
 
 ===== Internal Endpoints
 
@@ -135,6 +136,31 @@ https://veupathdb.github.io/service-multi-blast/querier-api.html[Full API Docume
 |===
 
 ==== "Formatter" Server
+
+The formatter container is based on the
+https://hub.docker.com/r/ncbi/blast[`ncbi/blast` Docker image]
+and is extended with a simple HTTP server that accepts a
+configuration via a `POST` request and returns a Fireworq
+compatible response.
+
+The server translates the posted configuration into a CLI
+call to `blast_formatter` run against the blast results
+present in the job specific workspace.  All output is stored
+in a subdirectory of that workspace.
+
+===== Internal Endpoints
+
+https://veupathdb.github.io/service-multi-blast/formatter-api.html[Full API Documentation]
+
+.Endpoint Overview
+[cols="2m,1m,4"]
+|===
+| Endpoint | Method | Purpose
+
+| /report
+| POST
+| Runs `blast_formatter` with the given config
+|===
 
 ==== Validation Server
 

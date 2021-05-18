@@ -621,15 +621,16 @@ services.</p>
 <div class="sect3">
 <h4 id="_blast_server">"Blast" Server</h4>
 <div class="paragraph">
-<p>The blast container is based on the <code>ncbi/blast</code> Docker
-image and is extended with a simple HTTP server that accepts
-a configuration via a <code>POST</code> request and returns a Fireworq
+<p>The blast container is based on the
+<a href="https://hub.docker.com/r/ncbi/blast"><code>ncbi/blast</code> Docker image</a>
+and is extended with a simple HTTP server that accepts a
+configuration via a <code>POST</code> request and returns a Fireworq
 compatible response.</p>
 </div>
 <div class="paragraph">
 <p>The server translates the posted configuration into a CLI
-call to a target blast+ CLI tool, then runs that tool with
-all output stored in a job specific workspace.</p>
+call to a target blast+ CLI tool with all output stored in a
+job specific workspace.</p>
 </div>
 <div class="sect4">
 <h5 id="_internal_endpoints">Internal Endpoints</h5>
@@ -667,7 +668,47 @@ all output stored in a job specific workspace.</p>
 </div>
 <div class="sect3">
 <h4 id="_formatter_server">"Formatter" Server</h4>
-
+<div class="paragraph">
+<p>The formatter container is based on the
+<a href="https://hub.docker.com/r/ncbi/blast"><code>ncbi/blast</code> Docker image</a>
+and is extended with a simple HTTP server that accepts a
+configuration via a <code>POST</code> request and returns a Fireworq
+compatible response.</p>
+</div>
+<div class="paragraph">
+<p>The server translates the posted configuration into a CLI
+call to <code>blast_formatter</code> run against the blast results
+present in the job specific workspace.  All output is stored
+in a subdirectory of that workspace.</p>
+</div>
+<div class="sect4">
+<h5 id="_internal_endpoints_2">Internal Endpoints</h5>
+<div class="paragraph">
+<p><a href="https://veupathdb.github.io/service-multi-blast/formatter-api.html">Full API Documentation</a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Endpoint Overview</caption>
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/report</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Runs <code>blast_formatter</code> with the given config</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_validation_server">Validation Server</h4>
@@ -696,7 +737,7 @@ in the repository root.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-18 14:31:08 -0400
+Last updated 2021-05-18 14:50:21 -0400
 </div>
 </div>
 </body>
