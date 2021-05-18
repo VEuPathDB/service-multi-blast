@@ -448,6 +448,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_containers">Containers</a></li>
 </ul>
 </li>
+<li><a href="#_workflow">Workflow</a>
+<ul class="sectlevel2">
+<li><a href="#_blast_jobs">Blast Jobs</a></li>
+<li><a href="#_formatter_jobs">Formatter Jobs</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -712,7 +718,11 @@ in a subdirectory of that workspace.</p>
 </div>
 <div class="sect3">
 <h4 id="_validation_server">Validation Server</h4>
-
+<div class="paragraph">
+<p>A simple server that validates the POSTed configuration
+against the rules outlined in the blast+ tool help
+documentation.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_queue_server">Queue Server</h4>
@@ -734,10 +744,41 @@ in the repository root.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_workflow">Workflow</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_blast_jobs">Blast Jobs</h3>
+<div class="openblock">
+<div class="title">Basic Blast Workflow</div>
+<div class="content">
+<div class="imageblock">
+<div class="content">
+<img src="assets/blast-job.svg" alt="blast job">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_formatter_jobs">Formatter Jobs</h3>
+<div class="openblock">
+<div class="title">Basic Formatter Workflow</div>
+<div class="content">
+<div class="imageblock">
+<div class="content">
+<img src="assets/format-job.svg" alt="format job">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-18 14:50:21 -0400
+Last updated 2021-05-18 15:01:38 -0400
 </div>
 </div>
 </body>
