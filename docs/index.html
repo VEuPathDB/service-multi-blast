@@ -435,6 +435,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -459,6 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_job_splittinghierarchy">Job Splitting/Hierarchy</a></li>
 <li><a href="#_hashingjob_collisions">Hashing/Job Collisions</a></li>
+<li><a href="#_workspaces">Workspaces</a></li>
 </ul>
 </li>
 <li><a href="#_todos">TODOS</a></li>
@@ -1143,6 +1145,113 @@ will see the job&#8217;s status changes as it runs through the
 process again.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_workspaces">Workspaces</h3>
+<div class="paragraph">
+<p>The job workspace volume is divided into 3 layers of
+directories, the job root directory containing individual
+blast job workspaces, the blast job workspaces containing
+the blast tool inputs and outputs in addition to the report
+workspaces, which contain report job output.</p>
+</div>
+<div class="paragraph">
+<p>The directory name for the job workspaces is the MD5 blast
+job digest (primary key), and the directory name for the
+report workspaces is the MD5 report job digest.</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 7. Workspace Volume</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre>/
+└─ jobs/
+    ├─ 9bfbb6c2885bdc1875ff315afd034f61/ <i class="conum" data-value="1"></i><b>(1)</b>
+    │    ├─ error.txt <i class="conum" data-value="2"></i><b>(2)</b>
+    │    ├─ log.txt <i class="conum" data-value="3"></i><b>(3)</b>
+    │    ├─ query.txt <i class="conum" data-value="4"></i><b>(4)</b>
+    │    └─ report.asn1 <i class="conum" data-value="5"></i><b>(5)</b>
+    ├─ b9e9407be6a1262cf1815635b3c99f74/ <i class="conum" data-value="6"></i><b>(6)</b>
+    │    ├─ d57b025af8832914cc8fcc4ead3bf965/ <i class="conum" data-value="7"></i><b>(7)</b>
+    │    │    ├─ meta.json <i class="conum" data-value="8"></i><b>(8)</b>
+    │    │    ├─ report.xml <i class="conum" data-value="9"></i><b>(9)</b>
+    │    │    └─ report.zip <i class="conum" data-value="10"></i><b>(10)</b>
+    │    ├─ error.txt
+    │    ├─ log.txt
+    │    ├─ query.txt
+    │    └─ report.asn1
+    ├─ f6b1992fd18bbfd9daa4b4af8caa04c7/ <i class="conum" data-value="11"></i><b>(11)</b>
+    │    ├─ error.txt
+    │    ├─ log.txt
+    │    └─ query.txt
+    └─ a022e6a3a418793b90bf34c852361352/ <i class="conum" data-value="12"></i><b>(12)</b>
+         └─ query.txt</pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Workspace for a job that completed successfully, with no
+reports yet run against it.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Text file containing the stderr output from the blast+
+tool execution.  This file should be empty for a
+successful run.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Text file containing the stdout output from the blast+
+tool execution.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The blast job query which may be one or more sequences.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The blast job output in the NCBI blast asn1 format.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Workspace for a job that both completed successfully and
+had one report job run against it.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Workspace for an individual report job.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>JSON file containing a listing of the files available to
+the user(s) who own this report.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Raw <code>blast_formatter</code> output in the user selected
+format.  There may be more than one file depending on
+the user selected report format.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Zip file containing all output files from the
+<code>blast_formatter</code> run.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Workspace for a blast job that failed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>Workspace for a blast job that has not yet run.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1159,6 +1268,9 @@ process again.</p>
 <li>
 <p>job expiration</p>
 </li>
+<li>
+<p>workspaces</p>
+</li>
 </ul>
 </div>
 </div>
@@ -1166,7 +1278,7 @@ process again.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-19 09:22:43 -0400
+Last updated 2021-05-19 11:40:01 -0400
 </div>
 </div>
 </body>
