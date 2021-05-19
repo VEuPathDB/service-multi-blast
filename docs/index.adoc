@@ -1,6 +1,11 @@
 = Multi-Blast Service
+:author: Elizabeth Harper <epharper@upenn.edu>
+:revnumber: 1
 :toc: left
 :icons: font
+:source-highlighter: pygments
+:pygments-style: monokai
+
 
 == Goal
 
@@ -503,10 +508,87 @@ report workspaces is the MD5 report job digest.
 <12> Workspace for a blast job that has not yet run.
 ====
 
+=== Job Statuses
+
+Blast and report jobs will be in one of 5 possible statuses:
+
+Queued::
+  The job and its workspace has been created but the job has
+  not yet been pulled from the queue to run.
+In Progress::
+  The job has been pulled from the queue and is actively
+  running.
+Errored::
+  An unexpected error occurred while attempting to run the
+  blast job.
+Completed::
+  The job completed successfully.
+Expired::
+  The job completed successfully but its cached results have
+  been deleted.  Job will re-run when requested.
+
+The status returned at runtime is derived from the status
+stored in the user DB in combination with the queue status
+and the status of the job's workspace in the mounted volume.
+
+The following pseudocode roughly describes the process used
+to determine a job's status.
+
+.Pseudocode
+[%collapsible]
+====
+[source, javascript]
+----
+if job.getDbStatus() == "errored"
+  return "errored"
+
+if job.getDbStatus() == "expired"
+  return "expired"
+
+if job.getDbStatus() == "completed"
+  if job.getWorkspace().exists() == true
+    return "completed"
+  else
+    return "expired"
+
+if job.getDbStatus() == "in-progress"
+  if job.checkIsRunning() == true
+    return "in-progress"
+  else
+    if job.checkIsFailed() == true
+      return "errored"
+    else if job.getWorkspace().exists() == true
+      return "completed"
+    else
+      return "expired"
+
+if job.getDbStatus() == "queued"
+  if job.checkIsInQueue() == true
+    return "queueud"
+  else if job.checkIsRunning() == true
+    return "in-progress"
+  else if job.checkIsFailed() == true
+    return "errored"
+  else if job.getWorkspace().exists() == true
+    return "completed"
+  else
+    return "expired"
+----
+====
+
+A job status is stored in the user DB, but is only updated
+when the job's details are requested.  This means that the
+unless the status in the DB is "errored" or "expired", that
+status is probably not up to date.
+
+WARNING: The `status` column present in both the blast job
+and report job mblast tables in the Oracle user DB is not
+expected to reflect the actual status of a job.  It is used
+internally along with several other factors to derive the
+status of a job when needed.
+
 == TODOS
 
 Describe:
 
-* statuses
 * job expiration
-* workspaces
