@@ -496,7 +496,7 @@ report workspaces is the MD5 report job digest.
     the user(s) who own this report.
 <9> Raw `blast_formatter` output in the user selected
     format.  There may be more than one file depending on
-    the user selected report format.
+    the selected format.
 <10> Zip file containing all output files from the
     `blast_formatter` run.
 <11> Workspace for a blast job that failed.
