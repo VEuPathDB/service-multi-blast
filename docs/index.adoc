@@ -1,5 +1,6 @@
 = Multi-Blast Service
 :toc: left
+:icons: font
 
 == Goal
 
@@ -441,9 +442,71 @@ re-run, which means that any other user linked to that job
 will see the job's status changes as it runs through the
 process again.
 
+=== Workspaces
+
+The job workspace volume is divided into 3 layers of
+directories, the job root directory containing individual
+blast job workspaces, the blast job workspaces containing
+the blast tool inputs and outputs in addition to the report
+workspaces, which contain report job output.
+
+The directory name for the job workspaces is the MD5 blast
+job digest (primary key), and the directory name for the
+report workspaces is the MD5 report job digest.
+
+.Workspace Volume
+====
+----
+/
+└─ jobs/
+    ├─ 9bfbb6c2885bdc1875ff315afd034f61/ <1>
+    │    ├─ error.txt <2>
+    │    ├─ log.txt <3>
+    │    ├─ query.txt <4>
+    │    └─ report.asn1 <5>
+    ├─ b9e9407be6a1262cf1815635b3c99f74/ <6>
+    │    ├─ d57b025af8832914cc8fcc4ead3bf965/ <7>
+    │    │    ├─ meta.json <8>
+    │    │    ├─ report.xml <9>
+    │    │    └─ report.zip <10>
+    │    ├─ error.txt
+    │    ├─ log.txt
+    │    ├─ query.txt
+    │    └─ report.asn1
+    ├─ f6b1992fd18bbfd9daa4b4af8caa04c7/ <11>
+    │    ├─ error.txt
+    │    ├─ log.txt
+    │    └─ query.txt
+    └─ a022e6a3a418793b90bf34c852361352/ <12>
+         └─ query.txt
+----
+<1> Workspace for a job that completed successfully, with no
+    reports yet run against it.
+<2> Text file containing the stderr output from the blast+
+    tool execution.  This file should be empty for a
+    successful run.
+<3> Text file containing the stdout output from the blast+
+    tool execution.
+<4> The blast job query which may be one or more sequences.
+<5> The blast job output in the NCBI blast asn1 format.
+<6> Workspace for a job that both completed successfully and
+    had one report job run against it.
+<7> Workspace for an individual report job.
+<8> JSON file containing a listing of the files available to
+    the user(s) who own this report.
+<9> Raw `blast_formatter` output in the user selected
+    format.  There may be more than one file depending on
+    the user selected report format.
+<10> Zip file containing all output files from the
+    `blast_formatter` run.
+<11> Workspace for a blast job that failed.
+<12> Workspace for a blast job that has not yet run.
+====
+
 == TODOS
 
 Describe:
 
 * statuses
 * job expiration
+* workspaces
