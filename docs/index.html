@@ -467,9 +467,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_hashingjob_collisions">Hashing/Job Collisions</a></li>
 <li><a href="#_workspaces">Workspaces</a></li>
 <li><a href="#_job_statuses">Job Statuses</a></li>
+<li><a href="#_job_expiration">Job Expiration</a></li>
 </ul>
 </li>
-<li><a href="#_todos">TODOS</a></li>
 </ul>
 </div>
 </div>
@@ -1366,20 +1366,26 @@ status of a job when needed.
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_todos">TODOS</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_job_expiration">Job Expiration</h3>
 <div class="paragraph">
-<p>Describe:</p>
+<p>Jobs that have completed are cached, and that cache is
+subject to deletion at a set time period from the last time
+the job was accessed.  By default this timeout is 5 days,
+however this value may be changed at runtime from external
+configuration.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>job expiration</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>The "last access" date is tracked by using the last modified
+date on the workspace directory.  When a job is accessed,
+the last modified timestamp on the workspace is updated to
+the time of the accessing.</p>
+</div>
+<div class="paragraph">
+<p>Job cleanup happens at a set interval and runs through and
+deletes all workspace directories that have a last modified
+date outside of the set timeout window.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1387,7 +1393,7 @@ status of a job when needed.
 <div id="footer">
 <div id="footer-text">
 Version 1<br>
-Last updated 2021-05-19 12:19:46 -0400
+Last updated 2021-05-19 13:16:39 -0400
 </div>
 </div>
 <style>
