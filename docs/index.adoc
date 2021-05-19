@@ -604,3 +604,14 @@ the time of the accessing.
 Job cleanup happens at a set interval and runs through and
 deletes all workspace directories that have a last modified
 date outside of the set timeout window.
+
+
+=== User Authentication
+
+The mblast service accepts a WDK session token like most of
+the other VEuPathDB containerized services, but additionally
+allows requests to be made using just a WDK user ID to
+enable WDK "guest" users to run blast jobs.
+
+Authentication is done via an HTTP header `Auth-Key`.  This
+key should contain the token or user ID.

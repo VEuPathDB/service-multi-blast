@@ -468,6 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_workspaces">Workspaces</a></li>
 <li><a href="#_job_statuses">Job Statuses</a></li>
 <li><a href="#_job_expiration">Job Expiration</a></li>
+<li><a href="#_user_authentication">User Authentication</a></li>
 </ul>
 </li>
 </ul>
@@ -1387,13 +1388,26 @@ deletes all workspace directories that have a last modified
 date outside of the set timeout window.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_user_authentication">User Authentication</h3>
+<div class="paragraph">
+<p>The mblast service accepts a WDK session token like most of
+the other VEuPathDB containerized services, but additionally
+allows requests to be made using just a WDK user ID to
+enable WDK "guest" users to run blast jobs.</p>
+</div>
+<div class="paragraph">
+<p>Authentication is done via an HTTP header <code>Auth-Key</code>.  This
+key should contain the token or user ID.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1<br>
-Last updated 2021-05-19 13:16:39 -0400
+Last updated 2021-05-19 13:55:38 -0400
 </div>
 </div>
 <style>
