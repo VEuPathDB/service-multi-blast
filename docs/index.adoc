@@ -401,7 +401,49 @@ image::assets/blast-job.svg[]
 image::assets/format-job.svg[]
 --
 
+== Other Topics
+
+=== Job Splitting/Hierarchy
+
+When a multi-sequence job is submitted to the mblast
+service, multiple jobs are created.  One for the full query,
+then an additional "child" job is created for each
+individual sequence in the query.  By default, child jobs
+are marked as non-primary which may be used by clients to
+render child jobs differently than the full parent job.
+
+Additionally, a job may be marked as non-primary on creation
+which may be used by indirect or non-UI clients to create
+jobs without polluting a user's created job list.
+
+To the mblast service, there is functionally no difference
+between a child job and a parent job.  Both run through the
+same steps and are queued and processed as individual jobs.
+The job hierarchy and primary status are purely for client
+use and have no impact on how the service functions.
+
+=== Hashing/Job Collisions
+
+To avoid storing/running multiple identical jobs, each job
+(both blast and formatter) is indexed on an MD5 digest of
+the config (excluding client-only fields such as
+`description` and `isPrimary`).
+
+When a blast or formatter job is submitted, it's config is
+parsed, validated, then serialized to JSON.  That JSON is
+used to generate the job digest.  If another job was found
+in the DB with the same hash, instead of running the
+submitted job, the user is marked as an owner of the
+pre-existing job and that job digest is returned as normal.
+
+If the user is linked to a job that has expired, the job is
+re-run, which means that any other user linked to that job
+will see the job's status changes as it runs through the
+process again.
+
 == TODOS
 
 Describe:
-. job hierarchy
+
+* statuses
+* job expiration
