@@ -455,6 +455,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_formatter_jobs">Formatter Jobs</a></li>
 </ul>
 </li>
+<li><a href="#_other_topics">Other Topics</a>
+<ul class="sectlevel2">
+<li><a href="#_job_splittinghierarchy">Job Splitting/Hierarchy</a></li>
+<li><a href="#_hashingjob_collisions">Hashing/Job Collisions</a></li>
+</ul>
+</li>
 <li><a href="#_todos">TODOS</a></li>
 </ul>
 </div>
@@ -1089,18 +1095,78 @@ be linked to a single job).</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_other_topics">Other Topics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_job_splittinghierarchy">Job Splitting/Hierarchy</h3>
+<div class="paragraph">
+<p>When a multi-sequence job is submitted to the mblast
+service, multiple jobs are created.  One for the full query,
+then an additional "child" job is created for each
+individual sequence in the query.  By default, child jobs
+are marked as non-primary which may be used by clients to
+render child jobs differently than the full parent job.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, a job may be marked as non-primary on creation
+which may be used by indirect or non-UI clients to create
+jobs without polluting a user&#8217;s created job list.</p>
+</div>
+<div class="paragraph">
+<p>To the mblast service, there is functionally no difference
+between a child job and a parent job.  Both run through the
+same steps and are queued and processed as individual jobs.
+The job hierarchy and primary status are purely for client
+use and have no impact on how the service functions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hashingjob_collisions">Hashing/Job Collisions</h3>
+<div class="paragraph">
+<p>To avoid storing/running multiple identical jobs, each job
+(both blast and formatter) is indexed on an MD5 digest of
+the config (excluding client-only fields such as
+<code>description</code> and <code>isPrimary</code>).</p>
+</div>
+<div class="paragraph">
+<p>When a blast or formatter job is submitted, it&#8217;s config is
+parsed, validated, then serialized to JSON.  That JSON is
+used to generate the job digest.  If another job was found
+in the DB with the same hash, instead of running the
+submitted job, the user is marked as an owner of the
+pre-existing job and that job digest is returned as normal.</p>
+</div>
+<div class="paragraph">
+<p>If the user is linked to a job that has expired, the job is
+re-run, which means that any other user linked to that job
+will see the job&#8217;s status changes as it runs through the
+process again.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_todos">TODOS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Describe:
-. job hierarchy</p>
+<p>Describe:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>statuses</p>
+</li>
+<li>
+<p>job expiration</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-18 15:49:03 -0400
+Last updated 2021-05-19 09:22:43 -0400
 </div>
 </div>
 </body>
