@@ -587,8 +587,20 @@ expected to reflect the actual status of a job.  It is used
 internally along with several other factors to derive the
 status of a job when needed.
 
-== TODOS
 
-Describe:
+=== Job Expiration
 
-* job expiration
+Jobs that have completed are cached, and that cache is
+subject to deletion at a set time period from the last time
+the job was accessed.  By default this timeout is 5 days,
+however this value may be changed at runtime from external
+configuration.
+
+The "last access" date is tracked by using the last modified
+date on the workspace directory.  When a job is accessed,
+the last modified timestamp on the workspace is updated to
+the time of the accessing.
+
+Job cleanup happens at a set interval and runs through and
+deletes all workspace directories that have a last modified
+date outside of the set timeout window.
