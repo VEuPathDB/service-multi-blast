@@ -3,5 +3,8 @@
   "type": "string",
   "minLength": 32,
   "maxLength": 32,
-  "pattern": "^[a-fA-F0-9]{32}$"
+  "pattern": "^[a-fA-F0-9]{32}$",
+  "examples": [
+    "fae0b27c451c728867a567e8c1bb4e53"
+  ]
 }
