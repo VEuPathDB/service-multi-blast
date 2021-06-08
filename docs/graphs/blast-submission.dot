@@ -1,0 +1,92 @@
+digraph {
+
+  // Graph Settings
+  graph[nodesep=1]
+  node[margin=0, shape=rect, width=1.5]
+  edge[color=darkblue]
+  splines=ortho
+  compound=true
+
+  //
+  // Nodes
+  //
+  Start               [shape=oval, color=blue]
+  CalcDigest          [label="Calculage\njob digest"]
+  DigestInDB          [label="Digest\nalready\nin DB", shape=diamond]
+  IsUserLinkedToJob   [label="User is\nlinked\nto job", shape=diamond]
+  CreateWorkspace     [label="Create job\nworkspace"]
+  CreateQueryFile     [label="Create\nquery file"]
+  InsertJobInDB       [label="Insert job\ninto DB"]
+  RefreshJobStatus    [label="Refresh job\nstatus"]
+  JobStatusFailed     [label="Job\nstatus is\nfailed", shape=diamond]
+  JobStillCached      [label="Job still\ncached", shape=diamond]
+  UpdateJobLastUsed   [label="Update job\nlast used"]
+  LinkUserToJob       [label="Link user\nto job"]
+  SubmitJobToQueue    [label="Submit job\nto queue"]
+  GetSubJobList       [label="Get sub\njob list"]
+  HandleSubJobList    [label="| Process sub-jobs |", shape=record]
+  200                 [label="200\nReturn job ID", color="green"]
+
+  //
+  // Links
+  //
+  Start             -> CalcDigest
+  CalcDigest        -> DigestInDB
+  IsUserLinkedToJob -> DigestInDB        [headlabel="Yes", color=darkgreen, dir=back]
+  DigestInDB        -> InsertJobInDB     [taillabel="No", color=darkred]
+  InsertJobInDB     -> CreateWorkspace
+  LinkUserToJob     -> GetSubJobList
+  GetSubJobList     -> HandleSubJobList
+  RefreshJobStatus  -> IsUserLinkedToJob [headlabel="Yes", color=darkgreen, dir=back]
+  IsUserLinkedToJob -> LinkUserToJob     [taillabel="No", color=darkred]
+  RefreshJobStatus  -> JobStatusFailed
+  JobStatusFailed   -> JobStillCached    [taillabel="No", color=darkred]
+  JobStillCached    -> UpdateJobLastUsed [taillabel="Yes", color=darkgreen]
+  UpdateJobLastUsed -> GetSubJobList
+  CreateWorkspace   -> CreateQueryFile
+  CreateQueryFile   -> SubmitJobToQueue
+  SubmitJobToQueue  -> GetSubJobList     [constraint=false]
+
+  JobStatusFailed   -> 200 [taillabel="Yes", color=darkgreen, constraint=false]
+  HandleSubJobList  -> 200
+  UpdateJobLastUsed -> 200 [constraint=false]
+
+  //
+  // Formatting
+  //
+  {
+    rank=same
+    DigestInDB
+    InsertJobInDB
+    CreateWorkspace
+    IsUserLinkedToJob
+  }
+  {
+    rank=same
+    LinkUserToJob
+    RefreshJobStatus
+    CreateQueryFile
+  }
+  {
+    rank=same
+    GetSubJobList
+    SubmitJobToQueue
+    UpdateJobLastUsed
+  }
+  {
+    rank=same
+    JobStatusFailed
+    JobStillCached
+  }
+  {
+    edge[style=invis]
+    DigestInDB -> LinkUserToJob
+    DigestInDB -> RefreshJobStatus
+    LinkUserToJob -> JobStillCached
+    // LinkUserToJob -> CreateWorkspace
+    LinkUserToJob -> CreateQueryFile
+  }
+
+  labelloc="t"
+  label="Blast Job Submission"
+}

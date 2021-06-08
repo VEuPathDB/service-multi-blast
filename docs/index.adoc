@@ -413,6 +413,12 @@ image::assets/blast-validation.svg[]
 image::assets/blast-submission.svg[]
 ====
 
+.Sub-Job Submission Process
+[%collapsible]
+====
+image::assets/sub-job-submission.svg[]
+====
+
 === Formatter Jobs
 
 .Basic Formatter Workflow
