@@ -400,6 +400,12 @@ be linked to a single job).
 image::assets/blast-job.svg[]
 --
 
+.Request Validation Process
+[%collapsible]
+--
+image::assets/blast-validation.svg[]
+--
+
 === Formatter Jobs
 
 .Basic Formatter Workflow
