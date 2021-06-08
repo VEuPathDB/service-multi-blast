@@ -396,14 +396,21 @@ be linked to a single job).
 === Blast Jobs
 
 .Basic Blast Workflow
---
+[%collapsible]
+====
 image::assets/blast-job.svg[]
---
+====
 
 .Request Validation Process
 [%collapsible]
 ====
 image::assets/blast-validation.svg[]
+====
+
+.Blast Submission Process
+[%collapsible]
+====
+image::assets/blast-submission.svg[]
 ====
 
 === Formatter Jobs
