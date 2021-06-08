@@ -72,7 +72,8 @@ public class JobService
     }
   }
 
-  private static final String ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences.";
+  private static final String ErrTooManySeqs  = "Too many sequences in input query.  Queries can have at most %d sequences.";
+  private static final String ErrQueryInvalid = "Invalid character \"%s\" at position %d in sequence %d on line %d.";
 
   public IOJobPostResponse createJob(IOJsonJobRequest input, long userID) {
     Log.trace("#createJob(input={}, userID={})", input, userID);
@@ -97,9 +98,27 @@ public class JobService
 
       // Limit input sequence count
       if (query.getSequenceCount() > Conf.getMaxSeqsPerQuery())
-        throw new UnprocessableEntityException(
+        throw new UnprocessableEntityException(new ErrorMap(
+          JsonKeys.Query,
           String.format(ErrTooManySeqs, Conf.getMaxSeqsPerQuery())
-        );
+        ));
+
+      {
+        var validationResult = query.validate();
+
+        if (validationResult != null) {
+          throw new UnprocessableEntityException(new ErrorMap(
+            JsonKeys.Query,
+            String.format(
+              ErrQueryInvalid,
+              validationResult.getCharacter(),
+              validationResult.getPosition(),
+              validationResult.getSequence(),
+              validationResult.getLine()
+            )
+          ));
+        }
+      }
 
       JobUtil.verifyResultLimit(input, (int) rawQuery.codePoints()
         .filter(c -> c == '>')
