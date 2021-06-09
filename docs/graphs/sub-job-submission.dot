@@ -1,11 +1,13 @@
 digraph {
   splines=ortho
   nodesep=0.5
-  node[shape=rect, margin=0, width=1]
+  node[shape=rect, margin=0, width="1.2"]
   edge[color=darkblue]
 
   // Nodes
   Start           [shape=oval, color=blue]
+  JobInDB         [label="Job\nalready\nin DB", shape=diamond]
+  InsertJobIntoDB [label="Insert job\ninto DB"]
   Remaining       [label="More\nsub-jobs\nremain", shape=diamond]
   CreateWorkspace [label="Create job\nworkspace"]
   CreateQueryFile [label="Create\nquery file"]
@@ -19,23 +21,41 @@ digraph {
   End             [shape=oval, color=green]
 
   // Links
-  Start           -> Remaining
-  Remaining       -> IsUserLinked    [taillabel=" Yes", color=darkgreen]
-  IsUserLinked    -> LinkUser        [taillabel="\n  No", color=darkred]
-  IsUserLinked    -> RefreshStatus   [taillabel="Yes  ", color=darkgreen]
+  Start     -> Remaining
+  Remaining -> JobInDB   [taillabel="Yes", color=darkgreen]
+
+  JobInDB -> IsUserLinked    [taillabel="Yes", color=darkgreen]
+  JobInDB -> InsertJobIntoDB [taillabel="\nNo", color=darkred]
+
+  IsUserLinked -> LinkUser      [taillabel="No", color=darkred, constraint=false]
+  IsUserLinked -> RefreshStatus [taillabel="Yes  ", color=darkgreen]
+
+  InsertJobIntoDB -> LinkUser
+
   LinkUser        -> RefreshStatus
   RefreshStatus   -> StatusFailed
-  StatusFailed    -> Remaining       [taillabel="Yes", color=darkgreen, constraint=false]
-  StatusFailed    -> StillCached     [taillabel="\nNo", color=darkred]
-  UpdateLastUsed  -> StillCached     [headlabel="Yes", color=darkgreen, dir=back]
-  StillCached     -> CreateWorkspace [taillabel="No", color=darkred]
-  CreateWorkspace -> CreateQueryFile
-  SubmitToQueue   -> CreateQueryFile [dir=back, constraint=false]
+
+  StatusFailed -> Remaining   [taillabel="Yes", color=darkgreen, constraint=false]
+  StatusFailed -> StillCached [taillabel="No", color=darkred]
+
+  UpdateLastUsed -> StillCached     [headlabel="Yes", color=darkgreen, dir=back]
+  StillCached    -> CreateWorkspace [taillabel="No", color=darkred]
+
+  CreateQueryFile -> CreateWorkspace [dir=back]
+  SubmitToQueue   -> CreateQueryFile [dir=back]
   SubmitToQueue   -> Remaining
   UpdateLastUsed  -> Remaining
-  End             -> Remaining       [headlabel="No", color=darkred, dir=back]
+
+  End -> Remaining [headlabel="No", color=darkred, dir=back]
 
   // Layout
+  {
+    rank=same
+    Remaining
+    End
+    JobInDB
+    IsUserLinked
+  }
   {
     rank=same;
     StillCached
@@ -43,16 +63,11 @@ digraph {
   }
   {
     rank=same
+    CreateWorkspace
     CreateQueryFile
     SubmitToQueue
   }
-  {
-    rank=same
-    Remaining
-    End
-    IsUserLinked
-  }
 
-  label="For each sub-job"
+  label="For Each Sub-Job"
   labelloc="t"
 }
