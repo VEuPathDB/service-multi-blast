@@ -34,10 +34,10 @@ digraph {
   NextJob -> HashJob
   HashJob -> JobInDB
 
-  JobInDB -> IsUserLinked    [taillabel="Yes", color=darkgreen]
+  JobInDB -> IsUserLinked    [taillabel="\nYes       ", color=darkgreen]
   JobInDB -> InsertJobIntoDB [taillabel="\nNo", color=darkred]
 
-  IsUserLinked  -> LinkUser     [taillabel="\n     No", color=darkred]
+  IsUserLinked  -> LinkUser     [taillabel="\n       No", color=darkred]
   RefreshStatus -> IsUserLinked [headlabel="Yes", color=darkgreen, dir=back]
 
   CreateWorkspace -> InsertJobIntoDB [dir=back]
