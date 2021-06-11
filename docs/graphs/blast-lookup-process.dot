@@ -1,0 +1,92 @@
+digraph {
+  graph [nodesep=1]
+  node  [margin=0, shape=rect, width=1.5]
+  edge  [color=darkblue]
+
+  //
+  // Nodes
+  //
+  401 [shape=oval, color=orange]
+  404 [shape=oval, color=orange]
+  200 [label="200\nJob details", shape=oval, color=darkgreen]
+
+  Start [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
+
+  IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]
+
+  ValidateJobID [label="Validate job ID"]
+  IsJobIDValid  [label="Is job ID\nvalid?", shape=diamond]
+
+  DoesJobExist [label="Does job\nexist?", shape=diamond]
+
+  IsUserLinkedToJob [label="Is user\nlinked to\njob?", shape=diamond]
+
+  RefreshJobStatus [label="Refresh job\nstatus"]
+
+  LinkUserToJob [label="Link user\nto job"]
+
+  LinkUserToSubJobs [label="|Link user\nto sub jobs|", shape=record]
+  IsJobStillCached [label="Is job\nstill\ncached?", shape=diamond]
+
+  UpdateLastUsed [label="Update\nlast used"]
+
+  //
+  // Links
+  //
+
+  Start -> IsUserTokenProvided
+
+  IsUserTokenProvided -> ValidateJobID [taillabel="Yes", color=darkgreen]
+  401 -> IsUserTokenProvided [headlabel="No", color=darkred, dir=back]
+
+  ValidateJobID -> IsJobIDValid
+
+  DoesJobExist -> IsJobIDValid [headlabel="Yes", color=darkgreen, dir=back]
+  IsJobIDValid -> 404 [taillabel="No", color=darkred]
+
+  IsUserLinkedToJob -> DoesJobExist [headlabel="Yes", color=darkgreen, dir=back]
+  DoesJobExist      -> 404          [taillabel="No", color=darkred]
+
+  IsUserLinkedToJob -> RefreshJobStatus [taillabel="Yes", color=darkgreen]
+  IsUserLinkedToJob -> LinkUserToJob [taillabel="No", color=darkred]
+
+  LinkUserToJob -> LinkUserToSubJobs
+
+  LinkUserToSubJobs -> RefreshJobStatus
+
+  RefreshJobStatus -> IsJobStillCached
+
+  IsJobStillCached -> UpdateLastUsed [taillabel="Yes", color=darkgreen]
+  IsJobStillCached -> 200
+
+  UpdateLastUsed -> 200
+
+  //
+  // Formatting
+  //
+  {
+    rank=same
+    401
+    IsUserTokenProvided
+    ValidateJobID
+  }
+
+  {
+    rank=same
+    IsJobIDValid
+    DoesJobExist
+    IsUserLinkedToJob
+  }
+
+  {
+    rank=same
+    RefreshJobStatus
+    IsJobStillCached
+    UpdateLastUsed
+  }
+
+  {
+    edge[style=invis]
+    404 -> LinkUserToJob
+  }
+}

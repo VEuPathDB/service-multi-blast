@@ -4,7 +4,8 @@ all: index.html \
      assets/blast-submission.svg \
      assets/blast-request-validation.svg \
      assets/blast-sequence-validation.svg \
-     assets/blast-target-validation.svg
+     assets/blast-target-validation.svg \
+     assets/blast-lookup-process.svg
 
 assets/sub-job-submission.svg: graphs/sub-job-submission.dot
 	@echo "Updating sub-job submission graph"
@@ -25,6 +26,10 @@ assets/blast-sequence-validation.svg: graphs/blast-sequence-validation.dot
 assets/blast-target-validation.svg: graphs/blast-target-validation.dot
 	@echo "Updating blast target validation graph"
 	@dot -T svg graphs/blast-target-validation.dot > assets/blast-target-validation.svg
+
+assets/blast-lookup-process.svg: graphs/blast-lookup-process.dot
+	@echo "Updating blast lookup process graph"
+	@dot -T svg graphs/blast-lookup-process.dot > assets/blast-lookup-process.svg
 
 index.html: index.adoc
 	@echo "Rebuilding index.html"
