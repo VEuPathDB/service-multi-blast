@@ -395,6 +395,8 @@ be linked to a single job).
 
 === Blast Jobs
 
+==== Job Submission
+
 .Basic Blast Workflow
 [%collapsible]
 ====
@@ -405,6 +407,18 @@ image::assets/blast-job.svg[]
 [%collapsible]
 ====
 image::assets/blast-request-validation.svg[]
+====
+
+.Sequence Validation Process
+[%collapsible]
+====
+image::assets/blast-sequence-validation.svg[]
+====
+
+.Target Organism Validation Process
+[%collapsible]
+====
+image::assets/blast-target-validation.svg[]
 ====
 
 .Blast Submission Process

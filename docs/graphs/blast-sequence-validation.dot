@@ -1,12 +1,54 @@
 digraph {
+  graph [nodesep=1]
+  node  [margin=0, shape=rect, width=1.5]
+  edge  [color=darkblue]
+  // splines=ortho
+
+  Start             [shape=oval, color=blue]
+  End               [shape=oval, color=green]
+  Error             [label="Validation\nerror", shape=oval, color=red]
   MoreSeqsRemaining [label="More seqs\nremaining?", shape=diamond]
-    
-  NextSequence [label="Next sequence"]
-    
+  NextSequence      [label="Next sequence"]
   IsSequenceTooLong [label="Is sequence\ntoo long?", shape=diamond]
 
   IsSequenceValid [label="Is sequence\nvalid?", shape=diamond]
-    
+
+  //
+  // Links
+  //
+  Start -> MoreSeqsRemaining
+
+  MoreSeqsRemaining -> NextSequence      [taillabel="Yes"]
+  End               -> MoreSeqsRemaining [headlabel="No", dir=back]
+
+  NextSequence -> IsSequenceTooLong
+
+  IsSequenceTooLong -> Error             [taillabel="Yes    ", color=darkred]
+  IsSequenceValid   -> IsSequenceTooLong [headlabel="No", color=darkgreen, dir=back]
+
+  IsSequenceValid -> MoreSeqsRemaining [taillabel="Yes", color=darkgreen]
+  IsSequenceValid -> Error             [taillabel="No", color=darkred]
+
+  //
+  // Formatting
+  //
+  {
+    rank=same
+    MoreSeqsRemaining
+    End
+  }
+
+  {
+    rank=same
+    IsSequenceTooLong
+    IsSequenceValid
+  }
+
+  {
+    edge[style=invis]
+    MoreSeqsRemaining -> IsSequenceTooLong
+  }
+
   label="For each sequence"
   labelloc="t"
 }
