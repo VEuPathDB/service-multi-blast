@@ -433,6 +433,14 @@ image::assets/blast-submission.svg[]
 image::assets/sub-job-submission.svg[]
 ====
 
+==== Job Lookup
+
+.Job Lookup Process
+[%collapsible]
+====
+image::assets/blast-lookup-process.svg[]
+====
+
 === Formatter Jobs
 
 .Basic Formatter Workflow
