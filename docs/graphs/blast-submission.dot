@@ -49,7 +49,6 @@ digraph {
 
   JobStatusFailed   -> 200 [taillabel="Yes", color=darkgreen, constraint=false]
   HandleSubJobList  -> 200
-  UpdateJobLastUsed -> 200 [constraint=false]
 
   //
   // Formatting

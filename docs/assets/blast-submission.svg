@@ -179,9 +179,9 @@
 <!-- JobStatusFailed&#45;&gt;200 -->
 <g id="edge17" class="edge">
 <title>JobStatusFailed&#45;&gt;200</title>
-<path fill="none" stroke="darkgreen" d="M61,-216.73C61,-144.68 61,-12 61,-12 61,-12 355.87,-12 355.87,-12"/>
-<polygon fill="darkgreen" stroke="darkgreen" points="355.87,-15.5 365.87,-12 355.87,-8.5 355.87,-15.5"/>
-<text text-anchor="middle" x="48.5" y="-205.53" font-family="Times,serif" font-size="14.00">Yes</text>
+<path fill="none" stroke="darkgreen" d="M61,-216.96C61,-146.46 61,-18 61,-18 61,-18 355.87,-18 355.87,-18"/>
+<polygon fill="darkgreen" stroke="darkgreen" points="355.87,-21.5 365.87,-18 355.87,-14.5 355.87,-21.5"/>
+<text text-anchor="middle" x="48.5" y="-205.76" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- UpdateJobLastUsed -->
 <g id="node11" class="node">
@@ -195,7 +195,7 @@
 <title>JobStillCached&#45;&gt;UpdateJobLastUsed</title>
 <path fill="none" stroke="darkgreen" d="M244,-234.69C244,-234.69 244,-191.16 244,-191.16"/>
 <polygon fill="darkgreen" stroke="darkgreen" points="247.5,-191.16 244,-181.16 240.5,-191.16 247.5,-191.16"/>
-<text text-anchor="middle" x="250.25" y="-223.49" font-family="Times,serif" font-size="14.00">Yes</text>
+<text text-anchor="middle" x="231.5" y="-223.49" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- GetSubJobList -->
 <g id="node14" class="node">
@@ -209,12 +209,6 @@
 <title>UpdateJobLastUsed&#45;&gt;GetSubJobList</title>
 <path fill="none" stroke="darkblue" d="M294.01,-163C294.01,-163 355.72,-163 355.72,-163"/>
 <polygon fill="darkblue" stroke="darkblue" points="355.72,-166.5 365.72,-163 355.72,-159.5 355.72,-166.5"/>
-</g>
-<!-- UpdateJobLastUsed&#45;&gt;200 -->
-<g id="edge19" class="edge">
-<title>UpdateJobLastUsed&#45;&gt;200</title>
-<path fill="none" stroke="darkblue" d="M240,-144.83C240,-107.15 240,-24 240,-24 240,-24 355.99,-24 355.99,-24"/>
-<polygon fill="darkblue" stroke="darkblue" points="355.99,-27.5 365.99,-24 355.99,-20.5 355.99,-27.5"/>
 </g>
 <!-- LinkUserToJob&#45;&gt;CreateQueryFile -->
 <!-- LinkUserToJob&#45;&gt;JobStillCached -->
