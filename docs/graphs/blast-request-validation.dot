@@ -39,9 +39,15 @@ digraph {
 
   ParseBlastConfig [label="Parse JSON config"]
 
-  ValidateBlastConfig [label="| Validate\nBLAST config| ", shape=record]
+  ValidateBlastConfig [label="Validate\nBLAST config"]
+
+  BlastConfigValidationService [label="BLAST config\nvalidation\nservice", shape=component]
 
   ProcessBlastJob [label="| Process\nBLAST job |", shape=record]
+
+  //
+  // Links
+  //
 
   Start -> IsUserTokenProvided
 
@@ -81,6 +87,8 @@ digraph {
   ValidateBlastConfig -> 422 [taillabel="Validation\nerror", color="darkred", constraint=false]
   ValidateBlastConfig -> ProcessBlastJob
 
+  BlastConfigValidationService -> ValidateBlastConfig [dir=both]
+
   //
   // Formatting
   //
@@ -113,6 +121,12 @@ digraph {
     422
     CalculateMaxResultSize
     IsMaxResultSizeTooLarge
+  }
+
+  {
+    rank=same
+    ValidateBlastConfig
+    BlastConfigValidationService
   }
 
   {
