@@ -4,7 +4,7 @@ digraph {
   graph[nodesep=1]
   node[margin=0, shape=rect, width=1.5]
   edge[color=darkblue]
-  splines=ortho
+  // splines=ortho
   compound=true
 
   //
@@ -32,22 +32,22 @@ digraph {
   //
   Start             -> CalcDigest
   CalcDigest        -> DigestInDB
-  IsUserLinkedToJob -> DigestInDB        [headlabel="Yes", color=darkgreen, dir=back]
+  DigestInDB        -> IsUserLinkedToJob [taillabel="Yes", color=darkgreen]
   DigestInDB        -> InsertJobInDB     [taillabel="No", color=darkred]
   InsertJobInDB     -> CreateWorkspace
-  LinkUserToJob     -> RefreshJobStatus  [constraint=false]
+  LinkUserToJob     -> RefreshJobStatus
   GetSubJobList     -> HandleSubJobList
-  RefreshJobStatus  -> IsUserLinkedToJob [headlabel="Yes", color=darkgreen, dir=back]
+  IsUserLinkedToJob -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
   IsUserLinkedToJob -> LinkUserToJob     [taillabel="No", color=darkred]
   RefreshJobStatus  -> JobStatusFailed
-  JobStatusFailed   -> JobStillCached    [taillabel="No", color=darkred]
+  JobStillCached    -> JobStatusFailed   [headlabel="No", color=darkred, dir=back]
   JobStillCached    -> UpdateJobLastUsed [taillabel="Yes", color=darkgreen]
   UpdateJobLastUsed -> GetSubJobList
   CreateWorkspace   -> CreateQueryFile
   CreateQueryFile   -> SubmitJobToQueue
-  SubmitJobToQueue  -> GetSubJobList     [constraint=false]
+  SubmitJobToQueue  -> GetSubJobList
 
-  JobStatusFailed   -> 200 [taillabel="Yes", color=darkgreen, constraint=false]
+  JobStatusFailed   -> 200 [taillabel="Yes", color=darkgreen]
   HandleSubJobList  -> 200
 
   //
@@ -55,35 +55,29 @@ digraph {
   //
   {
     rank=same
-    DigestInDB
-    InsertJobInDB
-    CreateWorkspace
     IsUserLinkedToJob
-  }
-  {
-    rank=same
+    DigestInDB
     LinkUserToJob
-    RefreshJobStatus
-    CreateQueryFile
   }
   {
     rank=same
-    GetSubJobList
-    SubmitJobToQueue
+    JobStillCached
+    JobStatusFailed
+  }
+  {
+    rank=same
+    CreateQueryFile
     UpdateJobLastUsed
   }
   {
     rank=same
-    JobStatusFailed
-    JobStillCached
+    SubmitJobToQueue
+    GetSubJobList
   }
   {
     edge[style=invis]
-    DigestInDB -> LinkUserToJob
-    DigestInDB -> RefreshJobStatus
-    LinkUserToJob -> JobStillCached
-    // LinkUserToJob -> CreateWorkspace
-    LinkUserToJob -> CreateQueryFile
+    IsUserLinkedToJob -> JobStillCached
+    CalcDigest -> LinkUserToJob
   }
 
   labelloc="t"
