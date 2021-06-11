@@ -1,0 +1,12 @@
+digraph {
+  MoreSeqsRemaining [label="More seqs\nremaining?", shape=diamond]
+    
+  NextSequence [label="Next sequence"]
+    
+  IsSequenceTooLong [label="Is sequence\ntoo long?", shape=diamond]
+
+  IsSequenceValid [label="Is sequence\nvalid?", shape=diamond]
+    
+  label="For each sequence"
+  labelloc="t"
+}
