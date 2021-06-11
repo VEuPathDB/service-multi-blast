@@ -404,7 +404,7 @@ image::assets/blast-job.svg[]
 .Request Validation Process
 [%collapsible]
 ====
-image::assets/blast-validation.svg[]
+image::assets/blast-request-validation.svg[]
 ====
 
 .Blast Submission Process
