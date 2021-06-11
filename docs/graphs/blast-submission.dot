@@ -35,7 +35,7 @@ digraph {
   IsUserLinkedToJob -> DigestInDB        [headlabel="Yes", color=darkgreen, dir=back]
   DigestInDB        -> InsertJobInDB     [taillabel="No", color=darkred]
   InsertJobInDB     -> CreateWorkspace
-  LinkUserToJob     -> GetSubJobList
+  LinkUserToJob     -> RefreshJobStatus  [constraint=false]
   GetSubJobList     -> HandleSubJobList
   RefreshJobStatus  -> IsUserLinkedToJob [headlabel="Yes", color=darkgreen, dir=back]
   IsUserLinkedToJob -> LinkUserToJob     [taillabel="No", color=darkred]
