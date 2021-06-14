@@ -15,5 +15,6 @@ node('centos8') {
     [ name: 'mblast-blast-formatter', path: 'blast/formatter' ],
     [ name: 'mblast-blast-validator', path: 'blast/validator' ],
     [ name: 'mblast-queue-db',        path: 'databases/queue' ],
+    [ name: 'mblast-blast-queue',     path: 'fireworq'        ]
   ])
 }
