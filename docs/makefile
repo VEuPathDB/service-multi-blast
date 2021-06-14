@@ -1,40 +1,12 @@
+DOT_FILES = $(wildcard graphs/*.dot)
+SVG_FILES = $(DOT_FILES:graphs/%.dot=assets/%.svg)
+
 .PHONY: all
-all: index.html \
-     assets/legend.svg \
-     assets/sub-job-submission.svg \
-     assets/blast-submission.svg \
-     assets/blast-request-validation.svg \
-     assets/blast-sequence-validation.svg \
-     assets/blast-target-validation.svg \
-     assets/blast-lookup-process.svg
+all: $(SVG_FILES) index.html
 
-assets/legend.svg: graphs/legend.dot
-	@echo "Rebuilding legend graph"
-	@dot -Tsvg graphs/legend.dot > assets/legend.svg
-
-assets/sub-job-submission.svg: graphs/sub-job-submission.dot
-	@echo "Updating sub-job submission graph"
-	@dot -Tsvg graphs/sub-job-submission.dot > assets/sub-job-submission.svg
-
-assets/blast-submission.svg: graphs/blast-submission.dot
-	@echo "Updating blast submission graph"
-	@dot -T svg graphs/blast-submission.dot > assets/blast-submission.svg
-
-assets/blast-request-validation.svg: graphs/blast-request-validation.dot
-	@echo "Updating blast request validation graph"
-	@dot -T svg graphs/blast-request-validation.dot > assets/blast-request-validation.svg
-
-assets/blast-sequence-validation.svg: graphs/blast-sequence-validation.dot
-	@echo "Updating blast sequence validation graph"
-	@dot -T svg graphs/blast-sequence-validation.dot > assets/blast-sequence-validation.svg
-
-assets/blast-target-validation.svg: graphs/blast-target-validation.dot
-	@echo "Updating blast target validation graph"
-	@dot -T svg graphs/blast-target-validation.dot > assets/blast-target-validation.svg
-
-assets/blast-lookup-process.svg: graphs/blast-lookup-process.dot
-	@echo "Updating blast lookup process graph"
-	@dot -T svg graphs/blast-lookup-process.dot > assets/blast-lookup-process.svg
+assets/%.svg: graphs/%.dot
+	@echo "Rebuilding $@"
+	@dot -Tsvg $< > $@
 
 index.html: index.adoc
 	@echo "Rebuilding index.html"
