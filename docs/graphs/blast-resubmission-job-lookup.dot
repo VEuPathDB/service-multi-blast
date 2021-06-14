@@ -30,12 +30,13 @@ digraph {
   DoesJobExist1      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
   DoesJobExist1      -> LookupJob         [taillabel="No", color=darkred]
   LookupJob          -> DB                [dir=both, style=dotted]
-  LookupJob          -> DoesJobExist2     [constraint=false]
-  LinkUserToJob      -> DoesJobExist2     [headlabel="Yes", color=darkgreen, dir=back]
+  LookupJob          -> DoesJobExist2     []
+  DoesJobExist2      -> LinkUserToJob     [taillabel="Yes", color=darkgreen]
   DoesJobExist2      -> End               [taillabel="No", color=darkred]
   LinkUserToJob      -> LinkUserToSubJobs
-  LinkUserToSubJobs  -> RefreshJobStatus
-  RefreshJobStatus   -> IsJobStillCached
+  LinkUserToJob      -> DB                [style=dotted]
+  LinkUserToSubJobs  -> RefreshJobStatus  []
+  IsJobStillCached   -> RefreshJobStatus
   IsJobStillCached   -> UpdateLastUsed    [taillabel="\n      Yes", color=darkgreen]
   IsJobStillCached   -> End               [taillabel="No", color=darkred]
   UpdateLastUsed     -> End
@@ -58,12 +59,18 @@ digraph {
     DoesJobExist2
     LinkUserToJob
   }
+  {
+    rank=same
+    RefreshJobStatus
+    IsJobStillCached
+  }
 
   {
     edge [style=invis]
-    LookupUserJob -> LookupJob
-    DB -> DoesJobExist2
-    LookupJob -> LinkUserToJob
-    DoesJobExist2 -> LinkUserToSubJobs
+    RefreshJobStatus -> UpdateLastUsed
+    // LookupUserJob -> LookupJob
+    // DB -> DoesJobExist2
+    // LookupJob -> LinkUserToJob
+    // DoesJobExist2 -> LinkUserToSubJobs
   }
 }
