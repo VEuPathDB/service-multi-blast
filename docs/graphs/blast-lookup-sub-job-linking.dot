@@ -15,9 +15,7 @@ digraph {
   Link  -> Next [dir=back]
   DB    -> Link [dir=both, style=dotted]
   Link  -> More
-
-  End -> More [headlabel="No", color=darkred, dir=back]
-
+  End   -> More [headlabel="No", color=darkred, dir=back]
 
   {rank=same; End; More}
   {rank=same; DB; Link; Next}
