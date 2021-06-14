@@ -467,6 +467,12 @@ image::assets/blast-resubmission.svg[]
 image::assets/blast-resubmission-job-lookup.svg[]
 ====
 
+.Sub-Job Linking
+[%collapsible]
+====
+image::assets/blast-lookup-sub-job-linking.svg[]
+====
+
 === Formatter Jobs
 
 .Basic Formatter Workflow
