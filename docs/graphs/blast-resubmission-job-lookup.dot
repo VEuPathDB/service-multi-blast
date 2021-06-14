@@ -1,0 +1,69 @@
+digraph {
+  graph [nodesep=1, ranksep=0.7]
+  node  [margin=0, shape=rect, width=1.5]
+  edge  [color=darkblue]
+
+  //
+  // Nodes
+  //
+
+  Start               [label="Start", shape=oval, color=darkgreen]
+  LookupUserJob       [label="Lookup\nuser job"]
+  LookupJob           [label="Lookup job"]
+  DB                  [label="MBlast DB", shape=cylinder]
+  DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
+  DoesJobExist2       [label="Does job\nexist?", shape=diamond]
+  RefreshJobStatus    [label="Refresh job\nstatus"]
+  LinkUserToJob       [label="Link user\nto job"]
+  LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
+  IsJobStillCached    [label="Is job\nstill\ncached?", shape=diamond]
+  UpdateLastUsed      [label="Update\nlast used"]
+  End                 [label="End", shape=oval, color=darkred]
+
+  //
+  // Links
+  //
+
+  Start              -> LookupUserJob
+  LookupUserJob      -> DoesJobExist1
+  LookupUserJob      -> DB                [dir=both, style=dotted]
+  DoesJobExist1      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
+  DoesJobExist1      -> LookupJob         [taillabel="No", color=darkred]
+  LookupJob          -> DB                [dir=both, style=dotted]
+  LookupJob          -> DoesJobExist2     [constraint=false]
+  LinkUserToJob      -> DoesJobExist2     [headlabel="Yes", color=darkgreen, dir=back]
+  DoesJobExist2      -> End               [taillabel="No", color=darkred]
+  LinkUserToJob      -> LinkUserToSubJobs
+  LinkUserToSubJobs  -> RefreshJobStatus
+  RefreshJobStatus   -> IsJobStillCached
+  IsJobStillCached   -> UpdateLastUsed    [taillabel="\n      Yes", color=darkgreen]
+  IsJobStillCached   -> End               [taillabel="No", color=darkred]
+  UpdateLastUsed     -> End
+
+  //
+  // Formatting
+  //
+  {
+    rank=same
+    DB
+    DoesJobExist1
+  }
+  {
+    rank=same
+    DoesJobExist1
+    LookupJob
+  }
+  {
+    rank=same
+    DoesJobExist2
+    LinkUserToJob
+  }
+
+  {
+    edge [style=invis]
+    LookupUserJob -> LookupJob
+    DB -> DoesJobExist2
+    LookupJob -> LinkUserToJob
+    DoesJobExist2 -> LinkUserToSubJobs
+  }
+}
