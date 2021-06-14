@@ -10,56 +10,38 @@ digraph {
   404 [shape=oval, color=orange]
   200 [label="200\nJob details", shape=oval, color=darkgreen]
 
-  Start [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
-
+  Start               [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
   IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]
-
-  ValidateJobID [label="Validate job ID"]
-  IsJobIDValid  [label="Is job ID\nvalid?", shape=diamond]
-
-  DoesJobExist [label="Does job\nexist?", shape=diamond]
-
-  IsUserLinkedToJob [label="Is user\nlinked to\njob?", shape=diamond]
-
-  RefreshJobStatus [label="Refresh job\nstatus"]
-
-  LinkUserToJob [label="Link user\nto job"]
-
-  LinkUserToSubJobs [label="|Link user\nto sub jobs|", shape=record]
-  IsJobStillCached [label="Is job\nstill\ncached?", shape=diamond]
-
-  UpdateLastUsed [label="Update\nlast used"]
+  ValidateJobID       [label="Validate job ID"]
+  IsJobIDValid        [label="Is job ID\nvalid?", shape=diamond]
+  DoesJobExist        [label="Does job\nexist?", shape=diamond]
+  IsUserLinkedToJob   [label="Is user\nlinked to\njob?", shape=diamond]
+  RefreshJobStatus    [label="Refresh job\nstatus"]
+  LinkUserToJob       [label="Link user\nto job"]
+  LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
+  IsJobStillCached    [label="Is job\nstill\ncached?", shape=diamond]
+  UpdateLastUsed      [label="Update\nlast used"]
 
   //
   // Links
   //
 
-  Start -> IsUserTokenProvided
-
-  IsUserTokenProvided -> ValidateJobID [taillabel="Yes", color=darkgreen]
-  401 -> IsUserTokenProvided [headlabel="No", color=darkred, dir=back]
-
-  ValidateJobID -> IsJobIDValid
-
-  DoesJobExist -> IsJobIDValid [headlabel="Yes", color=darkgreen, dir=back]
-  IsJobIDValid -> 404 [taillabel="No", color=darkred]
-
-  IsUserLinkedToJob -> DoesJobExist [headlabel="Yes", color=darkgreen, dir=back]
-  DoesJobExist      -> 404          [taillabel="No", color=darkred]
-
-  IsUserLinkedToJob -> RefreshJobStatus [taillabel="Yes", color=darkgreen]
-  IsUserLinkedToJob -> LinkUserToJob [taillabel="No", color=darkred]
-
-  LinkUserToJob -> LinkUserToSubJobs
-
-  LinkUserToSubJobs -> RefreshJobStatus
-
-  RefreshJobStatus -> IsJobStillCached
-
-  IsJobStillCached -> UpdateLastUsed [taillabel="Yes", color=darkgreen]
-  IsJobStillCached -> 200            [taillabel="\nNo", color=darkred]
-
-  UpdateLastUsed -> 200
+  Start               -> IsUserTokenProvided
+  IsUserTokenProvided -> ValidateJobID       [taillabel="Yes", color=darkgreen]
+  401                 -> IsUserTokenProvided [headlabel="No", color=darkred, dir=back]
+  ValidateJobID       -> IsJobIDValid
+  DoesJobExist        -> IsJobIDValid        [headlabel="Yes", color=darkgreen, dir=back]
+  IsJobIDValid        -> 404                 [taillabel="No", color=darkred]
+  IsUserLinkedToJob   -> DoesJobExist        [headlabel="Yes", color=darkgreen, dir=back]
+  DoesJobExist        -> 404                 [taillabel="No", color=darkred]
+  IsUserLinkedToJob   -> RefreshJobStatus    [taillabel="Yes", color=darkgreen]
+  IsUserLinkedToJob   -> LinkUserToJob       [taillabel="No", color=darkred]
+  LinkUserToJob       -> LinkUserToSubJobs
+  LinkUserToSubJobs   -> RefreshJobStatus
+  RefreshJobStatus    -> IsJobStillCached
+  IsJobStillCached    -> UpdateLastUsed      [taillabel="Yes", color=darkgreen]
+  IsJobStillCached    -> 200                 [taillabel="\nNo", color=darkred]
+  UpdateLastUsed      -> 200
 
   //
   // Formatting

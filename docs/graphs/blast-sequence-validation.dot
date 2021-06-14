@@ -10,24 +10,19 @@ digraph {
   MoreSeqsRemaining [label="More seqs\nremaining?", shape=diamond]
   NextSequence      [label="Next sequence"]
   IsSequenceTooLong [label="Is sequence\ntoo long?", shape=diamond]
-
-  IsSequenceValid [label="Is sequence\nvalid?", shape=diamond]
+  IsSequenceValid   [label="Is sequence\nvalid?", shape=diamond]
 
   //
   // Links
   //
-  Start -> MoreSeqsRemaining
-
+  Start             -> MoreSeqsRemaining
   MoreSeqsRemaining -> NextSequence      [taillabel="Yes"]
   End               -> MoreSeqsRemaining [headlabel="No", dir=back]
-
-  NextSequence -> IsSequenceTooLong
-
+  NextSequence      -> IsSequenceTooLong
   IsSequenceTooLong -> Error             [taillabel="Yes    ", color=darkred]
   IsSequenceValid   -> IsSequenceTooLong [headlabel="No", color=darkgreen, dir=back]
-
-  IsSequenceValid -> MoreSeqsRemaining [taillabel="Yes", color=darkgreen]
-  IsSequenceValid -> Error             [taillabel="No", color=darkred]
+  IsSequenceValid   -> MoreSeqsRemaining [taillabel="Yes", color=darkgreen]
+  IsSequenceValid   -> Error             [taillabel="No", color=darkred]
 
   //
   // Formatting
@@ -37,13 +32,11 @@ digraph {
     MoreSeqsRemaining
     End
   }
-
   {
     rank=same
     IsSequenceTooLong
     IsSequenceValid
   }
-
   {
     edge[style=invis]
     MoreSeqsRemaining -> IsSequenceTooLong

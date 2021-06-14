@@ -21,17 +21,14 @@ digraph {
   // Links
   //
 
-  Start -> MoreTargetsRemaining
-
+  Start                -> MoreTargetsRemaining
   End                  -> MoreTargetsRemaining [headlabel="No", dir=back]
   MoreTargetsRemaining -> NextTargetOrg
-
-  NextTargetOrg  -> ValidateTarget
-  BlastDBFS      -> ValidateTarget [dir=both]
-  ValidateTarget -> IsTargetValid
-
-  IsTargetValid -> Error [taillabel="No", color=darkred]
-  IsTargetValid -> MoreTargetsRemaining [taillabel="Yes", color=darkgreen]
+  NextTargetOrg        -> ValidateTarget
+  BlastDBFS            -> ValidateTarget       [dir=both]
+  ValidateTarget       -> IsTargetValid
+  IsTargetValid        -> Error                [taillabel="No", color=darkred]
+  IsTargetValid        -> MoreTargetsRemaining [taillabel="Yes", color=darkgreen]
 
   //
   // Formatting
