@@ -57,7 +57,7 @@ digraph {
   RefreshJobStatus -> IsJobStillCached
 
   IsJobStillCached -> UpdateLastUsed [taillabel="Yes", color=darkgreen]
-  IsJobStillCached -> 200
+  IsJobStillCached -> 200            [taillabel="\nNo", color=darkred]
 
   UpdateLastUsed -> 200
 
