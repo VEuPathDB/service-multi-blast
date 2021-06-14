@@ -1,0 +1,21 @@
+digraph {
+  edge [style=invis]
+  node [margin=0, width="1.5"]
+  nodesep=0.2
+
+  Choice   [label="Choice", shape=diamond]
+  NChoice  [label="A decision between 2\nor more possible branches", shape=plaintext]
+  PreDef   [label="|Predefined\nprocess|", shape=record]
+  NPreDef  [label="A process that is defined in\na separate graph or document", shape=plaintext]
+  Process  [label="Process", shape=rect]
+  NProcess [label="Internal process", shape=plaintext]
+  End      [label="Start/End"]
+  NEnd     [label="Process start/end", shape=plaintext]
+  DB       [label="Data Store", shape=cylinder]
+  NDB      [label="Database/filesystem\ndata store", shape=plaintext]
+  ExtServ  [label="Service", shape=component]
+  NExtServ [label="External network\nservice", shape=plaintext]
+
+  End -> Choice -> PreDef -> Process -> DB -> ExtServ
+  NEnd -> NChoice -> NPreDef -> NProcess -> NDB -> NExtServ
+}

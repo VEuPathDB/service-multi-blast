@@ -39,8 +39,8 @@
 <!-- End&#45;&gt;MoreTargetsRemaining -->
 <g id="edge2" class="edge">
 <title>End&#45;&gt;MoreTargetsRemaining</title>
-<path fill="none" stroke="darkblue" d="M185.25,-291.43C205.77,-291.43 226.29,-291.43 246.81,-291.43"/>
-<polygon fill="darkblue" stroke="darkblue" points="185.18,-287.93 175.18,-291.43 185.18,-294.93 185.18,-287.93"/>
+<path fill="none" stroke="darkred" d="M185.25,-291.43C205.77,-291.43 226.29,-291.43 246.81,-291.43"/>
+<polygon fill="darkred" stroke="darkred" points="185.18,-287.93 175.18,-291.43 185.18,-294.93 185.18,-287.93"/>
 <text text-anchor="middle" x="236.31" y="-295.23" font-family="Times,serif" font-size="14.00">No</text>
 </g>
 <!-- Error -->
@@ -60,8 +60,9 @@
 <!-- MoreTargetsRemaining&#45;&gt;NextTargetOrg -->
 <g id="edge3" class="edge">
 <title>MoreTargetsRemaining&#45;&gt;NextTargetOrg</title>
-<path fill="none" stroke="darkblue" d="M301.36,-261.06C288.96,-247.39 274.37,-231.31 262.53,-218.26"/>
-<polygon fill="darkblue" stroke="darkblue" points="264.86,-215.62 255.55,-210.57 259.68,-220.33 264.86,-215.62"/>
+<path fill="none" stroke="darkgreen" d="M301.36,-261.06C288.96,-247.39 274.37,-231.31 262.53,-218.26"/>
+<polygon fill="darkgreen" stroke="darkgreen" points="264.86,-215.62 255.55,-210.57 259.68,-220.33 264.86,-215.62"/>
+<text text-anchor="middle" x="275.36" y="-233.86" font-family="Times,serif" font-size="14.00">Yes &#160;&#160;&#160;&#160;&#160;</text>
 </g>
 <!-- ValidateTarget -->
 <g id="node6" class="node">
@@ -101,7 +102,7 @@
 <title>IsTargetValid&#45;&gt;MoreTargetsRemaining</title>
 <path fill="none" stroke="darkgreen" d="M409.84,-132.83C394.92,-161.56 369.31,-210.87 350.71,-246.7"/>
 <polygon fill="darkgreen" stroke="darkgreen" points="347.4,-245.47 345.9,-255.96 353.62,-248.69 347.4,-245.47"/>
-<text text-anchor="middle" x="397.34" y="-136.63" font-family="Times,serif" font-size="14.00">Yes</text>
+<text text-anchor="middle" x="395.34" y="-136.63" font-family="Times,serif" font-size="14.00">Yes </text>
 </g>
 <!-- BlastDBFS -->
 <g id="node8" class="node">

@@ -393,6 +393,12 @@ be linked to a single job).
 
 == Workflow
 
+.Flowchart Legend
+[%collapsible]
+====
+image::assets/legend.svg[]
+====
+
 === Blast Jobs
 
 ==== Job Submission
