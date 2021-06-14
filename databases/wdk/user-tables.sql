@@ -11,7 +11,7 @@ CREATE TABLE userlogins5.multiblast_jobs
   queue_id   NUMBER(7),
   project_id VARCHAR2(16)
     NOT NULL,
-  status     VARCHAR(10),
+  status     VARCHAR2(10),
   created_on TIMESTAMP WITH TIME ZONE
     NOT NULL,
   delete_on  TIMESTAMP WITH TIME ZONE
