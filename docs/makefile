@@ -1,11 +1,16 @@
 .PHONY: all
 all: index.html \
+     assets/legend.svg \
      assets/sub-job-submission.svg \
      assets/blast-submission.svg \
      assets/blast-request-validation.svg \
      assets/blast-sequence-validation.svg \
      assets/blast-target-validation.svg \
      assets/blast-lookup-process.svg
+
+assets/legend.svg: graphs/legend.dot
+	@echo "Rebuilding legend graph"
+	@dot -Tsvg graphs/legend.dot > assets/legend.svg
 
 assets/sub-job-submission.svg: graphs/sub-job-submission.dot
 	@echo "Updating sub-job submission graph"

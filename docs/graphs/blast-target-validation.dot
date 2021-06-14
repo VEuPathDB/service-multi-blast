@@ -22,13 +22,13 @@ digraph {
   //
 
   Start                -> MoreTargetsRemaining
-  End                  -> MoreTargetsRemaining [headlabel="No", dir=back]
-  MoreTargetsRemaining -> NextTargetOrg
+  End                  -> MoreTargetsRemaining [headlabel="No", dir=back, color=darkred]
+  MoreTargetsRemaining -> NextTargetOrg        [taillabel="\nYes      ", color=darkgreen]
   NextTargetOrg        -> ValidateTarget
   BlastDBFS            -> ValidateTarget       [dir=both]
   ValidateTarget       -> IsTargetValid
   IsTargetValid        -> Error                [taillabel="No", color=darkred]
-  IsTargetValid        -> MoreTargetsRemaining [taillabel="Yes", color=darkgreen]
+  IsTargetValid        -> MoreTargetsRemaining [taillabel="Yes ", color=darkgreen]
 
   //
   // Formatting
