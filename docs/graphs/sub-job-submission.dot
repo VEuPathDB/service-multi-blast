@@ -1,0 +1,94 @@
+digraph {
+  // splines=ortho
+  nodesep=0.5
+  node[shape=rect, margin=0, width="1.2"]
+  edge[color=darkblue]
+
+  // Nodes
+  Start           [shape=oval, color=blue]
+  Remaining       [label="More\nsub-jobs\nremain", shape=diamond]
+  NextJob         [label="Next\nsub-job"]
+  HashJob         [label="Hash\nsub-job"]
+  JobInDB         [label="Job\nalready\nin DB", shape=diamond]
+  InsertJobIntoDB [label="Insert job\ninto DB"]
+  CreateWorkspace [label="Create job\nworkspace"]
+  CreateQueryFile [label="Create\nquery file"]
+  SubmitToQueue   [label="Submit job\nto queue"]
+  UpdateLastUsed  [label="Update job\nlast used"]
+  StillCached     [label="Job still\ncached", shape=diamond]
+  RefreshStatus   [label="Refresh job\nstatus"]
+  StatusFailed    [label="Job\nstatus is\nfailed", shape=diamond]
+  LinkUser1       [label="Link user\nto job"]
+  LinkUser2       [label="Link user\nto job"]
+  IsUserLinked    [label="Is user\nlinked\nto job", shape=diamond]
+  End             [shape=oval, color=green]
+
+  //
+  // Links
+  //
+
+  Start           -> Remaining
+  Remaining       -> NextJob         [taillabel="Yes", color=darkgreen]
+  End             -> Remaining       [headlabel="No", color=darkred, dir=back]
+  NextJob         -> HashJob
+  HashJob         -> JobInDB
+  JobInDB         -> IsUserLinked    [taillabel="\nYes       ", color=darkgreen]
+  JobInDB         -> InsertJobIntoDB [taillabel="\nNo", color=darkred]
+  IsUserLinked    -> LinkUser1       [taillabel="\n       No", color=darkred]
+  RefreshStatus   -> IsUserLinked    [headlabel="Yes", color=darkgreen, dir=back]
+  CreateWorkspace -> LinkUser2       [dir=back]
+  LinkUser2       -> InsertJobIntoDB [dir=back]
+  RefreshStatus   -> LinkUser1       [dir=back]
+  StatusFailed    -> RefreshStatus   [dir=back]
+  StatusFailed    -> Remaining       [taillabel="Yes", color=darkgreen]
+  StatusFailed    -> StillCached     [taillabel="\nNo", color=darkred]
+  UpdateLastUsed  -> StillCached     [headlabel="Yes", color=darkgreen, dir=back]
+  StillCached     -> CreateWorkspace [taillabel="No", color=darkred]
+  CreateQueryFile -> CreateWorkspace [dir=back]
+  SubmitToQueue   -> CreateQueryFile [dir=back]
+  SubmitToQueue   -> Remaining
+  UpdateLastUsed  -> Remaining
+
+  //
+  // Layout
+  //
+  {
+    rank=same
+    Remaining
+    End
+    NextJob
+    HashJob
+    JobInDB
+  }
+  {
+    rank=same
+    IsUserLinked
+  }
+  {
+    rank=same
+    LinkUser1
+    StatusFailed
+    RefreshStatus
+  }
+  {
+    rank=same
+    StillCached
+    UpdateLastUsed
+    SubmitToQueue
+  }
+  {
+    rank=same
+    CreateWorkspace
+    CreateQueryFile
+    InsertJobIntoDB
+    LinkUser2
+  }
+  {
+    edge[style=invis]
+    HashJob -> IsUserLinked
+    JobInDB -> LinkUser1
+  }
+
+  label="For Each Sub-Job"
+  labelloc="t"
+}

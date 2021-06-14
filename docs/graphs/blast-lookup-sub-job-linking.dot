@@ -1,0 +1,22 @@
+digraph {
+  graph [nodesep=1]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+  Start [shape=oval, color=blue]
+  End   [shape=oval, color=blue]
+  More  [label="More\nsub-jobs\nremaining?", shape=diamond]
+  Next  [label="Next sub-job"]
+  Link  [label="Link sub-job"]
+  DB    [label="MBlast DB", shape=cylinder]
+
+  Start -> More
+  More  -> Next [taillabel="\n        Yes", color=darkgreen]
+  Link  -> Next [dir=back]
+  DB    -> Link [dir=both, style=dotted]
+  Link  -> More
+  End   -> More [headlabel="No", color=darkred, dir=back]
+
+  {rank=same; End; More}
+  {rank=same; DB; Link; Next}
+}
