@@ -27,37 +27,26 @@ digraph {
   // Links
   //
 
-  Start -> Remaining
-
-  Remaining -> NextJob   [taillabel="Yes", color=darkgreen]
-  End       -> Remaining [headlabel="No", color=darkred, dir=back]
-
-  NextJob -> HashJob
-  HashJob -> JobInDB
-
-  JobInDB -> IsUserLinked    [taillabel="\nYes       ", color=darkgreen]
-  JobInDB -> InsertJobIntoDB [taillabel="\nNo", color=darkred]
-
-  IsUserLinked  -> LinkUser1     [taillabel="\n       No", color=darkred]
-  RefreshStatus -> IsUserLinked [headlabel="Yes", color=darkgreen, dir=back]
-
-  CreateWorkspace -> LinkUser2 [dir=back]
+  Start           -> Remaining
+  Remaining       -> NextJob         [taillabel="Yes", color=darkgreen]
+  End             -> Remaining       [headlabel="No", color=darkred, dir=back]
+  NextJob         -> HashJob
+  HashJob         -> JobInDB
+  JobInDB         -> IsUserLinked    [taillabel="\nYes       ", color=darkgreen]
+  JobInDB         -> InsertJobIntoDB [taillabel="\nNo", color=darkred]
+  IsUserLinked    -> LinkUser1       [taillabel="\n       No", color=darkred]
+  RefreshStatus   -> IsUserLinked    [headlabel="Yes", color=darkgreen, dir=back]
+  CreateWorkspace -> LinkUser2       [dir=back]
   LinkUser2       -> InsertJobIntoDB [dir=back]
-
-  RefreshStatus -> LinkUser1 [dir=back]
-  StatusFailed -> RefreshStatus [dir=back]
-
-  StatusFailed -> Remaining   [taillabel="Yes", color=darkgreen]
-  StatusFailed -> StillCached [taillabel="\nNo", color=darkred]
-
-  UpdateLastUsed -> StillCached     [headlabel="Yes", color=darkgreen, dir=back]
-  StillCached    -> CreateWorkspace [taillabel="No", color=darkred]
-
+  RefreshStatus   -> LinkUser1       [dir=back]
+  StatusFailed    -> RefreshStatus   [dir=back]
+  StatusFailed    -> Remaining       [taillabel="Yes", color=darkgreen]
+  StatusFailed    -> StillCached     [taillabel="\nNo", color=darkred]
+  UpdateLastUsed  -> StillCached     [headlabel="Yes", color=darkgreen, dir=back]
+  StillCached     -> CreateWorkspace [taillabel="No", color=darkred]
   CreateQueryFile -> CreateWorkspace [dir=back]
-
-  SubmitToQueue -> CreateQueryFile [dir=back]
-  SubmitToQueue -> Remaining
-
+  SubmitToQueue   -> CreateQueryFile [dir=back]
+  SubmitToQueue   -> Remaining
   UpdateLastUsed  -> Remaining
 
   //

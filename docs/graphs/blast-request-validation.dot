@@ -13,81 +13,52 @@ digraph {
   401 [shape=oval, color=orange]
   422 [shape=oval, color=orange]
 
-  Start [label="POST /jobs", shape="oval", color="blue"]
-
-  IsUserTokenProvided [label="Is User\nToken\nProvided?", shape=diamond]
-
-  IsPostBodyValidJSON [label="Is POST\nbody valid\nJSON?", shape=diamond]
-
-  IsQueryNull [label="Is query\nnull?", shape=diamond]
-
-  IsQueryTextTooLong [label="Is query\ntext too\nlong?", shape=diamond]
-
-  ParseQuery [label="Parse query"]
-
-  ValidateSequences [label="| Validate\nsequences |", shape=record]
-
-  DoesQueryHaveTooManySeqs [label="Does query\nhave too\nmany seqs?", shape=diamond]
-
-  CalculateMaxResultSize [label="Calculate max\nresult size"]
-
-  IsMaxResultSizeTooLarge [label="Is max\nresult size\ntoo large?", shape=diamond]
-
-  HasTargetOrgs [label="Has target\norganisms?", shape=diamond]
-
-  ValidateOrgs [label="| Validate\ntarget\norganisms |", shape=record]
-
-  ParseBlastConfig [label="Parse JSON config"]
-
-  ValidateBlastConfig [label="Validate\nBLAST config"]
-
+  Start                        [label="POST /jobs", shape="oval", color="blue"]
+  IsUserTokenProvided          [label="Is User\nToken\nProvided?", shape=diamond]
+  IsPostBodyValidJSON          [label="Is POST\nbody valid\nJSON?", shape=diamond]
+  IsQueryNull                  [label="Is query\nnull?", shape=diamond]
+  IsQueryTextTooLong           [label="Is query\ntext too\nlong?", shape=diamond]
+  ParseQuery                   [label="Parse query"]
+  ValidateSequences            [label="| Validate\nsequences |", shape=record]
+  DoesQueryHaveTooManySeqs     [label="Does query\nhave too\nmany seqs?", shape=diamond]
+  CalculateMaxResultSize       [label="Calculate max\nresult size"]
+  IsMaxResultSizeTooLarge      [label="Is max\nresult size\ntoo large?", shape=diamond]
+  HasTargetOrgs                [label="Has target\norganisms?", shape=diamond]
+  ValidateOrgs                 [label="| Validate\ntarget\norganisms |", shape=record]
+  ParseBlastConfig             [label="Parse JSON config"]
+  ValidateBlastConfig          [label="Validate\nBLAST config"]
   BlastConfigValidationService [label="BLAST config\nvalidation\nservice", shape=component]
-
-  ProcessBlastJob [label="| Process\nBLAST job |", shape=record]
+  ProcessBlastJob              [label="| Process\nBLAST job |", shape=record]
 
   //
   // Links
   //
 
-  Start -> IsUserTokenProvided
-
-  IsUserTokenProvided -> IsPostBodyValidJSON [taillabel="Yes", color="darkgreen"]
-  401                 -> IsUserTokenProvided [headlabel="No", color="darkred", dir=back]
-
-  IsPostBodyValidJSON -> IsQueryNull [taillabel="Yes", color="darkgreen"]
-  400                 -> IsPostBodyValidJSON [headlabel="No", color="darkred", dir=back]
-
-  IsQueryNull -> 422                [taillabel="Yes", color="darkred"]
-  IsQueryNull -> IsQueryTextTooLong [taillabel="No", color="darkgreen", constraint=false]
-
-  IsQueryTextTooLong -> 422        [taillabel="Yes", color="darkred", constraint=false]
-  ParseQuery -> IsQueryTextTooLong [headlabel="No", color="darkgreen", dir=back]
-
-  ParseQuery -> DoesQueryHaveTooManySeqs
-
-  DoesQueryHaveTooManySeqs -> 422               [taillabel="Yes", color="darkred", constraint=false]
-  DoesQueryHaveTooManySeqs -> ValidateSequences [taillabel="No", color="darkgreen"]
-
-  ValidateSequences -> CalculateMaxResultSize
-  ValidateSequences -> 422                    [taillabel="Validation\nError", color="darkred", constraint=false]
-
-  CalculateMaxResultSize -> IsMaxResultSizeTooLarge
-
-  IsMaxResultSizeTooLarge -> 422           [taillabel="Yes", color="darkred", constraint=false]
-  IsMaxResultSizeTooLarge -> HasTargetOrgs [taillabel="No", color="darkgreen"]
-
-  HasTargetOrgs -> ValidateOrgs [taillabel="Yes", color="darkgreen"]
-  HasTargetOrgs -> 422          [taillabel="No", color="darkred", constraint=false]
-
-  ValidateOrgs -> ParseBlastConfig
-  ValidateOrgs -> 422              [taillabel="Validation\nerror", color="darkred", constraint=false]
-
-  ParseBlastConfig -> ValidateBlastConfig
-
-  ValidateBlastConfig -> 422 [taillabel="Validation\nerror", color="darkred", constraint=false]
-  ValidateBlastConfig -> ProcessBlastJob
-
-  BlastConfigValidationService -> ValidateBlastConfig [dir=both]
+  Start                        -> IsUserTokenProvided
+  IsUserTokenProvided          -> IsPostBodyValidJSON      [taillabel="Yes", color="darkgreen"]
+  401                          -> IsUserTokenProvided      [headlabel="No", color="darkred", dir=back]
+  IsPostBodyValidJSON          -> IsQueryNull              [taillabel="Yes", color="darkgreen"]
+  400                          -> IsPostBodyValidJSON      [headlabel="No", color="darkred", dir=back]
+  IsQueryNull                  -> 422                      [taillabel="Yes", color="darkred"]
+  IsQueryNull                  -> IsQueryTextTooLong       [taillabel="No", color="darkgreen", constraint=false]
+  IsQueryTextTooLong           -> 422                      [taillabel="Yes", color="darkred", constraint=false]
+  ParseQuery                   -> IsQueryTextTooLong       [headlabel="No", color="darkgreen", dir=back]
+  ParseQuery                   -> DoesQueryHaveTooManySeqs
+  DoesQueryHaveTooManySeqs     -> 422                      [taillabel="Yes", color="darkred", constraint=false]
+  DoesQueryHaveTooManySeqs     -> ValidateSequences        [taillabel="No", color="darkgreen"]
+  ValidateSequences            -> CalculateMaxResultSize
+  ValidateSequences            -> 422                      [taillabel="Validation\nError", color="darkred", constraint=false]
+  CalculateMaxResultSize       -> IsMaxResultSizeTooLarge
+  IsMaxResultSizeTooLarge      -> 422                      [taillabel="Yes", color="darkred", constraint=false]
+  IsMaxResultSizeTooLarge      -> HasTargetOrgs            [taillabel="No", color="darkgreen"]
+  HasTargetOrgs                -> ValidateOrgs             [taillabel="Yes", color="darkgreen"]
+  HasTargetOrgs                -> 422                      [taillabel="No", color="darkred", constraint=false]
+  ValidateOrgs                 -> ParseBlastConfig
+  ValidateOrgs                 -> 422                      [taillabel="Validation\nerror", color="darkred", constraint=false]
+  ParseBlastConfig             -> ValidateBlastConfig
+  ValidateBlastConfig          -> 422                      [taillabel="Validation\nerror", color="darkred", constraint=false]
+  ValidateBlastConfig          -> ProcessBlastJob
+  BlastConfigValidationService -> ValidateBlastConfig      [dir=both]
 
   //
   // Formatting
@@ -96,39 +67,33 @@ digraph {
     rank=sink
     ProcessBlastJob
   }
-
   {
     rank=same
     IsUserTokenProvided
     401
   }
-
   {
     rank=same
     IsPostBodyValidJSON
     400
     IsQueryNull
   }
-
   {
     rank=same
     IsQueryTextTooLong
     ParseQuery
   }
-
   {
     rank=same
     422
     CalculateMaxResultSize
     IsMaxResultSizeTooLarge
   }
-
   {
     rank=same
     ValidateBlastConfig
     BlastConfigValidationService
   }
-
   {
     edge[style=invis]
     IsPostBodyValidJSON -> IsQueryTextTooLong
