@@ -13,7 +13,7 @@ digraph {
   IsSequenceValid   [label="Is sequence\nvalid?", shape=diamond]
 
   //
-  // Links
+  // Edges
   //
   Start             -> MoreSeqsRemaining
   MoreSeqsRemaining -> NextSequence      [taillabel="Yes"]

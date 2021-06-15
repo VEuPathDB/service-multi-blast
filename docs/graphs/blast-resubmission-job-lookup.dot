@@ -21,7 +21,7 @@ digraph {
   End                 [label="End", shape=oval, color=darkred]
 
   //
-  // Links
+  // Edges
   //
 
   Start              -> LookupUserJob

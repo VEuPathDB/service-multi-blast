@@ -3,6 +3,9 @@ digraph {
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
+  //
+  // Nodes
+  //
   Start [shape=oval, color=blue]
   End   [shape=oval, color=blue]
   More  [label="More\nsub-jobs\nremaining?", shape=diamond]
@@ -10,6 +13,9 @@ digraph {
   Link  [label="Link sub-job"]
   DB    [label="MBlast DB", shape=cylinder]
 
+  //
+  // Edges
+  //
   Start -> More
   More  -> Next [taillabel="\n        Yes", color=darkgreen]
   Link  -> Next [dir=back]
@@ -17,6 +23,9 @@ digraph {
   Link  -> More
   End   -> More [headlabel="No", color=darkred, dir=back]
 
+  //
+  // Formatting
+  //
   {rank=same; End; More}
   {rank=same; DB; Link; Next}
 }
