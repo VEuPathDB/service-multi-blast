@@ -1,25 +1,26 @@
 digraph {
 
   // Graph Settings
-  graph[nodesep=1]
-  node[margin=0, shape=rect, width=1.5]
-  edge[color=darkblue]
-  // splines=ortho
+  graph [nodesep=1, ranksep=0.7]
+  node  [margin=0, shape=rect, width=1.5]
+  edge  [color=darkblue]
+  splines=ortho
   compound=true
 
   //
   // Nodes
   //
-  Start               [shape=oval, color=blue]
+  Start               [shape=oval]
   CalcDigest          [label="Calculage\njob digest"]
-  DigestInDB          [label="Digest\nalready\nin DB", shape=diamond]
-  IsUserLinkedToJob   [label="User is\nlinked\nto job", shape=diamond]
+  LookupUserJob       [label="Lookup\nuser job"]
+  UserJobFound        [label="Found\nuser job?", shape=diamond]
+  LookupJob           [label="Lookup job"]
+  JobFound            [label="Found\njob?", shape=diamond]
   CreateWorkspace     [label="Create job\nworkspace"]
   CreateQueryFile     [label="Create\nquery file"]
   InsertJobInDB       [label="Insert job\ninto DB"]
   RefreshJobStatus    [label="Refresh job\nstatus"]
-  JobStatusFailed     [label="Job\nstatus is\nfailed", shape=diamond]
-  JobStillCached      [label="Job still\ncached", shape=diamond]
+  JobStatusFailed     [label="Job\nstatus is\nexpired?", shape=diamond]
   UpdateJobLastUsed   [label="Update job\nlast used"]
   LinkUserToJob       [label="Link user\nto job"]
   SubmitJobToQueue    [label="Submit job\nto queue"]
@@ -27,57 +28,98 @@ digraph {
   HandleSubJobList    [label="| Process sub-jobs |", shape=record]
   200                 [label="200\nReturn job ID", shape=oval, color="green"]
 
+  // External systems
+  {
+    node [color=purple]
+
+    DB    [label="MBlast DB", shape=cylinder]
+    FS    [label="MBlast\nworkspaces", shape=cylinder]
+    Queue [label="Job queue", shape=component]
+  }
+
+
   //
   // Edges
   //
   Start             -> CalcDigest
-  CalcDigest        -> DigestInDB
-  DigestInDB        -> IsUserLinkedToJob [taillabel="Yes", color=darkgreen]
-  DigestInDB        -> InsertJobInDB     [taillabel="No", color=darkred]
-  InsertJobInDB     -> CreateWorkspace
-  LinkUserToJob     -> RefreshJobStatus
-  GetSubJobList     -> HandleSubJobList
-  IsUserLinkedToJob -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
-  IsUserLinkedToJob -> LinkUserToJob     [taillabel="No", color=darkred]
-  RefreshJobStatus  -> JobStatusFailed
-  JobStillCached    -> JobStatusFailed   [headlabel="No", color=darkred, dir=back]
-  JobStillCached    -> UpdateJobLastUsed [taillabel="Yes", color=darkgreen]
-  UpdateJobLastUsed -> GetSubJobList
-  CreateWorkspace   -> CreateQueryFile
-  CreateQueryFile   -> SubmitJobToQueue
-  SubmitJobToQueue  -> GetSubJobList
+  CalcDigest        -> LookupUserJob
 
-  JobStatusFailed   -> 200 [taillabel="Yes", color=darkgreen]
+  LookupUserJob     -> UserJobFound
+  LookupUserJob     -> DB                [dir=back, style=dotted, color="#444444"]
+
+  UserJobFound      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
+  UserJobFound      -> LookupJob         [taillabel="No", color=darkred]
+
+  JobFound          -> LookupJob         [dir=back]
+  LookupJob         -> DB                [dir=back, style=dotted, color="#444444"]
+
+  JobFound          -> LinkUserToJob     [taillabel="Yes", color=darkgreen]
+  InsertJobInDB     -> JobFound          [headlabel="No", color=darkred, dir=back]
+
+  InsertJobInDB     -> CreateWorkspace
+  InsertJobInDB     -> DB                [style=dotted, color="#444444"]
+
+  LinkUserToJob     -> RefreshJobStatus
+  LinkUserToJob     -> DB                [style=dotted, color="#444444"]
+
+  GetSubJobList     -> HandleSubJobList
+
+  RefreshJobStatus  -> JobStatusFailed
+  RefreshJobStatus  -> DB                [dir=both, style=dotted, color="#444444"]
+  Queue             -> RefreshJobStatus  [style=dotted, color="#444444"]
+  RefreshJobStatus  -> FS                [dir=back, style=dotted, color="#444444"]
+
+  JobStatusFailed   -> UpdateJobLastUsed [taillabel="No", color=darkred]
+  SubmitJobToQueue  -> JobStatusFailed   [headlabel="Yes", color=darkgreen, dir=back]
+
+  UpdateJobLastUsed -> GetSubJobList
+  UpdateJobLastUsed -> FS                [style=dotted, color="#444444"]
+
+  CreateWorkspace   -> CreateQueryFile   []
+  CreateWorkspace   -> FS                [style=dotted, color="#444444"]
+
+  CreateQueryFile   -> SubmitJobToQueue  []
+  CreateQueryFile   -> FS                [style=dotted, color="#444444"]
+
+  SubmitJobToQueue  -> GetSubJobList     [constraint=false]
+  SubmitJobToQueue  -> Queue             [style=dotted, color="#444444"]
+
   HandleSubJobList  -> 200
 
   //
   // Formatting
   //
+
   {
     rank=same
-    IsUserLinkedToJob
-    DigestInDB
+    CalcDigest
+    LookupUserJob
+    UserJobFound
+  }
+
+  {
+    rank=same
+    LookupJob
+    JobFound
+    InsertJobInDB
+  }
+
+  {
+    rank=same
     LinkUserToJob
+    DB
   }
+
   {
     rank=same
-    JobStillCached
-    JobStatusFailed
+    RefreshJobStatus
+    Queue
   }
+
   {
     rank=same
     CreateQueryFile
-    UpdateJobLastUsed
-  }
-  {
-    rank=same
-    SubmitJobToQueue
-    GetSubJobList
-  }
-  {
-    edge[style=invis]
-    IsUserLinkedToJob -> JobStillCached
-    CalcDigest -> LinkUserToJob
+    JobStatusFailed
   }
 
   labelloc="t"
