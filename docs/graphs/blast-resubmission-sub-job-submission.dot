@@ -1,0 +1,83 @@
+digraph {
+  graph [nodesep=1]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+  //
+  // Node
+  //
+
+  Start        [shape=oval, color=green]
+  DB           [label="MBlast DB", shape=cylinder]
+  Refresh      [label="Refresh\nsub-job status"]
+  IsExpired    [label="Sub-job is\nexpired?", shape=diamond]
+  More         [label="More\nsub-jobs\nremaining?", shape=diamond]
+  Next         [label="Next\nsub-job"]
+  End          [shape=oval, color=darkred]
+  Queue        [label="Job queue", shape=component]
+  Workspace    [label="MBlast workspaces", shape=cylinder]
+  NewWorkspace [label="Create\nworkspace"]
+  NewQuery     [label="Create\nquery file"]
+  Submit       [label="Submit to\nqueue"]
+
+  //
+  // Links
+  //
+
+  Start -> More
+
+  More    -> Next      [taillabel="Yes", color=darkgreen]
+  End     -> More      [headlabel="No", color=darkred, dir=back]
+
+  Next    -> Refresh
+
+  Refresh   -> IsExpired []
+  Refresh   -> DB        [dir=both, style=dotted]
+  Refresh   -> Queue     [dir=both, style=dotted]
+
+  IsExpired -> NewWorkspace [taillabel="Yes", color=darkgreen]
+  IsExpired -> More         [taillabel="No", color=darkred]
+
+  NewWorkspace -> NewQuery
+  NewWorkspace -> Workspace [style=dotted]
+
+  NewQuery -> Submit
+  NewQuery -> Workspace [style=dotted]
+
+  Submit -> More  []
+  Submit -> Queue [style=dotted]
+
+
+  //
+  // Formatting
+  //
+
+  {
+    rank=same
+    End
+    More
+    // Next
+    // T1[label="", color=white]
+  }
+
+  {
+    rank=same
+    // Refresh
+    // IsExpired
+    DB
+  }
+
+  {
+    rank=same
+    // NewWorkspace
+    // NewQuery
+    // Submit
+    Queue
+  }
+
+  {
+    edge [style=invis]
+    // Next -> DB
+    // Next -> T1 -> DB -> Queue -> Workspace
+  }
+}
