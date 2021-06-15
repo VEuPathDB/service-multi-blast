@@ -325,7 +325,7 @@
 <!-- BlastConfigValidationService&#45;&gt;ValidateBlastConfig -->
 <g id="edge25" class="edge">
 <title>BlastConfigValidationService&#45;&gt;ValidateBlastConfig</title>
-<path fill="none" stroke="darkblue" d="M167.01,-95C167.01,-95 218.72,-95 218.72,-95"/>
+<path fill="none" stroke="darkblue" stroke-dasharray="1,5" d="M167.01,-95C167.01,-95 218.72,-95 218.72,-95"/>
 <polygon fill="darkblue" stroke="darkblue" points="218.72,-98.5 228.72,-95 218.72,-91.5 218.72,-98.5"/>
 <polygon fill="darkblue" stroke="darkblue" points="167.01,-91.5 157.01,-95 167.01,-98.5 167.01,-91.5"/>
 </g>

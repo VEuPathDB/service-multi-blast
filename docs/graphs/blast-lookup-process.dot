@@ -30,7 +30,7 @@ digraph {
   UpdateLastUsed      [label="Update\nlast used"]
 
   //
-  // Links
+  // Edges
   //
 
   Start               -> IsUserTokenProvided

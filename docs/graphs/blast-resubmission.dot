@@ -23,7 +23,7 @@ digraph {
 
 
   //
-  // Links
+  // Edges
   //
   Start               -> IsUserTokenProvided
   401                 -> IsUserTokenProvided [headlabel="No", dir=back, color=darkred]
@@ -40,10 +40,6 @@ digraph {
   CreateQuery         -> ResubmitSubJobs
   ResubmitSubJobs     -> 204 [constraint=false]
   IsExpired           -> 204 [taillabel="No", color=darkred]
-
-
-
-
 
 
   //

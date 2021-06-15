@@ -28,7 +28,7 @@ digraph {
   200                 [label="200\nReturn job ID", shape=oval, color="green"]
 
   //
-  // Links
+  // Edges
   //
   Start             -> CalcDigest
   CalcDigest        -> DigestInDB

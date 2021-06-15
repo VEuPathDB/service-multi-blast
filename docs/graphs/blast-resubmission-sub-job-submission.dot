@@ -21,7 +21,7 @@ digraph {
   Submit       [label="Submit to\nqueue"]
 
   //
-  // Links
+  // Edges
   //
 
   Start -> More

@@ -24,7 +24,7 @@ digraph {
   End             [shape=oval, color=green]
 
   //
-  // Links
+  // Edges
   //
 
   Start           -> Remaining

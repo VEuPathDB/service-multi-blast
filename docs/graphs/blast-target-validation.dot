@@ -18,7 +18,7 @@ digraph {
   BlastDBFS            [label="BLAST DB\nmounted dir", shape=cylinder]
 
   //
-  // Links
+  // Edges
   //
 
   Start                -> MoreTargetsRemaining

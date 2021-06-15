@@ -31,7 +31,7 @@ digraph {
   ProcessBlastJob              [label="| Process\nBLAST job |", shape=record]
 
   //
-  // Links
+  // Edges
   //
 
   Start                        -> IsUserTokenProvided
@@ -58,7 +58,7 @@ digraph {
   ParseBlastConfig             -> ValidateBlastConfig
   ValidateBlastConfig          -> 422                      [taillabel="Validation\nerror", color="darkred", constraint=false]
   ValidateBlastConfig          -> ProcessBlastJob
-  BlastConfigValidationService -> ValidateBlastConfig      [dir=both]
+  BlastConfigValidationService -> ValidateBlastConfig      [dir=both, style=dotted]
 
   //
   // Formatting

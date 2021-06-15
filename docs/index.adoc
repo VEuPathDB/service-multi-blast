@@ -403,7 +403,7 @@ image::assets/legend.svg[]
 
 ==== Job Submission
 
-.Basic Blast Workflow
+.Basic Blast Workflow (Sequence Diagram)
 [%collapsible]
 ====
 image::assets/blast-job.svg[]
