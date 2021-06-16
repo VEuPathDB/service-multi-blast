@@ -11,7 +11,7 @@ digraph {
   // Nodes
   //
   Start               [shape=oval]
-  CalcDigest          [label="Calculage\njob digest"]
+  CalcDigest          [label="Calculate\njob digest"]
   LookupUserJob       [label="Lookup\nuser job"]
   UserJobFound        [label="Found\nuser job?", shape=diamond]
   LookupJob           [label="Lookup job"]
