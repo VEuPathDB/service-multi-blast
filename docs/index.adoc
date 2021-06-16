@@ -427,6 +427,12 @@ rows, then the process moves on to attempting to find just
 the job with no user links.
 ====
 
+.Refresh Job Status
+[%collapsible]
+====
+image:assets/refresh-job-status.svg[]
+====
+
 ==== Job Submission
 
 .Basic Blast Workflow (Sequence Diagram)

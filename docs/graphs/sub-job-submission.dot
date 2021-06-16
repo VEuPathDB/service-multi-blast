@@ -4,12 +4,31 @@ digraph {
   node  [shape=rect, margin=0, width="1.2"]
   edge  [color=darkblue]
 
+  //
   // Nodes
-  Start           [shape=oval, color=blue]
+  //
+
+  // Start/End
+  {
+    node [shape=oval]
+
+    Start
+    End
+  }
+
+  // External Resources
+  {
+    node [color=purple, shape=cylinder]
+
+    DB    [label="MBlast DB"]
+    FS    [label="MBlast\nWorkspaces"]
+    Queue [label="Job Queue", shape=component]
+  }
+
   Remaining       [label="More\nsub-jobs\nremain", shape=diamond]
   NextJob         [label="Next\nsub-job"]
   HashJob         [label="Calculate\njob digest"]
-  LookupUserJob   [label="Lookup\nuser job"]
+  LookupUserJob   [label="|Lookup\nuser job|", shape=record]
   FoundUserJob    [label="Found\nuser job?", shape=diamond]
   LookupJob       [label="Lookup job"]
   FoundJob        [label="Found\njob?", shape=diamond]
@@ -21,11 +40,25 @@ digraph {
   RefreshStatus   [label="Refresh job\nstatus"]
   StatusSwitch    [label="Switch:\njob status", shape=diamond]
   LinkUser1       [label="Link user\nto job"]
-  End             [shape=oval, color=green]
 
   //
   // Edges
   //
+
+  // To External Resources
+  {
+    edge [style=dotted, color="#333333"]
+
+    LookupUserJob   -> DB [dir=back]
+    LookupJob       -> DB [dir=back]
+    InsertJobIntoDB -> DB
+    LinkUser1       -> DB
+
+    CreateWorkspace -> FS
+    CreateQueryFile -> FS
+
+    SubmitToQueue -> Queue
+  }
 
   Start           -> Remaining
 
@@ -52,50 +85,17 @@ digraph {
   RefreshStatus   -> StatusSwitch
 
   StatusSwitch    -> Remaining       [taillabel="Errored /\nIn Progress"]
-  UpdateLastUsed  -> StatusSwitch    [taillabel="Complete", dir=back]
+  StatusSwitch    -> UpdateLastUsed  [taillabel="Complete"]
   StatusSwitch    -> CreateWorkspace [taillabel="Expired", constraint=false]
 
   CreateWorkspace -> CreateQueryFile
-  SubmitToQueue   -> CreateQueryFile [dir=back, constraint=false]
+  CreateQueryFile -> SubmitToQueue
   SubmitToQueue   -> Remaining
   UpdateLastUsed  -> Remaining
 
   //
   // Layout
   //
-  {
-    rank=same
-    End
-    Remaining
-    NextJob
-  }
-
-  {
-    rank=same
-    StatusSwitch
-    CreateWorkspace
-    UpdateLastUsed
-  }
-  {
-    rank=same
-    CreateQueryFile
-    SubmitToQueue
-  }
-  {
-    rank=same
-    FoundUserJob
-    LookupJob
-  }
-  {
-    rank=same
-    FoundJob
-    // RefreshStatus
-    // LinkUser1
-  }
-  {
-    edge [style=invis]
-    FoundUserJob -> LinkUser1
-  }
 
   label="For Each Sub-Job"
   labelloc="t"

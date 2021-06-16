@@ -1,0 +1,108 @@
+digraph {
+  graph [nodesep=0.7, ranksep=0.8]
+  node  [shape=rect, margin=0, width="1.2"]
+  edge  [color=darkblue]
+
+  //
+  // Nodes
+  //
+
+  // External Resources
+  {
+    node [shape=cylinder, color=purple]
+
+    DB    [label="MBlast DB"]
+    FS    [label="MBlast\nWorkspaces"]
+    Queue [label="Job Queue", shape=component]
+  }
+
+  // End Caps
+  {
+    node [shape=oval]
+
+    Start [label="Start\ninput: $job"]
+    End
+  }
+
+  // Decisions
+  {
+    node [shape=diamond]
+
+    SwitchInStatus    [label="Switch:\n$job.status"]
+    SwitchQueueStatus [label="Switch:\n$queue.status"]
+    JobExistsInWS     [label="Workspace\nexists?"]
+  }
+
+  // Internal processes
+  {
+    LookupQueueStatus [label="Lookup\nqueue status:\n$queue"]
+    CheckJobExists    [label="Verify\njob exists in\n workspaces"]
+    SetExpired        [label="$job.status = expired"]
+    SetErrored        [label="$job.status = errored"]
+    SetCompleted      [label="$job.status = complete"]
+    UpdateDBStatus    [label="Update status\nin DB"]
+  }
+
+  //
+  // Edges
+  //
+
+  Start -> SwitchInStatus
+
+  SwitchInStatus -> LookupQueueStatus [taillabel="QUEUED\lIN_PROGRESS\l"]
+  SwitchInStatus:e -> CheckJobExists    [taillabel="COMPLETED"]
+  SwitchInStatus:w -> End               [taillabel="ERRORED\lEXPIRED\l"]
+
+  LookupQueueStatus -> SwitchQueueStatus
+
+  SwitchQueueStatus:se -> SetErrored     [taillabel="  ERRORED"]
+  SwitchQueueStatus    -> CheckJobExists [taillabel="COMPLETED", constraint=false]
+  SwitchQueueStatus:sw -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
+
+  CheckJobExists -> JobExistsInWS
+
+  JobExistsInWS -> SetCompleted [taillabel="Yes", color=darkgreen]
+  JobExistsInWS -> SetExpired   [taillabel="No", color=darkred]
+
+  SetErrored   -> UpdateDBStatus []
+  SetExpired   -> UpdateDBStatus
+  SetCompleted -> UpdateDBStatus:e
+
+  UpdateDBStatus -> End
+
+  // External resource calls
+  {
+    edge [style=dotted, color="#333333"]
+
+    LookupQueueStatus -> Queue [dir=back]
+    UpdateDBStatus    -> DB
+    CheckJobExists    -> FS    [dir=back]
+  }
+
+  //
+  // Formatting
+  //
+
+  {
+    rank=same
+    LookupQueueStatus
+    Queue
+  }
+
+  {
+    rank=same
+    CheckJobExists
+    SwitchQueueStatus
+    FS
+  }
+
+
+  {
+    edge [style=invis]
+    // H2  -> LookupQueueStatus
+    // HN1 -> SwitchInStatus
+    // HN2 -> CheckJobExists
+    // End -> DB
+  }
+
+}

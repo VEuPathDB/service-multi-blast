@@ -39,14 +39,14 @@ digraph {
   CreateWorkspace     -> IsExpired           [headlabel="Yes", dir=back, color=darkgreen]
   CreateWorkspace     -> CreateQuery
 
-  BlastWorkspaces     -> CreateWorkspace     [constraint=false, style=dotted, dir=back]
-  BlastWorkspaces     -> CreateQuery         [style=dotted, dir=back]
+  BlastWorkspaces     -> CreateWorkspace     [constraint=false, style=dotted, dir=back, color="#333333"]
+  BlastWorkspaces     -> CreateQuery         [style=dotted, dir=back, color="#333333"]
 
   CreateQuery         -> ResubmitSubJobs
 
-  ResubmitSubJobs     -> 204 [constraint=false]
+  ResubmitSubJobs     -> 204                 [constraint=false]
 
-  IsExpired           -> 204 [taillabel="No", color=darkred]
+  IsExpired           -> 204                 [taillabel="No", color=darkred]
 
 
   //
