@@ -48,20 +48,20 @@ digraph {
 
   Start -> SwitchInStatus
 
-  SwitchInStatus -> LookupQueueStatus [taillabel="QUEUED\lIN_PROGRESS\l"]
-  SwitchInStatus -> CheckJobExists    [taillabel="COMPLETED"]
-  SwitchInStatus -> End               [taillabel="ERRORED\lEXPIRED\l"]
+  SwitchInStatus:s -> LookupQueueStatus [taillabel="QUEUED\lIN_PROGRESS\l"]
+  SwitchInStatus:e -> CheckJobExists    [taillabel="COMPLETED"]
+  SwitchInStatus:w -> End               [taillabel="ERRORED\lEXPIRED\l"]
 
-  LookupQueueStatus -> SwitchQueueStatus
+  LookupQueueStatus -> SwitchQueueStatus:n
 
-  SwitchQueueStatus -> SetErrored     [taillabel="  ERRORED"]
-  SwitchQueueStatus -> CheckJobExists [taillabel="COMPLETED", constraint=false]
-  SwitchQueueStatus -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
+  SwitchQueueStatus:se -> SetErrored     [taillabel="  ERRORED"]
+  SwitchQueueStatus:ne -> CheckJobExists [taillabel="COMPLETED", constraint=false]
+  SwitchQueueStatus:sw -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
 
   CheckJobExists -> JobExistsInWS
 
-  JobExistsInWS -> End [taillabel="Yes", color=darkgreen, ]
-  SetExpired    -> JobExistsInWS  [headlabel="No", color=darkred, dir=back]
+  JobExistsInWS:se -> End [taillabel="Yes", color=darkgreen, ]
+  JobExistsInWS:sw -> SetExpired  [taillabel="No", color=darkred]
 
   SetErrored   -> UpdateDBStatus []
   SetExpired   -> UpdateDBStatus
@@ -96,7 +96,7 @@ digraph {
 
   {
     rank=same
-    JobExistsInWS
+    // JobExistsInWS
     SetExpired
   }
 
