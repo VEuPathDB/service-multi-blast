@@ -401,6 +401,17 @@ image::assets/legend.svg[]
 
 === Blast Jobs
 
+==== Universal Processes
+
+Processes that are used by many if not all of the various
+endpoints.
+
+.Job ID Hash Validation
+[%collapsible]
+====
+image::assets/hash-validation.svg[]
+====
+
 ==== Job Submission
 
 .Basic Blast Workflow (Sequence Diagram)
