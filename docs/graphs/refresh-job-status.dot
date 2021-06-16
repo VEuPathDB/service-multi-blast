@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=0.7, ranksep=0.8]
+  graph [nodesep=0.8, ranksep=0.8]
   node  [shape=rect, margin=0, width="1.2"]
   edge  [color=darkblue]
 
@@ -39,7 +39,6 @@ digraph {
     CheckJobExists    [label="Verify\njob exists in\n workspaces"]
     SetExpired        [label="$job.status = expired"]
     SetErrored        [label="$job.status = errored"]
-    SetCompleted      [label="$job.status = complete"]
     UpdateDBStatus    [label="Update status\nin DB"]
   }
 
@@ -50,23 +49,22 @@ digraph {
   Start -> SwitchInStatus
 
   SwitchInStatus -> LookupQueueStatus [taillabel="QUEUED\lIN_PROGRESS\l"]
-  SwitchInStatus:e -> CheckJobExists    [taillabel="COMPLETED"]
-  SwitchInStatus:w -> End               [taillabel="ERRORED\lEXPIRED\l"]
+  SwitchInStatus -> CheckJobExists    [taillabel="COMPLETED"]
+  SwitchInStatus -> End               [taillabel="ERRORED\lEXPIRED\l"]
 
   LookupQueueStatus -> SwitchQueueStatus
 
-  SwitchQueueStatus:se -> SetErrored     [taillabel="  ERRORED"]
-  SwitchQueueStatus    -> CheckJobExists [taillabel="COMPLETED", constraint=false]
-  SwitchQueueStatus:sw -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
+  SwitchQueueStatus -> SetErrored     [taillabel="  ERRORED"]
+  SwitchQueueStatus -> CheckJobExists [taillabel="COMPLETED", constraint=false]
+  SwitchQueueStatus -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
 
   CheckJobExists -> JobExistsInWS
 
-  JobExistsInWS -> SetCompleted [taillabel="Yes", color=darkgreen]
-  JobExistsInWS -> SetExpired   [taillabel="No", color=darkred]
+  JobExistsInWS -> End [taillabel="Yes", color=darkgreen, ]
+  SetExpired    -> JobExistsInWS  [headlabel="No", color=darkred, dir=back]
 
   SetErrored   -> UpdateDBStatus []
   SetExpired   -> UpdateDBStatus
-  SetCompleted -> UpdateDBStatus:e
 
   UpdateDBStatus -> End
 
@@ -74,8 +72,8 @@ digraph {
   {
     edge [style=dotted, color="#333333"]
 
-    LookupQueueStatus -> Queue [dir=back]
-    UpdateDBStatus    -> DB
+    Queue -> LookupQueueStatus
+    UpdateDBStatus -> DB
     CheckJobExists    -> FS    [dir=back]
   }
 
@@ -91,18 +89,39 @@ digraph {
 
   {
     rank=same
-    CheckJobExists
+    // CheckJobExists
     SwitchQueueStatus
     FS
   }
 
+  {
+    rank=same
+    JobExistsInWS
+    SetExpired
+  }
+
+  {
+    rank=same
+    LookupQueueStatus
+    Queue
+  }
+
+
+  {
+    rank=same
+    SetExpired
+    SetErrored
+  }
+
+  {
+    rank=sink
+    End
+  }
 
   {
     edge [style=invis]
-    // H2  -> LookupQueueStatus
-    // HN1 -> SwitchInStatus
-    // HN2 -> CheckJobExists
-    // End -> DB
+    Queue -> SwitchQueueStatus
+    SetErrored -> SetExpired
   }
 
 }
