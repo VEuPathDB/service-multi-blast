@@ -11,7 +11,7 @@ digraph {
   More  [label="More\nsub-jobs\nremaining?", shape=diamond]
   Next  [label="Next sub-job"]
   Link  [label="Link sub-job"]
-  DB    [label="MBlast DB", shape=cylinder]
+  DB    [label="MBlast DB", shape=cylinder, color=purple]
 
   //
   // Edges

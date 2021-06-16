@@ -15,7 +15,7 @@ digraph {
   NextTargetOrg        [label="Next target\norganism"]
   ValidateTarget       [label="Validate\ntarget exists"]
   IsTargetValid        [label="Is target\nvalid?", shape=diamond]
-  BlastDBFS            [label="BLAST DB\nmounted dir", shape=cylinder]
+  BlastDBFS            [label="BLAST DB\nmounted dir", shape=cylinder, color=purple]
 
   //
   // Edges
