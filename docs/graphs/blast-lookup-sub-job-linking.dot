@@ -19,7 +19,7 @@ digraph {
   Start -> More
   More  -> Next [taillabel="\n        Yes", color=darkgreen]
   Link  -> Next [dir=back]
-  DB    -> Link [dir=both, style=dotted]
+  DB    -> Link [dir=back, style=dotted, color="#333333"]
   Link  -> More
   End   -> More [headlabel="No", color=darkred, dir=back]
 
