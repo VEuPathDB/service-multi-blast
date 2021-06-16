@@ -412,6 +412,21 @@ endpoints.
 image::assets/hash-validation.svg[]
 ====
 
+.Lookup User Job
+[%collapsible]
+====
+The process "Lookup User Job" appearing in the flowcharts in
+this doc refers to a query that attempts to lookup a full
+job record already attached to the target user.  If no such
+record is found, it only tells us that the user is not
+linked to such a job, but it does not tell us whether the
+job actually exists.
+
+If "Lookup User Job" process does not find any matching
+rows, then the process moves on to attempting to find just
+the job with no user links.
+====
+
 ==== Job Submission
 
 .Basic Blast Workflow (Sequence Diagram)

@@ -7,7 +7,10 @@ digraph {
   // Nodes
   //
 
-  Start               [label="Start", shape=oval, color=darkgreen]
+  Start               [label="Start", shape=oval]
+  End                 [label="End", shape=oval]
+  NotFound            [label="Not\nfound" shape=oval, color=darkred]
+
   LookupUserJob       [label="Lookup\nuser job"]
   LookupJob           [label="Lookup job"]
   DB                  [label="MBlast DB", shape=cylinder]
@@ -16,61 +19,76 @@ digraph {
   RefreshJobStatus    [label="Refresh job\nstatus"]
   LinkUserToJob       [label="Link user\nto job"]
   LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
-  IsJobStillCached    [label="Is job\nstill\ncached?", shape=diamond]
+  IsJobStillCached    [label="Is job\nexpired?", shape=diamond]
   UpdateLastUsed      [label="Update\nlast used"]
-  End                 [label="End", shape=oval, color=darkred]
 
   //
   // Edges
   //
 
   Start              -> LookupUserJob
+
   LookupUserJob      -> DoesJobExist1
-  LookupUserJob      -> DB                [dir=both, style=dotted]
+  LookupUserJob      -> DB                [dir=back, style=dotted, color="#333333"]
+
   DoesJobExist1      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
   DoesJobExist1      -> LookupJob         [taillabel="No", color=darkred]
-  LookupJob          -> DB                [dir=both, style=dotted]
-  LookupJob          -> DoesJobExist2     []
-  DoesJobExist2      -> LinkUserToJob     [taillabel="Yes", color=darkgreen]
-  DoesJobExist2      -> End               [taillabel="No", color=darkred]
+
+  LookupJob          -> DB                [dir=back, style=dotted, color="#333333", constraint=false]
+  LookupJob:e        -> DoesJobExist2     []
+
+  LinkUserToJob      -> DoesJobExist2     [headlabel="Yes", color=darkgreen, dir=back]
+  DoesJobExist2      -> NotFound          [taillabel="No", color=darkred]
+
   LinkUserToJob      -> LinkUserToSubJobs
-  LinkUserToJob      -> DB                [style=dotted]
+  LinkUserToJob      -> DB                [style=dotted, constraint=false, color="#333333"]
+
   LinkUserToSubJobs  -> RefreshJobStatus  []
-  IsJobStillCached   -> RefreshJobStatus
-  IsJobStillCached   -> UpdateLastUsed    [taillabel="\n      Yes", color=darkgreen]
-  IsJobStillCached   -> End               [taillabel="No", color=darkred]
+
+  IsJobStillCached   -> RefreshJobStatus  [dir=back]
+
+  IsJobStillCached:w -> UpdateLastUsed    [taillabel="No", color=darkred]
+  IsJobStillCached   -> End               [taillabel="Yes", color=darkgreen]
+
   UpdateLastUsed     -> End
 
   //
   // Formatting
   //
+
   {
     rank=same
-    DB
-    DoesJobExist1
-  }
-  {
-    rank=same
+    LookupUserJob
     DoesJobExist1
     LookupJob
   }
+
+  {
+    rank=same
+    RefreshJobStatus
+    IsJobStillCached
+    // UpdateLastUsed
+  }
+
+  {
+    rank=sink
+    NotFound
+    End
+  }
+
   {
     rank=same
     DoesJobExist2
     LinkUserToJob
   }
-  {
-    rank=same
-    RefreshJobStatus
-    IsJobStillCached
-  }
 
   {
     edge [style=invis]
-    RefreshJobStatus -> UpdateLastUsed
-    // LookupUserJob -> LookupJob
-    // DB -> DoesJobExist2
-    // LookupJob -> LinkUserToJob
-    // DoesJobExist2 -> LinkUserToSubJobs
+    LookupJob -> LinkUserToJob
+    LinkUserToSubJobs -> IsJobStillCached
+    DoesJobExist1 -> LinkUserToJob
+    // UpdateLastUsed -> NotFound
+    Start -> LookupJob
   }
+
 }
