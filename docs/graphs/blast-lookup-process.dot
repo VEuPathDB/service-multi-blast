@@ -6,20 +6,21 @@ digraph {
   //
   // Nodes
   //
+
+  // Response Codes
   401 [shape=oval, color=orange]
   404 [shape=oval, color=orange]
   200 [label="200\nJob details", shape=oval, color=darkgreen]
 
-  DB [label="MBlast DB", shape=cylinder]
-  FS [label="MBlast\nworkspaces", shape=cylinder]
-
+  // External Resources
+  DB    [label="MBlast DB", shape=cylinder]
+  FS    [label="MBlast\nworkspaces", shape=cylinder]
   Queue [label="Job queue", shape=component]
 
   Start               [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
   IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]
-  ValidateJobID       [label="Validate job ID"]
-  IsJobIDValid        [label="Is job ID\nvalid?", shape=diamond]
-  LookupUserJob       [label="Lookup\nuser job"]
+  ValidateJobID       [label="|Job ID hash\nvalidation|", shape=record]
+  LookupUserJob       [label="|Lookup\nuser job|", shape=record]
   LookupJob           [label="Lookup job"]
   DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
   DoesJobExist2       [label="Does job\nexist?", shape=diamond]
@@ -38,33 +39,31 @@ digraph {
   IsUserTokenProvided -> ValidateJobID       [taillabel="Yes", color=darkgreen]
   401                 -> IsUserTokenProvided [headlabel="No", color=darkred, dir=back]
 
-  ValidateJobID       -> IsJobIDValid        [constraint=false]
+  ValidateJobID       -> LookupUserJob
+  ValidateJobID       -> 404                 [taillabel="Invalid\nhash", color=darkred, constraint=false]
 
-  IsJobIDValid        -> LookupUserJob       [taillabel="Yes", color=darkgreen]
-  IsJobIDValid        -> 404                 [taillabel="No", color=darkred, constraint=false]
-
-  LookupUserJob       -> DoesJobExist1       [taillabel="Yes", color=darkgreen]
-  LookupUserJob       -> DB                  [dir=both, style=dotted]
+  LookupUserJob       -> DoesJobExist1
+  LookupUserJob       -> DB                  [dir=back, style=dotted, color="#333333"]
 
   DoesJobExist1       -> RefreshJobStatus    [taillabel="Yes", color=darkgreen]
   DoesJobExist1       -> LookupJob           [taillabel="No", color=darkred]
 
   LookupJob           -> DoesJobExist2       []
-  LookupJob           -> DB                  [dir=both, style=dotted]
+  LookupJob           -> DB                  [dir=back, style=dotted, color="#333333"]
 
   DoesJobExist2       -> LinkUserToJob       [taillabel="Yes", color=darkgreen]
   404                 -> DoesJobExist2:w     [headlabel="No", color=darkred, dir=back, constraint=false]
 
   LinkUserToJob       -> LinkUserToSubJobs
-  LinkUserToJob       -> DB                  [style=dotted]
+  LinkUserToJob       -> DB                  [style=dotted, color="#333333"]
 
   LinkUserToSubJobs   -> RefreshJobStatus
 
-  IsJobStillCached    -> RefreshJobStatus    [dir=back]
-  RefreshJobStatus    -> Queue               [dir=both, style=dotted, constraint=false]
-  RefreshJobStatus    -> FS                  [dir=both, style=dotted]
+  RefreshJobStatus    -> IsJobStillCached
+  RefreshJobStatus    -> Queue               [style=dotted, color="#333333"]
+  RefreshJobStatus    -> FS                  [dir=back, style=dotted, color="#333333"]
 
-  IsJobStillCached    -> UpdateLastUsed      [taillabel="No", color=darkred]
+  IsJobStillCached:e  -> UpdateLastUsed      [taillabel="No", color=darkred]
   IsJobStillCached:s  -> 200                 [taillabel="Yes", color=darkgreen]
   UpdateLastUsed      -> 200
 
@@ -75,39 +74,27 @@ digraph {
     rank=same
     IsUserTokenProvided
     401
-    ValidateJobID
   }
   {
     rank=same
     FS
-    RefreshJobStatus
+    LinkUserToSubJobs
   }
   {
     rank=same
     404
-    IsJobIDValid
+    LookupUserJob
   }
   {
     rank=same
     DoesJobExist2
     DB
   }
-  {
-    rank=same
-    RefreshJobStatus
-    IsJobStillCached
-  }
-  {
-    rank=same
-    IsJobIDValid
-    LookupUserJob
-  }
+
   {
     edge [style=invis]
-    DB -> FS -> Queue
+    DB -> FS -> Queue -> 200
     401 -> 404
-    IsUserTokenProvided -> IsJobIDValid
-    IsJobIDValid -> DoesJobExist1
     RefreshJobStatus -> UpdateLastUsed
   }
 }

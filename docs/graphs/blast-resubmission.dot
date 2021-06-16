@@ -8,8 +8,7 @@ digraph {
   //
   Start               [label="POST /jobs/{job-id}", shape=oval, color=green]
   IsUserTokenProvided [label="Is User\nToken\nProvided?", shape=diamond]
-  ValidateJobID       [label="Validate\njob id"]
-  IsJobIDValid        [label="Is job id\n valid?", shape=diamond]
+  ValidateJobID       [label="|Validate\njob id|", shape=record]
   401                 [label="401\nUnauthorized", shape=oval, color=red]
   404                 [label="404\nNot Found", shape=oval, color=red]
   204                 [label="204\nNo Content", shape=oval, color=green]
@@ -25,36 +24,40 @@ digraph {
   //
   // Edges
   //
+
   Start               -> IsUserTokenProvided
+
   401                 -> IsUserTokenProvided [headlabel="No", dir=back, color=darkred]
   IsUserTokenProvided -> ValidateJobID       [taillabel="Yes", color=darkgreen]
-  ValidateJobID       -> IsJobIDValid        [constraint=false]
-  404                 -> IsJobIDValid        [headlabel="No", color=darkred, dir=back]
-  IsJobIDValid        -> JobLookup           [taillabel="Yes", color=darkgreen]
-  JobLookup           -> 404                 [constraint=false, taillabel="Not found", color=darkred]
+
+  ValidateJobID       -> 404                 [taillabel="Validation\nerror", color=darkred]
+  ValidateJobID       -> JobLookup
+
+  JobLookup           -> 404                 [taillabel="Not found", color=darkred]
   JobLookup           -> IsExpired
+
   CreateWorkspace     -> IsExpired           [headlabel="Yes", dir=back, color=darkgreen]
   CreateWorkspace     -> CreateQuery
+
   BlastWorkspaces     -> CreateWorkspace     [constraint=false, style=dotted, dir=back]
   BlastWorkspaces     -> CreateQuery         [style=dotted, dir=back]
+
   CreateQuery         -> ResubmitSubJobs
+
   ResubmitSubJobs     -> 204 [constraint=false]
+
   IsExpired           -> 204 [taillabel="No", color=darkred]
 
 
   //
   // Formatting
   //
+
   {
     rank=same
     401
     IsUserTokenProvided
-    ValidateJobID
-  }
-  {
-    rank=same
-    404
-    IsJobIDValid
+    // ValidateJobID
   }
   {
     rank=same
@@ -75,8 +78,8 @@ digraph {
   }
   {
     edge [style=invis]
-    IsUserTokenProvided -> IsJobIDValid
-    BlastWorkspaces -> 204
-    JobLookup -> CreateWorkspace
+    // BlastWorkspaces -> 204
+    // JobLookup -> CreateWorkspace
+    404 -> CreateWorkspace
   }
 }
