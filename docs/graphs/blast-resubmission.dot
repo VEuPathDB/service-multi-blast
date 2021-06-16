@@ -13,7 +13,7 @@ digraph {
   404                 [label="404\nNot Found", shape=oval, color=red]
   204                 [label="204\nNo Content", shape=oval, color=green]
   JobLookup           [label="|Job lookup\nprocess|", shape=record]
-  BlastWorkspaces     [label="MBlast\nworkspaces", shape=cylinder]
+  BlastWorkspaces     [label="MBlast\nworkspaces", shape=cylinder, color=purple]
   IsExpired           [label="Is job\nexpired?", shape=diamond]
   CreateWorkspace     [label="Create job\nworkspace"]
   CreateQuery         [label="Create\nquery file"]

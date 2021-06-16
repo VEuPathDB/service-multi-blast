@@ -13,7 +13,7 @@ digraph {
 
   LookupUserJob       [label="Lookup\nuser job"]
   LookupJob           [label="Lookup job"]
-  DB                  [label="MBlast DB", shape=cylinder]
+  DB                  [label="MBlast DB", shape=cylinder, color=purple]
   DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
   DoesJobExist2       [label="Does job\nexist?", shape=diamond]
   RefreshJobStatus    [label="Refresh job\nstatus"]

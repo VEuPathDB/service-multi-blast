@@ -13,9 +13,9 @@ digraph {
   200 [label="200\nJob details", shape=oval, color=darkgreen]
 
   // External Resources
-  DB    [label="MBlast DB", shape=cylinder]
-  FS    [label="MBlast\nworkspaces", shape=cylinder]
-  Queue [label="Job queue", shape=component]
+  DB    [label="MBlast DB", shape=cylinder, color=purple]
+  FS    [label="MBlast\nworkspaces", shape=cylinder, color=purple]
+  Queue [label="Job queue", shape=component, color=purple]
 
   Start               [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
   IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]

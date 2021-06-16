@@ -8,7 +8,7 @@ digraph {
   //
 
   Start        [shape=oval, color=green]
-  DB           [label="MBlast DB", shape=cylinder]
+  DB           [label="MBlast DB", shape=cylinder, color=purple]
   Refresh      [label="Refresh\nsub-job status"]
   IsExpired    [label="Sub-job is\nexpired?", shape=diamond]
   More         [label="More\nsub-jobs\nremaining?", shape=diamond]
