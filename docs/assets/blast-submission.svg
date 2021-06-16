@@ -20,7 +20,7 @@
 <g id="node2" class="node">
 <title>CalcDigest</title>
 <polygon fill="none" stroke="black" points="271,-826.68 163,-826.68 163,-790.68 271,-790.68 271,-826.68"/>
-<text text-anchor="middle" x="217" y="-812.48" font-family="Times,serif" font-size="14.00">Calculage</text>
+<text text-anchor="middle" x="217" y="-812.48" font-family="Times,serif" font-size="14.00">Calculate</text>
 <text text-anchor="middle" x="217" y="-797.48" font-family="Times,serif" font-size="14.00">job digest</text>
 </g>
 <!-- Start&#45;&gt;CalcDigest -->
