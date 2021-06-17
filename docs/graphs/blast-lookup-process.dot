@@ -24,7 +24,7 @@ digraph {
   LookupJob           [label="Lookup job"]
   DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
   DoesJobExist2       [label="Does job\nexist?", shape=diamond]
-  RefreshJobStatus    [label="Refresh job\nstatus"]
+  RefreshJobStatus    [label="|Refresh\njob status|", shape=record]
   LinkUserToJob       [label="Link user\nto job"]
   LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
   IsJobStillCached    [label="Is job\nstatus\nexpired?", shape=diamond]
