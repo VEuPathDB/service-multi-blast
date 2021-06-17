@@ -19,7 +19,7 @@ digraph {
   CreateWorkspace     [label="Create job\nworkspace"]
   CreateQueryFile     [label="Create\nquery file"]
   InsertJobInDB       [label="Insert job\ninto DB"]
-  RefreshJobStatus    [label="Refresh job\nstatus"]
+  RefreshJobStatus    [label="|Refresh job\nstatus|", shape=record]
   JobStatusFailed     [label="Job\nstatus is\nexpired?", shape=diamond]
   UpdateJobLastUsed   [label="Update job\nlast used"]
   LinkUserToJob       [label="Link user\nto job"]
