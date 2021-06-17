@@ -25,7 +25,7 @@ digraph {
   LinkUserToJob       [label="Link user\nto job"]
   SubmitJobToQueue    [label="Submit job\nto queue"]
   GetSubJobList       [label="Get sub\njob list"]
-  HandleSubJobList    [label="| Process sub-jobs |", shape=record]
+  HandleSubJobList    [label="| Process\nsub-jobs |", shape=record]
   200                 [label="200\nReturn job ID", shape=oval, color="green"]
 
   // External systems
