@@ -57,7 +57,7 @@ digraph {
     CreateWorkspace -> FS
     CreateQueryFile -> FS
 
-    SubmitToQueue -> Queue
+    SubmitToQueue   -> Queue
   }
 
   Start           -> Remaining
@@ -81,7 +81,7 @@ digraph {
 
   InsertJobIntoDB -> CreateWorkspace
 
-  LinkUser1 -> RefreshStatus
+  LinkUser1       -> RefreshStatus
   RefreshStatus   -> StatusSwitch
 
   StatusSwitch    -> Remaining       [taillabel="ERRORED\nIN_PROGRESS"]
