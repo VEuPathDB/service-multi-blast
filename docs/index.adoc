@@ -471,6 +471,7 @@ image::assets/blast-submission.svg[]
 image::assets/sub-job-submission.svg[]
 ====
 
+
 ==== Job Lookup
 
 .Job Lookup Process
@@ -484,6 +485,13 @@ image::assets/blast-lookup-process.svg[]
 ====
 image::assets/blast-lookup-sub-job-linking.svg[]
 ====
+
+.Refresh Sub-Job Status
+[%collapsible]
+====
+image::assets/refresh-sub-job-status.svg[]
+====
+
 
 ==== Job Resubmission
 
@@ -504,6 +512,7 @@ image::assets/blast-resubmission-job-lookup.svg[]
 ====
 image::assets/blast-lookup-sub-job-linking.svg[]
 ====
+
 
 === Formatter Jobs
 
