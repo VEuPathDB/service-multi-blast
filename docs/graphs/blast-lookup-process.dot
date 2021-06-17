@@ -13,9 +13,7 @@ digraph {
   200 [label="200\nJob details", shape=oval, color=darkgreen]
 
   // External Resources
-  DB    [label="MBlast DB", shape=cylinder, color=purple]
-  FS    [label="MBlast\nworkspaces", shape=cylinder, color=purple]
-  Queue [label="Job queue", shape=component, color=purple]
+  DB [label="MBlast DB", shape=cylinder, color=purple]
 
   Start               [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
   IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]
@@ -25,6 +23,7 @@ digraph {
   DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
   DoesJobExist2       [label="Does job\nexist?", shape=diamond]
   RefreshJobStatus    [label="|Refresh\njob status|", shape=record]
+  RefreshSubJobStatus [label="|Refresh\nsub-job\nstatuses|", shape=record]
   LinkUserToJob       [label="Link user\nto job"]
   LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
   IsJobStillCached    [label="Is job\nstatus\nexpired?", shape=diamond]
@@ -52,18 +51,18 @@ digraph {
   LookupJob           -> DB                  [dir=back, style=dotted, color="#333333"]
 
   DoesJobExist2       -> LinkUserToJob       [taillabel="Yes", color=darkgreen]
-  404                 -> DoesJobExist2:w     [headlabel="No", color=darkred, dir=back, constraint=false]
+  404                 -> DoesJobExist2:w     [headlabel="No", color=darkred, dir=back]
 
   LinkUserToJob       -> LinkUserToSubJobs
   LinkUserToJob       -> DB                  [style=dotted, color="#333333"]
 
   LinkUserToSubJobs   -> RefreshJobStatus
 
-  RefreshJobStatus    -> IsJobStillCached
-  RefreshJobStatus    -> Queue               [style=dotted, color="#333333"]
-  RefreshJobStatus    -> FS                  [dir=back, style=dotted, color="#333333"]
+  RefreshJobStatus    -> RefreshSubJobStatus
 
-  IsJobStillCached:e  -> UpdateLastUsed      [taillabel="No", color=darkred]
+  RefreshSubJobStatus -> IsJobStillCached
+
+  IsJobStillCached:e  -> UpdateLastUsed:w      [taillabel="No", color=darkred]
   IsJobStillCached:s  -> 200                 [taillabel="Yes", color=darkgreen]
   UpdateLastUsed      -> 200
 
@@ -75,16 +74,19 @@ digraph {
     IsUserTokenProvided
     401
   }
-  {
-    rank=same
-    FS
-    LinkUserToSubJobs
-  }
+
   {
     rank=same
     404
     LookupUserJob
   }
+
+  {
+    rank=same
+    IsJobStillCached
+    UpdateLastUsed
+  }
+
   {
     rank=same
     DoesJobExist2
@@ -93,8 +95,8 @@ digraph {
 
   {
     edge [style=invis]
-    DB -> FS -> Queue -> 200
-    401 -> 404
+    401 -> 404 -> DoesJobExist1
     RefreshJobStatus -> UpdateLastUsed
+    DB -> UpdateLastUsed
   }
 }

@@ -1,0 +1,51 @@
+digraph {
+  graph [nodesep=1, ranksep=0.8]
+  node  [margin=0, shape=rect, width=1.5]
+  edge  [color=darkblue]
+
+  //
+  // Nodes
+  //
+
+  // Ends
+  {
+    node [shape=oval]
+
+    Start
+    End
+  }
+
+  // Choices
+  {
+    node [shape=diamond]
+
+    MoreJobs [label="More\nsub-jobs\nremain?"]
+  }
+
+  NextJob          [label="Next job"]
+  RefreshJobStatus [label="|Refresh\njob status|", shape=record]
+
+  //
+  // Edges
+  //
+
+  Start -> MoreJobs
+
+  MoreJobs -> NextJob  [taillabel="Yes", color=darkgreen]
+  End      -> MoreJobs [dir=back, headlabel="No", color=darkred]
+
+  NextJob -> RefreshJobStatus
+
+  RefreshJobStatus -> MoreJobs
+
+  //
+  // Formatting
+  //
+
+  {
+    rank=same
+    End
+    MoreJobs
+    NextJob
+  }
+}
