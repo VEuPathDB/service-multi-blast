@@ -37,7 +37,7 @@ digraph {
   CreateQueryFile [label="Create\nquery file"]
   SubmitToQueue   [label="Submit job\nto queue"]
   UpdateLastUsed  [label="Update job\nlast used"]
-  RefreshStatus   [label="Refresh job\nstatus"]
+  RefreshStatus   [label="|Refresh\njob status|", shape=record]
   StatusSwitch    [label="Switch:\njob status", shape=diamond]
   LinkUser1       [label="Link user\nto job"]
 
@@ -84,9 +84,9 @@ digraph {
   LinkUser1 -> RefreshStatus
   RefreshStatus   -> StatusSwitch
 
-  StatusSwitch    -> Remaining       [taillabel="Errored /\nIn Progress"]
-  StatusSwitch    -> UpdateLastUsed  [taillabel="Complete"]
-  StatusSwitch    -> CreateWorkspace [taillabel="Expired", constraint=false]
+  StatusSwitch    -> Remaining       [taillabel="ERRORED\nIN_PROGRESS"]
+  UpdateLastUsed  -> StatusSwitch    [taillabel="COMPLETED", dir=back]
+  StatusSwitch    -> CreateWorkspace [taillabel="EXPIRED", constraint=false]
 
   CreateWorkspace -> CreateQueryFile
   CreateQueryFile -> SubmitToQueue
@@ -96,6 +96,34 @@ digraph {
   //
   // Layout
   //
+
+  {
+    rank=same
+    End
+    Remaining
+    NextJob
+    HashJob
+  }
+
+  {
+    rank=same
+    FoundUserJob
+    LookupJob
+  }
+
+  {
+    rank=same
+    UpdateLastUsed
+    StatusSwitch
+    CreateWorkspace
+  }
+
+  {
+    edge [style=invis]
+    NextJob -> LookupUserJob
+    End -> SubmitToQueue
+  }
+
 
   label="For Each Sub-Job"
   labelloc="t"
