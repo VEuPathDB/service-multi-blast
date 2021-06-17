@@ -268,8 +268,8 @@
 <!-- UpdateJobLastUsed&#45;&gt;FS -->
 <g id="edge23" class="edge">
 <title>UpdateJobLastUsed&#45;&gt;FS</title>
-<path fill="none" stroke="#444444" stroke-dasharray="1,5" d="M501.55,-294C497.24,-294 494.5,-294 494.5,-294 494.5,-294 494.5,-200 494.5,-200 494.5,-200 286.16,-200 286.16,-200"/>
-<polygon fill="#444444" stroke="#444444" points="286.16,-196.5 276.16,-200 286.16,-203.5 286.16,-196.5"/>
+<path fill="none" stroke="#444444" stroke-dasharray="1,5" d="M501.62,-294C488.26,-294 477.71,-294 477.71,-294 477.71,-294 477.71,-200 477.71,-200 477.71,-200 286.23,-200 286.23,-200"/>
+<polygon fill="#444444" stroke="#444444" points="286.23,-196.5 276.23,-200 286.23,-203.5 286.23,-196.5"/>
 </g>
 <!-- LinkUserToJob&#45;&gt;RefreshJobStatus -->
 <g id="edge13" class="edge">
@@ -313,12 +313,13 @@
 <!-- HandleSubJobList -->
 <g id="node16" class="node">
 <title>HandleSubJobList</title>
-<polygon fill="none" stroke="black" points="491,-92.93 491,-128.93 621,-128.93 621,-92.93 491,-92.93"/>
-<text text-anchor="middle" x="493.5" y="-107.23" font-family="Times,serif" font-size="14.00"> </text>
-<polyline fill="none" stroke="black" points="496,-92.93 496,-128.93 "/>
-<text text-anchor="middle" x="556" y="-107.23" font-family="Times,serif" font-size="14.00">Process sub&#45;jobs</text>
-<polyline fill="none" stroke="black" points="616,-92.93 616,-128.93 "/>
-<text text-anchor="middle" x="618.5" y="-107.23" font-family="Times,serif" font-size="14.00"> </text>
+<polygon fill="none" stroke="black" points="502,-92.93 502,-128.93 610,-128.93 610,-92.93 502,-92.93"/>
+<text text-anchor="middle" x="510.5" y="-107.23" font-family="Times,serif" font-size="14.00"> </text>
+<polyline fill="none" stroke="black" points="519,-92.93 519,-128.93 "/>
+<text text-anchor="middle" x="555.5" y="-114.73" font-family="Times,serif" font-size="14.00">Process</text>
+<text text-anchor="middle" x="555.5" y="-99.73" font-family="Times,serif" font-size="14.00">sub&#45;jobs</text>
+<polyline fill="none" stroke="black" points="592,-92.93 592,-128.93 "/>
+<text text-anchor="middle" x="601" y="-107.23" font-family="Times,serif" font-size="14.00"> </text>
 </g>
 <!-- GetSubJobList&#45;&gt;HandleSubJobList -->
 <g id="edge15" class="edge">
