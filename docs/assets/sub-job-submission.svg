@@ -316,8 +316,9 @@
 <title>StatusSwitch&#45;&gt;Remaining</title>
 <path fill="none" stroke="darkblue" d="M382.88,-273.6C359.5,-301.98 323,-354.7 323,-407.25 323,-589.25 323,-589.25 323,-589.25 323,-647.26 283.08,-703.92 253.18,-738.22"/>
 <polygon fill="darkblue" stroke="darkblue" points="250.26,-736.23 246.21,-746.02 255.48,-740.89 250.26,-736.23"/>
-<text text-anchor="middle" x="328.88" y="-292.4" font-family="Times,serif" font-size="14.00">ERRORED</text>
-<text text-anchor="middle" x="328.88" y="-277.4" font-family="Times,serif" font-size="14.00">IN_PROGRESS</text>
+<text text-anchor="middle" x="319.88" y="-307.4" font-family="Times,serif" font-size="14.00">ERRORED &#160;&#160;</text>
+<text text-anchor="middle" x="319.88" y="-292.4" font-family="Times,serif" font-size="14.00">IN_PROGRESS &#160;&#160;&#160;</text>
+<text text-anchor="middle" x="319.88" y="-277.4" font-family="Times,serif" font-size="14.00"> </text>
 </g>
 <!-- StatusSwitch&#45;&gt;CreateWorkspace -->
 <g id="edge24" class="edge">
