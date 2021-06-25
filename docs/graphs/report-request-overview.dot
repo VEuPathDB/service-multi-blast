@@ -1,0 +1,84 @@
+digraph {
+  graph [nodesep=1]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+  Start              [label="POST\n/reports", shape=oval]
+  ValidateRequest    [label="|Validate\nRequest|", shape=record]
+  LookupUserJob      [label="|Lookup\nUser Job|", shape=record]
+  IsJobCompleted     [label="Is job status\nCOMPLETE?", shape=diamond]
+  HashConfig         [label="Hash config"]
+  CheckForCollision  [label="Check for\nhash collisions"]
+  CollisionExists    [label="Collision\nexists?", shape=diamond]
+  HandleJobCollision [label="|Job Collision\nHandling|", shape=record]
+  HandleNewJobCreation [label="|New Job\nCreation|", shape=record]
+
+  DB [label="MBlast DB", shape=cylinder, color=purple]
+
+
+  // Response Codes
+  {
+    node [shape=oval, color=red]
+
+    200 [color=green]
+    400
+    401
+    404
+  }
+
+
+  //
+  // Edges
+  //
+  Start                -> ValidateRequest
+
+  ValidateRequest      -> LookupUserJob
+  ValidateRequest      -> 400                  [taillabel="Validation   \nError       ", color=red]
+  ValidateRequest      -> 401                  [taillabel="Auth\n               Error", color=red]
+
+  LookupUserJob        -> IsJobCompleted
+  LookupUserJob        -> 404                  [taillabel="Not Found", color=red]
+
+  IsJobCompleted       -> HashConfig           [taillabel="Yes", color=darkgreen]
+  400                  -> IsJobCompleted       [headlabel="No", color=darkred, dir=back]
+
+  HashConfig           -> CheckForCollision
+
+  DB                   -> CheckForCollision    [style=dotted, color="#333333 "]
+  CheckForCollision    -> CollisionExists
+
+  CollisionExists      -> HandleJobCollision   [taillabel="Yes", color=darkgreen]
+  CollisionExists      -> HandleNewJobCreation [taillabel="No", color=darkred]
+
+  HandleJobCollision   -> 200
+  HandleNewJobCreation -> 200
+
+
+
+
+  //
+  // Formatting
+  //
+  {
+    edge [style=invis]
+    401 -> 404
+    400 -> DB
+  }
+
+  {
+    graph [rank=same]
+    DB
+    CheckForCollision
+    Has
+  }
+
+  {
+    graph [rank=same]
+    400
+    IsJobCompleted
+  }
+}
