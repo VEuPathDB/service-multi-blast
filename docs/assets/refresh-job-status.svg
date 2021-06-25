@@ -85,16 +85,16 @@
 <title>SwitchInStatus:w&#45;&gt;End</title>
 <path fill="none" stroke="darkblue" d="M200,-627C67.86,-627 0,-539.14 0,-407 0,-407 0,-407 0,-205 0,-124.26 88.6,-64.66 140.43,-36.71"/>
 <polygon fill="darkblue" stroke="darkblue" points="142.13,-39.77 149.34,-32.02 138.86,-33.58 142.13,-39.77"/>
-<text text-anchor="start" x="124" y="-645.8" font-family="Times,serif" font-size="14.00">ERRORED</text>
-<text text-anchor="start" x="124" y="-630.8" font-family="Times,serif" font-size="14.00">EXPIRED</text>
+<text text-anchor="end" x="200" y="-645.8" font-family="Times,serif" font-size="14.00">ERRORED</text>
+<text text-anchor="end" x="200" y="-630.8" font-family="Times,serif" font-size="14.00">EXPIRED</text>
 </g>
 <!-- SwitchInStatus&#45;&gt;LookupQueueStatus -->
 <g id="edge2" class="edge">
 <title>SwitchInStatus:s&#45;&gt;LookupQueueStatus</title>
 <path fill="none" stroke="darkblue" d="M281,-597C281,-581.23 281,-563.7 281,-549.12"/>
 <polygon fill="darkblue" stroke="darkblue" points="284.5,-549.09 281,-539.09 277.5,-549.09 284.5,-549.09"/>
-<text text-anchor="start" x="173" y="-585.8" font-family="Times,serif" font-size="14.00">QUEUED</text>
-<text text-anchor="start" x="173" y="-570.8" font-family="Times,serif" font-size="14.00">IN_PROGRESS</text>
+<text text-anchor="end" x="281" y="-585.8" font-family="Times,serif" font-size="14.00">QUEUED &#160;</text>
+<text text-anchor="end" x="281" y="-570.8" font-family="Times,serif" font-size="14.00">IN_PROGRESS &#160;</text>
 </g>
 <!-- CheckJobExists -->
 <g id="node10" class="node">
@@ -109,22 +109,22 @@
 <title>SwitchInStatus:e&#45;&gt;CheckJobExists</title>
 <path fill="none" stroke="darkblue" d="M362,-627C399.26,-627 417.58,-581.44 425.89,-549.1"/>
 <polygon fill="darkblue" stroke="darkblue" points="429.35,-549.67 428.24,-539.13 422.53,-548.06 429.35,-549.67"/>
-<text text-anchor="middle" x="410.5" y="-630.8" font-family="Times,serif" font-size="14.00">COMPLETED</text>
+<text text-anchor="start" x="362" y="-630.8" font-family="Times,serif" font-size="14.00">COMPLETED</text>
 </g>
 <!-- SwitchQueueStatus&#45;&gt;End -->
 <g id="edge8" class="edge">
 <title>SwitchQueueStatus:sw&#45;&gt;End</title>
 <path fill="none" stroke="darkblue" d="M186,-382C94.63,-290.63 143.81,-112.86 167.04,-45.62"/>
 <polygon fill="darkblue" stroke="darkblue" points="170.35,-46.76 170.39,-36.17 163.75,-44.42 170.35,-46.76"/>
-<text text-anchor="start" x="69" y="-370.8" font-family="Times,serif" font-size="14.00">QUEUED</text>
-<text text-anchor="start" x="69" y="-355.8" font-family="Times,serif" font-size="14.00">IN_PROGRESS &#160;</text>
+<text text-anchor="end" x="186" y="-370.8" font-family="Times,serif" font-size="14.00">QUEUED &#160;&#160;&#160;</text>
+<text text-anchor="end" x="186" y="-355.8" font-family="Times,serif" font-size="14.00">IN_PROGRESS &#160;&#160;&#160;&#160;&#160;</text>
 </g>
 <!-- SwitchQueueStatus&#45;&gt;CheckJobExists -->
 <g id="edge7" class="edge">
 <title>SwitchQueueStatus:ne&#45;&gt;CheckJobExists</title>
 <path fill="none" stroke="darkblue" d="M232,-430C253.39,-451.39 326.31,-479.48 377.9,-497.52"/>
 <polygon fill="darkblue" stroke="darkblue" points="377,-500.91 387.59,-500.88 379.29,-494.3 377,-500.91"/>
-<text text-anchor="middle" x="280.5" y="-433.8" font-family="Times,serif" font-size="14.00">COMPLETED</text>
+<text text-anchor="middle" x="287" y="-433.8" font-family="Times,serif" font-size="14.00"> &#160;&#160;COMPLETED</text>
 </g>
 <!-- SetErrored -->
 <g id="node12" class="node">
