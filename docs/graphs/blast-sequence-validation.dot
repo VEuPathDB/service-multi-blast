@@ -4,8 +4,8 @@ digraph {
   edge  [color=darkblue]
   // splines=ortho
 
-  Start             [shape=oval, color=blue]
-  End               [shape=oval, color=green]
+  Start             [shape=oval]
+  End               [shape=oval]
   Error             [label="Validation\nerror", shape=oval, color=red]
   MoreSeqsRemaining [label="More seqs\nremaining?", shape=diamond]
   NextSequence      [label="Next sequence"]

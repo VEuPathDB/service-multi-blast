@@ -1119,6 +1119,21 @@ job actually exists.</p>
 rows, then the process moves on to attempting to find just
 the job with no user links.</p>
 </div>
+<div class="paragraph">
+<p>A pseudo-query describing the intent of this process could
+be defined as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sql"><span></span><span class="tok-k">SELECT</span> <span class="tok-o">*</span>
+<span class="tok-k">FROM</span> <span class="tok-n">jobs_table</span> <span class="tok-k">AS</span> <span class="tok-n">job</span>
+  <span class="tok-k">JOIN</span> <span class="tok-n">user_links_table</span> <span class="tok-k">AS</span> <span class="tok-k">user</span>
+    <span class="tok-k">ON</span> <span class="tok-n">job</span><span class="tok-p">.</span><span class="tok-n">job_id</span> <span class="tok-o">=</span> <span class="tok-k">user</span><span class="tok-p">.</span><span class="tok-n">job_id</span>
+<span class="tok-k">WHERE</span>
+  <span class="tok-n">job</span><span class="tok-p">.</span><span class="tok-n">job_id</span> <span class="tok-o">=</span> <span class="tok-o">?</span>
+  <span class="tok-k">AND</span> <span class="tok-k">user</span><span class="tok-p">.</span><span class="tok-n">user_id</span> <span class="tok-o">=</span> <span class="tok-o">?</span></code></pre>
+</div>
+</div>
 </div>
 </details>
 <details>
@@ -1158,6 +1173,38 @@ the job with no user links.</p>
 <div class="imageblock">
 <div class="content">
 <img src="assets/blast-sequence-validation.svg" alt="blast sequence validation">
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Calculate Max Result Size</summary>
+<div class="content">
+<div class="paragraph">
+<p>The max allowed results for a query is configured either by
+the client making the request, or a value configured at
+service startup.  If the client&#8217;s requested max result size
+exceeds the value from the service configuration, the
+configured default will be used.</p>
+</div>
+<div class="paragraph">
+<p>Once the max is determined, the projected size of the result
+is calculated based on the following.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="tok-c1">// Input values</span>
+<span class="tok-n">var</span> <span class="tok-n">inputSequenceCount</span><span class="tok-o">;</span>
+<span class="tok-n">var</span> <span class="tok-n">jobConfig</span><span class="tok-o">;</span>
+
+<span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getMaxTargetSeqs</span><span class="tok-o">()</span> <span class="tok-o">!=</span> <span class="tok-kc">null</span><span class="tok-o">)</span>
+  <span class="tok-k">return</span> <span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getMaxTargetSeqs</span><span class="tok-o">()</span> <span class="tok-o">*</span> <span class="tok-n">inputSequenceCount</span><span class="tok-o">;</span>
+
+<span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getNumDescriptions</span><span class="tok-o">()</span> <span class="tok-o">!=</span> <span class="tok-kc">null</span><span class="tok-o">)</span>
+  <span class="tok-k">return</span> <span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getNumDescriptions</span><span class="tok-o">()</span> <span class="tok-o">*</span> <span class="tok-n">inputSequenceCount</span><span class="tok-o">;</span>
+
+<span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getNumAlignments</span><span class="tok-o">()</span> <span class="tok-o">!=</span> <span class="tok-kc">null</span><span class="tok-o">)</span>
+  <span class="tok-k">return</span> <span class="tok-n">jobConfig</span><span class="tok-o">.</span><span class="tok-na">getNumAlignments</span><span class="tok-o">()</span> <span class="tok-o">*</span> <span class="tok-n">inputSequenceCount</span><span class="tok-o">;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1339,7 +1386,7 @@ job digest (primary key), and the directory name for the
 report workspaces is the MD5 report job digest.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 23. Workspace Volume</div>
+<div class="title">Example 24. Workspace Volume</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1579,7 +1626,7 @@ key should contain the token or user ID.</p>
 <div id="footer">
 <div id="footer-text">
 Version 1<br>
-Last updated 2021-06-17 10:10:36 -0400
+Last updated 2021-06-25 10:35:11 -0400
 </div>
 </div>
 <style>

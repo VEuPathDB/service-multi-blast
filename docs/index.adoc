@@ -391,6 +391,7 @@ be linked to a single job).
 |===
 ====
 
+
 == Workflow
 
 .Flowchart Legend
@@ -398,6 +399,7 @@ be linked to a single job).
 ====
 image::assets/legend.svg[]
 ====
+
 
 === Blast Jobs
 
@@ -425,6 +427,20 @@ job actually exists.
 If "Lookup User Job" process does not find any matching
 rows, then the process moves on to attempting to find just
 the job with no user links.
+
+A pseudo-query describing the intent of this process could
+be defined as:
+
+[source, sql]
+----
+SELECT *
+FROM jobs_table AS job
+  JOIN user_links_table AS user
+    ON job.job_id = user.job_id
+WHERE
+  job.job_id = ?
+  AND user.user_id = ?
+----
 ====
 
 .Refresh Job Status
@@ -432,6 +448,7 @@ the job with no user links.
 ====
 image:assets/refresh-job-status.svg[]
 ====
+
 
 ==== Job Submission
 
@@ -451,6 +468,34 @@ image::assets/blast-request-validation.svg[]
 [%collapsible]
 ====
 image::assets/blast-sequence-validation.svg[]
+====
+
+.Calculate Max Result Size
+[%collapsible]
+====
+The max allowed results for a query is configured either by
+the client making the request, or a value configured at
+service startup.  If the client's requested max result size
+exceeds the value from the service configuration, the
+configured default will be used.
+
+Once the max is determined, the projected size of the result
+is calculated based on the following.
+[source, java]
+----
+// Input values
+var inputSequenceCount;
+var jobConfig;
+
+if (jobConfig.getMaxTargetSeqs() != null)
+  return jobConfig.getMaxTargetSeqs() * inputSequenceCount;
+
+if (jobConfig.getNumDescriptions() != null)
+  return jobConfig.getNumDescriptions() * inputSequenceCount;
+
+if (jobConfig.getNumAlignments() != null)
+  return jobConfig.getNumAlignments() * inputSequenceCount;
+----
 ====
 
 .Target Organism Validation Process
@@ -521,7 +566,9 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 image::assets/format-job.svg[]
 --
 
+
 == Other Topics
+
 
 === Job Splitting/Hierarchy
 
@@ -541,6 +588,7 @@ between a child job and a parent job.  Both run through the
 same steps and are queued and processed as individual jobs.
 The job hierarchy and primary status are purely for client
 use and have no impact on how the service functions.
+
 
 === Hashing/Job Collisions
 

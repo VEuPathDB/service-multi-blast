@@ -4,6 +4,7 @@ digraph {
   edge[color=darkblue]
   splines=ortho
 
+
   //
   // Node definitions
   //
@@ -13,22 +14,23 @@ digraph {
   401 [shape=oval, color=orange]
   422 [shape=oval, color=orange]
 
-  Start                        [label="POST /jobs", shape="oval", color="blue"]
+  Start                        [label="POST /jobs", shape="oval"]
   IsUserTokenProvided          [label="Is User\nToken\nProvided?", shape=diamond]
   IsPostBodyValidJSON          [label="Is POST\nbody valid\nJSON?", shape=diamond]
   IsQueryNull                  [label="Is query\nnull?", shape=diamond]
   IsQueryTextTooLong           [label="Is query\ntext too\nlong?", shape=diamond]
   ParseQuery                   [label="Parse query"]
-  ValidateSequences            [label="| Validate\nsequences |", shape=record]
+  ValidateSequences            [label="| Blast\nSequence\nValidation |", shape=record]
   DoesQueryHaveTooManySeqs     [label="Does query\nhave too\nmany seqs?", shape=diamond]
-  CalculateMaxResultSize       [label="Calculate max\nresult size"]
+  CalculateMaxResultSize       [label="| Calculate max\nresult size |", shape=record]
   IsMaxResultSizeTooLarge      [label="Is max\nresult size\ntoo large?", shape=diamond]
   HasTargetOrgs                [label="Has target\norganisms?", shape=diamond]
   ValidateOrgs                 [label="| Validate\ntarget\norganisms |", shape=record]
-  ParseBlastConfig             [label="Parse JSON config"]
+  ParseBlastConfig             [label="Translate JSON\nconfig"]
   ValidateBlastConfig          [label="Validate\nBLAST config"]
   BlastConfigValidationService [label="BLAST config\nvalidation\nservice", shape=component]
   ProcessBlastJob              [label="| Process\nBLAST job |", shape=record]
+
 
   //
   // Edges
@@ -58,7 +60,8 @@ digraph {
   ParseBlastConfig             -> ValidateBlastConfig
   ValidateBlastConfig          -> 422                      [taillabel="Validation\nerror", color="darkred", constraint=false]
   ValidateBlastConfig          -> ProcessBlastJob
-  BlastConfigValidationService -> ValidateBlastConfig      [dir=both, style=dotted]
+  BlastConfigValidationService -> ValidateBlastConfig      [dir=both, style=dotted, color="#333333"]
+
 
   //
   // Formatting
