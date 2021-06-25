@@ -13,7 +13,7 @@
 <!-- Start -->
 <g id="node1" class="node">
 <title>Start</title>
-<ellipse fill="none" stroke="blue" cx="261" cy="-360.43" rx="54" ry="18"/>
+<ellipse fill="none" stroke="black" cx="261" cy="-360.43" rx="54" ry="18"/>
 <text text-anchor="middle" x="261" y="-356.73" font-family="Times,serif" font-size="14.00">Start</text>
 </g>
 <!-- MoreSeqsRemaining -->
@@ -32,7 +32,7 @@
 <!-- End -->
 <g id="node2" class="node">
 <title>End</title>
-<ellipse fill="none" stroke="green" cx="54" cy="-276.43" rx="54" ry="18"/>
+<ellipse fill="none" stroke="black" cx="54" cy="-276.43" rx="54" ry="18"/>
 <text text-anchor="middle" x="54" y="-272.73" font-family="Times,serif" font-size="14.00">End</text>
 </g>
 <!-- End&#45;&gt;MoreSeqsRemaining -->

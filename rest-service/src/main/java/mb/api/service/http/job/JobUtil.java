@@ -59,13 +59,14 @@ public class JobUtil
    * create a result set larger than the client specified limit.
    */
   public static void verifyResultLimit(IOJsonJobRequest req, int numQueries) {
-    if (req.getMaxResults() != null && req.getMaxResults() > 0)
-      ResultLimitValidator.validateResultLimit(
-        req.getMaxResults() == null
-          ? Conf.getMaxResults()
-          : Math.min(req.getMaxResults(), Conf.getMaxResults()),
-        numQueries + 1,
-        req.getConfig()
-      ).ifPresent(m -> { throw new UnprocessableEntityException(m); });
+    var maxResults = req.getMaxResults() == null
+      ? Conf.getMaxResults()
+      : Math.min(req.getMaxResults(), Conf.getMaxResults());
+
+    ResultLimitValidator.validateResultLimit(
+      maxResults,
+      numQueries + 1,
+      req.getConfig()
+    ).ifPresent(m -> { throw new UnprocessableEntityException(m); });
   }
 }

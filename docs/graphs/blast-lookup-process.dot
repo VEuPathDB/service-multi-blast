@@ -29,6 +29,7 @@ digraph {
   IsJobStillCached    [label="Is job\nstatus\nexpired?", shape=diamond]
   UpdateLastUsed      [label="Update\nlast used"]
 
+
   //
   // Edges
   //
@@ -65,6 +66,7 @@ digraph {
   IsJobStillCached:e  -> UpdateLastUsed:w      [taillabel="No", color=darkred]
   IsJobStillCached:s  -> 200                 [taillabel="Yes", color=darkgreen]
   UpdateLastUsed      -> 200
+
 
   //
   // Formatting
