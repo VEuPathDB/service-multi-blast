@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1]
+  graph [nodesep=1, splines=line]
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
@@ -37,11 +37,11 @@ digraph {
   Start                -> ValidateRequest
 
   ValidateRequest      -> LookupUserJob
-  ValidateRequest      -> 400                  [taillabel="Validation   \nError       ", color=red]
-  ValidateRequest      -> 401                  [taillabel="Auth\n               Error", color=red]
+  ValidateRequest      -> 400                  [label="Validation\nError", color=red]
+  ValidateRequest      -> 401                  [label="Auth Error", color=red]
 
   LookupUserJob        -> IsJobCompleted
-  LookupUserJob        -> 404                  [taillabel="Not Found", color=red]
+  LookupUserJob        -> 404                  [label="Not Found", color=red]
 
   IsJobCompleted       -> HashConfig           [taillabel="Yes", color=darkgreen]
   400                  -> IsJobCompleted       [headlabel="No", color=darkred, dir=back]
@@ -73,7 +73,6 @@ digraph {
     graph [rank=same]
     DB
     CheckForCollision
-    Has
   }
 
   {
