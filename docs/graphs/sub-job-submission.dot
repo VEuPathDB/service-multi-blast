@@ -84,7 +84,7 @@ digraph {
   LinkUser1       -> RefreshStatus
   RefreshStatus   -> StatusSwitch
 
-  StatusSwitch    -> Remaining       [taillabel="ERRORED\nIN_PROGRESS"]
+  StatusSwitch    -> Remaining       [taillabel="ERRORED   \nIN_PROGRESS    \n "]
   UpdateLastUsed  -> StatusSwitch    [taillabel="COMPLETED", dir=back]
   StatusSwitch    -> CreateWorkspace [taillabel="EXPIRED", constraint=false]
 
