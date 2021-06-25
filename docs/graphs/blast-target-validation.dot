@@ -7,15 +7,15 @@ digraph {
   // Nodes
   //
 
-  Start [shape=oval, color=blue]
-  End   [shape=oval, color=blue]
+  Start [shape=oval]
+  End   [shape=oval]
   Error [label="Validation\nerror", shape=oval, color=red]
 
   MoreTargetsRemaining [label="More\ntargets\nremaining?", shape=diamond]
   NextTargetOrg        [label="Next target\norganism"]
   ValidateTarget       [label="Validate\ntarget exists"]
   IsTargetValid        [label="Is target\nvalid?", shape=diamond]
-  BlastDBFS            [label="BLAST DB\nmounted dir", shape=cylinder, color=purple]
+  BlastDBFS            [label="BLAST\nWorkspaces", shape=cylinder, color=purple]
 
   //
   // Edges
@@ -25,7 +25,7 @@ digraph {
   End                  -> MoreTargetsRemaining [headlabel="No", dir=back, color=darkred]
   MoreTargetsRemaining -> NextTargetOrg        [taillabel="\nYes      ", color=darkgreen]
   NextTargetOrg        -> ValidateTarget
-  BlastDBFS            -> ValidateTarget       [dir=both]
+  BlastDBFS            -> ValidateTarget       [dir=both, style=dotted, color="#333333"]
   ValidateTarget       -> IsTargetValid
   IsTargetValid        -> Error                [taillabel="No", color=darkred]
   IsTargetValid        -> MoreTargetsRemaining [taillabel="Yes ", color=darkgreen]

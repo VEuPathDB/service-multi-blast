@@ -13,7 +13,7 @@
 <!-- Start -->
 <g id="node1" class="node">
 <title>Start</title>
-<ellipse fill="none" stroke="blue" cx="328" cy="-390.43" rx="54" ry="18"/>
+<ellipse fill="none" stroke="black" cx="328" cy="-390.43" rx="54" ry="18"/>
 <text text-anchor="middle" x="328" y="-386.73" font-family="Times,serif" font-size="14.00">Start</text>
 </g>
 <!-- MoreTargetsRemaining -->
@@ -33,7 +33,7 @@
 <!-- End -->
 <g id="node2" class="node">
 <title>End</title>
-<ellipse fill="none" stroke="blue" cx="121" cy="-291.43" rx="54" ry="18"/>
+<ellipse fill="none" stroke="black" cx="121" cy="-291.43" rx="54" ry="18"/>
 <text text-anchor="middle" x="121" y="-287.73" font-family="Times,serif" font-size="14.00">End</text>
 </g>
 <!-- End&#45;&gt;MoreTargetsRemaining -->
@@ -109,15 +109,15 @@
 <title>BlastDBFS</title>
 <path fill="none" stroke="purple" d="M108,-125.4C108,-127.49 83.8,-129.18 54,-129.18 24.2,-129.18 0,-127.49 0,-125.4 0,-125.4 0,-91.45 0,-91.45 0,-89.37 24.2,-87.68 54,-87.68 83.8,-87.68 108,-89.37 108,-91.45 108,-91.45 108,-125.4 108,-125.4"/>
 <path fill="none" stroke="purple" d="M108,-125.4C108,-123.32 83.8,-121.63 54,-121.63 24.2,-121.63 0,-123.32 0,-125.4"/>
-<text text-anchor="middle" x="54" y="-112.23" font-family="Times,serif" font-size="14.00">BLAST DB</text>
-<text text-anchor="middle" x="54" y="-97.23" font-family="Times,serif" font-size="14.00">mounted dir</text>
+<text text-anchor="middle" x="54" y="-112.23" font-family="Times,serif" font-size="14.00">BLAST</text>
+<text text-anchor="middle" x="54" y="-97.23" font-family="Times,serif" font-size="14.00">Workspaces</text>
 </g>
 <!-- BlastDBFS&#45;&gt;ValidateTarget -->
 <g id="edge5" class="edge">
 <title>BlastDBFS&#45;&gt;ValidateTarget</title>
-<path fill="none" stroke="darkblue" d="M118.23,-108.43C135.42,-108.43 152.61,-108.43 169.8,-108.43"/>
-<polygon fill="darkblue" stroke="darkblue" points="118.14,-104.93 108.14,-108.43 118.14,-111.93 118.14,-104.93"/>
-<polygon fill="darkblue" stroke="darkblue" points="169.92,-111.93 179.92,-108.43 169.92,-104.93 169.92,-111.93"/>
+<path fill="none" stroke="#333333" stroke-dasharray="1,5" d="M118.23,-108.43C135.42,-108.43 152.61,-108.43 169.8,-108.43"/>
+<polygon fill="#333333" stroke="#333333" points="118.14,-104.93 108.14,-108.43 118.14,-111.93 118.14,-104.93"/>
+<polygon fill="#333333" stroke="#333333" points="169.92,-111.93 179.92,-108.43 169.92,-104.93 169.92,-111.93"/>
 </g>
 </g>
 </svg>

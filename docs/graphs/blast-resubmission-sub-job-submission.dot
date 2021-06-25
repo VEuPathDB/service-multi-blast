@@ -7,15 +7,15 @@ digraph {
   // Node
   //
 
-  Start        [shape=oval, color=green]
+  Start        [shape=oval]
   DB           [label="MBlast DB", shape=cylinder, color=purple]
   Refresh      [label="Refresh\nsub-job status"]
   IsExpired    [label="Sub-job is\nexpired?", shape=diamond]
   More         [label="More\nsub-jobs\nremaining?", shape=diamond]
   Next         [label="Next\nsub-job"]
-  End          [shape=oval, color=darkred]
+  End          [shape=oval]
   Queue        [label="Job queue", shape=component]
-  Workspace    [label="MBlast workspaces", shape=cylinder]
+  Workspace    [label="MBlast\nWorkspaces", shape=cylinder, color=purple]
   NewWorkspace [label="Create\nworkspace"]
   NewQuery     [label="Create\nquery file"]
   Submit       [label="Submit to\nqueue"]
@@ -26,26 +26,26 @@ digraph {
 
   Start -> More
 
-  More    -> Next      [taillabel="Yes", color=darkgreen]
+  More    -> Next      [taillabel="\n           Yes", color=darkgreen]
   End     -> More      [headlabel="No", color=darkred, dir=back]
 
   Next    -> Refresh
 
   Refresh   -> IsExpired []
-  Refresh   -> DB        [dir=both, style=dotted]
-  Refresh   -> Queue     [dir=both, style=dotted]
+  Refresh   -> DB        [dir=both, style=dotted, color="#333333"]
+  Refresh   -> Queue     [dir=both, style=dotted, color="#333333"]
 
   IsExpired -> NewWorkspace [taillabel="Yes", color=darkgreen]
   IsExpired -> More         [taillabel="No", color=darkred]
 
   NewWorkspace -> NewQuery
-  NewWorkspace -> Workspace [style=dotted]
+  NewWorkspace -> Workspace [style=dotted, color="#333333"]
 
   NewQuery -> Submit
-  NewQuery -> Workspace [style=dotted]
+  NewQuery -> Workspace [style=dotted, color="#333333"]
 
   Submit -> More  []
-  Submit -> Queue [style=dotted]
+  Submit -> Queue [style=dotted, color="#333333"]
 
 
   //

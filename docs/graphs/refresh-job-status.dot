@@ -49,15 +49,15 @@ digraph {
 
   Start -> SwitchInStatus
 
-  SwitchInStatus:s -> LookupQueueStatus [taillabel="QUEUED\lIN_PROGRESS\l"]
-  SwitchInStatus:e -> CheckJobExists    [taillabel="COMPLETED"]
-  SwitchInStatus:w -> End               [taillabel="ERRORED\lEXPIRED\l"]
+  SwitchInStatus:s -> LookupQueueStatus [taillabel="QUEUED  \rIN_PROGRESS  \r"]
+  SwitchInStatus:e -> CheckJobExists    [taillabel="COMPLETED\l"]
+  SwitchInStatus:w -> End               [taillabel="ERRORED\rEXPIRED\r"]
 
   LookupQueueStatus -> SwitchQueueStatus:n
 
   SwitchQueueStatus:se -> SetErrored     [taillabel="  ERRORED"]
-  SwitchQueueStatus:ne -> CheckJobExists [taillabel="COMPLETED", constraint=false]
-  SwitchQueueStatus:sw -> End            [taillabel="QUEUED\lIN_PROGRESS  \l"]
+  SwitchQueueStatus:ne -> CheckJobExists [taillabel="   COMPLETED", constraint=false]
+  SwitchQueueStatus:sw -> End            [taillabel="QUEUED    \rIN_PROGRESS      \r"]
 
   CheckJobExists -> JobExistsInWS
 

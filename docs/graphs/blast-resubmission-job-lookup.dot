@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1, ranksep=0.7]
+  graph [nodesep=1, ranksep=0.7, splines=ortho]
   node  [margin=0, shape=rect, width=1.5]
   edge  [color=darkblue]
 
@@ -11,7 +11,7 @@ digraph {
   End                 [label="End", shape=oval]
   NotFound            [label="Not\nfound" shape=oval, color=darkred]
 
-  LookupUserJob       [label="Lookup\nuser job"]
+  LookupUserJob       [label="| Lookup\nuser job |", shape=record]
   LookupJob           [label="Lookup job"]
   DB                  [label="MBlast DB", shape=cylinder, color=purple]
   DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
@@ -31,11 +31,11 @@ digraph {
   LookupUserJob      -> DoesJobExist1
   LookupUserJob      -> DB                [dir=back, style=dotted, color="#333333"]
 
-  DoesJobExist1      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
+  DoesJobExist1      -> RefreshJobStatus  [taillabel="\nYes", color=darkgreen]
   DoesJobExist1      -> LookupJob         [taillabel="No", color=darkred]
 
   LookupJob          -> DB                [dir=back, style=dotted, color="#333333", constraint=false]
-  LookupJob:e        -> DoesJobExist2     []
+  LookupJob          -> DoesJobExist2     []
 
   LinkUserToJob      -> DoesJobExist2     [headlabel="Yes", color=darkgreen, dir=back]
   DoesJobExist2      -> NotFound          [taillabel="No", color=darkred]
@@ -47,8 +47,8 @@ digraph {
 
   IsJobStillCached   -> RefreshJobStatus  [dir=back]
 
-  IsJobStillCached:w -> UpdateLastUsed    [taillabel="No", color=darkred]
-  IsJobStillCached   -> End               [taillabel="Yes", color=darkgreen]
+  IsJobStillCached   -> UpdateLastUsed    [taillabel="\nNo", color=darkred]
+  IsJobStillCached   -> End               [taillabel="\nYes", color=darkgreen]
 
   UpdateLastUsed     -> End
 
