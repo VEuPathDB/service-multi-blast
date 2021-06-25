@@ -8,7 +8,7 @@ digraph {
   // Nodes
   //
   Start              [label="POST\n/reports", shape=oval]
-  ValidateRequest    [label="|Validate\nRequest|", shape=record]
+  ValidateRequest    [label="|Request\nValidation|", shape=record]
   LookupUserJob      [label="|Lookup\nUser Job|", shape=record]
   IsJobCompleted     [label="Is job status\nCOMPLETE?", shape=diamond]
   HashConfig         [label="Hash config"]

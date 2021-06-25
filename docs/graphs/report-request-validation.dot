@@ -1,0 +1,48 @@
+digraph {
+  graph [nodesep=1, splines=line]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  // End Nodes
+  {
+    node [shape=oval]
+
+    Start
+    End
+
+    AuthError       [label="Auth\nError", color=red]
+    ValidationError [label="Validation\nError", color=red]
+  }
+
+  RequestHasAuthToken [label="Request\nhas auth\ntoken?", shape=diamond]
+  RequestHasBody      [label="Request\nhas valid\nbody?", shape=diamond]
+
+
+  //
+  // Edges
+  //
+
+  Start               -> RequestHasAuthToken
+
+  RequestHasAuthToken -> RequestHasBody  [taillabel="Yes", color=darkgreen]
+  RequestHasAuthToken -> AuthError       [taillabel="\nNo     ", color=darkred]
+
+  RequestHasBody      -> End             [taillabel="\nYes      ", color=darkgreen]
+  RequestHasBody      -> ValidationError [taillabel="\n       No", color=darkred]
+
+
+  //
+  // Formatting
+  //
+
+  {
+    edge [style=invis]
+
+    AuthError -> RequestHasBody
+  }
+}
