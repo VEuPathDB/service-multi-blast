@@ -561,18 +561,25 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 
 === Formatter Jobs
 
+
+==== Report Job Submission
+
 .Basic Formatter Workflow
 [%collapsible]
 ====
 image::assets/format-job.svg[]
 ====
 
-==== Report Job Submission
-
 .Request Overview
 [%collapsible]
 ====
 image::assets/report-request-overview.svg[]
+====
+
+.Request Validation
+[%collapsible]
+====
+image::assets/report-request-validation.svg[]
 ====
 
 
