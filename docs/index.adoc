@@ -5,6 +5,8 @@
 :icons: font
 :source-highlighter: pygments
 :pygments-style: monokai
+:icon-photo: &#xf1c5;
+:icon-text:  &#xf0f6;
 
 
 == Goal
@@ -392,9 +394,10 @@ be linked to a single job).
 ====
 
 
+[.fa]
 == Workflow
 
-.Flowchart Legend
+.{icon-photo} Flowchart Legend
 [%collapsible]
 ====
 image::assets/legend.svg[]
@@ -408,13 +411,13 @@ image::assets/legend.svg[]
 Processes that are used by many if not all of the various
 endpoints.
 
-.Job ID Hash Validation
+.{icon-photo} Job ID Hash Validation
 [%collapsible]
 ====
 image::assets/hash-validation.svg[]
 ====
 
-.Lookup User Job
+.{icon-text} Lookup User Job
 [%collapsible]
 ====
 The process "Lookup User Job" appearing in the flowcharts in
@@ -443,7 +446,7 @@ WHERE
 ----
 ====
 
-.Refresh Job Status
+.{icon-photo} Refresh Job Status
 [%collapsible]
 ====
 image:assets/refresh-job-status.svg[]
@@ -452,25 +455,31 @@ image:assets/refresh-job-status.svg[]
 
 ==== Job Submission
 
-.Basic Blast Workflow (Sequence Diagram)
+.{icon-photo} Basic Blast Workflow (Sequence Diagram)
 [%collapsible]
 ====
 image::assets/blast-job.svg[]
 ====
 
-.Request Validation Process
+.{icon-photo} Request Overview
 [%collapsible]
 ====
-image::assets/blast-request-validation.svg[]
+image::assets/submit-request-overview.svg[]
 ====
 
-.Sequence Validation Process
+.{icon-photo} Validate Request
 [%collapsible]
 ====
-image::assets/blast-sequence-validation.svg[]
+image::assets/submit-request-validation.svg[]
 ====
 
-.Calculate Max Result Size
+.{icon-photo} Validate Query
+[%collapsible]
+====
+image::assets/submit-validate-query.svg[]
+====
+
+.{icon-text} Calculate Max Result Size
 [%collapsible]
 ====
 The max allowed results for a query is configured either by
@@ -498,19 +507,26 @@ if (jobConfig.getNumAlignments() != null)
 ----
 ====
 
-.Target Organism Validation Process
+.{icon-photo} Validate Target Organisms
 [%collapsible]
 ====
 image::assets/blast-target-validation.svg[]
 ====
 
-.Blast Submission Process
+.{icon-photo} Blast Submission Process
 [%collapsible]
 ====
 image::assets/blast-submission.svg[]
 ====
 
-.Sub-Job Submission Process
+.{icon-photo} Sequence Validation
+[%collapsible]
+====
+image::assets/blast-sequence-validation.svg[]
+====
+
+
+.{icon-photo} Sub-Job Submission Process
 [%collapsible]
 ====
 image::assets/sub-job-submission.svg[]
@@ -519,37 +535,37 @@ image::assets/sub-job-submission.svg[]
 
 ==== Job Lookup
 
-.Job Lookup Process
+.{icon-photo} Job Lookup Process
 [%collapsible]
 ====
 image::assets/blast-lookup-process.svg[]
 ====
 
-.Job ID Hash Validation
+.{icon-photo} Job ID Hash Validation
 [%collapsible]
 ====
 image::assets/hash-validation.svg[]
 ====
 
-.Get and Link User Job
+.{icon-photo} Get and Link User Job
 [%collapsible]
 ====
 image::assets/get-and-link-user-job.svg[]
 ====
 
-.Refresh Job Status
+.{icon-photo} Refresh Job Status
 [%collapsible]
 ====
 image:assets/refresh-job-status.svg[]
 ====
 
-.Refresh Sub-Job Status
+.{icon-photo} Refresh Sub-Job Status
 [%collapsible]
 ====
 image::assets/refresh-sub-job-status.svg[]
 ====
 
-.Sub-Job Linking
+.{icon-photo} Sub-Job Linking
 [%collapsible]
 ====
 image::assets/blast-lookup-sub-job-linking.svg[]
@@ -558,31 +574,31 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 
 ==== Job Resubmission
 
-.Job Resubmission Process
+.{icon-photo} Job Resubmission Process
 [%collapsible]
 ====
 image::assets/blast-resubmission.svg[]
 ====
 
-.Job ID Hash Validation
+.{icon-photo} Job ID Hash Validation
 [%collapsible]
 ====
 image::assets/hash-validation.svg[]
 ====
 
-.Get and Link User Job
+.{icon-photo} Get and Link User Job
 [%collapsible]
 ====
 image::assets/get-and-link-user-job.svg[]
 ====
 
-.Sub-Job Resubmission
+.{icon-photo} Sub-Job Resubmission
 [%collapsible]
 ====
 image::assets/blast-resubmission-sub-job-submission.svg[]
 ====
 
-.Sub-Job Linking
+.{icon-photo} Sub-Job Linking
 [%collapsible]
 ====
 image::assets/blast-lookup-sub-job-linking.svg[]
@@ -594,37 +610,43 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 
 ==== Report Job Submission
 
-.Basic Formatter Workflow
+.{icon-photo} Basic Formatter Workflow (Sequence Diagram)
 [%collapsible]
 ====
 image::assets/format-job.svg[]
 ====
 
-.Request Overview
+.{icon-photo} Request Overview
 [%collapsible]
 ====
 image::assets/report-request-overview.svg[]
 ====
 
-.Request Validation
+.{icon-photo} Request Validation
 [%collapsible]
 ====
 image::assets/report-request-validation.svg[]
 ====
 
-.Get and Link User Job
+.{icon-photo} Get and Link User Job
 [%collapsible]
 ====
 image::assets/get-and-link-user-job.svg[]
 ====
 
-.Job Collision Handling
+.{icon-photo} Job Collision Handling
 [%collapsible]
 ====
 image::assets/report-collision-handling.svg[]
 ====
 
-.Sub-Job Linking
+.{icon-photo} New Job Creation
+[%collapsible]
+====
+image::assets/report-new-job-handling.svg[]
+====
+
+.{icon-photo} Sub-Job Linking
 [%collapsible]
 ====
 image::assets/blast-lookup-sub-job-linking.svg[]
