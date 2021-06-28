@@ -56,8 +56,8 @@
 <!-- DB -->
 <g id="node9" class="node">
 <title>DB</title>
-<path fill="none" stroke="black" d="M108,-113.73C108,-115.53 83.8,-117 54,-117 24.2,-117 0,-115.53 0,-113.73 0,-113.73 0,-84.27 0,-84.27 0,-82.47 24.2,-81 54,-81 83.8,-81 108,-82.47 108,-84.27 108,-84.27 108,-113.73 108,-113.73"/>
-<path fill="none" stroke="black" d="M108,-113.73C108,-111.92 83.8,-110.45 54,-110.45 24.2,-110.45 0,-111.92 0,-113.73"/>
+<path fill="none" stroke="purple" d="M108,-113.73C108,-115.53 83.8,-117 54,-117 24.2,-117 0,-115.53 0,-113.73 0,-113.73 0,-84.27 0,-84.27 0,-82.47 24.2,-81 54,-81 83.8,-81 108,-82.47 108,-84.27 108,-84.27 108,-113.73 108,-113.73"/>
+<path fill="none" stroke="purple" d="M108,-113.73C108,-111.92 83.8,-110.45 54,-110.45 24.2,-110.45 0,-111.92 0,-113.73"/>
 <text text-anchor="middle" x="54" y="-95.3" font-family="Times,serif" font-size="14.00">Data Store</text>
 </g>
 <!-- Process&#45;&gt;DB -->
@@ -84,9 +84,9 @@
 <!-- ExtServ -->
 <g id="node11" class="node">
 <title>ExtServ</title>
-<polygon fill="none" stroke="black" points="108,-40.5 0,-40.5 0,-36.5 -4,-36.5 -4,-32.5 0,-32.5 0,-12.5 -4,-12.5 -4,-8.5 0,-8.5 0,-4.5 108,-4.5 108,-40.5"/>
-<polyline fill="none" stroke="black" points="0,-36.5 4,-36.5 4,-32.5 0,-32.5 "/>
-<polyline fill="none" stroke="black" points="0,-12.5 4,-12.5 4,-8.5 0,-8.5 "/>
+<polygon fill="none" stroke="purple" points="108,-40.5 0,-40.5 0,-36.5 -4,-36.5 -4,-32.5 0,-32.5 0,-12.5 -4,-12.5 -4,-8.5 0,-8.5 0,-4.5 108,-4.5 108,-40.5"/>
+<polyline fill="none" stroke="purple" points="0,-36.5 4,-36.5 4,-32.5 0,-32.5 "/>
+<polyline fill="none" stroke="purple" points="0,-12.5 4,-12.5 4,-8.5 0,-8.5 "/>
 <text text-anchor="middle" x="54" y="-18.8" font-family="Times,serif" font-size="14.00">Service</text>
 </g>
 <!-- DB&#45;&gt;ExtServ -->
