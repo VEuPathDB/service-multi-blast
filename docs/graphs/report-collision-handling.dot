@@ -1,0 +1,34 @@
+digraph {
+  graph [nodesep=1, splines=line]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  {
+    node [shape=oval]
+
+    Start
+    End
+  }
+
+  // Refresh Report Status
+  {
+
+  }
+
+  // External Resources
+  {
+    node [shape=cylinder, color=purple]
+
+    DB [label="MBlast DB"]
+  }
+
+
+  //
+  // Edges
+  //
+}

@@ -9,7 +9,7 @@ digraph {
   //
   Start              [label="POST\n/reports", shape=oval]
   ValidateRequest    [label="|Request\nValidation|", shape=record]
-  LookupUserJob      [label="|Lookup\nUser Job|", shape=record]
+  LookupUserJob      [label="|Get and Link\nUser Job|", shape=record]
   IsJobCompleted     [label="Is job status\nCOMPLETE?", shape=diamond]
   HashConfig         [label="Hash config"]
   CheckForCollision  [label="Check for\nhash collisions"]
@@ -56,8 +56,6 @@ digraph {
 
   HandleJobCollision   -> 200
   HandleNewJobCreation -> 200
-
-
 
 
   //

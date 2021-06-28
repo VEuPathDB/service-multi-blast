@@ -12,20 +12,12 @@ digraph {
   404 [shape=oval, color=orange]
   200 [label="200\nJob details", shape=oval, color=darkgreen]
 
-  // External Resources
-  DB [label="MBlast DB", shape=cylinder, color=purple]
-
   Start               [label="GET /jobs/{job-id}", shape=oval, color=darkgreen]
   IsUserTokenProvided [label="Is user\ntoken\nprovided?", shape=diamond]
   ValidateJobID       [label="|Job ID hash\nvalidation|", shape=record]
-  LookupUserJob       [label="|Lookup\nuser job|", shape=record]
-  LookupJob           [label="Lookup job"]
-  DoesJobExist1       [label="Does user\njob exist?", shape=diamond]
-  DoesJobExist2       [label="Does job\nexist?", shape=diamond]
+  GetAndLinkUserJob   [label="|Get and Link\nUser Job|", shape=record]
   RefreshJobStatus    [label="|Refresh\njob status|", shape=record]
   RefreshSubJobStatus [label="|Refresh\nsub-job\nstatuses|", shape=record]
-  LinkUserToJob       [label="Link user\nto job"]
-  LinkUserToSubJobs   [label="|Link user\nto sub jobs|", shape=record]
   IsJobStillCached    [label="Is job\nstatus\nexpired?", shape=diamond]
   UpdateLastUsed      [label="Update\nlast used"]
 
@@ -39,25 +31,11 @@ digraph {
   IsUserTokenProvided -> ValidateJobID       [taillabel="Yes", color=darkgreen]
   401                 -> IsUserTokenProvided [headlabel="No", color=darkred, dir=back]
 
-  ValidateJobID       -> LookupUserJob
+  ValidateJobID       -> GetAndLinkUserJob
   ValidateJobID       -> 404                 [taillabel="Invalid\nhash", color=darkred, constraint=false]
 
-  LookupUserJob       -> DoesJobExist1
-  LookupUserJob       -> DB                  [dir=back, style=dotted, color="#333333"]
-
-  DoesJobExist1       -> RefreshJobStatus    [taillabel="Yes", color=darkgreen]
-  DoesJobExist1       -> LookupJob           [taillabel="No", color=darkred]
-
-  LookupJob           -> DoesJobExist2       []
-  LookupJob           -> DB                  [dir=back, style=dotted, color="#333333"]
-
-  DoesJobExist2       -> LinkUserToJob       [taillabel="Yes", color=darkgreen]
-  404                 -> DoesJobExist2:w     [headlabel="No", color=darkred, dir=back]
-
-  LinkUserToJob       -> LinkUserToSubJobs
-  LinkUserToJob       -> DB                  [style=dotted, color="#333333"]
-
-  LinkUserToSubJobs   -> RefreshJobStatus
+  GetAndLinkUserJob   -> RefreshJobStatus
+  GetAndLinkUserJob   -> 404                 [taillabel="Job not found", color=darkred]
 
   RefreshJobStatus    -> RefreshSubJobStatus
 
@@ -77,11 +55,6 @@ digraph {
     401
   }
 
-  {
-    rank=same
-    404
-    LookupUserJob
-  }
 
   {
     rank=same
@@ -90,15 +63,8 @@ digraph {
   }
 
   {
-    rank=same
-    DoesJobExist2
-    DB
-  }
-
-  {
     edge [style=invis]
-    401 -> 404 -> DoesJobExist1
+    401 -> 404
     RefreshJobStatus -> UpdateLastUsed
-    DB -> UpdateLastUsed
   }
 }

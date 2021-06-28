@@ -1,0 +1,85 @@
+digraph {
+  graph [nodesep=1, ranksep=1]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  {
+    node [shape=oval]
+    Start
+    End
+    Error [label="Not Found", color=red]
+  }
+
+  {
+    node [shape=cylinder, color=purple]
+
+    DB [label="MBlast DB"]
+  }
+
+  LookupUserJob   [label="|Lookup\nUser Job|", shape=record]
+  UserJobWasFound [label="User job\nwas found?", shape=diamond]
+  LookupJob       [label="Lookup Job"]
+  JobWasFound     [label="Job was\nfound?", shape=diamond]
+  LookupSubJobs   [label="Lookup\nsub jobs"]
+  LinkUserToJob   [label="Link user\nto job"]
+  SubJobLinking   [label="|Sub-Job\nLinking|", shape=record]
+
+
+  //
+  // Edges
+  //
+
+  Start           -> LookupUserJob
+
+  LookupUserJob   -> UserJobWasFound
+  LookupUserJob   -> DB              [dir=back, style=dotted, color="#333333"]
+
+  UserJobWasFound -> End           [taillabel="Yes", color=darkgreen]
+  LookupJob       -> UserJobWasFound [dir=back, headlabel="No", color=darkred]
+
+  LookupJob       -> DB              [dir=back, style=dotted, color="#333333"]
+  LookupJob       -> JobWasFound
+
+  LinkUserToJob   -> JobWasFound     [dir=back, headlabel="Yes", color=darkgreen]
+  JobWasFound     -> Error           [taillabel="    No", color=darkred]
+
+  LinkUserToJob   -> DB              [style=dotted, color="#333333"]
+  LinkUserToJob   -> LookupSubJobs
+
+  LookupSubJobs   -> DB              [dir=back, style=dotted, color="#333333"]
+  LookupSubJobs   -> SubJobLinking
+
+  SubJobLinking   -> End
+
+
+  //
+  // Formatting
+  //
+  {
+    graph [rank=same]
+
+    UserJobWasFound
+    LookupJob
+  }
+
+  {
+    graph [rank=same]
+
+    JobWasFound
+    LinkUserToJob
+  }
+
+  {
+    edge [style=invis]
+
+    LookupJob   -> LinkUserToJob
+    JobWasFound -> LookupSubJobs
+    UserJobWasFound -> Error
+    LinkUserToJob -> Error
+  }
+}
