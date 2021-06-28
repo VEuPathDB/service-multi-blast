@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1, splines=line]
+  graph [nodesep=1]
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
@@ -15,20 +15,79 @@ digraph {
     End
   }
 
-  // Refresh Report Status
-  {
-
-  }
-
   // External Resources
   {
     node [shape=cylinder, color=purple]
 
-    DB [label="MBlast DB"]
+    DB    [label="MBlast DB"]
+    Queue [label="Job Queue", shape=component]
   }
+
+  RefreshJobStatus  [label="|Refresh Report\nJob Status|" shape=record]
+  StatusIsExpired   [label="Status is\nEXPIRED?", shape=diamond]
+  SubmitToQueue     [label="Submit to\njob queue"]
+  UpdateStatus      [label="Update job\nstatus to\nQUEUED"]
+  GetUserJob        [label="|Get User\nReport Job|", shape=record]
+  UserJobExists     [label="User job\nexists?", shape=diamond]
+  DescriptionChange [label="Description\nchanged?", shape=diamond]
+  LinkUserToJob     [label="Link user to\nreport job"]
+  UpdateDescription [label="Update\ndescription"]
 
 
   //
   // Edges
   //
+
+  Start             -> RefreshJobStatus
+
+  RefreshJobStatus  -> StatusIsExpired
+
+  StatusIsExpired   -> SubmitToQueue     [taillabel="Yes", color=darkgreen]
+  StatusIsExpired   -> GetUserJob        [taillabel="No", color=darkred]
+
+  SubmitToQueue     -> Queue             [style=dotted, color="#333333"]
+  SubmitToQueue     -> UpdateStatus
+
+  UpdateStatus      -> DB                [style=dotted, color="#333333"]
+  UpdateStatus      -> GetUserJob
+
+  GetUserJob        -> UserJobExists
+
+  UserJobExists     -> DescriptionChange [taillabel="Yes", color=darkgreen]
+  UserJobExists     -> LinkUserToJob     [taillabel="No", color=darkred]
+
+  LinkUserToJob     -> DB                [style=dotted, color="#333333"]
+  LinkUserToJob     -> End
+
+  DescriptionChange -> UpdateDescription [taillabel="         Yes", color=darkgreen]
+  DescriptionChange -> End               [taillabel="   No\r", color=darkred]
+
+  UpdateDescription -> DB                [style=dotted, color="#333333"]
+  UpdateDescription -> End
+
+
+  //
+  // Formatting
+  //
+
+  {
+    graph [rank=same]
+    StatusIsExpired
+    SubmitToQueue
+    Queue
+  }
+
+  {
+    graph [rank=same]
+
+    UserJobExists
+    LinkUserToJob
+    DB
+  }
+
+  {
+    edge [style=invis]
+    RefreshJobStatus -> Queue
+    UpdateStatus -> LinkUserToJob
+  }
 }

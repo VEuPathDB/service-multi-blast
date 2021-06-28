@@ -618,6 +618,12 @@ image::assets/report-request-validation.svg[]
 image::assets/get-and-link-user-job.svg[]
 ====
 
+.Job Collision Handling
+[%collapsible]
+====
+image::assets/report-collision-handling.svg[]
+====
+
 .Sub-Job Linking
 [%collapsible]
 ====

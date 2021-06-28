@@ -11,9 +11,9 @@ digraph {
   NProcess [label="Internal process", shape=plaintext]
   End      [label="Start/End"]
   NEnd     [label="Process start/end", shape=plaintext]
-  DB       [label="Data Store", shape=cylinder]
+  DB       [label="Data Store", shape=cylinder, color=purple]
   NDB      [label="Database/filesystem\ndata store", shape=plaintext]
-  ExtServ  [label="Service", shape=component]
+  ExtServ  [label="Service", shape=component, color=purple]
   NExtServ [label="External network service.\nMay or may not be in the same\ndocker-compose stack.", shape=plaintext]
 
   End -> Choice -> PreDef -> Process -> DB -> ExtServ
