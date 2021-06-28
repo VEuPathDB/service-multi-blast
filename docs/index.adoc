@@ -513,7 +513,7 @@ if (jobConfig.getNumAlignments() != null)
 image::assets/blast-target-validation.svg[]
 ====
 
-.{icon-photo} Blast Submission Process
+.{icon-photo} Blast Job Processing
 [%collapsible]
 ====
 image::assets/blast-submission.svg[]

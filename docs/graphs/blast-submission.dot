@@ -26,7 +26,7 @@ digraph {
   SubmitJobToQueue    [label="Submit job\nto queue"]
   GetSubJobList       [label="Get sub\njob list"]
   HandleSubJobList    [label="| Process\nsub-jobs |", shape=record]
-  200                 [label="200\nReturn job ID", shape=oval, color="green"]
+  200                 [label="End", shape=oval]
 
   // External systems
   {
