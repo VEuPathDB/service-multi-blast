@@ -12,89 +12,89 @@
 <!-- Start -->
 <g id="node1" class="node">
 <title>Start</title>
-<ellipse fill="none" stroke="green" cx="300" cy="-693.1" rx="77.61" ry="18"/>
-<text text-anchor="middle" x="300" y="-689.4" font-family="Times,serif" font-size="14.00">POST /jobs/{job&#45;id}</text>
+<ellipse fill="none" stroke="green" cx="297" cy="-693.1" rx="77.61" ry="18"/>
+<text text-anchor="middle" x="297" y="-689.4" font-family="Times,serif" font-size="14.00">POST /jobs/{job&#45;id}</text>
 </g>
 <!-- IsUserTokenProvided -->
 <g id="node2" class="node">
 <title>IsUserTokenProvided</title>
-<polygon fill="none" stroke="black" points="300,-639.1 228,-594.1 300,-549.1 372,-594.1 300,-639.1"/>
-<text text-anchor="middle" x="300" y="-605.4" font-family="Times,serif" font-size="14.00">Is User</text>
-<text text-anchor="middle" x="300" y="-590.4" font-family="Times,serif" font-size="14.00">Token</text>
-<text text-anchor="middle" x="300" y="-575.4" font-family="Times,serif" font-size="14.00">Provided?</text>
+<polygon fill="none" stroke="black" points="297,-639.1 225,-594.1 297,-549.1 369,-594.1 297,-639.1"/>
+<text text-anchor="middle" x="297" y="-605.4" font-family="Times,serif" font-size="14.00">Is User</text>
+<text text-anchor="middle" x="297" y="-590.4" font-family="Times,serif" font-size="14.00">Token</text>
+<text text-anchor="middle" x="297" y="-575.4" font-family="Times,serif" font-size="14.00">Provided?</text>
 </g>
 <!-- Start&#45;&gt;IsUserTokenProvided -->
 <g id="edge1" class="edge">
 <title>Start&#45;&gt;IsUserTokenProvided</title>
-<path fill="none" stroke="darkblue" d="M300,-674.76C300,-667.48 300,-658.57 300,-649.38"/>
-<polygon fill="darkblue" stroke="darkblue" points="303.5,-649.36 300,-639.36 296.5,-649.36 303.5,-649.36"/>
+<path fill="none" stroke="darkblue" d="M297,-674.76C297,-667.48 297,-658.57 297,-649.38"/>
+<polygon fill="darkblue" stroke="darkblue" points="300.5,-649.36 297,-639.36 293.5,-649.36 300.5,-649.36"/>
 </g>
 <!-- ValidateJobID -->
 <g id="node3" class="node">
 <title>ValidateJobID</title>
-<polygon fill="none" stroke="black" points="253,-476.6 253,-512.6 347,-512.6 347,-476.6 253,-476.6"/>
-<text text-anchor="middle" x="259.5" y="-490.9" font-family="Times,serif" font-size="14.00"> </text>
-<polyline fill="none" stroke="black" points="266,-476.6 266,-512.6 "/>
-<text text-anchor="middle" x="299.5" y="-498.4" font-family="Times,serif" font-size="14.00">Validate</text>
-<text text-anchor="middle" x="299.5" y="-483.4" font-family="Times,serif" font-size="14.00">job id</text>
-<polyline fill="none" stroke="black" points="333,-476.6 333,-512.6 "/>
-<text text-anchor="middle" x="340" y="-490.9" font-family="Times,serif" font-size="14.00"> </text>
+<polygon fill="none" stroke="black" points="249.5,-476.6 249.5,-512.6 344.5,-512.6 344.5,-476.6 249.5,-476.6"/>
+<text text-anchor="middle" x="252" y="-490.9" font-family="Times,serif" font-size="14.00"> </text>
+<polyline fill="none" stroke="black" points="254.5,-476.6 254.5,-512.6 "/>
+<text text-anchor="middle" x="297" y="-498.4" font-family="Times,serif" font-size="14.00">Job ID Hash</text>
+<text text-anchor="middle" x="297" y="-483.4" font-family="Times,serif" font-size="14.00">Validation</text>
+<polyline fill="none" stroke="black" points="339.5,-476.6 339.5,-512.6 "/>
+<text text-anchor="middle" x="342" y="-490.9" font-family="Times,serif" font-size="14.00"> </text>
 </g>
 <!-- IsUserTokenProvided&#45;&gt;ValidateJobID -->
 <g id="edge3" class="edge">
 <title>IsUserTokenProvided&#45;&gt;ValidateJobID</title>
-<path fill="none" stroke="darkgreen" d="M300,-548.92C300,-540.19 300,-531.26 300,-523.27"/>
-<polygon fill="darkgreen" stroke="darkgreen" points="303.5,-523.06 300,-513.06 296.5,-523.06 303.5,-523.06"/>
-<text text-anchor="middle" x="287.5" y="-537.72" font-family="Times,serif" font-size="14.00">Yes</text>
+<path fill="none" stroke="darkgreen" d="M297,-548.92C297,-540.19 297,-531.26 297,-523.27"/>
+<polygon fill="darkgreen" stroke="darkgreen" points="300.5,-523.06 297,-513.06 293.5,-523.06 300.5,-523.06"/>
+<text text-anchor="middle" x="284.5" y="-537.72" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- 404 -->
 <g id="node5" class="node">
 <title>404</title>
-<ellipse fill="none" stroke="red" cx="222" cy="-345.89" rx="53.98" ry="21.43"/>
-<text text-anchor="middle" x="222" y="-349.69" font-family="Times,serif" font-size="14.00">404</text>
-<text text-anchor="middle" x="222" y="-334.69" font-family="Times,serif" font-size="14.00">Not Found</text>
+<ellipse fill="none" stroke="red" cx="217" cy="-345.89" rx="53.98" ry="21.43"/>
+<text text-anchor="middle" x="217" y="-349.69" font-family="Times,serif" font-size="14.00">404</text>
+<text text-anchor="middle" x="217" y="-334.69" font-family="Times,serif" font-size="14.00">Not Found</text>
 </g>
 <!-- ValidateJobID&#45;&gt;404 -->
 <g id="edge4" class="edge">
 <title>ValidateJobID&#45;&gt;404</title>
-<path fill="none" stroke="darkred" d="M290.44,-476.37C277.29,-451.31 253.49,-405.93 237.71,-375.85"/>
-<polygon fill="darkred" stroke="darkred" points="240.64,-373.9 232.9,-366.67 234.44,-377.15 240.64,-373.9"/>
-<text text-anchor="middle" x="254.44" y="-465.17" font-family="Times,serif" font-size="14.00">Validation</text>
-<text text-anchor="middle" x="254.44" y="-450.17" font-family="Times,serif" font-size="14.00">error</text>
+<path fill="none" stroke="darkred" d="M287.19,-476.37C273.71,-451.31 249.3,-405.93 233.12,-375.85"/>
+<polygon fill="darkred" stroke="darkred" points="236,-373.81 228.18,-366.67 229.83,-377.13 236,-373.81"/>
+<text text-anchor="middle" x="251.19" y="-465.17" font-family="Times,serif" font-size="14.00">Validation</text>
+<text text-anchor="middle" x="251.19" y="-450.17" font-family="Times,serif" font-size="14.00">error</text>
 </g>
-<!-- JobLookup -->
+<!-- GetAndLinkUserJob -->
 <g id="node7" class="node">
-<title>JobLookup</title>
-<polygon fill="none" stroke="black" points="331,-403.6 331,-439.6 425,-439.6 425,-403.6 331,-403.6"/>
-<text text-anchor="middle" x="335" y="-417.9" font-family="Times,serif" font-size="14.00"> </text>
-<polyline fill="none" stroke="black" points="339,-403.6 339,-439.6 "/>
-<text text-anchor="middle" x="378" y="-425.4" font-family="Times,serif" font-size="14.00">Job lookup</text>
-<text text-anchor="middle" x="378" y="-410.4" font-family="Times,serif" font-size="14.00">process</text>
-<polyline fill="none" stroke="black" points="417,-403.6 417,-439.6 "/>
-<text text-anchor="middle" x="421" y="-417.9" font-family="Times,serif" font-size="14.00"> </text>
+<title>GetAndLinkUserJob</title>
+<polygon fill="none" stroke="black" points="326,-403.6 326,-439.6 428,-439.6 428,-403.6 326,-403.6"/>
+<text text-anchor="middle" x="328.5" y="-417.9" font-family="Times,serif" font-size="14.00"> </text>
+<polyline fill="none" stroke="black" points="331,-403.6 331,-439.6 "/>
+<text text-anchor="middle" x="377" y="-425.4" font-family="Times,serif" font-size="14.00">Get and Link</text>
+<text text-anchor="middle" x="377" y="-410.4" font-family="Times,serif" font-size="14.00">User Job</text>
+<polyline fill="none" stroke="black" points="423,-403.6 423,-439.6 "/>
+<text text-anchor="middle" x="425.5" y="-417.9" font-family="Times,serif" font-size="14.00"> </text>
 </g>
-<!-- ValidateJobID&#45;&gt;JobLookup -->
+<!-- ValidateJobID&#45;&gt;GetAndLinkUserJob -->
 <g id="edge5" class="edge">
-<title>ValidateJobID&#45;&gt;JobLookup</title>
-<path fill="none" stroke="darkblue" d="M318.88,-476.42C328.75,-467.43 340.98,-456.3 351.76,-446.49"/>
-<polygon fill="darkblue" stroke="darkblue" points="354.25,-448.95 359.29,-439.63 349.54,-443.77 354.25,-448.95"/>
+<title>ValidateJobID&#45;&gt;GetAndLinkUserJob</title>
+<path fill="none" stroke="darkblue" d="M316.37,-476.42C326.49,-467.43 339.04,-456.3 350.09,-446.49"/>
+<polygon fill="darkblue" stroke="darkblue" points="352.66,-448.89 357.81,-439.63 348.01,-443.65 352.66,-448.89"/>
 </g>
 <!-- 401 -->
 <g id="node4" class="node">
 <title>401</title>
-<ellipse fill="none" stroke="red" cx="87" cy="-594.1" rx="69.09" ry="21.43"/>
-<text text-anchor="middle" x="87" y="-597.9" font-family="Times,serif" font-size="14.00">401</text>
-<text text-anchor="middle" x="87" y="-582.9" font-family="Times,serif" font-size="14.00">Unauthorized</text>
+<ellipse fill="none" stroke="red" cx="84" cy="-594.1" rx="69.09" ry="21.43"/>
+<text text-anchor="middle" x="84" y="-597.9" font-family="Times,serif" font-size="14.00">401</text>
+<text text-anchor="middle" x="84" y="-582.9" font-family="Times,serif" font-size="14.00">Unauthorized</text>
 </g>
 <!-- 401&#45;&gt;IsUserTokenProvided -->
 <g id="edge2" class="edge">
 <title>401&#45;&gt;IsUserTokenProvided</title>
-<path fill="none" stroke="darkred" d="M166.53,-594.1C187,-594.1 207.48,-594.1 227.96,-594.1"/>
-<polygon fill="darkred" stroke="darkred" points="166.47,-590.6 156.47,-594.1 166.47,-597.6 166.47,-590.6"/>
-<text text-anchor="middle" x="217.46" y="-597.9" font-family="Times,serif" font-size="14.00">No</text>
+<path fill="none" stroke="darkred" d="M163.53,-594.1C184,-594.1 204.48,-594.1 224.96,-594.1"/>
+<polygon fill="darkred" stroke="darkred" points="163.47,-590.6 153.47,-594.1 163.47,-597.6 163.47,-590.6"/>
+<text text-anchor="middle" x="214.46" y="-597.9" font-family="Times,serif" font-size="14.00">No</text>
 </g>
 <!-- CreateWorkspace -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>CreateWorkspace</title>
 <polygon fill="none" stroke="black" points="260,-276.68 166,-276.68 166,-240.68 260,-240.68 260,-276.68"/>
 <text text-anchor="middle" x="213" y="-262.48" font-family="Times,serif" font-size="14.00">Create job</text>
@@ -108,25 +108,29 @@
 <text text-anchor="middle" x="394" y="-25.01" font-family="Times,serif" font-size="14.00">204</text>
 <text text-anchor="middle" x="394" y="-10.01" font-family="Times,serif" font-size="14.00">No Content</text>
 </g>
-<!-- JobLookup&#45;&gt;404 -->
+<!-- GetAndLinkUserJob&#45;&gt;404 -->
 <g id="edge6" class="edge">
-<title>JobLookup&#45;&gt;404</title>
-<path fill="none" stroke="darkred" d="M341.82,-403.51C318.77,-392.62 288.82,-378.46 264.62,-367.03"/>
-<polygon fill="darkred" stroke="darkred" points="265.86,-363.74 255.32,-362.64 262.87,-370.07 265.86,-363.74"/>
-<text text-anchor="middle" x="305.82" y="-392.31" font-family="Times,serif" font-size="14.00">Not found</text>
+<title>GetAndLinkUserJob&#45;&gt;404</title>
+<path fill="none" stroke="darkred" d="M339.89,-403.51C316.07,-392.53 285.05,-378.24 260.13,-366.76"/>
+<polygon fill="darkred" stroke="darkred" points="261.45,-363.52 250.91,-362.51 258.53,-369.87 261.45,-363.52"/>
+<text text-anchor="middle" x="303.89" y="-392.31" font-family="Times,serif" font-size="14.00">Not found</text>
 </g>
-<!-- IsExpired -->
+<!-- RefreshJobStatus -->
 <g id="node9" class="node">
-<title>IsExpired</title>
-<polygon fill="none" stroke="black" points="394,-288.68 332,-258.68 394,-228.68 456,-258.68 394,-288.68"/>
-<text text-anchor="middle" x="394" y="-262.48" font-family="Times,serif" font-size="14.00">Is job</text>
-<text text-anchor="middle" x="394" y="-247.48" font-family="Times,serif" font-size="14.00">expired?</text>
+<title>RefreshJobStatus</title>
+<polygon fill="none" stroke="black" points="345,-327.89 345,-363.89 439,-363.89 439,-327.89 345,-327.89"/>
+<text text-anchor="middle" x="349" y="-342.19" font-family="Times,serif" font-size="14.00"> </text>
+<polyline fill="none" stroke="black" points="353,-327.89 353,-363.89 "/>
+<text text-anchor="middle" x="391.5" y="-349.69" font-family="Times,serif" font-size="14.00">Refresh</text>
+<text text-anchor="middle" x="391.5" y="-334.69" font-family="Times,serif" font-size="14.00">Job Status</text>
+<polyline fill="none" stroke="black" points="430,-327.89 430,-363.89 "/>
+<text text-anchor="middle" x="434.5" y="-342.19" font-family="Times,serif" font-size="14.00"> </text>
 </g>
-<!-- JobLookup&#45;&gt;IsExpired -->
+<!-- GetAndLinkUserJob&#45;&gt;RefreshJobStatus -->
 <g id="edge7" class="edge">
-<title>JobLookup&#45;&gt;IsExpired</title>
-<path fill="none" stroke="darkblue" d="M379.77,-403.54C382.26,-378.2 386.86,-331.43 390.15,-297.88"/>
-<polygon fill="darkblue" stroke="darkblue" points="393.68,-297.79 391.17,-287.5 386.71,-297.11 393.68,-297.79"/>
+<title>GetAndLinkUserJob&#45;&gt;RefreshJobStatus</title>
+<path fill="none" stroke="darkblue" d="M380.48,-403.51C382.28,-394.67 384.51,-383.68 386.54,-373.74"/>
+<polygon fill="darkblue" stroke="darkblue" points="389.98,-374.39 388.54,-363.89 383.12,-372.99 389.98,-374.39"/>
 </g>
 <!-- BlastWorkspaces -->
 <g id="node8" class="node">
@@ -137,63 +141,76 @@
 <text text-anchor="middle" x="47" y="-160.85" font-family="Times,serif" font-size="14.00">workspaces</text>
 </g>
 <!-- BlastWorkspaces&#45;&gt;CreateWorkspace -->
-<g id="edge10" class="edge">
+<g id="edge11" class="edge">
 <title>BlastWorkspaces&#45;&gt;CreateWorkspace</title>
 <path fill="none" stroke="#333333" stroke-dasharray="1,5" d="M93.02,-196.51C120.41,-210.47 154.55,-227.88 179.41,-240.55"/>
 <polygon fill="#333333" stroke="#333333" points="94.51,-193.34 84.01,-191.92 91.33,-199.58 94.51,-193.34"/>
 </g>
 <!-- CreateQuery -->
-<g id="node11" class="node">
+<g id="node12" class="node">
 <title>CreateQuery</title>
 <polygon fill="none" stroke="black" points="260,-190.05 166,-190.05 166,-154.05 260,-154.05 260,-190.05"/>
 <text text-anchor="middle" x="213" y="-175.85" font-family="Times,serif" font-size="14.00">Create</text>
 <text text-anchor="middle" x="213" y="-160.85" font-family="Times,serif" font-size="14.00">query file</text>
 </g>
 <!-- BlastWorkspaces&#45;&gt;CreateQuery -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>BlastWorkspaces&#45;&gt;CreateQuery</title>
 <path fill="none" stroke="#333333" stroke-dasharray="1,5" d="M104.08,-172.05C124.58,-172.05 145.09,-172.05 165.59,-172.05"/>
 <polygon fill="#333333" stroke="#333333" points="104.01,-168.55 94.01,-172.05 104.01,-175.55 104.01,-168.55"/>
 </g>
+<!-- IsExpired -->
+<g id="node10" class="node">
+<title>IsExpired</title>
+<polygon fill="none" stroke="black" points="394,-288.68 332,-258.68 394,-228.68 456,-258.68 394,-288.68"/>
+<text text-anchor="middle" x="394" y="-262.48" font-family="Times,serif" font-size="14.00">Is job</text>
+<text text-anchor="middle" x="394" y="-247.48" font-family="Times,serif" font-size="14.00">expired?</text>
+</g>
+<!-- RefreshJobStatus&#45;&gt;IsExpired -->
+<g id="edge8" class="edge">
+<title>RefreshJobStatus&#45;&gt;IsExpired</title>
+<path fill="none" stroke="darkblue" d="M392.4,-327.65C392.6,-319.34 392.84,-309.02 393.08,-298.95"/>
+<polygon fill="darkblue" stroke="darkblue" points="396.58,-298.72 393.32,-288.64 389.59,-298.56 396.58,-298.72"/>
+</g>
 <!-- IsExpired&#45;&gt;204 -->
-<g id="edge14" class="edge">
+<g id="edge15" class="edge">
 <title>IsExpired&#45;&gt;204</title>
 <path fill="none" stroke="darkred" d="M394,-228.6C394,-183.54 394,-98.9 394,-52.91"/>
 <polygon fill="darkred" stroke="darkred" points="397.5,-52.64 394,-42.64 390.5,-52.64 397.5,-52.64"/>
 <text text-anchor="middle" x="383.5" y="-217.4" font-family="Times,serif" font-size="14.00">No</text>
 </g>
 <!-- CreateWorkspace&#45;&gt;IsExpired -->
-<g id="edge8" class="edge">
+<g id="edge9" class="edge">
 <title>CreateWorkspace&#45;&gt;IsExpired</title>
 <path fill="none" stroke="darkgreen" d="M270.14,-258.68C290.75,-258.68 311.37,-258.68 331.98,-258.68"/>
 <polygon fill="darkgreen" stroke="darkgreen" points="270.02,-255.18 260.02,-258.68 270.02,-262.18 270.02,-255.18"/>
 <text text-anchor="middle" x="319.48" y="-262.48" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- CreateWorkspace&#45;&gt;CreateQuery -->
-<g id="edge9" class="edge">
+<g id="edge10" class="edge">
 <title>CreateWorkspace&#45;&gt;CreateQuery</title>
 <path fill="none" stroke="darkblue" d="M213,-240.55C213,-228.97 213,-213.42 213,-200.17"/>
 <polygon fill="darkblue" stroke="darkblue" points="216.5,-200.15 213,-190.15 209.5,-200.15 216.5,-200.15"/>
 </g>
 <!-- ResubmitSubJobs -->
-<g id="node12" class="node">
+<g id="node13" class="node">
 <title>ResubmitSubJobs</title>
-<polygon fill="none" stroke="black" points="166,-78.93 166,-114.93 260,-114.93 260,-78.93 166,-78.93"/>
-<text text-anchor="middle" x="171" y="-93.23" font-family="Times,serif" font-size="14.00"> </text>
-<polyline fill="none" stroke="black" points="176,-78.93 176,-114.93 "/>
-<text text-anchor="middle" x="213" y="-100.73" font-family="Times,serif" font-size="14.00">Resubmit</text>
-<text text-anchor="middle" x="213" y="-85.73" font-family="Times,serif" font-size="14.00">sub jobs</text>
-<polyline fill="none" stroke="black" points="250,-78.93 250,-114.93 "/>
-<text text-anchor="middle" x="255" y="-93.23" font-family="Times,serif" font-size="14.00"> </text>
+<polygon fill="none" stroke="black" points="158,-78.93 158,-114.93 268,-114.93 268,-78.93 158,-78.93"/>
+<text text-anchor="middle" x="160.5" y="-93.23" font-family="Times,serif" font-size="14.00"> </text>
+<polyline fill="none" stroke="black" points="163,-78.93 163,-114.93 "/>
+<text text-anchor="middle" x="213" y="-100.73" font-family="Times,serif" font-size="14.00">Sub&#45;Job</text>
+<text text-anchor="middle" x="213" y="-85.73" font-family="Times,serif" font-size="14.00">Resubmission</text>
+<polyline fill="none" stroke="black" points="263,-78.93 263,-114.93 "/>
+<text text-anchor="middle" x="265.5" y="-93.23" font-family="Times,serif" font-size="14.00"> </text>
 </g>
 <!-- CreateQuery&#45;&gt;ResubmitSubJobs -->
-<g id="edge12" class="edge">
+<g id="edge13" class="edge">
 <title>CreateQuery&#45;&gt;ResubmitSubJobs</title>
 <path fill="none" stroke="darkblue" d="M213,-153.72C213,-145.25 213,-134.86 213,-125.35"/>
 <polygon fill="darkblue" stroke="darkblue" points="216.5,-125.13 213,-115.13 209.5,-125.13 216.5,-125.13"/>
 </g>
 <!-- ResubmitSubJobs&#45;&gt;204 -->
-<g id="edge13" class="edge">
+<g id="edge14" class="edge">
 <title>ResubmitSubJobs&#45;&gt;204</title>
 <path fill="none" stroke="darkblue" d="M254.98,-78.83C282.56,-67.6 318.69,-52.88 347.2,-41.27"/>
 <polygon fill="darkblue" stroke="darkblue" points="348.61,-44.48 356.55,-37.46 345.97,-37.99 348.61,-44.48"/>

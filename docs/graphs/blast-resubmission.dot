@@ -8,17 +8,17 @@ digraph {
   //
   Start               [label="POST /jobs/{job-id}", shape=oval, color=green]
   IsUserTokenProvided [label="Is User\nToken\nProvided?", shape=diamond]
-  ValidateJobID       [label="|Validate\njob id|", shape=record]
+  ValidateJobID       [label="|Job ID Hash\nValidation|", shape=record]
   401                 [label="401\nUnauthorized", shape=oval, color=red]
   404                 [label="404\nNot Found", shape=oval, color=red]
   204                 [label="204\nNo Content", shape=oval, color=green]
-  JobLookup           [label="|Job lookup\nprocess|", shape=record]
+  GetAndLinkUserJob   [label="|Get and Link\nUser Job|", shape=record]
   BlastWorkspaces     [label="MBlast\nworkspaces", shape=cylinder, color=purple]
+  RefreshJobStatus    [label="|Refresh\nJob Status|", shape=record]
   IsExpired           [label="Is job\nexpired?", shape=diamond]
   CreateWorkspace     [label="Create job\nworkspace"]
   CreateQuery         [label="Create\nquery file"]
-  ResubmitSubJobs     [label="|Resubmit\nsub jobs|", shape=record]
-
+  ResubmitSubJobs     [label="|Sub-Job\nResubmission|", shape=record]
 
 
   //
@@ -31,10 +31,12 @@ digraph {
   IsUserTokenProvided -> ValidateJobID       [taillabel="Yes", color=darkgreen]
 
   ValidateJobID       -> 404                 [taillabel="Validation\nerror", color=darkred]
-  ValidateJobID       -> JobLookup
+  ValidateJobID       -> GetAndLinkUserJob
 
-  JobLookup           -> 404                 [taillabel="Not found", color=darkred]
-  JobLookup           -> IsExpired
+  GetAndLinkUserJob   -> 404                 [taillabel="Not found", color=darkred]
+  GetAndLinkUserJob   -> RefreshJobStatus
+
+  RefreshJobStatus    -> IsExpired
 
   CreateWorkspace     -> IsExpired           [headlabel="Yes", dir=back, color=darkgreen]
   CreateWorkspace     -> CreateQuery

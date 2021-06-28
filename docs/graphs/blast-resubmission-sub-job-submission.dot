@@ -9,12 +9,12 @@ digraph {
 
   Start        [shape=oval]
   DB           [label="MBlast DB", shape=cylinder, color=purple]
-  Refresh      [label="Refresh\nsub-job status"]
+  Refresh      [label="|Refresh\nJob Status|", shape=record]
   IsExpired    [label="Sub-job is\nexpired?", shape=diamond]
   More         [label="More\nsub-jobs\nremaining?", shape=diamond]
   Next         [label="Next\nsub-job"]
   End          [shape=oval]
-  Queue        [label="Job queue", shape=component]
+  Queue        [label="Job queue", shape=component, color=purple]
   Workspace    [label="MBlast\nWorkspaces", shape=cylinder, color=purple]
   NewWorkspace [label="Create\nworkspace"]
   NewQuery     [label="Create\nquery file"]
@@ -56,28 +56,6 @@ digraph {
     rank=same
     End
     More
-    // Next
-    // T1[label="", color=white]
-  }
-
-  {
-    rank=same
-    // Refresh
-    // IsExpired
-    DB
-  }
-
-  {
-    rank=same
-    // NewWorkspace
-    // NewQuery
-    // Submit
-    Queue
-  }
-
-  {
-    edge [style=invis]
-    // Next -> DB
-    // Next -> T1 -> DB -> Queue -> Workspace
+    Next
   }
 }
