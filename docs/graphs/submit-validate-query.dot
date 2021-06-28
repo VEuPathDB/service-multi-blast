@@ -1,0 +1,79 @@
+digraph {
+  graph [nodesep=1, ranksep=1, splines=line]
+  node  [margin=0, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  // Boundaries
+  {
+    node [shape=oval]
+
+    Start
+    End
+    Error [label="Validation\nError", color=red]
+  }
+
+  // Decisions
+  {
+    node [shape=diamond]
+
+    IsTextTooLong      [label="Is full\nquery text\ntoo long?"]
+    IsTooManySequences [label="Does query\nhave too many\nsequences?"]
+  }
+
+  // Internal processes
+  {
+    node [shape=rect]
+
+    ParseQuery [label="Parse query"]
+  }
+
+  // Predefined Processes
+  {
+    node [shape=record]
+
+    ValidateSeqs [label="|Sequence\nValidation|"]
+  }
+
+  //
+  // Edges
+  //
+
+  Start              -> IsTextTooLong
+
+  IsTextTooLong      -> Error              [taillabel="Yes", color=darkgreen]
+  IsTextTooLong      -> ParseQuery         [taillabel="No", color=darkred]
+
+  ParseQuery         -> IsTooManySequences
+
+  Error              -> IsTooManySequences [taillabel="Yes", color=darkgreen]
+  IsTooManySequences -> ValidateSeqs       [taillabel="No", color=darkred]
+
+  ValidateSeqs       -> Error              [taillabel="Validation\nError", color=red]
+  ValidateSeqs       -> End
+
+
+
+  //
+  // Formatting
+  //
+
+  {
+    graph [rank=same]
+
+    IsTextTooLong
+    ParseQuery
+  }
+
+  {
+    graph [rank=same]
+
+    Error
+    IsTooManySequences
+  }
+
+}

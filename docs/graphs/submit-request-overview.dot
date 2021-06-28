@@ -1,0 +1,95 @@
+digraph {
+  graph [nodesep=1, ranksep=1, splines=line]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  // Boundaries
+  {
+    node [shape=oval]
+
+    Start [label=<POST<br align="right" /><font face="monospace">/jobs</font>>, color=blue]
+    200   [color=green]
+    400   [color=orange]
+    401   [color=orange]
+    422   [color=orange]
+  }
+
+  // Predefined processes
+  {
+    node [shape=record]
+
+    ValidateRequest  [label="|Validate\nRequest|"]
+    ValidateQuery    [label="|Validate\nQuery|"]
+    ValidateMaxSize  [label="|Validate\nMax Size|"]
+    ValidateTargOrgs [label="|Validate\nTarget\nOrganisms|"]
+    Processing       [label="|Blast Job\nProcessing|"]
+  }
+
+  TranslateConfig [label="Translate\nJSON config"]
+  ValidationSvc   [label="Config\nValidation\nService", shape=component, color=purple]
+  ValidateConfig  [label="Validate config"]
+
+  //
+  // Edges
+  //
+
+  Start              -> ValidateRequest
+
+  ValidateRequest    -> 400 [taillabel="JSON Error", color=red]
+  ValidateRequest    -> 401 [taillabel="Auth Error", color=red]
+  ValidateRequest    -> ValidateQuery
+
+  ValidateQuery:se   -> 422 [taillabel="Validation Error", color=red]
+  ValidateQuery:s    -> ValidateMaxSize
+
+  ValidateMaxSize:s  -> 422 [taillabel="Validation Error", color=red]
+  ValidateMaxSize:sw -> ValidateTargOrgs
+
+  ValidateTargOrgs:e -> 422 [taillabel="Validation Error", color=red]
+  ValidateTargOrgs   -> TranslateConfig
+
+  TranslateConfig    -> ValidateConfig
+
+  ValidateConfig     -> ValidationSvc    [style=dotted, color="#333333", dir=both]
+  ValidateConfig     -> Processing
+
+  Processing         -> 200
+
+
+  //
+  // Formatting
+  //
+
+  {
+    graph [rank=same]
+    ValidateConfig
+    ValidationSvc
+  }
+
+  // Placement Nodes
+  {
+    node [shape=none, label=""]
+    L1
+    R1
+  }
+  {
+    edge [style=invis]
+    L1 -> Start -> R1
+    L1 -> 400
+    R1 -> 401
+
+    401 -> 422
+    401 -> ValidateMaxSize
+  }
+  {
+    graph [rank=same]
+    Start
+    L1
+    R1
+  }
+}

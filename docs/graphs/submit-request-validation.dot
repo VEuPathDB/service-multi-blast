@@ -1,0 +1,104 @@
+digraph {
+  graph [nodesep=1, ranksep=1]
+  node  [margin=0, shape=rect, width=1.3]
+  edge  [color=darkblue]
+
+
+  //
+  // Nodes
+  //
+
+  // Boundaries
+  {
+    node [shape=oval]
+
+    Start
+    End
+    AuthError [label="Auth Error", color=red]
+    JSONError [label="JSON Error", color=red]
+  }
+
+  // Decisions
+  {
+    node [shape=diamond]
+
+    IsToken    [label="Request\nincludes user\ntoken?"]
+    IsGuest    [label="Token is\nguest user\nID?"]
+    IsWDK      [label="Token is\nWDK user\ntoken?"]
+    UserExists [label="User\nexists?"]
+    BodyIsNull [label="Request\nbody is\nnull?"]
+  }
+
+  // External Resources
+  {
+    node [shape=cylinder, color=purple]
+
+    AcctDB [label="Acct DB"]
+
+  }
+
+  LookupUser [label="Lookup User"]
+  ParseJSON  [label="Parse JSON\nbody"]
+
+
+  //
+  // Edges
+  //
+
+  Start      -> IsToken
+
+  IsToken    -> IsGuest    [taillabel="Yes", color=darkgreen]
+  IsToken    -> AuthError  [taillabel="No", color=darkred]
+
+  IsGuest    -> LookupUser [taillabel="    Yes", color=darkgreen]
+  IsGuest    -> IsWDK      [taillabel="No", color=darkred]
+
+  IsWDK      -> LookupUser [taillabel="Yes", color=darkgreen]
+  IsWDK      -> AuthError  [taillabel="No", color=darkred]
+
+  LookupUser -> AcctDB     [dir=back, style=dotted, color="#333333"]
+  LookupUser -> UserExists
+
+  UserExists -> BodyIsNull [taillabel="Yes", color=darkgreen]
+  AuthError  -> UserExists [headlabel="No", color=darkred, dir=back]
+
+  BodyIsNull -> JSONError  [taillabel="    Yes", color=darkgreen]
+  BodyIsNull -> ParseJSON  [taillabel="No  ", color=darkred]
+
+  ParseJSON  -> JSONError  [taillabel="Parse Error\l", color=red]
+  ParseJSON  -> End
+
+  //
+  // Formatting
+  //
+
+  {
+    graph [rank=same]
+
+    IsToken
+    IsGuest
+  }
+
+  {
+    graph [rank=same]
+
+    IsWDK
+    LookupUser
+    AcctDB
+  }
+
+  {
+    graph [rank=same]
+
+    AuthError
+    UserExists
+  }
+
+  {
+    graph [rank=same]
+
+    JSONError
+    ParseJSON
+  }
+
+}
