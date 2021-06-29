@@ -55,8 +55,9 @@ digraph {
 
   TranslateConfig  -> ValidateConfig
 
-  ValidateConfig   -> ValidationSvc    [style=dotted, color="#333333", dir=both]
+  ValidationSvc    -> ValidateConfig   [style=dotted, color="#333333", dir=both]
   ValidateConfig   -> Processing
+  ValidateConfig   -> 422              [taillabel="Validation Error", color=red, constraint=false]
 
   Processing       -> 200
 

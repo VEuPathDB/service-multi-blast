@@ -48,13 +48,13 @@ digraph {
   Start      -> IsToken
 
   IsToken    -> IsGuest    [taillabel="Yes", color=darkgreen]
-  IsToken    -> AuthError  [taillabel="No", color=darkred]
+  IsToken    -> AuthError  [taillabel="No  ", color=darkred]
 
-  IsGuest    -> LookupUser [taillabel="    Yes", color=darkgreen]
-  IsGuest    -> IsWDK      [taillabel="No", color=darkred]
+  IsGuest    -> LookupUser [taillabel="Yes", color=darkgreen]
+  IsGuest    -> IsWDK      [taillabel="\nNo", color=darkred]
 
   IsWDK      -> LookupUser [taillabel="Yes", color=darkgreen]
-  IsWDK      -> AuthError  [taillabel="No", color=darkred]
+  IsWDK      -> AuthError  [taillabel="No  ", color=darkred]
 
   LookupUser -> AcctDB     [dir=back, style=dotted, color="#333333"]
   LookupUser -> UserExists
@@ -62,7 +62,7 @@ digraph {
   UserExists -> BodyIsNull [taillabel="Yes", color=darkgreen]
   AuthError  -> UserExists [headlabel="No", color=darkred, dir=back, constraint=false]
 
-  JSONError  -> BodyIsNull [headlabel="    Yes", color=darkgreen, dir=back]
+  JSONError  -> BodyIsNull [headlabel="Yes", color=darkgreen, dir=back]
   BodyIsNull -> ParseJSON  [taillabel="No  ", color=darkred]
 
   ParseJSON  -> JSONError  [taillabel="Parse Error\l", color=red]

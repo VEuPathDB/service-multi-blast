@@ -83,14 +83,14 @@
 <title>JSONError&#45;&gt;BodyIsNull</title>
 <path fill="none" stroke="darkgreen" d="M219.33,-261C239.81,-261 260.29,-261 280.77,-261"/>
 <polygon fill="darkgreen" stroke="darkgreen" points="219.28,-257.5 209.28,-261 219.28,-264.5 219.28,-257.5"/>
-<text text-anchor="middle" x="259.27" y="-264.8" font-family="Times,serif" font-size="14.00"> &#160;&#160;&#160;Yes</text>
+<text text-anchor="middle" x="268.27" y="-264.8" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- IsToken&#45;&gt;AuthError -->
 <g id="edge3" class="edge">
 <title>IsToken&#45;&gt;AuthError</title>
 <path fill="none" stroke="darkred" d="M74.14,-682.03C61.11,-659.7 45.81,-629.29 39,-600 25.69,-542.72 39.3,-473.59 49.03,-436.21"/>
 <polygon fill="darkred" stroke="darkred" points="52.53,-436.68 51.77,-426.11 45.78,-434.84 52.53,-436.68"/>
-<text text-anchor="middle" x="63.64" y="-670.83" font-family="Times,serif" font-size="14.00">No</text>
+<text text-anchor="middle" x="59.14" y="-670.83" font-family="Times,serif" font-size="14.00">No &#160;</text>
 </g>
 <!-- IsToken&#45;&gt;IsGuest -->
 <g id="edge2" class="edge">
@@ -113,7 +113,7 @@
 <title>IsGuest&#45;&gt;IsWDK</title>
 <path fill="none" stroke="darkred" d="M308.72,-689.94C275.33,-662.11 222.39,-617.99 186.47,-588.06"/>
 <polygon fill="darkred" stroke="darkred" points="188.55,-585.24 178.63,-581.52 184.07,-590.61 188.55,-585.24"/>
-<text text-anchor="middle" x="298.22" y="-693.74" font-family="Times,serif" font-size="14.00">No</text>
+<text text-anchor="middle" x="298.22" y="-662.74" font-family="Times,serif" font-size="14.00">No</text>
 </g>
 <!-- AcctDB -->
 <g id="node10" class="node">
@@ -134,14 +134,14 @@
 <title>IsGuest&#45;&gt;LookupUser</title>
 <path fill="none" stroke="darkgreen" d="M340,-671.86C340,-643.62 340,-607.87 340,-583.61"/>
 <polygon fill="darkgreen" stroke="darkgreen" points="343.5,-583.33 340,-573.33 336.5,-583.33 343.5,-583.33"/>
-<text text-anchor="middle" x="318.5" y="-660.66" font-family="Times,serif" font-size="14.00"> &#160;&#160;&#160;Yes</text>
+<text text-anchor="middle" x="327.5" y="-660.66" font-family="Times,serif" font-size="14.00">Yes</text>
 </g>
 <!-- IsWDK&#45;&gt;AuthError -->
 <g id="edge7" class="edge">
 <title>IsWDK&#45;&gt;AuthError</title>
 <path fill="none" stroke="darkred" d="M128.03,-522.18C111.51,-495.86 88.36,-458.97 73.04,-434.55"/>
 <polygon fill="darkred" stroke="darkred" points="75.86,-432.46 67.58,-425.85 69.93,-436.18 75.86,-432.46"/>
-<text text-anchor="middle" x="117.53" y="-510.98" font-family="Times,serif" font-size="14.00">No</text>
+<text text-anchor="middle" x="113.03" y="-510.98" font-family="Times,serif" font-size="14.00">No &#160;</text>
 </g>
 <!-- IsWDK&#45;&gt;LookupUser -->
 <g id="edge6" class="edge">
