@@ -60,9 +60,9 @@ digraph {
   LookupUser -> UserExists
 
   UserExists -> BodyIsNull [taillabel="Yes", color=darkgreen]
-  AuthError  -> UserExists [headlabel="No", color=darkred, dir=back]
+  AuthError  -> UserExists [headlabel="No", color=darkred, dir=back, constraint=false]
 
-  BodyIsNull -> JSONError  [taillabel="    Yes", color=darkgreen]
+  JSONError  -> BodyIsNull [headlabel="    Yes", color=darkgreen, dir=back]
   BodyIsNull -> ParseJSON  [taillabel="No  ", color=darkred]
 
   ParseJSON  -> JSONError  [taillabel="Parse Error\l", color=red]
@@ -72,33 +72,17 @@ digraph {
   // Formatting
   //
 
-  {
-    graph [rank=same]
-
-    IsToken
-    IsGuest
-  }
+  { graph [rank=same]; IsToken; IsGuest }
+  { graph [rank=same]; IsWDK; LookupUser; AcctDB }
+  { graph [rank=same]; AuthError; UserExists }
+  { graph [rank=same]; JSONError; BodyIsNull }
 
   {
-    graph [rank=same]
+    edge [style=invis]
 
-    IsWDK
-    LookupUser
-    AcctDB
-  }
-
-  {
-    graph [rank=same]
-
-    AuthError
-    UserExists
-  }
-
-  {
-    graph [rank=same]
-
-    JSONError
-    ParseJSON
+    Start -> IsGuest
+    IsToken -> IsWDK
+    IsGuest -> AcctDB
   }
 
 }
