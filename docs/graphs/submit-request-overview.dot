@@ -38,59 +38,34 @@ digraph {
   // Edges
   //
 
-  Start              -> ValidateRequest
+  Start            -> ValidateRequest
 
-  400                -> ValidateRequest [taillabel="JSON Error\l", color=red, dir=back]
-  ValidateRequest    -> 401             [taillabel="Auth Error", color=red]
-  ValidateRequest    -> ValidateQuery
+  400              -> ValidateRequest  [taillabel="JSON Error\l", color=red, dir=back]
+  ValidateRequest  -> 401              [taillabel="Auth Error", color=red]
+  ValidateRequest  -> ValidateQuery
 
-  ValidateQuery      -> 422 [taillabel="Validation Error", color=red, constraint=false]
-  ValidateQuery      -> ValidateMaxSize
+  ValidateQuery    -> 422              [taillabel="Validation Error", color=red, constraint=false]
+  ValidateQuery    -> ValidateMaxSize
 
-  ValidateMaxSize    -> 422 [taillabel="Validation Error\l", color=red]
-  ValidateMaxSize    -> ValidateTargOrgs
+  ValidateMaxSize  -> 422              [taillabel="Validation Error\l", color=red]
+  ValidateMaxSize  -> ValidateTargOrgs
 
-  ValidateTargOrgs   -> 422 [taillabel="Validation Error", color=red, constraint=false]
-  ValidateTargOrgs   -> TranslateConfig
+  ValidateTargOrgs -> 422              [taillabel="Validation Error", color=red, constraint=false]
+  ValidateTargOrgs -> TranslateConfig
 
-  TranslateConfig    -> ValidateConfig
+  TranslateConfig  -> ValidateConfig
 
-  ValidateConfig     -> ValidationSvc    [style=dotted, color="#333333", dir=both]
-  ValidateConfig     -> Processing
+  ValidateConfig   -> ValidationSvc    [style=dotted, color="#333333", dir=both]
+  ValidateConfig   -> Processing
 
-  Processing         -> 200
+  Processing       -> 200
 
 
   //
   // Formatting
   //
 
-  {
-    graph [rank=same]
-    ValidateConfig
-    ValidationSvc
-  }
-
+  { graph [rank=same]; ValidateConfig; ValidationSvc }
   { graph [rank=same]; 400; ValidateRequest; 401 }
   { graph [rank=same]; ValidateMaxSize; 422 }
-
-  // Placement Nodes
-  {
-    node [shape=none, label=""]
-    L1
-    R1
-  }
-  {
-    edge [style=invis]
-    L1 -> Start -> R1
-    L1 -> 400
-    R1 -> 401
-  }
-
-  {
-    graph [rank=same]
-    Start
-    L1
-    R1
-  }
 }

@@ -33,11 +33,6 @@
 <path fill="none" stroke="darkblue" d="M227,-886.82C227,-886.82 227,-824.86 227,-824.86"/>
 <polygon fill="darkblue" stroke="darkblue" points="230.5,-824.86 227,-814.86 223.5,-824.86 230.5,-824.86"/>
 </g>
-<!-- R1 -->
-<g id="node15" class="node">
-<title>R1</title>
-</g>
-<!-- Start&#45;&gt;R1 -->
 <!-- 200 -->
 <g id="node2" class="node">
 <title>200</title>
@@ -214,12 +209,5 @@
 <polygon fill="#333333" stroke="#333333" points="355.71,-242.5 365.71,-239 355.71,-235.5 355.71,-242.5"/>
 <polygon fill="#333333" stroke="#333333" points="290.3,-235.5 280.3,-239 290.3,-242.5 290.3,-235.5"/>
 </g>
-<!-- L1 -->
-<g id="node14" class="node">
-<title>L1</title>
-</g>
-<!-- L1&#45;&gt;Start -->
-<!-- L1&#45;&gt;400 -->
-<!-- R1&#45;&gt;401 -->
 </g>
 </svg>
