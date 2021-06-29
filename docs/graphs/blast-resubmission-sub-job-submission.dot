@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1]
+  graph [nodesep=1, splines=ortho]
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
@@ -24,38 +24,57 @@ digraph {
   // Edges
   //
 
-  Start -> More
+  Start        -> More
 
-  More    -> Next      [taillabel="\n           Yes", color=darkgreen]
-  End     -> More      [headlabel="No", color=darkred, dir=back]
+  More         -> Next         [taillabel="Yes", color=darkgreen]
+  End          -> More         [headlabel="No", color=darkred, dir=back]
 
-  Next    -> Refresh
+  Next         -> Refresh
 
-  Refresh   -> IsExpired []
-  Refresh   -> DB        [dir=both, style=dotted, color="#333333"]
-  Refresh   -> Queue     [dir=both, style=dotted, color="#333333"]
+  IsExpired    -> Refresh      [dir=back]
+  Refresh      -> DB           [dir=both, style=dotted, color="#333333"]
+  Refresh      -> Queue        [dir=both, style=dotted, color="#333333", constraint=false]
 
-  IsExpired -> NewWorkspace [taillabel="Yes", color=darkgreen]
-  IsExpired -> More         [taillabel="No", color=darkred]
+  IsExpired    -> NewWorkspace [taillabel="\nYes", color=darkgreen]
+  IsExpired    -> More         [taillabel="No", color=darkred]
 
   NewWorkspace -> NewQuery
-  NewWorkspace -> Workspace [style=dotted, color="#333333"]
+  NewWorkspace -> Workspace    [style=dashed, color="#333333", constraint=false]
 
-  NewQuery -> Submit
-  NewQuery -> Workspace [style=dotted, color="#333333"]
+  NewQuery     -> Submit
+  NewQuery     -> Workspace    [style=dashed, color="#333333", constraint=false]
 
-  Submit -> More  []
-  Submit -> Queue [style=dotted, color="#333333"]
+  Submit       -> More         [constraint=false]
+  Submit       -> Queue        [style=dotted, color="#333333", constraint=false]
 
 
   //
   // Formatting
   //
 
+  { rank=same; End; More; Next; }
+  { rank=same; IsExpired; Refresh; DB }
+
   {
-    rank=same
-    End
-    More
-    Next
+    edge [style=invis]
+
+    Next    -> IsExpired
+    Refresh -> NewWorkspace
+    Refresh -> Workspace
+    DB      -> Workspace -> Queue
+  }
+
+  // Hidden Nodes
+  {
+    node [shape=none, label="", width=0, height=0]
+    edge [style=invis]
+
+    N1 -> DB
+
+    {
+      rank=same
+      Next -> N1
+    }
+
   }
 }
