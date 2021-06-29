@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1, ranksep=0.8]
+  graph [nodesep=1, ranksep=0.8, splines=ortho]
   node  [margin=0, shape=rect, width=1.5]
   edge  [color=darkblue]
 
@@ -35,36 +35,26 @@ digraph {
   ValidateJobID       -> 404                 [taillabel="Invalid\nhash", color=darkred, constraint=false]
 
   GetAndLinkUserJob   -> RefreshJobStatus
-  GetAndLinkUserJob   -> 404                 [taillabel="Job not found", color=darkred]
+  GetAndLinkUserJob   -> 404                 [taillabel="Job not found", color=darkred, constraint=false]
 
   RefreshJobStatus    -> RefreshSubJobStatus
 
   RefreshSubJobStatus -> IsJobStillCached
 
-  IsJobStillCached:e  -> UpdateLastUsed:w      [taillabel="No", color=darkred]
-  IsJobStillCached:s  -> 200                 [taillabel="Yes", color=darkgreen]
-  UpdateLastUsed      -> 200
+  UpdateLastUsed      -> IsJobStillCached    [headlabel="No", color=darkred, dir=back]
+  IsJobStillCached    -> 200                 [taillabel="Yes", color=darkgreen]
+  UpdateLastUsed      -> 200                 [constraint=false]
 
 
   //
   // Formatting
   //
-  {
-    rank=same
-    IsUserTokenProvided
-    401
-  }
-
-
-  {
-    rank=same
-    IsJobStillCached
-    UpdateLastUsed
-  }
+  { rank=same; IsUserTokenProvided; 401 }
+  { rank=same; 404; ValidateJobID }
+  { rank=same; UpdateLastUsed; IsJobStillCached }
 
   {
     edge [style=invis]
     401 -> 404
-    RefreshJobStatus -> UpdateLastUsed
   }
 }
