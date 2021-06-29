@@ -37,7 +37,6 @@ digraph {
   Start           -> LookupUserJob
 
   LookupUserJob   -> UserJobWasFound
-  LookupUserJob   -> DB              [dir=back, style=dotted, color="#333333"]
 
   UserJobWasFound -> End             [taillabel="Yes", color=darkgreen]
   UserJobWasFound -> LookupJob       [taillabel="No", color=darkred]
@@ -68,7 +67,7 @@ digraph {
   {
     edge [style=invis]
 
-    LookupUserJob -> LookupJob
+    LookupUserJob -> LookupJob -> Error
     UserJobWasFound -> DB
     Error -> LinkUserToJob
   }
