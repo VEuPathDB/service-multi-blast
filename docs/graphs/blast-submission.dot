@@ -1,20 +1,21 @@
 digraph {
-
-  // Graph Settings
-  graph [nodesep=1, ranksep=0.7]
+  graph [
+    label    = "Blast Job Submission",
+    nodesep  = 1,
+    ranksep  = 0.7,
+    splines  = ortho,
+    labelloc = "t"
+  ]
   node  [margin=0, shape=rect, width=1.5]
   edge  [color=darkblue]
-  splines=ortho
-  compound=true
+
 
   //
   // Nodes
   //
   Start               [shape=oval]
   CalcDigest          [label="Calculate\njob digest"]
-  LookupUserJob       [label="Lookup\nuser job"]
-  UserJobFound        [label="Found\nuser job?", shape=diamond]
-  LookupJob           [label="Lookup job"]
+  GetAndLinkUserJob   [label="|Get and Link\nUser Job|", shape=record]
   JobFound            [label="Found\njob?", shape=diamond]
   CreateWorkspace     [label="Create job\nworkspace"]
   CreateQueryFile     [label="Create\nquery file"]
@@ -42,47 +43,40 @@ digraph {
   // Edges
   //
   Start             -> CalcDigest
-  CalcDigest        -> LookupUserJob
+  CalcDigest        -> GetAndLinkUserJob
 
-  LookupUserJob     -> UserJobFound
-  LookupUserJob     -> DB                [dir=back, style=dotted, color="#444444"]
-
-  UserJobFound      -> RefreshJobStatus  [taillabel="Yes", color=darkgreen]
-  UserJobFound      -> LookupJob         [taillabel="No", color=darkred]
-
-  JobFound          -> LookupJob         [dir=back]
-  LookupJob         -> DB                [dir=back, style=dotted, color="#444444"]
+  GetAndLinkUserJob -> JobFound
 
   JobFound          -> LinkUserToJob     [taillabel="Yes", color=darkgreen]
   InsertJobInDB     -> JobFound          [headlabel="No", color=darkred, dir=back]
 
   InsertJobInDB     -> CreateWorkspace
-  InsertJobInDB     -> DB                [style=dotted, color="#444444"]
+  InsertJobInDB     -> DB                [style=dotted, color="#333333"]
 
   LinkUserToJob     -> RefreshJobStatus
-  LinkUserToJob     -> DB                [style=dotted, color="#444444"]
+  LinkUserToJob     -> DB                [style=dotted, color="#333333"]
 
   GetSubJobList     -> HandleSubJobList
 
   RefreshJobStatus  -> JobStatusFailed
-  RefreshJobStatus  -> DB                [dir=both, style=dotted, color="#444444"]
-  Queue             -> RefreshJobStatus  [style=dotted, color="#444444"]
-  RefreshJobStatus  -> FS                [dir=back, style=dotted, color="#444444"]
+  RefreshJobStatus  -> DB                [dir=both, style=dotted, color="#333333", constraint=false]
+  Queue             -> RefreshJobStatus  [style=dashed, color="#333333", constraint=false]
+  RefreshJobStatus  -> FS                [dir=back, style=dotted, color="#333333", constraint=false]
 
   JobStatusFailed   -> UpdateJobLastUsed [taillabel="No", color=darkred]
-  SubmitJobToQueue  -> JobStatusFailed   [headlabel="Yes", color=darkgreen, dir=back]
+  CreateWorkspace   -> JobStatusFailed   [headlabel="Yes", color=darkgreen, dir=back]
 
   UpdateJobLastUsed -> GetSubJobList
-  UpdateJobLastUsed -> FS                [style=dotted, color="#444444"]
+  UpdateJobLastUsed -> FS                [style=dotted, color="#333333", constraint=false]
 
   CreateWorkspace   -> CreateQueryFile   []
-  CreateWorkspace   -> FS                [style=dotted, color="#444444"]
+  CreateWorkspace   -> FS                [style=dotted, color="#333333", constraint=false]
 
   CreateQueryFile   -> SubmitJobToQueue  []
-  CreateQueryFile   -> FS                [style=dotted, color="#444444"]
+  CreateQueryFile   -> FS                [style=dotted, color="#333333", constraint=false]
 
   SubmitJobToQueue  -> GetSubJobList     [constraint=false]
-  SubmitJobToQueue  -> Queue             [style=dotted, color="#444444"]
+  SubmitJobToQueue  -> Queue             [style=dashed, color="#333333", constraint=false]
 
   HandleSubJobList  -> 200
 
@@ -90,38 +84,31 @@ digraph {
   // Formatting
   //
 
+  { graph [rank=same]; InsertJobInDB; JobFound; LinkUserToJob }
+  { graph [rank=same]; DB; RefreshJobStatus }
+  { graph [rank=same]; JobStatusFailed; CreateWorkspace }
+  { graph [rank=same]; CreateQueryFile; FS; UpdateJobLastUsed}
+
+  // Hidden Nodes
   {
-    rank=same
-    CalcDigest
-    LookupUserJob
-    UserJobFound
+    node  [shape=none, label=""]
+    edge  [style=invis]
+    graph [rank=same]
+
+    L1 -> Start -> R1
   }
 
+  // Hidden Links
   {
-    rank=same
-    LookupJob
-    JobFound
-    InsertJobInDB
+    edge [style=invis]
+
+    L1       -> InsertJobInDB
+    R1       -> LinkUserToJob
+    JobFound -> DB
+    DB       -> Queue
+    Queue    -> FS
+    Queue    -> JobStatusFailed
+    Queue    -> CreateWorkspace
   }
 
-  {
-    rank=same
-    LinkUserToJob
-    DB
-  }
-
-  {
-    rank=same
-    RefreshJobStatus
-    Queue
-  }
-
-  {
-    rank=same
-    CreateQueryFile
-    JobStatusFailed
-  }
-
-  labelloc="t"
-  label="Blast Job Submission"
 }

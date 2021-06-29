@@ -39,17 +39,17 @@ digraph {
   LookupUserJob   -> UserJobWasFound
   LookupUserJob   -> DB              [dir=back, style=dotted, color="#333333"]
 
-  UserJobWasFound -> End           [taillabel="Yes", color=darkgreen]
-  LookupJob       -> UserJobWasFound [dir=back, headlabel="No", color=darkred]
+  UserJobWasFound -> End             [taillabel="Yes", color=darkgreen]
+  UserJobWasFound -> LookupJob       [taillabel="No", color=darkred]
 
   LookupJob       -> DB              [dir=back, style=dotted, color="#333333"]
   LookupJob       -> JobWasFound
 
-  LinkUserToJob   -> JobWasFound     [dir=back, headlabel="Yes", color=darkgreen]
+  JobWasFound     -> LinkUserToJob   [taillabel="Yes", color=darkgreen]
   JobWasFound     -> Error           [taillabel="    No", color=darkred]
 
-  LinkUserToJob   -> DB              [style=dotted, color="#333333"]
-  LinkUserToJob   -> LookupSubJobs
+  LinkUserToJob   -> DB              [style=dotted, color="#333333", constraint=false]
+  LookupSubJobs   -> LinkUserToJob
 
   LookupSubJobs   -> DB              [dir=back, style=dotted, color="#333333"]
   LookupSubJobs   -> SubJobLinking
@@ -60,26 +60,16 @@ digraph {
   //
   // Formatting
   //
-  {
-    graph [rank=same]
-
-    UserJobWasFound
-    LookupJob
-  }
-
-  {
-    graph [rank=same]
-
-    JobWasFound
-    LinkUserToJob
-  }
+  { graph [rank=same]; LookupJob; UserJobWasFound }
+  { graph [rank=same]; DB; JobWasFound }
+  { graph [rank=same]; LinkUserToJob; LookupSubJobs }
+  { graph [rank=same]; JobWasFound; Error }
 
   {
     edge [style=invis]
 
-    LookupJob   -> LinkUserToJob
-    JobWasFound -> LookupSubJobs
-    UserJobWasFound -> Error
-    LinkUserToJob -> Error
+    LookupUserJob -> LookupJob
+    UserJobWasFound -> DB
+    Error -> LinkUserToJob
   }
 }

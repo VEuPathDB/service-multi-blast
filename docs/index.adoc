@@ -453,6 +453,8 @@ image:assets/refresh-job-status.svg[]
 ====
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
+
 ==== Job Submission
 
 .{icon-photo} Basic Blast Workflow (Sequence Diagram)
@@ -525,6 +527,11 @@ image::assets/blast-submission.svg[]
 image::assets/blast-sequence-validation.svg[]
 ====
 
+.{icon-photo} Get and Link User Job
+[%collapsible]
+====
+image::assets/get-and-link-user-job.svg[]
+====
 
 .{icon-photo} Sub-Job Submission Process
 [%collapsible]
@@ -532,6 +539,8 @@ image::assets/blast-sequence-validation.svg[]
 image::assets/sub-job-submission.svg[]
 ====
 
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
 
 ==== Job Lookup
 
@@ -572,6 +581,8 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 ====
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
+
 ==== Job Resubmission
 
 .{icon-photo} Job Resubmission Process
@@ -605,8 +616,12 @@ image::assets/blast-lookup-sub-job-linking.svg[]
 ====
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
+
 === Formatter Jobs
 
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
 
 ==== Report Job Submission
 
@@ -652,6 +667,8 @@ image::assets/report-new-job-handling.svg[]
 image::assets/blast-lookup-sub-job-linking.svg[]
 ====
 
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // //
 
 == Other Topics
 
