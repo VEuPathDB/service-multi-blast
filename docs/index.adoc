@@ -715,10 +715,14 @@ process again.
 === Workspaces
 
 The job workspace volume is divided into 3 layers of
-directories, the job root directory containing individual
-blast job workspaces, the blast job workspaces containing
-the blast tool inputs and outputs in addition to the report
-workspaces, which contain report job output.
+directories:
+
+. the job root directory containing individual blast job
+  workspaces
+. the blast job workspaces, each containing the blast tool
+  inputs and outputs in addition to the report workspaces
+. the report workspaces which contain report job output both
+  original and zipped
 
 The directory name for the job workspaces is the MD5 blast
 job digest (primary key), and the directory name for the

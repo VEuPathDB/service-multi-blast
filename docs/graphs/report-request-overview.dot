@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1, splines=line]
+  graph [nodesep=1.2, splines=ortho]
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
@@ -7,7 +7,7 @@ digraph {
   //
   // Nodes
   //
-  Start              [label="POST\n/reports", shape=oval]
+  Start              [label="POST\n/reports", shape=oval, color=green]
   ValidateRequest    [label="|Request\nValidation|", shape=record]
   LookupUserJob      [label="|Get and Link\nUser Job|", shape=record]
   IsJobCompleted     [label="Is job status\nCOMPLETE?", shape=diamond]
@@ -37,14 +37,14 @@ digraph {
   Start                -> ValidateRequest
 
   ValidateRequest      -> LookupUserJob
-  ValidateRequest      -> 400                  [label="Validation\nError", color=red]
-  ValidateRequest      -> 401                  [label="Auth Error", color=red]
+  ValidateRequest      -> 400                  [taillabel="Validation Error", color=red, constraint=false]
+  ValidateRequest      -> 401                  [taillabel="Auth Error", color=red]
 
   LookupUserJob        -> IsJobCompleted
-  LookupUserJob        -> 404                  [label="Not Found", color=red]
+  LookupUserJob        -> 404                  [taillabel="Not Found", color=red]
 
   IsJobCompleted       -> HashConfig           [taillabel="Yes", color=darkgreen]
-  400                  -> IsJobCompleted       [headlabel="No", color=darkred, dir=back]
+  IsJobCompleted       -> 400                  [taillabel="No", color=darkred, constraint=false]
 
   HashConfig           -> CheckForCollision
 
@@ -61,11 +61,9 @@ digraph {
   //
   // Formatting
   //
-  {
-    edge [style=invis]
-    401 -> 404
-    400 -> DB
-  }
+  { graph [rank=same]; 400; ValidateRequest; 401 }
+  { graph [rank=same]; LookupUserJob;   404}
+
 
   {
     graph [rank=same]
@@ -74,8 +72,16 @@ digraph {
   }
 
   {
-    graph [rank=same]
-    400
-    IsJobCompleted
+    node [shape=none, label=""]
+    edge [style=invis]
+
+    L1
+    R1
+
+    {rank=same; L1 -> Start -> R1}
+
+    L1 -> 400
+    R1 -> 401 -> 404
   }
+
 }
