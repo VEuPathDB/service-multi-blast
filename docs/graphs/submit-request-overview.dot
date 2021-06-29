@@ -1,5 +1,5 @@
 digraph {
-  graph [nodesep=1, ranksep=1, splines=line]
+  graph [nodesep=1.2, ranksep=1, splines=ortho]
   node  [margin=0, shape=rect, width=1.3]
   edge  [color=darkblue]
 
@@ -40,17 +40,17 @@ digraph {
 
   Start              -> ValidateRequest
 
-  ValidateRequest    -> 400 [taillabel="JSON Error", color=red]
-  ValidateRequest    -> 401 [taillabel="Auth Error", color=red]
+  400                -> ValidateRequest [taillabel="JSON Error\l", color=red, dir=back]
+  ValidateRequest    -> 401             [taillabel="Auth Error", color=red]
   ValidateRequest    -> ValidateQuery
 
-  ValidateQuery:se   -> 422 [taillabel="Validation Error", color=red]
-  ValidateQuery:s    -> ValidateMaxSize
+  ValidateQuery      -> 422 [taillabel="Validation Error", color=red, constraint=false]
+  ValidateQuery      -> ValidateMaxSize
 
-  ValidateMaxSize:s  -> 422 [taillabel="Validation Error", color=red]
-  ValidateMaxSize:sw -> ValidateTargOrgs
+  ValidateMaxSize    -> 422 [taillabel="Validation Error\l", color=red]
+  ValidateMaxSize    -> ValidateTargOrgs
 
-  ValidateTargOrgs:e -> 422 [taillabel="Validation Error", color=red]
+  ValidateTargOrgs   -> 422 [taillabel="Validation Error", color=red, constraint=false]
   ValidateTargOrgs   -> TranslateConfig
 
   TranslateConfig    -> ValidateConfig
@@ -71,6 +71,9 @@ digraph {
     ValidationSvc
   }
 
+  { graph [rank=same]; 400; ValidateRequest; 401 }
+  { graph [rank=same]; ValidateMaxSize; 422 }
+
   // Placement Nodes
   {
     node [shape=none, label=""]
@@ -82,10 +85,8 @@ digraph {
     L1 -> Start -> R1
     L1 -> 400
     R1 -> 401
-
-    401 -> 422
-    401 -> ValidateMaxSize
   }
+
   {
     graph [rank=same]
     Start
