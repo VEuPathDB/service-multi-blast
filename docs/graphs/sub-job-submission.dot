@@ -1,8 +1,8 @@
 digraph {
-  // splines=ortho
-  graph [nodesep=0.7]
+  graph [nodesep=1]
   node  [shape=rect, margin=0, width="1.2"]
   edge  [color=darkblue]
+
 
   //
   // Nodes
@@ -81,14 +81,14 @@ digraph {
 
   InsertJobIntoDB -> CreateWorkspace
 
-  LinkUser1       -> RefreshStatus
+  LinkUser1       -> RefreshStatus   [constraint=false]
   RefreshStatus   -> StatusSwitch
 
   StatusSwitch    -> Remaining       [taillabel="ERRORED   \nIN_PROGRESS    \n "]
   UpdateLastUsed  -> StatusSwitch    [taillabel="COMPLETED", dir=back]
   StatusSwitch    -> CreateWorkspace [taillabel="EXPIRED", constraint=false]
 
-  CreateWorkspace -> CreateQueryFile
+  CreateWorkspace -> CreateQueryFile [constraint=false]
   CreateQueryFile -> SubmitToQueue
   SubmitToQueue   -> Remaining
   UpdateLastUsed  -> Remaining
@@ -115,13 +115,18 @@ digraph {
     rank=same
     UpdateLastUsed
     StatusSwitch
-    CreateWorkspace
+    // CreateWorkspace
+    SubmitToQueue
   }
 
   {
     edge [style=invis]
-    NextJob -> LookupUserJob
-    End -> SubmitToQueue
+    NextJob        -> LookupUserJob
+    End            -> SubmitToQueue
+    StatusSwitch   -> CreateQueryFile
+    UpdateLastUsed -> CreateQueryFile
+    RefreshStatus:s  -> LinkUser1:n
+    LinkUser1      -> CreateWorkspace
   }
 
 
