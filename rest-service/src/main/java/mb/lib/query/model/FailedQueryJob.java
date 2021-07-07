@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import mb.lib.model.HashID;
+import mb.lib.queue.consts.Format;
 import mb.lib.queue.consts.JsonKeys;
 import mb.lib.queue.model.FailedJob;
 import mb.lib.queue.model.JobResult;
@@ -38,19 +39,34 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
 
     BlastRequest out;
 
-    if (config.isObject())
+    if (config.isObject()) {
       out = new BlastRequest(
         new HashID(config.get(mb.api.model.io.JsonKeys.JobID).asText()),
         BlastTool.fromString(config.get(mb.api.model.io.JsonKeys.Tool).asText()),
         BlastConv.convertJobConfig(config.get("config"))
       );
-    else if (config.isArray())
+    } else if (config.isArray()) {
+      // Expand array to key value pairs
+      var parsedPayload = Format.JSON.createArrayNode();
+
+      config.forEach(flag -> {
+        var tmp   = Format.JSON.createArrayNode();
+        var split = flag.textValue().split("=", 2);
+
+        tmp.add(split[0]);
+
+        if (split.length > 1)
+          tmp.add(split[1]);
+
+        parsedPayload.add(tmp);
+      });
+
       out = new BlastRequest(
-        new HashID(getUrl().substring(getUrl().lastIndexOf('/')+1)),
+        new HashID(getUrl().substring(getUrl().lastIndexOf('/') + 1)),
         BlastTool.fromString(config.get(0).textValue()),
-        BlastConv.convertJobConfig(config)
+        BlastConv.convertJobConfig(parsedPayload)
       );
-    else
+    } else
       throw new RuntimeException("Unexpected payload format, must be one of object or array");
 
     setPayload(out);
