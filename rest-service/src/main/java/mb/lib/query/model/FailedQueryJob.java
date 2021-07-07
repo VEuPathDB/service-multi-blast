@@ -34,13 +34,24 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
     setFailedAt(JSON.cast(raw.get(JsonKeys.FailedAt), OffsetDateTime.class));
     setCreatedAt(JSON.cast(raw.get(JsonKeys.CreatedAt), OffsetDateTime.class));
 
-    var config = (ObjectNode) raw.get(JsonKeys.Payload);
+    var config = raw.get(JsonKeys.Payload);
 
-    var out = new BlastRequest(
-      new HashID(config.get(mb.api.model.io.JsonKeys.JobID).asText()),
-      BlastTool.fromString(config.get(mb.api.model.io.JsonKeys.Tool).asText()),
-      BlastConv.convertJobConfig(config.get("config"))
-    );
+    BlastRequest out;
+
+    if (config.isObject())
+      out = new BlastRequest(
+        new HashID(config.get(mb.api.model.io.JsonKeys.JobID).asText()),
+        BlastTool.fromString(config.get(mb.api.model.io.JsonKeys.Tool).asText()),
+        BlastConv.convertJobConfig(config.get("config"))
+      );
+    else if (config.isArray())
+      out = new BlastRequest(
+        new HashID(getUrl().substring(getUrl().lastIndexOf('/')+1)),
+        BlastTool.fromString(config.get(0).textValue()),
+        BlastConv.convertJobConfig(config)
+      );
+    else
+      throw new RuntimeException("Unexpected payload format, must be one of object or array");
 
     setPayload(out);
   }
