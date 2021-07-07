@@ -121,6 +121,9 @@ tasks.compileJava {
 }
 
 tasks.jar {
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
   manifest {
     attributes["Main-Class"] = "mb.Main"
     attributes["Implementation-Title"] = buildProps["project.name"]
