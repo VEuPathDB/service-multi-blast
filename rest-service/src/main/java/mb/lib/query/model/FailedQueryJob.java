@@ -61,9 +61,13 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
         parsedPayload.add(tmp);
       });
 
+      // Split up the URL to get at the tool name and the job ID.
+      // (versions <= v0.9.1 did not pass the job ID or tool in the payload)
+      var urlComponents = getUrl().split("/");
+
       out = new BlastRequest(
-        new HashID(getUrl().substring(getUrl().lastIndexOf('/') + 1)),
-        BlastTool.fromString(config.get(0).textValue()),
+        new HashID(urlComponents[urlComponents.length-1]),
+        BlastTool.fromString(urlComponents[urlComponents.length-2]),
         BlastConv.convertJobConfig(parsedPayload)
       );
     } else
