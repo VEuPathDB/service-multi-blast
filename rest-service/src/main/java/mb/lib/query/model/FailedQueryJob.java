@@ -46,9 +46,21 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
         BlastConv.convertJobConfig(config.get("config"))
       );
     } else if (config.isArray()) {
+      // Split up the URL to get at the tool name and the job ID.
+      // (versions <= v0.9.1 did not pass the job ID or tool in the payload)
+      //
+      // v <= 0.9.1 url format: http://{blast-service-name}/{blast-tool}/{job-id}
+      var urlComponents = getUrl().split("/");
+
       // Expand array to key value pairs
       var parsedPayload = Format.JSON.createArrayNode();
 
+      // Append the tool to the array first (the standard format for <= 0.9.1
+      // payloads puts the tool in the array's [0] position.
+      parsedPayload.add(Format.JSON.createArrayNode().add(urlComponents[urlComponents.length-2]));
+
+      // Split each cli arg into a key/value pair and append them to the parsed
+      // payload array.
       config.forEach(flag -> {
         var tmp   = Format.JSON.createArrayNode();
         var split = flag.textValue().split("=", 2);
@@ -60,10 +72,6 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
 
         parsedPayload.add(tmp);
       });
-
-      // Split up the URL to get at the tool name and the job ID.
-      // (versions <= v0.9.1 did not pass the job ID or tool in the payload)
-      var urlComponents = getUrl().split("/");
 
       out = new BlastRequest(
         new HashID(urlComponents[urlComponents.length-1]),
