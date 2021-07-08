@@ -13,6 +13,8 @@ public enum JobStatus
   Completed("completed"),
   Expired("expired");
 
+  private static final String InProgressAlias = "grabbed";
+
   private final String value;
 
   JobStatus(String name) {
@@ -25,6 +27,9 @@ public enum JobStatus
   }
 
   public static Optional<JobStatus> fromString(String name) {
+    if (InProgressAlias.equals(name))
+      return Optional.of(InProgress);
+
     for (var e : values())
       if (e.value.equals(name))
         return Optional.of(e);
