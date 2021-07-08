@@ -16,6 +16,7 @@ public class ReportWorkspace
   private final HashID     reportID;
   private final Path       workspace;
 
+  // Lazily loaded by #getReportMeta()
   private ReportMeta meta;
 
   public ReportWorkspace(HashID jobID, HashID reportID, Path workspace) {
