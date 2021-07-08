@@ -25,10 +25,9 @@ public class JobCleanup implements Runnable
         .stream()
         .map(Path::toFile)
         .peek(File::delete)
-        .map(File::getName)
         .count();
 
-      Log.info("Job cleanup completed.  Cleared {} workspaces.", deleted);
+      Log.info("Job cleanup completed.  Deleted {} files.", deleted);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

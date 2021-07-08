@@ -101,7 +101,7 @@ public class JobDataManager
    * @return A list of paths that were last modified before the given timestamp.
    */
   public static List<Path> getPathsModifiedBefore(OffsetDateTime time) throws Exception {
-    // 50 ~= 10 jobs
+    // 50 paths ~= 10 jobs
     final var out  = new ArrayList<Path>(50);
     final var root = Path.of(Config.getInstance().getJobMountPath());
 
