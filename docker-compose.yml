@@ -179,7 +179,6 @@ services:
 
       FIREWORQ_BIND: ${FIREWORQ_BIND:-0.0.0.0:80}
       FIREWORQ_DRIVER: ${FIREWORQ_DRIVER:-mysql}
-      FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
     depends_on:
       - queue-db
       - blast
