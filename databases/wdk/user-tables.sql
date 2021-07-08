@@ -11,7 +11,7 @@ CREATE TABLE userlogins5.multiblast_jobs
   queue_id   NUMBER(7),
   project_id VARCHAR2(16)
     NOT NULL,
-  status     VARCHAR2(10),
+  status     VARCHAR2(11),
   created_on TIMESTAMP WITH TIME ZONE
     NOT NULL,
   delete_on  TIMESTAMP WITH TIME ZONE
@@ -73,7 +73,7 @@ CREATE TABLE userlogins5.multiblast_fmt_jobs
 (
   report_digest RAW(16) PRIMARY KEY                                         NOT NULL,
   job_digest    RAW(16) REFERENCES userlogins5.multiblast_jobs (job_digest) NOT NULL,
-  status        VARCHAR2(10)                                                NOT NULL,
+  status        VARCHAR2(11)                                                NOT NULL,
   config        CLOB                                                        NOT NULL,
   queue_id      NUMBER(7)                                                   NOT NULL,
   created_on    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP          NOT NULL
