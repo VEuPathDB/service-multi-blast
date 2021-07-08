@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 
 import mb.lib.config.Config;
 import mb.lib.data.JobDataManager;
+import mb.lib.util.IntCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,13 +22,26 @@ public class JobCleanup implements Runnable
 
       var cutoff = OffsetDateTime.now().minusDays(Conf.getJobTimeout());
 
-      var deleted = JobDataManager.getPathsModifiedBefore(cutoff)
+      var success = new IntCounter();
+      var failure = new IntCounter();
+
+      JobDataManager.getPathsModifiedBefore(cutoff)
         .stream()
         .map(Path::toFile)
-        .peek(File::delete)
-        .count();
+        .forEach(file -> {
+          var del = file.delete();
 
-      Log.info("Job cleanup completed.  Deleted {} files.", deleted);
+          Log.debug("Target file {} deleted: {}", file.getName(), del);
+
+          if (del)
+            success.increment();
+          else
+            failure.increment();
+        });
+
+      Log.info("Job cleanup completed.  Successfully deleted {} files.  Failed to delete {} files.",
+        success.get(), failure.get());
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
