@@ -2,8 +2,10 @@ queues:
   - name: blast
     pollingInterval: 200
     maxWorkers: 5
-    category: blast
+    categories:
+      - blast
   - name: format
     pollingInterval: 200
     maxWorkers: 5
-    category: format
+    categories:
+      - format
