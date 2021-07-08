@@ -24,7 +24,6 @@ services:
 
       # Queue Connection
       QUEUE_HOST: ${QUEUE_HOST:-queue}
-      FIREWORQ_QUEUE_DEFAULT: ${FIREWORQ_QUEUE_DEFAULT:-blast}
 
       # Misc Config
       JOB_MOUNT_PATH: ${JOB_MOUNT_PATH:-/out}

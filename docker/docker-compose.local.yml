@@ -30,7 +30,6 @@ services:
 
       # Queue Connection
       QUEUE_HOST:
-      FIREWORQ_QUEUE_DEFAULT: blast
 
       # Misc Config
       JOB_MOUNT_PATH: /out
