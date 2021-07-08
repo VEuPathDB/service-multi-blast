@@ -14,6 +14,7 @@ public enum JobStatus
   Expired("expired");
 
   private static final String InProgressAlias = "grabbed";
+  private static final String QueuedAlias     = "claimed";
 
   private final String value;
 
@@ -27,14 +28,15 @@ public enum JobStatus
   }
 
   public static Optional<JobStatus> fromString(String name) {
-    if (InProgressAlias.equals(name))
-      return Optional.of(InProgress);
-
     for (var e : values())
       if (e.value.equals(name))
         return Optional.of(e);
 
-    return Optional.empty();
+    return Optional.ofNullable(switch (name) {
+      case QueuedAlias -> Queued;
+      case InProgressAlias -> InProgress;
+      default -> null;
+    });
   }
 
   @JsonCreator
