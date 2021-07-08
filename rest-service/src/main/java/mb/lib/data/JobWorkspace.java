@@ -89,7 +89,7 @@ public class JobWorkspace
    * @return {@code true} if a workspace exists for the given report ID,
    * otherwise {@code false}.
    */
-  public boolean reportExists(HashID reportID) {
+  public boolean reportWorkspaceExists(HashID reportID) {
     return fileExists(reportID.toString());
   }
 

@@ -195,10 +195,15 @@ public class ReportManager
 
     var ws = JobDataManager.jobWorkspace(row.getJobID());
 
-    if (!ws.reportExists(row.getReportID()))
+    if (!ws.reportWorkspaceExists(row.getReportID()))
       return Collections.emptyList();
 
-    return ws.reportWorkspace(row.getReportID()).getReportMeta().files();
+    var rws = ws.reportWorkspace(row.getReportID());
+
+    if (!rws.reportMetaExists())
+      return Collections.emptyList();
+
+    return rws.getReportMeta().files();
   }
 
   /**
@@ -272,7 +277,7 @@ public class ReportManager
 
     var ws = JobDataManager.jobWorkspace(row.getJobID());
 
-    if (!ws.reportExists(row.getReportID()))
+    if (!ws.reportWorkspaceExists(row.getReportID()))
       return Optional.empty();
 
     var rs = ws.reportWorkspace(row.getReportID());
@@ -399,7 +404,7 @@ public class ReportManager
         status = JobStatus.Expired;
 
       var ws = JobDataManager.jobWorkspace(row.getJobID());
-      if (!ws.reportExists(row.getReportID()))
+      if (!ws.reportWorkspaceExists(row.getReportID()))
         status = JobStatus.Expired;
     }
 
