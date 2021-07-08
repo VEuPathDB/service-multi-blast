@@ -66,6 +66,10 @@ public class ReportWorkspace
     return meta;
   }
 
+  public boolean reportMetaExists() {
+    return fileExists(MetaJson);
+  }
+
   public Path getFilePath(String file) {
     return workspace.resolve(file);
   }
