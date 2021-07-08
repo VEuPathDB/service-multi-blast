@@ -15,16 +15,13 @@ public class ReportWorkspace
   private final HashID     jobID;
   private final HashID     reportID;
   private final Path       workspace;
-  private final ReportMeta meta;
 
-  public ReportWorkspace(HashID jobID, HashID reportID, Path workspace) throws Exception {
+  private ReportMeta meta;
+
+  public ReportWorkspace(HashID jobID, HashID reportID, Path workspace) {
     this.jobID     = jobID;
     this.reportID  = reportID;
     this.workspace = workspace;
-    this.meta      = JSON.parse(
-      new FileInputStream(getReportMetaPath().toFile()),
-      ReportMeta.class
-    );
   }
 
   /**
@@ -62,7 +59,13 @@ public class ReportWorkspace
     return workspace.resolve(MetaJson);
   }
 
-  public ReportMeta getReportMeta() {
+  public ReportMeta getReportMeta() throws Exception {
+    if (meta == null)
+      meta = JSON.parse(
+        new FileInputStream(getReportMetaPath().toFile()),
+        ReportMeta.class
+      );
+
     return meta;
   }
 
