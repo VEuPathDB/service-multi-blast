@@ -218,7 +218,7 @@ public class BlastConv
     var out = new IOBlastnConfigImpl();
 
     out.setQueryLoc(bn.getQueryLocation());
-    out.setEValue(bn.getExpectValue());
+    out.setEValue(bn.getExpectValue().value());
     out.setOutFormat(convert(bn.getOutFormat()));
     out.setNumDescriptions(bn.getNumDescriptions());
     out.setNumAlignments(bn.getNumAlignments());

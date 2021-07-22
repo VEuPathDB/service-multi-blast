@@ -17,7 +17,7 @@ public class ReportJob
   public ReportJob(HashID jobID, long userID, BlastFormatter config, String description) {
     this.jobID       = jobID;
     this.userID      = userID;
-    this.config      = config.copy();
+    this.config      = config;
     this.description = description;
   }
 
@@ -30,7 +30,7 @@ public class ReportJob
   ) {
     this.jobID       = jobID;
     this.userID      = userID;
-    this.config      = config.copy();
+    this.config      = config;
     this.description = description;
   }
 
