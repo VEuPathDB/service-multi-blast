@@ -47,7 +47,7 @@ public class InsertBlastJob
   private void prep(PreparedStatement ps) throws Exception {
     Log.trace("#prep(ps={})", ps);
     var time = OffsetDateTime.now();
-    var json = JSON.stringify(row.getConfig());
+    var json = JSON.stringify(row.getConfig().toJSON(true));
 
     Log.debug(row.getConfig().getClass());
     Log.debug("Inserting job config: {}", json);
