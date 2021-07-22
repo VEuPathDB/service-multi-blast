@@ -1,6 +1,6 @@
 FROM alpine:3
 
-ARG VALIDATOR_VERSION=v1.1.1
+ARG VALIDATOR_VERSION=v1.1.3
 
 ADD https://github.com/VEuPathDB/util-blast-validator/releases/download/${VALIDATOR_VERSION}/blast-validator.${VALIDATOR_VERSION}.tar.gz /
 
