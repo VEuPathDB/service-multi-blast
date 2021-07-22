@@ -3,6 +3,7 @@ package mb.api.model.reports;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import mb.api.model.blast.IOBlastFormat;
@@ -11,9 +12,7 @@ import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
 import mb.lib.model.HashID;
 import org.veupathdb.lib.blast.BlastFormatter;
-import org.veupathdb.lib.blast.field.FormatField;
-import org.veupathdb.lib.blast.field.FormatType;
-import org.veupathdb.lib.blast.field.OutFormat;
+import org.veupathdb.lib.blast.field.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportRequest
@@ -110,6 +109,14 @@ public class ReportRequest
     return this;
   }
 
+  public ReportRequest setNumDescriptions(NumDescriptions val) {
+    if (val != null) {
+      return setNumDescriptions(val.value());
+    }
+
+    return this;
+  }
+
   @JsonGetter(JsonKeys.NumAlignments)
   public Long getNumAlignments() {
     return numAlignments;
@@ -121,6 +128,15 @@ public class ReportRequest
     return this;
   }
 
+  @JsonIgnore
+  public ReportRequest setNumAlignments(NumAlignments val) {
+    if (val != null) {
+      return setNumAlignments(val.value());
+    }
+
+    return this;
+  }
+
   @JsonGetter(JsonKeys.LineLength)
   public Integer getLineLength() {
     return lineLength;
@@ -129,6 +145,15 @@ public class ReportRequest
   @JsonSetter(JsonKeys.LineLength)
   public ReportRequest setLineLength(Integer lineLength) {
     this.lineLength = lineLength;
+    return this;
+  }
+
+  @JsonIgnore
+  public ReportRequest setLineLength(LineLength val) {
+    if (val != null) {
+      return setLineLength(val.value());
+    }
+
     return this;
   }
 
@@ -174,6 +199,11 @@ public class ReportRequest
   public ReportRequest setMaxTargetSeqs(Long maxTargetSeqs) {
     this.maxTargetSeqs = maxTargetSeqs;
     return this;
+  }
+
+  @JsonIgnore
+  public ReportRequest setMaxTargetSeqs(MaxTargetSeqs val) {
+    return val != null ? setMaxTargetSeqs(val.value()) : this;
   }
 
   @JsonGetter(JsonKeys.ParseDefLines)

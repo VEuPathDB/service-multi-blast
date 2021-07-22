@@ -1,12 +1,13 @@
 package mb.api.model.blast.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import mb.api.model.blast.IOBlastConfig;
 import mb.api.model.blast.IOBlastReportFormat;
 import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
-import org.veupathdb.lib.blast.field.Location;
+import org.veupathdb.lib.blast.field.*;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 abstract public class IOBlastConfigImpl implements IOBlastConfig
@@ -59,6 +60,12 @@ abstract public class IOBlastConfigImpl implements IOBlastConfig
     this.eValue = eValue;
   }
 
+  @JsonIgnore
+  public void setEValue(ExpectValue val) {
+    if (val != null)
+      setEValue(val.value());
+  }
+
   @JsonProperty("outFormat")
   public IOBlastReportFormat getOutFormat() {
     return this.outFormat;
@@ -79,6 +86,12 @@ abstract public class IOBlastConfigImpl implements IOBlastConfig
     this.numDescriptions = numDescriptions;
   }
 
+  @JsonIgnore
+  public void setNumDescriptions(NumDescriptions val) {
+    if (val != null)
+      setNumDescriptions(val.value());
+  }
+
   @JsonProperty("numAlignments")
   public Long getNumAlignments() {
     return this.numAlignments;
@@ -89,6 +102,13 @@ abstract public class IOBlastConfigImpl implements IOBlastConfig
     this.numAlignments = numAlignments;
   }
 
+  @JsonIgnore
+  public void setNumAlignments(NumAlignments val) {
+    if (val != null) {
+      setNumAlignments(val.value());
+    }
+  }
+
   @JsonProperty("lineLength")
   public Integer getLineLength() {
     return this.lineLength;
@@ -97,6 +117,13 @@ abstract public class IOBlastConfigImpl implements IOBlastConfig
   @JsonProperty("lineLength")
   public void setLineLength(Integer lineLength) {
     this.lineLength = lineLength;
+  }
+
+  @JsonIgnore
+  public void setLineLength(LineLength val) {
+    if (val != null) {
+      setLineLength(val.value());
+    }
   }
 
   @JsonProperty("sortHits")
@@ -157,6 +184,13 @@ abstract public class IOBlastConfigImpl implements IOBlastConfig
   @JsonProperty("maxTargetSeqs")
   public void setMaxTargetSeqs(Long maxTargetSeqs) {
     this.maxTargetSeqs = maxTargetSeqs;
+  }
+
+  @JsonIgnore
+  public void setMaxTargetSeqs(MaxTargetSeqs al) {
+    if (al != null) {
+      setMaxTargetSeqs(al.value());
+    }
   }
 
   @JsonProperty("dbSize")
