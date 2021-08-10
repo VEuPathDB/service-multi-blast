@@ -67,7 +67,7 @@ install-dev-env:
 		cd .tools && git pull && cd ..; \
 	fi
 	@$(BIN_DIR)/check-env.sh
-	@$(BIN_DIR)/install-fgputil.sh
+	@./gradlew fgputilInstall --stacktrace
 	@$(BIN_DIR)/install-oracle.sh
 
 fix-path:
@@ -81,7 +81,6 @@ gen-docs: node_modules/.bin/redoc-cli
 	@node_modules/.bin/redoc-cli bundle openapi.yml -o ../docs/api.html
 	@cp ../docs/api.html src/main/resources/api.html
 
-.PHONY: merge-raml
 merge-raml:
 	@$(BIN_DIR)/merge-raml -vv schema > schema/library.raml
 
@@ -92,6 +91,3 @@ merge-raml:
 build/libs/service.jar: vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
 	@./gradlew clean test jar
-
-node_modules/.bin/redoc-cli:
-	@npm install --dev

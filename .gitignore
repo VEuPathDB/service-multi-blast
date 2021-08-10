@@ -10,6 +10,8 @@ build/
 /gradlew
 /gradlew.bat
 node_modules/
+/rest-service/.bin/
+/rest-service/vendor/
 
 *.tmp
 *.bak

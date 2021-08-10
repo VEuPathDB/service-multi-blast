@@ -5,6 +5,7 @@ import java.util.*
 
 plugins {
   java
+  id("org.veupathdb.lib.gradle.container.container-utils") version "1.2.0"
 }
 
 // Load Props
@@ -15,6 +16,10 @@ val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.serv
 java {
   targetCompatibility = JavaVersion.VERSION_16
   sourceCompatibility = JavaVersion.VERSION_16
+}
+
+containerBuild {
+  fgpUtilVersion = "14aa44a13c28257b702a98ddbecdf1e72812e2e6"
 }
 
 // Project settings
