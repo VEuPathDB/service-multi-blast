@@ -16,19 +16,11 @@ RUN jlink --compress=2 --module-path /opt/jdk/jmods \
     && git config --global advice.detachedHead false
 
 ENV DOCKER=build
-COPY makefile .
-
-RUN make install-dev-env
-
-COPY ["service.properties", "build.gradle.kts", "settings.gradle.kts", "gradlew", "./"]
-COPY gradle gradle
-COPY bom bom/
-
-RUN ./gradlew dependencies --info --configuration runtimeClasspath
-
 COPY . .
 
-RUN mkdir -p vendor \
+RUN make install-dev-env \
+    && ./gradlew dependencies --info --configuration runtimeClasspath \
+    && mkdir -p vendor \
     && cp -n /jdbc/* vendor \
     && echo Installing Gradle \
     && make jar
