@@ -65,6 +65,7 @@ services:
     - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.rule=Host(`${TRAEFIK_MBLAST_SERVICE_HOST:-mblast-dev.local.apidb.org}`)"
     - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.tls=true"
     - "traefik.http.routers.${TRAEFIK_MBLAST_SERVICE_ROUTER:-mblast-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+    - "prometheus.scrape_enabled=true"
     - "traefik.docker.network=traefik"
 
     depends_on:
@@ -73,6 +74,7 @@ services:
     networks:
       - traefik
       - internal
+      - monitoring-ext
 
   # #
   # Blast Query Runner (Job Queue Managed)
@@ -101,10 +103,12 @@ services:
         read_only: true
     labels:
     - "com.centurylinklabs.watchtower.enable=${BLAST_WATCHTOWER:-false}"
+    - "prometheus.scrape_enabled=true"
 
     networks:
       - internal
       - external
+      - monitoring-ext
 
   # #
   # Blast Result Formatter
@@ -209,5 +213,7 @@ networks:
   internal:
     internal: true
   traefik:
+    external: true
+  monitoring-ext:
     external: true
 
