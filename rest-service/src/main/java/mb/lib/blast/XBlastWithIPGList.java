@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.veupathdb.lib.blast.BlastWithIPGList;
 import org.veupathdb.lib.blast.consts.Flag;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XBlastWithIPGList
 {
   private static final Map<String, BiConsumer<BlastWithIPGList, JsonNode>> map = new HashMap<>(){{

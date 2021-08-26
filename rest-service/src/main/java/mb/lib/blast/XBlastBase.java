@@ -10,7 +10,6 @@ import org.veupathdb.lib.blast.BlastBase;
 import org.veupathdb.lib.blast.consts.Flag;
 import org.veupathdb.lib.blast.field.Location;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XBlastBase
 {
   private static final Map<String, BiConsumer<BlastBase, JsonNode>> map = new HashMap<>(){{
