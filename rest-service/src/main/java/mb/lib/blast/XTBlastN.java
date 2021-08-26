@@ -17,7 +17,6 @@ import org.veupathdb.lib.blast.field.ScoringMatrix;
 import org.veupathdb.lib.blast.field.Seg;
 import org.veupathdb.lib.blast.field.TBlastNTask;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XTBlastN extends TBlastN
 {
   private static final Map<String, BiConsumer<XTBlastN, JsonNode>> map = new HashMap<>(){{
@@ -52,6 +51,9 @@ public class XTBlastN extends TBlastN
   public BlastTool tool() {
     return super.getTool();
   }
+
+  // Added to avoid having to set up a custom serialization config for this class.
+  public void setTool(BlastTool ignored) {}
 
   public void setTask(JsonNode j) {
     super.setTask(TBlastNTask.fromString(j.asText()));

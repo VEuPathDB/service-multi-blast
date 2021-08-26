@@ -19,7 +19,6 @@ import org.veupathdb.lib.blast.field.*;
  * <p>
  * Contains Jackson annotations mapping the legacy config
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XBlastX extends BlastX
 {
   private static final Map<String, BiConsumer<XBlastX, JsonNode>> map = new HashMap<>(){{
@@ -54,6 +53,9 @@ public class XBlastX extends BlastX
   public BlastTool tool() {
     return super.getTool();
   }
+
+  // Added to avoid having to set up a custom serialization config for this class.
+  public void setTool(BlastTool ignored) {}
 
   public void setStrand(JsonNode j) {
     super.setStrand(Strand.fromString(j.asText()));

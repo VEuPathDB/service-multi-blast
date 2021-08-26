@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.veupathdb.lib.blast.BlastWithLists;
 import org.veupathdb.lib.blast.consts.Flag;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XBlastWithLists
 {
   private static final Map<String, BiConsumer<BlastWithLists, JsonNode>> map = new HashMap<>(){{

@@ -11,7 +11,6 @@ import org.veupathdb.lib.blast.field.HSPSorting;
 import org.veupathdb.lib.blast.field.HitSorting;
 import org.veupathdb.lib.blast.field.OutFormat;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class XCLIBase
 {
   interface Appender {
