@@ -32,7 +32,7 @@ allprojects {
     mavenCentral()
     maven {
       name = "GitHubPackages"
-      url  = uri("https://maven.pkg.github.com/veupathdb/maven-packages")
+      url  = uri("https://maven.pkg.github.com/veupathdb/packages")
       credentials {
         username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
         password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
@@ -40,6 +40,7 @@ allprojects {
     }
   }
 }
+
 dependencies {
   val junit = "5.7.0"
 

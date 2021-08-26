@@ -3,6 +3,7 @@ package mb.lib.blast;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.veupathdb.lib.blast.CLIBase;
 import org.veupathdb.lib.blast.consts.Flag;
@@ -10,6 +11,7 @@ import org.veupathdb.lib.blast.field.HSPSorting;
 import org.veupathdb.lib.blast.field.HitSorting;
 import org.veupathdb.lib.blast.field.OutFormat;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class XCLIBase
 {
   interface Appender {

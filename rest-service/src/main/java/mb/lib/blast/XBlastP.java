@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import mb.api.model.io.JsonKeys;
@@ -21,6 +22,7 @@ import org.veupathdb.lib.blast.field.Seg;
  * <p>
  * Contains Jackson annotations mapping the legacy config
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class XBlastP extends BlastP
 {
   private static final Map<String, BiConsumer<XBlastP, JsonNode>> map = new HashMap<>(){{
