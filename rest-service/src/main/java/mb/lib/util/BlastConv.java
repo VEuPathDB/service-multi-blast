@@ -24,6 +24,7 @@ import org.veupathdb.lib.blast.*;
 import org.veupathdb.lib.blast.field.HSPSorting;
 import org.veupathdb.lib.blast.field.HitSorting;
 import org.veupathdb.lib.blast.field.OutFormat;
+import org.veupathdb.lib.blast.util.JSONObjectDecoder;
 
 public class BlastConv
 {
@@ -113,27 +114,27 @@ public class BlastConv
 
   static BlastConfig convertNJSON(ObjectNode json) {
     Log.trace("::convertNJSON(json=...)");
-    return JSON.cast(json, XBlastN.class);
+    return BlastN.fromJSON(new JSONObjectDecoder(json));
   }
 
   static BlastConfig convertPJSON(ObjectNode json) {
     Log.trace("::convertPJSON(json=...)");
-    return JSON.cast(json, XBlastP.class);
+    return BlastP.fromJSON(new JSONObjectDecoder(json));
   }
 
   static BlastConfig convertXJSON(ObjectNode json) {
     Log.trace("::convertXJSON(json=...)");
-    return JSON.cast(json, XBlastX.class);
+    return BlastX.fromJSON(new JSONObjectDecoder(json));
   }
 
   static BlastConfig convertTNJSON(ObjectNode json) {
     Log.trace("::convertTNJSON(json=...)");
-    return JSON.cast(json, XTBlastN.class);
+    return TBlastN.fromJSON(new JSONObjectDecoder(json));
   }
 
   static BlastConfig convertTXJSON(ObjectNode json) {
     Log.trace("::convertTXJSON(json=...)");
-    return JSON.cast(json, XTBlastX.class);
+    return TBlastX.fromJSON(new JSONObjectDecoder(json));
   }
 
   public static BlastQueryConfig convert(IOBlastConfig conf) {
