@@ -91,11 +91,11 @@ public class BlastConv
   public static IOBlastConfig convert(BlastConfig val) {
     Log.trace("::convert(val={})", val);
     return switch (val.getTool()) {
-      case BlastN -> convert((XBlastN) val);
-      case BlastP -> convert((XBlastP) val);
-      case BlastX -> convert((XBlastX) val);
-      case TBlastN -> convert((XTBlastN) val);
-      case TBlastX -> convert((XTBlastX) val);
+      case BlastN -> convert((BlastN) val);
+      case BlastP -> convert((BlastP) val);
+      case BlastX -> convert((BlastX) val);
+      case TBlastN -> convert((TBlastN) val);
+      case TBlastX -> convert((TBlastX) val);
       case DeltaBlast, PSIBlast, RPSBlast, RPSTBlastN, BlastFormatter -> throw new IllegalArgumentException();
     };
   }
