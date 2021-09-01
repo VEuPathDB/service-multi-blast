@@ -5,6 +5,7 @@ import java.util.List;
 
 import mb.api.service.util.Address;
 import mb.lib.config.Config;
+import mb.lib.model.EmptyBlastConfig;
 import mb.lib.model.HashID;
 import mb.lib.model.JobStatus;
 import mb.lib.query.model.BlastRequest;
@@ -104,6 +105,9 @@ class BlastQueueManager extends QueueManager
    */
   public int submitNewJob(HashID jobId, BlastConfig config) throws Exception {
     log.trace("#submitJob(jobID={}, config={})", jobId, config);
+
+    if (config instanceof EmptyBlastConfig)
+      throw new RuntimeException("Invalid config cannot be sumitted.");
 
     var tool = config.getTool();
 

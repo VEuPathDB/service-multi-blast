@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import mb.lib.model.EmptyBlastQueryConfig;
 import mb.lib.model.HashID;
 import mb.lib.queue.consts.Format;
 import mb.lib.queue.consts.JsonKeys;
@@ -12,9 +13,12 @@ import mb.lib.queue.model.JobResult;
 import mb.lib.util.BlastConv;
 import mb.lib.util.JSON;
 import org.veupathdb.lib.blast.BlastTool;
+import org.veupathdb.lib.blast.consts.Key;
 
 public class FailedQueryJob extends FailedJob<BlastRequest>
 {
+  private static final String ConfKey = "config";
+
   /**
    * Constructs a {@code FailedQueryJob} instance from the given JSON node.
    * <p>
@@ -22,7 +26,8 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
    * compatibility reasons.  Older jobs from the initial beta release store the
    * job CLI config as an array of arguments rather than a structured object.
    * This constructor can unpack either form.
-   * @param raw
+   *
+   * @param raw Raw response object from Fireworq.
    */
   @JsonCreator
   public FailedQueryJob(ObjectNode raw) {
@@ -40,10 +45,14 @@ public class FailedQueryJob extends FailedJob<BlastRequest>
     BlastRequest out;
 
     if (config.isObject()) {
+      var conf = config.path(ConfKey).has(Key.Tool)
+        ? BlastConv.convertJobConfig(config.get(ConfKey))
+        : new EmptyBlastQueryConfig(config.get(ConfKey).isObject() ? (ObjectNode) config.get(ConfKey) : JSON.object());
+
       out = new BlastRequest(
         new HashID(config.get(mb.api.model.io.JsonKeys.JobID).asText()),
         BlastTool.fromString(config.get(mb.api.model.io.JsonKeys.Tool).asText()),
-        BlastConv.convertJobConfig(config.get("config"))
+        conf
       );
     } else if (config.isArray()) {
       // Split up the URL to get at the tool name and the job ID.

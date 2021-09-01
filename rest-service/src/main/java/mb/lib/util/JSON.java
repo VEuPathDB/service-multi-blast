@@ -3,6 +3,7 @@ package mb.lib.util;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
@@ -13,6 +14,10 @@ public class JSON
     .registerModule(new ParameterNamesModule())
     .registerModule(new Jdk8Module())
     .registerModule(new JavaTimeModule());
+
+  public static ObjectNode object() {
+    return Mapper.createObjectNode();
+  }
 
   public static <T> T parse(InputStream stream, Class<T> cls) throws Exception {
     return Mapper.readValue(stream, cls);
