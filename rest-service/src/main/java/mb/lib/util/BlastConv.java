@@ -17,6 +17,7 @@ import mb.lib.blast.*;
 import mb.lib.blast.model.CompBasedStats;
 import mb.lib.blast.model.IOHSPSorting;
 import mb.lib.blast.model.IOHitSorting;
+import mb.lib.model.EmptyBlastConfig;
 import mb.lib.query.model.JobTarget;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,6 +91,10 @@ public class BlastConv
 
   public static IOBlastConfig convert(BlastConfig val) {
     Log.trace("::convert(val={})", val);
+
+    if (val instanceof EmptyBlastConfig)
+      return JSON.cast(val, IOBlastConfigImpl.class);
+
     return switch (val.getTool()) {
       case BlastN -> convert((BlastN) val);
       case BlastP -> convert((BlastP) val);
