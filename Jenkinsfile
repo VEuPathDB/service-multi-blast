@@ -8,7 +8,7 @@ node('centos8') {
 
   def builder = new Builder(this)
 
-  checkout scm
+  builder.gitClone()
   builder.buildContainers([
     [ name: 'mblast-http-service',    path: 'rest-service'    ],
     [ name: 'mblast-blast-query',     path: 'blast/querier'   ],
