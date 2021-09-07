@@ -95,7 +95,6 @@ public class JobService
 
       var query = BlastQuery.parse(input.getConfig().getTool(), rawQuery);
 
-
       // Limit input sequence count
       if (query.getSequenceCount() > Conf.getMaxSeqsPerQuery())
         throw new UnprocessableEntityException(new ErrorMap(
@@ -145,6 +144,7 @@ public class JobService
         .setUserID(userID)
         .setMaxDLSize(input.getMaxResultSize())
         .setTargets(BlastConv.convert(input.getTargets()))
+        .setPrimary(input.getIsPrimary())
       );
 
       return new IOJobPostResponseImpl().setJobId(res.getJobID().string());
