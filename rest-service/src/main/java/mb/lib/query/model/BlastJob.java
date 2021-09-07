@@ -17,6 +17,7 @@ public class BlastJob
   private long             maxDLSize;
   private HashID           parentID;
   private JobTarget[]      targets;
+  private boolean          isPrimary;
 
   public String getSite() {
     return site;
@@ -64,7 +65,7 @@ public class BlastJob
   }
 
   public boolean isPrimary() {
-    return parentID == null;
+    return isPrimary || parentID == null;
   }
 
   public HashID getParentID() {
@@ -94,9 +95,14 @@ public class BlastJob
     return this;
   }
 
+  public BlastJob setPrimary(boolean primary) {
+    isPrimary = primary;
+    return this;
+  }
+
   public HashID digest(String query) {
     try {
-      return new HashID(MD5.hash(JSON.stringify(new HashWrapper(site, query, config))));
+      return new HashID(JSON.stringify(new HashWrapper(site, query, config)));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
