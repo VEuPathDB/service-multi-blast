@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated;
 
-@Authenticated
+@Authenticated(allowGuests = true)
 public class ReportController implements Reports
 {
   private static final Logger Log = LogManager.getLogger(ReportController.class);
