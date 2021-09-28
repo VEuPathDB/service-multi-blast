@@ -2,6 +2,7 @@ package mb.lib.query.model;
 
 import mb.lib.blast.model.BlastQuery;
 import mb.lib.model.HashID;
+import mb.lib.util.Hash;
 import mb.lib.util.JSON;
 import mb.lib.util.MD5;
 import org.veupathdb.lib.blast.BlastQueryConfig;
@@ -102,7 +103,7 @@ public class BlastJob
 
   public HashID digest(String query) {
     try {
-      return new HashID(JSON.stringify(new HashWrapper(site, query, config)));
+      return new HashID(Hash.stringToHash(JSON.stringify(new HashWrapper(site, query, config))));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
