@@ -103,7 +103,7 @@ public class BlastJob
 
   public HashID digest(String query) {
     try {
-      return new HashID(Hash.stringToHash(JSON.stringify(new HashWrapper(site, query, config))));
+      return new HashID(MD5.hash(JSON.stringify(new HashWrapper(site, query, config))));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
