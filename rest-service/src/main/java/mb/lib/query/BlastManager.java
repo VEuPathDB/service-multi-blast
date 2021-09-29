@@ -9,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import mb.api.service.http.job.JobUtil;
 import mb.api.service.model.ErrorMap;
 import mb.lib.data.JobDataManager;
 import mb.lib.model.HashID;
@@ -144,6 +145,29 @@ public class BlastManager
     }
 
     var job = opt1.get();
+
+    // Refresh/update job targets.
+    //
+    // Because the blast DBs for each site build are kept in a build directory
+    // separate from the previous build (then eventually deleted after release)
+    // the target blast DB used for the job originally may no longer exist.
+    //
+    // This attempts to locate the same target in a later build to re-run the
+    // job against.
+    //
+    // For example:
+    //   Assume our job was created on build-49 targeting Foo organism's
+    //   annotated transcripts and has since expired.
+    //
+    //   We then attempt to re-run our expired job on build-53.
+    //
+    //   At this point, the original (build-49) blast targets have been deleted
+    //   and the job cannot be re-run as is.  We need to try to locate Foo
+    //   organism's annotated transcripts in the build-53 blast targets now.
+    //
+    // If the blast target does not exist anymore the re-run request will fail
+    // with a 400 error.
+    ((BlastQueryConfig) job.getConfig()).setDBFile(JobUtil.makeDBPaths(job.getProjectID(), job.getTargetDBs()));
 
     try (var db = new BlastDBManager()) {
       // If the job is not expired then there is nothing to do
