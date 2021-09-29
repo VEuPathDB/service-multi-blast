@@ -21,25 +21,8 @@ public class JobDataManager
 {
   private static final Logger Log       = LogManager.getLogger(JobDataManager.class);
   private static final Path   JobRoot   = Path.of(Config.getInstance().getJobMountPath());
-  private static final Path   DBRoot    = Path.of(Config.getInstance().getDbMountPath());
-  private static final String Build     = "build-" + Config.getInstance().getBuildNum();
-  private static final String BlastPath = "blast";
 
   private static final Config conf = Config.getInstance();
-
-  /**
-   * Creates a path string to the target blast DB.
-   *
-   * @param site Target DB site.
-   * @param org  Target DB organism.
-   * @param tgt  Target DB name.
-   *
-   * @return A path to the target DB file.
-   */
-  public static Path makeDBPath(String site, String org, String tgt) {
-    Log.trace("::makeDBPath(site={}, org={}, tgt={})", site, org, tgt);
-    return DBRoot.resolve(site).resolve(Build).resolve(org).resolve(BlastPath).resolve(tgt);
-  }
 
   public static void createQueryFile(HashID jobID, String query) throws Exception {
     var queryFile = Path.of(conf.getJobMountPath(), jobID.string(), "query.txt").toFile();

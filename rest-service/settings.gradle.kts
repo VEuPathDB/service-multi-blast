@@ -16,6 +16,7 @@ include("bom")
 
 pluginManagement {
   repositories {
+    gradlePluginPortal()
     mavenLocal()
     mavenCentral()
     maven {
