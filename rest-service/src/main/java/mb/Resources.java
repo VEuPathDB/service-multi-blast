@@ -2,9 +2,7 @@ package mb;
 
 import mb.api.controller.GuestLinkController;
 import mb.api.controller.JobController;
-import mb.api.controller.MetaController;
 import mb.api.controller.ReportController;
-import mb.api.controller.resources.Reports;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
@@ -31,7 +29,6 @@ public class Resources extends ContainerResources {
       MultiPartFeature.class,
 
       JobController.class,
-      MetaController.class,
 //      DebugController.class,
       GuestLinkController.class,
       ReportController.class,

@@ -285,20 +285,6 @@ paths:
           $ref: "#/components/responses/err500"
 
 
-  /meta:
-    get:
-      summary: Service Meta
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "./schema/io/meta-response.json"
-        500:
-          $ref: "#/components/responses/err500"
-
-
   /api:
     get:
       summary: API Docs
