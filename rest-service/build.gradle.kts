@@ -1,11 +1,13 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.*
 
 plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "1.2.0"
+  kotlin("jvm") version "1.5.31"
 }
 
 // Load Props
@@ -18,6 +20,11 @@ java {
   sourceCompatibility = JavaVersion.VERSION_16
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+  kotlinOptions {
+    jvmTarget = "16"
+  }
+}
 containerBuild {
   fgpUtilVersion = "14aa44a13c28257b702a98ddbecdf1e72812e2e6"
 }
