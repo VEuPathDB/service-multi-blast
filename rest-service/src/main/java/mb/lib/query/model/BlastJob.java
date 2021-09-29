@@ -2,7 +2,6 @@ package mb.lib.query.model;
 
 import mb.lib.blast.model.BlastQuery;
 import mb.lib.model.HashID;
-import mb.lib.util.Hash;
 import mb.lib.util.JSON;
 import mb.lib.util.MD5;
 import org.veupathdb.lib.blast.BlastQueryConfig;
