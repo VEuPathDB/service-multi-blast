@@ -350,7 +350,18 @@ public class BlastManager
 
     // If size is 1 then it's the whole query, which we've already handled.
     if (job.getQuery().getSequenceCount() > 1) {
+
+      // We reuse the job instance here since we would otherwise be done with
+      // it.  Just a small optimization to avoid a bunch of repeated
+      // instantiations.
+
+      // Set the parent to the original job ID.
       job.setParentID(root.getJobID());
+
+      // Sets the primary flag to false as this is a new child job and should
+      // be hidden by default.
+      job.setPrimary(false);
+
       for (var query : job.getQuery().getSubQueries()) {
         handleJob(db, job, query.toString());
       }
