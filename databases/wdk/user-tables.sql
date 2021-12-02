@@ -58,6 +58,8 @@ CREATE TABLE userlogins5.multiblast_users
     UNIQUE (job_digest, user_id)
 );
 
+CREATE INDEX mb_us_job_digest ON userlogins5.multiblast_users (job_digest);
+
 GRANT SELECT ON userlogins5.multiblast_jobs TO webwww;
 GRANT SELECT ON userlogins5.multiblast_users TO webwww;
 GRANT SELECT ON userlogins5.multiblast_job_to_jobs TO webwww;

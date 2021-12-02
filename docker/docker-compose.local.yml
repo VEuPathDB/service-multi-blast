@@ -9,8 +9,6 @@ services:
       dockerfile: Dockerfile
       context: ../rest-service
     # These values can be provided using the .env template file
-    ports:
-      - 8080:80
     environment:
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
       SERVER_PORT: ${SERVER_PORT:-80}
@@ -43,7 +41,7 @@ services:
       FORMAT_QUEUE_NAME: ${FORMAT_QUEUE_NAME:-format}
       FORMAT_JOB_CATEGORY: ${FORMAT_JOB_CATEGORY:-format}
 
-      VALIDATOR_HOST: ${VALIDATOR_HOST:-validator}
+      VALIDATOR_HOST:
 
       # Job Config
       #
@@ -59,12 +57,12 @@ services:
       # Replace `source` with the path you would like the job workspace to
       # reside in your development environment.
       - type: bind # volume
-        source: /home/ellie/blastout # job-data
+        source: /home/${USER}/blastout # job-data
         target: /out
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: /home/ellie/blastdb # blast-data
+        source: /home/${USER}/blastdb # blast-data
         target: /db
     depends_on:
       - queue
@@ -82,17 +80,17 @@ services:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
     ports:
-      - 8081:80
+      - '8081:80'
     volumes:
       # Replace `source` with the path you would like the job workspace to
       # reside in your development environment.
       - type: bind # volume
-        source: /home/ellie/blastout # job-data
+        source: /home/${USER}/blastout # job-data
         target: /out
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: /home/ellie/blastdb # blast-data
+        source: /home/${USER}/blastdb # blast-data
         target: /db
 
   # #
@@ -106,17 +104,17 @@ services:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
     ports:
-      - 8082:80
+      - '8082:80'
     volumes:
       # Replace `source` with the path you would like the job workspace to
       # reside in your development environment.
       - type: bind # volume
-        source: /home/ellie/blastout # job-data
+        source: /home/${USER}/blastout # job-data
         target: /out
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: /home/ellie/blastdb # blast-data
+        source: /home/${USER}/blastdb # blast-data
         target: /db
 
   # #
@@ -156,7 +154,7 @@ services:
       FIREWORQ_DRIVER: mysql
       JOB_CATEGORY: blast
     ports:
-      - 8083:80
+      - '8083:80'
     depends_on:
       - queue-db
       - blast
@@ -169,7 +167,7 @@ services:
     build:
       context: ../blast/validator
     ports:
-      - 8084:80
+      - '8084:80'
 
 
 volumes:

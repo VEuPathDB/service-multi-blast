@@ -7,7 +7,7 @@ import java.util.*
 import java.util.stream.Stream
 
 fun findDBPath(site: String, organism: String, target: String): Optional<String> {
-  val root = Config.getInstance().dbMountPath
+  val root = Config.dbMountPath
 
   return findBuildVersionsFor(site)
     .map { SplitDBPath(root, site, it, organism, "blast", target) }
@@ -24,7 +24,7 @@ fun findDBPath(site: String, organism: String, target: String): Optional<String>
  * @return An array of zero or more builds available for the given [site].  If
  * the site is invalid, or no builds exist, an empty array will be returned.
  */
-fun findBuildVersionsFor(site: String): Stream<String> = File(Config.getInstance().dbMountPath, site)
+fun findBuildVersionsFor(site: String): Stream<String> = File(Config.dbMountPath, site)
   .takeIf(File::isDirectory)
   ?.listFiles(File::isDirectory)
   ?.let(Arrays::stream)
