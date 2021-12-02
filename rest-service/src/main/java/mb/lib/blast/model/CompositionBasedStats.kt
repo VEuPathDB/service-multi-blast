@@ -1,0 +1,43 @@
+package mb.lib.blast.model
+
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.TextNode
+import mb.api.service.util.ErrorText
+
+enum class CompositionBasedStats(val externalValue: String) {
+  None                         ("none"),
+  CompBasedStats               ("comp-based-stats"),
+  ConditionalScoreAdjustment   ("conditional-comp-based-score-adjustment"),
+  UnconditionalScoreAdjustment ("unconditional-comp-based-score-adjustment"),
+  ;
+
+  @JsonValue
+  fun toJSON(): JsonNode = TextNode(externalValue)
+
+  override fun toString() = ordinal.toString()
+
+
+  companion object {
+    @JsonCreator
+    fun fromValue(value: String): CompositionBasedStats {
+      val tmp = value.lowercase()
+
+      for (v in values())
+        if (v.externalValue == tmp)
+          return v
+
+      return when(tmp) {
+        "0", "f", "false" -> None
+        "1" -> CompBasedStats
+        "d", "2", "t", "true" -> ConditionalScoreAdjustment
+        "3" -> UnconditionalScoreAdjustment
+        else -> throw IllegalArgumentException(String.format(
+        ErrorText.InvalidEnumValue,
+        value,
+        CompositionBasedStats::class.simpleName))
+      }
+    }
+  }
+}

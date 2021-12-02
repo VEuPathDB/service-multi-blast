@@ -6,7 +6,7 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "1.2.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "1.4.0"
   kotlin("jvm") version "1.5.31"
 }
 
@@ -53,6 +53,9 @@ dependencies {
 
   implementation(platform(project(":bom")))
 
+  implementation(kotlin("stdlib"))
+  implementation(kotlin("stdlib-jdk8"))
+
   //
   // FgpUtil & Compatibility Dependencies
   //
@@ -73,6 +76,7 @@ dependencies {
   runtimeOnly("org.json:json")
   runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org")
   implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 

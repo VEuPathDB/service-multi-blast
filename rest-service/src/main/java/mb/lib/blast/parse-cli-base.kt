@@ -1,0 +1,36 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
+package mb.lib.blast
+
+import com.fasterxml.jackson.databind.node.NumericNode
+import org.veupathdb.lib.blast.CLIBase
+import org.veupathdb.lib.blast.consts.Flag
+import org.veupathdb.lib.blast.field.HSPSorting
+import org.veupathdb.lib.blast.field.HitSorting
+import org.veupathdb.lib.blast.field.OutFormat
+
+inline fun CLIBase.fromBoolJSON(key: String, value: Boolean) = when (key) {
+  Flag.ParseDefLines -> parseDefLines = value
+  Flag.ShowGIs       -> showGIs       = value
+  Flag.HTML          -> html          = value
+  Flag.ShortHelp     -> shortHelp     = value
+  Flag.LongHelp      -> longHelp      = value
+  Flag.Version       -> version       = value
+  else               -> { /* do nothing */ }
+}
+
+inline fun CLIBase.fromNumberJSON(key: String, value: NumericNode) = when (key) {
+  Flag.NumDescriptions    -> setNumDescriptions(value.longValue())
+  Flag.NumAlignments      -> setNumAlignments(value.longValue())
+  Flag.LineLength         -> setLineLength(value.intValue())
+  Flag.MaxTargetSequences -> setMaxTargetSequences(value.longValue())
+  Flag.SortHits           -> sortHits = HitSorting.fromIntValue(value.intValue())
+  Flag.SortHSPs           -> sortHSPs = HSPSorting.fromIntValue(value.intValue())
+  else                    -> { /* do nothing */ }
+}
+
+inline fun CLIBase.fromTextJSON(k: String, value: String) = when (k) {
+  Flag.OutFormat -> outFormat = OutFormat.fromString(value)
+  Flag.OutFile   -> setOutFile(value)
+  else           -> { /* do nothing */ }
+}
