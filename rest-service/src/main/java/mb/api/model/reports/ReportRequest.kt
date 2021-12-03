@@ -3,6 +3,7 @@
 package mb.api.model.reports
 
 import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import mb.api.model.blast.IOBlastFormat
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.model.IOHSPSorting
@@ -12,6 +13,7 @@ import mb.lib.util.toExternal
 import org.veupathdb.lib.blast.BlastFormatter
 import org.veupathdb.lib.blast.field.*
 
+@JsonInclude(NON_NULL)
 data class ReportRequest(
   @JsonProperty(JsonKeys.JobID)              var jobID:           HashID,
   @JsonProperty(JsonKeys.Description)        var description:     String?            = null,

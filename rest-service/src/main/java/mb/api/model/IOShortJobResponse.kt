@@ -1,5 +1,6 @@
 package mb.api.model
 
+import com.fasterxml.jackson.annotation.JsonGetter
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -8,36 +9,36 @@ import mb.lib.model.JobStatus
 
 @JsonInclude(NON_NULL)
 open class IOShortJobResponse(
-  @JsonProperty(JsonKeys.ID)
+  @get:JsonGetter(JsonKeys.ID)
   val id: String? = null,
 
-  @JsonProperty(JsonKeys.Description)
+  @get:JsonGetter(JsonKeys.Description)
   val description: String? = null,
 
-  @JsonProperty(JsonKeys.Status)
+  @get:JsonGetter(JsonKeys.Status)
   val status: JobStatus? = null,
 
-  @JsonProperty(JsonKeys.Created)
+  @get:JsonGetter(JsonKeys.Created)
   val created: String? = null,
 
-  @JsonProperty(JsonKeys.Expires)
+  @get:JsonGetter(JsonKeys.Expires)
   val expires: String? = null,
 
-  @JsonProperty(JsonKeys.MaxResultSize)
+  @get:JsonGetter(JsonKeys.MaxResultSize)
   val maxResultSize: Long? = null,
 
-  @JsonProperty(JsonKeys.ParentJobs)
+  @get:JsonGetter(JsonKeys.ParentJobs)
   val parentJobs: Array<IOJobLink>? = null,
 
-  @JsonProperty(JsonKeys.ChildJobs)
+  @get:JsonGetter(JsonKeys.ChildJobs)
   val childJobs: Array<IOJobLink>? = null,
 
-  @JsonProperty(JsonKeys.IsPrimary)
+  @get:JsonGetter(JsonKeys.IsPrimary)
   val isPrimary: Boolean,
 
-  @JsonProperty(JsonKeys.Site)
+  @get:JsonGetter(JsonKeys.Site)
   val site: String? = null,
 
-  @JsonProperty(JsonKeys.Targets)
+  @get:JsonGetter(JsonKeys.Targets)
   val targets: Array<IOJobTarget>? = null,
 )
