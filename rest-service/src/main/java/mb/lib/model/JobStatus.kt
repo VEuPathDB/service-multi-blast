@@ -20,20 +20,22 @@ enum class JobStatus(val value: String) {
     private const val InProgressAlias = "grabbed"
     private const val QueuedAlias     = "claimed"
 
-    fun fromString(name: String): Optional<JobStatus> {
+    @JvmStatic
+    fun fromString(name: String): JobStatus? {
       for (e in values())
         if (e.value == name)
-          return Optional.of(e)
+          return e
 
-      return Optional.ofNullable(when (name) {
+      return when (name) {
         QueuedAlias     -> Queued
         InProgressAlias -> InProgress
         else            -> null
-      })
+      }
     }
 
+    @JvmStatic
     @JsonCreator
     fun unsafeFromString(name: String): JobStatus =
-      fromString(name).orElseThrow { IllegalArgumentException("Unrecognized JobStatus value: $name") }
+      fromString(name) ?: throw IllegalArgumentException("Unrecognized JobStatus value: $name")
   }
 }
