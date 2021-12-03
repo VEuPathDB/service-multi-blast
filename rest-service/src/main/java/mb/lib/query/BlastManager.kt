@@ -373,8 +373,17 @@ object BlastManager {
       refreshJobStatus(db, row)
       submitToQueueIfExpired(db, row)
 
-      if (!job.isPrimary)
+      if (!job.isPrimary) {
+        // Look for an existing link between these jobs.
+        db.getParentJobLinks(jobID).forEach {
+          // If we find one, skip out because we don't need to insert a link.
+          if (it.parentJobID == job.parentID)
+            return row
+        }
+
+        // Link this job to the parent (no existing parent link was found).
         db.linkJobs(jobID, job.parentID!!)
+      }
 
       return row
     }
@@ -395,8 +404,17 @@ object BlastManager {
       // Rerun the job if needed.
       submitToQueueIfExpired(db, row)
 
-      if (!job.isPrimary)
+      if (!job.isPrimary) {
+        // Look for an existing link between these jobs.
+        db.getParentJobLinks(jobID).forEach {
+          // If we find one, skip out because we don't need to insert a link.
+          if (it.parentJobID == job.parentID)
+            return row
+        }
+
+        // Link this job to the parent (no existing parent link was found).
         db.linkJobs(jobID, job.parentID!!)
+      }
 
       return row
     }
