@@ -13,7 +13,7 @@ import org.veupathdb.lib.blast.field.*
 @JsonTypeName("blastn")
 @JsonDeserialize(`as` = IOBlastnConfigImpl::class)
 @JsonInclude(NON_DEFAULT)
-interface IOBlastnConfig : IOBlastConfig {
+interface IOBlastnConfig : IOBlastWithLists {
   @get:JsonProperty(JsonKeys.Strand)
   @set:JsonProperty(JsonKeys.Strand)
   var strand: Strand?
@@ -61,14 +61,6 @@ interface IOBlastnConfig : IOBlastConfig {
   @get:JsonProperty(JsonKeys.SoftMasking)
   @set:JsonProperty(JsonKeys.SoftMasking)
   var softMasking: Boolean?
-
-  @get:JsonProperty(JsonKeys.TaxIDs)
-  @set:JsonProperty(JsonKeys.TaxIDs)
-  var taxIds: List<Int>?
-
-  @get:JsonProperty(JsonKeys.NegativeTaxIDs)
-  @set:JsonProperty(JsonKeys.NegativeTaxIDs)
-  var negativeTaxIds: List<Int>?
 
   @get:JsonProperty(JsonKeys.DBSoftMask)
   @set:JsonProperty(JsonKeys.DBSoftMask)

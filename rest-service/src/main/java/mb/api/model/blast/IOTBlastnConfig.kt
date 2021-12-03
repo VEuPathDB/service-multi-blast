@@ -16,7 +16,7 @@ import org.veupathdb.lib.blast.field.TBlastNTask
 @JsonTypeName("tblastn")
 @JsonDeserialize(`as` = IOTBlastnConfigImpl::class)
 @JsonInclude(NON_DEFAULT)
-interface IOTBlastnConfig : IOBlastConfig {
+interface IOTBlastnConfig : IOBlastWithLists {
   @get:JsonProperty(JsonKeys.Task)
   @set:JsonProperty(JsonKeys.Task)
   var task: TBlastNTask?
@@ -60,14 +60,6 @@ interface IOTBlastnConfig : IOBlastConfig {
   @get:JsonProperty(JsonKeys.SoftMasking)
   @set:JsonProperty(JsonKeys.SoftMasking)
   var softMasking: Boolean?
-
-  @get:JsonProperty(JsonKeys.TaxIDs)
-  @set:JsonProperty(JsonKeys.TaxIDs)
-  var taxIds: List<Int>?
-
-  @get:JsonProperty(JsonKeys.NegativeTaxIDs)
-  @set:JsonProperty(JsonKeys.NegativeTaxIDs)
-  var negativeTaxIds: List<Int>?
 
   @get:JsonProperty(JsonKeys.DBSoftMask)
   @set:JsonProperty(JsonKeys.DBSoftMask)

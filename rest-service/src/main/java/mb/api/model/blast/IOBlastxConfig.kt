@@ -16,7 +16,7 @@ import org.veupathdb.lib.blast.field.Strand
 @JsonTypeName("blastx")
 @JsonDeserialize(`as` = IOBlastxConfigImpl::class)
 @JsonInclude(NON_DEFAULT)
-interface IOBlastxConfig : IOBlastConfig {
+interface IOBlastxConfig : IOBlastWithLists {
   @get:JsonProperty("strand")
   @set:JsonProperty("strand")
   var strand: Strand?
@@ -43,7 +43,7 @@ interface IOBlastxConfig : IOBlastConfig {
 
   @get:JsonProperty("maxIntronLength")
   @set:JsonProperty("maxIntronLength")
-  var maxIntronLength: Int
+  var maxIntronLength: Int?
 
   @get:JsonProperty("matrix")
   @set:JsonProperty("matrix")
@@ -64,14 +64,6 @@ interface IOBlastxConfig : IOBlastConfig {
   @get:JsonProperty("softMasking")
   @set:JsonProperty("softMasking")
   var softMasking: Boolean
-
-  @get:JsonProperty("taxIds")
-  @set:JsonProperty("taxIds")
-  var taxIds: List<Int>?
-
-  @get:JsonProperty("negativeTaxIds")
-  @set:JsonProperty("negativeTaxIds")
-  var negativeTaxIds: List<Int>?
 
   @get:JsonProperty("dbSoftMask")
   @set:JsonProperty("dbSoftMask")
@@ -111,7 +103,7 @@ interface IOBlastxConfig : IOBlastConfig {
 
   @get:JsonProperty("windowSize")
   @set:JsonProperty("windowSize")
-  var windowSize: Int
+  var windowSize: Int?
 
   @get:JsonProperty("ungapped")
   @set:JsonProperty("ungapped")

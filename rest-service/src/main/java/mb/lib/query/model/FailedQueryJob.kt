@@ -65,7 +65,7 @@ private fun ObjectNode.toRequest(): BlastRequest = when(val c = this.get(JsonKey
     // (versions <= v0.9.1 did not pass the job ID or tool in the payload)
     //
     // v <= 0.9.1 url format: http://{blast-service-name}/{blast-tool}/{job-id}
-    val urlComponents = this.get(JsonKeys.Category).asText().split("/")
+    val urlComponents = this.get(JsonKeys.URL).asText().split("/")
 
     // Expand array to key value pairs
     val parsedPayload = jsonArray {
