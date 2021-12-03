@@ -24,7 +24,6 @@ class JobService {
     val instance by lazy(::JobService)
 
     private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
-    private const val ErrQueryInvalid = "Invalid character \"%s\" at position %d in sequence %d on line %d."
   }
 
   fun createJob(input: IOJsonJobRequest, userID: Long): IOJobPostResponse {
@@ -69,7 +68,7 @@ class JobService {
       ))
 
     val conv = input.config.toInternal()
-    BlastManager.validateConfig(conv).ifPresent { e -> throw UnprocessableEntityException(e); }
+    BlastManager.validateConfig(conv)?.also{ e -> throw UnprocessableEntityException(e); }
 
     val dbPath = makeDBPaths(input.site, input.targets)
     conv.dbFile = dbPath

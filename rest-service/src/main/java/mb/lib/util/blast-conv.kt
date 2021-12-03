@@ -1,6 +1,5 @@
 package mb.lib.util
 
-
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -9,15 +8,11 @@ import mb.api.model.blast.*
 import mb.api.model.blast.impl.*
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.*
-import mb.lib.blast.model.CompositionBasedStats
-import mb.lib.blast.model.IOHSPSorting
-import mb.lib.blast.model.IOHitSorting
+import mb.lib.blast.model.*
 import mb.lib.model.EmptyBlastConfig
 import mb.lib.query.model.JobTarget
 import org.veupathdb.lib.blast.*
-import org.veupathdb.lib.blast.field.HSPSorting
-import org.veupathdb.lib.blast.field.HitSorting
-import org.veupathdb.lib.blast.field.OutFormat
+import org.veupathdb.lib.blast.field.*
 import org.veupathdb.lib.blast.util.JSONObjectDecoder
 
 fun convertReportConfig(json: String): BlastFormatter = json.parseJSON()
@@ -241,15 +236,15 @@ fun convert(bp: BlastP): IOBlastpConfig = IOBlastpConfigImpl().apply {
 
   queryLoc         = bp.queryLocation
   outFormat        = bp.outFormat?.toExternal()
-  numDescriptions  = bp.numDescriptions.value
-  numAlignments    = bp.numAlignments.value
+  numDescriptions  = bp.numDescriptions?.value
+  numAlignments    = bp.numAlignments?.value
   lineLength       = bp.lineLength.value
   sortHits         = bp.sortHits?.toExternal()
   sortHSPs         = bp.sortHSPs?.toExternal()
   lcaseMasking     = bp.lowercaseMasking
   qCovHSPPerc      = bp.queryCoverageHSPPercent
   maxHSPs          = bp.maxHSPs
-  maxTargetSeqs    = bp.maxTargetSequences.value
+  maxTargetSeqs    = bp.maxTargetSequences?.value
   dbSize           = bp.dbSize
   searchSpace      = bp.searchSpace
   xDropUngap       = bp.extensionDropoffUngapped
@@ -321,7 +316,7 @@ fun convert(conf: IOBlastxConfig): BlastX = XBlastX().apply {
   sumStats                     = conf.sumStats
   extensionDropoffPrelimGapped = conf.xDropGap
   extensionDropoffFinalGapped  = conf.xDropGapFinal
-  windowSize                   = conf.windowSize?.toLong()
+  windowSize                   = conf.windowSize.toLong()
   ungappedAlignmentsOnly       = conf.ungapped
   useSmithWatermanTraceback    = conf.useSWTraceback
 }
@@ -421,17 +416,17 @@ fun convert(conf: IOTBlastnConfig): TBlastN = XTBlastN().apply {
 
 fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
   queryLoc         = b.queryLocation
-  eValue           = b.expectValue.value
+  eValue           = b.expectValue?.value
   outFormat        = b.outFormat?.toExternal()
-  numDescriptions  = b.numDescriptions.value
-  numAlignments    = b.numAlignments.value
-  lineLength       = b.lineLength.value
+  numDescriptions  = b.numDescriptions?.value
+  numAlignments    = b.numAlignments?.value
+  lineLength       = b.lineLength?.value
   sortHits         = b.sortHits?.toExternal()
   sortHSPs         = b.sortHSPs?.toExternal()
   lcaseMasking     = b.lowercaseMasking
   qCovHSPPerc      = b.queryCoverageHSPPercent
   maxHSPs          = b.maxHSPs
-  maxTargetSeqs    = b.maxTargetSequences.value
+  maxTargetSeqs    = b.maxTargetSequences?.value
   dbSize           = b.dbSize
   searchSpace      = b.searchSpace
   xDropUngap       = b.extensionDropoffUngapped
@@ -507,17 +502,17 @@ fun convert(conf: IOTBlastxConfig): TBlastX = XTBlastX().apply {
 
 fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
   queryLoc         = b.queryLocation
-  eValue           = b.expectValue.value
+  eValue           = b.expectValue?.value
   outFormat        = b.outFormat?.toExternal()
-  numDescriptions  = b.numDescriptions.value
-  numAlignments    = b.numAlignments.value
-  lineLength       = b.lineLength.value
+  numDescriptions  = b.numDescriptions?.value
+  numAlignments    = b.numAlignments?.value
+  lineLength       = b.lineLength?.value
   sortHits         = b.sortHits?.toExternal()
   sortHSPs         = b.sortHSPs?.toExternal()
   lcaseMasking     = b.lowercaseMasking
   qCovHSPPerc      = b.queryCoverageHSPPercent
   maxHSPs          = b.maxHSPs
-  maxTargetSeqs    = b.maxTargetSequences.value
+  maxTargetSeqs    = b.maxTargetSequences?.value
   dbSize           = b.dbSize
   searchSpace      = b.searchSpace
   xDropUngap       = b.extensionDropoffUngapped

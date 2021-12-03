@@ -20,7 +20,7 @@ object BlastValidationManager {
 
   private const val Path = "validate"
 
-  fun validate(conf: BlastConfig): Optional<ErrorMap> {
+  fun validate(conf: BlastConfig): ErrorMap? {
     Log.trace("::Validate(conf={})", conf)
 
     val payload = conf.jsonStringify()
@@ -43,7 +43,7 @@ object BlastValidationManager {
 
     Log.debug("JSON Reply: {}", res.body())
     if (parsed.payload.isEmpty())
-      return Optional.empty()
+      return null
 
     val converted = ErrorMap(parsed.payload.size)
 
@@ -53,7 +53,7 @@ object BlastValidationManager {
       converted[flag] = value
     }
 
-    return Optional.of(converted)
+    return converted
   }
 }
 

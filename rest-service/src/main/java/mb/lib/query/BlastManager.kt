@@ -5,14 +5,12 @@ package mb.lib.query
 import mb.api.service.http.job.makeDBPaths
 import mb.api.service.model.ErrorMap
 import mb.lib.data.JobDataManager
-import mb.lib.model.HashID
-import mb.lib.model.JobStatus
+import mb.lib.model.*
 import mb.lib.query.model.*
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.BlastQueryConfig
 import java.lang.IllegalStateException
 import java.time.OffsetDateTime
-import java.util.Optional
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.stream.Collectors
@@ -122,7 +120,7 @@ object BlastManager {
     }
   }
 
-  fun getJobQuery(jobID: HashID): Optional<String> {
+  fun getJobQuery(jobID: HashID): String? {
     Log.trace("::getJobQuery(jobID={})", jobID)
     return BlastDBManager().use { db ->
       updateLastModified(jobID)
@@ -294,7 +292,7 @@ object BlastManager {
     }
   }
 
-  fun validateConfig(conf: BlastQueryConfig): Optional<ErrorMap> {
+  fun validateConfig(conf: BlastQueryConfig): ErrorMap? {
     return BlastValidationManager.validate(conf)
   }
 

@@ -143,7 +143,7 @@ class JobController(@Context private val request: Request) {
     if (download)
       res.header("Content-Disposition", String.format(AttachmentPat, "$jobID-query", "txt"))
 
-    res.entity(BlastManager.getJobQuery(HashID.parseOrThrow(jobID, ::NotFoundException)).orElseThrow(::NotFoundException)).build()
+    res.entity(BlastManager.getJobQuery(HashID.parseOrThrow(jobID, ::NotFoundException)) ?: throw NotFoundException()).build()
   }
 
 
