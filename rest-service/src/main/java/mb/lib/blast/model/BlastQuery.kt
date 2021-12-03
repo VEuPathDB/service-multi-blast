@@ -21,9 +21,9 @@ inline fun String.parseAsQuery(tool: BlastTool): BlastQuery {
       if (currentHeader != null) {
         subQueries.add(BlastSubQuery(tool, currentHeader, buffer.toString()))
         buffer.setLength(0)
-      } else {
-        currentHeader = line
       }
+
+      currentHeader = line
     } else {
       buffer.append(line).append("\n")
     }
