@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package mb.lib.util
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -35,7 +37,16 @@ fun convertJobConfig(json: JsonNode): BlastConfig = when {
 
 fun convert(tgt: JobTarget): IOJobTarget = IOJobTarget(tgt.organism, tgt.target)
 
-fun convert(tgts: Collection<IOJobTarget>): Array<JobTarget> = tgts.stream().map(::convert).toArray(::arrayOfNulls)
+@Suppress("UNCHECKED_CAST")
+fun convert(tgts: Collection<IOJobTarget>): Array<JobTarget> {
+  val out = arrayOfNulls<JobTarget>(tgts.size)
+  var ind = 0
+
+  for (tgt in tgts)
+    out[ind++] = convert(tgt)
+
+  return out as Array<JobTarget>
+}
 
 fun convert(tgt: IOJobTarget) = JobTarget(tgt.organism, tgt.target)
 
@@ -137,22 +148,8 @@ fun convert(bn: IOBlastnConfig): BlastN = XBlastN().apply {
 }
 
 fun convert(bn: BlastN): IOBlastnConfig = IOBlastnConfigImpl().apply {
-  queryLoc          = bn.queryLocation
-  eValue            = bn.expectValue?.value()
-  outFormat         = bn.outFormat?.toExternal()
-  numDescriptions   = bn.numDescriptions?.value
-  numAlignments     = bn.numAlignments?.value
-  lineLength        = bn.lineLength?.value
-  sortHits          = bn.sortHits?.toExternal()
-  sortHSPs          = bn.sortHSPs?.toExternal()
-  lcaseMasking      = bn.lowercaseMasking
-  qCovHSPPerc       = bn.queryCoverageHSPPercent
-  maxHSPs           = bn.maxHSPs
-  maxTargetSeqs     = bn.maxTargetSequences?.value
-  dbSize            = bn.dbSize
-  searchSpace       = bn.searchSpace
-  xDropUngap        = bn.extensionDropoffUngapped
-  parseDefLines     = bn.parseDefLines
+  convert(this)
+
   strand            = bn.strand
   task              = bn.task
   wordSize          = bn.wordSize
@@ -165,8 +162,6 @@ fun convert(bn: BlastN): IOBlastnConfig = IOBlastnConfigImpl().apply {
   dust              = bn.dust
   windowMaskerTaxID = bn.windowMaskerTaxID
   softMasking       = bn.softMasking
-  taxIds            = convertTaxIDsToExternal(bn.taxIDs)
-  negativeTaxIds    = convertTaxIDsToExternal(bn.negativeTaxIDs)
   dbSoftMask        = bn.dbSoftMask
   dbHardMask        = bn.dbHardMask
   percIdentity      = bn.percentIdentity
@@ -233,22 +228,8 @@ fun convert(conf: IOBlastpConfig): BlastP = XBlastP().apply {
 
 fun convert(bp: BlastP): IOBlastpConfig = IOBlastpConfigImpl().apply {
   setEValue(bp.expectValue)
+  convert(this)
 
-  queryLoc         = bp.queryLocation
-  outFormat        = bp.outFormat?.toExternal()
-  numDescriptions  = bp.numDescriptions?.value
-  numAlignments    = bp.numAlignments?.value
-  lineLength       = bp.lineLength?.value
-  sortHits         = bp.sortHits?.toExternal()
-  sortHSPs         = bp.sortHSPs?.toExternal()
-  lcaseMasking     = bp.lowercaseMasking
-  qCovHSPPerc      = bp.queryCoverageHSPPercent
-  maxHSPs          = bp.maxHSPs
-  maxTargetSeqs    = bp.maxTargetSequences?.value
-  dbSize           = bp.dbSize
-  searchSpace      = bp.searchSpace
-  xDropUngap       = bp.extensionDropoffUngapped
-  parseDefLines    = bp.parseDefLines
   task             = bp.task
   wordSize         = bp.wordSize?.toInt()
   gapOpen          = bp.gapOpen
@@ -258,8 +239,6 @@ fun convert(bp: BlastP): IOBlastpConfig = IOBlastpConfigImpl().apply {
   compBasedStats   = convertCBS(bp.compBasedStats)
   seg              = bp.seg
   softMasking      = bp.softMasking
-  taxIds           = convertTaxIDsToExternal(bp.taxIDs)
-  negativeTaxIds   = convertTaxIDsToExternal(bp.negativeTaxIDs)
   dbSoftMask       = bp.dbSoftMask
   dbHardMask       = bp.dbHardMask
   cullingLimit     = bp.cullingLimit?.toInt()
@@ -316,55 +295,38 @@ fun convert(conf: IOBlastxConfig): BlastX = XBlastX().apply {
   sumStats                     = conf.sumStats
   extensionDropoffPrelimGapped = conf.xDropGap
   extensionDropoffFinalGapped  = conf.xDropGapFinal
-  windowSize                   = conf.windowSize.toLong()
+  windowSize                   = conf.windowSize?.toLong()
   ungappedAlignmentsOnly       = conf.ungapped
   useSmithWatermanTraceback    = conf.useSWTraceback
 }
 
-fun BlastX.toExternal(): IOBlastxConfig = IOBlastxConfigImpl(
-  queryLoc         = queryLocation,
-  eValue           = expectValue?.value,
-  outFormat        = outFormat?.toExternal(),
-  numDescriptions  = numDescriptions?.value,
-  numAlignments    = numAlignments?.value,
-  lineLength       = lineLength?.value,
-  sortHits         = sortHits?.toExternal(),
-  sortHSPs         = sortHSPs?.toExternal(),
-  lcaseMasking     = lowercaseMasking,
-  qCovHSPPerc      = queryCoverageHSPPercent,
-  maxHSPs          = maxHSPs,
-  maxTargetSeqs    = maxTargetSequences?.value,
-  dbSize           = dbSize,
-  searchSpace      = searchSpace,
-  xDropUngap       = extensionDropoffUngapped,
-  parseDefLines    = parseDefLines,
-  strand           = strand,
-  queryGeneticCode = queryGenCode,
-  task             = task,
-  wordSize         = wordSize?.toInt(),
-  gapOpen          = gapOpen,
-  gapExtend        = gapExtend,
-  maxIntronLength  = maxIntronLength?.toInt(),
-  matrix           = matrix,
-  threshold        = threshold,
-  compBasedStats   = convertCBS(compBasedStats),
-  seg              = seg,
-  softMasking      = softMasking,
-  taxIds           = convertTaxIDsToExternal(taxIDs),
-  negativeTaxIds   = convertTaxIDsToExternal(negativeTaxIDs),
-  dbSoftMask       = dbSoftMask,
-  dbHardMask       = dbHardMask,
-  cullingLimit     = cullingLimit?.toInt(),
-  bestHitOverhang  = bestHitOverhang,
-  bestHitScoreEdge = bestHitScoreEdge,
-  subjectBestHit   = subjectBestHit,
-  sumStats         = sumStats,
-  xDropGap         = extensionDropoffPrelimGapped,
-  xDropGapFinal    = extensionDropoffFinalGapped,
-  windowSize       = windowSize?.toInt(),
-  ungapped         = ungappedAlignmentsOnly,
-  useSWTraceback   = useSmithWatermanTraceback,
-)
+fun BlastX.toExternal(): IOBlastxConfig = IOBlastxConfigImpl().also {
+  convert(it)
+  it.strand = strand
+  it.queryGeneticCode = queryGenCode
+  it.task = task
+  it.wordSize = wordSize?.toInt()
+  it.gapOpen = gapOpen
+  it.gapExtend = gapExtend
+  it.maxIntronLength = maxIntronLength?.toInt()
+  it.matrix = matrix
+  it.threshold = threshold
+  it.compBasedStats = convertCBS(compBasedStats)
+  it.seg = seg
+  it.softMasking = softMasking
+  it.dbSoftMask = dbSoftMask
+  it.dbHardMask = dbHardMask
+  it.cullingLimit = cullingLimit?.toInt()
+  it.bestHitOverhang = bestHitOverhang
+  it.bestHitScoreEdge = bestHitScoreEdge
+  it.subjectBestHit = subjectBestHit
+  it.sumStats = sumStats
+  it.xDropGap = extensionDropoffPrelimGapped
+  it.xDropGapFinal = extensionDropoffFinalGapped
+  it.windowSize = windowSize?.toInt()
+  it.ungapped = ungappedAlignmentsOnly
+  it.useSWTraceback = useSmithWatermanTraceback
+}
 
 // ---------------------------------------------------------------------- //
 
@@ -415,22 +377,8 @@ fun convert(conf: IOTBlastnConfig): TBlastN = XTBlastN().apply {
 }
 
 fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
-  queryLoc         = b.queryLocation
-  eValue           = b.expectValue?.value
-  outFormat        = b.outFormat?.toExternal()
-  numDescriptions  = b.numDescriptions?.value
-  numAlignments    = b.numAlignments?.value
-  lineLength       = b.lineLength?.value
-  sortHits         = b.sortHits?.toExternal()
-  sortHSPs         = b.sortHSPs?.toExternal()
-  lcaseMasking     = b.lowercaseMasking
-  qCovHSPPerc      = b.queryCoverageHSPPercent
-  maxHSPs          = b.maxHSPs
-  maxTargetSeqs    = b.maxTargetSequences?.value
-  dbSize           = b.dbSize
-  searchSpace      = b.searchSpace
-  xDropUngap       = b.extensionDropoffUngapped
-  parseDefLines    = b.parseDefLines
+  b.convert(this)
+
   task             = b.task
   wordSize         = b.wordSize?.toInt()
   gapOpen          = b.gapOpen
@@ -442,8 +390,6 @@ fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
   compBasedStats   = convertCBS(b.compBasedStats)
   seg              = b.seg
   softMasking      = b.softMasking
-  taxIds           = convertTaxIDsToExternal(b.taxIDs)
-  negativeTaxIds   = convertTaxIDsToExternal(b.negativeTaxIDs)
   dbSoftMask       = b.dbSoftMask
   dbHardMask       = b.dbHardMask
   cullingLimit     = b.cullingLimit?.toInt()
@@ -501,22 +447,15 @@ fun convert(conf: IOTBlastxConfig): TBlastX = XTBlastX().apply {
 }
 
 fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
+  b.convert(this)
   queryLoc         = b.queryLocation
   eValue           = b.expectValue?.value
-  outFormat        = b.outFormat?.toExternal()
-  numDescriptions  = b.numDescriptions?.value
-  numAlignments    = b.numAlignments?.value
-  lineLength       = b.lineLength?.value
-  sortHits         = b.sortHits?.toExternal()
-  sortHSPs         = b.sortHSPs?.toExternal()
   lcaseMasking     = b.lowercaseMasking
   qCovHSPPerc      = b.queryCoverageHSPPercent
   maxHSPs          = b.maxHSPs
-  maxTargetSeqs    = b.maxTargetSequences?.value
   dbSize           = b.dbSize
   searchSpace      = b.searchSpace
   xDropUngap       = b.extensionDropoffUngapped
-  parseDefLines    = b.parseDefLines
   strand           = b.strand
   queryGeneticCode = b.queryGenCode?.toByte()
   wordSize         = b.wordSize?.toInt()
@@ -526,8 +465,6 @@ fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
   dbGencode        = b.dbGenCode?.toByte()
   seg              = b.seg
   softMasking      = b.softMasking
-  taxIds           = convertTaxIDsToExternal(b.taxIDs)
-  negativeTaxIds   = convertTaxIDsToExternal(b.negativeTaxIDs)
   dbSoftMask       = b.dbSoftMask
   dbHardMask       = b.dbHardMask
   cullingLimit     = b.cullingLimit?.toInt()
@@ -536,6 +473,39 @@ fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
   subjectBestHit   = b.subjectBestHit
   sumStats         = b.sumStats
   windowSize       = b.windowSize?.toInt()
+}
+
+
+
+private inline fun BlastWithLists.convert(o: IOBlastWithLists) {
+  o.taxIds         = convertTaxIDsToExternal(taxIDs)
+  o.negativeTaxIds = convertTaxIDsToExternal(negativeTaxIDs)
+
+  (this as BlastQueryConfig).convert(o)
+}
+
+private inline fun BlastQueryConfig.convert(o: IOBlastConfig) {
+  o.dbSize       = dbSize
+  o.eValue       = expectValue?.value
+  o.lcaseMasking = lowercaseMasking
+  o.maxHSPs      = maxHSPs
+  o.qCovHSPPerc  = queryCoverageHSPPercent
+  o.queryLoc     = queryLocation
+  o.searchSpace  = searchSpace
+  o.xDropUngap   = extensionDropoffUngapped
+
+  (this as BlastConfig).convert(o)
+}
+
+private inline fun BlastConfig.convert(o: IOBlastConfig) {
+  o.lineLength      = lineLength?.value
+  o.maxTargetSeqs   = maxTargetSequences?.value
+  o.numAlignments   = numAlignments?.value
+  o.numDescriptions = numDescriptions?.value
+  o.outFormat       = outFormat?.toExternal()
+  o.parseDefLines   = parseDefLines
+  o.sortHits        = sortHits?.toExternal()
+  o.sortHSPs        = sortHSPs?.toExternal()
 }
 
 // ---------------------------------------------------------------------- //

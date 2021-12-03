@@ -7,8 +7,8 @@ import mb.lib.queue.model.FailedJobResponse
 import mb.lib.util.jsonCast
 import mb.lib.util.jsonObject
 
-data class FailedQueryJobResponse(@JsonProperty(JsonKeys.FailedJobs) override val failedJobs: List<FailedQueryJob>)
-  : FailedJobResponse<FailedQueryJob>
-{
+data class FailedQueryJobResponse(
+  @JsonProperty(JsonKeys.FailedJobs) override val failedJobs: List<FailedQueryJob>
+) : FailedJobResponse<FailedQueryJob> {
   override fun toJSON() = jsonObject { set<JsonNode>(JsonKeys.FailedJobs, failedJobs.jsonCast()) }
 }

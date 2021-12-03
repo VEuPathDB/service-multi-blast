@@ -36,7 +36,7 @@ data class IOBlastxConfigImpl private constructor(
   override var wordSize:         Int?,
   override var gapOpen:          Int?,
   override var gapExtend:        Int?,
-  override var maxIntronLength:  Int,
+  override var maxIntronLength:  Int?,
   override var matrix:           ScoringMatrix?,
   override var threshold:        Double?,
   override var compBasedStats:   CompositionBasedStats?,
@@ -53,7 +53,7 @@ data class IOBlastxConfigImpl private constructor(
   override var sumStats:         Boolean?,
   override var xDropGap:         Double,
   override var xDropGapFinal:    Double,
-  override var windowSize:       Int,
+  override var windowSize:       Int?,
   override var ungapped:         Boolean?,
   override var useSWTraceback:   Boolean?,
 ) : IOBlastConfigImpl(), IOBlastxConfig {
