@@ -159,7 +159,7 @@ class BlastDBManager: MBlastDBManager()
     return SelectUserTargetLinks(connection, userID).run()
   }
 
-  fun getBlastQuery(jobID: HashID): Optional<String> {
+  fun getBlastQuery(jobID: HashID): String? {
     Log.trace("#getJobQuery(jobID={})", jobID)
     return SelectBlastQuery(connection, jobID).run()
   }
