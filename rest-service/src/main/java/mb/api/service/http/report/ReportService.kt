@@ -124,15 +124,17 @@ internal object ReportService {
       val rep = ReportManager.getAndLinkReport(reportID, userID)
         .orElseThrow(::NotFoundException)
 
-      val out = ReportManager.getReportFile(rep, file)
-        .orElseThrow(::NotFoundException)
+      val out = ReportManager.getReportFile(rep, file) ?: throw NotFoundException()
+
+      if (maxSize != null && out.length() > maxSize)
+        throw BadRequestException("Requested report is larger than the specified max content size.")
 
       if (rep.config.outFormat == null)
-        return ReportDownload(file, download, out)
+        return ReportDownload(file, download, out.inputStream())
       if (rep.config.outFormat.type == null)
-        return ReportDownload(file, download, out)
+        return ReportDownload(file, download, out.inputStream())
 
-      return ReportDownload(file, download, out)
+      return ReportDownload(file, download, out.inputStream())
     } catch (e: Exception) {
       throw e.wrap()
     }
