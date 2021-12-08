@@ -365,6 +365,11 @@ object BlastManager {
 
     val jobID = job.digest(query)
 
+    // FIXME: This doesn't belong here, this should be upstream somewhere.  It's
+    //        only here because this is where the job ID is created.
+    if (!job.isPrimary && job.parentID == null)
+      job.parentID = jobID
+
     // Check to see if this user already has a job matching this one.
     db.getUserBlastRow(jobID, job.userID)?.also { row ->
       // If the user has this job already exists, refresh it to see if it needs to
