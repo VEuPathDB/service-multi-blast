@@ -1,5 +1,6 @@
 package mb.api.controller.resources
 
+import mb.api.model.io.Headers
 import mb.api.model.reports.ReportRequest
 import mb.api.model.reports.ReportResponse
 import mb.lib.http.MimeType
@@ -54,6 +55,7 @@ interface Reports
   fun getReportData(
     @PathParam(Vars.ReportID) reportID: String,
     @PathParam(Vars.FileName) fileName: String,
-    @QueryParam("download") @DefaultValue("true") download: Boolean
+    @QueryParam("download") @DefaultValue("true") download: Boolean,
+    @HeaderParam(Headers.ContentMaxLength) contentMaxLength: Long?,
   ): Response
 }
