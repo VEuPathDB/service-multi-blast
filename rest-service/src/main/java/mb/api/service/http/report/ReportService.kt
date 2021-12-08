@@ -118,8 +118,8 @@ internal object ReportService {
   }
 
 
-  fun downloadReport(reportID: HashID, userID: Long, file: String, download: Boolean): ReportDownload {
-    Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={})", reportID, userID, file, download)
+  fun downloadReport(reportID: HashID, userID: Long, file: String, download: Boolean, maxSize: Long?): ReportDownload {
+    Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={}, maxSize={})", reportID, userID, file, download, maxSize)
     try {
       val rep = ReportManager.getAndLinkReport(reportID, userID)
         .orElseThrow(::NotFoundException)
