@@ -45,14 +45,15 @@ data class ReportController(@Context private val request: Request): Reports
   }
 
   @Override
-  override fun getReportData(reportID: String, fileName: String, download: Boolean): Response {
-    Log.trace("getReportData(reportID={}, fileName={}, download={})", reportID, fileName, download)
+  override fun getReportData(reportID: String, fileName: String, download: Boolean, contentMaxLength: Long?): Response {
+    Log.trace("getReportData(reportID={}, fileName={}, download={}, contentMaxLength={})", reportID, fileName, download, contentMaxLength)
 
     return ReportService.downloadReport(
       HashID.parseOrThrow(reportID, ::NotFoundException),
       request.requireUserID(),
       fileName,
-      download
+      download,
+      contentMaxLength
     ).toResponse()
   }
 }
