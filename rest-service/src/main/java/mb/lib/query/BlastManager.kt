@@ -365,11 +365,6 @@ object BlastManager {
 
     val jobID = job.digest(query)
 
-    // FIXME: This doesn't belong here, this should be upstream somewhere.  It's
-    //        only here because this is where the job ID is created.
-    if (!job.isPrimary && job.parentID == null)
-      job.parentID = jobID
-
     // Check to see if this user already has a job matching this one.
     db.getUserBlastRow(jobID, job.userID)?.also { row ->
       // If the user has this job already exists, refresh it to see if it needs to
@@ -378,7 +373,7 @@ object BlastManager {
       refreshJobStatus(db, row)
       submitToQueueIfExpired(db, row)
 
-      if (!job.isPrimary) {
+      if (!job.isPrimary && job.parentID != null) {
         // Look for an existing link between these jobs.
         db.getParentJobLinks(jobID).forEach {
           // If we find one, skip out because we don't need to insert a link.
@@ -409,7 +404,7 @@ object BlastManager {
       // Rerun the job if needed.
       submitToQueueIfExpired(db, row)
 
-      if (!job.isPrimary) {
+      if (!job.isPrimary && job.parentID != null) {
         // Look for an existing link between these jobs.
         db.getParentJobLinks(jobID).forEach {
           // If we find one, skip out because we don't need to insert a link.
@@ -447,7 +442,7 @@ object BlastManager {
     db.linkUser(row)
     db.linkTargets(jobID, *job.targets)
 
-    if (!job.isPrimary)
+    if (!job.isPrimary && job.parentID != null)
       db.linkJobs(jobID, job.parentID!!)
 
     return row
