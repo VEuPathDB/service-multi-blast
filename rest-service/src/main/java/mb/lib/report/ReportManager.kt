@@ -9,6 +9,7 @@ import mb.lib.report.model.ReportPayload
 import mb.lib.report.model.ReportRow
 import mb.lib.report.model.UserReportRow
 import org.apache.logging.log4j.LogManager
+import java.io.File
 import java.io.InputStream
 import java.time.OffsetDateTime
 import java.util.Optional
@@ -28,23 +29,23 @@ object ReportManager {
    *
    * @return an optional input stream over the target file.
    */
-  fun getReportFile(row: ReportRow, file: String): Optional<InputStream> {
+  fun getReportFile(row: ReportRow, file: String): File? {
     Log.trace("::getReportFiles(row={})", row)
 
     if (!JobDataManager.workspaceExists(row.jobID))
-      return Optional.empty()
+      return null
 
     val ws = JobDataManager.jobWorkspace(row.jobID)
 
     if (!ws.reportWorkspaceExists(row.reportID))
-      return Optional.empty()
+      return null
 
     val rs = ws.reportWorkspace(row.reportID)
 
     if (!rs.fileExists(file))
-      return Optional.empty()
+      return null
 
-    return Optional.of(rs.getFileStream(file))
+    return rs.getFilePath(file).toFile()
   }
 
   fun getUpdatedUserReport(reportID: HashID, userID: Long): Optional<UserReportRow> {
