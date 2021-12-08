@@ -20,6 +20,7 @@ enum class CompositionBasedStats(val externalValue: String) {
 
 
   companion object {
+    @JvmStatic
     @JsonCreator
     fun fromValue(value: String): CompositionBasedStats {
       val tmp = value.lowercase()
