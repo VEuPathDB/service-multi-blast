@@ -11,6 +11,7 @@ import mb.api.model.blast.impl.*
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.*
 import mb.lib.blast.model.*
+import mb.lib.blast.model.CompositionBasedStats.Companion
 import mb.lib.model.EmptyBlastConfig
 import mb.lib.query.model.JobTarget
 import org.veupathdb.lib.blast.*
@@ -69,15 +70,15 @@ fun convertLegacy(json: ArrayNode): BlastConfig = when (BlastTool.fromString(jso
   else              -> throw IllegalArgumentException()
 }
 
-fun convertNJSON(json: ObjectNode): BlastConfig = BlastN.fromJSON(JSONObjectDecoder(json))
+fun convertNJSON(json: ObjectNode): BlastConfig = BlastN(JSONObjectDecoder(json))
 
-fun convertPJSON(json: ObjectNode): BlastConfig = BlastP.fromJSON(JSONObjectDecoder(json))
+fun convertPJSON(json: ObjectNode): BlastConfig = BlastP(JSONObjectDecoder(json))
 
-fun convertXJSON(json: ObjectNode): BlastConfig = BlastX.fromJSON(JSONObjectDecoder(json))
+fun convertXJSON(json: ObjectNode): BlastConfig = BlastX(JSONObjectDecoder(json))
 
-fun convertTNJSON(json: ObjectNode): BlastConfig = TBlastN.fromJSON(JSONObjectDecoder(json))
+fun convertTNJSON(json: ObjectNode): BlastConfig = TBlastN(JSONObjectDecoder(json))
 
-fun convertTXJSON(json: ObjectNode): BlastConfig = TBlastX.fromJSON(JSONObjectDecoder(json))
+fun convertTXJSON(json: ObjectNode): BlastConfig = TBlastX(JSONObjectDecoder(json))
 
 fun IOBlastConfig.toInternal(): BlastQueryConfig = when (tool) {
   BlastTool.BlastN  -> convert(this as IOBlastnConfig)
@@ -96,12 +97,12 @@ fun IOBlastConfig.toInternal(): BlastQueryConfig = when (tool) {
  * @return Converted internal blast config.
  */
 fun convert(bn: IOBlastnConfig): BlastN = XBlastN().apply {
-  setQueryFile(bn.query)
-  setExpectValue(bn.eValue)
-  setNumDescriptions(bn.numDescriptions)
-  setNumAlignments(bn.numAlignments)
-  setLineLength(bn.lineLength)
-  setMaxTargetSequences(bn.maxTargetSeqs)
+  queryFile = bn.query?.let(::QueryFile)
+  expectValue = bn.eValue?.let(::ExpectValue)
+  numDescriptions = bn.numDescriptions?.let(::NumDescriptions)
+  numAlignments = bn.numAlignments?.let(::NumAlignments)
+  lineLength = bn.lineLength?.let(::LineLength)
+  maxTargetSequences = bn.maxTargetSeqs?.let(::MaxTargetSeqs)
 
   queryLocation                = bn.queryLoc
   outFormat                    = convert(bn.outFormat)
@@ -184,12 +185,12 @@ fun convert(bn: BlastN): IOBlastnConfig = IOBlastnConfigImpl().apply {
 // ---------------------------------------------------------------------- //
 
 fun convert(conf: IOBlastpConfig): BlastP = XBlastP().apply {
-  setQueryFile(conf.query)
-  setExpectValue(conf.eValue)
-  setNumDescriptions(conf.numDescriptions)
-  setNumAlignments(conf.numAlignments)
-  setLineLength(conf.lineLength)
-  setMaxTargetSequences(conf.maxTargetSeqs)
+  queryFile = conf.query?.let(::QueryFile)
+  expectValue = conf.eValue?.let(::ExpectValue)
+  numDescriptions = conf.numDescriptions?.let(::NumDescriptions)
+  numAlignments = conf.numAlignments?.let(::NumAlignments)
+  lineLength = conf.lineLength?.let(::LineLength)
+  maxTargetSequences = conf.maxTargetSeqs?.let(::MaxTargetSeqs)
 
   queryLocation                = conf.queryLoc
   outFormat                    = convert(conf.outFormat)
@@ -208,7 +209,7 @@ fun convert(conf: IOBlastpConfig): BlastP = XBlastP().apply {
   gapExtend                    = conf.gapExtend
   matrix                       = conf.matrix
   threshold                    = conf.threshold
-  compBasedStats               = convertCBS(conf.compBasedStats)
+  compBasedStats               = conf.compBasedStats?.toInternalLong()
   seg                          = conf.seg
   softMasking                  = conf.softMasking
   taxIDs                       = convertTaxIDsToInternal(conf.taxIds)
@@ -236,7 +237,7 @@ fun convert(bp: BlastP): IOBlastpConfig = IOBlastpConfigImpl().apply {
   gapExtend        = bp.gapExtend
   matrix           = bp.matrix
   threshold        = bp.threshold
-  compBasedStats   = convertCBS(bp.compBasedStats)
+  compBasedStats   = bp.compBasedStats?.let(CompositionBasedStats::fromValue)
   seg              = bp.seg
   softMasking      = bp.softMasking
   dbSoftMask       = bp.dbSoftMask
@@ -254,12 +255,12 @@ fun convert(bp: BlastP): IOBlastpConfig = IOBlastpConfigImpl().apply {
 // ---------------------------------------------------------------------- //
 
 fun convert(conf: IOBlastxConfig): BlastX = XBlastX().apply {
-  setQueryFile(conf.query)
-  setExpectValue(conf.eValue)
-  setNumDescriptions(conf.numDescriptions)
-  setNumAlignments(conf.numAlignments)
-  setLineLength(conf.lineLength)
-  setMaxTargetSequences(conf.maxTargetSeqs)
+  queryFile = conf.query?.let(::QueryFile)
+  expectValue = conf.eValue?.let(::ExpectValue)
+  numDescriptions = conf.numDescriptions?.let(::NumDescriptions)
+  numAlignments = conf.numAlignments?.let(::NumAlignments)
+  lineLength = conf.lineLength?.let(::LineLength)
+  maxTargetSequences = conf.maxTargetSeqs?.let(::MaxTargetSeqs)
 
   queryLocation                = conf.queryLoc
   outFormat                    = convert(conf.outFormat)
@@ -281,7 +282,7 @@ fun convert(conf: IOBlastxConfig): BlastX = XBlastX().apply {
   maxIntronLength              = conf.maxIntronLength?.toLong()
   matrix                       = conf.matrix
   threshold                    = conf.threshold
-  compBasedStats               = convertCBS(conf.compBasedStats)
+  compBasedStats               = conf.compBasedStats?.toInternalLong()
   seg                          = conf.seg
   softMasking                  = conf.softMasking
   taxIDs                       = convertTaxIDsToInternal(conf.taxIds)
@@ -311,7 +312,7 @@ fun BlastX.toExternal(): IOBlastxConfig = IOBlastxConfigImpl().also {
   it.maxIntronLength = maxIntronLength?.toInt()
   it.matrix = matrix
   it.threshold = threshold
-  it.compBasedStats = convertCBS(compBasedStats)
+  it.compBasedStats = compBasedStats?.let(Companion::fromValue)
   it.seg = seg
   it.softMasking = softMasking
   it.dbSoftMask = dbSoftMask
@@ -331,12 +332,12 @@ fun BlastX.toExternal(): IOBlastxConfig = IOBlastxConfigImpl().also {
 // ---------------------------------------------------------------------- //
 
 fun convert(conf: IOTBlastnConfig): TBlastN = XTBlastN().apply {
-  setQueryFile(conf.query)
-  setExpectValue(conf.eValue)
-  setNumDescriptions(conf.numDescriptions)
-  setNumAlignments(conf.numAlignments)
-  setLineLength(conf.lineLength)
-  setMaxTargetSequences(conf.maxTargetSeqs)
+  queryFile = conf.query?.let(::QueryFile)
+  expectValue = conf.eValue?.let(::ExpectValue)
+  numDescriptions = conf.numDescriptions?.let(::NumDescriptions)
+  numAlignments = conf.numAlignments?.let(::NumAlignments)
+  lineLength = conf.lineLength?.let(::LineLength)
+  maxTargetSequences = conf.maxTargetSeqs?.let(::MaxTargetSeqs)
 
   queryLocation                = conf.queryLoc
   outFormat                    = convert(conf.outFormat)
@@ -357,7 +358,7 @@ fun convert(conf: IOTBlastnConfig): TBlastN = XTBlastN().apply {
   maxIntronLength              = conf.maxIntronLength?.toLong()
   matrix                       = conf.matrix
   threshold                    = conf.threshold
-  compBasedStats               = convertCBS(conf.compBasedStats)
+  compBasedStats               = conf.compBasedStats?.toInternalLong()
   seg                          = conf.seg
   softMasking                  = conf.softMasking
   taxIDs                       = convertTaxIDsToInternal(conf.taxIds)
@@ -387,7 +388,7 @@ fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
   maxIntronLength  = b.maxIntronLength?.toInt()
   matrix           = b.matrix
   threshold        = b.threshold
-  compBasedStats   = convertCBS(b.compBasedStats)
+  compBasedStats   = b.compBasedStats?.let(CompositionBasedStats::fromValue)
   seg              = b.seg
   softMasking      = b.softMasking
   dbSoftMask       = b.dbSoftMask
@@ -407,12 +408,12 @@ fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
 // ---------------------------------------------------------------------- //
 
 fun convert(conf: IOTBlastxConfig): TBlastX = XTBlastX().apply {
-  setQueryFile(conf.query)
-  setExpectValue(conf.eValue)
-  setNumDescriptions(conf.numDescriptions)
-  setNumAlignments(conf.numAlignments)
-  setLineLength(conf.lineLength)
-  setMaxTargetSequences(conf.maxTargetSeqs)
+  queryFile = conf.query?.let(::QueryFile)
+  expectValue = conf.eValue?.let(::ExpectValue)
+  numDescriptions = conf.numDescriptions?.let(::NumDescriptions)
+  numAlignments = conf.numAlignments?.let(::NumAlignments)
+  lineLength = conf.lineLength?.let(::LineLength)
+  maxTargetSequences = conf.maxTargetSeqs?.let(::MaxTargetSeqs)
 
   queryLocation            = conf.queryLoc
   outFormat                = convert(conf.outFormat)
@@ -512,7 +513,7 @@ private inline fun BlastConfig.convert(o: IOBlastConfig) {
 
 fun convertCBS(value: String?): CompositionBasedStats? = value?.let(CompositionBasedStats::fromValue)
 
-fun convertCBS(value: CompositionBasedStats?) = value?.externalValue
+fun convertCBS(value: CompositionBasedStats?) = value?.publicValue
 
 fun OutFormat.toExternal() = IOBlastReportFormat.fromInternalValue(this)
 

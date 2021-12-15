@@ -7,15 +7,31 @@ import org.veupathdb.lib.container.jaxrs.config.Options
 import org.veupathdb.lib.container.jaxrs.health.Dependency
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources
 import org.veupathdb.lib.container.jaxrs.server.Server
-import org.veupathdb.lib.container.jaxrs.server.middleware.JacksonFilter
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
-class Main : Server() {
+
+object Main : Server() {
+  @JvmStatic
+  val bgTasks: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+
+  init {
+    enableAccountDB()
+    enableUserDB()
+    bgTasks.scheduleAtFixedRate(JobCleanup, 0, 24, TimeUnit.HOURS)
+  }
+
+  @JvmStatic
+  fun main(args: Array<String>) = start(args)
+
+  fun startServer(args: Array<String>) {
+    start(args)
+  }
+
   override fun onShutdown() {
     super.onShutdown()
-    bgTasks!!.shutdown()
+    bgTasks.shutdown()
   }
 
   override fun newResourceConfig(options: Options): ContainerResources {
@@ -32,16 +48,4 @@ class Main : Server() {
     return Config
   }
 
-  companion object {
-    private var bgTasks: ScheduledExecutorService? = null
-    @JvmStatic
-    fun main(args: Array<String>) {
-      val server = Main()
-      bgTasks = Executors.newSingleThreadScheduledExecutor()
-      server.enableAccountDB()
-      server.enableUserDB()
-      server.start(args)
-      bgTasks!!.scheduleAtFixedRate(JobCleanup, 0, 24, TimeUnit.HOURS)
-    }
-  }
 }
