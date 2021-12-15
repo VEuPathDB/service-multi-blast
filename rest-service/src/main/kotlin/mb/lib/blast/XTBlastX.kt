@@ -30,7 +30,7 @@ fun XTBlastX.fromLegacyJSON(raw: ArrayNode) {
 }
 
 fun XTBlastX.fromTextJSON(key: String, value: String) = when (key) {
-  Flag.Strand -> strand = Strand.fromString(value)
+  Flag.Strand           -> strand = Strand.fromString(value)
   Flag.Matrix           -> matrix = ScoringMatrix.fromString(value)
   Flag.SubjectFile      -> subjectFile = value
   Flag.SubjectLocation  -> subjectLocation = Location.fromString(value)

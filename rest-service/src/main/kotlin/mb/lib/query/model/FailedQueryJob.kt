@@ -12,6 +12,7 @@ import mb.lib.util.convertJobConfig
 import mb.lib.util.jsonArray
 import mb.lib.util.jsonCast
 import mb.lib.util.jsonObject
+import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.consts.Key
 import java.time.OffsetDateTime

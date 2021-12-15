@@ -63,7 +63,7 @@ interface IOBlastxConfig : IOBlastWithLists {
 
   @get:JsonProperty("softMasking")
   @set:JsonProperty("softMasking")
-  var softMasking: Boolean
+  var softMasking: Boolean?
 
   @get:JsonProperty("dbSoftMask")
   @set:JsonProperty("dbSoftMask")
@@ -87,7 +87,7 @@ interface IOBlastxConfig : IOBlastWithLists {
 
   @get:JsonProperty("subjectBestHit")
   @set:JsonProperty("subjectBestHit")
-  var subjectBestHit: Boolean
+  var subjectBestHit: Boolean?
 
   @get:JsonProperty("sumStats")
   @set:JsonProperty("sumStats")
@@ -95,11 +95,11 @@ interface IOBlastxConfig : IOBlastWithLists {
 
   @get:JsonProperty("xDropGap")
   @set:JsonProperty("xDropGap")
-  var xDropGap: Double
+  var xDropGap: Double?
 
   @get:JsonProperty("xDropGapFinal")
   @set:JsonProperty("xDropGapFinal")
-  var xDropGapFinal: Double
+  var xDropGapFinal: Double?
 
   @get:JsonProperty("windowSize")
   @set:JsonProperty("windowSize")

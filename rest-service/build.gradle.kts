@@ -7,7 +7,7 @@ import java.util.*
 plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "1.4.0"
-  kotlin("jvm") version "1.5.31"
+  kotlin("jvm") version "1.6.0"
 }
 
 // Load Props
@@ -16,8 +16,9 @@ buildProps.load(FileInputStream(File(rootDir, "service.properties")))
 val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.service"]}"
 
 java {
-  targetCompatibility = JavaVersion.VERSION_16
-  sourceCompatibility = JavaVersion.VERSION_16
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(16))
+  }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -51,9 +52,6 @@ allprojects {
 dependencies {
   val junit = "5.7.0"
 
-  implementation(platform(project(":bom")))
-
-  implementation(kotlin("stdlib"))
   implementation(kotlin("stdlib-jdk8"))
 
   //
@@ -72,13 +70,13 @@ dependencies {
   runtimeOnly("org.apache.logging.log4j:log4j-1.2-api")
 
   // Extra FgpUtil dependencies
-  runtimeOnly("org.apache.commons:commons-dbcp2")
-  runtimeOnly("org.json:json")
-  runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org")
-  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+  runtimeOnly("org.apache.commons:commons-dbcp2:2.8.0")
+  runtimeOnly("org.json:json:20190722")
+  runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.0")
+  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.0")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.0")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
 
   //
   // Project Dependencies
@@ -93,44 +91,44 @@ dependencies {
 
 
   // Core lib, prefers local checkout if available
-  implementation("org.veupathdb.lib:jaxrs-container-core")
-  implementation("org.veupathdb.lib:java-blast")
+  implementation("org.veupathdb.lib:jaxrs-container-core:5.1.7")
+  implementation("org.veupathdb.lib:java-blast:5.0.4")
 
   // Jersey
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http")
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet")
-  implementation("org.glassfish.jersey.media:jersey-media-json-jackson")
-  implementation("org.glassfish.jersey.media:jersey-media-multipart")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.3")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.0.3")
+  implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.0.3")
+  implementation("org.glassfish.jersey.media:jersey-media-multipart:3.0.3")
   implementation("jakarta.ws.rs:jakarta.ws.rs-api")
-  runtimeOnly("org.glassfish.jersey.inject:jersey-hk2")
+  runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.0.3")
 
   // Jackson
-  implementation("com.fasterxml.jackson.core:jackson-databind")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
 
   // Log4J
-  implementation("org.apache.logging.log4j:log4j-api")
-  implementation("org.apache.logging.log4j:log4j-core")
-  implementation("org.apache.logging.log4j:log4j")
+  implementation("org.apache.logging.log4j:log4j-api:2.14.1")
+  implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+  implementation("org.apache.logging.log4j:log4j:2.14.0")
 
   // Metrics
-  implementation("io.prometheus:simpleclient")
-  implementation("io.prometheus:simpleclient_common")
+  implementation("io.prometheus:simpleclient:0.12.0")
+  implementation("io.prometheus:simpleclient_common:0.12.0")
 
   // Utils
-  implementation("io.vulpine.lib", "sql-import")
-  implementation("io.vulpine.lib", "lib-query-util")
-  implementation("io.vulpine.lib:Jackfish")
-  implementation("io.vulpine.lib:iffy")
-  implementation("com.devskiller.friendly-id:friendly-id")
-  implementation("info.picocli:picocli:4.6.1")
-  annotationProcessor("info.picocli:picocli-codegen:4.6.1")
+  implementation("io.vulpine.lib", "sql-import", "0.2.1")
+  implementation("io.vulpine.lib", "lib-query-util", "2.1.0")
+  implementation("io.vulpine.lib:Jackfish:1.1.0")
+  implementation("io.vulpine.lib:iffy:1.0.1")
+  implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
+  implementation("info.picocli:picocli:4.6.2")
+  annotationProcessor("info.picocli:picocli-codegen:4.6.2")
 
   // Unit Testing
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:${junit}")
-  testImplementation("org.mockito:mockito-core:2.+")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+  testImplementation("org.mockito:mockito-core:4.1.0")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
 tasks.compileJava {
@@ -142,7 +140,7 @@ tasks.jar {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   manifest {
-    attributes["Main-Class"] = "mb.Main"
+    attributes["Main-Class"] = "mb.MainKt"
     attributes["Implementation-Title"] = buildProps["project.name"]
     attributes["Implementation-Version"] = buildProps["project.version"]
   }
