@@ -1,6 +1,6 @@
 package mb.api.service.http.job
 
-import javax.ws.rs.BadRequestException
+import jakarta.ws.rs.BadRequestException
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName

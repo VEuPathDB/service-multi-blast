@@ -16,11 +16,11 @@ import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import java.io.IOException
 import java.io.InputStream
-import javax.ws.rs.*
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Request
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.Context
+import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.Request
+import jakarta.ws.rs.core.Response
 
 
 private const val ParamQuery      = "query"

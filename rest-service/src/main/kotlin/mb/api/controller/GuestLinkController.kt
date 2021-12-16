@@ -5,10 +5,10 @@ import mb.api.model.IOGuestLink
 import mb.lib.db.JobDBManager
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
-import javax.ws.rs.ForbiddenException
-import javax.ws.rs.InternalServerErrorException
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.Request
+import jakarta.ws.rs.ForbiddenException
+import jakarta.ws.rs.InternalServerErrorException
+import jakarta.ws.rs.core.Context
+import jakarta.ws.rs.core.Request
 
 @Authenticated
 data class GuestLinkController(@Context val req: Request): LinkGuest {

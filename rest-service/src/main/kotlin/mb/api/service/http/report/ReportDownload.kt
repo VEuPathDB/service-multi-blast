@@ -1,16 +1,16 @@
 package mb.api.service.http.report
 
+import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.core.StreamingOutput
 import mb.lib.http.Header
 import mb.lib.http.MimeType
 import java.io.InputStream
 import java.io.OutputStream
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.StreamingOutput
 
 data class ReportDownload(
-  private val fileName:  String     ,
-  private val download:  Boolean    ,
-  private val stream:  InputStream,
+  private val fileName: String,
+  private val download: Boolean,
+  private val stream:   InputStream,
 ): StreamingOutput {
 
   companion object {
