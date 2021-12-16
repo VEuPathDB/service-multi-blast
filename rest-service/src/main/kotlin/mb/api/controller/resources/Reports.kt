@@ -4,8 +4,8 @@ import mb.api.model.io.Headers
 import mb.api.model.reports.ReportRequest
 import mb.api.model.reports.ReportResponse
 import mb.lib.http.MimeType
-import javax.ws.rs.*
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.Response
 
 @Path(Paths.Reports)
 interface Reports

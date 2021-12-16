@@ -10,6 +10,7 @@ import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.BlastX
 import org.veupathdb.lib.blast.consts.Flag
 import org.veupathdb.lib.blast.field.*
+import org.veupathdb.lib.blast.field.CompBasedStatsLong.Companion
 
 fun XBlastX.fromLegacyJSON(node: ArrayNode) {
   for (i in 1 until node.size()) {
@@ -29,7 +30,7 @@ fun XBlastX.fromTextJSON(key: String, value: String) = when (key) {
   Flag.Strand          -> strand          = Strand.fromString(value)
   Flag.Task            -> task            = BlastXTask.fromString(value)
   Flag.Matrix          -> matrix          = ScoringMatrix.fromString(value)
-  Flag.CompBasedStats  -> compBasedStats  = value
+  Flag.CompBasedStats  -> compBasedStats  = CompBasedStatsLong.fromString(value)
   Flag.SubjectFile     -> subjectFile     = value
   Flag.SubjectLocation -> subjectLocation = Location.fromString(value)
   Flag.Seg             -> seg             = Seg.fromString(value)
@@ -70,7 +71,7 @@ fun XBlastX.fromBoolJSON(key: String, value: Boolean) = when (key) {
 class XBlastX: BlastX() {
   @JsonGetter(JsonKeys.Tool)
   fun tool(): BlastTool {
-    return super.getTool()
+    return super.tool
   }
 
   // Added to avoid having to set up a custom serialization config for this class.

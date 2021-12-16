@@ -88,7 +88,7 @@ inline fun BlastN.fromNumberJSON(key: String, value: NumericNode) = when(key) {
 class XBlastN: BlastN()
 {
   @JsonGetter(JsonKeys.Tool)
-  fun tool(): BlastTool = super.getTool()
+  fun tool(): BlastTool = super.tool
 
   // Added to avoid having to set up a custom serialization config for this class.
   @Suppress("UNUSED_PARAMETER")

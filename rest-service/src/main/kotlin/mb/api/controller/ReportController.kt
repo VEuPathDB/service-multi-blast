@@ -7,10 +7,10 @@ import mb.api.service.http.report.ReportService
 import mb.lib.model.HashID
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.Request
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.NotFoundException
+import jakarta.ws.rs.core.Context
+import jakarta.ws.rs.core.Request
+import jakarta.ws.rs.core.Response
 
 @Authenticated(allowGuests = true)
 data class ReportController(@Context private val request: Request): Reports

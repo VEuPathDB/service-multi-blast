@@ -71,7 +71,7 @@ dependencies {
 
   // Extra FgpUtil dependencies
   runtimeOnly("org.apache.commons:commons-dbcp2:2.8.0")
-  runtimeOnly("org.json:json:20190722")
+  runtimeOnly("org.json:json:20211205")
   runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.0")
   implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.0")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
@@ -91,15 +91,15 @@ dependencies {
 
 
   // Core lib, prefers local checkout if available
-  implementation("org.veupathdb.lib:jaxrs-container-core:5.1.7")
-  implementation("org.veupathdb.lib:java-blast:5.0.4")
+  implementation("org.veupathdb.lib:jaxrs-container-core:6.0.0")
+  implementation("org.veupathdb.lib:java-blast:5.0.6")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.3")
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.0.3")
   implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.0.3")
   implementation("org.glassfish.jersey.media:jersey-media-multipart:3.0.3")
-  implementation("jakarta.ws.rs:jakarta.ws.rs-api")
+  implementation("jakarta.platform:jakarta.jakartaee-web-api:9.1.0")
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.0.3")
 
   // Jackson

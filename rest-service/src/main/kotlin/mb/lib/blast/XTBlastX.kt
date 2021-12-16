@@ -61,7 +61,7 @@ fun XTBlastX.fromBoolJSON(key: String, value: Boolean) = when (key) {
 
 class XTBlastX : TBlastX() {
   @JsonGetter(JsonKeys.Tool)
-  fun tool() = super.getTool()!!
+  fun tool() = super.tool
 
   // Added to avoid having to set up a custom serialization config for this class.
   @Suppress("UNUSED_PARAMETER")

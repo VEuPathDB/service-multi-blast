@@ -1,5 +1,7 @@
 package mb.api.service.http.report
 
+import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotFoundException
 import mb.api.model.reports.ReportRequest
 import mb.api.model.reports.ReportResponse
 import mb.api.model.reports.toExternal
@@ -11,8 +13,6 @@ import mb.lib.report.ReportManager
 import mb.lib.report.model.ReportJob
 import mb.lib.report.model.UserReportRow
 import org.apache.logging.log4j.LogManager
-import javax.ws.rs.BadRequestException
-import javax.ws.rs.NotFoundException
 
 internal object ReportService {
   private val Log = LogManager.getLogger(ReportService::class.java)
@@ -131,7 +131,7 @@ internal object ReportService {
 
       if (rep.config.outFormat == null)
         return ReportDownload(file, download, out.inputStream())
-      if (rep.config.outFormat.type == null)
+      if (rep.config.outFormat!!.type == null)
         return ReportDownload(file, download, out.inputStream())
 
       return ReportDownload(file, download, out.inputStream())

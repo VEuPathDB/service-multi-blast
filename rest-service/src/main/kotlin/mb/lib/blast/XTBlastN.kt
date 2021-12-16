@@ -8,10 +8,8 @@ import mb.api.model.io.JsonKeys;
 import org.veupathdb.lib.blast.BlastTool;
 import org.veupathdb.lib.blast.TBlastN;
 import org.veupathdb.lib.blast.consts.Flag;
-import org.veupathdb.lib.blast.field.Location;
-import org.veupathdb.lib.blast.field.ScoringMatrix;
-import org.veupathdb.lib.blast.field.Seg;
-import org.veupathdb.lib.blast.field.TBlastNTask;
+import org.veupathdb.lib.blast.field.*
+import org.veupathdb.lib.blast.field.CompBasedStatsLong.Companion
 
 fun XTBlastN.fromLegacyJSON(raw: ArrayNode) {
   // skip first element as it is just the tool name
@@ -47,7 +45,7 @@ fun XTBlastN.fromNumberJSON(key: String, value: NumericNode) = when (key) {
 fun XTBlastN.fromTextJSON(key: String, value: String) = when (key) {
   Flag.Task                         -> task = TBlastNTask.fromString(value)
   Flag.Matrix                       -> matrix = ScoringMatrix.fromString(value)
-  Flag.CompBasedStats               -> compBasedStats = value
+  Flag.CompBasedStats               -> compBasedStats = CompBasedStatsLong.fromString(value)
   Flag.SubjectFile                  -> subjectFile = value
   Flag.SubjectLocation              -> subjectLocation = Location.fromString(value)
   Flag.Seg                          -> seg = Seg.fromString(value)
@@ -68,7 +66,7 @@ fun XTBlastN.fromBoolJSON(key: String, value: Boolean) = when (key) {
 
 class XTBlastN : TBlastN() {
   @JsonGetter(JsonKeys.Tool)
-  fun tool(): BlastTool = super.getTool()
+  fun tool(): BlastTool = super.tool
   // Added to avoid having to set up a custom serialization config for this class.
   @Suppress("UNUSED_PARAMETER")
   fun setTool(ignored: BlastTool) {}

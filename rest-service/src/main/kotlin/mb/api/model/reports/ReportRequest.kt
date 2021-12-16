@@ -32,39 +32,40 @@ data class ReportRequest(
 ) {
   @JsonIgnore
   inline fun setNumDescriptions(value: NumDescriptions?) {
-    if (value != null) numDescriptions = value.value()
+    if (value != null)
+      numDescriptions = value.value
   }
 
   @JsonIgnore
   fun setNumAlignments(value: NumAlignments?) {
-    if (value != null) numAlignments = value.value()
+    if (value != null)
+      numAlignments = value.value
   }
 
   @JsonIgnore
   fun setLineLength(value: LineLength?) {
-    if (value != null) lineLength = value.value()
+    if (value != null)
+      lineLength = value.value
   }
 
   @JsonIgnore
   fun setMaxTargetSeqs(value: MaxTargetSeqs?) {
-    if (value != null) maxTargetSeqs = value.value()
+    if (value != null)
+      maxTargetSeqs = value.value
   }
 
   @JsonIgnore
   fun toInternal(): BlastFormatter {
     val out = BlastFormatter()
-    out.outFormat = OutFormat()
-      .setType(FormatType.values()[type!!.ordinal])
-      .setDelimiter(delim)
-      .setFields(fields)
+    out.outFormat = OutFormat(FormatType.values()[type!!.ordinal], delim, fields?.toMutableList() ?: mutableListOf())
     out.showGIs = showGIs
-    out.setNumDescriptions(numDescriptions)
-    out.setNumAlignments(numAlignments)
-    out.setLineLength(lineLength)
+    out.numDescriptions = numDescriptions?.let(::NumDescriptions)
+    out.numAlignments = numAlignments?.let(::NumAlignments)
+    out.lineLength = lineLength?.let(::LineLength)
     out.html = html
     out.sortHits = sortHits?.internalValue
     out.sortHSPs = sortHSPs?.internalValue
-    out.setMaxTargetSequences(maxTargetSeqs)
+    out.maxTargetSequences = maxTargetSeqs?.let(::MaxTargetSeqs)
     out.parseDefLines = parseDefLines
     return out
   }
@@ -73,9 +74,10 @@ data class ReportRequest(
 inline fun BlastFormatter.toExternal(jobID: HashID): ReportRequest {
   val out = ReportRequest(jobID)
   if (outFormat != null) {
-    out.type = IOBlastFormat.values()[outFormat.type.ordinal]
-    out.delim = outFormat.delimiter
-    if (outFormat.fields != null && outFormat.fields.size > 0) out.fields = outFormat.fields
+    out.type = IOBlastFormat.values()[outFormat!!.type!!.ordinal]
+    out.delim = outFormat!!.delimiter
+    if (outFormat!!.fields.size > 0)
+      out.fields = outFormat!!.fields.toMutableList()
   }
   out.showGIs = showGIs
   out.setNumDescriptions(numDescriptions)

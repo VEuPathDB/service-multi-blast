@@ -2,10 +2,10 @@ package mb.api.controller
 
 import org.veupathdb.lib.container.jaxrs.model.User
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider
-import javax.ws.rs.BadRequestException
-import javax.ws.rs.InternalServerErrorException
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Request
+import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.InternalServerErrorException
+import jakarta.ws.rs.WebApplicationException
+import jakarta.ws.rs.core.Request
 
 private const val ErrNoUser = "request reached authenticated endpoint with no user attached"
 

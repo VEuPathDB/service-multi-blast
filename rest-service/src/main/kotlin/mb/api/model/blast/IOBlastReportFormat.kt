@@ -28,9 +28,7 @@ interface IOBlastReportFormat {
 
   val toInternalValue: OutFormat?
     get() {
-      return OutFormat().setType(format!!.internalValue)
-        .setDelimiter(delim)
-        .setFields(if (fields == null) emptyList() else ArrayList(fields))
+      return OutFormat(format!!.internalValue, delim, fields?.toMutableList() ?: mutableListOf())
     }
 
   companion object {
@@ -38,7 +36,7 @@ interface IOBlastReportFormat {
       val out = IOBlastReportFormatImpl()
       out.format = fromInternalValue(fmt.type)
       out.delim = fmt.delimiter
-      out.fields = if (fmt.fields == null) emptyList() else ArrayList(fmt.fields)
+      out.fields = ArrayList(fmt.fields)
       return out
     }
   }

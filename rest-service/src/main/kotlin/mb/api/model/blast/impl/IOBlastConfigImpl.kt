@@ -33,31 +33,31 @@ sealed class IOBlastConfigImpl(
   @JsonIgnore
   fun setEValue(value: ExpectValue?) {
     if (value != null)
-      eValue = value.value()
+      eValue = value.value
   }
 
   @JsonIgnore
   fun setNumDescriptions(value: NumDescriptions?) {
     if (value != null)
-      numDescriptions = value.value()
+      numDescriptions = value.value
 }
 
   @JsonIgnore
   fun setNumAlignments(value: NumAlignments?) {
     if (value != null)
-      numAlignments = value.value()
+      numAlignments = value.value
   }
 
   @JsonIgnore
   fun setLineLength(value: LineLength?) {
     if (value != null)
-      lineLength = value.value()
+      lineLength = value.value
   }
 
   @JsonIgnore
   fun setMaxTargetSeqs(al: MaxTargetSeqs?) {
     if (al != null) {
-      maxTargetSeqs = al.value()
+      maxTargetSeqs = al.value
     }
   }
 }

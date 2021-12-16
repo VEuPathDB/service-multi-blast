@@ -1,12 +1,12 @@
 package mb.api.service.http.job
 
+import jakarta.ws.rs.BadRequestException
 import mb.api.model.IOJobTarget
 import mb.api.model.IOJsonJobRequest
 import mb.lib.config.Config
 import mb.lib.path.findDBPath
 import mb.lib.query.model.BlastTargetLink
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
-import javax.ws.rs.BadRequestException
 import kotlin.math.min
 
 fun makeDBPaths(site: String, targets: Collection<IOJobTarget>) =
