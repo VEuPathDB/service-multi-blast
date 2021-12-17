@@ -140,7 +140,7 @@ tasks.jar {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   manifest {
-    attributes["Main-Class"] = "mb.MainKt"
+    attributes["Main-Class"] = "mb.Main"
     attributes["Implementation-Title"] = buildProps["project.name"]
     attributes["Implementation-Version"] = buildProps["project.version"]
   }

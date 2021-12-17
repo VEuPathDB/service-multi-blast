@@ -34,7 +34,7 @@ COPY [\
 RUN ./gradlew dependencies --info --configuration compileClasspath
 RUN make install-dev-env
 
-COPY src/ .src/
+COPY src/ src/
 
 RUN make jar
 
@@ -43,7 +43,7 @@ RUN make jar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM foxcapades/alpine-oracle:1.3
+FROM foxcapades/alpine-oracle:1.6
 
 LABEL service="demo-service"
 
