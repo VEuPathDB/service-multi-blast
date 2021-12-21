@@ -92,7 +92,7 @@ dependencies {
 
   // Core lib, prefers local checkout if available
   implementation("org.veupathdb.lib:jaxrs-container-core:6.0.0")
-  implementation("org.veupathdb.lib:java-blast:5.0.6")
+  implementation("org.veupathdb.lib:java-blast:5.0.7")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.3")
@@ -107,13 +107,13 @@ dependencies {
   implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
 
   // Log4J
-  implementation("org.apache.logging.log4j:log4j-api:2.14.1")
-  implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+  implementation("org.apache.logging.log4j:log4j-api:2.16.0")
+  implementation("org.apache.logging.log4j:log4j-core:2.16.0")
   implementation("org.apache.logging.log4j:log4j:2.14.0")
 
   // Metrics
-  implementation("io.prometheus:simpleclient:0.12.0")
-  implementation("io.prometheus:simpleclient_common:0.12.0")
+  implementation("io.prometheus:simpleclient:0.13.0")
+  implementation("io.prometheus:simpleclient_common:0.13.0")
 
   // Utils
   implementation("io.vulpine.lib", "sql-import", "0.2.1")
