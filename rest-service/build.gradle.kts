@@ -92,7 +92,7 @@ dependencies {
 
   // Core lib, prefers local checkout if available
   implementation("org.veupathdb.lib:jaxrs-container-core:6.0.0")
-  implementation("org.veupathdb.lib:java-blast:5.0.8")
+  implementation("org.veupathdb.lib:java-blast:5.0.9")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.3")
