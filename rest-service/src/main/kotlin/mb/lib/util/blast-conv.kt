@@ -1,3 +1,4 @@
+@file:JvmName("BlastConv")
 @file:Suppress("NOTHING_TO_INLINE")
 
 package mb.lib.util
@@ -18,7 +19,7 @@ import org.veupathdb.lib.blast.*
 import org.veupathdb.lib.blast.field.*
 import org.veupathdb.lib.blast.util.JSONObjectDecoder
 
-fun convertReportConfig(json: String): BlastFormatter = json.parseJSON()
+fun convertReportConfig(json: String) = BlastFormatter(JSONObjectDecoder(json.parseJSON()))
 
 fun convertJobConfig(json: String): BlastConfig = convertJobConfig(json.parseJSON<JsonNode>())
 
