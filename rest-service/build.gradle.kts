@@ -124,7 +124,7 @@ dependencies {
   implementation("info.picocli:picocli:4.6.2")
   annotationProcessor("info.picocli:picocli-codegen:4.6.2")
 
-  implementation("org.veupathdb.lib:lib-prometheus-stats:1.0.1")
+  implementation("org.veupathdb.lib:lib-prometheus-stats:1.0.2")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
