@@ -72,11 +72,11 @@ dependencies {
   // Extra FgpUtil dependencies
   runtimeOnly("org.apache.commons:commons-dbcp2:2.8.0")
   runtimeOnly("org.json:json:20211205")
-  runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.0")
-  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.0")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.0")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
+  runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.1")
+  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.1")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.1")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
   //
   // Project Dependencies
@@ -103,17 +103,17 @@ dependencies {
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.0.3")
 
   // Jackson
-  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.1")
 
   // Log4J
-  implementation("org.apache.logging.log4j:log4j-api:2.16.0")
-  implementation("org.apache.logging.log4j:log4j-core:2.16.0")
+  implementation("org.apache.logging.log4j:log4j-api:2.17.0")
+  implementation("org.apache.logging.log4j:log4j-core:2.17.0")
   implementation("org.apache.logging.log4j:log4j:2.14.0")
 
   // Metrics
-  implementation("io.prometheus:simpleclient:0.13.0")
-  implementation("io.prometheus:simpleclient_common:0.13.0")
+  implementation("io.prometheus:simpleclient:0.14.1")
+  implementation("io.prometheus:simpleclient_common:0.14.1")
 
   // Utils
   implementation("io.vulpine.lib", "sql-import", "0.2.1")
@@ -124,10 +124,12 @@ dependencies {
   implementation("info.picocli:picocli:4.6.2")
   annotationProcessor("info.picocli:picocli-codegen:4.6.2")
 
+  implementation("org.veupathdb.lib:lib-prometheus-stats:1.0.0")
+
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
   testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
-  testImplementation("org.mockito:mockito-core:4.1.0")
+  testImplementation("org.mockito:mockito-core:4.3.1")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
