@@ -8,6 +8,7 @@ import org.veupathdb.lib.container.jaxrs.health.Dependency
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources
 import org.veupathdb.lib.container.jaxrs.server.Server
 import org.veupathdb.lib.container.jaxrs.server.middleware.PrometheusFilter
+import org.veupathdb.lib.prom.PrometheusJVM
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -25,6 +26,8 @@ object Main : Server() {
     PrometheusFilter.setPathTransform {
       it.replace(Regex("[0-9A-Fa-f]{32}"), "{id}")
     }
+
+    PrometheusJVM.enable()
 
     bgTasks.scheduleAtFixedRate(JobCleanup, 0, 24, TimeUnit.HOURS)
   }
