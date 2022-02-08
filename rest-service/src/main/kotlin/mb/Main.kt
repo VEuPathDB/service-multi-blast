@@ -23,7 +23,7 @@ object Main : Server() {
 
     // Add path transform to exclude job IDs from endpoint metrics.
     PrometheusFilter.setPathTransform {
-      it.replace(Regex("/[0-9A-Fa-f]{32}/"), "{id}")
+      it.replace(Regex("[0-9A-Fa-f]{32}"), "{id}")
     }
 
     bgTasks.scheduleAtFixedRate(JobCleanup, 0, 24, TimeUnit.HOURS)
