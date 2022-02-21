@@ -56,7 +56,7 @@ fun convert(value: BlastConfig): IOBlastConfig =
   if (value is EmptyBlastConfig) value.jsonCast() else when (value.tool) {
     BlastTool.BlastN  -> convert(value as BlastN)
     BlastTool.BlastP  -> convert(value as BlastP)
-    BlastTool.BlastX  -> convert(value as BlastX)
+    BlastTool.BlastX  -> (value as BlastX).toExternal() //TODO update this one to be like the others (convert)
     BlastTool.TBlastN -> convert(value as TBlastN)
     BlastTool.TBlastX -> convert(value as TBlastX)
     else              -> throw IllegalArgumentException()
