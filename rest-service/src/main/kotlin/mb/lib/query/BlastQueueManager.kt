@@ -22,8 +22,6 @@ import kotlin.reflect.KClass
 
 object BlastQueueManager: QueueManager<FailedQueryJob>()
 {
-  private val log  = LogManager.getLogger(BlastQueueManager::class.java)
-
   private const val Path = "blast"
 
   override val submissionURL
@@ -31,7 +29,6 @@ object BlastQueueManager: QueueManager<FailedQueryJob>()
 
   override val failedJobs: List<FailedQueryJob>
     get() {
-      log.trace("#getFailedJobs()")
       return getFailedJobs(Config.blastQueueName).failedJobs
     }
 
@@ -43,24 +40,20 @@ object BlastQueueManager: QueueManager<FailedQueryJob>()
    * @return Status of the checked job.
    */
   override fun getJobStatus(jobID: Int): JobStatus {
-    log.trace("#getJobStatus(jobID={})", jobID)
     return getJobStatus(Config.blastQueueName, jobID)
   }
 
   // ------------------------------------------------------------------------------------------ //
 
   override fun jobInFailList(jobID: Int): Boolean {
-    log.trace("#jobInFailList(jobID={})", jobID)
     return jobInFailList(Config.blastQueueName, jobID)
   }
 
   override fun deleteJobFailure(failID: Int) {
-    log.trace("#deleteJobFailure(failID={})", failID)
     deleteJobFailure(Config.blastQueueName, failID)
   }
 
   override fun deleteJob(jobID: Int) {
-    log.trace("#deleteJob(jobID={})", jobID)
     deleteJob(Config.blastQueueName, jobID)
   }
 
@@ -81,8 +74,6 @@ object BlastQueueManager: QueueManager<FailedQueryJob>()
    * @return the queue ID for the queued job
    */
   fun submitNewJob(jobId: HashID, config: BlastConfig): Int {
-    log.trace("#submitJob(jobID={}, config={})", jobId, config)
-
     if (config is EmptyBlastConfig)
       throw RuntimeException("Invalid config cannot be submitted.")
 
