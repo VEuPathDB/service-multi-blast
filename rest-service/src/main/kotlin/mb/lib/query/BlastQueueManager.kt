@@ -4,65 +4,18 @@ import mb.api.service.util.Address
 import mb.lib.config.Config
 import mb.lib.model.EmptyBlastConfig
 import mb.lib.model.HashID
-import mb.lib.model.JobStatus
 import mb.lib.query.model.BlastRequest
-import mb.lib.query.model.FailedQueryJob
-import mb.lib.query.model.FailedQueryJobResponse
 import mb.lib.queue.QueueManager
-import mb.lib.queue.consts.URL
 import mb.lib.queue.model.CreateRequest
-import mb.lib.queue.model.FailedJobResponse
-import mb.lib.util.parseJSON
-import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.BlastConfig
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import kotlin.reflect.KClass
+import org.veupathdb.lib.fireworq.FireworqQueue
 
-object BlastQueueManager: QueueManager<FailedQueryJob>()
+object BlastQueueManager: QueueManager()
 {
   private const val Path = "blast"
 
-  override val submissionURL
-    get() = URL.jobSubmissionEndpoint(Config.blastJobCategory)
-
-  override val failedJobs: List<FailedQueryJob>
-    get() {
-      return getFailedJobs(Config.blastQueueName).failedJobs
-    }
-
-  /**
-   * Retrieves and returns the status for a given job ID in the blast job queue.
-   *
-   * @param jobID External ID of the job to check.
-   *
-   * @return Status of the checked job.
-   */
-  override fun getJobStatus(jobID: Int): JobStatus {
-    return getJobStatus(Config.blastQueueName, jobID)
-  }
-
-  // ------------------------------------------------------------------------------------------ //
-
-  override fun jobInFailList(jobID: Int): Boolean {
-    return jobInFailList(Config.blastQueueName, jobID)
-  }
-
-  override fun deleteJobFailure(failID: Int) {
-    deleteJobFailure(Config.blastQueueName, failID)
-  }
-
-  override fun deleteJob(jobID: Int) {
-    deleteJob(Config.blastQueueName, jobID)
-  }
-
-  override fun getFailedJobs(queue: String): FailedQueryJobResponse {
-    return HttpClient.newHttpClient().send(
-      HttpRequest.newBuilder().uri(URL.failedEndpoint(queue)).GET().build(),
-      HttpResponse.BodyHandlers.ofInputStream()
-    ).body().parseJSON()
-  }
+  override val fireworq: FireworqQueue =
+    FireworqQueue(Config.blastQueueName, Config.queueHost)
 
   /**
    * Submits a new Blast job to the job queue.
