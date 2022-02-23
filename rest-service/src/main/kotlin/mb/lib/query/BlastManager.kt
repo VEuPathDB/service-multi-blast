@@ -267,7 +267,7 @@ object BlastManager {
         row.status = status
 
         if (status == JobStatus.Errored) {
-          BlastQueueManager.failedJobs
+          BlastQueueManager.getFailedJobs()
             .stream()
             .filter { r -> r.jobID == row.queueID }
             .map { j -> j.failID }

@@ -95,8 +95,8 @@ dependencies {
   implementation("org.veupathdb.lib:java-blast:5.0.9")
 
   // Jersey
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.3")
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.0.3")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.4")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.0.4")
   implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.0.4")
   implementation("org.glassfish.jersey.media:jersey-media-multipart:3.0.4")
   implementation("jakarta.platform:jakarta.jakartaee-web-api:9.1.0")
@@ -121,10 +121,11 @@ dependencies {
   implementation("io.vulpine.lib:Jackfish:1.1.0")
   implementation("io.vulpine.lib:iffy:1.0.1")
   implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
-  implementation("info.picocli:picocli:4.6.2")
+  implementation("info.picocli:picocli:4.6.3")
   annotationProcessor("info.picocli:picocli-codegen:4.6.2")
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
+  implementation("org.veupathdb.lib:jvm-fireworq:1.0.1")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
