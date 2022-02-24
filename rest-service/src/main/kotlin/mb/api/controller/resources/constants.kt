@@ -10,8 +10,8 @@ internal object Paths
   const val Queues      = "/queues"
   const val Reports     = "/reports"
   const val ReportByID  = "/{${Vars.ReportID}}"
-  const val ReportData  = "$ReportFiles/{${Vars.FileName}}"
   const val ReportFiles = "$ReportByID/files"
+  const val ReportData  = "$ReportFiles/{${Vars.FileName}}"
   const val ReportQueue = "/reports"
 }
 
