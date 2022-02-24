@@ -1,5 +1,6 @@
 package mb.lib.query
 
+import io.prometheus.client.Gauge
 import mb.api.service.util.Address
 import mb.lib.config.Config
 import mb.lib.model.EmptyBlastConfig
@@ -14,6 +15,22 @@ import org.veupathdb.lib.fireworq.FireworqQueue
 object BlastQueueManager: QueueManager()
 {
   private const val Path = "blast"
+
+  private val queueSizeGauge = Gauge.build(
+    "blast_queue_size",
+    "Number of jobs currently waiting in the blast queue."
+  ).register()
+
+  init {
+    Thread {
+      while (true) {
+        queueSizeGauge.set(queueSize().toDouble())
+
+        // Sleep 15 seconds
+        Thread.sleep(15_000)
+      }
+    }.start()
+  }
 
   override val fireworq: FireworqQueue =
     FireworqQueue(URL.prependHTTP(Config.queueHost), Config.blastQueueName)
