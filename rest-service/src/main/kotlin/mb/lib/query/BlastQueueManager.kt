@@ -16,7 +16,7 @@ object BlastQueueManager: QueueManager()
   private const val Path = "blast"
 
   override val fireworq: FireworqQueue =
-    FireworqQueue(Config.blastQueueName, URL.prependHTTP(Config.queueHost))
+    FireworqQueue(URL.prependHTTP(Config.queueHost), Config.blastQueueName)
 
   /**
    * Submits a new Blast job to the job queue.

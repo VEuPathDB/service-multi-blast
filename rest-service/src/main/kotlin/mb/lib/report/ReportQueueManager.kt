@@ -12,7 +12,7 @@ object ReportQueueManager : QueueManager() {
   private val log = LogManager.getLogger(ReportQueueManager::class.java)
 
   override val fireworq =
-    FireworqQueue(Config.formatQueueName, URL.prependHTTP(Config.queueHost))
+    FireworqQueue(URL.prependHTTP(Config.queueHost), Config.formatQueueName)
 
   /**
    * Report endpoint path segment.  There should be no slashes in this value as
