@@ -21,6 +21,8 @@ abstract class QueueManager
     return JobStatus.unsafeFromString(job.status)
   }
 
+  fun grabbedJobs() = fireworq.getGrabbed()
+
   fun queueSize() = fireworq.getWaiting().size + fireworq.getGrabbed().size
 
   fun jobInFailList(jobID: Int) = fireworq.jobInFailList(jobID)

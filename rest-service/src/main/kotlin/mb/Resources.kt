@@ -2,6 +2,7 @@ package mb
 
 import mb.api.controller.GuestLinkController
 import mb.api.controller.JobController
+import mb.api.controller.QueueController
 import mb.api.controller.ReportController
 import org.glassfish.jersey.media.multipart.MultiPartFeature
 import org.veupathdb.lib.container.jaxrs.config.Options
@@ -27,6 +28,7 @@ class Resources(opts: Options): ContainerResources(opts) {
 //      DebugController.class,
       GuestLinkController::class.java,
       ReportController::class.java,
+      QueueController::class.java,
     )
   }
 }
