@@ -6,6 +6,7 @@ import mb.lib.model.EmptyBlastConfig
 import mb.lib.model.HashID
 import mb.lib.query.model.BlastRequest
 import mb.lib.queue.QueueManager
+import mb.lib.queue.consts.URL
 import mb.lib.queue.model.CreateRequest
 import org.veupathdb.lib.blast.BlastConfig
 import org.veupathdb.lib.fireworq.FireworqQueue
@@ -15,7 +16,7 @@ object BlastQueueManager: QueueManager()
   private const val Path = "blast"
 
   override val fireworq: FireworqQueue =
-    FireworqQueue(Config.blastQueueName, Config.queueHost)
+    FireworqQueue(Config.blastQueueName, URL.prependHTTP(Config.queueHost))
 
   /**
    * Submits a new Blast job to the job queue.
