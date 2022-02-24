@@ -7,23 +7,8 @@ import org.veupathdb.lib.fireworq.FireworqQueue
 
 abstract class QueueManager
 {
-  private val queueSizeGauge = Gauge.build(
-    "blast_queue_size",
-    "Number of jobs currently waiting in the blast queue."
-  ).register()
-
   protected abstract val fireworq: FireworqQueue
 
-  init {
-    Thread {
-      while (true) {
-        queueSizeGauge.set(queueSize().toDouble())
-
-        // Sleep 15 seconds
-        Thread.sleep(15_000)
-      }
-    }.start()
-  }
 
   fun getFailedJobs() = fireworq.getFailed()
 
