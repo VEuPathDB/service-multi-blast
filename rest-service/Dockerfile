@@ -48,9 +48,11 @@ FROM foxcapades/alpine-oracle:1.6
 LABEL service="demo-service"
 
 ENV JAVA_HOME=/opt/jdk \
-    PATH=/opt/jdk/bin:$PATH
+    PATH=/opt/jdk/bin:$PATH \
+    XMS=64M \
+    XMX=512M
 
 COPY --from=prep /jlinked /opt/jdk
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
 
-CMD java -jar /service.jar
+CMD java -jar -Xms$XMS -Xmx$XMX /service.jar
