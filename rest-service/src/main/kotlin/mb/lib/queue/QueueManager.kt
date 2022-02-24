@@ -1,6 +1,5 @@
 package mb.lib.queue
 
-import io.prometheus.client.Gauge
 import mb.lib.model.JobStatus
 import mb.lib.queue.model.CreateRequest
 import org.veupathdb.lib.fireworq.FireworqQueue
@@ -22,7 +21,7 @@ abstract class QueueManager
     return JobStatus.unsafeFromString(job.status)
   }
 
-  fun queueSize() = fireworq.getWaiting().size
+  fun queueSize() = fireworq.getWaiting().size + fireworq.getGrabbed().size
 
   fun jobInFailList(jobID: Int) = fireworq.jobInFailList(jobID)
 
