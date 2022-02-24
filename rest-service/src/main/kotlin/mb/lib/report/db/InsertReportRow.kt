@@ -21,9 +21,9 @@ data class InsertReportRow(
       , config
       , queue_id
       )
-    SELECT (?, ?, ?, ?, ?)
+    SELECT ?, ?, ?, ?, ?
     FROM dual
-    WHERE NOT EXISTS(
+    WHERE NOT EXISTS (
       SELECT *
       FROM userlogins5.multiblast_fmt_jobs
       WHERE report_digest = ?
