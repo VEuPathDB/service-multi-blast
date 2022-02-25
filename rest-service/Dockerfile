@@ -50,9 +50,10 @@ LABEL service="demo-service"
 ENV JAVA_HOME=/opt/jdk \
     PATH=/opt/jdk/bin:$PATH \
     XMS=64M \
-    XMX=256M
+    XMX=256M \
+    JVM_ARGS=""
 
 COPY --from=prep /jlinked /opt/jdk
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
 
-CMD java -jar -Xms$XMS -Xmx$XMX /service.jar
+CMD java -jar -XX:+CrashOnOutOfMemoryError -Xms$XMS -Xmx$XMX $JVM_ARGS /service.jar
