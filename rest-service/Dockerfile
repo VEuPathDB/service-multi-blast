@@ -50,7 +50,7 @@ LABEL service="demo-service"
 ENV JAVA_HOME=/opt/jdk \
     PATH=/opt/jdk/bin:$PATH \
     XMS=64M \
-    XMX=512M
+    XMX=256M
 
 COPY --from=prep /jlinked /opt/jdk
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
