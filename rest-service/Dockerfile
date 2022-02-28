@@ -45,7 +45,11 @@ RUN make jar
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM foxcapades/alpine-oracle:1.6
 
-LABEL service="demo-service"
+LABEL service="multi-blast"
+
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+    && echo "America/New_York" > /etc/timezone
 
 ENV JAVA_HOME=/opt/jdk \
     PATH=/opt/jdk/bin:$PATH \
