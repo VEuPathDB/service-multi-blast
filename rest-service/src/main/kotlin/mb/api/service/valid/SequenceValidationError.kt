@@ -21,3 +21,8 @@ class SequenceLengthValidationError(
   override val message
     get() = "Sequence too long, max length is $maxLength input length was $length."
 }
+
+class SequenceEmptyValidationError : SequenceValidationError {
+  override val message: String
+    get() = "Empty query.  Query must have 1 or more sequences."
+}
