@@ -6,8 +6,8 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "1.4.0"
-  kotlin("jvm") version "1.6.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "3.0.1"
+  kotlin("jvm") version "1.6.10"
 }
 
 // Load Props
@@ -26,8 +26,12 @@ tasks.withType<KotlinCompile>().configureEach {
     jvmTarget = "16"
   }
 }
+
 containerBuild {
-  fgpUtilVersion = "14aa44a13c28257b702a98ddbecdf1e72812e2e6"
+  fgputil {
+    version = "c48c7e7"
+    targets = arrayOf(AccountDB, Core, DB, Web)
+  }
 }
 
 // Project settings
@@ -137,6 +141,7 @@ dependencies {
 tasks.compileJava {
   options.compilerArgs.add("-Aproject=${project.group}/${project.name}")
 }
+
 tasks.jar {
 
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
