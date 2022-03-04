@@ -28,6 +28,11 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 containerBuild {
+  project {
+    mainClassName = "Main"
+    projectPackage = "mb"
+  }
+
   fgputil {
     version = "c48c7e7"
     targets = arrayOf(AccountDB, Core, DB, Web)
