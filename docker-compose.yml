@@ -43,7 +43,7 @@ services:
       #
       # These options configure the validation/management of jobs.
       JOB_TIMEOUT: ${JOB_TIMEOUT:-5} #days
-      MAX_QUERIES_PER_REQUEST: ${MAX_QUERIES_PER_RESULT:-100}
+      MAX_QUERIES_PER_REQUEST: ${MAX_QUERIES_PER_REQUEST:-100}
       MAX_RESULTS_PER_QUERY: ${MAX_RESULTS_PER_QUERY:-10000}
       MAX_INPUT_QUERY_SIZE: ${MAX_INPUT_QUERY_SIZE:-3145728} # 3MiB
       MAX_NA_SEQ_SIZE: ${MAX_NA_SEQ_SIZE:-1048576} # 1MiB
