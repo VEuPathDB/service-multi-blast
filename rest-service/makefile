@@ -71,7 +71,7 @@ install-dev-env:
 		cd .tools && git pull && cd ..; \
 	fi
 	@$(BIN_DIR)/check-env.sh
-	@./gradlew fgputilInstall --stacktrace
+	@./gradlew download-fgputil
 	@$(BIN_DIR)/install-oracle.sh
 
 fix-path:

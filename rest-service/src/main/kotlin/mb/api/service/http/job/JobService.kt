@@ -4,6 +4,7 @@ import mb.api.model.IOJobPostResponse
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.io.JsonKeys
 import mb.api.service.model.ErrorMap
+import mb.api.service.valid.Sequences
 import mb.lib.blast.model.parseAsQuery
 import mb.lib.config.Config
 import mb.lib.query.BlastManager
@@ -29,14 +30,14 @@ class JobService {
   fun createJob(input: IOJsonJobRequest, userID: Long): IOJobPostResponse {
     Log.trace("#createJob(input={}, userID={})", input, userID)
 
-    var rawQuery = input.config.query
+    var rawQuery = Sequences.standardize(
+      input.config.query
+        ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required."))
+    )
 
     // We are abusing the config query file field, null it out so it doesn't
     // get stored or sent anywhere with the query in this field.
     input.config.query = null
-
-    if (rawQuery == null)
-      throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required."))
 
     rawQuery = rawQuery.trim()
 
