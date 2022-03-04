@@ -6,8 +6,8 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "1.4.0"
-  kotlin("jvm") version "1.6.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "3.0.0"
+  kotlin("jvm") version "1.6.10"
 }
 
 // Load Props
@@ -26,8 +26,12 @@ tasks.withType<KotlinCompile>().configureEach {
     jvmTarget = "16"
   }
 }
+
 containerBuild {
-  fgpUtilVersion = "14aa44a13c28257b702a98ddbecdf1e72812e2e6"
+  fgputil {
+    version = "c48c7e7"
+    targets = arrayOf(AccountDB, Core, DB, Web)
+  }
 }
 
 // Project settings
@@ -138,31 +142,6 @@ tasks.compileJava {
   options.compilerArgs.add("-Aproject=${project.group}/${project.name}")
 }
 
-tasks.jar {
-
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-  manifest {
-    attributes["Main-Class"] = "mb.Main"
-    attributes["Implementation-Title"] = buildProps["project.name"]
-    attributes["Implementation-Version"] = buildProps["project.version"]
-  }
-  println("Packaging Components")
-  from(configurations.runtimeClasspath.get().map {
-    println("  " + it.name)
-
-    if (it.isDirectory) it else zipTree(it).matching {
-      exclude { f ->
-        val name = f.name.toLowerCase()
-        (name.contains("log4j") && name.contains(".dat")) ||
-          name.endsWith(".sf") ||
-          name.endsWith(".dsa") ||
-          name.endsWith(".rsa")
-      } } })
-  archiveFileName.set("service.jar")
-}
-
-tasks.register("print-package") { print(fullPack) }
 tasks.register("print-container-name") { print(buildProps["container.name"]) }
 
 tasks.withType<Test> {
