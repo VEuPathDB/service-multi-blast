@@ -32,8 +32,11 @@ interface SequenceValidator {
    * @return Whether all characters in the input {@code CharSequence} are valid.
    */
   fun validate(sequence: Int, seq: String): SequenceValidationError? {
+    // Input scanner
     val scan = Scanner(seq)
+    // Current line number
     var lineNum = 1
+    // Number of sequence lines in the input.
     var size = 0
 
     while (scan.hasNextLine()) {
@@ -51,8 +54,13 @@ interface SequenceValidator {
       lineNum++
     }
 
+    // If the query had no sequence lines.
+    if (size == 0)
+      return SequenceEmptyValidationError()
+
     if (size > maxSeqLength)
       return SequenceLengthValidationError(size, maxSeqLength)
+
     return null
   }
 
