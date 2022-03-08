@@ -179,7 +179,7 @@ object BlastManager {
           Log.debug("Resubmitting child job {} of parent {}", child.jobID, jobID)
 
           JobDataManager.createJobWorkspace(child.jobID)
-          JobDataManager.createQueryFile(child.jobID, job.query!!)
+          JobDataManager.createQueryFile(child.jobID, child.query!!)
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
 
