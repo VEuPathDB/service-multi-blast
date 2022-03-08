@@ -35,6 +35,10 @@ object Sequences {
    * aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
    * aaaaaaaaaaaaaaaaaaaaa
    * ```
+   *
+   * This is done to ensure that user formatting does not affect the generated
+   * job hash so the cache may be used for queries that are identical except in
+   * formatting.
    */
   fun standardize(input: String): String {
 
