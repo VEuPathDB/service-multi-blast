@@ -68,6 +68,9 @@ class JobService {
         "1 or more targets must be selected."
       ))
 
+    // Sort targets to prevent different hashes with the same targets:
+    input.targets = input.targets.sortedBy { it.target }
+
     val conv = input.config.toInternal()
     BlastManager.validateConfig(conv)?.also{ e -> throw UnprocessableEntityException(e); }
 
@@ -97,5 +100,4 @@ class JobService {
     props.config.query = String(query.readAllBytes(), StandardCharsets.UTF_8)
     createJob(props, user.userID)
   }
-
 }

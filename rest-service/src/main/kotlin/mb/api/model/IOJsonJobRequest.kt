@@ -12,7 +12,7 @@ data class IOJsonJobRequest(
   val site: String,
 
   @JsonProperty(JsonKeys.Targets)
-  val targets: Set<IOJobTarget>,
+  var targets: List<IOJobTarget>,
 
   @JsonProperty(JsonKeys.Config)
   val config: IOBlastConfig,
