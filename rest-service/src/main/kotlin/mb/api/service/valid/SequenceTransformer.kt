@@ -8,6 +8,7 @@ import java.util.Scanner
 private const val SequenceLineLength = 80
 
 object Sequences {
+  private val replace = Regex("\\s+")
 
   /**
    * Standardizes the input query into a query consisting of only the query
@@ -56,7 +57,7 @@ object Sequences {
 
     while (scanner.hasNextLine()) {
       // Current line
-      val line     = scanner.nextLine().trim()
+      val line = scanner.nextLine().trim()
 
       // If the line starts with a '>' character then it is a FASTA header line
       // and should be written to the output stream unchanged.
@@ -65,7 +66,7 @@ object Sequences {
 
         // If the line is empty, skip it, else write it out.
       } else if (line.isNotBlank()) {
-        overflow = appendBuffer(lineBuffer, line)
+        overflow = appendBuffer(lineBuffer, line.replace(replace, ""))
 
         // If the overflow string is not empty, then the line buffer must be
         // full.

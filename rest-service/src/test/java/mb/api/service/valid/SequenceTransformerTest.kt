@@ -55,16 +55,16 @@ nt to test the margin removal.
     @DisplayName("Breaks/merges lines to 80 character rows.")
     fun test3() {
       val input = """>Test header line
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaa
+maligkserfsadfvmggaaaivaksaaapiervklllqnqgemiktghlirpy
+
+     tglgncftriyreegvlsfwrgnqan viryfptqasnfafkgyfknllgcskekdgylkwfagnvasgsaagattslflyhldyartrlgtdakecsvngkrqfkg midvyrktlssdgikglyrgfgvsivgitlyrgmyfgmydtikpivlvgslegnflasfllgwsittsagviaypfdtlrrrmmltsgqpvkyrntihalreilksegfyalyrgvtanmllgvagagvlagydqlhqiaykhwvq
 """
 
       val expected = """>Test header line
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+maligkserfsadfvmggaaaivaksaaapiervklllqnqgemiktghlirpytglgncftriyreegvlsfwrgnqan
+viryfptqasnfafkgyfknllgcskekdgylkwfagnvasgsaagattslflyhldyartrlgtdakecsvngkrqfkg
+midvyrktlssdgikglyrgfgvsivgitlyrgmyfgmydtikpivlvgslegnflasfllgwsittsagviaypfdtlr
+rrmmltsgqpvkyrntihalreilksegfyalyrgvtanmllgvagagvlagydqlhqiaykhwvq
 """
 
       assertEquals(expected, Sequences.standardize(input))
