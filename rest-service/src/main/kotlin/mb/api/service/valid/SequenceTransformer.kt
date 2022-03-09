@@ -91,7 +91,7 @@ object Sequences {
     if (lineBuffer.isNotEmpty())
       writer.appendLine(lineBuffer)
 
-    return writer.toString()
+    return writer.toString().trim()
   }
 
   private fun appendBuffer(buf: StringBuilder, line: String): String {
