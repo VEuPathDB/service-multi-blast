@@ -13,7 +13,7 @@ internal sealed class AbstractWorkspace(final override val directory: File)
   override val isEmpty get() = directory.list()?.isEmpty() ?: true
 
   init {
-    if (!directory.isDirectory)
+    if (directory.exists() && !directory.isDirectory)
       throw IllegalStateException()
   }
 
