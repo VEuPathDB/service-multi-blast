@@ -6,7 +6,8 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "3.0.1"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "3.2.0"
+  id("com.github.johnrengelman.shadow") version "7.1.2"
   kotlin("jvm") version "1.6.10"
 }
 
@@ -57,6 +58,8 @@ allprojects {
     }
   }
 }
+
+
 
 dependencies {
   implementation(kotlin("stdlib"))
@@ -143,28 +146,10 @@ tasks.compileJava {
   options.compilerArgs.add("-Aproject=${project.group}/${project.name}")
 }
 
-tasks.jar {
-
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-  manifest {
-    attributes["Main-Class"] = "mb.Main"
-    attributes["Implementation-Title"] = buildProps["project.name"]
-    attributes["Implementation-Version"] = buildProps["project.version"]
-  }
-  println("Packaging Components")
-  from(configurations.runtimeClasspath.get().map {
-    println("  " + it.name)
-
-    if (it.isDirectory) it else zipTree(it).matching {
-      exclude { f ->
-        val name = f.name.toLowerCase()
-        (name.contains("log4j") && name.contains(".dat")) ||
-          name.endsWith(".sf") ||
-          name.endsWith(".dsa") ||
-          name.endsWith(".rsa")
-      } } })
-  archiveFileName.set("service.jar")
+tasks.shadowJar {
+  archiveBaseName.set("service")
+  archiveClassifier.set("")
+  archiveVersion.set("")
 }
 
 tasks.register("print-container-name") { print(buildProps["container.name"]) }
