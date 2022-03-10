@@ -150,6 +150,8 @@ tasks.shadowJar {
   archiveBaseName.set("service")
   archiveClassifier.set("")
   archiveVersion.set("")
+
+  exclude("**/Log4j2Plugins.dat")
 }
 
 tasks.register("print-container-name") { print(buildProps["container.name"]) }
