@@ -1,4 +1,4 @@
-package mb.lib.report.db;
+package mb.lib.report.db
 
 import mb.lib.model.JobStatus
 import mb.lib.report.model.ReportRow
