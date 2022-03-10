@@ -1,9 +1,9 @@
 package mb.lib.report.model
 
-import mb.lib.model.HashID
 import mb.lib.util.jsonStringify
 import mb.lib.util.md5
 import org.veupathdb.lib.blast.BlastFormatter
+import org.veupathdb.lib.hash_id.HashID
 
 data class ReportJob(
   val jobID: HashID,

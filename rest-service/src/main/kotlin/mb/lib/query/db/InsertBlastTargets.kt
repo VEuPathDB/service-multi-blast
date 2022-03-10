@@ -1,7 +1,7 @@
 package mb.lib.query.db
 
-import mb.lib.model.HashID
 import mb.lib.query.model.JobTarget
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 
 @Suppress("ArrayInDataClass")

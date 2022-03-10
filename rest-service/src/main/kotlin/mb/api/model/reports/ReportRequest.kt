@@ -8,10 +8,10 @@ import mb.api.model.blast.IOBlastFormat
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.model.IOHSPSorting
 import mb.lib.blast.model.IOHitSorting
-import mb.lib.model.HashID
 import mb.lib.util.toExternal
 import org.veupathdb.lib.blast.BlastFormatter
 import org.veupathdb.lib.blast.field.*
+import org.veupathdb.lib.hash_id.HashID
 
 @JsonInclude(NON_NULL)
 data class ReportRequest(

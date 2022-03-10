@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.*
 import com.fasterxml.jackson.annotation.JsonProperty
 import mb.api.model.io.JsonKeys
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
+import org.veupathdb.lib.hash_id.HashID
 
 @JsonInclude(NON_EMPTY)
 data class ReportResponse(

@@ -4,8 +4,7 @@ import mb.api.model.IOJobPostResponse
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.io.JsonKeys
 import mb.api.service.model.ErrorMap
-import mb.api.service.valid.Sequences
-import mb.lib.blast.model.parseAsQuery
+import mb.lib.blast.model.BlastQuery
 import mb.lib.config.Config
 import mb.lib.query.BlastManager
 import mb.lib.query.model.BlastJob
@@ -17,37 +16,85 @@ import org.veupathdb.lib.container.jaxrs.model.User
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
-class JobService {
-  companion object {
-    private val Log = LogManager.getLogger(JobService::class.java)
+object JobService {
+  private val Log = LogManager.getLogger(JobService::class.java)
 
-    @JvmStatic
-    val instance by lazy(::JobService)
+  private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
 
-    private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
-  }
-
+  /**
+   * Creates a job from the given JSON configuration and user.
+   */
   fun createJob(input: IOJsonJobRequest, userID: Long): IOJobPostResponse {
-    Log.trace("#createJob(input={}, userID={})", input, userID)
-
-    var rawQuery = Sequences.standardize(
+    val query = processQuery(
       input.config.query
-        ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required."))
+        ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")),
+      input
     )
 
-    // We are abusing the config query file field, null it out so it doesn't
-    // get stored or sent anywhere with the query in this field.
     input.config.query = null
 
-    rawQuery = rawQuery.trim()
+    return createJob(input, userID, query)
+  }
 
-    if (rawQuery.length > Config.maxInputQuerySize)
+  /**
+   * Creates a job from the given JSON configuration, user, and input stream
+   * containing query file contents.
+   */
+  fun createJob(query: InputStream, props: IOJsonJobRequest, user: User) =
+    query.use {
+      Log.trace("#createJob(query={}, props={}, user={})", query, props, user.userID)
+
+      createJob(
+        props,
+        user.userID,
+        processQuery(String(query.readAllBytes(), StandardCharsets.UTF_8), props)
+      )
+    }
+
+  private fun createJob(
+    request: IOJsonJobRequest,
+    userID:  Long,
+    query:   BlastQuery,
+  ): IOJobPostResponse {
+    if (request.targets.isEmpty())
+      throw UnprocessableEntityException(ErrorMap(
+        "targets",
+        "1 or more targets must be selected."
+      ))
+
+    // Sort targets to prevent different hashes with the same targets:
+    request.targets = request.targets.sortedBy { it.target }
+
+    val conv = request.config.toInternal()
+    BlastManager.validateConfig(conv)?.also{ e -> throw UnprocessableEntityException(e); }
+
+    val dbPath = makeDBPaths(request.site, request.targets)
+    conv.dbFile = dbPath
+
+    val res = BlastManager.submitJob(BlastJob(
+      config      = conv,
+      query       = query,
+      site        = request.site,
+      description = request.description,
+      userID      = userID,
+      maxDLSize   = request.maxResultSize ?: 0,
+      targets     = convert(request.targets),
+    ).apply {
+      if (request.isPrimary == false)
+        isPrimary = false
+    })
+
+    return IOJobPostResponse(res.jobID.string)
+  }
+
+  private fun processQuery(input: String, req: IOJsonJobRequest): BlastQuery {
+    if (input.length > Config.maxInputQuerySize)
       throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is too large."))
 
-    val query = rawQuery.parseAsQuery(input.config.tool)
+    val query = BlastQuery.fromString(req.config.tool, input)
 
     // Limit input sequence count
-    if (query.sequenceCount > Config.maxQueries)
+    if (query.sequences.size > Config.maxQueries)
       throw UnprocessableEntityException(ErrorMap(
         JsonKeys.Query,
         String.format(ErrTooManySeqs, Config.maxQueries)
@@ -58,46 +105,8 @@ class JobService {
         throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, message))
     }
 
-    verifyResultLimit(input, rawQuery.codePoints()
-      .filter { c -> c == '>'.code }
-      .count().toInt())
+    verifyResultLimit(req, query.sequences.size)
 
-    if (input.targets.isEmpty())
-      throw UnprocessableEntityException(ErrorMap(
-        "targets",
-        "1 or more targets must be selected."
-      ))
-
-    // Sort targets to prevent different hashes with the same targets:
-    input.targets = input.targets.sortedBy { it.target }
-
-    val conv = input.config.toInternal()
-    BlastManager.validateConfig(conv)?.also{ e -> throw UnprocessableEntityException(e); }
-
-    val dbPath = makeDBPaths(input.site, input.targets)
-    conv.dbFile = dbPath
-
-    val res = BlastManager.submitJob(BlastJob(
-      config = conv,
-      query = query,
-      site = input.site,
-      description = input.description,
-      userID = userID,
-      maxDLSize = input.maxResultSize ?: 0,
-      targets = convert(input.targets),
-    ).apply {
-      if (input.isPrimary == false)
-        isPrimary = false
-    })
-
-
-    return IOJobPostResponse(res.jobID.string)
-  }
-
-  fun createJob(query: InputStream, props: IOJsonJobRequest, user: User) = query.use {
-    Log.trace("#createJob(query={}, props={}, user={})", query, props, user.userID)
-
-    props.config.query = String(query.readAllBytes(), StandardCharsets.UTF_8)
-    createJob(props, user.userID)
+    return query
   }
 }

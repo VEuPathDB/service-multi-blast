@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import mb.lib.model.EmptyBlastQueryConfig
-import mb.lib.model.HashID
 import mb.lib.queue.consts.JsonKeys
 import mb.lib.queue.model.FailedJob
 import mb.lib.queue.model.JobResult
@@ -12,9 +11,9 @@ import mb.lib.util.convertJobConfig
 import mb.lib.util.jsonArray
 import mb.lib.util.jsonCast
 import mb.lib.util.jsonObject
-import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.consts.Key
+import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 /**

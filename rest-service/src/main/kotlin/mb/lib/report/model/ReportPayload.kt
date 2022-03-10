@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import mb.api.model.io.JsonKeys
-import mb.lib.model.HashID
 import org.veupathdb.lib.blast.BlastFormatter
+import org.veupathdb.lib.hash_id.HashID
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ReportPayload(

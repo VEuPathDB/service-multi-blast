@@ -1,10 +1,10 @@
 package mb.lib.report.db;
 
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import mb.lib.report.model.ReportRow
 import mb.lib.report.model.UserReportRow
 import mb.lib.util.convertReportConfig
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.ResultSet
 import java.time.OffsetDateTime
 

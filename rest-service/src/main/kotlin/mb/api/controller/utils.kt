@@ -6,6 +6,7 @@ import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.InternalServerErrorException
 import jakarta.ws.rs.WebApplicationException
 import jakarta.ws.rs.core.Request
+import org.veupathdb.lib.hash_id.HashID
 
 private const val ErrNoUser = "request reached authenticated endpoint with no user attached"
 
@@ -21,3 +22,11 @@ inline fun <T> enforceParam(value: T?, name: String): T =
 
 inline fun <R> errorWrap(fn: () -> R): R = try { fn() }
   catch (e: Throwable) { throw if (e is WebApplicationException) e else InternalServerErrorException(e) }
+
+fun hashIDorThrow(raw: String, fn: () -> Exception): HashID {
+  try {
+    return HashID(raw)
+  } catch (e: Exception) {
+    throw fn()
+  }
+}

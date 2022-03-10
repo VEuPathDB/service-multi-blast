@@ -1,8 +1,8 @@
 package mb.lib.db.model.impl
 
 import mb.lib.db.model.ShortJobRow
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
+import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 open class ShortJobRowImpl(

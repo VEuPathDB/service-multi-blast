@@ -4,13 +4,13 @@ import io.prometheus.client.Gauge
 import mb.api.service.util.Address
 import mb.lib.config.Config
 import mb.lib.model.EmptyBlastConfig
-import mb.lib.model.HashID
 import mb.lib.query.model.BlastRequest
 import mb.lib.queue.QueueManager
 import mb.lib.queue.consts.URL
 import mb.lib.queue.model.CreateRequest
 import org.veupathdb.lib.blast.BlastConfig
 import org.veupathdb.lib.fireworq.FireworqQueue
+import org.veupathdb.lib.hash_id.HashID
 
 object BlastQueueManager: QueueManager()
 {

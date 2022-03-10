@@ -4,11 +4,12 @@ package mb.lib.query
 
 import mb.api.service.http.job.makeDBPaths
 import mb.api.service.model.ErrorMap
-import mb.lib.data.JobDataManager
 import mb.lib.model.*
 import mb.lib.query.model.*
+import mb.lib.workspace.Workspaces
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.BlastQueryConfig
+import org.veupathdb.lib.hash_id.HashID
 import java.lang.IllegalStateException
 import java.time.OffsetDateTime
 import java.util.concurrent.CountDownLatch
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors
 import java.util.stream.Collectors
 import kotlin.math.min
 
-
+// TODO: Good gourd this class needs to be refactored
 object BlastManager {
   private val Log = LogManager.getLogger("BlastManager")
 
@@ -161,8 +162,10 @@ object BlastManager {
       if (job.status == JobStatus.Expired) {
         Log.debug("Resubmitting parent job {}", jobID)
 
-        JobDataManager.createJobWorkspace(jobID)
-        JobDataManager.createQueryFile(jobID, job.query!!)
+        with(Workspaces.open(jobID)) {
+          if (createIfNotExists())
+            createQueryFile(job.query!!)
+        }
 
         val qID = BlastQueueManager.submitNewJob(jobID, job.config!!)
 
@@ -178,8 +181,10 @@ object BlastManager {
         if (child.status == JobStatus.Expired) {
           Log.debug("Resubmitting child job {} of parent {}", child.jobID, jobID)
 
-          JobDataManager.createJobWorkspace(child.jobID)
-          JobDataManager.createQueryFile(child.jobID, child.query!!)
+          with(Workspaces.open(child.jobID)) {
+            if (createIfNotExists())
+              createQueryFile(child.query!!)
+          }
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
 
@@ -197,8 +202,10 @@ object BlastManager {
 
   private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow) {
     if (row.status == JobStatus.Expired) {
-      JobDataManager.createJobWorkspace(row.jobID)
-      JobDataManager.createQueryFile(row.jobID, row.query!!)
+      with(Workspaces.open(row.jobID)) {
+        if (createIfNotExists())
+          createQueryFile(row.query!!)
+      }
 
       val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!)
 
@@ -242,53 +249,68 @@ object BlastManager {
   }
 
   private fun refreshJobStatus(db: BlastDBManager, row: BlastRow) {
-    Log.trace("::refreshJobStatus(db={}, row={})", db, row)
+    // If the job is expired or errored out there is nothing more to do with it.
+    (row.status != JobStatus.Errored && row.status != JobStatus.Expired)
+      || return
 
-    when (row.status!!) {
-      // If the job is marked as expired or errored there's nothing to do.
-      JobStatus.Errored, JobStatus.Expired -> return
+    // If the job status is Completed, verify that the workspace still exists.
+    if (row.status == JobStatus.Completed) {
+      with (Workspaces.open(row.jobID)) {
+        // If the workspace still exists, then the Completed status is still
+        // valid, and we can bail here.
+        !exists || return@with
 
-      // If the job is marked as queued or in progress, see if the status has
-      // changed.
-      JobStatus.Queued, JobStatus.InProgress -> {
-        var status = BlastQueueManager.getJobStatus(row.queueID!!)
+        db.updateJobQueue(row.jobID, row.queueID!!, JobStatus.Expired)
+        row.status = JobStatus.Expired
+      }
+    }
 
-        if (status == row.status)
-          return
+    // The only remaining statuses are Queued and InProgress.
+    //
+    // Check the queue to see if the job status has changed yet.
+    else {
 
-        // To handle the case where a user fires off a job and then doesn't come
-        // back to view it in the expiration period, check the filesystem to
-        // confirm the job workspace still exists.
-        if (status == JobStatus.Completed && !JobDataManager.workspaceExists(row.jobID)) {
-          status = JobStatus.Expired
-        }
+      // It is possible the user has not checked on this job in a long time and
+      // it has already expired.  Check this first since it is the lightest
+      // check and can save us some HTTP requests if the job has expired.
+      val ws = Workspaces.open(row.jobID)
 
-        db.updateJobQueue(row.jobID, row.queueID!!, status)
-        row.status = status
-
-        if (status == JobStatus.Errored) {
-          BlastQueueManager.getFailedJobs()
-            .stream()
-            .filter { r -> r.jobID == row.queueID }
-            .map { j -> j.failID }
-            .forEach { i ->
-              try {
-                BlastQueueManager.deleteJobFailure(i)
-              } catch (e: Exception) {
-                throw RuntimeException(e)
-              }
-            }
-        }
-
+      // If the job _has_ expired, update the status in the DB and do the ugly
+      // input mutation.
+      if (!ws.exists) {
+        db.updateJobQueue(row.jobID, row.queueID!!, JobStatus.Expired)
+        row.status = JobStatus.Expired
         return
       }
 
-      //
-      JobStatus.Completed ->
-        if (!JobDataManager.workspaceExists(row.jobID)) {
-          db.updateJobQueue(row.jobID, row.queueID!!, JobStatus.Expired)
-          row.status = JobStatus.Expired
-        }
+      // So we know the job has not yet expired.  Let's go ahead and check the
+      // queue server.
+      val status = BlastQueueManager.getJobStatus(row.queueID!!)
+
+      // If the status has not changed, there is nothing more to do, so bail
+      // here.
+      status != row.status || return
+
+      // Update the status and do the ugly mutation.
+      db.updateJobQueue(row.jobID, row.queueID!!, status)
+      row.status = status
+
+      // If the status has now changed to Errored, clear the errored job entry
+      // from the job queue.
+      if (status == JobStatus.Errored) {
+        BlastQueueManager.getFailedJobs()
+          .stream()
+          .filter { r -> r.jobID == row.queueID }
+          .map { j -> j.failID }
+          .forEach { i ->
+            try {
+              BlastQueueManager.deleteJobFailure(i)
+            } catch (e: Exception) {
+              throw RuntimeException(e)
+            }
+          }
+      }
+
     }
   }
 
@@ -306,23 +328,22 @@ object BlastManager {
   fun updateLastModified(jobID: HashID) {
     Log.trace("::updateLastModified(jobID={})", jobID)
 
-    val wd = JobDataManager.jobWorkspace(jobID)
+    val wd = Workspaces.open(jobID)
 
-    if (!wd.exists)
-      return
+    wd.exists || return
 
-    wd.updateLastModified()
+    wd.updateLastModified(OffsetDateTime.now())
   }
 
   fun getJobError(jobID: HashID): String? {
     Log.trace("::getJobError(jobID={})", jobID)
 
-    val wd = JobDataManager.jobWorkspace(jobID)
+    val wd = Workspaces.open(jobID)
 
-    if (!wd.exists || !wd.errorFileExists)
+    if (!wd.exists || !wd.hasErrorFile)
       return null
 
-    return wd.errorText
+    return wd.errorFile.readText()
   }
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
@@ -334,12 +355,11 @@ object BlastManager {
   fun submitJob(job: BlastJob) = BlastDBManager().use { handleJobs(it, job) }
 
   private fun handleJobs(db: BlastDBManager, job: BlastJob): FullUserBlastRow {
-    Log.trace("#handleJobs(db=$db, job=$job")
 
-    val root = handleJob(db, job, job.query.fullQuery)
+    val root = handleJob(db, job, job.query.getFullQuery())
 
     // If size is 1 then it's the whole query, which we've already handled.
-    if (job.query.sequenceCount > 1) {
+    if (job.query.sequences.size > 1) {
 
       // We reuse the job instance here since we would otherwise be done with
       // it.  Just a small optimization to avoid a bunch of repeated
@@ -352,8 +372,8 @@ object BlastManager {
       // be hidden by default.
       job.isPrimary = false
 
-      for (query in job.query.subQueries) {
-        handleJob(db, job, query.toString())
+      for (query in job.query.sequences) {
+        handleJob(db, job, query.toStandardString())
       }
     }
 
@@ -361,68 +381,21 @@ object BlastManager {
   }
 
   private fun handleJob(db: BlastDBManager, job: BlastJob, query: String): UserBlastRow {
-    Log.trace("#handleJob(db=$db, job=$job, query=$query")
 
     val jobID = job.digest(query)
 
-    // Check to see if this user already has a job matching this one.
-    db.getUserBlastRow(jobID, job.userID)?.also { row ->
-      // If the user has this job already exists, refresh it to see if it needs to
-      // be rerun, then rerun it if needed.
+    var row = getUserBlastRow(db, jobID, job) ?: getBlastRow(db, jobID, job)
 
-      refreshJobStatus(db, row)
-      submitToQueueIfExpired(db, row)
-
-      if (!job.isPrimary && job.parentID != null) {
-        // Look for an existing link between these jobs.
-        db.getParentJobLinks(jobID).forEach {
-          // If we find one, skip out because we don't need to insert a link.
-          if (it.parentJobID == job.parentID)
-            return row
-        }
-
-        // Link this job to the parent (no existing parent link was found).
-        db.linkJobs(jobID, job.parentID!!)
-      }
-
+    if (row != null)
       return row
-    }
 
-    // The user does not already have a matching job.
-
-    // Check to see if this job already exists (not linked to this user)
-    db.getBlastRow(jobID)?.also {
-      // If the job already exists, but is not linked to this user...
-
-      // Link the job to the current user.
-      val row = UserBlastRow(it, job.userID, job.description, job.maxDLSize, job.isPrimary)
-      db.linkUser(row)
-
-      // Refresh the job's status.
-      refreshJobStatus(db, row)
-
-      // Rerun the job if needed.
-      submitToQueueIfExpired(db, row)
-
-      if (!job.isPrimary && job.parentID != null) {
-        // Look for an existing link between these jobs.
-        db.getParentJobLinks(jobID).forEach {
-          // If we find one, skip out because we don't need to insert a link.
-          if (it.parentJobID == job.parentID)
-            return row
-        }
-
-        // Link this job to the parent (no existing parent link was found).
-        db.linkJobs(jobID, job.parentID!!)
-      }
-
-      return row
-    }
+    Log.info("Cache miss for job {}.", jobID)
 
     // No matching job exists.
 
     val tim = OffsetDateTime.now()
-    val row = UserBlastRow(
+
+    row = UserBlastRow(
       jobID           = jobID,
       config          = job.config,
       query           = query,
@@ -448,4 +421,78 @@ object BlastManager {
     return row
   }
 
+  private fun getUserBlastRow(
+    db: BlastDBManager,
+    jobID: HashID,
+    job: BlastJob
+  ): UserBlastRow? {
+    val row = db.getUserBlastRow(jobID, job.userID) ?: return null
+
+    Log.info("Cache hit for job {} and user {}.", jobID, job.userID)
+
+
+    // If the user has this job already exists, refresh it to see if it needs to
+    // be rerun, then rerun it if needed.
+
+    refreshJobStatus(db, row)
+    submitToQueueIfExpired(db, row)
+
+    if (!job.isPrimary && job.parentID != null) {
+      // Look for an existing link between these jobs.
+      db.getParentJobLinks(jobID).forEach {
+        // If we find one, skip out because we don't need to insert a link.
+        if (it.parentJobID == job.parentID)
+          return row
+      }
+
+      // Link this job to the parent (no existing parent link was found).
+      db.linkJobs(jobID, job.parentID!!)
+    }
+
+    return row
+  }
+
+  private fun getBlastRow(
+    db: BlastDBManager,
+    jobID: HashID,
+    job: BlastJob
+  ): UserBlastRow? {
+    val unlinked = db.getBlastRow(jobID) ?: return null
+
+    Log.info("Cache hit for job {}.", jobID)
+
+    // If the job already exists, but is not linked to this user...
+
+    // Link the job to the current user.
+    val row = UserBlastRow(
+      unlinked,
+      job.userID,
+      job.description,
+      job.maxDLSize,
+      job.isPrimary
+    )
+
+    db.linkUser(row)
+
+    // Refresh the job's status.
+    refreshJobStatus(db, row)
+
+    // Rerun the job if needed.
+    submitToQueueIfExpired(db, row)
+
+    if (!job.isPrimary && job.parentID != null) {
+      // Look for an existing link between these jobs.
+      db.getParentJobLinks(jobID).forEach {
+        // If we find one, skip out because we don't need to insert a link.
+        if (it.parentJobID == job.parentID)
+          return row
+      }
+
+      // Link this job to the parent (no existing parent link was found).
+      db.linkJobs(jobID, job.parentID!!)
+
+    }
+
+    return row
+  }
 }

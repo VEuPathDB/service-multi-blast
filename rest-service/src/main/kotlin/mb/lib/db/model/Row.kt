@@ -1,6 +1,6 @@
 package mb.lib.db.model
 
-import mb.lib.model.HashID
+import org.veupathdb.lib.hash_id.HashID
 
 interface Row {
   val jobID: HashID

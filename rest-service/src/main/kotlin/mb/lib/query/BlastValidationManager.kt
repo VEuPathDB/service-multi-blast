@@ -1,6 +1,5 @@
 package mb.lib.query
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import mb.api.service.model.ErrorMap
 import mb.api.service.util.Address
@@ -13,7 +12,6 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.*
 
 object BlastValidationManager {
   private val Log  = LogManager.getLogger(BlastValidationManager::class)

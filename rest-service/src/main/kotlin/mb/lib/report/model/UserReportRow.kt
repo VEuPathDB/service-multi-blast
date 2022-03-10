@@ -2,9 +2,9 @@ package mb.lib.report.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import org.veupathdb.lib.blast.BlastFormatter
+import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 @JsonInclude(NON_DEFAULT)

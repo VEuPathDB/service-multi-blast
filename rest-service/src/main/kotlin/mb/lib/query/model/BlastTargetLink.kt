@@ -1,5 +1,5 @@
 package mb.lib.query.model
 
-import mb.lib.model.HashID
+import org.veupathdb.lib.hash_id.HashID
 
 data class BlastTargetLink(val jobID: HashID, val organism: String, val targetFile: String)

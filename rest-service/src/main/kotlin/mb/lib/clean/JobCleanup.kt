@@ -1,8 +1,8 @@
 package mb.lib.clean
 
 import mb.lib.config.Config
-import mb.lib.data.JobDataManager
 import mb.lib.util.IntCounter
+import mb.lib.workspace.Workspaces
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Path
 import java.time.OffsetDateTime
@@ -15,27 +15,10 @@ object JobCleanup: Runnable
     try {
       Log.info("Starting job cleanup.")
 
-      val cutoff = OffsetDateTime.now().minusDays(Config.jobTimeout.toLong())
+      val ws = Workspaces.getExpiredWorkspaces()
+      ws.forEach { it.delete() }
 
-      val success = IntCounter()
-      val failure = IntCounter()
-
-      JobDataManager.getPathsModifiedBefore(cutoff)
-        .stream()
-        .map(Path::toFile)
-        .forEach { file ->
-          val del = file.delete()
-
-          Log.debug("Target file {} deleted: {}", file.name, del)
-
-          if (del)
-            success.increment()
-          else
-            failure.increment()
-        }
-
-      Log.info("Job cleanup completed.  Successfully deleted {} files.  Failed to delete {} files.",
-        success.value, failure.value)
+      Log.info("Job cleanup completed.  Deleted {} workspaces.", ws.size)
 
     } catch (e: Exception) {
       throw RuntimeException(e)

@@ -1,4 +1,4 @@
-package mb.lib.data;
+package mb.lib.report.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

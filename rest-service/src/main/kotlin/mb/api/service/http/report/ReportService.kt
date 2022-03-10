@@ -6,13 +6,13 @@ import mb.api.model.reports.ReportRequest
 import mb.api.model.reports.ReportResponse
 import mb.api.model.reports.toExternal
 import mb.api.service.http.wrap
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import mb.lib.query.BlastManager
 import mb.lib.report.ReportManager
 import mb.lib.report.model.ReportJob
 import mb.lib.report.model.UserReportRow
 import org.apache.logging.log4j.LogManager
+import org.veupathdb.lib.hash_id.HashID
 
 internal object ReportService {
   private val Log = LogManager.getLogger(ReportService::class.java)

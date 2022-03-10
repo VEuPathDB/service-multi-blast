@@ -8,7 +8,6 @@ import mb.api.service.http.job.JobService
 import mb.api.service.http.job.translateLongResponse
 import mb.api.service.http.job.translateShortResponses
 import mb.lib.http.MimeType
-import mb.lib.model.HashID
 import mb.lib.query.BlastManager
 import mb.lib.util.Mapper
 import org.glassfish.jersey.media.multipart.FormDataParam
@@ -39,7 +38,6 @@ private fun Any.okJSON() = Response.status(Response.Status.OK)
 @Path(Paths.Jobs)
 @Authenticated(allowGuests = true)
 class JobController(@Context private val request: Request) {
-  private val svc = JobService.instance
 
   /**
    * @return A list of jobs associated with the currently logged-in user.
@@ -60,7 +58,7 @@ class JobController(@Context private val request: Request) {
   @Produces(MimeType.ApplicationJSON)
   @Consumes(MimeType.ApplicationJSON)
   fun postJob(entity: IOJsonJobRequest?) = errorWrap {
-    svc.createJob(enforceBody(entity), getUser(request).userID).okJSON()
+    JobService.createJob(enforceBody(entity), getUser(request).userID).okJSON()
   }
 
 
@@ -90,7 +88,7 @@ class JobController(@Context private val request: Request) {
     if (query == null)
       postJob(props)
     else
-      svc.createJob(query, props, getUser(request)).okJSON()
+      JobService.createJob(query, props, getUser(request)).okJSON()
   }
 
 
@@ -109,7 +107,7 @@ class JobController(@Context private val request: Request) {
   @Produces(MimeType.ApplicationJSON)
   fun getJob(@PathParam(Vars.JobID) jobID: String) = errorWrap {
     translateLongResponse(BlastManager.getAndLinkUserBlastJob(
-      HashID.parseOrThrow(jobID, ::NotFoundException),
+      hashIDorThrow(jobID, ::NotFoundException),
       getUser(request).userID) ?: throw NotFoundException()
     ).okJSON()
   }
@@ -143,7 +141,7 @@ class JobController(@Context private val request: Request) {
     if (download)
       res.header("Content-Disposition", String.format(AttachmentPat, "$jobID-query", "txt"))
 
-    res.entity(BlastManager.getJobQuery(HashID.parseOrThrow(jobID, ::NotFoundException)) ?: throw NotFoundException()).build()
+    res.entity(BlastManager.getJobQuery(hashIDorThrow(jobID, ::NotFoundException)) ?: throw NotFoundException()).build()
   }
 
 
@@ -151,15 +149,14 @@ class JobController(@Context private val request: Request) {
   @Path(Paths.JobByID)
   @Produces(MimeType.ApplicationJSON)
   fun rerunJob(@PathParam(Vars.JobID) jobID: String) = errorWrap {
-    BlastManager.rerunJob(HashID.parseOrThrow(jobID, ::NotFoundException), getUser(request).userID)
-    val foo = java.lang.String("")
+    BlastManager.rerunJob(hashIDorThrow(jobID, ::NotFoundException), getUser(request).userID)
   }
 
   @GET
   @Path(Paths.JobError)
   @Produces(MimeType.TextPlain)
   fun getJobError(@PathParam(Vars.JobID) jobID: String): Response = errorWrap {
-    when (val err = HashID.parseOrThrow(jobID, ::NotFoundException).let(BlastManager::getJobError)) {
+    when (val err = hashIDorThrow(jobID, ::NotFoundException).let(BlastManager::getJobError)) {
       null -> Response.status(404).build()
       else -> Response.status(200).entity(err).build()
     }
