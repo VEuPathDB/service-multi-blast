@@ -1,7 +1,5 @@
 package mb.api.model.reports
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonInclude.Include.*
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -10,7 +8,6 @@ import mb.lib.model.JobStatus
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
 
-@JsonInclude(NON_EMPTY)
 data class ReportResponse(
   @JsonProperty(JsonKeys.JobID)       val jobID:       HashID,
   @JsonProperty(JsonKeys.ReportID)    val reportID:    HashID,
@@ -29,6 +26,8 @@ data class ReportResponse(
       set<ObjectNode>(JsonKeys.Config, config.toJson())
       put(JsonKeys.Status, status.value)
       description?.let { put(JsonKeys.Description, it) }
-      putPOJO(JsonKeys.Files, files)
+
+      if (files.isNotEmpty())
+        putPOJO(JsonKeys.Files, files)
     }
 }
