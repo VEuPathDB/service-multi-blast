@@ -69,8 +69,6 @@ data class ReportRequest(
 
   @JsonValue
   fun toJson() = Json.new<ObjectNode> {
-    put(JsonKeys.JobID, jobID.string)
-
     description?.let { put(JsonKeys.Description, it) }
     type?.let { put(JsonKeys.Format, it.value) }
     delim?.let { put(JsonKeys.FieldDelim, it) }

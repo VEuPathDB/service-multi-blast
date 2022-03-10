@@ -26,21 +26,10 @@ enum class CompositionBasedStats(val publicValue: String) {
     UnconditionalScoreAdjustment -> CompBasedStatsLong.UnconditionalScoreAdjustment
   }
 
-  fun toInternalShort() = when(this) {
-    None           -> CompBasedStatsShort.None
-    CompBasedStats -> CompBasedStatsShort.Statistics
-    else           -> throw IllegalStateException("$publicValue cannot be converted to a shortform -comp_based_stats flag.")
-  }
-
   override fun toString() = ordinal.toString()
 
 
   companion object {
-    @JvmStatic
-    fun fromValue(value: CompBasedStatsShort) = when (value) {
-      CompBasedStatsShort.None       -> None
-      CompBasedStatsShort.Statistics -> CompBasedStats
-    }
 
 
     @JvmStatic

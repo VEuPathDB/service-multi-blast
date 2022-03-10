@@ -9,7 +9,6 @@ import org.veupathdb.lib.blast.BlastP
 import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.consts.Flag
 import org.veupathdb.lib.blast.field.*
-import org.veupathdb.lib.blast.field.CompBasedStatsLong.Companion
 
 fun XBlastP.fromLegacyJSON(node: ArrayNode) {
   val it  = node.elements()

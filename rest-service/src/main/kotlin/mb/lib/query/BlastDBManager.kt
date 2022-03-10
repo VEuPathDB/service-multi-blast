@@ -6,7 +6,6 @@ import mb.lib.query.db.*
 import mb.lib.query.model.*
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.hash_id.HashID
-import java.util.*
 
 class BlastDBManager: MBlastDBManager()
 {

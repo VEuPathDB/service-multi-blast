@@ -10,7 +10,6 @@ import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.BlastX
 import org.veupathdb.lib.blast.consts.Flag
 import org.veupathdb.lib.blast.field.*
-import org.veupathdb.lib.blast.field.CompBasedStatsLong.Companion
 
 fun XBlastX.fromLegacyJSON(node: ArrayNode) {
   for (i in 1 until node.size()) {

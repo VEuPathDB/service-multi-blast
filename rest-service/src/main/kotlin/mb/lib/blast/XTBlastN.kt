@@ -9,7 +9,6 @@ import org.veupathdb.lib.blast.BlastTool;
 import org.veupathdb.lib.blast.TBlastN;
 import org.veupathdb.lib.blast.consts.Flag;
 import org.veupathdb.lib.blast.field.*
-import org.veupathdb.lib.blast.field.CompBasedStatsLong.Companion
 
 fun XTBlastN.fromLegacyJSON(raw: ArrayNode) {
   // skip first element as it is just the tool name

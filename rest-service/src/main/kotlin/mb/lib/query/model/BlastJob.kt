@@ -2,7 +2,6 @@ package mb.lib.query.model
 
 import mb.lib.blast.model.BlastQuery
 import mb.lib.util.jsonStringify
-import mb.lib.util.md5
 import mb.lib.util.toHashable
 import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.hash_id.HashID
@@ -20,20 +19,6 @@ data class BlastJob(
   var parentID:    HashID? = null
 
   var isPrimary:   Boolean = true
-
-  constructor(
-    config: BlastQueryConfig,
-    query: BlastQuery,
-    site: String,
-    description: String? = null,
-    userID: Long,
-    maxDLSize: Long,
-    targets: Array<JobTarget>,
-    parentID: HashID
-  ) : this(config, query, site, description, userID, maxDLSize, targets) {
-    this.parentID = parentID
-    this.isPrimary = false
-  }
 
   fun digest(query: String): HashID {
     try {
