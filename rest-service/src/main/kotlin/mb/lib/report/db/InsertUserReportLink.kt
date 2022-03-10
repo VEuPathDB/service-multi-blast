@@ -1,4 +1,4 @@
-package mb.lib.report.db;
+package mb.lib.report.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery
 import org.veupathdb.lib.hash_id.HashID
@@ -18,14 +18,14 @@ data class InsertUserReportLink(
         userlogins5.multiblast_users_to_fmt_jobs (report_digest, user_id, description)
       VALUES
         (?, ?, ?)
-      """;
+      """
   }
 
   fun run() = BasicPreparedVoidQuery(Query, con, this::prepare).execute()
 
   private fun prepare(ps: PreparedStatement) {
-    ps.setBytes(1, reportID.bytes);
-    ps.setLong(2, userID);
-    ps.setString(3, description);
+    ps.setBytes(1, reportID.bytes)
+    ps.setLong(2, userID)
+    ps.setString(3, description)
   }
 }

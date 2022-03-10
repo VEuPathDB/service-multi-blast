@@ -512,10 +512,6 @@ private inline fun BlastConfig.convert(o: IOBlastConfig) {
 
 // ---------------------------------------------------------------------- //
 
-fun convertCBS(value: String?): CompositionBasedStats? = value?.let(CompositionBasedStats::fromValue)
-
-fun convertCBS(value: CompositionBasedStats?) = value?.publicValue
-
 fun OutFormat.toExternal() = IOBlastReportFormat.fromInternalValue(this)
 
 fun convert(value: IOBlastReportFormat?) = value?.toInternalValue

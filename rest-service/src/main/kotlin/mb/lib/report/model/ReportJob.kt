@@ -13,11 +13,6 @@ data class ReportJob(
 ) {
   private var repID: HashID? = null
 
-  constructor(jobID: HashID, reportID: HashID, userID: Long, config: BlastFormatter, description: String)
-  : this(jobID, userID, config, description) {
-    repID = reportID
-  }
-
   fun getReportID(): HashID {
     if (repID == null)
       repID = generateReportID()

@@ -17,8 +17,6 @@ inline fun Request.requireUserID(): Long = UserProvider.lookupUser(this).orElseT
 
 inline fun <T> enforceBody(value: T?): T =
   value ?: throw BadRequestException("Request missing one or more input body fields.")
-inline fun <T> enforceParam(value: T?, name: String): T =
-  value ?: throw BadRequestException("Request missing required parameter \"$name\".")
 
 inline fun <R> errorWrap(fn: () -> R): R = try { fn() }
   catch (e: Throwable) { throw if (e is WebApplicationException) e else InternalServerErrorException(e) }

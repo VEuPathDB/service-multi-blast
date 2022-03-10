@@ -11,16 +11,12 @@ class ReportDBManager: MBlastDBManager() {
 
   fun getUserReportJob(reportID: HashID, userID: Long) = SelectUserReportRow(connection, reportID, userID).run()
 
-  fun getJobReports(jobID: HashID) = SelectAllJobReports(connection, jobID).run()
-
   fun getUserJobReports(userID: Long) = SelectAllUserReports(connection, userID).run()
 
   fun getUserJobReports(jobID: HashID, userID: Long) = SelectUserJobReports(connection, jobID, userID).run()
 
   fun linkUserToReport(reportID: HashID, userID: Long, description: String?) =
     InsertUserReportLink(connection, reportID, userID, description).run()
-
-  fun unlinkUserFromReport(reportID: HashID, userID: Long) = DeleteUserReportLink(connection, reportID, userID).run()
 
   /**
    * Inserts a report record.
