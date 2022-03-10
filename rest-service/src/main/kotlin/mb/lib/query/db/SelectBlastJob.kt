@@ -1,8 +1,7 @@
 package mb.lib.query.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery
-import mb.lib.model.HashID
-import mb.lib.query.model.BlastRow
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet

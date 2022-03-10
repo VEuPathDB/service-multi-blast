@@ -1,8 +1,8 @@
 package mb.lib.report.model
 
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import org.veupathdb.lib.blast.BlastFormatter
+import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 open class ReportRow(

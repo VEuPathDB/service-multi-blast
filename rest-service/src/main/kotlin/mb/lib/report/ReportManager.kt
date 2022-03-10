@@ -1,16 +1,17 @@
 
 package mb.lib.report
 
-import mb.lib.data.JobDataManager
-import mb.lib.model.HashID
+import mb.lib.report.model.ReportMeta
 import mb.lib.model.JobStatus
 import mb.lib.report.model.ReportJob
 import mb.lib.report.model.ReportPayload
 import mb.lib.report.model.ReportRow
 import mb.lib.report.model.UserReportRow
+import mb.lib.workspace.Workspaces
 import org.apache.logging.log4j.LogManager
+import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 import java.io.File
-import java.io.InputStream
 import java.time.OffsetDateTime
 import java.util.Optional
 
@@ -20,7 +21,7 @@ object ReportManager {
   /**
    * Returns an optional input stream over the specified file in the target
    * report workspace.
-   * <p>
+   *
    * If the job workspace, report workspace, or target file do not exist, this
    * method will return an empty option.
    *
@@ -30,22 +31,15 @@ object ReportManager {
    * @return an optional input stream over the target file.
    */
   fun getReportFile(row: ReportRow, file: String): File? {
-    Log.trace("::getReportFiles(row={})", row)
+    with(Workspaces.open(row.jobID)) {
+      exists || return null
 
-    if (!JobDataManager.workspaceExists(row.jobID))
-      return null
+      val rs = reportWorkspace(row.reportID)
 
-    val ws = JobDataManager.jobWorkspace(row.jobID)
+      rs.exists || return null
 
-    if (!ws.reportWorkspaceExists(row.reportID))
-      return null
-
-    val rs = ws.reportWorkspace(row.reportID)
-
-    if (!rs.fileExists(file))
-      return null
-
-    return rs.getFilePath(file).toFile()
+      return rs.getFile(file).let { if (it.exists()) it else null }
+    }
   }
 
   fun getUpdatedUserReport(reportID: HashID, userID: Long): Optional<UserReportRow> {
@@ -57,20 +51,6 @@ object ReportManager {
         updateJobStatus(tmpOpt.get())
 
       return tmpOpt
-    }
-  }
-
-  fun getAllReportsForJob(jobID: HashID): List<ReportRow> {
-    Log.trace("::getAllReportsForJob(jobID={})", jobID)
-    ReportDBManager().use {
-      val out = it.getJobReports(jobID)
-
-      for (rep in out) {
-        if (rep.status == JobStatus.Queued || rep.status == JobStatus.InProgress)
-          updateJobStatus(rep)
-      }
-
-      return out
     }
   }
 
@@ -105,11 +85,11 @@ object ReportManager {
   /**
    * Updates the job status field for a report job matching the given report
    * hash.
-   * <p>
+   *
    * If no such report exists, this method updates nothing and returns an empty
    * option.
    *
-   * @param reportID ID of the report job to have it's status updated.
+   * @param reportID ID of the report job to have its status updated.
    *
    * @return An option containing the updated row, if such a row exists, or else
    * an empty option if no job with the given hash was found.
@@ -139,22 +119,17 @@ object ReportManager {
   }
 
   fun getReportFiles(row: ReportRow): List<String> {
-    Log.trace("::getReportFiles(row={})", row)
+    with(Workspaces.open(row.jobID)) {
+      exists || return emptyList()
 
-    if (!JobDataManager.workspaceExists(row.jobID))
-      return emptyList()
+      val rs = reportWorkspace(row.reportID)
+      rs.exists      || return emptyList()
+      rs.hasMetaJson || return emptyList()
 
-    val ws = JobDataManager.jobWorkspace(row.jobID)
-
-    if (!ws.reportWorkspaceExists(row.reportID))
-      return emptyList()
-
-    val rws = ws.reportWorkspace(row.reportID)
-
-    if (!rws.reportMetaExists)
-      return emptyList()
-
-    return rws.meta.files
+      return Json.Mapper
+        .readValue(rs.metaJson, ReportMeta::class.java)
+        .files
+    }
   }
 
   /**
@@ -275,10 +250,11 @@ object ReportManager {
 
   /**
    * Creates a new report job from the given information.
-   * <p>
+   *
    * If a job matching the digest of the given {@link ReportJob} already exists,
    * a new job will not be created, instead the requesting user will be linked
-   * to the existing job.  If the matching job has expired, it will be requeued.
+   * to the existing job.  If the matching job has expired, it will be
+   * re-queued.
    *
    * @param job Configuration from which a report job should be created.
    *
@@ -373,36 +349,21 @@ object ReportManager {
     }
   }
 
-  /**
-   * Returns an input stream over a blast report's zipped output.
-   *
-   * @param jobID    ID of the report job's parent blast job.
-   * @param reportID ID of the report job.
-   *
-   * @return An input stream over a blast report's zipped output.
-   */
-  fun getReportZip(jobID: HashID, reportID: HashID): InputStream {
-    Log.trace("::getReportZip(jobID={}, reportID={})", jobID, reportID)
-    return JobDataManager.jobWorkspace(jobID).reportWorkspace(reportID).zipStream
-  }
-
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
-    Log.trace("::updateJobStatus(db={}, row={})", db, row)
-
     var status = ReportQueueManager.getJobStatus(row.queueID)
-
-    Log.debug("Report job queue status = {}", status)
 
     if (status == JobStatus.Completed) {
 
-      if (!JobDataManager.workspaceExists(row.jobID)) {
+      val ws = Workspaces.open(row.jobID)
+
+      if (!ws.exists) {
         Log.debug("Blast job workspace does not exist.")
         status = JobStatus.Expired
       }
 
-      val ws = JobDataManager.jobWorkspace(row.jobID)
+      val rs = ws.reportWorkspace(row.reportID)
 
-      if (!ws.reportWorkspaceExists(row.reportID)) {
+      if (!rs.exists) {
         Log.debug("Report job workspace does not exist. ${row.reportID}")
         status = JobStatus.Expired
       }

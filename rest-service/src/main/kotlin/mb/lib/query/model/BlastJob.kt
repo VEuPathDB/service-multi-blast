@@ -1,10 +1,11 @@
 package mb.lib.query.model
 
 import mb.lib.blast.model.BlastQuery
-import mb.lib.model.HashID
 import mb.lib.util.jsonStringify
 import mb.lib.util.md5
+import mb.lib.util.toHashable
 import org.veupathdb.lib.blast.BlastQueryConfig
+import org.veupathdb.lib.hash_id.HashID
 
 @Suppress("ArrayInDataClass")
 data class BlastJob(
@@ -36,15 +37,19 @@ data class BlastJob(
 
   fun digest(query: String): HashID {
     try {
-      return HashID(md5((HashWrapper(site, query, config)).jsonStringify()))
+      return HashID.ofMD5(HashWrapper(site, query, config).jsonStringify())
     } catch (e: Exception) {
       throw  RuntimeException(e)
     }
   }
 }
 
-data class HashWrapper(val site: String, val query: String, val config: BlastQueryConfig)
-{
-  val tool    = config.tool
-  val dbFiles = config.dbFile
+class HashWrapper(
+  val site:   String,
+  val query:  String,
+  rawConfig: BlastQueryConfig
+) {
+  val tool    = rawConfig.tool
+  val dbFiles = rawConfig.dbFile
+  val config  = rawConfig.toHashable()
 }

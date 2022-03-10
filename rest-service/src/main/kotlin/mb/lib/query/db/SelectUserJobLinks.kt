@@ -24,7 +24,7 @@ data class SelectUserJobLinks(
   }
 
   fun run(): JobLinkCollection {
-    return BasicPreparedReadQuery(Query, con, this::parse, this::prep).execute().getValue()
+    return BasicPreparedReadQuery(Query, con, this::parse, this::prep).execute().value
   }
 
   private fun parse(rs: ResultSet): JobLinkCollection {
@@ -33,8 +33,8 @@ data class SelectUserJobLinks(
     while (rs.next()) {
       val link = parseJobLink(rs)
 
-      (output.byParentID.computeIfAbsent(link.parentJobID!!) { _ -> ArrayList() } as ArrayList).add(link)
-      (output.byChildID.computeIfAbsent(link.childJobID!!) { _ -> ArrayList() } as ArrayList).add(link)
+      (output.byParentID.computeIfAbsent(link.parentJobID!!) { ArrayList() } as ArrayList).add(link)
+      (output.byChildID.computeIfAbsent(link.childJobID!!) { ArrayList() } as ArrayList).add(link)
     }
 
     return output

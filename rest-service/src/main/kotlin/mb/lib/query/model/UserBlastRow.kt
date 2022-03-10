@@ -1,8 +1,8 @@
 package mb.lib.query.model
 
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import org.veupathdb.lib.blast.BlastConfig
+import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 open class UserBlastRow(

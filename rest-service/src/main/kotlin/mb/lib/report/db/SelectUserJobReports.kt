@@ -1,8 +1,8 @@
 package mb.lib.report.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery
-import mb.lib.model.HashID
 import mb.lib.report.model.UserReportRow
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 

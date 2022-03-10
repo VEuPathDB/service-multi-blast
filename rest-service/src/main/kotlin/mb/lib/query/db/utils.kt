@@ -2,13 +2,13 @@
 
 package mb.lib.query.db
 
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
 import mb.lib.query.model.BlastJobLink
 import mb.lib.query.model.BlastRow
 import mb.lib.query.model.BlastTargetLink
 import mb.lib.query.model.UserBlastRow
 import mb.lib.util.convertJobConfig
+import org.veupathdb.lib.hash_id.HashID
 import java.io.File
 import java.io.FileOutputStream
 import java.sql.Clob

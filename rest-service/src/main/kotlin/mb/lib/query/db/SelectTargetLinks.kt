@@ -1,8 +1,8 @@
 package mb.lib.query.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery
-import mb.lib.model.HashID
 import mb.lib.query.model.BlastTargetLink
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 

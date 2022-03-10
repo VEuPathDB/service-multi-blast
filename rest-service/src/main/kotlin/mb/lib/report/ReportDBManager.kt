@@ -1,10 +1,10 @@
 package mb.lib.report
 
 import mb.lib.db.MBlastDBManager
-import mb.lib.model.HashID
 import mb.lib.report.db.*
 import mb.lib.report.model.ReportRow
 import mb.lib.report.model.UserReportRow
+import org.veupathdb.lib.hash_id.HashID
 
 class ReportDBManager: MBlastDBManager() {
   fun getReportJob(reportID: HashID) = SelectReportRow(connection, reportID).run()

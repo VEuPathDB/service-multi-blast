@@ -1,8 +1,8 @@
 package mb.lib.db.model.impl
 
 import mb.lib.db.model.FullJobRow
-import mb.lib.model.HashID
 import mb.lib.model.JobStatus
+import org.veupathdb.lib.hash_id.HashID
 import java.io.File
 import java.time.OffsetDateTime
 

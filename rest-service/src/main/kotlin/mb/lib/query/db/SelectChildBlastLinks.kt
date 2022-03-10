@@ -1,12 +1,15 @@
 package mb.lib.query.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery
-import mb.lib.model.HashID
 import mb.lib.query.model.BlastJobLink
+import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 
-data class SelectChildBlastLinks(private val con: Connection, private val parentJobID: HashID) {
+data class SelectChildBlastLinks(
+  private val con: Connection,
+  private val parentJobID: HashID
+) {
   companion object {
     private const val Query = """
     SELECT

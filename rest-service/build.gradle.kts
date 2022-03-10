@@ -59,9 +59,9 @@ allprojects {
 }
 
 dependencies {
-  val junit = "5.7.0"
-
+  implementation(kotlin("stdlib"))
   implementation(kotlin("stdlib-jdk8"))
+  implementation("org.veupathdb.lib:hash-id:1.0.2")
 
   //
   // FgpUtil & Compatibility Dependencies
@@ -74,9 +74,6 @@ dependencies {
     "${rootProject.projectDir}/vendor/fgputil-db-1.0.0.jar",
     "${rootProject.projectDir}/vendor/fgputil-web-1.0.0.jar"
   ))
-
-  // Compatibility bridge to support the long dead log4j-1.X
-  runtimeOnly("org.apache.logging.log4j:log4j-1.2-api")
 
   // Extra FgpUtil dependencies
   runtimeOnly("org.apache.commons:commons-dbcp2:2.8.0")
@@ -99,7 +96,6 @@ dependencies {
   ))
 
 
-  // Core lib, prefers local checkout if available
   implementation("org.veupathdb.lib:jaxrs-container-core:6.3.2")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
 
@@ -116,8 +112,8 @@ dependencies {
   implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.1")
 
   // Log4J
-  implementation("org.apache.logging.log4j:log4j-api:2.17.0")
-  implementation("org.apache.logging.log4j:log4j-core:2.17.0")
+  implementation("org.apache.logging.log4j:log4j-api:2.17.1")
+  implementation("org.apache.logging.log4j:log4j-core:2.17.1")
   implementation("org.apache.logging.log4j:log4j:2.14.0")
 
   // Metrics
@@ -131,7 +127,7 @@ dependencies {
   implementation("io.vulpine.lib:iffy:1.0.1")
   implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
   implementation("info.picocli:picocli:4.6.3")
-  annotationProcessor("info.picocli:picocli-codegen:4.6.2")
+  annotationProcessor("info.picocli:picocli-codegen:4.6.3")
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
   implementation("org.veupathdb.lib:jvm-fireworq:1.0.3")
