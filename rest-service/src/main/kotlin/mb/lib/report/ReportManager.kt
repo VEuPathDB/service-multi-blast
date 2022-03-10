@@ -275,6 +275,8 @@ object ReportManager {
 
       // If a report with our hash already exists
       if (optOld.isPresent) {
+        Log.debug("Found pre-existing job with this reportID.")
+
         val oldJob = optOld.get()
 
         refreshJobStatus(db, oldJob)
@@ -291,6 +293,9 @@ object ReportManager {
         // Check to see if the user is already linked to the report job.
         val optFull = db.getUserReportJob(reportID, job.userID)
         if (optFull.isPresent) {
+
+          Log.debug("User is already linked to report job.")
+
           val full = optFull.get()
 
           // If the user submitted the new report job with a different
@@ -317,6 +322,8 @@ object ReportManager {
           return full
         }
 
+        Log.debug("User is not already linked to report job.")
+
         // The report job exists, but the user is not linked to it yet.  Link
         // the user to the report job and return a record that has been updated
         // to reflect the user being linked.
@@ -326,6 +333,7 @@ object ReportManager {
       }
 
       // No report with that hash exists
+      Log.debug("No pre-existing job found.")
 
       val queueID = ReportQueueManager.submitNewJob(ReportPayload(
         job.jobID,
