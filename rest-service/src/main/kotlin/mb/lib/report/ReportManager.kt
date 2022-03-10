@@ -184,7 +184,8 @@ object ReportManager {
   }
 
   fun rerunJob(reportID: HashID, userID: Long): Optional<UserReportRow> {
-    Log.trace("::rerunJob(reportID={}, userID={})", reportID, userID)
+    Log.debug("::rerunJob(reportID={}, userID={})", reportID, userID)
+
     ReportDBManager().use { db ->
       // See if the job already exists for this user
       val try1 = db.getUserReportJob(reportID, userID)
@@ -350,23 +351,27 @@ object ReportManager {
   }
 
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
-    var status = ReportQueueManager.getJobStatus(row.queueID)
+    var status: JobStatus? = null
 
-    if (status == JobStatus.Completed) {
+    // Before anything else, let's check if the workspace exists since that is
+    // the fastest check.
+    val ws = Workspaces.open(row.jobID)
 
-      val ws = Workspaces.open(row.jobID)
+    if (!ws.exists) {
+      Log.debug("Blast job workspace does not exist.")
+      status = JobStatus.Expired
+    }
 
-      if (!ws.exists) {
-        Log.debug("Blast job workspace does not exist.")
-        status = JobStatus.Expired
-      }
+    val rs = ws.reportWorkspace(row.reportID)
 
-      val rs = ws.reportWorkspace(row.reportID)
+    if (!rs.exists) {
+      Log.debug("Report job workspace does not exist. ${row.reportID}")
+      status = JobStatus.Expired
+    }
 
-      if (!rs.exists) {
-        Log.debug("Report job workspace does not exist. ${row.reportID}")
-        status = JobStatus.Expired
-      }
+    // If the status isn't Expired
+    if (status != JobStatus.Expired) {
+      status = ReportQueueManager.getJobStatus(row.queueID)
     }
 
     if (status != row.status) {
