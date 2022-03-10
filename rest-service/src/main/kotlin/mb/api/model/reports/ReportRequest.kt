@@ -4,6 +4,7 @@ package mb.api.model.reports
 
 import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+import com.fasterxml.jackson.databind.node.ObjectNode
 import mb.api.model.blast.IOBlastFormat
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.model.IOHSPSorting
@@ -12,6 +13,7 @@ import mb.lib.util.toExternal
 import org.veupathdb.lib.blast.BlastFormatter
 import org.veupathdb.lib.blast.field.*
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 
 @JsonInclude(NON_NULL)
 data class ReportRequest(
@@ -30,31 +32,26 @@ data class ReportRequest(
   @JsonProperty(JsonKeys.MaxTargetSequences) var maxTargetSeqs:   Long?              = null,
   @JsonProperty(JsonKeys.ParseDefLines)      var parseDefLines:   Boolean?           = null,
 ) {
-  @JsonIgnore
   inline fun setNumDescriptions(value: NumDescriptions?) {
     if (value != null)
       numDescriptions = value.value
   }
 
-  @JsonIgnore
   fun setNumAlignments(value: NumAlignments?) {
     if (value != null)
       numAlignments = value.value
   }
 
-  @JsonIgnore
   fun setLineLength(value: LineLength?) {
     if (value != null)
       lineLength = value.value
   }
 
-  @JsonIgnore
   fun setMaxTargetSeqs(value: MaxTargetSeqs?) {
     if (value != null)
       maxTargetSeqs = value.value
   }
 
-  @JsonIgnore
   fun toInternal(): BlastFormatter {
     val out = BlastFormatter()
     out.outFormat = OutFormat(FormatType.values()[type!!.ordinal], delim, fields?.toMutableList() ?: mutableListOf())
@@ -68,6 +65,25 @@ data class ReportRequest(
     out.maxTargetSequences = maxTargetSeqs?.let(::MaxTargetSeqs)
     out.parseDefLines = parseDefLines
     return out
+  }
+
+  @JsonValue
+  fun toJson() = Json.new<ObjectNode> {
+    put(JsonKeys.JobID, jobID.string)
+
+    description?.let { put(JsonKeys.Description, it) }
+    type?.let { put(JsonKeys.Format, it.value) }
+    delim?.let { put(JsonKeys.FieldDelim, it) }
+    fields?.let { putPOJO(JsonKeys.Fields, it) }
+    showGIs?.let { put(JsonKeys.ShowNCBIGIs, it) }
+    numDescriptions?.let { put(JsonKeys.NumDescriptions, it) }
+    numAlignments?.let { put(JsonKeys.NumAlignments, it) }
+    lineLength?.let { put(JsonKeys.LineLength, it) }
+    html?.let { put(JsonKeys.HTML, it) }
+    sortHits?.let { put(JsonKeys.SortHits, it.value) }
+    sortHSPs?.let { put(JsonKeys.SortHSPs, it.value) }
+    maxTargetSeqs?.let { put(JsonKeys.MaxTargetSequences, it) }
+    parseDefLines?.let { put(JsonKeys.ParseDefLines, it) }
   }
 }
 
