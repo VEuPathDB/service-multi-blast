@@ -134,6 +134,7 @@ dependencies {
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
   implementation("org.veupathdb.lib:jvm-fireworq:1.0.3")
+  implementation("org.veupathdb.lib:jackson-singleton:2.1.0")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

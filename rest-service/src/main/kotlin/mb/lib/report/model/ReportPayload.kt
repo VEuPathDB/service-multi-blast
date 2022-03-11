@@ -7,6 +7,7 @@ import mb.api.model.io.JsonKeys
 import org.veupathdb.lib.blast.BlastFormatter
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
+import org.veupathdb.lib.jackson.putIfNN
 
 data class ReportPayload(
   @set:JsonSetter(JsonKeys.JobID)    var jobID:    HashID?         = null,
@@ -16,8 +17,8 @@ data class ReportPayload(
 
   @JsonValue
   fun toJson() = Json.new<ObjectNode> {
-    jobID?.run { put(JsonKeys.JobID, string) }
-    reportID?.run { put(JsonKeys.ReportID, string) }
-    config?.run { set<ObjectNode>(JsonKeys.Config, toJSON().toJSON()) }
+    putIfNN(JsonKeys.JobID, jobID) { it.string }
+    putIfNN(JsonKeys.ReportID, reportID) { it.string }
+    putIfNN(JsonKeys.Config, config) { it.toJSON().toJSON() }
   }
 }
