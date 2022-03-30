@@ -12,6 +12,7 @@ class BlastDBManager: MBlastDBManager()
   companion object {
     private val Log = LogManager.getLogger(BlastDBManager::class.java)
   }
+
   /**
    * Retrieves a blast job record from the DB if such a row exists.
    *
