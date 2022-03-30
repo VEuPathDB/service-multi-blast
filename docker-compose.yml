@@ -75,6 +75,8 @@ services:
     depends_on:
       - queue
       - formatter
+
+    restart: on-failure:5
     networks:
       - traefik
       - internal
