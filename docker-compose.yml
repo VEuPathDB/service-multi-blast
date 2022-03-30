@@ -39,6 +39,10 @@ services:
 
       VALIDATOR_HOST: ${VALIDATOR_HOST:-validator}
 
+      # JVM Config
+      XMX: ${SERVICE_XMX:-256M}
+      XMS: ${SERVICE_XMS:-64M}
+
       # Job Config
       #
       # These options configure the validation/management of jobs.
