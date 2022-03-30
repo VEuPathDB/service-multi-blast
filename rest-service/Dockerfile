@@ -60,4 +60,4 @@ ENV JAVA_HOME=/opt/jdk \
 COPY --from=prep /jlinked /opt/jdk
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
 
-CMD java -jar -XX:+CrashOnOutOfMemoryError -Xms$XMS -Xmx$XMX $JVM_ARGS /service.jar
+CMD java -jar -XX:+CrashOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -Xms$XMS -Xmx$XMX $JVM_ARGS /service.jar
