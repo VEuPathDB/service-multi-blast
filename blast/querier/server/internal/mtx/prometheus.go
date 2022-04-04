@@ -25,6 +25,8 @@ var (
 			300,  // 5 Minutes
 			600,  // 10 Minutes
 			900,  // 15 Minutes
+			1200, // 20 Minutes
+			1800, // 30 Minutes
 		},
 	})
 	jobFailures = promauto.NewCounter(prometheus.CounterOpts{

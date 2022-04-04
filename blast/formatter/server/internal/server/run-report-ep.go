@@ -6,11 +6,13 @@ import (
 	"compress/flate"
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"server/internal/xfiles"
 
 	"github.com/francoispqt/gojay"
 	"github.com/sirupsen/logrus"
@@ -44,7 +46,7 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	job.Config.ArchiveFile.Set("../report.asn1")
 	job.Config.OutFile.Set(OutputName(job.Config.Format.Type))
 
-	cmd  := job.Config.ToCLI()
+	cmd := job.Config.ToCLI()
 	cmd.Path = "/blast/bin/" + cmd.Args[0]
 	cmd.Stderr = os.Stderr
 
@@ -82,6 +84,16 @@ func zipDir(path string) (err error) {
 		return
 	}
 
+	zipPath := filepath.Join(path, reportExportName)
+
+	exists, err := xfiles.FileExists(zipPath)
+	if err != nil {
+		return
+	}
+	if exists {
+		return errors.New(zipPath + " already exists!")
+	}
+
 	file, err := os.Create(filepath.Join(path, reportExportName))
 	if err != nil {
 		return
@@ -100,11 +112,21 @@ func zipDir(path string) (err error) {
 
 	var tf io.Writer
 	for i := range matches {
-		tf, err = zp.Create(filepath.Base(matches[i]))
+
+		baseFileName := filepath.Base(matches[i])
+
+		// This should never happen given the check above, but just to be safe!
+		if baseFileName == reportExportName {
+			return errors.New(baseFileName + " already exists!")
+		}
+
+		// Create a file reference in the new zip for the globbed file
+		tf, err = zp.Create(baseFileName)
 		if err != nil {
 			return
 		}
 
+		// Copy the contents of the globbed file into the referenced zipped file.
 		if err = copyFileInto(matches[i], tf); err != nil {
 			return
 		}
