@@ -54,7 +54,7 @@ RUN apk add --no-cache tzdata \
 ENV JAVA_HOME=/opt/jdk \
     PATH=/opt/jdk/bin:$PATH \
     XMS=64M \
-    XMX=1G \
+    XMX=256M \
     JVM_ARGS=""
 
 COPY --from=prep /jlinked /opt/jdk
