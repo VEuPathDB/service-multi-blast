@@ -169,7 +169,7 @@ object BlastManager {
 
         val qID = BlastQueueManager.submitNewJob(jobID, job.config!!)
 
-        db.updateJobQueue(jobID, qID, JobStatus.Queued)
+        db.updateJobStatus(jobID, qID, JobStatus.Queued)
       }
 
       // For each child job, do the same
@@ -188,7 +188,7 @@ object BlastManager {
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
 
-          db.updateJobQueue(child.jobID, qID, JobStatus.Queued)
+          db.updateJobStatus(child.jobID, qID, JobStatus.Queued)
         }
       }
     }
@@ -212,7 +212,7 @@ object BlastManager {
       row.queueID = queueID
       row.status = JobStatus.Queued
 
-      db.updateJobQueue(row.jobID, queueID, JobStatus.Queued)
+      db.updateJobStatus(row.jobID, queueID, JobStatus.Queued)
     }
   }
 
@@ -248,70 +248,51 @@ object BlastManager {
     }
   }
 
+  /**
+   * Refreshes the job status by checking the job workspace.
+   *
+   * Status conditions:
+   * * Job previously failed    -> Failed
+   * * Workspace does not exist -> Expired
+   * * Has "completed" flag     -> Completed
+   * * Has "failed" flag        -> Failed
+   * * Has no flag files        -> In Progress
+   *
+   * This method mutates the input [BlastRow] to update the status field with
+   * the newly determined status.
+   *
+   * This method additionally updates the database status if the status has
+   * changed from the previously observed status.
+   *
+   * @param db Active DB session
+   *
+   * @param row Blast record from the DB
+   */
   private fun refreshJobStatus(db: BlastDBManager, row: BlastRow) {
-    // If the job is expired or errored out there is nothing more to do with it.
-    (row.status != JobStatus.Errored && row.status != JobStatus.Expired)
-      || return
+    // If the job failed, there is no need to proceed any further, we don't
+    // re-run failed jobs.
+    if (row.status == JobStatus.Errored)
+      return
 
-    // If the job status is Completed, verify that the workspace still exists.
-    if (row.status == JobStatus.Completed) {
-      with (Workspaces.open(row.jobID)) {
-        // If the workspace still exists, then the Completed status is still
-        // valid, and we can bail here.
-        !exists || return@with
-
-        db.updateJobQueue(row.jobID, row.queueID!!, JobStatus.Expired)
-        row.status = JobStatus.Expired
-      }
-    }
-
-    // The only remaining statuses are Queued and InProgress.
-    //
-    // Check the queue to see if the job status has changed yet.
-    else {
-
-      // It is possible the user has not checked on this job in a long time and
-      // it has already expired.  Check this first since it is the lightest
-      // check and can save us some HTTP requests if the job has expired.
-      val ws = Workspaces.open(row.jobID)
-
-      // If the job _has_ expired, update the status in the DB and do the ugly
-      // input mutation.
+    val status = Workspaces.open(row.jobID).let { ws ->
       if (!ws.exists) {
-        db.updateJobQueue(row.jobID, row.queueID!!, JobStatus.Expired)
-        row.status = JobStatus.Expired
-        return
+        Log.debug("Blast workspace {} does not exist.", row.jobID)
+        JobStatus.Expired
+      } else if (ws.hasCompletionFlag()) {
+        Log.debug("Blast workspace {} contains a completed flag.", row.jobID)
+        JobStatus.Completed
+      } else if (ws.hasFailedFlag()) {
+        Log.debug("Blast workspace {} contains a failed flag.", row.jobID)
+        JobStatus.Errored
+      } else {
+        JobStatus.InProgress
       }
-
-      // So we know the job has not yet expired.  Let's go ahead and check the
-      // queue server.
-      val status = BlastQueueManager.getJobStatus(row.queueID!!)
-
-      // If the status has not changed, there is nothing more to do, so bail
-      // here.
-      status != row.status || return
-
-      // Update the status and do the ugly mutation.
-      db.updateJobQueue(row.jobID, row.queueID!!, status)
-      row.status = status
-
-      // If the status has now changed to Errored, clear the errored job entry
-      // from the job queue.
-      if (status == JobStatus.Errored) {
-        BlastQueueManager.getFailedJobs()
-          .stream()
-          .filter { r -> r.jobID == row.queueID }
-          .map { j -> j.failID }
-          .forEach { i ->
-            try {
-              BlastQueueManager.deleteJobFailure(i)
-            } catch (e: Exception) {
-              throw RuntimeException(e)
-            }
-          }
-      }
-
     }
+
+    if (status != row.status)
+      db.updateJobStatus(row.jobID, row.queueID!!, status)
+
+    row.status = status
   }
 
   fun validateConfig(conf: BlastQueryConfig): ErrorMap? {
