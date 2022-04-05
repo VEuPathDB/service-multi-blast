@@ -146,8 +146,6 @@ internal class BlastWorkspaceImpl(override val jobID: HashID)
     const val LogFile    = "log.txt"
   }
 
-  override val appearsComplete get() = hasQuery && hasResult
-
   override val hasQuery get() = queryFile.exists()
 
   override val hasResult get() = resultFile.exists()

@@ -4,6 +4,9 @@ import java.io.File
 import java.time.OffsetDateTime
 import java.util.stream.Stream
 
+internal const val completeFlagFile = ".complete"
+internal const val failedFlagFile   = ".failed"
+
 sealed interface Workspace {
 
   /**
@@ -15,11 +18,6 @@ sealed interface Workspace {
    * Whether this workspace directory has no contents.
    */
   val isEmpty: Boolean
-
-  /**
-   * Whether this workspace appears to be that of a completed job.
-   */
-  val appearsComplete: Boolean
 
   /**
    * Handle on the workspace directory.
@@ -88,4 +86,26 @@ sealed interface Workspace {
    * time.
    */
   fun updateLastModified(time: OffsetDateTime)
+
+  /**
+   * Tests whether the workspace contains a success flag.
+   *
+   * @return `true` if the workspace contains a success flag, otherwise `false`.
+   */
+  fun hasSuccessFlag(): Boolean
+
+  /**
+   * Tests whether the workspace contains a failed flag.
+   *
+   * @return `true` if the workspace contains a failed flag, otherwise `false`.
+   */
+  fun hasFailedFlag(): Boolean
+
+  /**
+   * Tests whether the workspace contains either a success or failed flag.
+   *
+   * @return `true` if the workspace contains a completion flag of either
+   * success or failure, otherwise `false`.
+   */
+  fun hasCompletionFlag(): Boolean
 }
