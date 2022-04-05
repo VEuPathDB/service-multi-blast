@@ -75,4 +75,10 @@ internal sealed class AbstractWorkspace(final override val directory: File)
     directory.setLastModified(time.toInstant().toEpochMilli()) ||
       throw IllegalStateException("Failed to update workspace last modified date for $directory")
   }
+
+  override fun hasSuccessFlag(): Boolean = File(directory, completeFlagFile).exists()
+
+  override fun hasFailedFlag(): Boolean = File(directory, failedFlagFile).exists()
+
+  override fun hasCompletionFlag() = hasSuccessFlag() || hasFailedFlag()
 }

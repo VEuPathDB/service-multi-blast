@@ -66,9 +66,6 @@ internal class ReportWorkspaceImpl(
     const val MetaJson  = "meta.json"
   }
 
-  override val appearsComplete: Boolean
-    get() = hasReportZip && hasMetaJson && directory.list()!!.size > 2
-
   override val hasReportZip
     get() = reportZip.exists()
 
