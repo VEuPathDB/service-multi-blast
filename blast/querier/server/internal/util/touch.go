@@ -10,10 +10,12 @@ const (
 	failedFlag  = ".failed"
 )
 
+// TouchSuccessFlag creates a job success flag file.
 func TouchSuccessFlag(dir string) error {
 	return touchFile(filepath.Join(dir, successFlag))
 }
 
+// TouchFailedFlag creates a job success flag file.
 func TouchFailedFlag(dir string) error {
 	return touchFile(filepath.Join(dir, failedFlag))
 }
