@@ -1,6 +1,5 @@
 package mb.lib.queue
 
-import mb.lib.model.JobStatus
 import mb.lib.queue.model.CreateRequest
 import org.veupathdb.lib.fireworq.FireworqQueue
 
