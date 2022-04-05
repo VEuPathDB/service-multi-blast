@@ -28,13 +28,13 @@ data class SelectUserReportRow(val con: Connection, val reportID: HashID, val us
         AND user_id = ?
       """
   }
-  fun run() = BasicPreparedReadQuery(Query, con, this::parse, this::prepare).execute().value!!
+  fun run() = BasicPreparedReadQuery(Query, con, this::parse, this::prepare).execute().value
 
-  fun parse(rs: ResultSet): Optional<UserReportRow> {
+  fun parse(rs: ResultSet): UserReportRow? {
     if (!rs.next())
-      return Optional.empty()
+      return null
 
-    return Optional.of(UserReportRow(
+    return UserReportRow(
       reportID,
       HashID(rs.getBytes(Column.FormatJob.JobID)),
       JobStatus.unsafeFromString(rs.getString(Column.FormatJob.Status)),
@@ -43,7 +43,7 @@ data class SelectUserReportRow(val con: Connection, val reportID: HashID, val us
       rs.getObject(Column.FormatJob.CreatedOn, OffsetDateTime::class.java),
       rs.getLong(Column.UserLink.UserID),
       rs.getString(Column.UserLink.Description)
-    ))
+    )
   }
 
   private fun prepare(ps: PreparedStatement) {

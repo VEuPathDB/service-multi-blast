@@ -42,15 +42,11 @@ object ReportManager {
     }
   }
 
-  fun getUpdatedUserReport(reportID: HashID, userID: Long): Optional<UserReportRow> {
+  fun getUpdatedUserReport(reportID: HashID, userID: Long): UserReportRow? {
     Log.trace("::getUserReport(reportID={}, userID={})", reportID, userID)
-    ReportDBManager().use {
-      val tmpOpt = it.getUserReportJob(reportID, userID)
 
-      if (tmpOpt.isPresent)
-        updateJobStatus(tmpOpt.get())
-
-      return tmpOpt
+    return ReportDBManager().use { db ->
+      db.getUserReportJob(reportID, userID)?.also { updateJobStatus(it) }
     }
   }
 
@@ -142,15 +138,15 @@ object ReportManager {
    * @return An option that will contain a user report row for the given user id
    * if such a job exists.
    */
-  fun getAndLinkReport(reportID: HashID, userID: Long): Optional<UserReportRow> {
+  fun getAndLinkReport(reportID: HashID, userID: Long): UserReportRow? {
     Log.trace("::getAndLinkReport(reportID={}, userID={})", reportID, userID)
 
     ReportDBManager().use { db ->
       val userRow = db.getUserReportJob(reportID, userID)
 
-      if (userRow.isPresent) {
-        refreshJobStatus(db, userRow.get())
-        Log.debug("Job status = ${userRow.get().status}")
+      if (userRow != null) {
+        refreshJobStatus(db, userRow)
+        Log.debug("Job status = ${userRow.status}")
         return userRow
       }
 
@@ -160,7 +156,7 @@ object ReportManager {
 
       // Report doesn't exist.
       if (rawRow.isEmpty)
-        return Optional.empty()
+        return null
 
       // Report exists, so lets link the user to it.
       db.linkUserToReport(reportID, userID, null)
@@ -170,7 +166,7 @@ object ReportManager {
       refreshJobStatus(db, raw)
       Log.debug("Job status = ${raw.status}")
 
-      return Optional.of(UserReportRow(
+      return UserReportRow(
         reportID,
         raw.jobID,
         raw.status,
@@ -179,42 +175,40 @@ object ReportManager {
         raw.createdOn,
         userID,
         null
-      ))
+      )
     }
   }
 
-  fun rerunJob(reportID: HashID, userID: Long): Optional<UserReportRow> {
+  fun rerunJob(reportID: HashID, userID: Long): UserReportRow? {
     Log.debug("::rerunJob(reportID={}, userID={})", reportID, userID)
 
     ReportDBManager().use { db ->
       // See if the job already exists for this user
       val try1 = db.getUserReportJob(reportID, userID)
 
-      if (try1.isPresent) {
+      if (try1 != null) {
         // The user is already linked to the job
-        val job = try1.get()
-
-        refreshJobStatus(db, job)
+        refreshJobStatus(db, try1)
 
         // If the job isn't expired, then there's nothing to do.
-        if (job.status != JobStatus.Expired)
+        if (try1.status != JobStatus.Expired)
           return try1
 
         // Submit the job to be re-run
         val queueID = ReportQueueManager.submitNewJob(ReportPayload(
-          job.jobID,
-          job.reportID,
-          job.config
+          try1.jobID,
+          try1.reportID,
+          try1.config
         ))
 
         // Build an updated job row
-        job.status  = JobStatus.Queued
-        job.queueID = queueID
+        try1.status  = JobStatus.Queued
+        try1.queueID = queueID
 
         // Update the DB
-        db.updateReportRow(job)
+        db.updateReportRow(try1)
 
-        return Optional.of(job)
+        return try1
       }
 
       // Job doesn't exist OR user is not linked to job.
@@ -232,7 +226,7 @@ object ReportManager {
 
         // Job isn't expired, nothing to do.
         if (raw.status != JobStatus.Expired)
-          return Optional.of(job)
+          return job
 
         // Resubmit the job.
         job.status  = JobStatus.Queued
@@ -241,11 +235,11 @@ object ReportManager {
         // Update the job status in the DB.
         db.updateReportRow(job)
 
-        return Optional.of(job)
+        return job
       }
 
       // Report job doesn't exist, return empty.
-      return Optional.empty()
+      return null
     }
   }
 
@@ -277,59 +271,7 @@ object ReportManager {
       if (optOld.isPresent) {
         Log.debug("Found pre-existing job with this reportID.")
 
-        val oldJob = optOld.get()
-
-        refreshJobStatus(db, oldJob)
-
-        // If the job is expired, rerun it for the new requesting user.
-        if (oldJob.status == JobStatus.Expired) {
-          // Queue the job
-          ReportQueueManager.submitNewJob(ReportPayload(job.jobID, job.getReportID(), job.config))
-          // Update the status in the DB
-          oldJob.status = JobStatus.Queued
-          db.updateReportRow(oldJob)
-        }
-
-        // Check to see if the user is already linked to the report job.
-        val optFull = db.getUserReportJob(reportID, job.userID)
-        if (optFull.isPresent) {
-
-          Log.debug("User is already linked to report job.")
-
-          val full = optFull.get()
-
-          // If the user submitted the new report job with a different
-          // description than last time, update the description.
-          if (full.description != job.description) {
-            val out = UserReportRow(
-              full.reportID,
-              full.jobID,
-              full.status,
-              full.config,
-              full.queueID,
-              full.createdOn,
-              full.userID,
-              job.description
-            )
-
-            db.updateReportDescription(out)
-
-            return out
-          }
-
-          // Since the description hasn't changed, we can just return the row
-          // we found.
-          return full
-        }
-
-        Log.debug("User is not already linked to report job.")
-
-        // The report job exists, but the user is not linked to it yet.  Link
-        // the user to the report job and return a record that has been updated
-        // to reflect the user being linked.
-        db.linkUserToReport(reportID, job.userID, job.description)
-
-        return UserReportRow(oldJob, job.userID, job.description)
+        return handlePreExisting(db, reportID, optOld.get(), job)
       }
 
       // No report with that hash exists
@@ -356,6 +298,61 @@ object ReportManager {
 
       return row
     }
+  }
+
+  private fun handlePreExisting(
+    db: ReportDBManager,
+    reportID: HashID,
+    oldJob: ReportRow,
+    job: ReportJob,
+  ): UserReportRow {
+    refreshJobStatus(db, oldJob)
+
+    // If the job is expired, rerun it for the new requesting user.
+    if (oldJob.status == JobStatus.Expired) {
+      // Queue the job
+      ReportQueueManager.submitNewJob(ReportPayload(job.jobID, job.getReportID(), job.config))
+      // Update the status in the DB
+      oldJob.status = JobStatus.Queued
+      db.updateReportRow(oldJob)
+    }
+
+    // Check to see if the user is already linked to the report job.
+    db.getUserReportJob(reportID, job.userID)?.let {
+      Log.debug("User is already linked to report job.")
+
+      // If the user submitted the new report job with a different
+      // description than last time, update the description.
+      if (it.description != job.description) {
+        val out = UserReportRow(
+          it.reportID,
+          it.jobID,
+          it.status,
+          it.config,
+          it.queueID,
+          it.createdOn,
+          it.userID,
+          job.description
+        )
+
+        db.updateReportDescription(out)
+
+        return out
+      }
+
+      // Since the description hasn't changed, we can just return the row
+      // we found.
+      return it
+    }
+
+    Log.debug("User is not already linked to report job.")
+
+    // The report job exists, but the user is not linked to it yet.  Link
+    // the user to the report job and return a record that has been updated
+    // to reflect the user being linked.
+    db.linkUserToReport(reportID, job.userID, job.description)
+
+    return UserReportRow(oldJob, job.userID, job.description)
   }
 
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
