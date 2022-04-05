@@ -114,7 +114,7 @@ func zipDir(path string) (err error) {
 	for i := 0; i < 10; i++ {
 
 		// Search for files in the workspace directory (will be empty until the
-		// formatter is complete and the report is copied into the workspace).
+		// report is copied into the workspace).
 		matches, err = filepath.Glob(filepath.Join(path, "*"))
 		if err != nil {
 			return err
@@ -135,6 +135,8 @@ func zipDir(path string) (err error) {
 		time.Sleep(100 * time.Millisecond)
 	}
 
+	// We waited a full second after the completion of the formatter and there is
+	// still no report file in the workspace.
 	return errors.New("no report file was found in workspace")
 }
 
