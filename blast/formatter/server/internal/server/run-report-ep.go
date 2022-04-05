@@ -184,19 +184,16 @@ func OutputName(kind field.FormatType) string {
 func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 	log.Tracef("server.runIfNeeded(cmd=..., outDir=%s, log=...)", outDir)
 
-	_, err := os.Stat(outDir)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			return err
+	if stat, err := os.Stat(outDir); err != nil {
+		return err
+	} else {
+		if !stat.IsDir() {
+			return errors.New("path " + outDir + " exists but is not a directory")
 		}
+	}
 
-		if err = os.Mkdir(outDir, 0775); err != nil {
-			return err
-		}
-
-		if err = runCommand(cmd, outDir); err != nil {
-			return err
-		}
+	if err := runCommand(cmd, outDir); err != nil {
+		return err
 	}
 
 	return nil
