@@ -344,36 +344,55 @@ object ReportManager {
    * Status is checked by:
    * 1. Blast workspace exists or else status == expired
    * 2. Report workspace exists or else status == expired
-   * 3. Check queue for job status.
+   * 3. Report workspace has a completion flag or else status == in progress
    *
    * @param db Active DB session
    *
    * @param row Current report row from the database.
    */
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
-    var status: JobStatus? = null
 
-    // Before anything else, let's check if the workspace exists since that is
-    // the fastest check.
-    val ws = Workspaces.open(row.jobID)
+    // Determine job status.
+    val status = Workspaces.open(row.jobID).let bw@ { bws ->
+      // If the blast workspace does not exist, the job has expired.
+      if (!bws.exists) {
+        Log.debug("Blast job workspace ${row.jobID} does not exist.")
+        return@bw JobStatus.Expired
+      }
 
-    if (!ws.exists) {
-      Log.debug("Blast job workspace does not exist.")
-      status = JobStatus.Expired
+      // Test the report workspace
+      bws.reportWorkspace(row.reportID).let { rws ->
+        when {
+          // If the report workspace does not exist, the job has expired?
+          !rws.exists -> {
+            Log.debug("Report job {}/{} does not exist.", row.jobID, row.reportID)
+            JobStatus.Expired
+          }
+
+          // If the report workspace contains a success flag file, the job
+          // completed successfully.
+          rws.hasSuccessFlag() -> {
+            Log.debug("Report job {}/{} has a success flag.", row.jobID, row.reportID)
+            JobStatus.Completed
+          }
+
+          // If the report workspace contains a failed flag file, the job
+          // completed unsuccessfully.
+          rws.hasFailedFlag() -> {
+            Log.debug("Report job {}/{} has a failed flag.", row.jobID, row.reportID)
+            JobStatus.Errored
+          }
+
+          // If the workspace exists, but there is no completion flag, then the
+          // job is either still in progress, or in limbo due to a filesystem
+          // error.
+          else -> JobStatus.InProgress
+        }
+      }
     }
 
-    val rs = ws.reportWorkspace(row.reportID)
-
-    if (!rs.exists) {
-      Log.debug("Report job workspace does not exist. ${row.reportID}")
-      status = JobStatus.Expired
-    }
-
-    // If the status isn't Expired
-    if (status != JobStatus.Expired) {
-      status = ReportQueueManager.getJobStatus(row.queueID)
-    }
-
+    // If the status has changed since it was last observed, update the
+    // database.
     if (status != row.status) {
       row.status = status
       db.updateReportRow(row)
