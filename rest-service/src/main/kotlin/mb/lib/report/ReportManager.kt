@@ -271,7 +271,7 @@ object ReportManager {
       if (optOld.isPresent) {
         Log.debug("Found pre-existing job with this reportID.")
 
-        return handlePreExisting(db, reportID, optOld.get(), job)
+        return handlePreExistingNewReport(db, reportID, optOld.get(), job)
       }
 
       // No report with that hash exists
@@ -300,7 +300,7 @@ object ReportManager {
     }
   }
 
-  private fun handlePreExisting(
+  private fun handlePreExistingNewReport(
     db: ReportDBManager,
     reportID: HashID,
     oldJob: ReportRow,
