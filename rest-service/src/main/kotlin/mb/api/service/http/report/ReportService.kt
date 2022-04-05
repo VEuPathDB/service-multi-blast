@@ -88,12 +88,15 @@ internal object ReportService {
     Log.trace("::submitReport(req={}, userID={})", req, userID)
 
     try {
-      // Verify job's existence and status.
+      // Verify blast job's existence and status.
       val job = BlastManager.getAndLinkUserBlastJob(req.jobID, userID) ?: throw NotFoundException()
 
+      // If the blast job is not completed, then we can't run a report against
+      // it.
       if (job.status != JobStatus.Completed)
         throw BadRequestException()
 
+      // The blast job is completed, so we can submit a new report job.
       return ReportManager.newReportJob(ReportJob(
         req.jobID,
         userID,
