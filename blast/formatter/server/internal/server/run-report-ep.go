@@ -108,20 +108,34 @@ func zipDir(path string) (err error) {
 
 	// Loop to wait for the report file if we get here before it's copied into the
 	// workspace directory.
-	for len(matches) == 0 {
-		if matches, err = filepath.Glob(filepath.Join(path, "*")); err != nil {
+	//
+	// Try a maximum of 10 times before bailing on the job (something is wrong if
+	// we've waited a whole second and the report isn't here yet).
+	for i := 0; i < 10; i++ {
+
+		// Search for files in the workspace directory (will be empty until the
+		// formatter is complete and the report is copied into the workspace).
+		matches, err = filepath.Glob(filepath.Join(path, "*"))
+		if err != nil {
 			return err
-		} else {
+		}
+
+		// If we found 1 or more files in the workspace, then the file has been
+		// copied in, and we can zip the report.
+		if len(matches) > 0 {
 			if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {
 				return err
 			}
+
+			return nil
 		}
 
+		// If we are here, the workspace is empty.
 		// Wait a tenth of a second before checking again.
 		time.Sleep(100 * time.Millisecond)
 	}
 
-	return nil
+	return errors.New("no report file was found in workspace")
 }
 
 // OutputName returns a file name with an appropriate file extension for the
