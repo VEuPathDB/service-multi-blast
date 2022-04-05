@@ -6,10 +6,10 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"server/internal/model"
 	"server/internal/xfiles"
 
 	"github.com/francoispqt/gojay"
@@ -218,28 +218,13 @@ func (f fileList) IsNil() bool {
 // WriteMeta collects a list of all the files in `dir` and writes out a JSON
 // file with a list of those files.
 func WriteMeta(dir string) error {
-	files, err := ioutil.ReadDir(dir)
-	if err != nil {
+	if meta, err := model.CreateMeta(dir); err != nil {
 		return err
+	} else {
+		if err = meta.WriteToFile(); err != nil {
+			return err
+		}
 	}
-
-	meta := meta{}
-	meta.files = make([]string, 0, len(files))
-
-	for i := range files {
-		meta.files = append(meta.files, files[i].Name())
-	}
-
-	metaFile, err := os.Create(filepath.Join(dir, "meta.json"))
-	if err != nil {
-		return err
-	}
-	defer metaFile.Close()
-
-	enc := gojay.BorrowEncoder(metaFile)
-	defer enc.Release()
-
-	return enc.EncodeObject(&meta)
 }
 
 func DecodePayload(body io.Reader) (*api.JobPayload, error) {
