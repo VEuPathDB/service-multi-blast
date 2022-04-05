@@ -3,7 +3,6 @@ package mb.lib.workspace
 import mb.lib.config.Config
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
-import java.nio.file.Path
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
