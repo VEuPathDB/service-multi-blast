@@ -52,6 +52,21 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 
 	outputDir := filepath.Join(workspace, job.ReportID)
 
+	// Check to make sure the job has not already been completed.  This should
+	// never happen, but if it does, we should not attempt to re-run this report
+	// job.  Instead, fail the request.
+	if exists, err := xfiles.CompletionFlagExists(outputDir); err != nil {
+		log.Error(err)
+		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
+			log.Error(e)
+		}
+		return New500Error(err.Error())
+	} else if exists {
+		err := errors.New("attempted to re-run a report job in a completed workspace")
+		log.Error(err)
+		return New500Error(err.Error())
+	}
+
 	// If the directory already exists, this report has already been run.
 	// If the directory does not exist, create it and run the report.
 	if err = runIfNeeded(cmd, outputDir, log); err != nil {
