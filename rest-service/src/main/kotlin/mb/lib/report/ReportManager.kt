@@ -355,6 +355,18 @@ object ReportManager {
     return UserReportRow(oldJob, job.userID, job.description)
   }
 
+  /**
+   * Update the given report job's status.
+   *
+   * Status is checked by:
+   * 1. Blast workspace exists or else status == expired
+   * 2. Report workspace exists or else status == expired
+   * 3. Check queue for job status.
+   *
+   * @param db Active DB session
+   *
+   * @param row Current report row from the database.
+   */
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
     var status: JobStatus? = null
 
