@@ -1,9 +1,6 @@
 package server
 
 import (
-	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"errors"
 	"io"
 	"os"
@@ -168,51 +165,6 @@ func runCommand(cmd *exec.Cmd, dir string) error {
 	return cmd.Run()
 }
 
-func hashCommand(cmd *exec.Cmd) string {
-	return hashSlice(cmd.Args)
-}
-
-func hashSlice(val []string) string {
-	size := 0
-	for i := range val {
-		size += len(val[i])
-	}
-
-	buf := bytes.NewBuffer(make([]byte, size))
-
-	for i := range val {
-		buf.WriteString(val[i])
-	}
-
-	hash := md5.Sum(buf.Bytes())
-
-	return hex.EncodeToString(hash[:])
-}
-
-type meta struct {
-	files fileList
-}
-
-func (m *meta) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.ArrayKey("files", m.files)
-}
-
-func (m *meta) IsNil() bool {
-	return m == nil
-}
-
-type fileList []string
-
-func (f fileList) MarshalJSONArray(enc *gojay.Encoder) {
-	for i := range f {
-		enc.String(f[i])
-	}
-}
-
-func (f fileList) IsNil() bool {
-	return f == nil
-}
-
 // ---------------------------------------------------------------------------------------------- //
 
 // WriteMeta collects a list of all the files in `dir` and writes out a JSON
@@ -225,6 +177,8 @@ func WriteMeta(dir string) error {
 			return err
 		}
 	}
+
+	return nil
 }
 
 func DecodePayload(body io.Reader) (*api.JobPayload, error) {
