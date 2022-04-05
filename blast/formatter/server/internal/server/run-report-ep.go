@@ -1,9 +1,7 @@
 package server
 
 import (
-	"archive/zip"
 	"bytes"
-	"compress/flate"
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
@@ -54,10 +52,28 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 
 	outputDir := filepath.Join(workspace, job.ReportID)
 
+	// Check to make sure the job has not already been completed.  This should
+	// never happen, but if it does, we should not attempt to re-run this report
+	// job.  Instead, fail the request.
+	if exists, err := xfiles.CompletionFlagExists(outputDir); err != nil {
+		log.Error(err)
+		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
+			log.Error(e)
+		}
+		return New500Error(err.Error())
+	} else if exists {
+		err := errors.New("attempted to re-run a report job in a completed workspace")
+		log.Error(err)
+		return New500Error(err.Error())
+	}
+
 	// If the directory already exists, this report has already been run.
 	// If the directory does not exist, create it and run the report.
 	if err = runIfNeeded(cmd, outputDir, log); err != nil {
 		log.Error(err)
+		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
+			log.Error(e)
+		}
 		return New500Error(err.Error())
 	}
 
@@ -65,6 +81,9 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	err = zipDir(outputDir)
 	if err != nil {
 		log.Error(err.Error())
+		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
+			log.Error(e)
+		}
 		return New500Error(err.Error())
 	}
 
@@ -72,93 +91,34 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 
 	if err = WriteMeta(outputDir); err != nil {
 		log.Error(err.Error())
+		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
+			log.Error(e)
+		}
 		return New500Error(err.Error())
+	}
+
+	if e := xfiles.WriteCompletedFlag(outputDir); e != nil {
+		log.Error(e)
 	}
 
 	return New200Response("Job completed successfully")
 }
 
-func zipDir(path string) (err error) {
-	matches, err := filepath.Glob(filepath.Join(path, "*"))
-	if err != nil {
-		return
-	}
-
-	zipPath := filepath.Join(path, reportExportName)
-
-	exists, err := xfiles.FileExists(zipPath)
-	if err != nil {
-		return
-	}
-	if exists {
-		return errors.New(zipPath + " already exists!")
-	}
-
-	file, err := os.Create(filepath.Join(path, reportExportName))
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err != nil {
-			_ = file.Close()
-			_ = os.Remove(filepath.Join(path, reportExportName))
-		}
-	}()
-
-	zp := zip.NewWriter(file)
-	zp.RegisterCompressor(zip.Deflate, func(w io.Writer) (io.WriteCloser, error) {
-		return flate.NewWriter(w, flate.BestCompression)
-	})
-
-	var tf io.Writer
-	for i := range matches {
-
-		baseFileName := filepath.Base(matches[i])
-
-		// This should never happen given the check above, but just to be safe!
-		if baseFileName == reportExportName {
-			return errors.New(baseFileName + " already exists!")
-		}
-
-		// Create a file reference in the new zip for the globbed file
-		tf, err = zp.Create(baseFileName)
-		if err != nil {
-			return
-		}
-
-		// Copy the contents of the globbed file into the referenced zipped file.
-		if err = copyFileInto(matches[i], tf); err != nil {
-			return
-		}
-	}
-
-	if err = zp.Flush(); err != nil {
-		return
-	}
-
-	if err = zp.Close(); err != nil {
-		return
-	}
-
-	_, err = file.Seek(0, io.SeekStart)
-
-	return
-}
-
-func copyFileInto(path string, w io.Writer) error {
-	f, err := os.Open(path)
-	if err != nil {
+// zipDir zips the contents of the given directory.
+func zipDir(path string) error {
+	if matches, err := filepath.Glob(filepath.Join(path, "*")); err != nil {
 		return err
-	}
-	defer f.Close()
-
-	if _, err = io.Copy(w, f); err != nil {
-		return err
+	} else {
+		if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
+// OutputName returns a file name with an appropriate file extension for the
+// given file kind.
 func OutputName(kind field.FormatType) string {
 	out := "report"
 
