@@ -13,7 +13,6 @@ import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
 import java.io.File
 import java.time.OffsetDateTime
-import java.util.Optional
 
 object ReportManager {
   private val Log = LogManager.getLogger("ReportManager")
@@ -42,14 +41,6 @@ object ReportManager {
     }
   }
 
-  fun getUpdatedUserReport(reportID: HashID, userID: Long): UserReportRow? {
-    Log.trace("::getUserReport(reportID={}, userID={})", reportID, userID)
-
-    return ReportDBManager().use { db ->
-      db.getUserReportJob(reportID, userID)?.also { updateJobStatus(it) }
-    }
-  }
-
   fun getUserReportsForJob(jobID: HashID, userID: Long): List<UserReportRow> {
     Log.trace("::getUserReportsForJob(jobID={}, userID={})", jobID, userID)
     ReportDBManager().use {
@@ -75,32 +66,6 @@ object ReportManager {
       }
 
       return out
-    }
-  }
-
-  /**
-   * Updates the job status field for a report job matching the given report
-   * hash.
-   *
-   * If no such report exists, this method updates nothing and returns an empty
-   * option.
-   *
-   * @param reportID ID of the report job to have its status updated.
-   *
-   * @return An option containing the updated row, if such a row exists, or else
-   * an empty option if no job with the given hash was found.
-   */
-  fun updateJobStatusIfExists(reportID: HashID): Optional<ReportRow> {
-    Log.trace("::updateJobStatusIfExists(reportID={})", reportID)
-    ReportDBManager().use {
-      val optRow = it.getReportJob(reportID)
-
-      if (optRow.isEmpty)
-        return Optional.empty()
-
-      refreshJobStatus(it, optRow.get())
-
-      return Optional.of(optRow.get())
     }
   }
 
@@ -194,6 +159,9 @@ object ReportManager {
         if (try1.status != JobStatus.Expired)
           return try1
 
+        // Create a workspace for the report job.
+        Workspaces.open(try1.jobID).reportWorkspace(reportID).createIfNotExists()
+
         // Submit the job to be re-run
         val queueID = ReportQueueManager.submitNewJob(ReportPayload(
           try1.jobID,
@@ -277,12 +245,17 @@ object ReportManager {
       // No report with that hash exists
       Log.debug("No pre-existing job found.")
 
+      // Create a report job workspace.
+      Workspaces.open(job.jobID).reportWorkspace(reportID).createIfNotExists()
+
+      // Queue the job to be executed.
       val queueID = ReportQueueManager.submitNewJob(ReportPayload(
         job.jobID,
         job.getReportID(),
         job.config
       ))
 
+      // Create the report job and link the current user to it.
       val row = UserReportRow(
         reportID,
         job.jobID,
@@ -306,14 +279,24 @@ object ReportManager {
     oldJob: ReportRow,
     job: ReportJob,
   ): UserReportRow {
+
+    // Update the report job's status
     refreshJobStatus(db, oldJob)
 
     // If the job is expired, rerun it for the new requesting user.
     if (oldJob.status == JobStatus.Expired) {
+
+      // Create the report job workspace.
+      Workspaces.open(oldJob.jobID)
+        .reportWorkspace(oldJob.reportID)
+        .createIfNotExists()
+
       // Queue the job
       ReportQueueManager.submitNewJob(ReportPayload(job.jobID, job.getReportID(), job.config))
+
       // Update the status in the DB
       oldJob.status = JobStatus.Queued
+
       db.updateReportRow(oldJob)
     }
 
