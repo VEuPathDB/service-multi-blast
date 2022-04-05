@@ -72,7 +72,7 @@ internal object ReportService {
 
     try {
       val tmp = ReportManager.getAndLinkReport(reportID, userID)
-        .orElseThrow(::NotFoundException)
+        ?: throw NotFoundException()
 
       val out = tmp.convert()
 
@@ -109,9 +109,9 @@ internal object ReportService {
   fun rerunReport(reportID: HashID, userID: Long): ReportResponse {
     Log.trace("::rerunReport(reportID={}, userID={})", reportID, userID)
     try {
-      return ReportManager.rerunJob(reportID, userID)
-        .map { it.convert() }
-        .orElseThrow(::NotFoundException)
+      return ReportManager.rerunJob(reportID, userID)?.convert()
+        ?: throw NotFoundException()
+
     } catch (e: Exception) {
       throw e.wrap()
     }
@@ -122,7 +122,7 @@ internal object ReportService {
     Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={}, maxSize={})", reportID, userID, file, download, maxSize)
     try {
       val rep = ReportManager.getAndLinkReport(reportID, userID)
-        .orElseThrow(::NotFoundException)
+        ?: throw NotFoundException()
 
       val out = ReportManager.getReportFile(rep, file) ?: throw NotFoundException()
 
