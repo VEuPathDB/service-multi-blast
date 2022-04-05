@@ -225,15 +225,12 @@ object ReportManager {
    */
   fun newReportJob(job: ReportJob): UserReportRow {
     Log.trace("::newReportJob(job={})", job)
+
     ReportDBManager().use { db ->
       val reportID = job.getReportID()
-      val optOld   = db.getReportJob(reportID)
 
-      // Set the archive to the job id for hashing.
-      //
-      // Without this there would be hash collisions for report jobs across
-      // different blast jobs.
-      job.config.archiveFile = job.jobID.string
+      // Look up the target report job to see if it already exists.
+      val optOld = db.getReportJob(reportID)
 
       // If a report with our hash already exists
       if (optOld.isPresent) {
@@ -273,6 +270,9 @@ object ReportManager {
     }
   }
 
+  /**
+   * Handle "newReport" requests for report jobs that already existed.
+   */
   private fun handlePreExistingNewReport(
     db: ReportDBManager,
     reportID: HashID,
