@@ -118,7 +118,7 @@ class BlastDBManager: MBlastDBManager()
    * @param jobID     ID of the job to update.
    * @param newStatus The new status to be set.
    */
-  fun updateJobQueue(jobID: HashID, queueID: Int, newStatus: JobStatus) {
+  fun updateJobStatus(jobID: HashID, queueID: Int, newStatus: JobStatus) {
     Log.trace("#updateJobStatus(jobID={}, queueID={}, newStatus={})", jobID, queueID, newStatus)
     UpdateJobStatus(connection, jobID, queueID, newStatus).run()
   }
