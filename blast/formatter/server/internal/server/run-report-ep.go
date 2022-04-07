@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"server/internal/model"
 	"server/internal/xfiles"
+	"time"
 
 	"github.com/francoispqt/gojay"
 	"github.com/sirupsen/logrus"
@@ -102,16 +103,44 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 }
 
 // zipDir zips the contents of the given directory.
-func zipDir(path string) error {
-	if matches, err := filepath.Glob(filepath.Join(path, "*")); err != nil {
-		return err
-	} else {
-		if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {
+func zipDir(path string) (err error) {
+	var matches []string
+
+	// Loop to wait for the report file if we get here before it's copied into the
+	// workspace directory.
+	//
+	// Try a maximum of 10 times before bailing on the job (something is wrong if
+	// we've waited a whole second and the report isn't here yet).
+	for i := 0; i < 10; i++ {
+
+		// Search for files in the workspace directory (will be empty until the
+		// report is copied into the workspace).
+		matches, err = filepath.Glob(filepath.Join(path, "*"))
+		if err != nil {
 			return err
 		}
+
+		// If we found 1 or more files in the workspace, then the file has been
+		// copied in, and we can zip the report.
+		//
+		// The only things being zipped are the report output files, the `meta.json`
+		// file and the completed flag file are created after this zip is done.
+		if len(matches) > 0 {
+			if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {
+				return err
+			}
+
+			return nil
+		}
+
+		// If we are here, the workspace is empty.
+		// Wait a tenth of a second before checking again.
+		time.Sleep(100 * time.Millisecond)
 	}
 
-	return nil
+	// We waited a full second after the completion of the formatter and there is
+	// still no report file in the workspace.
+	return errors.New("no report file was found in workspace")
 }
 
 // OutputName returns a file name with an appropriate file extension for the
