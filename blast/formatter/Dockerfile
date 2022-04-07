@@ -7,7 +7,7 @@ RUN pwd && ls
 
 FROM ncbi/blast:2.10.1 AS run
 
-RUN apk add --no-cache tzdata \
+RUN apt-get install tzdata \
     && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
     && echo "America/New_York" > /etc/timezone
 
