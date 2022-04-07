@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"server/internal/util"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -29,9 +30,12 @@ type Endpoint struct {
 }
 
 func (b Endpoint) Handle(req midl.Request) midl.Response {
+	// Increment request counter.
 	mtx.RecordRequest()
+
 	log.Println("Config: ", b.config)
 
+	// Create logger with context.
 	log := req.AdditionalContext()[middleware.KeyLogger].(*logrus.Entry)
 
 	log.Debug("Deserializing request.")
@@ -71,6 +75,10 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	stdout, err := os.Create(filepath.Join(workDir, "log.txt"))
 	if err != nil {
 		log.Debug("Failed to create stdout log file: ", err.Error())
+
+		// Create failed flag
+		_ = util.TouchFailedFlag(workDir)
+
 		return server.NewFailResponse(err.Error())
 	}
 	defer stdout.Close()
@@ -78,6 +86,10 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	stderr, err := os.Create(filepath.Join(workDir, "error.txt"))
 	if err != nil {
 		log.Debug("Failed to create stderr log file: ", err.Error())
+
+		// Create failed flag
+		_ = util.TouchFailedFlag(workDir)
+
 		return server.NewFailResponse(err.Error())
 	}
 	defer stderr.Close()
@@ -96,10 +108,19 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	mtx.RecordJobTime(time.Since(start).Seconds())
 	if err != nil {
 		log.Debug("Command execution failed: ", err.Error())
+
+		// Increment job failure metric
 		mtx.RecordFailedJob()
+
+		// Create failed flag
+		_ = util.TouchFailedFlag(workDir)
+
 		return server.NewFailResponse(err.Error())
 	}
 	log.Info("Command completed successfully.")
+
+	// Create success flag
+	_ = util.TouchSuccessFlag(workDir)
 
 	return server.NewSuccessResponse("success")
 }
