@@ -7,10 +7,14 @@ RUN pwd && ls
 
 FROM ncbi/blast:2.10.1 AS run
 
-COPY --from=build /server/server /server
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+    && echo "America/New_York" > /etc/timezone
 
 ENV BLASTDB=/:/db:/blast/blastdb:/blast/blastdb_custom
 
 EXPOSE 80
+
+COPY --from=build /server/server /server
 
 CMD /server
