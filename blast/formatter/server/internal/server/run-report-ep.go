@@ -122,6 +122,9 @@ func zipDir(path string) (err error) {
 
 		// If we found 1 or more files in the workspace, then the file has been
 		// copied in, and we can zip the report.
+		//
+		// The only things being zipped are the report output files, the `meta.json`
+		// file and the completed flag file are created after this zip is done.
 		if len(matches) > 0 {
 			if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {
 				return err
