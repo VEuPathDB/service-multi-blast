@@ -21,7 +21,7 @@ func ReportEndpoint(req midl.Request) midl.Response {
 	reqID := req.AdditionalContext()[midlid.KeyRequestId].(string)
 	log := logrus.WithField(midlid.KeyRequestId, reqID)
 
-	log.Trace("server.ReportEndpoint(")
+	log.Trace("server.ReportEndpoint()")
 
 	payload, err := DecodePayload(req.RawRequest().Body)
 	if err != nil {
@@ -33,6 +33,10 @@ func ReportEndpoint(req midl.Request) midl.Response {
 
 func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	workspace, err := getWorkspace(job.JobID)
+
+	// Append blast job id and report job id to the log lines.
+	log = log.WithField("job-id", job.JobID).WithField("report-id", job.ReportID)
+
 	if err != nil {
 		log.Error(err.Error())
 		return New500Error(err.Error())
