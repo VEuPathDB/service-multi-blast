@@ -7,8 +7,12 @@ RUN pwd && ls
 
 FROM ncbi/blast:2.10.1 AS run
 
-COPY --from=build /server/server /server
+RUN apt-get install tzdata \
+    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+    && echo "America/New_York" > /etc/timezone
 
 EXPOSE 80
+
+COPY --from=build /server/server /server
 
 CMD /server
