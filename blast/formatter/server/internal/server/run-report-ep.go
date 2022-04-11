@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"server/internal/model"
+	"server/internal/mtx"
 	"server/internal/xfiles"
 	"time"
 
@@ -36,6 +37,7 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 	workspace, err := getWorkspace(job.JobID)
 	if err != nil {
 		log.Error(err.Error())
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	}
 
@@ -58,10 +60,12 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
 			log.Error(e)
 		}
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	} else if exists {
 		err := errors.New("attempted to re-run a report job in a completed workspace")
 		log.Error(err)
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	}
 
@@ -72,6 +76,7 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
 			log.Error(e)
 		}
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	}
 
@@ -82,6 +87,7 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
 			log.Error(e)
 		}
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	}
 
@@ -92,6 +98,7 @@ func runReport(job *api.JobPayload, log *logrus.Entry) midl.Response {
 		if e := xfiles.WriteFailedFlag(outputDir); e != nil {
 			log.Error(e)
 		}
+		mtx.RecordFailedJob()
 		return New500Error(err.Error())
 	}
 
@@ -178,9 +185,11 @@ func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 		}
 	}
 
+	start := time.Now()
 	if err := runCommand(cmd, outDir); err != nil {
 		return err
 	}
+	mtx.RecordJobTime(time.Since(start).Seconds())
 
 	return nil
 }
