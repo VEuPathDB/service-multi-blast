@@ -8,10 +8,10 @@ import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import jakarta.ws.rs.ForbiddenException
 import jakarta.ws.rs.InternalServerErrorException
 import jakarta.ws.rs.core.Context
-import jakarta.ws.rs.core.Request
+import org.glassfish.jersey.server.ContainerRequest
 
 @Authenticated
-data class GuestLinkController(@Context val req: Request): LinkGuest {
+data class GuestLinkController(@Context val req: ContainerRequest): LinkGuest {
 
   override fun convGuestToUser(link: IOGuestLink) {
     val user = UserProvider.lookupUser(req).orElseThrow(::InternalServerErrorException)
