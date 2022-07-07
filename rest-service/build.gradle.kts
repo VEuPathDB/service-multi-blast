@@ -6,9 +6,9 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "3.2.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "3.4.3"
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "1.6.10"
+  kotlin("jvm") version "1.6.21"
 }
 
 // Load Props
@@ -18,13 +18,13 @@ val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.serv
 
 java {
   toolchain {
-    languageVersion.set(JavaLanguageVersion.of(16))
+    languageVersion.set(JavaLanguageVersion.of(17))
   }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
-    jvmTarget = "16"
+    jvmTarget = "17"
   }
 }
 
@@ -32,11 +32,6 @@ containerBuild {
   project {
     mainClassName = "Main"
     projectPackage = "mb"
-  }
-
-  fgputil {
-    version = "c48c7e7"
-    targets = arrayOf(AccountDB, Core, DB, Web)
   }
 }
 
@@ -67,39 +62,11 @@ dependencies {
   implementation("org.veupathdb.lib:hash-id:1.0.2")
 
   //
-  // FgpUtil & Compatibility Dependencies
-  //
-
-  // FgpUtil jars
-  implementation(files(
-    "${rootProject.projectDir}/vendor/fgputil-accountdb-1.0.0.jar",
-    "${rootProject.projectDir}/vendor/fgputil-core-1.0.0.jar",
-    "${rootProject.projectDir}/vendor/fgputil-db-1.0.0.jar",
-    "${rootProject.projectDir}/vendor/fgputil-web-1.0.0.jar"
-  ))
-
-  // Extra FgpUtil dependencies
-  runtimeOnly("org.apache.commons:commons-dbcp2:2.8.0")
-  runtimeOnly("org.json:json:20211205")
-  runtimeOnly("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.1")
-  implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.1")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.1")
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
-
-  //
   // Project Dependencies
   //
 
-  // Oracle
-  runtimeOnly(files(
-    "${rootProject.projectDir}/vendor/ojdbc8.jar",
-    "${rootProject.projectDir}/vendor/ucp.jar",
-    "${rootProject.projectDir}/vendor/xstreams.jar"
-  ))
-
-
-  implementation("org.veupathdb.lib:jaxrs-container-core:6.3.2")
+  implementation("org.veupathdb.lib:jaxrs-container-core:6.7.4")
+  implementation("org.gusdb:fgputil-db:2.7.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
 
   // Jersey
@@ -111,13 +78,12 @@ dependencies {
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.0.4")
 
   // Jackson
-  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.1")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
 
   // Log4J
-  implementation("org.apache.logging.log4j:log4j-api:2.17.1")
-  implementation("org.apache.logging.log4j:log4j-core:2.17.1")
-  implementation("org.apache.logging.log4j:log4j:2.14.0")
+  implementation("org.apache.logging.log4j:log4j-api:2.17.2")
+  implementation("org.apache.logging.log4j:log4j-core:2.17.2")
 
   // Metrics
   implementation("io.prometheus:simpleclient:0.15.0")
@@ -139,7 +105,7 @@ dependencies {
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
   testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
-  testImplementation("org.mockito:mockito-core:4.3.1")
+  testImplementation("org.mockito:mockito-core:4.6.1")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 

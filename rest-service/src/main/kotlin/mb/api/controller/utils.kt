@@ -5,15 +5,15 @@ import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.InternalServerErrorException
 import jakarta.ws.rs.WebApplicationException
-import jakarta.ws.rs.core.Request
+import org.glassfish.jersey.server.ContainerRequest
 import org.veupathdb.lib.hash_id.HashID
 
 private const val ErrNoUser = "request reached authenticated endpoint with no user attached"
 
 fun noUserExcept(): RuntimeException = InternalServerErrorException(ErrNoUser)
 
-inline fun Request.requireUser(): User = UserProvider.lookupUser(this).orElseThrow(::noUserExcept)
-inline fun Request.requireUserID(): Long = UserProvider.lookupUser(this).orElseThrow(::noUserExcept).userID
+inline fun ContainerRequest.requireUser(): User = UserProvider.lookupUser(this).orElseThrow(::noUserExcept)
+inline fun ContainerRequest.requireUserID(): Long = UserProvider.lookupUser(this).orElseThrow(::noUserExcept).userID
 
 inline fun <T> enforceBody(value: T?): T =
   value ?: throw BadRequestException("Request missing one or more input body fields.")
