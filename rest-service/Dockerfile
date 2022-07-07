@@ -3,12 +3,13 @@
 #   Build Service & Dependencies
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM veupathdb/alpine-dev-base:jdk-16 AS prep
+FROM veupathdb/alpine-dev-base:jdk-17 AS prep
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
 
 WORKDIR /workspace
+
 RUN jlink --compress=2 --module-path /opt/jdk/jmods \
        --add-modules java.base,java.net.http,java.security.jgss,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
        --output /jlinked \
@@ -43,7 +44,7 @@ RUN make jar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM foxcapades/alpine-oracle:1.6
+FROM amazoncorretto:17-alpine3.15-jdk
 
 LABEL service="multi-blast"
 
