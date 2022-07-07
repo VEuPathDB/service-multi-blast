@@ -7,10 +7,10 @@ import mb.api.service.http.report.ReportService
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import jakarta.ws.rs.NotFoundException
 import jakarta.ws.rs.core.Context
-import jakarta.ws.rs.core.Request
+import org.glassfish.jersey.server.ContainerRequest
 
 @Authenticated(allowGuests = true)
-data class ReportController(@Context private val request: Request): Reports
+data class ReportController(@Context private val request: ContainerRequest): Reports
 {
   override fun getAllReports(jobID: String?): List<ReportResponse> =
     if (jobID != null)

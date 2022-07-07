@@ -18,8 +18,8 @@ import java.io.InputStream
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
-import jakarta.ws.rs.core.Request
 import jakarta.ws.rs.core.Response
+import org.glassfish.jersey.server.ContainerRequest
 
 
 private const val ParamQuery      = "query"
@@ -28,7 +28,7 @@ private const val ParamDownload   = "download"
 private const val AttachmentPat = "attachment; filename=\"%s.%s\""
 
 
-private fun getUser(req: Request) = UserProvider.lookupUser(req).orElseThrow(::noUserExcept)!!
+private fun getUser(req: ContainerRequest) = UserProvider.lookupUser(req).orElseThrow(::noUserExcept)!!
 
 private fun Any.okJSON() = Response.status(Response.Status.OK)
   .type(MediaType.APPLICATION_JSON_TYPE)
@@ -37,7 +37,7 @@ private fun Any.okJSON() = Response.status(Response.Status.OK)
 
 @Path(Paths.Jobs)
 @Authenticated(allowGuests = true)
-class JobController(@Context private val request: Request) {
+class JobController(@Context private val request: ContainerRequest) {
 
   /**
    * @return A list of jobs associated with the currently logged-in user.
