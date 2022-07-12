@@ -6,7 +6,7 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "3.4.3"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "4.0.0"
   id("com.github.johnrengelman.shadow") version "7.1.2"
   kotlin("jvm") version "1.6.21"
 }
