@@ -1,6 +1,7 @@
 package mb.lib.blast.model
 
 
+import mb.api.service.valid.SequenceEmptyValidationError
 import mb.api.service.valid.SequenceValidationError
 import mb.api.service.valid.SequenceValidator
 import org.veupathdb.lib.blast.BlastTool
@@ -36,7 +37,12 @@ data class BlastQuery(val tool: BlastTool, val sequences: List<BlastSubQuery>) {
    * Validates all the sequences in this query.
    */
   fun validate(): SequenceValidationError? {
+    // If we don't have any sequences
+    if (sequences.isEmpty())
+      return SequenceEmptyValidationError()
+
     var seq = 1
+
     for (sub in sequences) {
       val err = sub.validate(seq)
       if (err != null)
@@ -59,13 +65,28 @@ data class BlastQuery(val tool: BlastTool, val sequences: List<BlastSubQuery>) {
       val buffer     = StringBuilder()
       var index      = 1
 
+      // Current defline
+      //
+      // This will hold the defline value for the subsequence we are currently
+      // reading through.
+      //
+      // If there is only one sequence in the query, the defline is optional.
+      // If there are multiple sequences in the query, each sequence will be
+      // preceded by a defline.
       var currentHeader: String? = null
 
+      // Iterate through the lines in the input query text
       while (scanner.hasNextLine()) {
         val line = scanner.nextLine()
 
+        // If the current line is a defline (starts with '>')
         if (line.startsWith(">")) {
+
+          // AND we already had a current defline for the current sequence
           if (currentHeader != null) {
+
+            // Then we are starting a new sequence in the query.  Close out the
+            // sequence we were working on so we can start a new one.
             subQueries.add(BlastSubQuery(
               index++,
               tool,
@@ -75,12 +96,19 @@ data class BlastQuery(val tool: BlastTool, val sequences: List<BlastSubQuery>) {
             buffer.setLength(0)
           }
 
+          // Set the current defline to the one we just encountered.
           currentHeader = line
-        } else {
+        }
+
+        // else, the line is not a defline
+        else {
+          // then it must be part of a sequence, add it to the sequence buffer.
           buffer.append(line).append("\n")
         }
       }
 
+      // We've reached the end of the input query, close out the last sequence
+      // we were working on.
       if (buffer.isNotEmpty()) {
         subQueries.add(BlastSubQuery(
           index,
