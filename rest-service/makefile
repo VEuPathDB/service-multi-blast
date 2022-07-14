@@ -71,8 +71,6 @@ install-dev-env:
 		cd .tools && git pull && cd ..; \
 	fi
 	@$(BIN_DIR)/check-env.sh
-	@./gradlew download-fgputil
-	@$(BIN_DIR)/install-oracle.sh
 
 fix-path:
 	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_DIR) $(MAIN_DIR)
@@ -92,6 +90,6 @@ merge-raml:
 # File based targets
 #
 
-build/libs/service.jar: vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
+build/libs/service.jar: build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
 	@./gradlew clean test shadowJar
