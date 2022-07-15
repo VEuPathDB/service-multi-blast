@@ -17,8 +17,9 @@ enum class JobStatus(val value: String) {
   fun toJSON(): JsonNode = TextNode(value)
 
   companion object {
-    private const val InProgressAlias = "grabbed"
-    private const val QueuedAlias     = "claimed"
+    private const val InProgressAlias1 = "grabbed"
+    private const val InProgressAlias2 = "running"
+    private const val QueuedAlias      = "claimed"
 
     @JvmStatic
     fun fromString(name: String): JobStatus? {
@@ -27,9 +28,10 @@ enum class JobStatus(val value: String) {
           return e
 
       return when (name) {
-        QueuedAlias     -> Queued
-        InProgressAlias -> InProgress
-        else            -> null
+        QueuedAlias      -> Queued
+        InProgressAlias1 -> InProgress
+        InProgressAlias2 -> InProgress
+        else             -> null
       }
     }
 
