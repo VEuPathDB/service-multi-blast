@@ -18,9 +18,6 @@ RUN jlink --compress=2 --module-path /opt/jdk/jmods \
 
 ENV DOCKER=build
 
-RUN mkdir -p vendor \
-    && cp -n /jdbc/* vendor
-
 COPY gradle/ ./gradle
 COPY [\
   "makefile",\
