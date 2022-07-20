@@ -190,7 +190,7 @@ func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 	}
 
 	start := time.Now()
-	if err := runCommand(cmd, outDir); err != nil {
+	if err := runCommand(cmd, outDir, log); err != nil {
 		return err
 	}
 	mtx.RecordJobTime(time.Since(start).Seconds())
@@ -198,11 +198,13 @@ func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 	return nil
 }
 
-func runCommand(cmd *exec.Cmd, dir string) error {
+func runCommand(cmd *exec.Cmd, dir string, log *logrus.Entry) error {
 	cmd.Dir = dir
 	cmd.Env = os.Environ()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
+	log.Debugf("Command: %s", cmd)
 
 	return cmd.Run()
 }
