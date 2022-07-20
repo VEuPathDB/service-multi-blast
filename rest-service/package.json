@@ -9,6 +9,6 @@
   "author": "Elizabeth Paige Harper",
   "license": "Apache-2.0",
   "devDependencies": {
-    "redoc-cli": "^0.11.4"
+    "redoc-cli": "^0.13.16"
   }
 }
