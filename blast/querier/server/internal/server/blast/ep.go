@@ -54,7 +54,7 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 		return server.NewFailResponse(err.Error())
 	}
 
-	// Query file is created outside of this service.
+	// Query file is created outside this service.
 	config.(blast.BlastQueryConfig).GetQueryFile().Set("query.txt")
 
 	// Override format value to always output format 11
@@ -104,7 +104,7 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 
 	log.Infof("Starting command \"%s\"", cmd.Args)
 	start := time.Now()
-	err = cmd.Run()
+	err = runCommand(cmd, log)
 	mtx.RecordJobTime(time.Since(start).Seconds())
 	if err != nil {
 		log.Debug("Command execution failed: ", err.Error())
@@ -133,10 +133,13 @@ func (b Endpoint) Register(path string, r *mux.Router) {
 			middleware.RequestTimer{},
 		))
 }
-func isCommandAvailable(name string) bool {
-	cmd := exec.Command("command", "-v", name)
-	if err := cmd.Run(); err != nil {
-		return false
+
+func runCommand(cmd *exec.Cmd, log *logrus.Entry) error {
+	if err := cmd.Start(); err != nil {
+		return err
 	}
-	return true
+
+	log.Debugf("Process ID: %d", cmd.Process.Pid)
+
+	return cmd.Wait()
 }
