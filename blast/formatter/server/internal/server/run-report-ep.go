@@ -204,7 +204,7 @@ func runCommand(cmd *exec.Cmd, dir string, log *logrus.Entry) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	log.Debugf("Command: %s", cmd)
+	log.Debugf("Running command: %s", cmd)
 
 	return cmd.Run()
 }
