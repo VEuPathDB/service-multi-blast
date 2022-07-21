@@ -1,33 +1,32 @@
-openapi: 3.1.0
+openapi: 3.0.3
 
 info:
   title: Multi Blast
   version: 1.0.0
   license:
     name: Apache 2.0
-    identifier: Apache-2.0
 
 servers:
-- url: https://amoebadb.org/multi-blast
-- url: https://cryptodb.org/multi-blast
-- url: https://fungidb.org/multi-blast
-- url: https://giardiadb.org/multi-blast
-- url: https://hostdb.org/multi-blast
-- url: https://microsporidiadb.org/multi-blast
-- url: https://piroplasmadb.org/multi-blast
-- url: https://plasmodb.org/multi-blast
-- url: https://toxodb.org/multi-blast
-- url: https://trichdb.org/multi-blast
-- url: https://tritrypdb.org/multi-blast
-- url: https://vectorbase.org/multi-blast
-- url: https://veupathdb.org/multi-blast
+  - url: https://amoebadb.org/multi-blast
+  - url: https://cryptodb.org/multi-blast
+  - url: https://fungidb.org/multi-blast
+  - url: https://giardiadb.org/multi-blast
+  - url: https://hostdb.org/multi-blast
+  - url: https://microsporidiadb.org/multi-blast
+  - url: https://piroplasmadb.org/multi-blast
+  - url: https://plasmodb.org/multi-blast
+  - url: https://toxodb.org/multi-blast
+  - url: https://trichdb.org/multi-blast
+  - url: https://tritrypdb.org/multi-blast
+  - url: https://vectorbase.org/multi-blast
+  - url: https://veupathdb.org/multi-blast
 
 paths:
 
   /jobs:
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: List Blast Jobs
       responses:
         200:
@@ -45,7 +44,7 @@ paths:
 
     post:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: New Blast Job
       requestBody:
         content:
@@ -75,10 +74,10 @@ paths:
 
   /jobs/{job-id}:
     parameters:
-    - $ref: "#/components/parameters/job-id"
+      - $ref: "#/components/parameters/job-id"
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Blast Job Details
       responses:
         200:
@@ -95,7 +94,7 @@ paths:
           $ref: "#/components/responses/err500"
     post:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Rerun Blast Job
       responses:
         204:
@@ -110,17 +109,17 @@ paths:
 
   /jobs/{job-id}/query:
     parameters:
-    - $ref: "#/components/parameters/job-id"
-    - name: download
-      description: "Force Download"
-      in: query
-      required: false
-      schema:
-        type: boolean
-        default: false
+      - $ref: "#/components/parameters/job-id"
+      - name: download
+        description: "Force Download"
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Blast Job Query
       responses:
         200:
@@ -129,8 +128,6 @@ paths:
             Content-Disposition:
               required: false
               description: Sent if ?download=true was set.
-              schema:
-                type: string
           content:
             text/plain:
               schema:
@@ -146,7 +143,7 @@ paths:
   /reports:
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: List Report Jobs
       responses:
         200:
@@ -164,7 +161,7 @@ paths:
 
     post:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: New Report Job
       requestBody:
         content:
@@ -190,10 +187,10 @@ paths:
 
   /reports/{report-id}:
     parameters:
-    - $ref: "#/components/parameters/report-id"
+      - $ref: "#/components/parameters/report-id"
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Report Job Details
       responses:
         200:
@@ -211,7 +208,7 @@ paths:
 
     post:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Rerun Report Job
       responses:
         204:
@@ -226,22 +223,22 @@ paths:
 
   /reports/{report-id}/files/{filename}:
     parameters:
-    - $ref: "#/components/parameters/report-id"
-    - name: filename
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: download
-      description: "Force download"
-      in: query
-      required: false
-      schema:
-        type: boolean
-        default: true
+      - $ref: "#/components/parameters/report-id"
+      - name: filename
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: download
+        description: "Force download"
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
     get:
       security:
-      - authKey: [ ]
+        - authKey: []
       summary: Report File Download
       responses:
         200:
@@ -250,8 +247,6 @@ paths:
             Content-Disposition:
               required: false
               description: Present if ?download=true
-              schema:
-                type: string
           content:
             text/plain:
               schema:
@@ -259,21 +254,21 @@ paths:
             application/json:
               schema:
                 oneOf:
-                - type: object
-                - type: array
-                - type: string
-                - type: boolean
-                - type: integer
-                - type: number
+                  - type: object
+                  - type: array
+                  - type: string
+                  - type: boolean
+                  - type: integer
+                  - type: number
             application/xml:
               schema:
                 oneOf:
-                - type: object
-                - type: array
-                - type: string
-                - type: boolean
-                - type: integer
-                - type: number
+                  - type: object
+                  - type: array
+                  - type: string
+                  - type: boolean
+                  - type: integer
+                  - type: number
             application/zip:
               schema:
                 type: string
@@ -288,23 +283,6 @@ paths:
           $ref: "#/components/responses/err404"
         500:
           $ref: "#/components/responses/err500"
-
-  /link-guest:
-    post:
-      operationId: convGuestToUser
-      summary: Link Guest
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                guestID:
-                  type: integer
-                  format: int64
-              additionalProperties: false
-              required:
-              - guestID
 
 
   /api:
