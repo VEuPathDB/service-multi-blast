@@ -7,19 +7,18 @@ import mb.lib.model.JobStatus
 
 @JsonInclude(NON_NULL)
 class IOLongJobResponse(
-  id:            String?             = null,
-  description:   String?             = null,
-  status:        JobStatus?          = null,
-  created:       String?             = null,
-  expires:       String?             = null,
-  maxResultSize: Long?               = null,
-  parentJobs:    Array<IOJobLink>?   = null,
-  childJobs:     Array<IOJobLink>?   = null,
+  id:            String,
+  description:   String?,
+  status:        JobStatus,
+  created:       String?,
+  maxResultSize: Long,
+  parentJobs:    Array<IOJobLink>?,
+  childJobs:     Array<IOJobLink>?,
   isPrimary:     Boolean,
-  site:          String?             = null,
-  targets:       Array<IOJobTarget>? = null,
+  site:          String,
+  targets:       Array<IOJobTarget>?,
   val config: IOBlastConfig
 ) : IOShortJobResponse(
-  id, description, status, created, expires, maxResultSize, parentJobs,
+  id, description, status, created, maxResultSize, parentJobs,
   childJobs, isPrimary, site, targets
 )
