@@ -13,6 +13,8 @@ endif::[]
 Elizabeth Paige Harper <epharper@upenn.edu>
 v1.0.0
 
+image:https://img.shields.io/github/v/tag/veupathdb/service-multi-blast[]
+
 https://veupathdb.github.io/service-multi-blast/api.html[API Docs] +
 https://veupathdb.github.io/service-multi-blast/[Service Docs]
 
