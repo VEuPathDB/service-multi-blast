@@ -9,25 +9,36 @@ data class InsertUserLink(private val con: Connection, private val row: UserBlas
   companion object {
     private const val Query = """
     INSERT INTO
-      userlogins5.multiblast_users (
-        job_digest
-      , user_id
-      , description
-      , max_download_size
-      , run_directly
+      userlogins5.multiblast_users
+    SELECT
+      ?, ?, ?, ?, ?
+    FROM
+      dual
+    WHERE
+      NOT EXISTS (
+        SELECT
+          1
+        FROM
+          userlogins5.multiblast_users
+        WHERE
+          job_digest = ?
+        AND
+          user_id = ?
       )
-    VALUES
-      (?, ?, ?, ?, ?)
     """
   }
 
   fun run() = BasicPreparedVoidQuery(Query, con, this::prep).execute()
 
   private fun prep(ps: PreparedStatement) {
-    ps.setBytes(1, row.jobID!!.bytes)
+    // SELECT
+    ps.setBytes(1, row.jobID.bytes)
     ps.setLong(2, row.userID)
     ps.setString(3, row.description)
     ps.setLong(4, row.maxDownloadSize)
     ps.setBoolean(5, row.runDirectly)
+    // WHERE NOT EXISTS
+    ps.setBytes(6, row.jobID.bytes)
+    ps.setLong(7, row.userID)
   }
 }
