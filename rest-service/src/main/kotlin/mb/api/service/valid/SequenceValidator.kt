@@ -45,8 +45,8 @@ interface SequenceValidator {
       if (!line.startsWith(">")) {
         for (i in line.indices) {
           size++
-          // testing: skip always space chars
-          if (!line[i].isDigit() && line[i] != ' ' && line[i] != '\t' && !isValid(line[i])) {
+          // skip always numbers and space chars
+          if (!line[i].isDigit() && !line[i].isWhitespace() && !isValid(line[i])) {
             return SequenceCharacterValidationError(sequence, lineNum, i + 1, seq[i])
           }
         }
