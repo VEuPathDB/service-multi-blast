@@ -278,7 +278,7 @@ object BlastManager {
       if (!ws.exists) {
         Log.debug("Blast workspace {} does not exist.", row.jobID)
         JobStatus.Expired
-      } else if (ws.hasCompletionFlag()) {
+      } else if (ws.hasSuccessFlag()) {
         Log.debug("Blast workspace {} contains a completed flag.", row.jobID)
         JobStatus.Completed
       } else if (ws.hasFailedFlag()) {
