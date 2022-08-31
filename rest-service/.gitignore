@@ -1,6 +1,0 @@
-/build/
-/FgpUtil/
-.tools
-!/gradle/
-!/gradlew
-/db/build/
