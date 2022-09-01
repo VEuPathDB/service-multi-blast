@@ -1,17 +1,9 @@
 .gradle/
 .idea/
 build/
-/vendor/
-/.tools/
-/bin/
-/tmp/
-/.settings/
-/gradle/
-/gradlew
-/gradlew.bat
-node_modules/
-/rest-service/.bin/
-/rest-service/vendor/
+.tools/
+bin/
+tmp/
 
 *.tmp
 *.bak
