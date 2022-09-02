@@ -42,8 +42,8 @@ services:
 
   service:
     build:
-      dockerfile: Dockerfile
-      context: ..
+      dockerfile: ../report-service/Dockerfile
+      context: ../report-service
     ports:
       - "8080:8080"
     depends_on:
