@@ -1,0 +1,40 @@
+= Postgres Container
+
+Spins up a Postgres instance containing 2 databases, one for the query service
+and one for the report service.
+
+== Environment
+
+=== Base Image Requirements
+
+`POSTGRES_ROOT_USER`::
+Postgres root user username.
+
+`POSTGRES_ROOT_PASS`::
+Postgres root user password.
+
+=== MBlast Specifics
+
+`QUERY_SERVICE_PG_USER`::
+Username for the postgres user that will be used by the query service to access
+its own database in the postgres instance.
+
+`QUERY_SERVICE_PG_PASS`::
+Password for the postgres user that will be used by the query service to access
+its won database in the postgres instance.
+
+`QUERY_SERVICE_PG_DB_NAME`::
+Name of the postgres database that will be used by the query service.
+
+
+`REPORT_SERVICE_PG_USER`::
+Username for the postgres user that will be used by the report service to access
+its own database in the postgres instance.
+
+`REPORT_SERVICE_PG_PASS`::
+Password for the postgres user that will be used by the report service to access
+its own database in the postgres instance.
+
+`REPORT_SERVICE_PG_DB_NAME`::
+Name of the postgres database that will be used by the report service.
+
