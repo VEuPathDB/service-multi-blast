@@ -16,4 +16,3 @@ pluginManagement {
 
 include(":query-service")
 include(":report-service")
-include(":user-service")
