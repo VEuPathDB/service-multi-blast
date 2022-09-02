@@ -38,3 +38,19 @@ its own database in the postgres instance.
 `REPORT_SERVICE_PG_DB_NAME`::
 Name of the postgres database that will be used by the report service.
 
+=== Example `.env`
+
+..env
+[source,bash]
+----
+POSTGRES_ROOT_USER=rootuser
+POSTGRES_ROOT_PASS=rootpass
+
+QUERY_SERVICE_PG_USER=queryuser
+QUERY_SERVICE_PG_PASS=querypass
+QUERY_SERVICE_PG_DB_NAME=querydb
+
+REPORT_SERVICE_PG_USER=reportuser
+REPORT_SERVICE_PG_PASS=reportpass
+REPORT_SERVICE_PG_DB_NAME=reportdb
+----
