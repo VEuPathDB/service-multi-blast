@@ -1,5 +1,16 @@
 version: '3.8'
 
+networks:
+  internal:
+    internal: true
+  traefik:
+    external: true
+  monitoring-ext:
+    external: true
+
+volumes:
+  pg-data:
+
 services:
   queue-db:
     build:
@@ -18,6 +29,14 @@ services:
       REPORT_SERVICE_PG_USER: ${REPORT_SERVICE_PG_USER:?}
       REPORT_SERVICE_PG_PASS: ${REPORT_SERVICE_PG_PASS:?}
       REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
+    volumes:
+    - type: volume
+      source: pg-data
+      target: /var/lib/postgresql/data
+    networks:
+    - internal
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
 
 #  minio:
 #    image: minio/minio
