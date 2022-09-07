@@ -12,6 +12,8 @@ volumes:
   pg-data:
 
 services:
+
+  # Database backing the job queues for both the query and report services.
   queue-db:
     build:
       dockerfile: ../postgres/Dockerfile
