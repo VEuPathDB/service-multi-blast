@@ -69,6 +69,9 @@ instance. +
  +
 In local development, these credentials are also used to access the RabbitMQ
 management console web UI.
+
+| JOB_CACHE_TIMEOUT_DAYS
+| Number of days job data will be kept in the S3 cache before being pruned.
 |===
 
 ===== Example `.env` Contents
@@ -84,6 +87,8 @@ RABBITMQ_ROOT_PASS=rabbitmqpass
 MINIO_ROOT_USER=miniouser
 MINIO_ROOT_PASS=miniopass
 
+JOB_CACHE_TIMEOUT_DAYS=30
+
 QUERY_SERVICE_PG_USER=queryuser
 QUERY_SERVICE_PG_PASS=querypass
 QUERY_SERVICE_PG_DB_NAME=querydb
@@ -95,7 +100,6 @@ REPORT_SERVICE_PG_PASS=reportpass
 REPORT_SERVICE_PG_DB_NAME=reportdb
 
 REPORT_SERVICE_S3_BUCKET=reportbucket
-
 ----
 
 ==== Exposed Ports
