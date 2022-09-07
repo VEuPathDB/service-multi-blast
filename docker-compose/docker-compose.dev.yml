@@ -40,6 +40,14 @@ services:
     labels:
     - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
 
+  queue:
+    image: rabbitmq:3.10.7-management-alpine
+    ports:
+      - "9002:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_ADMIN_USER:?}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ADMIN_PASS:?}
+
 #  minio:
 #    image: minio/minio
 #    command: server --console-address ':9001' /data
@@ -63,13 +71,6 @@ services:
 #      exit 0;
 #      "
 
-#  queue:
-#    image: rabbitmq:3.10.5-management-alpine
-#    ports:
-#      - "9002:15672"
-#    environment:
-#      RABBITMQ_DEFAULT_USER: demouser
-#      RABBITMQ_DEFAULT_PASS: demopass
 #
 #  service:
 #    build:

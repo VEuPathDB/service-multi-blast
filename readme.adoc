@@ -1,0 +1,115 @@
+= MultiBlast
+:source-highlighter: highlightjs
+
+== Development
+
+=== Running The Dev Stack
+
+==== Environment Variables
+
+===== Explanation
+
+The following is an explanation of all the environment variables that should be
+set and available (using a .env file) for spinning up the docker compose stack.
+
+[cols="2m,1,1,2"]
+|===
+| Variable           | Local | Prod | Purpose
+
+| POSTGRES_ROOT_USER
+| :heavy_check_mark:
+| :heavy_check_mark:
+| Root user for the queue management postgres instance. +
+This value is required to spin up the postgres instance, but is not needed by
+any of the services in the stack.
+
+| POSTGRES_ROOT_PASS
+|
+|
+| Root password for the queue management postgres instance. +
+This value is required to spin up the postgres instance, but is not needed by
+any of the services in the stack.
+
+| QUERY_SERVICE_PG_USER
+|
+|
+| Username used by the blast query service to connect to its database in the
+shared queue management postgres instance.
+
+| QUERY_SERVICE_PG_PASS
+|
+|
+| Password used by the blast query service to connect to its database in the
+shared queue management postgres instance.
+
+| QUERY_SERVICE_PG_DB_NAME
+|
+|
+| Name of the blast query service's database in the shared queue management
+postgres instance.
+
+| REPORT_SERVICE_PG_USER
+|
+|
+| Username used by the blast report service to connect to its database in the
+shared queue management postgres instance.
+
+| REPORT_SERVICE_PG_PASS
+|
+|
+| Password used by the blast report service to connect to its database in the
+shared queue management postgres instance.
+
+| REPORT_SERVICE_PG_DB_NAME
+|
+|
+| Name of the blast report service's database in the shared queue management
+postgres instance.
+
+| RABBITMQ_ADMIN_USER
+|
+|
+| Username that will be used by both services to connect to the shared RabbitMQ
+instance. +
+ +
+In local development, these credentials are also used to access the RabbitMQ
+management console web UI.
+
+| RABBITMQ_ADMIN_PASS
+|
+| Password that will be used by both services to connect to the shared RabbitMQ
+instance. +
+ +
+In local development, these credentials are also used to access the RabbitMQ
+management console web UI.
+|===
+
+===== Example `.env` Contents
+
+[source, shell]
+----
+POSTGRES_ROOT_USER=rootuser
+POSTGRES_ROOT_PASS=rootpass
+
+QUERY_SERVICE_PG_USER=queryuser
+QUERY_SERVICE_PG_PASS=querypass
+QUERY_SERVICE_PG_DB_NAME=querydb
+
+REPORT_SERVICE_PG_USER=reportuser
+REPORT_SERVICE_PG_PASS=reportpass
+REPORT_SERVICE_PG_DB_NAME=reportdb
+
+RABBITMQ_ADMIN_USER=rabbitmquser
+RABBITMQ_ADMIN_PASS=rabbitmqpass
+----
+
+==== Exposed Ports
+
+[%header, cols="1m,2"]
+|===
+| Port | Purpose
+| 5432 | Queue management postgres access.
+| 9000 | MinIO S3 API Access
+| 9001 | MinIO management console
+| 9002 | RabbitMQ management console
+|===
