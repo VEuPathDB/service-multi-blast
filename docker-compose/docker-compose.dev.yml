@@ -40,36 +40,46 @@ services:
     labels:
     - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
 
+  # RabbitMQ instance backing the job queues for both the query and report
+  # services.
   queue:
     image: rabbitmq:3.10.7-management-alpine
     ports:
       - "9002:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_ADMIN_USER:?}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ADMIN_PASS:?}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_ROOT_USER:?}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ROOT_PASS:?}
 
-#  minio:
-#    image: minio/minio
-#    command: server --console-address ':9001' /data
-#    ports:
-#    - "9000:9000"
-#    - "9001:9001"
-#    environment:
-#      MINIO_ROOT_USER: demouser
-#      MINIO_ROOT_PASSWORD: demopass
-#
-#  minio-create-buckets:
-#    image: minio/mc
-#    depends_on:
-#    - minio
-#    entrypoint: >
-#      /bin/sh -c "
-#      sleep 1;
-#      /usr/bin/mc alias set minioc http://minio:9000 demouser demopass;
-#      /usr/bin/mc mb minioc/demobucket;
-#      /usr/bin/mc policy set public minioc/demobucket;
-#      exit 0;
-#      "
+  # Dev minio instance used for local development only.
+  # On our servers there is a singular S3 store per environment to connect to.
+  minio:
+    image: minio/minio
+    command: server --console-address ':9001' /data
+    ports:
+    - "9000:9000"
+    - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASS:?}
+
+  # Dev setup script to create buckets for our services.
+  #
+  # This script creates 2 buckets and sets them to public.  The bucket names are
+  # defined by environment variables.
+  minio-create-buckets:
+    image: minio/mc
+    depends_on:
+    - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 1;
+      /usr/bin/mc alias set minioc http://minio:9000 ${MINIO_ROOT_USER:?} ${MINIO_ROOT_PASS:?};
+      /usr/bin/mc mb minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc mb minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      exit 0;
+      "
 
 #
 #  service:

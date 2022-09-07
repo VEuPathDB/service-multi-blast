@@ -12,72 +12,58 @@
 The following is an explanation of all the environment variables that should be
 set and available (using a .env file) for spinning up the docker compose stack.
 
-[cols="2m,1,1,2"]
+[cols="1m,2"]
 |===
-| Variable           | Local | Prod | Purpose
+| Variable | Purpose
 
 | POSTGRES_ROOT_USER
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Root user for the queue management postgres instance. +
 This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | POSTGRES_ROOT_PASS
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Root password for the queue management postgres instance. +
 This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | QUERY_SERVICE_PG_USER
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Username used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_PASS
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Password used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_DB_NAME
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Name of the blast query service's database in the shared queue management
 postgres instance.
 
+| QUERY_SERVICE_S3_BUCKET
+| Name of the S3 bucket that will be created and used by the query service.
+
 | REPORT_SERVICE_PG_USER
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Username used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_PASS
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Password used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_DB_NAME
-| :heavy_check_mark:
-| :heavy_check_mark:
 | Name of the blast report service's database in the shared queue management
 postgres instance.
 
-| RABBITMQ_ADMIN_USER
-| :heavy_check_mark:
-| :heavy_check_mark:
+| REPORT_SERVICE_S3_BUCKET
+| Name of the S3 bucket that will be created and used by the report service.
+
+| RABBITMQ_ROOT_USER
 | Username that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
 In local development, these credentials are also used to access the RabbitMQ
 management console web UI.
 
-| RABBITMQ_ADMIN_PASS
-| :heavy_check_mark:
-| :heavy_check_mark:
+| RABBITMQ_ROOT_PASS
 | Password that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
@@ -92,16 +78,24 @@ management console web UI.
 POSTGRES_ROOT_USER=rootuser
 POSTGRES_ROOT_PASS=rootpass
 
+RABBITMQ_ROOT_USER=rabbitmquser
+RABBITMQ_ROOT_PASS=rabbitmqpass
+
+MINIO_ROOT_USER=miniouser
+MINIO_ROOT_PASS=miniopass
+
 QUERY_SERVICE_PG_USER=queryuser
 QUERY_SERVICE_PG_PASS=querypass
 QUERY_SERVICE_PG_DB_NAME=querydb
+
+QUERY_SERVICE_S3_BUCKET=querybucket
 
 REPORT_SERVICE_PG_USER=reportuser
 REPORT_SERVICE_PG_PASS=reportpass
 REPORT_SERVICE_PG_DB_NAME=reportdb
 
-RABBITMQ_ADMIN_USER=rabbitmquser
-RABBITMQ_ADMIN_PASS=rabbitmqpass
+REPORT_SERVICE_S3_BUCKET=reportbucket
+
 ----
 
 ==== Exposed Ports
