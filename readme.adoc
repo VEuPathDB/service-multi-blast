@@ -12,51 +12,82 @@
 The following is an explanation of all the environment variables that should be
 set and available (using a .env file) for spinning up the docker compose stack.
 
-[cols="1m,2"]
+[cols="1m,1m,2"]
 |===
-| Variable | Purpose
+| Variable | Default | Purpose
 
 | POSTGRES_ROOT_USER
+|
 | Root user for the queue management postgres instance. +
 This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | POSTGRES_ROOT_PASS
+|
 | Root password for the queue management postgres instance. +
 This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | QUERY_SERVICE_PG_USER
+|
 | Username used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_PASS
+|
 | Password used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_DB_NAME
+|
 | Name of the blast query service's database in the shared queue management
 postgres instance.
 
+| QUERY_SERVICE_PG_PORT
+| 5432
+| Port number the blast query service will use when connecting to the shared
+postgres instance.
+
+| QUERY_SERVICE_PG_POOL_SIZE
+| 10
+| Max number of open database connections to hold onto for the shared postgres
+instance.
+
 | QUERY_SERVICE_S3_BUCKET
+|
 | Name of the S3 bucket that will be created and used by the query service.
 
 | REPORT_SERVICE_PG_USER
+|
 | Username used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_PASS
+|
 | Password used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_DB_NAME
+|
 | Name of the blast report service's database in the shared queue management
 postgres instance.
 
+| REPORT_SERVICE_PG_PORT
+| 5432
+| Port number the blast report service will use when connecting to the shared
+postgres instance.
+
+| REPORT_SERVICE_PG_POOL_SIZE
+| 10
+| Max number of open database connections to hold onto for the shared postgres
+instance.
+
 | REPORT_SERVICE_S3_BUCKET
+|
 | Name of the S3 bucket that will be created and used by the report service.
 
 | RABBITMQ_ROOT_USER
+|
 | Username that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
@@ -64,6 +95,7 @@ In local development, these credentials are also used to access the RabbitMQ
 management console web UI.
 
 | RABBITMQ_ROOT_PASS
+|
 | Password that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
@@ -71,6 +103,7 @@ In local development, these credentials are also used to access the RabbitMQ
 management console web UI.
 
 | JOB_CACHE_TIMEOUT_DAYS
+|
 | Number of days job data will be kept in the S3 cache before being pruned.
 |===
 
@@ -92,12 +125,16 @@ JOB_CACHE_TIMEOUT_DAYS=30
 QUERY_SERVICE_PG_USER=queryuser
 QUERY_SERVICE_PG_PASS=querypass
 QUERY_SERVICE_PG_DB_NAME=querydb
+QUERY_SERVICE_PG_PORT=5432
+QUERY_SERVICE_PG_POOL_SIZE=10
 
 QUERY_SERVICE_S3_BUCKET=querybucket
 
 REPORT_SERVICE_PG_USER=reportuser
 REPORT_SERVICE_PG_PASS=reportpass
 REPORT_SERVICE_PG_DB_NAME=reportdb
+REPORT_SERVICE_PG_PORT=5432
+REPORT_SERVICE_PG_POOL_SIZE=10
 
 REPORT_SERVICE_S3_BUCKET=reportbucket
 ----
