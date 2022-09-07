@@ -33,7 +33,8 @@ CREATE TABLE mblast.user_to_queries (
     NOT NULL
 , summary      VARCHAR2(512)
 , description  CLOB
-, query        CLOB NOT NULL
+, query        CLOB
+    NOT NULL
 );
 
 
