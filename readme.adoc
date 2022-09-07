@@ -24,51 +24,51 @@ This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | POSTGRES_ROOT_PASS
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Root password for the queue management postgres instance. +
 This value is required to spin up the postgres instance, but is not needed by
 any of the services in the stack.
 
 | QUERY_SERVICE_PG_USER
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Username used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_PASS
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Password used by the blast query service to connect to its database in the
 shared queue management postgres instance.
 
 | QUERY_SERVICE_PG_DB_NAME
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Name of the blast query service's database in the shared queue management
 postgres instance.
 
 | REPORT_SERVICE_PG_USER
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Username used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_PASS
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Password used by the blast report service to connect to its database in the
 shared queue management postgres instance.
 
 | REPORT_SERVICE_PG_DB_NAME
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Name of the blast report service's database in the shared queue management
 postgres instance.
 
 | RABBITMQ_ADMIN_USER
-|
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Username that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
@@ -76,7 +76,8 @@ In local development, these credentials are also used to access the RabbitMQ
 management console web UI.
 
 | RABBITMQ_ADMIN_PASS
-|
+| :heavy_check_mark:
+| :heavy_check_mark:
 | Password that will be used by both services to connect to the shared RabbitMQ
 instance. +
  +
