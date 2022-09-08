@@ -1,0 +1,229 @@
+= MultiBlast
+:source-highlighter: highlightjs
+
+== The Development Stack
+
+=== Spinning it Up
+
+==== Prerequisites
+
+TODO: Setup sshuttle
+
+TODO: Gradle.properties OR .direnv
+
+==== Build The Stack
+
+[source, shell]
+----
+./gradlew dev-compose-build
+----
+
+==== Run The Stack
+
+===== In The Background
+
+[source, shell]
+----
+./gradlew dev-compose-up
+----
+
+===== In The Foreground
+
+[source, shell]
+----
+cd docker-compose
+docker compose -f docker-compose.dev.yml up
+----
+
+==== Teardown
+
+[source, shell]
+----
+./gradlew dev-compose-down
+----
+
+=== Environment Variables
+
+==== Explanation
+
+The following is an explanation of all the environment variables that should be
+set and available (using a .env file) for spinning up the docker compose stack.
+
+[%header, cols="1m,1m,2"]
+|===
+| Variable | Default | Purpose
+
+3+|
+
+| POSTGRES_ROOT_USER
+|
+| Root user for the queue management postgres instance. +
+This value is required to spin up the postgres instance, but is not needed by
+any of the services in the stack.
+
+| POSTGRES_ROOT_PASS
+|
+| Root password for the queue management postgres instance. +
+This value is required to spin up the postgres instance, but is not needed by
+any of the services in the stack.
+
+| POSTGRES_PORT
+| 5432
+| Open postgres port.
+
+3+|
+
+| RABBITMQ_ROOT_USER
+|
+| Username that will be used by both services to connect to the shared RabbitMQ
+instance. +
+ +
+In local development, these credentials are also used to access the RabbitMQ
+management console web UI.
+
+| RABBITMQ_ROOT_PASS
+|
+| Password that will be used by both services to connect to the shared RabbitMQ
+instance. +
+ +
+In local development, these credentials are also used to access the RabbitMQ
+management console web UI.
+
+| RABBITMQ_PORT
+| 5672
+| Open RabbitMQ port.
+
+3+|
+
+| MINIO_ROOT_USER
+|
+| Root username for the local dev minio instance. +
+ +
+This username is also used to access the MinIO console web UI.
+
+
+| MINIO_ROOT_PASS
+|
+| Root password for the local dev minio instance. +
+ +
+This password is also used to access the MinIO console web UI.
+
+| MINIO_PORT
+| 9000
+| Open S3 API port.
+
+3+|
+
+| QUERY_SERVICE_PG_USER
+|
+| Username used by the blast query service to connect to its database in the
+shared queue management postgres instance.
+
+| QUERY_SERVICE_PG_PASS
+|
+| Password used by the blast query service to connect to its database in the
+shared queue management postgres instance.
+
+| QUERY_SERVICE_PG_DB_NAME
+|
+| Name of the blast query service's database in the shared queue management
+postgres instance.
+
+| QUERY_SERVICE_PG_POOL_SIZE
+| 10
+| Max number of open database connections to hold onto for the shared postgres
+instance.
+
+| QUERY_SERVICE_S3_BUCKET
+|
+| Name of the S3 bucket that will be created and used by the query service.
+
+| QUERY_SERVICE_QUEUE_POOL_SIZE
+| 5
+| Size of the worker pool used by the job queue in the blast query service.
+
+3+|
+
+| REPORT_SERVICE_PG_USER
+|
+| Username used by the blast report service to connect to its database in the
+shared queue management postgres instance.
+
+| REPORT_SERVICE_PG_PASS
+|
+| Password used by the blast report service to connect to its database in the
+shared queue management postgres instance.
+
+| REPORT_SERVICE_PG_DB_NAME
+|
+| Name of the blast report service's database in the shared queue management
+postgres instance.
+
+| REPORT_SERVICE_PG_POOL_SIZE
+| 10
+| Max number of open database connections to hold onto for the shared postgres
+instance.
+
+| REPORT_SERVICE_S3_BUCKET
+|
+| Name of the S3 bucket that will be created and used by the report service.
+
+| REPORT_SERVICE_QUEUE_POOL_SIZE
+| 5
+| Size of the worker pool used by the job queue in the blast report service.
+
+3+|
+| JOB_CACHE_TIMEOUT_DAYS
+| 30
+| Number of days job data will be kept in the S3 cache before being pruned.
+|===
+
+==== Example `.env` Contents
+
+[source, shell]
+----
+POSTGRES_ROOT_USER=rootuser
+POSTGRES_ROOT_PASS=rootpass
+POSTGRES_PORT=5432
+
+RABBITMQ_ROOT_USER=rabbitmquser
+RABBITMQ_ROOT_PASS=rabbitmqpass
+RABBITMQ_PORT=5672
+
+MINIO_ROOT_USER=miniouser
+MINIO_ROOT_PASS=miniopass
+MINIO_PORT=9000
+
+JOB_CACHE_TIMEOUT_DAYS=30
+
+QUERY_SERVICE_PG_USER=queryuser
+QUERY_SERVICE_PG_PASS=querypass
+QUERY_SERVICE_PG_DB_NAME=querydb
+QUERY_SERVICE_PG_POOL_SIZE=10
+
+QUERY_SERVICE_S3_BUCKET=querybucket
+
+QUERY_SERVICE_QUEUE_POOL_SIZE=5
+
+REPORT_SERVICE_PG_USER=reportuser
+REPORT_SERVICE_PG_PASS=reportpass
+REPORT_SERVICE_PG_DB_NAME=reportdb
+REPORT_SERVICE_PG_POOL_SIZE=10
+
+REPORT_SERVICE_S3_BUCKET=reportbucket
+
+REPORT_SERVICE_QUEUE_POOL_SIZE=5
+----
+
+=== Exposed Ports
+
+[%header, cols="1m,2"]
+|===
+| Port | Purpose
+| 5432 | Queue management postgres access.
+| 8080 | Query service API
+| 8081 | Report service API
+| 9000 | MinIO S3 API Access
+| 9001 | MinIO management console
+| 9002 | RabbitMQ management console
+|===

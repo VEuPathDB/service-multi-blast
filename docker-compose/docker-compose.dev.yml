@@ -1,17 +1,8 @@
 version: '3.8'
 
-networks:
-  internal:
-    internal: true
-  traefik:
-    external: true
-  monitoring-ext:
-    external: true
-
-volumes:
-  pg-data:
-
 services:
+
+  # Database backing the job queues for both the query and report services.
   queue-db:
     build:
       dockerfile: ../postgres/Dockerfile
@@ -29,78 +20,116 @@ services:
       REPORT_SERVICE_PG_USER: ${REPORT_SERVICE_PG_USER:?}
       REPORT_SERVICE_PG_PASS: ${REPORT_SERVICE_PG_PASS:?}
       REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
-    volumes:
-    - type: volume
-      source: pg-data
-      target: /var/lib/postgresql/data
-    networks:
-    - internal
-    labels:
-    - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
 
-#  minio:
-#    image: minio/minio
-#    command: server --console-address ':9001' /data
-#    ports:
-#    - "9000:9000"
-#    - "9001:9001"
-#    environment:
-#      MINIO_ROOT_USER: demouser
-#      MINIO_ROOT_PASSWORD: demopass
-#
-#  minio-create-buckets:
-#    image: minio/mc
-#    depends_on:
-#    - minio
-#    entrypoint: >
-#      /bin/sh -c "
-#      sleep 1;
-#      /usr/bin/mc alias set minioc http://minio:9000 demouser demopass;
-#      /usr/bin/mc mb minioc/demobucket;
-#      /usr/bin/mc policy set public minioc/demobucket;
-#      exit 0;
-#      "
+  # RabbitMQ instance backing the job queues for both the query and report
+  # services.
+  queue:
+    image: rabbitmq:3.10.7-management-alpine
+    ports:
+      - "9002:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_ROOT_USER:?}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ROOT_PASS:?}
 
-#  queue:
-#    image: rabbitmq:3.10.5-management-alpine
-#    ports:
-#      - "9002:15672"
-#    environment:
-#      RABBITMQ_DEFAULT_USER: demouser
-#      RABBITMQ_DEFAULT_PASS: demopass
-#
-#  service:
-#    build:
-#      dockerfile: ../report-service/Dockerfile
-#      context: ../report-service
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - minio
-#      - queue
-#      - queue-db
-#    environment:
-#      # Queue Platform Postgres
-#      QUEUE_DB_NAME: demodb
-#      QUEUE_DB_HOST: queue-db
-#      QUEUE_DB_PORT: 5432
-#      QUEUE_DB_USERNAME: demouser
-#      QUEUE_DB_PASSWORD: demopass
-#      QUEUE_DB_POOL_SIZE: 10
-#
-#      # Queue Platform RabbitMQ
-#      JOB_QUEUE_USERNAME: demouser
-#      JOB_QUEUE_PASSWORD: demopass
-#      JOB_QUEUE_HOST: queue
-#      JOB_QUEUE_PORT: 5672
-#      JOB_QUEUE_WORKERS: 5
-#
-#      # Queue Platform Minio
-#      S3_HOST: minio
-#      S3_BUCKET: demobucket
-#      S3_ACCESS_TOKEN: demouser
-#      S3_SECRET_KEY: demopass
-#      S3_PORT: 9000
-#
-#      # Job Settings
-#      JOB_CACHE_TIMEOUT_DAYS: 30
+  # Dev minio instance used for local development only.
+  # On our servers there is a singular S3 store per environment to connect to.
+  minio:
+    image: minio/minio
+    command: server --console-address ':9001' /data
+    ports:
+    - "9000:9000"
+    - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASS:?}
+
+  # Dev setup script to create buckets for our services.
+  #
+  # This script creates 2 buckets and sets them to public.  The bucket names are
+  # defined by environment variables.
+  minio-create-buckets:
+    image: minio/mc
+    depends_on:
+    - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 1;
+      /usr/bin/mc alias set minioc http://minio:9000 ${MINIO_ROOT_USER:?} ${MINIO_ROOT_PASS:?};
+      /usr/bin/mc mb minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc mb minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      exit 0;
+      "
+
+  query-service:
+    build:
+      dockerfile: ../query-service/Dockerfile
+      context: ../query-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - minio
+      - queue
+      - queue-db
+    environment:
+      # Postgres
+      QUEUE_DB_HOST: queue-db
+      QUEUE_DB_NAME: ${QUERY_SERVICE_PG_DB_NAME:?}
+      QUEUE_DB_PORT: ${POSTGRES_PORT:-5432}
+      QUEUE_DB_USERNAME: ${QUERY_SERVICE_PG_USER:?}
+      QUEUE_DB_PASSWORD: ${QUERY_SERVICE_PG_PASS:?}
+      QUEUE_DB_POOL_SIZE: ${QUERY_SERVICE_PG_POOL_SIZE:-10}
+
+      # RabbitMQ
+      JOB_QUEUE_HOST: queue
+      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+      JOB_QUEUE_PORT: ${RABBITMQ_PORT:-5672}
+      JOB_QUEUE_WORKERS: ${QUERY_SERVICE_QUEUE_POOL_SIZE:-5}
+
+      # Queue Platform Minio
+      S3_HOST: minio
+      S3_BUCKET: ${QUERY_SERVICE_S3_BUCKET:?}
+      S3_ACCESS_TOKEN: ${MINIO_ROOT_USER:?}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASS:?}
+      S3_PORT: ${MINIO_PORT:-9000}
+
+      # Job Settings
+      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
+
+  report-service:
+    build:
+      dockerfile: ../report-service/Dockerfile
+      context: ../report-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - minio
+      - queue
+      - queue-db
+    environment:
+      # Queue Platform Postgres
+      QUEUE_DB_HOST: queue-db
+      QUEUE_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
+      QUEUE_DB_PORT: ${POSTGRES_PORT:-5432}
+      QUEUE_DB_USERNAME: ${REPORT_SERVICE_PG_USER:?}
+      QUEUE_DB_PASSWORD: ${REPORT_SERVICE_PG_PASS:?}
+      QUEUE_DB_POOL_SIZE: ${REPORT_SERVICE_PG_POOL_SIZE:-10}
+
+      # Queue Platform RabbitMQ
+      JOB_QUEUE_HOST: queue
+      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+      JOB_QUEUE_PORT: ${RABBITMQ_PORT:-5672}
+      JOB_QUEUE_WORKERS: ${REPORT_SERVICE_QUEUE_POOL_SIZE:-5}
+
+      # Queue Platform Minio
+      S3_HOST: minio
+      S3_BUCKET: ${REPORT_SERVICE_S3_BUCKET:?}
+      S3_ACCESS_TOKEN: ${MINIO_ROOT_USER:?}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASS:?}
+      S3_PORT: ${MINIO_PORT:-9000}
+
+      # Job Settings
+      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
