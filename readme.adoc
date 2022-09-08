@@ -14,6 +14,8 @@ TODO: gradle.properties OR .direnv
 
 ==== Build The Stack
 
+Builds the development docker compose stack.
+
 [source, shell]
 ----
 ./gradlew dev-compose-build
@@ -198,9 +200,11 @@ instance.
 | Size of the worker pool used by the job queue in the blast report service.
 
 3+|
+
 | JOB_CACHE_TIMEOUT_DAYS
 | 30
 | Number of days job data will be kept in the S3 cache before being pruned.
+
 |===
 
 ==== Example `.env` Contents
