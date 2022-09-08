@@ -54,6 +54,32 @@ tasks.create("dev-compose-up") {
 
 
 /**
+ * Dev Docker Compose Stack Stop
+ *
+ * Stops a running development docker compose stack.
+ */
+tasks.create("dev-compose-stop") {
+  doLast {
+    with(
+      ProcessBuilder(
+        "docker", "compose",
+        "-f", "docker-compose.dev.yml",
+        "stop"
+      )
+        .directory(file("docker-compose"))
+        .start()
+    ) {
+      inputStream.transferTo(System.out)
+      errorStream.transferTo(System.err)
+
+      if (waitFor() != 0)
+        throw RuntimeException("Failed to stop running docker compose stack.")
+    }
+  }
+}
+
+
+/**
  * Dev Docker Compose Stack Down
  *
  * Tears down a running development docker compose stack.
@@ -73,7 +99,7 @@ tasks.create("dev-compose-down") {
       errorStream.transferTo(System.err)
 
       if (waitFor() != 0)
-        throw RuntimeException("Failed to spin up docker compose stack.")
+        throw RuntimeException("Failed to tear down docker compose stack.")
     }
   }
 }

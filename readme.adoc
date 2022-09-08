@@ -9,7 +9,8 @@
 
 TODO: Setup sshuttle
 
-TODO: Gradle.properties OR .direnv
+TODO: gradle.properties OR .direnv
+
 
 ==== Build The Stack
 
@@ -18,16 +19,23 @@ TODO: Gradle.properties OR .direnv
 ./gradlew dev-compose-build
 ----
 
+
 ==== Run The Stack
 
+
 ===== In The Background
+
+Spins up the docker compose stack in the background.
 
 [source, shell]
 ----
 ./gradlew dev-compose-up
 ----
 
+
 ===== In The Foreground
+
+Manually spin up the docker compose stack in the console foreground.
 
 [source, shell]
 ----
@@ -35,14 +43,31 @@ cd docker-compose
 docker compose -f docker-compose.dev.yml up
 ----
 
+
+==== Stop The Stack
+
+Shuts down a running development docker compose stack without removing the
+containers.
+
+[source, shell]
+----
+./gradlew dev-compose-stop
+----
+
+
 ==== Teardown
+
+Shuts down and/or removes the containers for the development docker compose
+stack.
 
 [source, shell]
 ----
 ./gradlew dev-compose-down
 ----
 
+
 === Environment Variables
+
 
 ==== Explanation
 
