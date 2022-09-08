@@ -1,16 +1,5 @@
 version: '3.8'
 
-networks:
-  internal:
-    internal: true
-  traefik:
-    external: true
-  monitoring-ext:
-    external: true
-
-volumes:
-  pg-data:
-
 services:
 
   # Database backing the job queues for both the query and report services.
@@ -31,14 +20,6 @@ services:
       REPORT_SERVICE_PG_USER: ${REPORT_SERVICE_PG_USER:?}
       REPORT_SERVICE_PG_PASS: ${REPORT_SERVICE_PG_PASS:?}
       REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
-    volumes:
-    - type: volume
-      source: pg-data
-      target: /var/lib/postgresql/data
-    networks:
-    - internal
-    labels:
-    - "com.centurylinklabs.watchtower.enable=${QUEUE_DB_WATCHTOWER:-false}"
 
   # RabbitMQ instance backing the job queues for both the query and report
   # services.
@@ -117,39 +98,38 @@ services:
       # Job Settings
       JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
 
-#
-#  service:
-#    build:
-#      dockerfile: ../report-service/Dockerfile
-#      context: ../report-service
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - minio
-#      - queue
-#      - queue-db
-#    environment:
-#      # Queue Platform Postgres
-#      QUEUE_DB_NAME: demodb
-#      QUEUE_DB_HOST: queue-db
-#      QUEUE_DB_PORT: 5432
-#      QUEUE_DB_USERNAME: demouser
-#      QUEUE_DB_PASSWORD: demopass
-#      QUEUE_DB_POOL_SIZE: 10
-#
-#      # Queue Platform RabbitMQ
-#      JOB_QUEUE_USERNAME: demouser
-#      JOB_QUEUE_PASSWORD: demopass
-#      JOB_QUEUE_HOST: queue
-#      JOB_QUEUE_PORT: 5672
-#      JOB_QUEUE_WORKERS: 5
-#
-#      # Queue Platform Minio
-#      S3_HOST: minio
-#      S3_BUCKET: demobucket
-#      S3_ACCESS_TOKEN: demouser
-#      S3_SECRET_KEY: demopass
-#      S3_PORT: 9000
-#
-#      # Job Settings
-#      JOB_CACHE_TIMEOUT_DAYS: 30
+  report-service:
+    build:
+      dockerfile: ../report-service/Dockerfile
+      context: ../report-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - minio
+      - queue
+      - queue-db
+    environment:
+      # Queue Platform Postgres
+      QUEUE_DB_HOST: queue-db
+      QUEUE_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
+      QUEUE_DB_PORT: ${POSTGRES_PORT:-5432}
+      QUEUE_DB_USERNAME: ${REPORT_SERVICE_PG_USER:?}
+      QUEUE_DB_PASSWORD: ${REPORT_SERVICE_PG_PASS:?}
+      QUEUE_DB_POOL_SIZE: ${REPORT_SERVICE_PG_POOL_SIZE:-10}
+
+      # Queue Platform RabbitMQ
+      JOB_QUEUE_HOST: queue
+      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+      JOB_QUEUE_PORT: ${RABBITMQ_PORT:-5672}
+      JOB_QUEUE_WORKERS: ${REPORT_SERVICE_QUEUE_POOL_SIZE:-5}
+
+      # Queue Platform Minio
+      S3_HOST: minio
+      S3_BUCKET: ${REPORT_SERVICE_S3_BUCKET:?}
+      S3_ACCESS_TOKEN: ${MINIO_ROOT_USER:?}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASS:?}
+      S3_PORT: ${MINIO_PORT:-9000}
+
+      # Job Settings
+      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}

@@ -1,13 +1,50 @@
 = MultiBlast
 :source-highlighter: highlightjs
 
-== Development
+== The Development Stack
 
-=== Running The Dev Stack
+=== Spinning it Up
 
-==== Environment Variables
+==== Prerequisites
 
-===== Explanation
+TODO: Setup sshuttle
+
+TODO: Gradle.properties OR .direnv
+
+==== Build The Stack
+
+[source, shell]
+----
+./gradlew dev-compose-build
+----
+
+==== Run The Stack
+
+===== In The Background
+
+[source, shell]
+----
+./gradlew dev-compose-up
+----
+
+===== In The Foreground
+
+[source, shell]
+----
+cd docker-compose
+docker compose -f docker-compose.dev.yml up
+----
+
+==== Teardown
+
+[source, shell]
+----
+./gradlew dev-compose-down
+----
+
+=== Environment Variables
+
+==== Explanation
 
 The following is an explanation of all the environment variables that should be
 set and available (using a .env file) for spinning up the docker compose stack.
@@ -141,7 +178,7 @@ instance.
 | Number of days job data will be kept in the S3 cache before being pruned.
 |===
 
-===== Example `.env` Contents
+==== Example `.env` Contents
 
 [source, shell]
 ----
@@ -178,7 +215,7 @@ REPORT_SERVICE_S3_BUCKET=reportbucket
 REPORT_SERVICE_QUEUE_POOL_SIZE=5
 ----
 
-==== Exposed Ports
+=== Exposed Ports
 
 [%header, cols="1m,2"]
 |===
