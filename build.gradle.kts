@@ -128,7 +128,7 @@ tasks.create("raml-gen-docs") {
       docDir.mkdirs()
 
       with(file("$svc/docs/api.html")) {
-        copyTo(file("docs/$svc/api.html"))
+        copyTo(file("docs/$svc/api.html"), true)
         delete()
       }
     }
