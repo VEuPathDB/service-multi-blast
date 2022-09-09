@@ -2,6 +2,7 @@
  * Initialize the repository for development.
  */
 tasks.create("initialize") {
+  group = "monorepo"
   doLast {
     // Async-Platform based subprojects
     arrayOf(
@@ -27,6 +28,7 @@ tasks.create("initialize") {
  * Builds the development docker compose stack images.
  */
 tasks.create("dev-compose-build") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -55,6 +57,7 @@ tasks.create("dev-compose-build") {
  * Spins up the development docker compose stack in the background.
  */
 tasks.create("dev-compose-up") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -82,6 +85,7 @@ tasks.create("dev-compose-up") {
  * Stops a running development docker compose stack.
  */
 tasks.create("dev-compose-stop") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -108,6 +112,7 @@ tasks.create("dev-compose-stop") {
  * Tears down a running development docker compose stack.
  */
 tasks.create("dev-compose-down") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -135,6 +140,7 @@ tasks.create("dev-compose-down") {
  * the `docs` directory.
  */
 tasks.create("raml-gen-docs") {
+  group = "monorepo"
   doLast {
     // List of subprojects with APIs
     val subProjects = arrayOf("query-service", "report-service")
