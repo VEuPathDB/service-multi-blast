@@ -7,6 +7,10 @@
 
 * Docker
 * Docker Compose Plugin
+* Make
+* Node & NPM
+* Java 17+
+
 
 === Gradle Tasks
 
