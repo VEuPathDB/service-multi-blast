@@ -7,50 +7,6 @@
 ################################################################################
 
 types:
-  BlastQueryConfig:
-    type: object
-    additionalProperties: false
-    discriminator: tool
-    properties:
-      tool:
-        displayName: Blast Tool
-        description: Target Blast+ query tool to execute.
-        type: BlastQueryTool
-      queryLocation:
-        displayName: Query Location
-        description: Location on the query sequence in 1-based offsets.
-        type: BlastLocation
-        required: false
-      eValue:
-        displayName: Expectation Value
-        description: Expectation value (E) threshold for saving hits.
-        type: string
-        required: false
-        pattern: ^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$
-  BlastQueryTool:
-    type: string
-    enum:
-      - blastn
-      - blastp
-      - blastx
-      - deltablast
-      - psiblast
-      - rpsblast
-      - rpstblastn
-      - tblastn
-      - tblastx
-  BlastLocation:
-    type: object
-    additionalProperties: false
-    properties:
-      start:
-        type: integer
-        format: long
-        minimum: 0
-      stop:
-        type: integer
-        format: long
-        minimum: 0
   QueryJobRequest:
     type: object
     additionalProperties: false
@@ -96,4 +52,119 @@ types:
       target: string
   QueryJobListEntry: string
   QueryJobDetails: string
+  BlastQueryConfig:
+    type: object
+    additionalProperties: false
+    discriminator: tool
+    properties:
+      tool:
+        displayName: Blast Tool
+        description: Target Blast+ query tool to execute.
+        type: BlastQueryTool
+      queryLocation:
+        displayName: Query Location
+        description: Location on the query sequence in 1-based offsets.
+        type: BlastLocation
+        required: false
+      eValue:
+        displayName: Expectation Value
+        description: Expectation value (E) threshold for saving hits.
+        type: string
+        required: false
+        pattern: ^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$
+      softMasking:
+        displayName: Soft Masking
+        description: Apply filtering locations as soft masks.
+        type: boolean
+        required: false
+      lowercaseMasking:
+        displayName: Lowercase Masking
+        description: Use lower case filtering in query and subject sequence(s)?
+        type: boolean
+        required: false
+      queryCoverageHSPPercent:
+        displayName: Query Coverage HSP Percent
+        description: Percent query coverage per HSP.
+        type: number
+        required: false
+        format: double
+        minimum: !!float 0
+        maximum: !!float 100
+      maxHSPs:
+        displayName: Max HSPs
+        description: |
+          Set maximum number of HSPs per subject sequence to save for each
+          query.
+        type: integer
+        required: false
+        format: int
+        minimum: 1
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: Maximum number of aligned sequences to keep.
+        type: integer
+        default: 500
+        required: false
+        minimum: 5
+      dbSize:
+        displayName: DB Size
+        description: Effective length of the database.
+        type: integer
+        required: false
+        format: int8
+        minimum: -128
+        maximum: 127
+      searchSpace:
+        displayName: Search Space
+        description: Effective length of the search space.
+        type: integer
+        required: false
+        format: int8
+        minimum: 0
+        maximum: 127
+      ungappedExtensionXDropoff:
+        displayName: Ungapped Extension X-Dropoff
+        description: X-dropoff value (in bits) for ungapped extensions
+        type: number
+        required: false
+        format: double
+      windowSize:
+        displayName: Window Size
+        description: |
+          Multiple hits window size.
+
+          0 to specify 1-hit algorithm.
+        type: integer
+        format: int
+        minimum: 0
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        default: false
+        required: false
+  BlastQueryTool:
+    type: string
+    enum:
+      - blastn
+      - blastp
+      - blastx
+      - deltablast
+      - psiblast
+      - rpsblast
+      - rpstblastn
+      - tblastn
+      - tblastx
+  BlastLocation:
+    type: object
+    additionalProperties: false
+    properties:
+      start:
+        type: integer
+        format: long
+        minimum: 0
+      stop:
+        type: integer
+        format: long
+        minimum: 0
 
