@@ -13,6 +13,15 @@ the project as a whole.
 Each of these tasks may be executed by passing the name of the task to the
 included `./gradlew` script.
 
+`initialize`::
+Initializes the repository for local development.
++
+.Example
+[source, bash]
+----
+./gradlew initialize
+----
+
 `raml-gen-docs`::
 Generates HTML documentation of the service APIs based on the RAML API
 definitions in each subproject and puts the output in the `docs` directory.
@@ -22,7 +31,6 @@ definitions in each subproject and puts the output in the `docs` directory.
 ----
 ./gradlew raml-gen-docs
 ----
-
 
 `dev-compose-build`::
 See <<Build The Stack>>.
