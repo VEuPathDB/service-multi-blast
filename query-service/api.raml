@@ -16,11 +16,47 @@ uses:
   get:
     displayName: Get Job List
     description: Lists the current user's blast query jobs.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: array
+            items:
+              type: lib.QueryJobListEntry
+      401:
+        description: Unauthorized
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
 
   post:
     displayName: Create New Job
     description: Creates a new blast query job.
+    body:
+      multipart/form-data:
+        type: object
+        additionalProperties: false
+        properties:
+          config:
+            displayName: Job Configuration
+            type: lib.QueryJobRequest
+            required: true
+          query:
+            displayName: Query File
+            description: |
+              Optional file upload parameter for uploading multi-blast queries.
+              
+              **IMPORTANT**: Either this field or the job config's `query` field
+              MUST be set in order for a job to be valid.
+            type: file
+            required: false
 
   /{job-id}:
     displayName: Job By ID
