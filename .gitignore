@@ -4,6 +4,7 @@ build/
 .tools/
 bin/
 tmp/
+.bin/
 
 *.tmp
 *.bak
