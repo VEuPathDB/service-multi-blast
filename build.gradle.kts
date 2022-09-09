@@ -109,7 +109,7 @@ tasks.create("dev-compose-down") {
  * RAML Based HTML Documentation Generation
  *
  * Generates the HTML docs for the RAML in each service and moves the output to
- * the docs directory.
+ * the `docs` directory.
  */
 tasks.create("raml-gen-docs") {
   doLast {
