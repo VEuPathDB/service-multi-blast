@@ -9,17 +9,24 @@ types:
     additionalProperties: false
     properties:
       jobConfig:
+        displayName: Job Config
         type: QueryJobConfig
       blastConfig:
+        displayName: Blast Tool Config
         type: base.BlastQueryConfig
       meta:
+        displayName: User Metadata
         type: QueryJobRequestMeta
 
   QueryJobConfig:
     type: object
     additionalProperties: false
     properties:
+      site:
+        displayName: Target Site
+        type: TargetSite
       targets:
+        displayName: Query Targets
         type: array
         items:
           type: QueryJobTarget
@@ -60,4 +67,21 @@ types:
   QueryJobListEntry: {}
 
   QueryJobDetails: {}
+
+  TargetSite:
+    type: string
+    enum:
+    - AmoebaDB
+    - CryptoDB
+    - FungiDB
+    - GiardiaDB
+    - HostDB
+    - MicrosporidiaDB
+    - PiroplasmaDB
+    - PlasmoDB
+    - ToxoDB
+    - TrichDB
+    - TriTrypDB
+    - Vectorbase
+    - VEuPathDB
 
