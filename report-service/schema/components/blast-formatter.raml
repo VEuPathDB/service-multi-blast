@@ -1,0 +1,226 @@
+#%RAML 1.0 Library
+
+types:
+  BlastFormatterConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      outFormat:
+        displayName: Out Format
+        description: |
+          Configuration of the report format that will be generated on command
+          execution.
+        type: BlastOutFormat
+        required: false
+        default:
+          type: pairwise
+      showGIs:
+        type: boolean
+        required: false
+        default: false
+      numDescriptions:
+        displayName: Number of Descriptions
+        description: |
+          Number of database sequences to show one-line descriptions for
+
+          Not applicable for the following format types:
+          - xml
+          - tabular
+          - tabular-with-comments
+          - seqalign-text
+          - seqalign-binary
+          - csv,
+          - asn1,
+          - seqalign-json
+          - multi-file-json
+          - multi-file-xml2
+          - single-file-json
+          - single-file-xml2
+          - sam
+          - organism-report
+        type: integer
+        minimum: 1
+        required: false
+        default: 500
+      lineLength:
+        displayName: Line Length
+        description: |
+          Line length for formatting alignments
+
+          Not applicable for the following format types:
+          - xml
+          - tabular
+          - tabular-with-comments
+          - seqalign-text
+          - seqalign-binary
+          - csv,
+          - asn1,
+          - seqalign-json
+          - multi-file-json
+          - multi-file-xml2
+          - single-file-json
+          - single-file-xml2
+          - sam
+          - organism-report
+        type: integer
+        minimum: 1
+        required: false
+        default: 60
+      sortHits:
+        displayName: Sort Hits
+        description: |
+          Sorting option for hits.
+          
+          Only applicable to the following blast format types:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+        type: string
+        enum:
+        - by-evalue
+        - by-bit-score
+        - by-total-score
+        - by-percent-identity
+        - by-query-coverage
+        required: false
+      sortHSPs:
+        displayName: Sort HSPs
+        description: |
+          Sorting option for HSPs.
+          
+          Only applicable to blast format type `pairwise`.
+        type: string
+        enum:
+        - by-hsp-evalue
+        - by-hsp-score
+        - by-hsp-query-start
+        - by-hsp-percent-identity
+        - by-hsp-subject-start
+        required: false
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: Maximum number of aligned sequences to keep.
+        type: integer
+        minimum: 5
+        default: 500
+        required: false
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        required: false
+        default: false
+
+  BlastOutFormat:
+    type: object
+    additionalProperties: false
+    properties:
+      type:
+        displayName: Format Type
+        type: BlastOutFormatType
+        required: false
+        default: pairwise
+
+      delimiter:
+        displayName: Custom Format Delimiter
+        description: |
+          Only applicable to the following blast format types:
+          - tabular
+          - tabular-with-comments
+          - csv
+          - sam
+        type: string
+        minLength: 1
+        maxLength: 1
+        required: false
+
+      fields:
+        type: array
+        items:
+          type: BlastOutFormatField
+        minItems: 1
+        required: false
+        default:
+        - std
+
+  BlastOutFormatType:
+    type: string
+    enum:
+    - pairwise
+    - query-anchored-with-identities
+    - query-anchored-no-identities
+    - flat-query-anchored-with-identities
+    - flat-query-anchored-no-identities
+    - xml
+    - tabular
+    - tabular-with-comments
+    - seqalign-text
+    - seqalign-binary
+    - csv
+    - asn1
+    - seqalign-json
+    - multi-file-json
+    - multi-file-xml2
+    - single-file-json
+    - single-file-xml2
+    - sam
+    - organism-report
+
+  BlastOutFormatField:
+    type: string
+    enum:
+    - qseqid
+    - qgi
+    - qacc
+    - qaccver
+    - qlen
+    - sseqid
+    - sallseqid
+    - sgi
+    - sallgi
+    - sacc
+    - saccver
+    - sallacc
+    - slen
+    - qstart
+    - qend
+    - sstart
+    - send
+    - qseq
+    - sseq
+    - evalue
+    - bitscore
+    - score
+    - length
+    - pident
+    - nident
+    - mismatch
+    - positive
+    - gapopen
+    - gaps
+    - ppos
+    - frames
+    - qframe
+    - sframe
+    - btop
+    - staxid
+    - ssciname
+    - scomname
+    - sblastname
+    - sskingdom
+    - staxids
+    - sscinames
+    - scomnames
+    - sblastnames
+    - sskingdoms
+    - stitle
+    - salltitles
+    - sstrand
+    - qcovs
+    - qcovhsp
+    - qcovus
+    - std
+    - SQ
+    - SR
