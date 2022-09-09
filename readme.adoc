@@ -3,6 +3,11 @@
 
 == Development
 
+=== Prerequisites
+
+* Docker
+* Docker Compose Plugin
+
 === Gradle Tasks
 
 ==== Root Level
