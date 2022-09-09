@@ -1,0 +1,71 @@
+#%RAML 1.0 Library
+
+# Blast CLI Flags and Arguments Common to all Blast+ Query Tools
+
+types:
+  # Base Query Tool Configuration Object
+  #
+  # The properties defined on this object are flags and arguments that are
+  # common to all Blast+ CLI tools used by the mblast query process.
+  #
+  # The target tools are:
+  #
+  # - blastn
+  # - blastp
+  # - blastx
+  # - deltablast
+  # - psiblast
+  # - rpsblast
+  # - rpstblastn
+  # - tblastn
+  # - tblastx
+  BlastQueryConfig:
+    type: object
+    additionalProperties: false
+    discriminator: tool
+    properties:
+      tool:
+        displayName: Blast Tool
+        description: Target Blast+ query tool to execute.
+        type: BlastQueryTool
+        required: true
+      queryLocation:
+        displayName: Query Location
+        description: Location on the query sequence in 1-based offsets.
+        type: BlastLocation
+        required: false
+      eValue:
+        displayName: Expectation Value
+        description: Expectation value (E) threshold for saving hits.
+        type: string
+        pattern: ^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$
+        required: false
+
+      # May not be required
+
+  BlastQueryTool:
+    type: string
+    enum:
+    - blastn
+    - blastp
+    - blastx
+    - deltablast
+    - psiblast
+    - rpsblast
+    - rpstblastn
+    - tblastn
+    - tblastx
+
+  BlastLocation:
+    type: object
+    additionalProperties: false
+    properties:
+      start:
+        type: integer
+        format: long
+        minimum: 0
+      stop:
+        type: integer
+        format: long
+        minimum: 0
+

@@ -1,0 +1,63 @@
+#%RAML 1.0 Library
+
+uses:
+  base: ./blast/blast-cli.raml
+
+types:
+  QueryJobRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      jobConfig:
+        type: QueryJobConfig
+      blastConfig:
+        type: base.BlastQueryConfig
+      meta:
+        type: QueryJobRequestMeta
+
+  QueryJobConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      targets:
+        type: array
+        items:
+          type: QueryJobTarget
+        minItems: 1
+      query:
+        displayName: Blast Query
+        description: |
+          Inline query definition.
+          
+          This field is to be used for non-file-upload blast queries.
+          
+          If this field is not set, a query file must be uploaded for the
+          request to be valid.
+        type: string
+        required: false
+
+  QueryJobRequestMeta:
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Brief Summary
+        type: string
+        maxLength: 512
+      description:
+        displayName: Long Description
+        type: string
+
+  QueryJobTarget:
+    type: object
+    additionalProperties: false
+    properties:
+      organism:
+        type: string
+      target:
+        type: string
+
+  QueryJobListEntry: {}
+
+  QueryJobDetails: {}
+
