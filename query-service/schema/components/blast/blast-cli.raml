@@ -34,22 +34,26 @@ types:
         description: Location on the query sequence in 1-based offsets.
         type: BlastLocation
         required: false
+        default: null
       eValue:
         displayName: Expectation Value
         description: Expectation value (E) threshold for saving hits.
         type: string
-        pattern: ^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$
+        pattern: ^\d+(?:\.\d+)?(?:[eE]-?\d+)?$
         required: false
+        default: '10'
       softMasking:
         displayName: Soft Masking
         description: Apply filtering locations as soft masks.
         type: boolean
         required: false
+        default: false
       lowercaseMasking:
         displayName: Lowercase Masking
         description: Use lower case filtering in query and subject sequence(s)?
         type: boolean
         required: false
+        default: false
       queryCoverageHSPPercent:
         displayName: Query Coverage HSP Percent
         description: Percent query coverage per HSP.
@@ -58,6 +62,7 @@ types:
         minimum: 0.0
         maximum: 100.0
         required: false
+        default: null
       maxHSPs:
         displayName: Max HSPs
         description: |
@@ -67,13 +72,14 @@ types:
         format: int
         minimum: 1
         required: false
+        default: null
       maxTargetSequences:
         displayName: Max Target Sequences
         description: Maximum number of aligned sequences to keep.
         type: integer
         minimum: 5
-        default: 500
         required: false
+        default: 500
       dbSize:
         displayName: DB Size
         description: Effective length of the database.
@@ -82,6 +88,7 @@ types:
         minimum: -128
         maximum: 127
         required: false
+        default: null
       searchSpace:
         displayName: Search Space
         description: Effective length of the search space.
@@ -90,12 +97,14 @@ types:
         minimum: 0
         maximum: 127
         required: false
+        default: null
       xDropoffUngapped:
         displayName: Ungapped Extension X-Dropoff
         description: X-dropoff value (in bits) for ungapped extensions
         type: number
         format: double
         required: false
+        default: null
       windowSize:
         displayName: Window Size
         description: |
@@ -105,12 +114,41 @@ types:
         type: integer
         format: int
         minimum: 0
+        required: false
+        default: null
       parseDefLines:
         displayName: Parse Query Definition Lines
         description: Should the query and subject defline(s) be parsed?
         type: boolean
         required: false
         default: false
+
+  BlastSeg:
+    type: object
+    additionalProperties: false
+    properties:
+      window:
+        displayName: Window
+        description: SEG window.
+        type: integer
+        format: int
+        required: false
+        default: 12
+      locut:
+        displayName: Locut
+        description: SEG locut.
+        type: number
+        format: double
+        required: false
+        default: 2.2
+      hicut:
+        displayName: Hicut
+        description: SEG hicut.
+        type: number
+        format: double
+        required: false
+        default: 2.5
+
 
   BlastQueryTool:
     type: string
