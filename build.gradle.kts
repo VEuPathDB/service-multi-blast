@@ -113,20 +113,28 @@ tasks.create("dev-compose-down") {
  */
 tasks.create("raml-gen-docs") {
   doLast {
-    for (svc in arrayOf("query-service", "report-service")) {
+    // List of subprojects with APIs
+    val subProjects = arrayOf("query-service", "report-service")
+
+    // For each of the defined subprojects
+    for (svc in subProjects) {
+      // Get a handle on the subproject directory
+      val subDir = file(svc)
+
+      // Generate the HTML API docs.
       with(
-        ProcessBuilder("./gradlew", "generate-raml-docs")
-          .directory(file(svc))
+        ProcessBuilder("make", "raml-gen-docs")
+          .directory(subDir)
           .start()
       ) {
         errorStream.transferTo(System.err)
         require(waitFor() == 0)
       }
 
-      val docDir = file("docs/$svc")
+      // Ensure the docs directory exists
+      with(file("docs/$svc"), File::mkdirs)
 
-      docDir.mkdirs()
-
+      // Copy the generated HTML file to the docs directory.
       with(file("$svc/docs/api.html")) {
         copyTo(file("docs/$svc/api.html"), true)
         delete()
