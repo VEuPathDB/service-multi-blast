@@ -40,6 +40,78 @@ types:
         type: string
         pattern: ^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$
         required: false
+      softMasking:
+        displayName: Soft Masking
+        description: Apply filtering locations as soft masks.
+        type: boolean
+        required: false
+      lowercaseMasking:
+        displayName: Lowercase Masking
+        description: Use lower case filtering in query and subject sequence(s)?
+        type: boolean
+        required: false
+      queryCoverageHSPPercent:
+        displayName: Query Coverage HSP Percent
+        description: Percent query coverage per HSP.
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 100.0
+        required: false
+      maxHSPs:
+        displayName: Max HSPs
+        description: |
+          Set maximum number of HSPs per subject sequence to save for each
+          query.
+        type: integer
+        format: int
+        minimum: 1
+        required: false
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: Maximum number of aligned sequences to keep.
+        type: integer
+        minimum: 5
+        default: 500
+        required: false
+      dbSize:
+        displayName: DB Size
+        description: Effective length of the database.
+        type: integer
+        format: int8
+        minimum: -128
+        maximum: 127
+        required: false
+      searchSpace:
+        displayName: Search Space
+        description: Effective length of the search space.
+        type: integer
+        format: int8
+        minimum: 0
+        maximum: 127
+        required: false
+      ungappedExtensionXDropoff:
+        displayName: Ungapped Extension X-Dropoff
+        description: X-dropoff value (in bits) for ungapped extensions
+        type: number
+        format: double
+        required: false
+      windowSize:
+        displayName: Window Size
+        description: |
+          Multiple hits window size.
+          
+          0 to specify 1-hit algorithm.
+        type: integer
+        format: int
+        minimum: 0
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        required: false
+        default: false
+
 
       # May not be required
 
