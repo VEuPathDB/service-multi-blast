@@ -11,117 +11,114 @@ uses:
   lib: schema/library.raml
 
 
-/query:
-  description: Base endpoint for the service.
+/jobs:
 
-  /jobs:
+  get:
+    displayName: Get Job List
+    description: Lists the current user's blast query jobs.
+
+
+  post:
+    displayName: Create New Job
+    description: Creates a new blast query job.
+
+  /{job-id}:
+    displayName: Job By ID
+    description: |
+      Operations on a singular job identified by the `{job-id}` URI parameter.
+      
+      As a side effect, all interactions with this endpoint or any of its
+      sub-paths will cause the requesting user to be linked to the job
+      identified by the `{job-id}` URI parameter.
 
     get:
-      displayName: Get Job List
-      description: Lists the current user's blast query jobs.
-
+      displayName: Get Job Details
+      description: Returns details about the target job.
 
     post:
-      displayName: Create New Job
-      description: Creates a new blast query job.
+      displayName: Restart Job
+      description: Causes the target job to be restarted (if it is expired).
 
-    /{job-id}:
-      displayName: Job By ID
-      description: |
-        Operations on a singular job identified by the `{job-id}` URI parameter.
-        
-        As a side effect, all interactions with this endpoint or any of its
-        sub-paths will cause the requesting user to be linked to the job
-        identified by the `{job-id}` URI parameter.
+    /query:
 
       get:
-        displayName: Get Job Details
-        description: Returns details about the target job.
+        displayName: Get Query
+        description: |
+          Returns the query for the target job, optionally as a download.
+        queryParameters:
+          dl:
+            displayName: Download?
+            description: |
+              If set to true, the server will send a `Content-Disposition`
+              header in the response indicating that the query file should be
+              downloaded rather than rendered.
+            type: boolean
+        responses:
+          200:
+            description: Success
+            body:
+              text/plain:
+                type: string
+                displayName: Job Query
+                description: Raw query text
+          401:
+            description: Unauthorized
+            body:
+              application/json:
+                type: error.UnauthorizedError
+          404:
+            description: Not Found
+            body:
+              application/json:
+                type: error.NotFoundError
+          500:
+            description: Server Error
+            body:
+              application/json:
+                type: error.ServerError
 
-      post:
-        displayName: Restart Job
-        description: Causes the target job to be restarted (if it is expired).
+    /result:
 
-      /query:
-
-        get:
-          displayName: Get Query
-          description: |
-            Returns the query for the target job, optionally as a download.
-          queryParameters:
-            dl:
-              displayName: Download?
-              description: |
-                If set to true, the server will send a `Content-Disposition`
-                header in the response indicating that the query file should be
-                downloaded rather than rendered.
-              type: boolean
-          responses:
-            200:
-              description: Success
-              body:
-                text/plain:
-                  type: string
-                  displayName: Job Query
-                  description: Raw query text
-            401:
-              description: Unauthorized
-              body:
-                application/json:
-                  type: error.UnauthorizedError
-            404:
-              description: Not Found
-              body:
-                application/json:
-                  type: error.NotFoundError
-            500:
-              description: Server Error
-              body:
-                application/json:
-                  type: error.ServerError
-
-      /result:
-
-  /statuses:
-    post:
-      description: |
-        Lookup the statuses for the list of job IDs posted.
-        
-        The response will be a mapping whose keys are the posted job IDs and
-        whose values are the status of the job represented by the associated ID.
-        
-        If a job ID in the input list does not appear to be a real/valid job ID,
-        the ID will be omitted from the response object.
-        
-        Each status value will be a valid JobStatus enum item, meaning they will
-        each be one of:
-        
-        * "queued"
-        * "in-progress"
-        * "complete"
-        * "failed"
-        * "expired"
-      body:
-        application/json:
-          type: array
-          items:
-            type: string
-            minLength: 32
-            maxLength: 32
-            pattern: '^[\dA-Fa-f]{32}$'
-      responses:
-        200:
-          description: Success
-          body:
-            application/json:
-              type: lib.JobBulkStatusResponse
-        500:
-          description: |
-            Internal Server Error
-            
-            An unexpected exception was thrown while attempting to process
-            the request.
-          body:
-            application/json:
-              type: error.ServerError
+/statuses:
+  post:
+    description: |
+      Lookup the statuses for the list of job IDs posted.
+      
+      The response will be a mapping whose keys are the posted job IDs and
+      whose values are the status of the job represented by the associated ID.
+      
+      If a job ID in the input list does not appear to be a real/valid job ID,
+      the ID will be omitted from the response object.
+      
+      Each status value will be a valid JobStatus enum item, meaning they will
+      each be one of:
+      
+      * "queued"
+      * "in-progress"
+      * "complete"
+      * "failed"
+      * "expired"
+    body:
+      application/json:
+        type: array
+        items:
+          type: string
+          minLength: 32
+          maxLength: 32
+          pattern: '^[\dA-Fa-f]{32}$'
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.JobBulkStatusResponse
+      500:
+        description: |
+          Internal Server Error
+          
+          An unexpected exception was thrown while attempting to process
+          the request.
+        body:
+          application/json:
+            type: error.ServerError
 
