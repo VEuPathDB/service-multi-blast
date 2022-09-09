@@ -1,0 +1,272 @@
+#%RAML 1.0 Library
+
+uses:
+  base: ./blast-cli.raml
+
+types:
+  BlastNConfig:
+    type: base.BlastQueryConfig
+    discriminatorValue: blastn
+    additionalProperties: false
+    properties:
+      strand:
+        displayName: Strand
+        description: Query strand(s) to search against database/subject.
+        type: base.BlastStrand
+        required: false
+        default: both
+      task:
+        displayName: Task
+        description: Task to execute.
+        type: BlastNTask
+        required: false
+        default: megablast
+      wordSize:
+        displayName: Word Size
+        description: |
+          Word size for wordfinder algorithm (length of best perfect match).
+        type: integer
+        format: int
+        minimum: 4
+        required: false
+      gapOpen:
+        displayName: Gap Open
+        description: Cost to open a gap.
+        type: integer
+        format: int
+        required: false
+      gapExtend:
+        displayName: Gap Extend
+        description: Cost to extend a gap.
+        type: integer
+        format: int
+        required: false
+      penalty:
+        displayName: Penalty
+        description: Penalty for a nucleotide mismatch.
+        type: integer
+        format: int
+        maximum: 0
+        required: false
+      reward:
+        displayName: Reward
+        description: Reward for a nucleotide match.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+      useIndex:
+        displayName: Use Index
+        description: Use MegaBLAST database index.
+        type: boolean
+        required: false
+        default: false
+      indexName:
+        displayName: Index Name
+        description: |
+          MegaBLAST database index name (deprecated; use only for old style
+          indices).
+        type: string
+        minLength: 1
+        required: false
+      dust:
+        displayName: DUST
+        description: Filter query sequence with DUST.
+        type: BlastNDust
+        required: false
+        default:
+          enable: true
+          level: 20
+          window: 64
+          linker: 1
+      dbSoftMask:
+        displayName: DB Soft Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft masking
+          
+          Incompatible with: `dbHardMask`
+        type: string
+        required: false
+      dbHardMask:
+        displayName: DB Hard Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard masking
+          
+          Incompatible with:  `dbSoftMask`
+        type: string
+        required: false
+      percentIdentity:
+        displayName: Percent Identity
+        description: Percent identity.
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 100.0
+        required: false
+      cullingLimit:
+        displayName: Culling Limit
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+          
+          Incompatible with: 
+          - `bestHitOverhang`
+          - `bestHitScoreEdge`
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      templateType:
+        displayName: Template Type
+        description: |
+          Discontiguous MegaBLAST template type.
+          
+          Requires:
+          - `templateLength`
+        type: BlastNTemplateType
+        required: false
+      templateLength:
+        displayName: Template Length
+        description: |
+          Discontiguous MegaBLAST template length.
+          
+          Requires:
+          - `templateType`
+        type: BlastNTemplateLength
+        required: false
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+      nonGreedy:
+        displayName: Non Greedy Extension
+        description: Use non-greedy dynamic programming extension.
+        type: boolean
+        required: false
+        default: false
+      minRawGappedScore:
+        displayName: Minimum Raw Gapped Score
+        description: |
+          Minimum raw gapped score to keep an alignment in the preliminary
+          gapped and traceback stages
+        type: integer
+        format: int
+        required: false
+      ungappedOnly:
+        displayName: Ungapped Alignment Only
+        description: Perform ungapped alignment only?
+        type: boolean
+        required: false
+        default: false
+      offDiagonalRange:
+        displayName: Off-Diagonal Range
+        description: |
+          Number of off-diagonals to search for the 2nd hit, use 0 to turn off.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: 0
+
+  BlastNTask:
+    type: string
+    enum:
+    - blastn
+    - blastn-short
+    - dc-megablast
+    - megablast
+    - rmblastn
+
+  BlastNDust:
+    type: object
+    additionalProperties: false
+    properties:
+      enable:
+        displayName: Enable
+        description: Whether dust filtering should be enabled.
+        type: boolean
+        required: false
+        default: true
+      level:
+        displayName: Level
+        description: Score threshold for subwindows.
+        type: integer
+        format: int
+        required: false
+        default: 20
+      window:
+        displayName: Window
+        description: Window length.
+        type: integer
+        format: int
+        required: false
+        default: 64
+      linker:
+        displayName: Linker
+        description: |
+          How close masked intervals should be to get merged together.
+        type: integer
+        format: int
+        required: false
+        default: 1
+
+  BlastNTemplateType:
+    type: string
+    enum:
+    - coding
+    - coding-and-optimal
+    - optimal
+
+  BlastNTemplateLength:
+    type: integer
+    format: int
+    enum:
+    - 16
+    - 18
+    - 21
