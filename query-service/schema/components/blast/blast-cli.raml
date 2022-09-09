@@ -90,7 +90,7 @@ types:
         minimum: 0
         maximum: 127
         required: false
-      ungappedExtensionXDropoff:
+      xDropoffUngapped:
         displayName: Ungapped Extension X-Dropoff
         description: X-dropoff value (in bits) for ungapped extensions
         type: number
@@ -111,9 +111,6 @@ types:
         type: boolean
         required: false
         default: false
-
-
-      # May not be required
 
   BlastQueryTool:
     type: string
@@ -141,3 +138,9 @@ types:
         format: long
         minimum: 0
 
+  BlastStrand:
+    type: string
+    enum:
+    - both
+    - minus
+    - plus
