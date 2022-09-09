@@ -103,3 +103,34 @@ tasks.create("dev-compose-down") {
     }
   }
 }
+
+
+/**
+ * RAML Based HTML Documentation Generation
+ *
+ * Generates the HTML docs for the RAML in each service and moves the output to
+ * the `docs` directory.
+ */
+tasks.create("raml-gen-docs") {
+  doLast {
+    for (svc in arrayOf("query-service", "report-service")) {
+      with(
+        ProcessBuilder("./gradlew", "generate-raml-docs")
+          .directory(file(svc))
+          .start()
+      ) {
+        errorStream.transferTo(System.err)
+        require(waitFor() == 0)
+      }
+
+      val docDir = file("docs/$svc")
+
+      docDir.mkdirs()
+
+      with(file("$svc/docs/api.html")) {
+        copyTo(file("docs/$svc/api.html"))
+        delete()
+      }
+    }
+  }
+}
