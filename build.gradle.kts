@@ -1,4 +1,27 @@
 /**
+ * Initialize the repository for development.
+ */
+tasks.create("initialize") {
+  doLast {
+    // Async-Platform based subprojects
+    arrayOf(
+      "query-service",
+      "report-service",
+    ).forEach { proj ->
+      // Get a handle on the directory containing the subproject.
+      val projDir = file(proj)
+
+      // Execute the "install-dev-env" make target in each subproject.
+      with(ProcessBuilder("make", "install-dev-env").directory(projDir).start()) {
+        errorStream.transferTo(System.err)
+        require(waitFor() == 0)
+      }
+    }
+  }
+}
+
+
+/**
  * Dev Docker Compose Stack Build
  *
  * Builds the development docker compose stack images.
