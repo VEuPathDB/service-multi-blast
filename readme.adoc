@@ -1,7 +1,42 @@
 = MultiBlast
 :source-highlighter: highlightjs
 
-== The Development Stack
+== Development
+
+=== Gradle Tasks
+
+==== Root Level
+
+The following tasks are defined at the root level of the project and operate on
+the project as a whole.
+
+Each of these tasks may be executed by passing the name of the task to the
+included `./gradlew` script.
+
+`raml-gen-docs`::
+Generates HTML documentation of the service APIs based on the RAML API
+definitions in each subproject and puts the output in the `docs` directory.
++
+.Example
+[source, bash]
+----
+./gradlew raml-gen-docs
+----
+
+
+`dev-compose-build`::
+See <<Build The Stack>>.
+
+`dev-compose-up`::
+See <<In The Background,Run The Stack>>.
+
+`dev-compose-stop`::
+See <<Stop The Stack>>.
+
+`dev-compose-down`::
+See <<Teardown>>.
+
+== Local Development Stack
 
 === Spinning it Up
 
