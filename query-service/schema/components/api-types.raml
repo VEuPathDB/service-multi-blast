@@ -10,6 +10,18 @@ types:
     properties:
       jobConfig:
         displayName: Job Config
+        description: |
+          Implemented by one of:
+          
+          - [BlastNConfig](#type:lib.BlastNConfig)
+          - [BlastPConfig](#type:lib.BlastPConfig)
+          - [BlastXConfig](#type:lib.BlastXConfig)
+          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
+          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
+          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
+          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
+          - [TBlastNConfig](#type:lib.TBlastNConfig)
+          - [TBlastXConfig](#type:lib.TBlastXConfig)
         type: QueryJobConfig
       blastConfig:
         displayName: Blast Tool Config
