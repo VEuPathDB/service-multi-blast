@@ -15,7 +15,7 @@ uses:
 
   get:
     displayName: Get Job List
-    description: Lists the current user's blast query jobs.
+    description: Lists the current user's collected blast query jobs.
     responses:
       200:
         description: Success
@@ -25,7 +25,8 @@ uses:
             items:
               type: lib.QueryJobListEntry
       401:
-        description: Unauthorized
+        description: |
+          No valid user authentication provided.
         body:
           application/json:
             type: error.UnauthorizedError
@@ -57,23 +58,102 @@ uses:
               MUST be set in order for a job to be valid.
             type: file
             required: false
+    responses:
+      200:
+        description: |
+          Query job was successfully submitted to the job queue for execution.
+        body:
+          application/json:
+            type: lib.QueryJobDetails
+      400:
+        description: |
+          Invalid request body or parameters.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      422:
+        description: |
+          Invalid job configuration.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
 
   /{job-id}:
     displayName: Job By ID
     description: |
       Operations on a singular job identified by the `{job-id}` URI parameter.
-      
-      As a side effect, all interactions with this endpoint or any of its
-      sub-paths will cause the requesting user to be linked to the job
-      identified by the `{job-id}` URI parameter.
 
     get:
       displayName: Get Job Details
-      description: Returns details about the target job.
+      description: |
+        Returns details about the target job.
+      
+        As a side effect, interactions with this endpoint will cause the target
+        job to be added to the requesting user's job collection if it was not
+        already present in that user's collection.
+        
+        THIS WILL JUST CAUSE ALL THE SUBJOBS TO BE LINKED TO THE USER
+        AUTOMATICALLY WHEN THEY REQUEST DETAILS...  THERE SHOULD BE A SEPARATE
+        SHARE MECHANISM.
 
     post:
       displayName: Restart Job
       description: Causes the target job to be restarted (if it is expired).
+      responses:
+        200:
+          description: Job was successfully requeued for execution.
+          body:
+            application/json:
+              type: lib.QueryJobDetails
+        401:
+          description: |
+            No valid user authentication provided.
+          body:
+            application/json:
+              type: error.UnauthorizedError
+        404:
+          description: |
+            Target job does not exist in the user's job collection.
+          body:
+            application/json:
+              type: error.NotFoundError
+        500:
+          description: Server Error
+          body:
+            application/json:
+              type: error.ServerError
+
+    delete:
+      displayName: Delete Job
+      description: Deletes the target job from the user's job collection.
+      responses:
+        204:
+          description: |
+            Job was successfully deleted from the user's job collection.
+        401:
+          description: |
+            No valid user authentication provided.
+          body:
+            application/json:
+              type: error.UnauthorizedError
+        404:
+          description: |
+            Target job does not exist in the user's job collection.
+          body:
+            application/json:
+              type: error.NotFoundError
+        500:
+          description: Server Error
+          body:
+            application/json:
+              type: error.ServerError
+
 
     /query:
 
