@@ -33,6 +33,8 @@ types:
       meta:
         displayName: User Metadata
         type: QueryJobRequestMeta
+        required: false
+        default: null
 
   QueryJobConfig:
     type: object
@@ -50,12 +52,18 @@ types:
       query:
         displayName: Blast Query
         description: |
+          **For Requests**
+          
           Inline query definition.
           
           This field is to be used for non-file-upload blast queries.
           
           If this field is not set, a query file must be uploaded for the
           request to be valid.
+          
+          **For Responses**
+          
+          This field will be omitted.
         type: string
         required: false
       addToCollection:
@@ -76,11 +84,15 @@ types:
     properties:
       summary:
         displayName: Brief Summary
+        description: Brief, user defined summary or tagline for the job.
         type: string
         maxLength: 512
+        required: false
       description:
         displayName: Long Description
+        description: Longform, user provided description of the job.
         type: string
+        required: false
 
   QueryJobTarget:
     type: object
@@ -101,16 +113,73 @@ types:
         pattern: ^[\dA-Fa-f]{32}$
         minLength: 32
         maxLength: 32
-      summary:
-        displayName: User Summary
-        type: string
-        maxLength: 512
-      description:
-        displayName: User Description
-        type: string
+      status:
+        displayName: Job Status
+        type: JobStatus
+      meta:
+        displayName: User Metadata
+        type: QueryJobRequestMeta
+        required: false
 
+  QueryJobDetails:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      jobConfig:
+        displayName: Job Config
+        description: Job Configuration.
+        type: QueryJobConfig
+      blastConfig:
+        displayName: Blast Tool Config
+        description: |
+          Blast Tool Configuration.
+          
+          Implemented by one of:
+          
+          - [BlastNConfig](#type:lib.BlastNConfig)
+          - [BlastPConfig](#type:lib.BlastPConfig)
+          - [BlastXConfig](#type:lib.BlastXConfig)
+          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
+          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
+          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
+          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
+          - [TBlastNConfig](#type:lib.TBlastNConfig)
+          - [TBlastXConfig](#type:lib.TBlastXConfig)
+        type: base.BlastQueryConfig
+      meta:
+        displayName: User Metadata
+        type: QueryJobRequestMeta
+        required: false
+      subJobs:
+        displayName: Sub-Job IDs
+        description: List of sub-jobs that belong to this job.
+        type: array
+        items:
+          type: string
+          pattern: ^[\dA-Fa-f]{32}$
+          minLength: 32
+          maxLength: 32
+        minItems: 1
+        required: false
 
-  QueryJobDetails: {}
+  JobStatus:
+    type: string
+    enum:
+    - queued
+    - in-progress
+    - running
+    - complete
+    - failed
+    - expired
 
   TargetSite:
     type: string
