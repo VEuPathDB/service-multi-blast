@@ -1,0 +1,82 @@
+#%RAML 1.0 Library
+
+uses:
+  base: ./blast-cli.raml
+
+types:
+  RPSTBlastNConfig:
+    type: base.BlastQueryConfig
+    discriminatorValue: rpstblastn
+    additionalProperties: false
+    properties:
+      queryGenCode:
+        displayName: Translation Genetic Code
+        description: |
+          Genetic code to use to translate query (see
+          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes
+          for details)
+        type: base.BlastGenCode
+        required: false
+        default: 1
+      strand:
+        displayName: Strand
+        description: Query strand(s) to search against database/subject.
+        type: base.BlastStrand
+        required: false
+        default: both
+      compBasedStats:
+        displayName: Composition Based Statistics
+        description: |
+          Use composition-based statistics:
+          
+          - No composition-based statistics
+          - Composition-based statistics as in NAR 29:2994-3005, 2001
+        type: RPSTBlastNCompBasedStats
+        required: false
+        default: comp-based-stats
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: base.BlastSeg
+        required: false
+        default: null
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      ungappedOnly:
+        displayName: Ungapped Alignment Only
+        description: Perform ungapped alignment only?
+        type: boolean
+        required: false
+        default: false
+      useSWTraceback:
+        displayName: Use Smith-Waterman Traceback
+        description: Compute locally optimal Smith-Waterman alignments?
+        type: boolean
+        required: false
+        default: false
+
+  RPSTBlastNCompBasedStats:
+    type: string
+    enum:
+    - none
+    - comp-based-stats
