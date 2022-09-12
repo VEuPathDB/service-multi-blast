@@ -13,6 +13,16 @@ CREATE TABLE mblast.query_configs (
     NOT NULL
 );
 
+CREATE TABLE mblast.query_to_subqueries (
+  parent_job_id CHAR(32)
+    NOT NULL
+    CONSTRAINT mblast_query_to_subqueries_fk_1 REFERENCES mblast.query_configs (query_job_id)
+, child_job_id  CHAR(32)
+    NOT NULL
+    CONSTRAINT mblast_query_to_subqueries_fk_2 REFERENCES mblast.query_configs (query_job_id)
+, position      NUMBER(9)
+    NOT NULL
+);
 
 CREATE TABLE mblast.query_to_targets (
   query_job_id CHAR(32)
