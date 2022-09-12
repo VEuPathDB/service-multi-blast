@@ -170,6 +170,12 @@ types:
         minItems: 1
         required: false
 
+  JobBulkStatusResponse:
+    type: object
+    properties:
+      /^[\dA-Fa-f]{32}$/:
+        type: JobStatus
+
   JobStatus:
     type: string
     enum:
