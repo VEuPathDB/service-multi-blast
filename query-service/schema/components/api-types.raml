@@ -171,6 +171,10 @@ types:
         required: false
 
   JobBulkStatusResponse:
+    displayName: Bulk Job Status Response
+    description: |
+      Returns a mapping of job-id to status for each of the valid job IDs that
+      appeared in the original bulk status request.
     type: object
     properties:
       /^[\dA-Fa-f]{32}$/:
