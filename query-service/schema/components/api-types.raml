@@ -5,12 +5,19 @@ uses:
 
 types:
   QueryJobRequest:
+    displayName: Query Job Request
     type: object
     additionalProperties: false
     properties:
       jobConfig:
         displayName: Job Config
+        description: Job Configuration.
+        type: QueryJobConfig
+      blastConfig:
+        displayName: Blast Tool Config
         description: |
+          Blast Tool Configuration.
+          
           Implemented by one of:
           
           - [BlastNConfig](#type:lib.BlastNConfig)
@@ -22,9 +29,6 @@ types:
           - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
           - [TBlastNConfig](#type:lib.TBlastNConfig)
           - [TBlastXConfig](#type:lib.TBlastXConfig)
-        type: QueryJobConfig
-      blastConfig:
-        displayName: Blast Tool Config
         type: base.BlastQueryConfig
       meta:
         displayName: User Metadata
@@ -54,6 +58,17 @@ types:
           request to be valid.
         type: string
         required: false
+      addToCollection:
+        displayName: Add to Collection
+        description: |
+          Adds this job to the users collection of jobs.
+          
+          The user's collection of jobs is what is returned by the `/jobs`
+          endpoint.
+        type: boolean
+        required: false
+        default: false
+
 
   QueryJobRequestMeta:
     type: object
@@ -76,7 +91,24 @@ types:
       target:
         type: string
 
-  QueryJobListEntry: {}
+  QueryJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      summary:
+        displayName: User Summary
+        type: string
+        maxLength: 512
+      description:
+        displayName: User Description
+        type: string
+
 
   QueryJobDetails: {}
 
@@ -96,4 +128,3 @@ types:
     - TriTrypDB
     - Vectorbase
     - VEuPathDB
-
