@@ -11,7 +11,13 @@ uses:
   lib: schema/library.raml
 
 
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job List Endpoint                                                          #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs:
+  displayName: Jobs
 
   get:
     displayName: Get Job List
@@ -24,6 +30,18 @@ uses:
             type: array
             items:
               type: lib.QueryJobListEntry
+            example:
+            - queryJobID: 9f444b23ceec3ee5588cc4c784c16696
+              status: expired
+            - queryJobID: bc49f1a3bc36cd15b84890439d19d395
+              status: complete
+              meta:
+                summary: A blast job
+            - queryJobID: 297a61dda47317f11d8e50e6ab8508c9
+              status: failed
+              meta:
+                summary: Another blast job.
+                description: This job will fail.
       401:
         description: |
           No valid user authentication provided.
@@ -83,150 +101,188 @@ uses:
           application/json:
             type: error.UnprocessableEntityError
 
-  /{job-id}:
-    displayName: Job By ID
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job By ID                                                                  #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}:
+  displayName: Job By ID
+  description: |
+    Operations on a singular job identified by the `{job-id}` URI parameter.
+
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
+
+  get:
+    displayName: Get Job Details
     description: |
-      Operations on a singular job identified by the `{job-id}` URI parameter.
-
-    get:
-      displayName: Get Job Details
-      description: |
-        Returns details about the target job.
-      
-        As a side effect, interactions with this endpoint will cause the target
-        job to be added to the requesting user's job collection if it was not
-        already present in that user's collection.  This default behavior can be
-        defeated by using the `skip_job_add` query parameter.
-      queryParameters:
-        skip_job_add:
-          displayName: Skip Job Adding
-          description: |
-            A flag, that when set to true, tells the service to skip the part of
-            the process where it would normally add the requested job to the
-            current users jobs collection.
-          type: boolean
-          default: false
-          required: false
-      responses:
-        200:
-          description: Success
-          body:
-            application/json:
-              type: lib.QueryJobDetails
-        401:
-          description: |
-            No valid user authentication provided.
-          body:
-            application/json:
-              type: error.UnauthorizedError
-        404:
-          description: |
-            Target job does not exist.
-          body:
-            application/json:
-              type: error.NotFoundError
-        500:
-          description: Server Error
-          body:
-            application/json:
-              type: error.ServerError
-
-
-    post:
-      displayName: Restart Job
-      description: Causes the target job to be restarted (if it is expired).
-      responses:
-        200:
-          description: Job was successfully requeued for execution.
-          body:
-            application/json:
-              type: lib.QueryJobDetails
-        401:
-          description: |
-            No valid user authentication provided.
-          body:
-            application/json:
-              type: error.UnauthorizedError
-        404:
-          description: |
-            Target job does not exist in the user's job collection.
-          body:
-            application/json:
-              type: error.NotFoundError
-        500:
-          description: Server Error
-          body:
-            application/json:
-              type: error.ServerError
-
-    delete:
-      displayName: Delete Job
-      description: Deletes the target job from the user's job collection.
-      responses:
-        204:
-          description: |
-            Job was successfully deleted from the user's job collection.
-        401:
-          description: |
-            No valid user authentication provided.
-          body:
-            application/json:
-              type: error.UnauthorizedError
-        404:
-          description: |
-            Target job does not exist in the user's job collection.
-          body:
-            application/json:
-              type: error.NotFoundError
-        500:
-          description: Server Error
-          body:
-            application/json:
-              type: error.ServerError
-
-
-    /query:
-
-      get:
-        displayName: Get Query
+      Returns details about the target job.
+    
+      As a side effect, interactions with this endpoint will cause the target
+      job to be added to the requesting user's job collection if it was not
+      already present in that user's collection.  This default behavior can be
+      defeated by using the `skip_job_add` query parameter.
+    queryParameters:
+      skip_job_add:
+        displayName: Skip Job Adding
         description: |
-          Returns the query for the target job, optionally as a download.
-        queryParameters:
-          dl:
-            displayName: Download?
-            description: |
-              If set to true, the server will send a `Content-Disposition`
-              header in the response indicating that the query file should be
-              downloaded rather than rendered.
-            type: boolean
-        responses:
-          200:
-            description: Success
-            body:
-              text/plain:
-                type: string
-                displayName: Job Query
-                description: Raw query text
-          401:
-            description: Unauthorized
-            body:
-              application/json:
-                type: error.UnauthorizedError
-          404:
-            description: Not Found
-            body:
-              application/json:
-                type: error.NotFoundError
-          500:
-            description: Server Error
-            body:
-              application/json:
-                type: error.ServerError
+          A flag, that when set to true, tells the service to skip the part of
+          the process where it would normally add the requested job to the
+          current users jobs collection.
+        type: boolean
+        default: false
+        required: false
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.QueryJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
-    /result:
+  post:
+    displayName: Restart Job
+    description: Causes the target job to be restarted (if it is expired).
+    responses:
+      200:
+        description: Job was successfully requeued for execution.
+        body:
+          application/json:
+            type: lib.QueryJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  delete:
+    displayName: Delete Job
+    description: Deletes the target job from the user's job collection.
+    responses:
+      204:
+        description: |
+          Job was successfully deleted from the user's job collection.
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job Query Retrieval Endpoint                                               #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/query:
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
+
+  get:
+    displayName: Get Query
+    description: |
+      Returns the query for the target job, optionally as a download.
+    queryParameters:
+      dl:
+        displayName: Download?
+        description: |
+          If set to true, the server will send a `Content-Disposition`
+          header in the response indicating that the query file should be
+          downloaded rather than rendered.
+        type: boolean
+    responses:
+      200:
+        description: Success
+        body:
+          text/plain:
+            type: string
+            displayName: Job Query
+            description: Raw query text
+      401:
+        description: Unauthorized
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: Not Found
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job Result Retrieval Endpoint                                              #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/result:
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
 
 /statuses:
+  displayName: Bulk Statuses
+
   post:
+    displayName: Bulk Status Lookup
     description: |
       Lookup the statuses for the list of job IDs posted.
       
