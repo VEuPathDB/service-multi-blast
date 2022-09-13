@@ -5,6 +5,7 @@ build/
 bin/
 tmp/
 .bin/
+blastdb/
 
 *.tmp
 *.bak

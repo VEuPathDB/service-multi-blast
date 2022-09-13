@@ -1,9 +1,34 @@
 /**
+ * Initialize the repository for development.
+ */
+tasks.create("initialize") {
+  group = "monorepo"
+  doLast {
+    // Async-Platform based subprojects
+    arrayOf(
+      "query-service",
+      "report-service",
+    ).forEach { proj ->
+      // Get a handle on the directory containing the subproject.
+      val projDir = file(proj)
+
+      // Execute the "install-dev-env" make target in each subproject.
+      with(ProcessBuilder("make", "install-dev-env").directory(projDir).start()) {
+        errorStream.transferTo(System.err)
+        require(waitFor() == 0)
+      }
+    }
+  }
+}
+
+
+/**
  * Dev Docker Compose Stack Build
  *
  * Builds the development docker compose stack images.
  */
 tasks.create("dev-compose-build") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -32,6 +57,7 @@ tasks.create("dev-compose-build") {
  * Spins up the development docker compose stack in the background.
  */
 tasks.create("dev-compose-up") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -59,6 +85,7 @@ tasks.create("dev-compose-up") {
  * Stops a running development docker compose stack.
  */
 tasks.create("dev-compose-stop") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -85,6 +112,7 @@ tasks.create("dev-compose-stop") {
  * Tears down a running development docker compose stack.
  */
 tasks.create("dev-compose-down") {
+  group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
@@ -100,6 +128,46 @@ tasks.create("dev-compose-down") {
 
       if (waitFor() != 0)
         throw RuntimeException("Failed to tear down docker compose stack.")
+    }
+  }
+}
+
+
+/**
+ * RAML Based HTML Documentation Generation
+ *
+ * Generates the HTML docs for the RAML in each service and moves the output to
+ * the `docs` directory.
+ */
+tasks.create("raml-gen-docs") {
+  group = "monorepo"
+  doLast {
+    // List of subprojects with APIs
+    val subProjects = arrayOf("query-service", "report-service")
+
+    // For each of the defined subprojects
+    for (svc in subProjects) {
+      // Get a handle on the subproject directory
+      val subDir = file(svc)
+
+      // Generate the HTML API docs.
+      with(
+        ProcessBuilder("make", "raml-gen-docs")
+          .directory(subDir)
+          .start()
+      ) {
+        errorStream.transferTo(System.err)
+        require(waitFor() == 0)
+      }
+
+      // Ensure the docs directory exists
+      with(file("docs/$svc"), File::mkdirs)
+
+      // Copy the generated HTML file to the docs directory.
+      with(file("$svc/docs/api.html")) {
+        copyTo(file("docs/$svc/api.html"), true)
+        delete()
+      }
     }
   }
 }
