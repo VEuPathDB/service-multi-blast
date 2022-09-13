@@ -4,6 +4,10 @@
 tasks.create("initialize") {
   group = "monorepo"
   doLast {
+    // Create blast input directory.  The blastdb directory is required to spin
+    // up the service locally.
+    file("blastdb").mkdir()
+
     // Async-Platform based subprojects
     arrayOf(
       "query-service",
