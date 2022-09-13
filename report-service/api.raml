@@ -47,4 +47,45 @@ uses:
 
 
 /jobs/{job-id}/files:
+  displayName: Job Files
 
+  get:
+    displayName: List Job Files
+    description: |
+      Lists the result files available for a given job.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: array
+            items:
+              lib.FileEntry
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+/jobs/{job-id}/files/{filename}:
