@@ -8,8 +8,11 @@ types:
     type: object
     additionalProperties: false
     properties:
-      jobConfig:
-        type: ReportJobConfig
+      queryJobID:
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
         required: true
       blastConfig:
         type: blast.BlastFormatConfig
@@ -21,16 +24,63 @@ types:
         required: false
         default: null
 
-  ReportJobConfig:
+  ReportJobDetails:
     type: object
     additionalProperties: false
     properties:
-      queryJobID:
+      reportJobID:
+        displayName: Report Job ID
         type: string
         minLength: 32
         maxLength: 32
         pattern: '^[\dA-Fa-f]{32}$'
         required: true
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      status:
+        displayName: Job Status
+        type: JobStatus
+        required: true
+      blastConfig:
+        type: blast.BlastFormatConfig
+        required: true
+      meta:
+        type: ReportJobMeta
+        required: false
+        default: null
+
+  ReportJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      status:
+        displayName: Job Status
+        type: JobStatus
+        required: true
+      meta:
+        displayName: Job Meta
+        type: ReportJobMeta
+        required: false
+        default: null
 
   ReportJobMeta:
     type: object
@@ -44,3 +94,27 @@ types:
         type: string
         required: false
         default: null
+
+  FileEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        type: string
+        required: true
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
+        type: integer
+        format: long
+        required: true
+
+  JobStatus:
+    type: string
+    enum:
+    - queued
+    - in-progress
+    - complete
+    - failed
+    - expired
