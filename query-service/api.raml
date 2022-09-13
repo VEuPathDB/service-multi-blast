@@ -222,6 +222,7 @@ uses:
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 /jobs/{job-id}/query:
+  displayName: Job Query
   uriParameters:
     job-id:
       type: string
@@ -244,6 +245,12 @@ uses:
     responses:
       200:
         description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Present if the dl query param was sent in with the request.
+            type: string
+            required: false
         body:
           text/plain:
             type: string
@@ -271,12 +278,34 @@ uses:
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 /jobs/{job-id}/result:
+  displayName: Job Result
   uriParameters:
     job-id:
       type: string
       pattern: ^[\dA-Fa-f]{32}$
       minLength: 32
       maxLength: 32
+  get:
+    displayName: Download Job Result
+    description: |
+      Downloads the ASN1 result from the blast query execution.
+    responses:
+      200:
+        description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Sent to indicate the result is to be downloaded rather than
+              rendered in the browser.
+            type: string
+            required: true
+        body:
+          text/plain:
+            type: string
+            displayName: Job Result
+            description: Raw job result.
+
+
 
 /statuses:
   displayName: Bulk Statuses
