@@ -1,0 +1,222 @@
+#%RAML 1.0 Library
+
+types:
+  BlastFormatConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      formatType:
+        displayName: Format Type
+        type: BlastOutFormat
+        required: false
+        default: pairwise
+      formatFields:
+        displayName: Report Fields
+        description: |
+          Fields to include in the generated report.
+          
+          Custom field selection is only valid for the following `formatType`
+          values:
+          - `tabular`
+          - `tabular-with-comments`
+          - `csv`
+          - `sam`
+          
+          For all other `formatType` values, including this field is an error.
+        type: array
+        items:
+          type: BlastOutField
+        required: false
+        default: null
+      showGIs:
+        displayName: Show GIs
+        description: Show NCBI GIs in deflines?
+        type: boolean
+        required: false
+        default: false
+      numDescriptions:
+        displayName: Number of Descriptions
+        description: |
+          Number of database sequences to show one-line descriptions for.
+          
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      numAlignments:
+        displayName: Number of Alignments
+        description: |
+          Number of database sequences to show alignments for.
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      lineLength:
+        displayName: Line Length
+        description: |
+          Line length for formatting alignments
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 1
+        required: false
+        default: null
+      sortHits:
+        displayName: Sort Hits
+        description: |
+          Sorting option for hits.
+          
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+        type: BlastHitSorting
+        required: false
+        default: null
+      sortHSPs:
+        displayName: Sort HSPs
+        description: |
+          Sorting option for HSPs.
+          
+          Only applicable for `formatType` value `pairwise`.
+        type: BlastHSPSorting
+        required: false
+        default: null
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: |
+          Maximum number of aligned sequences to keep.
+          
+          Incompatible with:
+          - `numDescriptions`
+          - `numAlignments`
+        type: integer
+        minimum: 5
+        required: false
+        default: null
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        required: false
+        default: false
+
+  BlastOutFormat:
+    type: string
+    enum:
+    - pairwise
+    - query-anchored-with-identities
+    - query-anchored-no-identities
+    - flat-query-anchored-with-identities
+    - flat-query-anchored-no-identities
+    - xml
+    - tabular
+    - tabular-with-comments
+    - seqalign-text
+    - seqalign-binary
+    - csv
+    - asn1
+    - seqalign-json
+    - multi-file-blast-json
+    - multi-file-blast-xml2
+    - Single-file-blast-json
+    - Single-file-blast-xml2
+    - sam
+    - organism-report
+
+  BlastOutField:
+    type: string
+    enum:
+    - qseqid
+    - qgi
+    - qacc
+    - qaccver
+    - qlen
+    - sseqid
+    - sallseqid
+    - sgi
+    - sallgi
+    - sacc
+    - saccver
+    - sallacc
+    - slen
+    - qstart
+    - qend
+    - sstart
+    - send
+    - qseq
+    - sseq
+    - evalue
+    - bitscore
+    - score
+    - length
+    - pident
+    - nident
+    - mismatch
+    - positive
+    - gapopen
+    - gaps
+    - ppos
+    - frames
+    - qframe
+    - sframe
+    - btop
+    - staxid
+    - ssciname
+    - scomname
+    - sblastname
+    - sskingdom
+    - staxids
+    - sscinames
+    - scomnames
+    - sblastnames
+    - sskingdoms
+    - stitle
+    - salltitles
+    - sstrand
+    - qcovs
+    - qcovhsp
+    - qcovus
+    - SQ
+    - SR
+    - std
+
+  BlastHitSorting:
+    type: string
+    enum:
+    - by-evalue
+    - by-bit-score
+    - by-total-score
+    - by-percent-identity
+    - by-query-coverage
+
+  BlastHSPSorting:
+    type: string
+    enum:
+    - by-hsp-evalue
+    - by-hsp-score
+    - by-hsp-query-start
+    - by-hsp-percent-identity
+    - by-hsp-subject-start
