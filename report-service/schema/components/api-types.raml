@@ -1,0 +1,46 @@
+#%RAML 1.0 Library
+
+uses:
+  blast: blast-types.raml
+
+types:
+  ReportJobRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      jobConfig:
+        type: ReportJobConfig
+        required: true
+      blastConfig:
+        type: blast.BlastFormatConfig
+        required: false
+        default:
+          formatType: pairwise
+      meta:
+        type: ReportJobMeta
+        required: false
+        default: null
+
+  ReportJobConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+
+  ReportJobMeta:
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        type: string
+        required: false
+        default: null
+      description:
+        type: string
+        required: false
+        default: null
