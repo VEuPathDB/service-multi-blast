@@ -72,6 +72,10 @@ services:
       - minio
       - queue
       - queue-db
+    volumes:
+    - type: bind
+      source: ./blastdb
+      target: /blastdb/
     environment:
       # Postgres
       QUEUE_DB_HOST: queue-db
@@ -98,6 +102,8 @@ services:
       # Job Settings
       JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
 
+      SITE_BUILD: ${SITE_BUILD:-build-59}
+
   report-service:
     build:
       dockerfile: ../report-service/Dockerfile
@@ -108,6 +114,10 @@ services:
       - minio
       - queue
       - queue-db
+    volumes:
+    - type: bind
+      source: ./blastdb
+      target: /blastdb/
     environment:
       # Queue Platform Postgres
       QUEUE_DB_HOST: queue-db
@@ -133,3 +143,5 @@ services:
 
       # Job Settings
       JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
+
+      SITE_BUILD: ${SITE_BUILD:-build-59}
