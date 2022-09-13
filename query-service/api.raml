@@ -36,7 +36,6 @@ uses:
           application/json:
             type: error.ServerError
 
-
   post:
     displayName: Create New Job
     description: Creates a new blast query job.
@@ -96,11 +95,42 @@ uses:
       
         As a side effect, interactions with this endpoint will cause the target
         job to be added to the requesting user's job collection if it was not
-        already present in that user's collection.
-        
-        THIS WILL JUST CAUSE ALL THE SUBJOBS TO BE LINKED TO THE USER
-        AUTOMATICALLY WHEN THEY REQUEST DETAILS...  THERE SHOULD BE A SEPARATE
-        SHARE MECHANISM.
+        already present in that user's collection.  This default behavior can be
+        defeated by using the `skip_job_add` query parameter.
+      queryParameters:
+        skip_job_add:
+          displayName: Skip Job Adding
+          description: |
+            A flag, that when set to true, tells the service to skip the part of
+            the process where it would normally add the requested job to the
+            current users jobs collection.
+          type: boolean
+          default: false
+          required: false
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              type: lib.QueryJobDetails
+        401:
+          description: |
+            No valid user authentication provided.
+          body:
+            application/json:
+              type: error.UnauthorizedError
+        404:
+          description: |
+            Target job does not exist.
+          body:
+            application/json:
+              type: error.NotFoundError
+        500:
+          description: Server Error
+          body:
+            application/json:
+              type: error.ServerError
+
 
     post:
       displayName: Restart Job
