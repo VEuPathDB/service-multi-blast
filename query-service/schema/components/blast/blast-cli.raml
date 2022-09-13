@@ -164,38 +164,21 @@ types:
     - tblastx
 
   BlastGenCode:
+    description: |
+      Translation Gen Code
+      
+      Valid values are:
+      - 1, 2, 3, 4, 5, 6
+      - 9, 10, 11, 12, 13, 14, 15, 16
+      - 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+      - 33
+      
+      This type _should_ be an enum, however the code generated from the RAML
+      when it _is_ an enum is broken.
     type: integer
     format: int8
-    enum:
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
-    - 6
-    #
-    - 9
-    - 10
-    - 11
-    - 12
-    - 13
-    - 14
-    - 15
-    - 16
-    #
-    - 21
-    - 22
-    - 23
-    - 24
-    - 25
-    - 26
-    - 27
-    - 28
-    - 29
-    - 30
-    - 31
-    #
-    - 33
+    minimum: 1
+    maximum: 33
 
   BlastLocation:
     type: object
