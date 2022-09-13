@@ -16,5 +16,5 @@ pluginManagement {
 
 include("query-service", "report-service")
 
-include("common:blast-db")
-findProject(":common:blast-db")?.name = "blast-db"
+//include("common:blast-db-path")
+//findProject(":common:blast-db-path")?.name = "blast-db-path"
