@@ -74,7 +74,7 @@ services:
       - queue-db
     volumes:
     - type: bind
-      source: ./blastdb
+      source: ../blastdb
       target: /blastdb/
     environment:
       # Postgres
@@ -116,7 +116,7 @@ services:
       - queue-db
     volumes:
     - type: bind
-      source: ./blastdb
+      source: ../blastdb
       target: /blastdb/
     environment:
       # Queue Platform Postgres
