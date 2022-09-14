@@ -4,6 +4,10 @@
 tasks.create("initialize") {
   group = "monorepo"
   doLast {
+    // Create blast input directory.  The blastdb directory is required to spin
+    // up the service locally.
+    file("blastdb").mkdir()
+
     // Async-Platform based subprojects
     arrayOf(
       "query-service",
@@ -167,6 +171,21 @@ tasks.create("raml-gen-docs") {
       with(file("$svc/docs/api.html")) {
         copyTo(file("docs/$svc/api.html"), true)
         delete()
+      }
+    }
+  }
+}
+
+allprojects {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      name = "GitHubPackages"
+      url  = uri("https://maven.pkg.github.com/veupathdb/packages")
+      credentials {
+        username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+        password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
       }
     }
   }
