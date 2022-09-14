@@ -34,4 +34,7 @@ object ServiceOptions : Options() {
   val maxNASeqSize       = NBEnv.require("MAX_NA_SEQ_SIZE") { it.toInt() }
   val maxAASeqSize       = NBEnv.require("MAX_AA_SEQ_SIZE") { it.toInt() }
 
+  val queueNamePrimary   = NBEnv.require("QUEUES_QUERY_NAME_1")
+  val queueNameSecondary = NBEnv.require("QUEUES_QUERY_NAME_2")
+
 }

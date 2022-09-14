@@ -63,6 +63,12 @@ java {
   }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+}
+
 tasks.shadowJar {
   exclude("**/Log4j2Plugins.dat")
   archiveFileName.set("service.jar")
