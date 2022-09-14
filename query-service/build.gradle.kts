@@ -133,6 +133,8 @@ dependencies {
   implementation("io.prometheus:simpleclient:0.16.0")
   implementation("io.prometheus:simpleclient_common:0.16.0")
 
+  implementation("io.foxcapades.lib:env-access:1.0.0")
+
 
   // Recommended Dependencies
   //
@@ -143,5 +145,5 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 
   // Mockito Test Mocking
-  testImplementation("org.mockito:mockito-core:4.7.0")
+  testImplementation("org.mockito:mockito-core:4.8.0")
 }
