@@ -112,6 +112,9 @@ services:
       MAX_NA_SEQ_SIZE: ${MAX_NA_SEQ_SIZE:-1048576}
       MAX_AA_SEQ_SIZE: ${MAX_AA_SEQ_SIZE:-102400}
 
+      QUEUES_QUERY_NAME_1: ${QUEUES_QUERY_NAME_1:-primary-queries}
+      QUEUES_QUERY_NAME_2: ${QUEUES_QUERY_NAME_2:-secondary-queries}
+
   report-service:
     build:
       dockerfile: ../report-service/Dockerfile
@@ -160,3 +163,5 @@ services:
 
       # Build Target
       SITE_BUILD: ${SITE_BUILD:-build-59}
+
+      QUEUES_REPORT_NAME: ${QUEUES_REPORT_NAME:-report-jobs}
