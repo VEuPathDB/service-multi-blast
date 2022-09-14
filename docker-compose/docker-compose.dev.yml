@@ -73,7 +73,16 @@ services:
     - queue
     - queue-db
     environment:
-      # Postgres
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      LDAP_SERVER: ${LDAP_SERVERS:?}
+      ORACLE_BASE_DN: ${ORACLE_BASE_DN:?}
+
+      USER_DB_TNS_NAME: ${USER_DB_TNS_NAME:?}
+      USER_DB_USER: ${USER_DB_USER:?}
+      USER_DB_PASS: ${USER_DB_PASS:?}
+      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
+
       QUEUE_DB_HOST: queue-db
       QUEUE_DB_NAME: ${QUERY_SERVICE_PG_DB_NAME:?}
       QUEUE_DB_PORT: ${POSTGRES_PORT:-5432}
@@ -81,24 +90,20 @@ services:
       QUEUE_DB_PASSWORD: ${QUERY_SERVICE_PG_PASS:?}
       QUEUE_DB_POOL_SIZE: ${QUERY_SERVICE_PG_POOL_SIZE:-10}
 
-      # RabbitMQ
       JOB_QUEUE_HOST: queue
       JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
       JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
       JOB_QUEUE_PORT: ${RABBITMQ_PORT:-5672}
       JOB_QUEUE_WORKERS: ${QUERY_SERVICE_QUEUE_POOL_SIZE:-5}
 
-      # Queue Platform Minio
       S3_HOST: minio
       S3_BUCKET: ${QUERY_SERVICE_S3_BUCKET:?}
       S3_ACCESS_TOKEN: ${MINIO_ROOT_USER:?}
       S3_SECRET_KEY: ${MINIO_ROOT_PASS:?}
       S3_PORT: ${MINIO_PORT:-9000}
 
-      # Job Settings
       JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
 
-      # Build Target
       SITE_BUILD: ${SITE_BUILD:-build-59}
 
       MAX_QUERIES_PER_JOB: ${MAX_QUERIES_PER_JOB:-100}
@@ -118,6 +123,16 @@ services:
     - queue
     - queue-db
     environment:
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      LDAP_SERVER: ${LDAP_SERVERS:?}
+      ORACLE_BASE_DN: ${ORACLE_BASE_DN:?}
+
+      USER_DB_TNS_NAME: ${USER_DB_TNS_NAME:?}
+      USER_DB_USER: ${USER_DB_USER:?}
+      USER_DB_PASS: ${USER_DB_PASS:?}
+      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
+
       # Queue Platform Postgres
       QUEUE_DB_HOST: queue-db
       QUEUE_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
