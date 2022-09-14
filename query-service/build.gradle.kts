@@ -4,6 +4,7 @@ plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "4.0.0"
   id("com.github.johnrengelman.shadow") version "7.1.2"
+  kotlin("jvm") version "1.7.10"
 }
 
 // configure VEupathDB container plugin
@@ -59,6 +60,12 @@ containerBuild {
 java {
   toolchain {
     languageVersion.set(JavaLanguageVersion.of(17))
+  }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+  kotlinOptions {
+    jvmTarget = "17"
   }
 }
 
@@ -132,6 +139,8 @@ dependencies {
   implementation("io.prometheus:simpleclient:0.16.0")
   implementation("io.prometheus:simpleclient_common:0.16.0")
 
+  implementation("io.foxcapades.lib:env-access:1.0.0")
+
 
   // Recommended Dependencies
   //
@@ -142,5 +151,5 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 
   // Mockito Test Mocking
-  testImplementation("org.mockito:mockito-core:4.7.0")
+  testImplementation("org.mockito:mockito-core:4.8.0")
 }
