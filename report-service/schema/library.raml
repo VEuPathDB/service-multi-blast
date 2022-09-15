@@ -7,26 +7,96 @@
 ################################################################################
 
 types:
-  ReverseRequest:
+  ReportJobRequest:
     type: object
     additionalProperties: false
     properties:
-      input: string
-  JobResponse:
-    type: object
-    additionalProperties: false
-    properties:
-      jobID:
+      queryJobID:
         type: string
         pattern: ^[\dA-Fa-f]{32}$
         minLength: 32
         maxLength: 32
-      status: JobStatus
-      queuePosition?:
+      blastConfig:
+        type: BlastFormatConfig
+        default:
+          formatType: pairwise
+        required: false
+      meta:
+        type: ReportJobMeta
+        default: null
+        required: false
+  ReportJobDetails:
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      blastConfig: BlastFormatConfig
+      meta:
+        type: ReportJobMeta
+        default: null
+        required: false
+  ReportJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      meta:
+        displayName: Job Meta
+        type: ReportJobMeta
+        default: null
+        required: false
+  ReportJobMeta:
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        type: string
+        default: null
+        required: false
+      description:
+        type: string
+        default: null
+        required: false
+  FileEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        type: string
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
         type: integer
-        format: int32
-  JobBulkStatusResponse: object
-  JobDataResponse: any
+        format: long
   JobStatus:
     type: string
     enum:
@@ -35,4 +105,218 @@ types:
       - complete
       - failed
       - expired
+  BlastFormatConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      formatType:
+        displayName: Format Type
+        type: BlastOutFormat
+        default: pairwise
+        required: false
+      formatFields:
+        displayName: Report Fields
+        description: |
+          Fields to include in the generated report.
+
+          Custom field selection is only valid for the following `formatType`
+          values:
+          - `tabular`
+          - `tabular-with-comments`
+          - `csv`
+          - `sam`
+
+          For all other `formatType` values, including this field is an error.
+        type: array
+        default: null
+        required: false
+        items: BlastOutField
+      showGIs:
+        displayName: Show GIs
+        description: Show NCBI GIs in deflines?
+        type: boolean
+        default: false
+        required: false
+      numDescriptions:
+        displayName: Number of Descriptions
+        description: |
+          Number of database sequences to show one-line descriptions for.
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 0
+      numAlignments:
+        displayName: Number of Alignments
+        description: |
+          Number of database sequences to show alignments for.
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 0
+      lineLength:
+        displayName: Line Length
+        description: |
+          Line length for formatting alignments
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 1
+      sortHits:
+        displayName: Sort Hits
+        description: |
+          Sorting option for hits.
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+        type: BlastHitSorting
+        default: null
+        required: false
+      sortHSPs:
+        displayName: Sort HSPs
+        description: |
+          Sorting option for HSPs.
+
+          Only applicable for `formatType` value `pairwise`.
+        type: BlastHSPSorting
+        default: null
+        required: false
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: |
+          Maximum number of aligned sequences to keep.
+
+          Incompatible with:
+          - `numDescriptions`
+          - `numAlignments`
+        type: integer
+        default: null
+        required: false
+        minimum: 5
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        default: false
+        required: false
+  BlastOutFormat:
+    type: string
+    enum:
+      - pairwise
+      - query-anchored-with-identities
+      - query-anchored-no-identities
+      - flat-query-anchored-with-identities
+      - flat-query-anchored-no-identities
+      - xml
+      - tabular
+      - tabular-with-comments
+      - seqalign-text
+      - seqalign-binary
+      - csv
+      - asn1
+      - seqalign-json
+      - multi-file-blast-json
+      - multi-file-blast-xml2
+      - Single-file-blast-json
+      - Single-file-blast-xml2
+      - sam
+      - organism-report
+  BlastOutField:
+    type: string
+    enum:
+      - qseqid
+      - qgi
+      - qacc
+      - qaccver
+      - qlen
+      - sseqid
+      - sallseqid
+      - sgi
+      - sallgi
+      - sacc
+      - saccver
+      - sallacc
+      - slen
+      - qstart
+      - qend
+      - sstart
+      - send
+      - qseq
+      - sseq
+      - evalue
+      - bitscore
+      - score
+      - length
+      - pident
+      - nident
+      - mismatch
+      - positive
+      - gapopen
+      - gaps
+      - ppos
+      - frames
+      - qframe
+      - sframe
+      - btop
+      - staxid
+      - ssciname
+      - scomname
+      - sblastname
+      - sskingdom
+      - staxids
+      - sscinames
+      - scomnames
+      - sblastnames
+      - sskingdoms
+      - stitle
+      - salltitles
+      - sstrand
+      - qcovs
+      - qcovhsp
+      - qcovus
+      - SQ
+      - SR
+      - std
+  BlastHitSorting:
+    type: string
+    enum:
+      - by-evalue
+      - by-bit-score
+      - by-total-score
+      - by-percent-identity
+      - by-query-coverage
+  BlastHSPSorting:
+    type: string
+    enum:
+      - by-hsp-evalue
+      - by-hsp-score
+      - by-hsp-query-start
+      - by-hsp-percent-identity
+      - by-hsp-subject-start
 
