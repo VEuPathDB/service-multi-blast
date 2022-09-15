@@ -9,6 +9,8 @@ import org.veupathdb.lib.container.jaxrs.server.Server
 
 class Main : Server() {
 
+  override fun newResourceConfig(opts: Options) = Resources(opts)
+
   override fun newOptions(): Options = ServiceOptions
 
   override fun postCliParse(opts: Options) {
@@ -22,7 +24,7 @@ class Main : Server() {
         .poolSize(ServiceOptions.queueDBPoolSize)
         .build())
       .jobConfig(AsyncJobConfig.builder()
-        .executorFactory()
+        .executorFactory(ExecutorFactory())
         .expirationDays(ServiceOptions.jobCacheTimeoutDays)
         .build())
       .s3Config(AsyncS3Config.builder()
