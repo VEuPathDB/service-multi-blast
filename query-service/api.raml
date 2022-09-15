@@ -177,6 +177,13 @@ uses:
         body:
           application/json:
             type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          Returned when attempting to restart a job that has not yet expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
       404:
         description: |
           Target job does not exist in the user's job collection.
@@ -304,6 +311,32 @@ uses:
             type: string
             displayName: Job Result
             description: Raw job result.
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to download the result for a job that has not
+          yet completed.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
 
 
