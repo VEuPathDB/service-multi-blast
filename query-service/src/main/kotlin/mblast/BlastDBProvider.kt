@@ -94,25 +94,8 @@ class BlastDBProvider(
    * This method makes no guarantee that the returned path actually points to
    * a valid Blast DB.
    *
-   * Testing the existence of a Blast DB at the given path can be done by
-   * appending `.nin` or `.pin` to the path and testing for the existence of
-   * those files.
-   *
-   * Testing for the existence a nucleotide database at the returned path:
-   * ```
-   * val path = dbProvider.dbPath(site, org, tgt)
-   *
-   * if (File("$path.nin").exists())
-   *   // do something
-   * ```
-   *
-   * Testing for the existence of a protein database at the returned path:
-   * ```
-   * val path = dbProvider.dbPath(site, org, tgt)
-   *
-   * if (File("$path.pin").exists())
-   *   // do something
-   * ```
+   * Testing for the existence of the database can be done with the [dbExists]
+   * method.
    *
    * @param site VEuPathDB site housing the Blast DB.
    *
@@ -125,6 +108,8 @@ class BlastDBProvider(
    * @param target Database target for the Blast DB.
    *
    * Example: `Pfalciparum3D7AnnotatedTranscripts`
+   *
+   * @return A path string for a Blast DB matching the given parameters.
    */
   fun dbPath(site: String, organism: String, target: String) =
     Paths.get(root, site, build, organism, target).pathString
