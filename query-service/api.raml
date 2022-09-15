@@ -370,12 +370,25 @@ uses:
           minLength: 32
           maxLength: 32
           pattern: '^[\dA-Fa-f]{32}$'
+        example:
+        - dd6060e5367622e574ffb38f32bfa049
+        - 77542f92d9e68ea80eff4852ecc41fa4
+        - 29e07b0b80181222ad33cbc8f679d672
+        - 748ba381dd81bb8de615319837ffa350
+        - f4757ea84c455b04a1d307d4ac33049d
     responses:
       200:
         description: Success
         body:
           application/json:
             type: lib.JobBulkStatusResponse
+            example:
+              dd6060e5367622e574ffb38f32bfa049: queued
+              29e07b0b80181222ad33cbc8f679d672: complete
+              748ba381dd81bb8de615319837ffa350: in-progress
+              f4757ea84c455b04a1d307d4ac33049d: expired
+
+
       500:
         description: |
           Internal Server Error
