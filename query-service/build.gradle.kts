@@ -140,7 +140,7 @@ dependencies {
   implementation("io.prometheus:simpleclient_common:0.16.0")
 
   implementation("io.foxcapades.lib:env-access:1.0.0")
-
+  implementation("org.veupathdb.lib:blast-types:6.0.0-2.11.0")
 
   // Recommended Dependencies
   //

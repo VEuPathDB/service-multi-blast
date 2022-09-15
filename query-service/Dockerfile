@@ -38,12 +38,11 @@ RUN ./gradlew clean test shadowJar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM alpine:3.16
+FROM ncbi/blast:2.13.0
 
 LABEL service="demo-service"
 
-RUN apk add --no-cache tzdata \
-    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime \
     && echo "America/New_York" > /etc/timezone
 
 ENV JAVA_HOME=/opt/jdk \
