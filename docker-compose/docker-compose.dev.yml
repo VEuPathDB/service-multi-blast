@@ -72,6 +72,10 @@ services:
     - minio
     - queue
     - queue-db
+    volumes:
+    - type: bind
+      source: ../blastdb
+      target: ${BLAST_DB_ROOT:-/blastdb}
     environment:
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
       SERVER_PORT: ${SERVER_PORT:-8080}
@@ -115,6 +119,8 @@ services:
       QUEUES_QUERY_NAME_1: ${QUEUES_QUERY_NAME_1:-primary-queries}
       QUEUES_QUERY_NAME_2: ${QUEUES_QUERY_NAME_2:-secondary-queries}
 
+      BLAST_DB_ROOT: ${BLAST_DB_ROOT:-/blastdb}
+
   report-service:
     build:
       dockerfile: ../report-service/Dockerfile
@@ -125,6 +131,10 @@ services:
     - minio
     - queue
     - queue-db
+    volumes:
+    - type: bind
+      source: ../blastdb
+      target: ${BLAST_DB_ROOT:-/blastdb}
     environment:
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
       SERVER_PORT: ${SERVER_PORT:-8080}
@@ -165,3 +175,5 @@ services:
       SITE_BUILD: ${SITE_BUILD:-build-59}
 
       QUEUES_REPORT_NAME: ${QUEUES_REPORT_NAME:-report-jobs}
+
+      BLAST_DB_ROOT: ${BLAST_DB_ROOT:-/blastdb}
