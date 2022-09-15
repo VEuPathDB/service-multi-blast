@@ -33,6 +33,9 @@ class BlastDBProvider(
    * @param target Database target for the Blast DB.
    *
    * Example: `Pfalciparum3D7AnnotatedTranscripts`
+   *
+   * @return `true` if the given parameters match either a nucleotide or protein
+   * database that exists on the filesystem, otherwise returns `false`.
    */
   fun dbExists(site: String, organism: String, target: String) =
     nucleotideDBExists(site, organism, target)
@@ -52,6 +55,9 @@ class BlastDBProvider(
    * @param target Database target for the Blast DB.
    *
    * Example: `Pfalciparum3D7AnnotatedTranscripts`
+   *
+   * @return `true` if the given parameters match a nucleotide database that
+   * exists on the filesystem, otherwise returns `false`.
    */
   fun nucleotideDBExists(site: String, organism: String, target: String) =
     Paths.get(root, site, build, organism, "$target.nin").exists()
@@ -70,6 +76,9 @@ class BlastDBProvider(
    * @param target Database target for the Blast DB.
    *
    * Example: `Pfalciparum3D7AnnotatedProteins`
+   *
+   * @return `true` if the given parameters match a protein database that
+   * exists on the filesystem, otherwise returns `false`.
    */
   fun proteinDBExists(site: String, organism: String, target: String) =
     Paths.get(root, site, build, organism, "$target.pin").exists()
@@ -104,6 +113,18 @@ class BlastDBProvider(
    * if (File("$path.pin").exists())
    *   // do something
    * ```
+   *
+   * @param site VEuPathDB site housing the Blast DB.
+   *
+   * Example: `PlasmoDB`
+   *
+   * @param organism Target organism for the Blast DB.
+   *
+   * Example: `Pfalciparum3D7`
+   *
+   * @param target Database target for the Blast DB.
+   *
+   * Example: `Pfalciparum3D7AnnotatedTranscripts`
    */
   fun dbPath(site: String, organism: String, target: String) =
     Paths.get(root, site, build, organism, target).pathString
