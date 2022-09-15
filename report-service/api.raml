@@ -10,6 +10,12 @@ uses:
   error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/errors.raml
   lib: schema/library.raml
 
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Job Listing                                                               #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs:
   displayName: Jobs
 
@@ -33,26 +39,113 @@ uses:
     description: Creates a new report job from the posted configuration.
 
 
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Job Details                                                               #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs/{job-id}:
   displayName: Job by ID
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
 
   get:
     displayName: Get Job by ID
     description: Lookup a job's details by the job's ID.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
 
   post:
     displayName: Rerun Job
     description: |
       Requeues a job to be executed if the job was previously expired.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+
+          Returned when attempting to restart a job that has not yet expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
 
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    File Listing                                                              #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs/{job-id}/files:
   displayName: Job Files
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
 
   get:
     displayName: List Job Files
     description: |
       Lists the result files available for a given job.
+      
+      This list will consist of the raw output(s) of the report job as well as
+      a zip file named `report.zip` containing all of those outputs.
     responses:
       200:
         description: Success
@@ -61,6 +154,13 @@ uses:
             type: array
             items:
               lib.FileEntry
+            example:
+            - name: somefile1.txt
+              size: 1023
+            - name: somefile2.json
+              size: 58372
+            - name: report.zip
+              size: 10234
       401:
         description: |
           No valid user authentication provided.
@@ -88,4 +188,138 @@ uses:
           application/json:
             type: error.ServerError
 
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    File Download                                                             #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs/{job-id}/files/{filename}:
+  displayName: Job File by Name
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: Get Job File by Name
+    description: |
+      Retrieves/downloads a target file from the report job output files.
+    queryParameters:
+      dl:
+        displayName: Download
+        description: |
+          When set to true, indicates that the service should mark the returned
+          file as an attachment using the `Content-Disposition` header to cause
+          the file to be downloaded by the browser rather than rendered.
+        type: boolean
+        required: false
+        default: false
+    responses:
+      200:
+        description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Present if the dl query parameter was sent in with the request.
+            type: string
+            required: false
+        body:
+          '*/*':
+            type: any
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    stderr retrieval                                                          #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/stderr:
+  displayName: Job STDERR Output
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: Get STDERR Output
+    description: |
+      Returns the stderr output for the blast tool execution for this job.
+      
+      This output may be empty.
+    responses:
+      200:
+        description: Success
+        body:
+          text/plain:
+            type: any
+            example: |
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 1: 1, 62-63
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 2: 44-46
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 3: 27-29
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 4: 10-12, 73-75
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 5: 56-58
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 6: 39-41
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
