@@ -1,4 +1,4 @@
-CREATE SCHEMA AUTHORIZATION mblast;
+CREATE USER mblast NO AUTHENTICATION;
 
 
 CREATE TABLE mblast.query_configs (
