@@ -33,10 +33,71 @@ uses:
         minLength: 32
         maxLength: 32
         pattern: '^[\dA-Fa-f]{32}$'
+    responses:
+      200:
+        description: |
+          Success
+          
+          Returns a list of report jobs.
+        body:
+          application/json:
+            type: array
+            items:
+              type: lib.ReportJobListEntry
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
   post:
     displayName: Create Job
     description: Creates a new report job from the posted configuration.
+    body:
+      application/json:
+        type: lib.ReportJobRequest
+    responses:
+      200:
+        description: |
+          Success
+          
+          Job was submitted successfully and the job details have been returned.
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      400:
+        description: |
+          Bad Request
+          
+          Request body could not be parsed into a config object.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      422:
+        description: |
+          Unprocessable Request
+          
+          Job configuration was semantically invalid and could not be submitted.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
 
 # ---------------------------------------------------------------------------- #
@@ -121,7 +182,6 @@ uses:
             type: error.ServerError
 
 
-
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #    File Listing                                                              #
@@ -172,7 +232,7 @@ uses:
           Forbidden.
           
           Returned when attempting to list the files for a job that is not yet
-          complete.
+          complete or has expired.
         body:
           application/json:
             type: error.ForbiddenError
@@ -211,7 +271,7 @@ uses:
     description: |
       Retrieves/downloads a target file from the report job output files.
     queryParameters:
-      dl:
+      download:
         displayName: Download
         description: |
           When set to true, indicates that the service should mark the returned
@@ -226,7 +286,8 @@ uses:
         headers:
           Content-Disposition:
             description: |
-              Present if the dl query parameter was sent in with the request.
+              Present if the `download` query parameter was sent in with the
+              request.
             type: string
             required: false
         body:
@@ -243,7 +304,7 @@ uses:
           Forbidden.
           
           Returned when attempting to list the files for a job that is not yet
-          complete.
+          complete or has expired.
         body:
           application/json:
             type: error.ForbiddenError
@@ -307,7 +368,7 @@ uses:
           Forbidden.
           
           Returned when attempting to list the files for a job that is not yet
-          complete.
+          complete or has expired.
         body:
           application/json:
             type: error.ForbiddenError
