@@ -207,6 +207,12 @@ uses:
       204:
         description: |
           Job was successfully deleted from the user's job collection.
+          
+          This does not mean the job was deleted, it will continue to exist
+          until it expires.
+          
+          If a user deletes a job from their job collection but then re-accesses
+          that job by job-url, the job will be re-added to their collection.
       401:
         description: |
           No valid user authentication provided.
