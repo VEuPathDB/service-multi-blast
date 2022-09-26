@@ -10,7 +10,7 @@ import kotlin.io.path.pathString
  * Provides functionality for testing the existence of and getting the raw paths
  * to target Blast databases on the filesystem.
  *
- * @author Elizabeth Harper - https://github.com/Foxcapades
+ * @author Elizabeth Paige Harper - https://github.com/Foxcapades
  * @since 2.0.0
  */
 class BlastDBProvider(
