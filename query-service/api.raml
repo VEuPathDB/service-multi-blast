@@ -127,16 +127,16 @@ uses:
       As a side effect, interactions with this endpoint will cause the target
       job to be added to the requesting user's job collection if it was not
       already present in that user's collection.  This default behavior can be
-      defeated by using the `skip_job_add` query parameter.
+      defeated by setting the `saveJob` query parameter to `false`.
     queryParameters:
-      skip_job_add:
+      saveJob:
         displayName: Skip Job Adding
         description: |
-          A flag, that when set to true, tells the service to skip the part of
-          the process where it would normally add the requested job to the
+          A flag, that when set to `false`, tells the service to skip the part
+          of the process where it would normally add the requested job to the
           current users jobs collection.
         type: boolean
-        default: false
+        default: true
         required: false
     responses:
       200:
