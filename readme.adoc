@@ -76,7 +76,7 @@ Setup local blastdb path::
 . Use SFTP or some other tool to download target databases for local use.
 +
 ----
-./
+service-multi-blast/
   |- blastdb/
        |- PlasmoDB/
             |- build-59/
