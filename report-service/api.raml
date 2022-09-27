@@ -13,7 +13,7 @@ uses:
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
-#    Job Listing                                                               #
+#    Jobs                                                                      #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 /jobs:
@@ -57,7 +57,7 @@ uses:
             type: error.ServerError
 
   post:
-    displayName: Create Job
+    displayName: Create New Job
     description: Creates a new report job from the posted configuration.
     body:
       application/json:
@@ -143,7 +143,6 @@ uses:
         body:
           application/json:
             type: error.ServerError
-
 
   post:
     displayName: Rerun Job
@@ -384,3 +383,67 @@ uses:
           application/json:
             type: error.ServerError
 
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Bulk Status Check                                                         #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/statuses:
+  displayName: Bulk Statuses
+
+  post:
+    displayName: Bulk Status Lookup
+    description: |
+      Lookup the statuses for the list of job IDs posted.
+      
+      The response will be a mapping whose keys are the posted job IDs and
+      whose values are the status of the job represented by the associated ID.
+      
+      If a job ID in the input list does not appear to be a real/valid job ID,
+      the ID will be omitted from the response object.
+      
+      Each status value will be a valid JobStatus enum item, meaning they will
+      each be one of:
+      
+      * "queued"
+      * "in-progress"
+      * "complete"
+      * "failed"
+      * "expired"
+    body:
+      application/json:
+        type: array
+        items:
+          type: string
+          minLength: 32
+          maxLength: 32
+          pattern: '^[\dA-Fa-f]{32}$'
+        example:
+        - dd6060e5367622e574ffb38f32bfa049
+        - 77542f92d9e68ea80eff4852ecc41fa4
+        - 29e07b0b80181222ad33cbc8f679d672
+        - 748ba381dd81bb8de615319837ffa350
+        - f4757ea84c455b04a1d307d4ac33049d
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.JobBulkStatusResponse
+            example:
+              dd6060e5367622e574ffb38f32bfa049: queued
+              29e07b0b80181222ad33cbc8f679d672: complete
+              748ba381dd81bb8de615319837ffa350: in-progress
+              f4757ea84c455b04a1d307d4ac33049d: expired
+
+
+      500:
+        description: |
+          Internal Server Error
+          
+          An unexpected exception was thrown while attempting to process
+          the request.
+        body:
+          application/json:
+            type: error.ServerError
