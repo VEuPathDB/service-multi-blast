@@ -25,6 +25,11 @@ included `./gradlew` script.
 `initialize`::
 Initializes the repository for local development.
 +
+This target performs all the necessary setup steps at the root level of the
+project and in all the subprojects to put the project into a state where it
+should be buildable locally assuming the environment has the necessary
+prerequisites.
++
 .Example
 [source, bash]
 ----
