@@ -124,6 +124,29 @@ types:
         default: false
 
   BlastOutFormat:
+    displayName: Blast Report Format
+    description: |
+      | Identifier                          | Description                             |
+      | ----------------------------------- | --------------------------------------- |
+      | pairwise                            | Pairwise                                |
+      | query-anchored-with-identities      | Query-anchored showing identities       |
+      | query-anchored-no-identities        | Query-anchored no identities            |
+      | flat-query-anchored-with-identities | Flat query-anchored showing identities  |
+      | flat-query-anchored-no-identities   | Flat query-anchored no identities       |
+      | xml                                 | BLAST XML                               |
+      | tabular                             | Tabular                                 |
+      | tabular-with-comments               | Tabular with comment lines              |
+      | seqalign-text                       | Seqalign (Text ASN.1)                   |
+      | seqalign-binary                     | Seqalign (Binary ASN.1)                 |
+      | csv                                 | Comma-separated values                  |
+      | asn1                                | BLAST archive (ASN.1)                   |
+      | seqalign-json                       | Seqalign (JSON)                         |
+      | multi-file-blast-json               | Multiple-file BLAST JSON                |
+      | multi-file-blast-xml2               | Multiple-file BLAST XML2                |
+      | Single-file-blast-json              | Single-file BLAST JSON                  |
+      | Single-file-blast-xml2              | Single-file BLAST XML2                  |
+      | sam                                 | Sequence Alignment/Map (SAM)            |
+      | organism-report                     | Organism Report                         |
     type: string
     enum:
     - pairwise
