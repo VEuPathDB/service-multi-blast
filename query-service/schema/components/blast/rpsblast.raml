@@ -1,0 +1,107 @@
+#%RAML 1.0 Library
+
+uses:
+  base: ./blast-cli.raml
+
+types:
+  RPSBlastConfig:
+    type: base.BlastQueryConfig
+    discriminatorValue: rpsblast
+    additionalProperties: false
+    properties:
+      compBasedStats:
+        displayName: Composition Based Statistics
+        description: |
+          Use composition-based statistics:
+          
+          - No composition-based statistics
+          - Composition-based statistics as in NAR 29:2994-3005, 2001
+        type: RPSBlastCompBasedStats
+        required: false
+        default: comp-based-stats
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: base.BlastSeg
+        required: false
+        default: null
+      cullingLimit:
+        displayName: Culling Limit
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+          
+          Incompatible with: 
+          - `bestHitOverhang`
+          - `bestHitScoreEdge`
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      useSWTraceback:
+        displayName: Use Smith-Waterman Traceback
+        description: Compute locally optimal Smith-Waterman alignments?
+        type: boolean
+        required: false
+        default: false
+
+  RPSBlastCompBasedStats:
+    type: string
+    enum:
+    - none
+    - comp-based-stats

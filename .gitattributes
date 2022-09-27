@@ -1,4 +1,4 @@
-*.html linguist-generated
+*.html linguist-documentation
 *.sql  linguist-detectable linguist-language=SQL
 
 query-service/schema/library.raml linguist-generated
