@@ -134,11 +134,13 @@ uses:
       that job.
     queryParameters:
       saveJob:
-        displayName: Skip Job Adding
+        displayName: Save Job
         description: |
-          A flag, that when set to `false`, tells the service to skip the part
-          of the process where it would normally add the requested job to the
-          current users jobs collection.
+          Flag that specifies whether the requested job should be saved to the
+          user's job collection.
+          
+          To maintain legacy job sharing behavior, this parameter defaults to
+          `true`.
         type: boolean
         default: true
         required: false
@@ -266,7 +268,8 @@ uses:
         headers:
           Content-Disposition:
             description: |
-              Present if the dl query param was sent in with the request.
+              Present if the `download` query param was sent in with the
+              request.
             type: string
             required: false
         body:
