@@ -2,88 +2,416 @@
 
 extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/base-service.raml
 
-title: Example Async JaxRS Container Service
-version: 1.0.0
+title: MultiBlast Query Service
+version: 2.0.0
 mediaType: application/json
 
 uses:
   error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/errors.raml
   lib: schema/library.raml
 
-#
-# Example Endpoints
-#
 
-/reverse:
-  post:
-    description: Reverses a given input string.
-    body:
-      application/json:
-        type: lib.ReverseRequest
-        example:
-          input: "hello world"
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job List Endpoint                                                          #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs:
+  displayName: Jobs
+
+  get:
+    displayName: Get Job List
+    description: Lists the current user's collected blast query jobs.
     responses:
       200:
-        description: |
-          Success
-          
-          Job was processed and queued successfully.
+        description: Success
         body:
           application/json:
-            type: lib.JobResponse
-            examples:
-              queued:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: queued
-                  queuePosition: 3
-              in-progress:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: in-progress
-              complete:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: complete
-              failed:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: failed
-              expired:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: expired
-      500:
+            type: array
+            items:
+              type: lib.QueryJobListEntry
+            example:
+            - queryJobID: 9f444b23ceec3ee5588cc4c784c16696
+              status: expired
+            - queryJobID: bc49f1a3bc36cd15b84890439d19d395
+              status: complete
+              meta:
+                summary: A blast job
+            - queryJobID: 297a61dda47317f11d8e50e6ab8508c9
+              status: failed
+              meta:
+                summary: Another blast job.
+                description: This job will fail.
+      401:
         description: |
-          Internal Server Error
-          
-          An unexpected exception was thrown while attempting to process
-          the request.
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      500:
+        description: Server Error
         body:
           application/json:
             type: error.ServerError
 
-# TODO: need the file upload patch in the gradle plugin for this
-/word-count:
   post:
-    description: Counts the words in an uploaded file.
+    displayName: Create New Job
+    description: Creates a new blast query job.
     body:
       multipart/form-data:
-        type: file
+        type: object
+        additionalProperties: false
+        properties:
+          config:
+            displayName: Job Configuration
+            type: lib.QueryJobRequest
+            required: true
+          query:
+            displayName: Query File
+            description: |
+              Optional file upload parameter for uploading multi-blast queries.
+              
+              **IMPORTANT**: Either this field or the job config's `query` field
+              MUST be set in order for a job to be valid.
+            type: file
+            required: false
     responses:
       200:
         description: |
-          Success
-          
-          Job was processed and queued successfully.
+          Query job was successfully submitted to the job queue for execution.
         body:
           application/json:
-            type: lib.JobResponse
+            type: lib.QueryJobDetails
+      400:
+        description: |
+          Invalid request body or parameters.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      422:
+        description: |
+          Invalid job configuration.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job By ID                                                                  #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}:
+  displayName: Job By ID
+  description: |
+    Operations on a singular job identified by the `{job-id}` URI parameter.
+
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
+
+  get:
+    displayName: Get Job Details
+    description: |
+      Returns details about the target job.
+    
+      As a side effect, interactions with this endpoint will cause the target
+      job to be added to the requesting user's job collection if it was not
+      already present in that user's collection.  This default behavior can be
+      defeated by setting the `saveJob` query parameter to `false`.
+      
+      The reason this is done is to maintain a legacy job sharing behavior where
+      a job is "shared with" a user automatically when they follow a link to
+      that job.
+    queryParameters:
+      saveJob:
+        displayName: Save Job
+        description: |
+          Flag that specifies whether the requested job should be saved to the
+          user's job collection.
+          
+          To maintain legacy job sharing behavior, this parameter defaults to
+          `true`.
+        type: boolean
+        default: true
+        required: false
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.QueryJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  post:
+    displayName: Restart Job
+    description: Causes the target job to be restarted (if it is expired).
+    responses:
+      200:
+        description: Job was successfully requeued for execution.
+        body:
+          application/json:
+            type: lib.QueryJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          Returned when attempting to restart a job that has not yet expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  delete:
+    displayName: Delete Job
+    description: Deletes the target job from the user's job collection.
+    responses:
+      204:
+        description: |
+          Job was successfully deleted from the user's job collection.
+          
+          This does not mean the job was deleted, it will continue to exist
+          until it expires.
+          
+          If a user deletes a job from their job collection but then re-accesses
+          that job by job-url, the job will be re-added to their collection.
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job Query Retrieval Endpoint                                               #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/query:
+  displayName: Job Query
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
+
+  get:
+    displayName: Get Query
+    description: |
+      Returns the query for the target job, optionally as a download.
+    queryParameters:
+      download:
+        displayName: Download
+        description: |
+          If set to true, the server will send a `Content-Disposition`
+          header in the response indicating that the query file should be
+          downloaded rather than rendered.
+        type: boolean
+        default: false
+    responses:
+      200:
+        description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Present if the `download` query param was sent in with the
+              request.
+            type: string
+            required: false
+        body:
+          text/plain:
+            type: string
+            displayName: Job Query
+            description: Raw query text
+      401:
+        description: Unauthorized
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: Not Found
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Job Result Retrieval Endpoint                                              #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/result:
+  displayName: Job Result
+  uriParameters:
+    job-id:
+      type: string
+      pattern: ^[\dA-Fa-f]{32}$
+      minLength: 32
+      maxLength: 32
+  get:
+    displayName: Download Job Result
+    description: |
+      Downloads the ASN1 result from the blast query execution.
+    queryParameters:
+      download:
+        displayName: Download
+        description: |
+          If set to true, the server will send a `Content-Disposition`
+          header in the response indicating that the result file should be
+          downloaded rather than rendered.
+        type: boolean
+        default: false
+    responses:
+      200:
+        description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Sent to indicate the result is to be downloaded rather than
+              rendered in the browser.
+            type: string
+            required: true
+        body:
+          text/plain:
+            type: string
+            displayName: Job Result
+            description: Raw job result.
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to download the result for a job that has not
+          yet completed.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+
+/statuses:
+  displayName: Bulk Statuses
+
+  post:
+    displayName: Bulk Status Lookup
+    description: |
+      Lookup the statuses for the list of job IDs posted.
+      
+      The response will be a mapping whose keys are the posted job IDs and
+      whose values are the status of the job represented by the associated ID.
+      
+      If a job ID in the input list does not appear to be a real/valid job ID,
+      the ID will be omitted from the response object.
+      
+      Each status value will be a valid JobStatus enum item, meaning they will
+      each be one of:
+      
+      * "queued"
+      * "in-progress"
+      * "complete"
+      * "failed"
+      * "expired"
+    body:
+      application/json:
+        type: array
+        items:
+          type: string
+          minLength: 32
+          maxLength: 32
+          pattern: '^[\dA-Fa-f]{32}$'
+        example:
+        - dd6060e5367622e574ffb38f32bfa049
+        - 77542f92d9e68ea80eff4852ecc41fa4
+        - 29e07b0b80181222ad33cbc8f679d672
+        - 748ba381dd81bb8de615319837ffa350
+        - f4757ea84c455b04a1d307d4ac33049d
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.JobBulkStatusResponse
+            example:
+              dd6060e5367622e574ffb38f32bfa049: queued
+              29e07b0b80181222ad33cbc8f679d672: complete
+              748ba381dd81bb8de615319837ffa350: in-progress
+              f4757ea84c455b04a1d307d4ac33049d: expired
+
+
       500:
         description: |
           Internal Server Error
@@ -93,202 +421,4 @@ uses:
         body:
           application/json:
             type: error.ServerError
-
-/jobs:
-  /{job-id}:
-    uriParameters:
-      job-id:
-        type: string
-        minLength: 32
-        maxLength: 32
-        pattern: '^[\dA-Fa-f]{32}$'
-    get:
-      description: Gets the status of the target job.
-      responses:
-        200:
-          description: |
-            Success
-            
-            The target job exists and its status returned.
-          body:
-            application/json:
-              type: lib.JobResponse
-              examples:
-                queued:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: queued
-                    queuePosition: 3
-                in-progress:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: in-progress
-                complete:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: complete
-                failed:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: failed
-                expired:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: expired
-        404:
-          description: |
-            Not Found
-            
-            The target `{job-id}` was not found.
-          body:
-            application/json:
-              type: error.NotFoundError
-        500:
-          description: |
-            Internal Server Error
-            
-            An unexpected exception was thrown while attempting to process
-            the request.
-          body:
-            application/json:
-              type: error.ServerError
-    /files:
-      get:
-        description: |
-          Lists the files available for a completed job.
-        responses:
-          200:
-            description: |
-              Success
-              
-              The job has completed and has files available.
-            body:
-              application/json:
-                type: string[]
-                example:
-                  - output
-          403:
-            description: |
-              Forbidden
-              
-              The job has not yet completed and thus cannot yet be queried for
-              files.
-            body:
-              application/json:
-                type: error.ForbiddenError
-          404:
-            description: |
-              Not Found
-              
-              The target `{job-id}` was not found.
-            body:
-              application/json:
-                type: error.NotFoundError
-          500:
-            description: |
-              Internal Server Error
-              
-              An unexpected exception was thrown while attempting to process
-              the request.
-            body:
-              application/json:
-                type: error.ServerError
-      /{file-name}:
-        uriParameters:
-          file-name:
-            type: string
-            minLength: 1
-        get:
-          description: |
-            Returns the target file from a completed job.
-          responses:
-            200:
-              description: |
-                Success
-                
-                The job has completed and the target file exists to return.
-              headers:
-                Content-Disposition:
-                  type: string
-                  example:
-                    value: attachment; filename=output.txt
-              body:
-                text/plain:
-                  type: any
-                  example: dlrow olleh
-            403:
-              description: |
-                Forbidden
-                
-                The job has not yet completed and thus cannot yet be queried for
-                files.
-              body:
-                application/json:
-                  type: error.ForbiddenError
-            404:
-              description: |
-                Not Found
-                
-                Either the target `{job-id}` was not found or no file with the
-                name `{file-name}` exists.
-              body:
-                application/json:
-                  type: error.NotFoundError
-            500:
-              description: |
-                Internal Server Error
-                
-                An unexpected exception was thrown while attempting to process
-                the request.
-              body:
-                application/json:
-                  type: error.ServerError
-
-  /statuses:
-    post:
-      description: |
-        Lookup the statuses for the list of job IDs posted.
-        
-        The response will be a mapping whose keys are the posted job IDs and
-        whose values are the status of the job represented by the associated ID.
-        
-        If a job ID in the input list does not appear to be a real/valid job ID,
-        the ID will be omitted from the response object.
-        
-        Each status value will be a valid JobStatus enum item, meaning they will
-        each be one of:
-        
-        * "queued"
-        * "in-progress"
-        * "complete"
-        * "failed"
-        * "expired"
-      body:
-        application/json:
-          type: array
-          items:
-            type: string
-            minLength: 32
-            maxLength: 32
-            pattern: '^[\dA-Fa-f]{32}$'
-      responses:
-        200:
-          description: Success
-          body:
-            application/json:
-              type: lib.JobBulkStatusResponse
-        500:
-          description: |
-            Internal Server Error
-            
-            An unexpected exception was thrown while attempting to process
-            the request.
-          body:
-            application/json:
-              type: error.ServerError
 
