@@ -18,5 +18,5 @@ include("query-service", "report-service")
 
 //include("common:blast-db-path")
 //findProject(":common:blast-db-path")?.name = "blast-db-path"
-include("common:query-util")
-findProject(":common:query-util")?.name = "query-util"
+//include("common:query-util")
+//findProject(":common:query-util")?.name = "query-util"
