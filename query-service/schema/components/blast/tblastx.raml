@@ -1,0 +1,177 @@
+#%RAML 1.0 Library
+
+uses:
+  base: ./blast-cli.raml
+
+types:
+  TBlastXConfig:
+    type: base.BlastQueryConfig
+    discriminatorValue: tblastx
+    additionalProperties: false
+    properties:
+      strand:
+        displayName: Strand
+        description: Query strand(s) to search against database/subject.
+        type: base.BlastStrand
+        required: false
+        default: both
+      queryGenCode:
+        displayName: Translation Genetic Code
+        description: |
+          Genetic code to use to translate query (see
+          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes
+          for details)
+        type: base.BlastGenCode
+        required: false
+        default: 1
+      wordSize:
+        displayName: Word Size
+        description: |
+          Word size for wordfinder algorithm (length of best perfect match).
+        type: integer
+        format: int
+        minimum: 2
+        required: false
+        default: null
+      maxIntronLength:
+        displayName: Max Intron Length
+        description: |
+          Length of the largest intron allowed in a translated nucleotide
+          sequence when linking multiple distinct alignments
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: 0
+      matrix:
+        displayName: Scoring Matrix
+        description: Scoring matrix name (normally BLOSUM62)
+        type: TBlastXMatrix
+        required: false
+        default: null
+      threshold:
+        displayName: Minimum Word Score Threshold
+        description: |
+          Minimum word score such that the word is added to the BLAST lookup
+          table.
+        type: number
+        format: double
+        minimum: 0.0
+        required: false
+        default: null
+      dbGenCode:
+        displayName: Translation Genetic Code
+        description: |
+          Genetic code to use to translate database/subjects (see
+          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes
+          for details)
+        type: base.BlastGenCode
+        required: false
+        default: 1
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: base.BlastSeg
+        required: false
+        default:
+          window: 12
+          locut: 2.2
+          hicut: 2.5
+      dbSoftMask:
+        displayName: DB Soft Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft masking
+          
+          Incompatible with: `dbHardMask`
+        type: string
+        required: false
+        default: null
+      dbHardMask:
+        displayName: DB Hard Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard masking
+          
+          Incompatible with:  `dbSoftMask`
+        type: string
+        required: false
+        default: null
+      cullingLimit:
+        displayName: Culling Limit
+        description: |
+          If the query range of a hit is enveloped by that of at least this many
+          higher-scoring hits, delete the hit
+          
+          Incompatible with: 
+          - `bestHitOverhang`
+          - `bestHitScoreEdge`
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+          
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+
+  TBlastXMatrix:
+    type: string
+    enum:
+    - BLOSUM45
+    - BLOSUM50
+    - BLOSUM62
+    - BLOSUM80
+    - BLOSUM90
+    - PAM30
+    - PAM70
+    - PAM250
