@@ -13,6 +13,44 @@ internal class ProteinQueryParserTest {
   inner class ParseQuery1 {
 
     @Nested
+    @DisplayName("When given an empty query")
+    inner class ZeroSequences1 {
+
+      @Test
+      @DisplayName("that has no defline")
+      fun t1() {
+        val inputs = arrayOf(
+          "",
+          "   ",
+          "\n\n\n   \n"
+        )
+
+        for (input in inputs) {
+          val tgt = ProteinQueryParser(1, 100)
+
+          assertThrows(EmptySequenceException::class.java) { tgt.parseQuery(input) }
+        }
+      }
+
+      @Test
+      @DisplayName("that has a defline")
+      fun t2() {
+        val inputs = arrayOf(
+          "> hoopla",
+          "> hoopla\n",
+          "> hoopla\n    ",
+          "> hoopla\n\n\n   \n"
+        )
+
+        for (input in inputs) {
+          val tgt = ProteinQueryParser(1, 100)
+
+          assertThrows(EmptySequenceException::class.java) { tgt.parseQuery(input) }
+        }
+      }
+    }
+
+    @Nested
     @DisplayName("When given a single sequence query")
     inner class SingleSequence1 {
 

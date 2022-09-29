@@ -138,7 +138,7 @@ abstract class QueryParser(
 
     // We _should_ have some stuff in the buffer for the final sequence in the
     // input query.
-    if (sequenceBuffer.isNotBlank()) {
+    if (charsInSequence > 0) {
 
       // We will have appended one extra newline to the end of the buffer due to
       // the way the [handleLine] method works.  Clip it off.
