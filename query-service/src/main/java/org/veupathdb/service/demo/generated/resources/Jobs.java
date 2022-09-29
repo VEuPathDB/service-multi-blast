@@ -1,184 +1,93 @@
 package org.veupathdb.service.demo.generated.resources;
 
 import java.util.List;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.GenericEntity;
-import jakarta.ws.rs.core.Response;
-import org.veupathdb.service.demo.generated.model.ForbiddenError;
-import org.veupathdb.service.demo.generated.model.JobBulkStatusResponse;
-import org.veupathdb.service.demo.generated.model.JobResponse;
-import org.veupathdb.service.demo.generated.model.NotFoundError;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import org.veupathdb.service.demo.generated.model.BadRequestError;
+import org.veupathdb.service.demo.generated.model.JobsPostMultipartFormData;
+import org.veupathdb.service.demo.generated.model.QueryJobDetails;
+import org.veupathdb.service.demo.generated.model.QueryJobListEntry;
 import org.veupathdb.service.demo.generated.model.ServerError;
+import org.veupathdb.service.demo.generated.model.UnauthorizedError;
+import org.veupathdb.service.demo.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.demo.generated.support.ResponseDelegate;
 
 @Path("/jobs")
 public interface Jobs {
   @GET
-  @Path("/{job-id}")
   @Produces("application/json")
-  GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") String jobId);
-
-  @GET
-  @Path("/{job-id}/files")
-  @Produces("application/json")
-  GetJobsFilesByJobIdResponse getJobsFilesByJobId(@PathParam("job-id") String jobId);
-
-  @GET
-  @Path("/{job-id}/files/{file-name}")
-  @Produces({
-      "application/json",
-      "text/plain"
-  })
-  GetJobsFilesByJobIdAndFileNameResponse getJobsFilesByJobIdAndFileName(
-      @PathParam("job-id") String jobId, @PathParam("file-name") String fileName);
+  GetJobsResponse getJobs();
 
   @POST
-  @Path("/statuses")
   @Produces("application/json")
-  @Consumes("application/json")
-  PostJobsStatusesResponse postJobsStatuses(List<String> entity);
+  @Consumes("multipart/form-data")
+  PostJobsResponse postJobs(JobsPostMultipartFormData entity);
 
-  class GetJobsByJobIdResponse extends ResponseDelegate {
-    private GetJobsByJobIdResponse(Response response, Object entity) {
+  class GetJobsResponse extends ResponseDelegate {
+    private GetJobsResponse(Response response, Object entity) {
       super(response, entity);
     }
 
-    private GetJobsByJobIdResponse(Response response) {
+    private GetJobsResponse(Response response) {
       super(response);
     }
 
-    public static GetJobsByJobIdResponse respond200WithApplicationJson(JobResponse entity) {
+    public static GetJobsResponse respond200WithApplicationJson(List<QueryJobListEntry> entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsByJobIdResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
-    }
-  }
-
-  class GetJobsFilesByJobIdResponse extends ResponseDelegate {
-    private GetJobsFilesByJobIdResponse(Response response, Object entity) {
-      super(response, entity);
-    }
-
-    private GetJobsFilesByJobIdResponse(Response response) {
-      super(response);
-    }
-
-    public static GetJobsFilesByJobIdResponse respond200WithApplicationJson(List<String> entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<String>> wrappedEntity = new GenericEntity<List<String>>(entity){};
+      GenericEntity<List<QueryJobListEntry>> wrappedEntity = new GenericEntity<List<QueryJobListEntry>>(entity){};
       responseBuilder.entity(wrappedEntity);
-      return new GetJobsFilesByJobIdResponse(responseBuilder.build(), wrappedEntity);
+      return new GetJobsResponse(responseBuilder.build(), wrappedEntity);
     }
 
-    public static GetJobsFilesByJobIdResponse respond403WithApplicationJson(ForbiddenError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(403).header("Content-Type", "application/json");
+    public static GetJobsResponse respond401WithApplicationJson(UnauthorizedError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdResponse(responseBuilder.build(), entity);
+      return new GetJobsResponse(responseBuilder.build(), entity);
     }
 
-    public static GetJobsFilesByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsFilesByJobIdResponse respond500WithApplicationJson(ServerError entity) {
+    public static GetJobsResponse respond500WithApplicationJson(ServerError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdResponse(responseBuilder.build(), entity);
+      return new GetJobsResponse(responseBuilder.build(), entity);
     }
   }
 
-  class GetJobsFilesByJobIdAndFileNameResponse extends ResponseDelegate {
-    private GetJobsFilesByJobIdAndFileNameResponse(Response response, Object entity) {
+  class PostJobsResponse extends ResponseDelegate {
+    private PostJobsResponse(Response response, Object entity) {
       super(response, entity);
     }
 
-    private GetJobsFilesByJobIdAndFileNameResponse(Response response) {
+    private PostJobsResponse(Response response) {
       super(response);
     }
 
-    public static HeadersFor200 headersFor200() {
-      return new HeadersFor200();
-    }
-
-    public static GetJobsFilesByJobIdAndFileNameResponse respond200WithTextPlain(Object entity,
-        HeadersFor200 headers) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "text/plain");
-      responseBuilder.entity(entity);
-      headers.toResponseBuilder(responseBuilder);
-      return new GetJobsFilesByJobIdAndFileNameResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsFilesByJobIdAndFileNameResponse respond403WithApplicationJson(
-        ForbiddenError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(403).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdAndFileNameResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsFilesByJobIdAndFileNameResponse respond404WithApplicationJson(
-        NotFoundError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdAndFileNameResponse(responseBuilder.build(), entity);
-    }
-
-    public static GetJobsFilesByJobIdAndFileNameResponse respond500WithApplicationJson(
-        ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new GetJobsFilesByJobIdAndFileNameResponse(responseBuilder.build(), entity);
-    }
-
-    public static class HeadersFor200 extends HeaderBuilderBase {
-      private HeadersFor200() {
-      }
-
-      public HeadersFor200 withContentDisposition(final String p) {
-        headerMap.put("Content-Disposition", String.valueOf(p));;
-        return this;
-      }
-    }
-  }
-
-  class PostJobsStatusesResponse extends ResponseDelegate {
-    private PostJobsStatusesResponse(Response response, Object entity) {
-      super(response, entity);
-    }
-
-    private PostJobsStatusesResponse(Response response) {
-      super(response);
-    }
-
-    public static PostJobsStatusesResponse respond200WithApplicationJson(
-        JobBulkStatusResponse entity) {
+    public static PostJobsResponse respond200WithApplicationJson(QueryJobDetails entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PostJobsStatusesResponse(responseBuilder.build(), entity);
+      return new PostJobsResponse(responseBuilder.build(), entity);
     }
 
-    public static PostJobsStatusesResponse respond500WithApplicationJson(ServerError entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
+    public static PostJobsResponse respond400WithApplicationJson(BadRequestError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(400).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PostJobsStatusesResponse(responseBuilder.build(), entity);
+      return new PostJobsResponse(responseBuilder.build(), entity);
+    }
+
+    public static PostJobsResponse respond401WithApplicationJson(UnauthorizedError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PostJobsResponse(responseBuilder.build(), entity);
+    }
+
+    public static PostJobsResponse respond422WithApplicationJson(UnprocessableEntityError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(422).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PostJobsResponse(responseBuilder.build(), entity);
     }
   }
 }
