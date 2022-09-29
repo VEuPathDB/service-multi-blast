@@ -95,7 +95,6 @@ gen-jaxrs: raml-gen-code
 .PHONY: raml-gen-code
 raml-gen-code: api.raml merge-raml
 	@./gradlew generate-jaxrs
-	@$(BIN_DIR)/generate-jaxrs-streams.sh $(APP_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(APP_PACKAGE)
 
 # See raml-gen-docs
