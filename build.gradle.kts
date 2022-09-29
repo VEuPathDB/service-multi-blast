@@ -142,29 +142,25 @@ tasks.create("dev-compose-down") {
  *
  * Generates the HTML docs for the RAML in each service and moves the output to
  * the `docs` directory.
+ *
+ * **NOTE**: This task overrides the `generate-raml-docs` task in the child
+ * projects.
  */
-tasks.create("raml-gen-docs") {
+tasks.create("generate-raml-docs") {
   group = "monorepo"
+
+  dependsOn(
+    ":query-service:generate-raml-docs",
+    ":report-service:generate-raml-docs",
+  )
+
   doLast {
     // List of subprojects with APIs
     val subProjects = arrayOf("query-service", "report-service")
 
     // For each of the defined subprojects
     for (svc in subProjects) {
-      // Get a handle on the subproject directory
-      val subDir = file(svc)
-
-      // Generate the HTML API docs.
-      with(
-        ProcessBuilder("make", "raml-gen-docs")
-          .directory(subDir)
-          .start()
-      ) {
-        errorStream.transferTo(System.err)
-        require(waitFor() == 0)
-      }
-
-      // Ensure the docs directory exists
+          // Ensure the docs directory exists
       with(file("docs/$svc"), File::mkdirs)
 
       // Copy the generated HTML file to the docs directory.
