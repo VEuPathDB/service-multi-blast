@@ -228,6 +228,38 @@ internal class ProteinQueryParserTest {
         }
       }
 
+      @Nested
+      @DisplayName("that is invalid")
+      inner class Invalid1 {
+
+        @Test
+        @DisplayName("due to too many sequences")
+        fun t1() {
+          val input = "aaaaa\n>hello\nccccc"
+          val tgt   = ProteinQueryParser(1, 100)
+
+          assertThrows(TooManySequencesException::class.java) { tgt.parseQuery(input) }
+        }
+
+        @Test
+        @DisplayName("due to a sequence validation error")
+        fun t2() {
+          val input = "aaaaa\n>hello\n+++++"
+          val tgt   = ProteinQueryParser(2, 100)
+
+          assertThrows(InvalidSequenceCharacterException::class.java) { tgt.parseQuery(input) }
+        }
+
+        @Test
+        @DisplayName("due to an inner empty sequence")
+        fun t3() {
+          val input = "aaaaa\n>hello\n>goodbye\naaaaa"
+          val tgt   = ProteinQueryParser(2, 100)
+
+          assertThrows(EmptySequenceException::class.java) { tgt.parseQuery(input) }
+        }
+
+      }
     }
   }
 }
