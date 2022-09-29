@@ -1,3 +1,19 @@
+allprojects {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      name = "GitHubPackages"
+      url  = uri("https://maven.pkg.github.com/veupathdb/packages")
+      credentials {
+        username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+        password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
+}
+
+
 /**
  * Initialize the repository for development.
  */
@@ -167,21 +183,6 @@ tasks.create("generate-raml-docs") {
       with(file("$svc/docs/api.html")) {
         copyTo(file("docs/$svc/api.html"), true)
         delete()
-      }
-    }
-  }
-}
-
-allprojects {
-  repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-      name = "GitHubPackages"
-      url  = uri("https://maven.pkg.github.com/veupathdb/packages")
-      credentials {
-        username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-        password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
       }
     }
   }
