@@ -187,3 +187,35 @@ tasks.create("generate-raml-docs") {
     }
   }
 }
+
+
+tasks.create("generate-jaxrs") {
+  group = "monorepo"
+
+  dependsOn(
+    ":query-service:generate-jaxrs",
+    ":report-service:generate-jaxrs",
+  )
+
+  doLast {
+    val subProjects = arrayOf("query-service", "report-service")
+
+    for (svc in subProjects) {
+
+      val svcDir = file(svc)
+
+      with(
+        ProcessBuilder("sh", "$svcDir/.tools/bin/generate-jaxrs-postgen-mods.sh")
+          .directory(svcDir)
+          .start()
+      ) {
+        inputStream.transferTo(System.out)
+        errorStream.transferTo(System.err)
+
+        if (waitFor() != 0)
+          throw RuntimeException("Failed to apply postgen patch shell script.")
+      }
+    }
+  }
+
+}
