@@ -140,10 +140,6 @@ abstract class QueryParser(
     // input query.
     if (charsInSequence > 0) {
 
-      // We will have appended one extra newline to the end of the buffer due to
-      // the way the [handleLine] method works.  Clip it off.
-      sequenceBuffer.setLength(sequenceBuffer.length - 1)
-
       // We _did_ have some stuff in the buffer.
       // Finalize the sequence
       finalizeSequence()
@@ -257,7 +253,7 @@ abstract class QueryParser(
    */
   private fun finalizeSequence() {
     // Record the current sequence state as a new sequence entry.
-    sequences.add(BlastSequence(currentDefline, sequenceBuffer.toString()))
+    sequences.add(BlastSequence(currentDefline, sequenceBuffer.substring(0, sequenceBuffer.length-1)))
 
     // Increment the sequence counter
     sequenceNumber++

@@ -189,6 +189,45 @@ internal class ProteinQueryParserTest {
 
     @Nested
     @DisplayName("When given a multi-sequence query")
-    inner class MultiSequence1 {}
+    inner class MultiSequence1 {
+
+      @Nested
+      @DisplayName("that is valid")
+      inner class Valid1 {
+
+        @Test
+        @DisplayName("with no leading defline")
+        fun t1() {
+          val input = "aaaaa\n>hello\nccccc"
+          val tgt   = ProteinQueryParser(2, 100)
+          val out   = tgt.parseQuery(input)
+
+          assertEquals(2, out.sequences.size)
+
+          assertNull(out.sequences[0].defLine)
+          assertEquals("aaaaa", out.sequences[0].sequence)
+
+          assertEquals(">hello", out.sequences[1].defLine)
+          assertEquals("ccccc", out.sequences[1].sequence)
+        }
+
+        @Test
+        @DisplayName("with a leading defline")
+        fun t2() {
+          val input = ">hello\naaaaa\n>goodbye\nccccc"
+          val tgt   = ProteinQueryParser(2, 100)
+          val out   = tgt.parseQuery(input)
+
+          assertEquals(2, out.sequences.size)
+
+          assertEquals(">hello", out.sequences[0].defLine)
+          assertEquals("aaaaa", out.sequences[0].sequence)
+
+          assertEquals(">goodbye", out.sequences[1].defLine)
+          assertEquals("ccccc", out.sequences[1].sequence)
+        }
+      }
+
+    }
   }
 }
