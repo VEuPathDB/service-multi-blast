@@ -7,26 +7,335 @@
 ################################################################################
 
 types:
-  ReverseRequest:
+  BlastFormatConfig:
     type: object
     additionalProperties: false
     properties:
-      input: string
-  JobResponse:
+      formatType:
+        displayName: Format Type
+        type: BlastOutFormat
+        default: pairwise
+        required: false
+      formatFields:
+        displayName: Report Fields
+        description: |
+          Fields to include in the generated report.
+
+          Custom field selection is only valid for the following `formatType`
+          values:
+          - `tabular`
+          - `tabular-with-comments`
+          - `csv`
+          - `sam`
+
+          For all other `formatType` values, including this field is an error.
+        type: array
+        default: null
+        required: false
+        items: BlastOutField
+      showGIs:
+        displayName: Show GIs
+        description: Show NCBI GIs in deflines?
+        type: boolean
+        default: false
+        required: false
+      numDescriptions:
+        displayName: Number of Descriptions
+        description: |
+          Number of database sequences to show one-line descriptions for.
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 0
+      numAlignments:
+        displayName: Number of Alignments
+        description: |
+          Number of database sequences to show alignments for.
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 0
+      lineLength:
+        displayName: Line Length
+        description: |
+          Line length for formatting alignments
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 1
+      sortHits:
+        displayName: Sort Hits
+        description: |
+          Sorting option for hits.
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+        type: BlastHitSorting
+        default: null
+        required: false
+      sortHSPs:
+        displayName: Sort HSPs
+        description: |
+          Sorting option for HSPs.
+
+          Only applicable for `formatType` value `pairwise`.
+        type: BlastHSPSorting
+        default: null
+        required: false
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: |
+          Maximum number of aligned sequences to keep.
+
+          Incompatible with:
+          - `numDescriptions`
+          - `numAlignments`
+        type: integer
+        default: null
+        required: false
+        minimum: 5
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        default: false
+        required: false
+  BlastOutFormat:
+    type: string
+    enum:
+      - pairwise
+      - query-anchored-with-identities
+      - query-anchored-no-identities
+      - flat-query-anchored-with-identities
+      - flat-query-anchored-no-identities
+      - xml
+      - tabular
+      - tabular-with-comments
+      - seqalign-text
+      - seqalign-binary
+      - csv
+      - asn1
+      - seqalign-json
+      - multi-file-blast-json
+      - multi-file-blast-xml2
+      - Single-file-blast-json
+      - Single-file-blast-xml2
+      - sam
+      - organism-report
+  BlastOutField:
+    type: string
+    enum:
+      - qseqid
+      - qgi
+      - qacc
+      - qaccver
+      - qlen
+      - sseqid
+      - sallseqid
+      - sgi
+      - sallgi
+      - sacc
+      - saccver
+      - sallacc
+      - slen
+      - qstart
+      - qend
+      - sstart
+      - send
+      - qseq
+      - sseq
+      - evalue
+      - bitscore
+      - score
+      - length
+      - pident
+      - nident
+      - mismatch
+      - positive
+      - gapopen
+      - gaps
+      - ppos
+      - frames
+      - qframe
+      - sframe
+      - btop
+      - staxid
+      - ssciname
+      - scomname
+      - sblastname
+      - sskingdom
+      - staxids
+      - sscinames
+      - scomnames
+      - sblastnames
+      - sskingdoms
+      - stitle
+      - salltitles
+      - sstrand
+      - qcovs
+      - qcovhsp
+      - qcovus
+      - SQ
+      - SR
+      - std
+  BlastHitSorting:
+    type: string
+    enum:
+      - by-evalue
+      - by-bit-score
+      - by-total-score
+      - by-percent-identity
+      - by-query-coverage
+  BlastHSPSorting:
+    type: string
+    enum:
+      - by-hsp-evalue
+      - by-hsp-score
+      - by-hsp-query-start
+      - by-hsp-percent-identity
+      - by-hsp-subject-start
+  ReportJobRequest:
+    displayName: Report Job Request
+    description: |
+      Request body sent to start a new report job.
     type: object
     additionalProperties: false
     properties:
-      jobID:
+      queryJobID:
         type: string
         pattern: ^[\dA-Fa-f]{32}$
         minLength: 32
         maxLength: 32
-      status: JobStatus
-      queuePosition?:
+      blastConfig:
+        type: BlastFormatConfig
+        default:
+          formatType: pairwise
+        required: false
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobDetails:
+    displayName: Report Job Details
+    description: |
+      Longform details about a report job that has been submitted.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      blastConfig: BlastFormatConfig
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobListEntry:
+    displayName: Report Job List Entry
+    description: |
+      Short-form details about a report job that has been submitted.  This
+      object is intended to appear in a list of similar objects for report job
+      list endpoints.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        description: Hash ID of the report job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        description: Hash ID of the source query job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        description: Current status of the represented report job.
+        type: JobStatus
+      userMeta:
+        displayName: Job Meta
+        description: User provided metadata about the represented report job.
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobUserMeta:
+    displayName: Report Job User Meta
+    description: User provided metadata about a report job.
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Summary
+        description: Optional, one line user summary about a target job.
+        type: string
+        default: null
+        required: false
+        maxLength: 512
+      description:
+        displayName: Description
+        description: Optional, longform description of a target job.
+        type: string
+        default: null
+        required: false
+  FileEntry:
+    displayName: File Entry
+    description: List entry item for a file.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        description: Name of the target file.
+        type: string
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
         type: integer
-        format: int32
-  JobBulkStatusResponse: object
-  JobDataResponse: any
+        format: long
   JobStatus:
     type: string
     enum:

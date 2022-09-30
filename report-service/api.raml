@@ -2,293 +2,448 @@
 
 extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/base-service.raml
 
-title: Example Async JaxRS Container Service
-version: 1.0.0
+title: MultiBlast Report Service
+version: 2.0.0
 mediaType: application/json
 
 uses:
   error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/errors.raml
   lib: schema/library.raml
 
-#
-# Example Endpoints
-#
 
-/reverse:
-  post:
-    description: Reverses a given input string.
-    body:
-      application/json:
-        type: lib.ReverseRequest
-        example:
-          input: "hello world"
-    responses:
-      200:
-        description: |
-          Success
-          
-          Job was processed and queued successfully.
-        body:
-          application/json:
-            type: lib.JobResponse
-            examples:
-              queued:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: queued
-                  queuePosition: 3
-              in-progress:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: in-progress
-              complete:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: complete
-              failed:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: failed
-              expired:
-                strict: true
-                value:
-                  jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                  status: expired
-      500:
-        description: |
-          Internal Server Error
-          
-          An unexpected exception was thrown while attempting to process
-          the request.
-        body:
-          application/json:
-            type: error.ServerError
-
-# TODO: need the file upload patch in the gradle plugin for this
-/word-count:
-  post:
-    description: Counts the words in an uploaded file.
-    body:
-      multipart/form-data:
-        type: file
-    responses:
-      200:
-        description: |
-          Success
-          
-          Job was processed and queued successfully.
-        body:
-          application/json:
-            type: lib.JobResponse
-      500:
-        description: |
-          Internal Server Error
-          
-          An unexpected exception was thrown while attempting to process
-          the request.
-        body:
-          application/json:
-            type: error.ServerError
-
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Jobs                                                                      #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /jobs:
-  /{job-id}:
-    uriParameters:
-      job-id:
+  displayName: Jobs
+
+  get:
+    displayName: List Jobs
+    description: Lists the current user's blast report jobs.
+    queryParameters:
+      query_job_id:
+        displayName: Query Job ID
+        description: |
+          Filters the results of the endpoint down to only report jobs that
+          belong to the given target query job ID.
         type: string
+        required: false
         minLength: 32
         maxLength: 32
         pattern: '^[\dA-Fa-f]{32}$'
-    get:
-      description: Gets the status of the target job.
-      responses:
-        200:
-          description: |
-            Success
-            
-            The target job exists and its status returned.
-          body:
-            application/json:
-              type: lib.JobResponse
-              examples:
-                queued:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: queued
-                    queuePosition: 3
-                in-progress:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: in-progress
-                complete:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: complete
-                failed:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: failed
-                expired:
-                  strict: true
-                  value:
-                    jobID: 9ab9a5886d6abb9ebc82a40f770a1db3
-                    status: expired
-        404:
-          description: |
-            Not Found
-            
-            The target `{job-id}` was not found.
-          body:
-            application/json:
-              type: error.NotFoundError
-        500:
-          description: |
-            Internal Server Error
-            
-            An unexpected exception was thrown while attempting to process
-            the request.
-          body:
-            application/json:
-              type: error.ServerError
-    /files:
-      get:
+    responses:
+      200:
         description: |
-          Lists the files available for a completed job.
-        responses:
-          200:
-            description: |
-              Success
-              
-              The job has completed and has files available.
-            body:
-              application/json:
-                type: string[]
-                example:
-                  - output
-          403:
-            description: |
-              Forbidden
-              
-              The job has not yet completed and thus cannot yet be queried for
-              files.
-            body:
-              application/json:
-                type: error.ForbiddenError
-          404:
-            description: |
-              Not Found
-              
-              The target `{job-id}` was not found.
-            body:
-              application/json:
-                type: error.NotFoundError
-          500:
-            description: |
-              Internal Server Error
-              
-              An unexpected exception was thrown while attempting to process
-              the request.
-            body:
-              application/json:
-                type: error.ServerError
-      /{file-name}:
-        uriParameters:
-          file-name:
-            type: string
-            minLength: 1
-        get:
-          description: |
-            Returns the target file from a completed job.
-          responses:
-            200:
-              description: |
-                Success
-                
-                The job has completed and the target file exists to return.
-              headers:
-                Content-Disposition:
-                  type: string
-                  example:
-                    value: attachment; filename=output.txt
-              body:
-                text/plain:
-                  type: any
-                  example: dlrow olleh
-            403:
-              description: |
-                Forbidden
-                
-                The job has not yet completed and thus cannot yet be queried for
-                files.
-              body:
-                application/json:
-                  type: error.ForbiddenError
-            404:
-              description: |
-                Not Found
-                
-                Either the target `{job-id}` was not found or no file with the
-                name `{file-name}` exists.
-              body:
-                application/json:
-                  type: error.NotFoundError
-            500:
-              description: |
-                Internal Server Error
-                
-                An unexpected exception was thrown while attempting to process
-                the request.
-              body:
-                application/json:
-                  type: error.ServerError
+          Success
+          
+          Returns a list of report jobs.
+        body:
+          application/json:
+            type: array
+            items:
+              type: lib.ReportJobListEntry
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
-  /statuses:
-    post:
-      description: |
-        Lookup the statuses for the list of job IDs posted.
-        
-        The response will be a mapping whose keys are the posted job IDs and
-        whose values are the status of the job represented by the associated ID.
-        
-        If a job ID in the input list does not appear to be a real/valid job ID,
-        the ID will be omitted from the response object.
-        
-        Each status value will be a valid JobStatus enum item, meaning they will
-        each be one of:
-        
-        * "queued"
-        * "in-progress"
-        * "complete"
-        * "failed"
-        * "expired"
-      body:
-        application/json:
-          type: array
-          items:
-            type: string
-            minLength: 32
-            maxLength: 32
-            pattern: '^[\dA-Fa-f]{32}$'
-      responses:
-        200:
-          description: Success
-          body:
-            application/json:
-              type: lib.JobBulkStatusResponse
-        500:
-          description: |
-            Internal Server Error
-            
-            An unexpected exception was thrown while attempting to process
-            the request.
-          body:
-            application/json:
-              type: error.ServerError
+  post:
+    displayName: Create New Job
+    description: Creates a new report job from the posted configuration.
+    body:
+      application/json:
+        type: lib.ReportJobRequest
+    responses:
+      200:
+        description: |
+          Success
+          
+          Job was submitted successfully and the job details have been returned.
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      400:
+        description: |
+          Bad Request
+          
+          Request body could not be parsed into a config object.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      422:
+        description: |
+          Unprocessable Request
+          
+          Job configuration was semantically invalid and could not be submitted.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
 
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Job Details                                                               #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}:
+  displayName: Job by ID
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: Get Job by ID
+    description: Lookup a job's details by the job's ID.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  post:
+    displayName: Rerun Job
+    description: |
+      Requeues a job to be executed if the job was previously expired.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.ReportJobDetails
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+
+          Returned when attempting to restart a job that has not yet expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    File Listing                                                              #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/files:
+  displayName: Job Files
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: List Job Files
+    description: |
+      Lists the result files available for a given job.
+      
+      This list will consist of the raw output(s) of the report job as well as
+      a zip file named `report.zip` containing all of those outputs.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: array
+            items:
+              lib.FileEntry
+            example:
+            - name: somefile1.txt
+              size: 1023
+            - name: somefile2.json
+              size: 58372
+            - name: report.zip
+              size: 10234
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete or has expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    File Download                                                             #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/files/{filename}:
+  displayName: Job File by Name
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: Get Job File by Name
+    description: |
+      Retrieves/downloads a target file from the report job output files.
+    queryParameters:
+      download:
+        displayName: Download
+        description: |
+          When set to true, indicates that the service should mark the returned
+          file as an attachment using the `Content-Disposition` header to cause
+          the file to be downloaded by the browser rather than rendered.
+        type: boolean
+        required: false
+        default: false
+    responses:
+      200:
+        description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Present if the `download` query parameter was sent in with the
+              request.
+            type: string
+            required: false
+        body:
+          '*/*':
+            type: any
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete or has expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    stderr retrieval                                                          #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/jobs/{job-id}/stderr:
+  displayName: Job STDERR Output
+
+  uriParameters:
+    job-id:
+      displayName: Report Job ID
+      type: string
+      required: false
+      minLength: 32
+      maxLength: 32
+      pattern: '^[\dA-Fa-f]{32}$'
+
+  get:
+    displayName: Get STDERR Output
+    description: |
+      Returns the stderr output for the blast tool execution for this job.
+      
+      This output may be empty.
+    responses:
+      200:
+        description: Success
+        body:
+          text/plain:
+            type: any
+            example: |
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 1: 1, 62-63
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 2: 44-46
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 3: 27-29
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 4: 10-12, 73-75
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 5: 56-58
+              FASTA-Reader: Ignoring invalid residues at position(s): On line 6: 39-41
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: |
+          Forbidden.
+          
+          Returned when attempting to list the files for a job that is not yet
+          complete or has expired.
+        body:
+          application/json:
+            type: error.ForbiddenError
+      404:
+        description: |
+          Target job does not exist.
+        body:
+          application/json:
+            type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#    Bulk Status Check                                                         #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+/statuses:
+  displayName: Bulk Statuses
+
+  post:
+    displayName: Bulk Status Lookup
+    description: |
+      Lookup the statuses for the list of job IDs posted.
+      
+      The response will be a mapping whose keys are the posted job IDs and
+      whose values are the status of the job represented by the associated ID.
+      
+      If a job ID in the input list does not appear to be a real/valid job ID,
+      the ID will be omitted from the response object.
+      
+      Each status value will be a valid JobStatus enum item, meaning they will
+      each be one of:
+      
+      * "queued"
+      * "in-progress"
+      * "complete"
+      * "failed"
+      * "expired"
+    body:
+      application/json:
+        type: array
+        items:
+          type: string
+          minLength: 32
+          maxLength: 32
+          pattern: '^[\dA-Fa-f]{32}$'
+        example:
+        - dd6060e5367622e574ffb38f32bfa049
+        - 77542f92d9e68ea80eff4852ecc41fa4
+        - 29e07b0b80181222ad33cbc8f679d672
+        - 748ba381dd81bb8de615319837ffa350
+        - f4757ea84c455b04a1d307d4ac33049d
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.JobBulkStatusResponse
+            example:
+              dd6060e5367622e574ffb38f32bfa049: queued
+              29e07b0b80181222ad33cbc8f679d672: complete
+              748ba381dd81bb8de615319837ffa350: in-progress
+              f4757ea84c455b04a1d307d4ac33049d: expired
+
+
+      500:
+        description: |
+          Internal Server Error
+          
+          An unexpected exception was thrown while attempting to process
+          the request.
+        body:
+          application/json:
+            type: error.ServerError
