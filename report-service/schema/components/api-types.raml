@@ -1,0 +1,145 @@
+#%RAML 1.0 Library
+
+uses:
+  blast: blast-types.raml
+
+types:
+  ReportJobRequest:
+    displayName: Report Job Request
+    description: |
+      Request body sent to start a new report job.
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      blastConfig:
+        type: blast.BlastFormatConfig
+        required: false
+        default:
+          formatType: pairwise
+      userMeta:
+        type: ReportJobUserMeta
+        required: false
+        default: null
+
+  ReportJobDetails:
+    displayName: Report Job Details
+    description: |
+      Longform details about a report job that has been submitted.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      status:
+        displayName: Job Status
+        type: JobStatus
+        required: true
+      blastConfig:
+        type: blast.BlastFormatConfig
+        required: true
+      userMeta:
+        type: ReportJobUserMeta
+        required: false
+        default: null
+
+  ReportJobListEntry:
+    displayName: Report Job List Entry
+    description: |
+      Short-form details about a report job that has been submitted.  This
+      object is intended to appear in a list of similar objects for report job
+      list endpoints.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        description: Hash ID of the report job.
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      queryJobID:
+        displayName: Query Job ID
+        description: Hash ID of the source query job.
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      status:
+        displayName: Job Status
+        description: Current status of the represented report job.
+        type: JobStatus
+        required: true
+      userMeta:
+        displayName: Job Meta
+        description: User provided metadata about the represented report job.
+        type: ReportJobUserMeta
+        required: false
+        default: null
+
+  ReportJobUserMeta:
+    displayName: Report Job User Meta
+    description: User provided metadata about a report job.
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Summary
+        description: Optional, one line user summary about a target job.
+        type: string
+        required: false
+        default: null
+        maxLength: 512
+      description:
+        displayName: Description
+        description: Optional, longform description of a target job.
+        type: string
+        required: false
+        default: null
+
+  FileEntry:
+    displayName: File Entry
+    description: List entry item for a file.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        description: Name of the target file.
+        type: string
+        required: true
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
+        type: integer
+        format: long
+        required: true
+
+  JobStatus:
+    type: string
+    enum:
+    - queued
+    - in-progress
+    - complete
+    - failed
+    - expired

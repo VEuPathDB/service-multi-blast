@@ -1,0 +1,306 @@
+#%RAML 1.0 Library
+
+types:
+  BlastFormatConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      formatType:
+        displayName: Format Type
+        type: BlastOutFormat
+        required: false
+        default: pairwise
+      formatFields:
+        displayName: Report Fields
+        description: |
+          Fields to include in the generated report.
+          
+          Custom field selection is only valid for the following `formatType`
+          values:
+          - `tabular`
+          - `tabular-with-comments`
+          - `csv`
+          - `sam`
+          
+          For all other `formatType` values, including this field is an error.
+        type: array
+        items:
+          type: BlastOutField
+        required: false
+        default: null
+      showGIs:
+        displayName: Show GIs
+        description: Show NCBI GIs in deflines?
+        type: boolean
+        required: false
+        default: false
+      numDescriptions:
+        displayName: Number of Descriptions
+        description: |
+          Number of database sequences to show one-line descriptions for.
+          
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      numAlignments:
+        displayName: Number of Alignments
+        description: |
+          Number of database sequences to show alignments for.
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      lineLength:
+        displayName: Line Length
+        description: |
+          Line length for formatting alignments
+
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+          
+          Incompatible with `maxTargetSequences`.
+        type: integer
+        format: int
+        minimum: 1
+        required: false
+        default: null
+      sortHits:
+        displayName: Sort Hits
+        description: |
+          Sorting option for hits.
+          
+          Only applicable for the following `formatType` values:
+          - pairwise
+          - query-anchored-with-identities
+          - query-anchored-no-identities
+          - flat-query-anchored-with-identities
+          - flat-query-anchored-no-identities
+        type: BlastHitSorting
+        required: false
+        default: null
+      sortHSPs:
+        displayName: Sort HSPs
+        description: |
+          Sorting option for HSPs.
+          
+          Only applicable for `formatType` value `pairwise`.
+        type: BlastHSPSorting
+        required: false
+        default: null
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: |
+          Maximum number of aligned sequences to keep.
+          
+          Incompatible with:
+          - `numDescriptions`
+          - `numAlignments`
+        type: integer
+        minimum: 5
+        required: false
+        default: null
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
+        type: boolean
+        required: false
+        default: false
+
+  BlastOutFormat:
+    displayName: Blast Report Format
+    description: |
+      | Identifier                          | Description                             |
+      | ----------------------------------- | --------------------------------------- |
+      | pairwise                            | Pairwise                                |
+      | query-anchored-with-identities      | Query-anchored showing identities       |
+      | query-anchored-no-identities        | Query-anchored no identities            |
+      | flat-query-anchored-with-identities | Flat query-anchored showing identities  |
+      | flat-query-anchored-no-identities   | Flat query-anchored no identities       |
+      | xml                                 | BLAST XML                               |
+      | tabular                             | Tabular                                 |
+      | tabular-with-comments               | Tabular with comment lines              |
+      | seqalign-text                       | Seqalign (Text ASN.1)                   |
+      | seqalign-binary                     | Seqalign (Binary ASN.1)                 |
+      | csv                                 | Comma-separated values                  |
+      | asn1                                | BLAST archive (ASN.1)                   |
+      | seqalign-json                       | Seqalign (JSON)                         |
+      | multi-file-blast-json               | Multiple-file BLAST JSON                |
+      | multi-file-blast-xml2               | Multiple-file BLAST XML2                |
+      | single-file-blast-json              | Single-file BLAST JSON                  |
+      | single-file-blast-xml2              | Single-file BLAST XML2                  |
+      | sam                                 | Sequence Alignment/Map (SAM)            |
+      | organism-report                     | Organism Report                         |
+    type: string
+    enum:
+    - pairwise
+    - query-anchored-with-identities
+    - query-anchored-no-identities
+    - flat-query-anchored-with-identities
+    - flat-query-anchored-no-identities
+    - xml
+    - tabular
+    - tabular-with-comments
+    - seqalign-text
+    - seqalign-binary
+    - csv
+    - asn1
+    - seqalign-json
+    - multi-file-blast-json
+    - multi-file-blast-xml2
+    - single-file-blast-json
+    - single-file-blast-xml2
+    - sam
+    - organism-report
+
+  BlastOutField:
+    displayName: Blast Report Field
+    description: |
+      | Field       | Meaning                                                                                  |
+      | ----------- | ---------------------------------------------------------------------------------------- |
+      | qseqid      | Query Seq-id                                                                             |
+      | qgi         | Query GI                                                                                 |
+      | qacc        | Query accesion                                                                           |
+      | qaccver     | Query accesion.version                                                                   |
+      | qlen        | Query sequence length                                                                    |
+      | sseqid      | Subject Seq-id                                                                           |
+      | sallseqid   | All subject Seq-id(s), separated by a ';'                                                |
+      | sgi         | Subject GI                                                                               |
+      | sallgi      | All subject GIs                                                                          |
+      | sacc        | Subject accession                                                                        |
+      | saccver     | Subject accession.version                                                                |
+      | sallacc     | All subject accessions                                                                   |
+      | slen        | Subject sequence length                                                                  |
+      | qstart      | Start of alignment in query                                                              |
+      | qend        | End of alignment in query                                                                |
+      | sstart      | Start of alignment in subject                                                            |
+      | send        | End of alignment in subject                                                              |
+      | qseq        | Aligned part of query sequence                                                           |
+      | sseq        | Aligned part of subject sequence                                                         |
+      | evalue      | Expect value                                                                             |
+      | bitscore    | Bit score                                                                                |
+      | score       | Raw score                                                                                |
+      | length      | Alignment length                                                                         |
+      | pident      | Percentage of identical matches                                                          |
+      | nident      | Number of identical matches                                                              |
+      | mismatch    | Number of mismatches                                                                     |
+      | positive    | Number of positive-scoring matches                                                       |
+      | gapopen     | Number of gap openings                                                                   |
+      | gaps        | Total number of gaps                                                                     |
+      | ppos        | Percentage of positive-scoring matches                                                   |
+      | frames      | Query and subject frames separated by a '/'                                              |
+      | qframe      | Query frame                                                                              |
+      | sframe      | Subject frame                                                                            |
+      | btop        | Blast traceback operations (BTOP)                                                        |
+      | staxid      | Subject Taxonomy ID                                                                      |
+      | ssciname    | Subject Scientific Name                                                                  |
+      | scomname    | Subject Common Name                                                                      |
+      | sblastname  | Subject Blast Name                                                                       |
+      | sskingdom   | Subject Super Kingdom                                                                    |
+      | staxids     | unique Subject Taxonomy ID(s), separated by a ';' (in numerical order)                   |
+      | sscinames   | unique Subject Scientific Name(s), separated by a ';'                                    |
+      | scomnames   | unique Subject Common Name(s), separated by a ';'                                        |
+      | sblastnames | unique Subject Blast Name(s), separated by a ';' (in alphabetical order)                 |
+      | sskingdoms  | unique Subject Super Kingdom(s), separated by a ';' (in alphabetical order)              |
+      | stitle      | Subject Title                                                                            |
+      | salltitles  | All Subject Title(s), separated by a '<>'                                                |
+      | sstrand     | Subject Strand                                                                           |
+      | qcovs       | Query Coverage Per Subject                                                               |
+      | qcovhsp     | Query Coverage Per HSP                                                                   |
+      | qcovus      | Query Coverage Per Unique Subject (blastn only)                                          |
+      | SQ          | Include Sequence Data                                                                    |
+      | SR          | Subject as Reference Seq                                                                 |
+      | std         | 'qaccver saccver pident length mismatch gapopen qstart qend sstart send evalue bitscore' |
+    type: string
+    enum:
+    - qseqid
+    - qgi
+    - qacc
+    - qaccver
+    - qlen
+    - sseqid
+    - sallseqid
+    - sgi
+    - sallgi
+    - sacc
+    - saccver
+    - sallacc
+    - slen
+    - qstart
+    - qend
+    - sstart
+    - send
+    - qseq
+    - sseq
+    - evalue
+    - bitscore
+    - score
+    - length
+    - pident
+    - nident
+    - mismatch
+    - positive
+    - gapopen
+    - gaps
+    - ppos
+    - frames
+    - qframe
+    - sframe
+    - btop
+    - staxid
+    - ssciname
+    - scomname
+    - sblastname
+    - sskingdom
+    - staxids
+    - sscinames
+    - scomnames
+    - sblastnames
+    - sskingdoms
+    - stitle
+    - salltitles
+    - sstrand
+    - qcovs
+    - qcovhsp
+    - qcovus
+    - SQ
+    - SR
+    - std
+
+  BlastHitSorting:
+    displayName: Hit Sorting
+    description: Sorting option for hits.
+    type: string
+    enum:
+    - by-evalue
+    - by-bit-score
+    - by-total-score
+    - by-percent-identity
+    - by-query-coverage
+
+  BlastHSPSorting:
+    displayName: HSP Sorting
+    description: Sorting option for High Scoring Pairs
+    type: string
+    enum:
+    - by-hsp-evalue
+    - by-hsp-score
+    - by-hsp-query-start
+    - by-hsp-percent-identity
+    - by-hsp-subject-start
