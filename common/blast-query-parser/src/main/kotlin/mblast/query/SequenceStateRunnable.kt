@@ -1,7 +1,5 @@
 package mblast.query
 
-import java.lang.Runnable
-
 /**
  * Runnable BLAST Query State Machine
  *
@@ -21,7 +19,7 @@ abstract class SequenceStateRunnable : HeadlessSequenceStateMachine(), Runnable 
    * Executes the process of iterating through all the characters in the input
    * query.
    */
-  open fun run() {
+  override fun run() {
     onQueryStart()
 
     var i = nextCharacter()
