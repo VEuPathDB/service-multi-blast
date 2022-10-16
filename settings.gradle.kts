@@ -20,5 +20,3 @@ include("common:blast-types")
 findProject(":common:blast-types")!!.name = "blast-types"
 include("common:mblast-utils")
 findProject(":common:mblast-utils")!!.name = "mblast-utils"
-include("common:query-parser")
-findProject(":common:query-parser")!!.name = "query-parser"
