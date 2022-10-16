@@ -1,4 +1,4 @@
-package mblast
+package org.veupathdb.service.mblast.query
 
 import io.foxcapades.lib.env.NBEnv
 import org.veupathdb.lib.container.jaxrs.config.Options

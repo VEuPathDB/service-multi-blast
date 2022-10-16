@@ -1,4 +1,4 @@
-package mblast
+package org.veupathdb.service.mblast.query
 
 import org.veupathdb.lib.compute.platform.job.JobExecutorContext
 import org.veupathdb.lib.compute.platform.job.JobExecutorFactory
