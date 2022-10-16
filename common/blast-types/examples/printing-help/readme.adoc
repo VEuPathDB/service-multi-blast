@@ -1,0 +1,77 @@
+= `blast-types` Example: Printing Help
+:source-highlighter: highlightjs
+
+This example contains a simple executable script that calls the `blastn` tool
+with the `-help` flag as a demonstration of the basics of constructing a BLAST+
+CLI call.
+
+== Running the Example
+
+=== Setup
+
+As the library is only published to
+link:https://docs.github.com/en/packages[GitHub Packages], some configuration is
+necessary to build and run the example.  Specfically the `gradle.properties`
+file will need to be edited with your own GitHub username and
+link:https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token[GitHub token].
+
+=== With Docker
+
+This example includes a `Dockerfile` based on the
+link:https://hub.docker.com/r/ncbi/blast[NCBI Blast docker image].
+
+==== Prerequisites
+
+* link:https://www.docker.com/[Docker]
+
+NOTE: `sudo` may be required to execute the `docker` command on your machine.
+
+==== Build
+
+First build the Docker image:
+[source, bash]
+----
+docker build -t print-help .
+----
+
+==== Run
+
+Then run the built image:
+[source, bash]
+----
+docker run --rm print-help
+----
+
+==== Cleanup
+
+Removing the Docker image can be done with the command:
+[source, bash]
+----
+docker image rm print-help
+----
+
+=== Locally
+
+==== Prerequisites
+
+* Java 8+
+* link:https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download[NCBI Blast+ Tool Set]
+
+==== Build
+
+First build the executable jar file:
+[source, bash]
+----
+./gradlew shadowJar
+----
+
+NOTE: The `shadowJar` task assembles a single executable jar that includes all
+necessary dependencies.
+
+==== Run
+
+Then run the executable jar:
+[source, bash]
+----
+java -jar build/libs/printing-help.jar
+----
