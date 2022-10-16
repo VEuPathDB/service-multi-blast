@@ -1,0 +1,143 @@
+version: "3.5"
+
+volumes:
+  vol-queue-db:
+
+services:
+
+  queue-db:
+    image: veupathdb/mblast-queue-db:${MBLAST_QUEUE_DB_TAG:-latest}
+    environment:
+      POSTGRES_USER:     ${POSTGRES_ROOT_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASS:?}
+
+      QUERY_SERVICE_PG_USER:    ${QUERY_SERVICE_PG_USER:?}
+      QUERY_SERVICE_PG_PASS:    ${QUERY_SERVICE_PG_PASS:?}
+      QUERY_SERVICE_PG_DB_NAME: ${QUERY_SERVICE_PG_DB_NAME:?}
+
+      REPORT_SERVICE_PG_USER:    ${REPORT_SERVICE_PG_USER:?}
+      REPORT_SERVICE_PG_PASS:    ${REPORT_SERVICE_PG_PASS:?}
+      REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
+
+
+  queue:
+    image: rabbitmq:3.10.7-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_ROOT_USER:?}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ROOT_PASS:?}
+
+
+  query-service:
+    image: veupathdb/mblast-query-service:${MBLAST_QUERY_SERVICE_TAG:-latest}
+    depends_on:
+    - queue
+    - queue-db
+    volumes:
+    - type: bind
+      source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
+      target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+    environment:
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+      LDAP_SERVER:     ${LDAP_SERVERS:?}
+      ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
+
+      SERVER_PORT: ${QUERY_SERVER_PORT:-8080}
+
+      ACCT_DB_TNS_NAME:  ${ACCT_DB_TNS_NAME:?}
+      ACCT_DB_USER:      ${ACCT_DB_USER:?}
+      ACCT_DB_PASS:      ${ACCT_DB_PASS:?}
+      ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-5}
+
+      USER_DB_TNS_NAME:  ${USER_DB_TNS_NAME:?}
+      USER_DB_USER:      ${USER_DB_USER:?}
+      USER_DB_PASS:      ${USER_DB_PASS:?}
+      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
+
+      QUEUE_DB_HOST:      queue-db
+      QUEUE_DB_NAME:      ${QUERY_SERVICE_PG_DB_NAME:?}
+      QUEUE_DB_PORT:      ${POSTGRES_PORT:-5432}
+      QUEUE_DB_USERNAME:  ${QUERY_SERVICE_PG_USER:?}
+      QUEUE_DB_PASSWORD:  ${QUERY_SERVICE_PG_PASS:?}
+      QUEUE_DB_POOL_SIZE: ${QUERY_SERVICE_PG_POOL_SIZE:-10}
+
+      JOB_QUEUE_HOST:     queue
+      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+      JOB_QUEUE_PORT:     ${RABBITMQ_PORT:-5672}
+      JOB_QUEUE_WORKERS:  ${QUERY_SERVICE_QUEUE_POOL_SIZE:-5}
+
+      S3_HOST:         ${S3_HOST:?}
+      S3_BUCKET:       ${QUERY_SERVICE_S3_BUCKET:?}
+      S3_ACCESS_TOKEN: ${S3_ACCESS_TOKEN:?}
+      S3_SECRET_KEY:   ${S3_SECRET_KEY:?}
+      S3_PORT:         ${S3_PORT:-9000}
+
+      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
+
+      SITE_BUILD_DIR: ${SITE_BUILD_DIR:?}
+
+      MAX_SEQUENCES_PER_JOB:   ${MAX_QUERIES_PER_JOB:-100}
+      MAX_RESULTS_PER_QUERY: ${MAX_RESULTS_PER_QUERY:-10000}
+      MAX_INPUT_QUERY_SIZE:  ${MAX_INPUT_QUERY_SIZE:-3145728}
+      MAX_NA_SEQ_SIZE:       ${MAX_NA_SEQ_SIZE:-1048576}
+      MAX_AA_SEQ_SIZE:       ${MAX_AA_SEQ_SIZE:-102400}
+
+      QUERY_SERVICE_QUEUE_NAME_1: ${QUERY_SERVICE_QUEUE_NAME_1:-primary-queries}
+      QUERY_SERVICE_QUEUE_NAME_2: ${QUERY_SERVICE_QUEUE_NAME_2:-secondary-queries}
+
+      BLAST_DB_ROOT_DIR: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+
+
+#  report-service:
+#    image: veupathdb/mblast-report-service:${MBLAST_REPORT_SERVICE_TAG:-latest}
+#    depends_on:
+#    - queue
+#    - queue-db
+#    - query-service
+#    volumes:
+#    - type: bind
+#      source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
+#      target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+#    environment:
+#      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+#      LDAP_SERVER:     ${LDAP_SERVERS:?}
+#      ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
+#
+#      SERVER_PORT: ${REPORT_SERVER_PORT:-8080}
+#
+#      ACCT_DB_TNS_NAME:  ${ACCT_DB_TNS_NAME:?}
+#      ACCT_DB_USER:      ${ACCT_DB_USER:?}
+#      ACCT_DB_PASS:      ${ACCT_DB_PASS:?}
+#      ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-5}
+#
+#      USER_DB_TNS_NAME:  ${USER_DB_TNS_NAME:?}
+#      USER_DB_USER:      ${USER_DB_USER:?}
+#      USER_DB_PASS:      ${USER_DB_PASS:?}
+#      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
+#
+#      QUEUE_DB_HOST:      queue-db
+#      QUEUE_DB_NAME:      ${REPORT_SERVICE_PG_DB_NAME:?}
+#      QUEUE_DB_USERNAME:  ${REPORT_SERVICE_PG_USER:?}
+#      QUEUE_DB_PASSWORD:  ${REPORT_SERVICE_PG_PASS:?}
+#      QUEUE_DB_POOL_SIZE: ${REPORT_SERVICE_PG_POOL_SIZE:-10}
+#      QUEUE_DB_PORT:      ${POSTGRES_PORT:-5432}
+#
+#      JOB_QUEUE_HOST:     queue
+#      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+#      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+#      JOB_QUEUE_PORT:     ${RABBITMQ_PORT:-5672}
+#      JOB_QUEUE_WORKERS:  ${REPORT_SERVICE_QUEUE_POOL_SIZE:-5}
+#
+#      S3_HOST:         ${S3_HOST:?}
+#      S3_BUCKET:       ${REPORT_SERVICE_S3_BUCKET:?}
+#      S3_ACCESS_TOKEN: ${S3_ACCESS_TOKEN:?}
+#      S3_SECRET_KEY:   ${S3_SECRET_KEY:?}
+#      S3_PORT:         ${S3_PORT:-9000}
+#
+#      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
+#
+#      SITE_BUILD_DIR: ${SITE_BUILD_DIR:?}
+#
+#      REPORT_SERVICE_QUEUE_NAME: ${REPORT_SERVICE_QUEUE_NAME:-report-jobs}
+#
+#      BLAST_DB_ROOT: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
