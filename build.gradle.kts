@@ -16,28 +16,19 @@ allprojects {
 
 /**
  * Initialize the repository for development.
+ *
+ * This task is a catch-all for any and all tasks that need to be performed
+ * before local development can successfully begin.
+ *
+ * Each step should be commented with what it's doing and why.
  */
 tasks.create("initialize") {
   group = "monorepo"
   doLast {
     // Create blast input directory.  The blastdb directory is required to spin
-    // up the service locally.
+    // up the service locally.  This directory is mounted into the mblast
+    // service containers when spinning up the stack.
     file("blastdb").mkdir()
-
-    // Async-Platform based subprojects
-    arrayOf(
-      "query-service",
-      "report-service",
-    ).forEach { proj ->
-      // Get a handle on the directory containing the subproject.
-      val projDir = file(proj)
-
-      // Execute the "install-dev-env" make target in each subproject.
-      with(ProcessBuilder("make", "install-dev-env").directory(projDir).start()) {
-        errorStream.transferTo(System.err)
-        require(waitFor() == 0)
-      }
-    }
   }
 }
 
@@ -47,18 +38,19 @@ tasks.create("initialize") {
  *
  * Builds the development docker compose stack images.
  */
-tasks.create("dev-compose-build") {
+tasks.create("compose-build") {
   group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
         "docker", "compose",
+        "-f", "docker-compose.yml",
         "-f", "docker-compose.dev.yml",
         "build",
         "--build-arg=GITHUB_USERNAME=" + if (extra.has("gpr.user")) extra["gpr.user"] as String? else System.getenv("GITHUB_USERNAME"),
         "--build-arg=GITHUB_TOKEN=" + if (extra.has("gpr.key")) extra["gpr.key"] as String? else System.getenv("GITHUB_TOKEN"),
       )
-        .directory(file("docker-compose"))
+        .directory(file("service-stack"))
         .start()
     ) {
       inputStream.transferTo(System.out)
@@ -76,17 +68,18 @@ tasks.create("dev-compose-build") {
  *
  * Spins up the development docker compose stack in the background.
  */
-tasks.create("dev-compose-up") {
+tasks.create("compose-up") {
   group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
         "docker", "compose",
+        "-f", "docker-compose.yml",
         "-f", "docker-compose.dev.yml",
         "up",
         "--detach"
       )
-        .directory(file("docker-compose"))
+        .directory(file("service-stack"))
         .start()
     ) {
       inputStream.transferTo(System.out)
@@ -104,16 +97,17 @@ tasks.create("dev-compose-up") {
  *
  * Stops a running development docker compose stack.
  */
-tasks.create("dev-compose-stop") {
+tasks.create("compose-stop") {
   group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
         "docker", "compose",
+        "-f", "docker-compose.yml",
         "-f", "docker-compose.dev.yml",
         "stop"
       )
-        .directory(file("docker-compose"))
+        .directory(file("service-stack"))
         .start()
     ) {
       inputStream.transferTo(System.out)
@@ -131,16 +125,17 @@ tasks.create("dev-compose-stop") {
  *
  * Tears down a running development docker compose stack.
  */
-tasks.create("dev-compose-down") {
+tasks.create("compose-down") {
   group = "monorepo"
   doLast {
     with(
       ProcessBuilder(
         "docker", "compose",
+        "-f", "docker-compose.yml",
         "-f", "docker-compose.dev.yml",
         "down"
       )
-        .directory(file("docker-compose"))
+        .directory(file("service-stack"))
         .start()
     ) {
       inputStream.transferTo(System.out)
@@ -188,34 +183,45 @@ tasks.create("generate-raml-docs") {
   }
 }
 
-
-tasks.create("generate-jaxrs") {
+tasks.create("generate-env-file") {
   group = "monorepo"
 
-  dependsOn(
-    ":query-service:generate-jaxrs",
-    ":report-service:generate-jaxrs",
-  )
+  data class EnvVar(val key: String, val default: String = "")
+
+  val pat = Regex("\\$\\{(\\w+)(?::(?:\\-(.+?)|\\?))?\\}")
 
   doLast {
-    val subProjects = arrayOf("query-service", "report-service")
+    val lines = file("service-stack")
+      .listFiles()
+      .filter { it.name.endsWith(".yml") }
+      .stream()
+      .map { it.readLines() }
+      .flatMap { it.stream() }
+      .filter { it.contains("\${") }
+      .map { pat.find(it) }
+      .filter { it != null }
+      .map { it!!.groupValues }
+      .collect({ HashMap<String, String>(64) }, { m, e -> m[e[1]] = e[2] }, { a, b -> a.putAll(b) })
+      .entries
+      .stream()
+      .map { (k, v) -> "$k=$v" }
+      .sorted()
+      .toList()
 
-    for (svc in subProjects) {
-
-      val svcDir = file(svc)
-
-      with(
-        ProcessBuilder("sh", "$svcDir/.tools/bin/generate-jaxrs-postgen-mods.sh")
-          .directory(svcDir)
-          .start()
-      ) {
-        inputStream.transferTo(System.out)
-        errorStream.transferTo(System.err)
-
-        if (waitFor() != 0)
-          throw RuntimeException("Failed to apply postgen patch shell script.")
+    file("service-stack/sample.env").bufferedWriter().use { writer ->
+      lines.forEach {
+        writer.write(it)
+        writer.newLine()
       }
     }
-  }
 
+    println("\u001b[38:5:203m")
+    println("""
+      Generated file "service-stack/sample.env".
+      
+      Please edit this file with the correct values and rename it to just \".env\" for it to be automatically picked up
+      by docker compose.
+    """.trimIndent())
+    println("\u001b[0m")
+  }
 }
