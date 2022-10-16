@@ -1,0 +1,269 @@
+= MultiBlast Developer Info
+:toc:
+
+== Prerequisites
+
+The following tools are required or strongly recommended for developers working
+on the MultiBlast stack.
+
+* link:https://www.docker.com/[Docker]
+* link:https://docs.docker.com/compose/install/[Docker Compose Plugin]
+* link:https://www.gnu.org/software/make/[Make]
+* link:https://nodejs.org/en/[Node & NPM]
+* link:https://openjdk.org/projects/jdk/[Java 18+]
+
+== Getting Started
+
+1. Clone this repository into your development environment.
++
+[source, bash]
+----
+git clone git@github.com:veupathdb/service-multi-blast
+----
+
+2. CD into the cloned directory
++
+[source, bash]
+----
+cd service-multi-blaste
+----
+
+3. Run the initialization Gradle task to perform any setup steps needed before
+working on or attempting to spin up the project.
++
+[source, bash]
+----
+./gradlew initialize
+----
+
+4. Setup complete! You're good to go!
+
+
+== Gradle Tasks
+
+The following are root level gradle tasks that operate on the entire project.
+
+Each of the following tasks may be executed by passing the name of the task to
+the `./gradlew` command.
+
+[NOTE]
+====
+This list does not include the available default gradle tasks such as `build` or
+`test`.
+
+For a full listing of available gradle tasks, run `./gradlew tasks` in the repo
+root.
+====
+
+`initialize`::
+Initializes the repository for local development.
++
+This target performs all the necessary setup steps at the root level of the
+project and in all the subprojects to put the project into a state where it
+should be buildable locally assuming the environment has the necessary
+prerequisites.
++
+.Example
+[source, bash]
+----
+./gradlew initialize
+----
+
+`generate-raml-docs`::
+Generates HTML documentation of the service APIs based on the RAML API
+definitions in each subproject and puts the output in the `docs` directory.
++
+.Example
+[source, bash]
+----
+./gradlew generate-raml-docs
+----
+
+`generate-jaxrs`::
+Generates JaxRS based Java code from the service API RAML definitions in each
+subproject.
++
+.Example
+[source, bash]
+----
+./gradlew generate-jaxrs
+----
+
+`compose-build`::
+See <<Build The Stack>>.
+
+`compose-up`::
+See <<In The Background,Run The Stack>>.
+
+`compose-stop`::
+See <<Stop The Stack>>.
+
+`compose-down`::
+See <<Teardown>>.
+
+== Local Development Stack
+
+=== Spinning it Up
+
+==== Prerequisites
+
+TODO: Setup sshuttle
+
+TODO: gradle.properties OR .direnv
+
+Setup local blastdb path::
+. Create a local directory in the project root named `blastdb`
+. In the `blastdb` directory, create a directory structure mirroring the
+structure of the remote `webServices` directory for your target site(s) and
+build number.
+. Use SFTP or some other tool to download target databases for local use.
++
+----
+service-multi-blast/
+  |- blastdb/
+       |- PlasmoDB/
+            |- build-59/
+                 |- Pfalciparum/
+                 |    |- SomeTarget.nhr
+                 |    |- SomeTarget.nin
+                 |    |- SomeTarget.nsq
+----
+
+
+==== Build The Stack
+
+Builds the development docker compose stack.
+
+[source, shell]
+----
+./gradlew compose-build
+----
+
+
+==== Run The Stack
+
+
+===== In The Background
+
+Spins up the docker compose stack in the background.
+
+[source, shell]
+----
+./gradlew compose-up
+----
+
+
+===== In The Foreground
+
+Manually spin up the docker compose stack in the console foreground.
+
+[source, shell]
+----
+cd service-stack
+docker compose -f docker-compose.dev.yml up
+----
+
+
+==== Stop The Stack
+
+Shuts down a running development docker compose stack without removing the
+containers.
+
+[source, shell]
+----
+./gradlew compose-stop
+----
+
+
+==== Teardown
+
+Shuts down and/or removes the containers for the development docker compose
+stack.
+
+[source, shell]
+----
+./gradlew compose-down
+----
+
+
+== Environment Variables
+
+
+=== Explanation
+
+The following is an explanation of all the environment variables that should be
+set and available (using a .env file) for spinning up the docker compose stack.
+
+=== Example `.env` Contents
+
+[source, shell]
+----
+#
+# Connection Configuration
+#
+POSTGRES_ROOT_USER=rootuser
+POSTGRES_ROOT_PASS=rootpass
+POSTGRES_PORT=5432
+
+RABBITMQ_ROOT_USER=rabbitmquser
+RABBITMQ_ROOT_PASS=rabbitmqpass
+RABBITMQ_PORT=5672
+
+MINIO_ROOT_USER=miniouser
+MINIO_ROOT_PASS=miniopass
+MINIO_PORT=9000
+
+QUERY_SERVICE_PG_USER=queryuser
+QUERY_SERVICE_PG_PASS=querypass
+QUERY_SERVICE_PG_DB_NAME=querydb
+QUERY_SERVICE_PG_POOL_SIZE=10
+QUERY_SERVICE_S3_BUCKET=querybucket
+QUERY_SERVICE_QUEUE_POOL_SIZE=5
+
+REPORT_SERVICE_PG_USER=reportuser
+REPORT_SERVICE_PG_PASS=reportpass
+REPORT_SERVICE_PG_DB_NAME=reportdb
+REPORT_SERVICE_PG_POOL_SIZE=10
+REPORT_SERVICE_S3_BUCKET=reportbucket
+REPORT_SERVICE_QUEUE_POOL_SIZE=5
+
+SERVER_PORT=8080
+LDAP_SERVERS=
+ORACLE_BASE_DN=
+USER_DB_TNS_NAME=
+USER_DB_USER=
+USER_DB_PASS=
+USER_DB_POOL_SIZE=
+
+#
+# Service Configuration
+#
+AUTH_SECRET_KEY=
+
+JOB_CACHE_TIMEOUT_DAYS=30
+
+SITE_BUILD=build-59
+
+MAX_QUERIES_PER_JOB=100
+MAX_RESULTS_PER_QUERY=10000
+MAX_INPUT_QUERY_SIZE=3145728
+MAX_NA_SEQ_SIZE=1048576
+MAX_AA_SEQ_SIZE=102400
+
+QUEUES_QUERY_NAME_1=primary-queries
+QUEUES_QUERY_NAME_2=secondary-queries
+QUEUES_REPORT_NAME=report-jobs
+----
+
+== Exposed Ports
+
+[%header, cols="1m,2"]
+|===
+| Port | Purpose
+| 5432 | Queue management postgres access.
+| 8080 | Query service API
+| 8081 | Report service API
+| 9000 | MinIO S3 API Access
+| 9001 | MinIO management console
+| 9002 | RabbitMQ management console
+|===

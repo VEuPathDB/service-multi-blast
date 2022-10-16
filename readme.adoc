@@ -1,226 +1,37 @@
 = MultiBlast
 :source-highlighter: highlightjs
+:icons: font
 
-== Development
+image:https://img.shields.io/github/license/veupathdb/service-multi-blast[GitHub]
 
-=== Prerequisites
+This repository is a "monorepo" containing various projects relating to and
+supporting the VEuPathDB MultiBlast service stack.
 
-* Docker
-* Docker Compose Plugin
-* Make
-* Node & NPM
-* Java 17+
+For development details and information see the
+link:development.adoc[Developer Info] doc.
 
+An index of available API documentation can be found at
+https://veupathdb.github.io/service-multi-blast/
 
-=== Gradle Tasks
+== Projects
 
-==== Root Level
+link:query-service/[BLAST+ Query Service]::
+A containerized service whose purpose is the asynchronous execution of BLAST
+queries against mounted databases.
 
-The following tasks are defined at the root level of the project and operate on
-the project as a whole.
+link:report-service/[BLAST+ Result Formatting Service]::
+A containerized services whose purpose is the asynchronous formatting of ASN.1
+BLAST query results into various other formats via the BLAST+ `blast_formatter`
+tool.
 
-Each of these tasks may be executed by passing the name of the task to the
-included `./gradlew` script.
-
-`initialize`::
-Initializes the repository for local development.
+link:common/blast-types/[BLAST+ CLI API Wrapper Type Library]::
+BLAST+ tool CLI API wrapper.
 +
-This target performs all the necessary setup steps at the root level of the
-project and in all the subprojects to put the project into a state where it
-should be buildable locally assuming the environment has the necessary
-prerequisites.
-+
-.Example
-[source, bash]
-----
-./gradlew initialize
-----
+Allows easy programmatic construction and validation of CLI calls to BLAST+
+tools.
 
-`generate-raml-docs`::
-Generates HTML documentation of the service APIs based on the RAML API
-definitions in each subproject and puts the output in the `docs` directory.
-+
-.Example
-[source, bash]
-----
-./gradlew raml-gen-docs
-----
+link:common/blast-query-parser/[BLAST+ Query Parsing Tools]::
+Multi-sequence BLAST query parsing tool kit.
 
-`dev-compose-build`::
-See <<Build The Stack>>.
-
-`dev-compose-up`::
-See <<In The Background,Run The Stack>>.
-
-`dev-compose-stop`::
-See <<Stop The Stack>>.
-
-`dev-compose-down`::
-See <<Teardown>>.
-
-== Local Development Stack
-
-=== Spinning it Up
-
-==== Prerequisites
-
-TODO: Setup sshuttle
-
-TODO: gradle.properties OR .direnv
-
-Setup local blastdb path::
-. Create a local directory in the project root named `blastdb`
-. In the `blastdb` directory, create a directory structure mirroring the
-  structure of the remote `webServices` directory for your target site(s) and
-  build number.
-. Use SFTP or some other tool to download target databases for local use.
-+
-----
-service-multi-blast/
-  |- blastdb/
-       |- PlasmoDB/
-            |- build-59/
-                 |- Pfalciparum/
-                 |    |- SomeTarget.nhr
-                 |    |- SomeTarget.nin
-                 |    |- SomeTarget.nsq
-----
-
-
-==== Build The Stack
-
-Builds the development docker compose stack.
-
-[source, shell]
-----
-./gradlew dev-compose-build
-----
-
-
-==== Run The Stack
-
-
-===== In The Background
-
-Spins up the docker compose stack in the background.
-
-[source, shell]
-----
-./gradlew dev-compose-up
-----
-
-
-===== In The Foreground
-
-Manually spin up the docker compose stack in the console foreground.
-
-[source, shell]
-----
-cd docker-compose
-docker compose -f docker-compose.dev.yml up
-----
-
-
-==== Stop The Stack
-
-Shuts down a running development docker compose stack without removing the
-containers.
-
-[source, shell]
-----
-./gradlew dev-compose-stop
-----
-
-
-==== Teardown
-
-Shuts down and/or removes the containers for the development docker compose
-stack.
-
-[source, shell]
-----
-./gradlew dev-compose-down
-----
-
-
-=== Environment Variables
-
-
-==== Explanation
-
-The following is an explanation of all the environment variables that should be
-set and available (using a .env file) for spinning up the docker compose stack.
-
-==== Example `.env` Contents
-
-[source, shell]
-----
-#
-# Connection Configuration
-#
-POSTGRES_ROOT_USER=rootuser
-POSTGRES_ROOT_PASS=rootpass
-POSTGRES_PORT=5432
-
-RABBITMQ_ROOT_USER=rabbitmquser
-RABBITMQ_ROOT_PASS=rabbitmqpass
-RABBITMQ_PORT=5672
-
-MINIO_ROOT_USER=miniouser
-MINIO_ROOT_PASS=miniopass
-MINIO_PORT=9000
-
-QUERY_SERVICE_PG_USER=queryuser
-QUERY_SERVICE_PG_PASS=querypass
-QUERY_SERVICE_PG_DB_NAME=querydb
-QUERY_SERVICE_PG_POOL_SIZE=10
-QUERY_SERVICE_S3_BUCKET=querybucket
-QUERY_SERVICE_QUEUE_POOL_SIZE=5
-
-REPORT_SERVICE_PG_USER=reportuser
-REPORT_SERVICE_PG_PASS=reportpass
-REPORT_SERVICE_PG_DB_NAME=reportdb
-REPORT_SERVICE_PG_POOL_SIZE=10
-REPORT_SERVICE_S3_BUCKET=reportbucket
-REPORT_SERVICE_QUEUE_POOL_SIZE=5
-
-SERVER_PORT=8080
-LDAP_SERVERS=
-ORACLE_BASE_DN=
-USER_DB_TNS_NAME=
-USER_DB_USER=
-USER_DB_PASS=
-USER_DB_POOL_SIZE=
-
-#
-# Service Configuration
-#
-AUTH_SECRET_KEY=
-
-JOB_CACHE_TIMEOUT_DAYS=30
-
-SITE_BUILD=build-59
-
-MAX_QUERIES_PER_JOB=100
-MAX_RESULTS_PER_QUERY=10000
-MAX_INPUT_QUERY_SIZE=3145728
-MAX_NA_SEQ_SIZE=1048576
-MAX_AA_SEQ_SIZE=102400
-
-QUEUES_QUERY_NAME_1=primary-queries
-QUEUES_QUERY_NAME_2=secondary-queries
-QUEUES_REPORT_NAME=report-jobs
-----
-
-=== Exposed Ports
-
-[%header, cols="1m,2"]
-|===
-| Port | Purpose
-| 5432 | Queue management postgres access.
-| 8080 | Query service API
-| 8081 | Report service API
-| 9000 | MinIO S3 API Access
-| 9001 | MinIO management console
-| 9002 | RabbitMQ management console
-|===
+link:common/mblast-utils/[MultiBlast Common Utilities]::
+Various utilities common to the other  services and libraries in this repo.
