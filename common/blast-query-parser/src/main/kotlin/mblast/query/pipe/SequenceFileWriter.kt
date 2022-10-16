@@ -1,6 +1,6 @@
 package mblast.query.pipe
 
-import mblast.query.SequenceStateMachine
+import mblast.query.SequenceStateRunnable
 import mblast.util.io.InStream
 import java.io.Closeable
 import java.io.File
@@ -24,6 +24,7 @@ import java.io.OutputStream
  * were created for the failed process.
  *
  * @author Elizabeth Paige Harper - https://github.com/foxcapades
+ * @since  1.0.0
  *
  * @constructor Constructs a new `SequenceFileWriter` instance.
  *
@@ -111,7 +112,7 @@ class SequenceFileWriter(
    * If the input stream contains only one sequence, the returned result
    * sub-query list will be empty as the overall query file is the only result.
    */
-  override fun run(): SequenceFileWriteResult {
+  override fun run() {
     try {
       super.run()
     } catch (e: Throwable) {
@@ -120,10 +121,11 @@ class SequenceFileWriter(
     } finally {
       close()
     }
-    return SequenceFileWriteResult(overallOutputFile, childOutputFiles)
   }
 
-  override fun pipe(c: Int) {
+  fun getResult() = SequenceFileWriteResult(overallOutputFile, childOutputFiles)
+
+  override fun handleChar(c: Int) {
     if (c > -1) {
       overallOutputStream.write(c)
       currentChildStream?.write(c)
