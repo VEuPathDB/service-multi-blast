@@ -12,23 +12,17 @@ ARG GITHUB_TOKEN
 
 WORKDIR /workspace
 
-RUN jlink --compress=2 --module-path /opt/jdk/jmods \
-       --add-modules java.base,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
-       --output /jlinked \
-    && apk add --no-cache git sed findutils coreutils make npm curl gawk \
+RUN apk add --no-cache git npm \
     && git config --global advice.detachedHead false
 
 ENV DOCKER=build
 
 # copy files required to build dev environment and fetch dependencies
-COPY makefile build.gradle.kts settings.gradle.kts gradlew ./
-COPY gradle gradle
+COPY build.gradle.kts settings.gradle.kts gradlew ./
 
-# cache build environment
-RUN make install-dev-env
-
-# copy remaining files
-COPY . .
+COPY gradle/ gradle/
+COPY schema/ schema/
+COPY src/ src/
 
 # build the project
 RUN ./gradlew clean test shadowJar
@@ -42,15 +36,17 @@ FROM ncbi/blast:2.13.0
 
 LABEL service="demo-service"
 
-RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-18-x64-linux-jdk.deb --output java.deb \
+    && apt-get update \
+    && apt-get install -y java-common netcat \
+    && dpkg --install java.deb \
+    && rm java.deb \
+    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
     && echo "America/New_York" > /etc/timezone
 
-ENV JAVA_HOME=/opt/jdk \
-    PATH=/opt/jdk/bin:$PATH \
-    JVM_MEM_ARGS="-Xms32M -Xmx256M" \
+ENV JVM_MEM_ARGS="-Xms32M -Xmx256M" \
     JVM_ARGS=""
 
-COPY --from=prep /jlinked /opt/jdk
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
 
 COPY startup.sh startup.sh

@@ -1,13 +1,13 @@
 #%RAML 1.0 Extension
 
-extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/base-service.raml
+extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.1.0/libraries/base-service.raml
 
 title: MultiBlast Query Service
 version: 2.0.0
 mediaType: application/json
 
 uses:
-  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/errors.raml
+  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.1.0/libraries/errors.raml
   lib: schema/library.raml
 
 
@@ -76,12 +76,9 @@ uses:
             type: file
             required: false
     responses:
-      200:
+      204:
         description: |
           Query job was successfully submitted to the job queue for execution.
-        body:
-          application/json:
-            type: lib.QueryJobDetails
       400:
         description: |
           Invalid request body or parameters.
@@ -94,6 +91,12 @@ uses:
         body:
           application/json:
             type: error.UnauthorizedError
+      409:
+        description: |
+          Job already exists and is owned by the current user.
+        body:
+          application/json:
+            type: error.ConflictError
       422:
         description: |
           Invalid job configuration.
