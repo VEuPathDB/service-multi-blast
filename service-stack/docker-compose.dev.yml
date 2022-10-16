@@ -1,0 +1,62 @@
+version: '3.5'
+
+services:
+
+  queue-db:
+    build:
+      dockerfile: ../postgres/Dockerfile
+      context: ../postgres
+    ports:
+    - "5432:5432"
+
+  queue:
+    ports:
+    - "9002:15672"
+
+  minio:
+    image: minio/minio
+    command: server --console-address ':9001' /data
+    ports:
+    - "9000:9000"
+    - "9001:9001"
+    environment:
+      MINIO_ROOT_USER:     ${S3_ACCESS_TOKEN:?}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:?}
+
+  minio-create-buckets:
+    image: minio/mc
+    depends_on:
+    - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 1;
+      /usr/bin/mc alias set minioc http://minio:9000 ${S3_ACCESS_TOKEN:?} ${S3_SECRET_KEY:?};
+      /usr/bin/mc mb minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc mb minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${QUERY_SERVICE_S3_BUCKET:?};
+      /usr/bin/mc policy set public minioc/${REPORT_SERVICE_S3_BUCKET:?};
+      exit 0;
+      "
+
+  query-service:
+    build:
+      dockerfile: ../query-service/Dockerfile
+      context: ../query-service
+    ports:
+    - "8080:8080"
+    depends_on:
+    - minio
+    - queue
+    - queue-db
+
+#  report-service:
+#    build:
+#      dockerfile: ../report-service/Dockerfile
+#      context: ../report-service
+#    ports:
+#    - "8081:8080"
+#    depends_on:
+#    - minio
+#    - queue
+#    - queue-db
+#    - query-service
