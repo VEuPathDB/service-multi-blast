@@ -2,9 +2,9 @@ import org.veupathdb.lib.gradle.container.util.Logger.Level
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "4.1.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "4.4.0"
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "1.7.10"
+  kotlin("jvm") version "1.7.20"
 }
 
 // configure VEupathDB container plugin
@@ -17,16 +17,16 @@ containerBuild {
   project {
 
     // Project Name
-    name = "demo-service"
+    name = "mblast-query-service"
 
     // Project Group
     group = "org.veupathdb.service"
 
     // Project Version
-    version = "1.0.0"
+    version = "2.0.0"
 
     // Project Root Package
-    projectPackage = "org.veupathdb.service.demo"
+    projectPackage = "org.veupathdb.service.mblast.query"
 
     // Main Class Name
     mainClassName = "Main"
@@ -42,49 +42,25 @@ containerBuild {
     dockerFile = "Dockerfile"
 
     // Resulting image tag
-    imageName = "example-service"
+    imageName = "mblast-query"
 
-  }
-
-  generateJaxRS {
-    // List of custom arguments to use in the jax-rs code generation command
-    // execution.
-    arguments = listOf(/*arg1, arg2, arg3*/)
-
-    // Map of custom environment variables to set for the jax-rs code generation
-    // command execution.
-    environment = mapOf(/*Pair("env-key", "env-val"), Pair("env-key", "env-val")*/)
   }
 }
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
+  targetCompatibility = JavaVersion.VERSION_17
+  sourceCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   kotlinOptions {
-    jvmTarget = "17"
+    jvmTarget = "18"
   }
 }
 
 tasks.shadowJar {
   exclude("**/Log4j2Plugins.dat")
   archiveFileName.set("service.jar")
-}
-
-repositories {
-  mavenCentral()
-  mavenLocal()
-  maven {
-    name = "GitHubPackages"
-    url  = uri("https://maven.pkg.github.com/veupathdb/maven-packages")
-    credentials {
-      username = if (extra.has("gpr.user")) extra["gpr.user"] as String? else System.getenv("GITHUB_USERNAME")
-      password = if (extra.has("gpr.key")) extra["gpr.key"] as String? else System.getenv("GITHUB_TOKEN")
-    }
-  }
 }
 
 configurations.all {
@@ -96,60 +72,38 @@ configurations.all {
 
 dependencies {
 
-  // Required Dependencies
-  //
-  // These dependencies are required for all projects based on this example
-  // repository:
+  implementation("org.gusdb:fgputil-db:2.7.4")
 
   // Core lib
-  implementation("org.veupathdb.lib:jaxrs-container-core:6.9.1")
+  implementation("org.veupathdb.lib:jaxrs-container-core:6.10.0")
 
   // Jersey
-  implementation("org.glassfish.jersey.core:jersey-server:3.0.6")
+  implementation("org.glassfish.jersey.core:jersey-server:3.0.8")
 
   // Async platform core
-  implementation("org.veupathdb.lib:compute-platform:1.0.0")
+  implementation("org.veupathdb.lib:compute-platform:1.3.1")
 
   // Job IDs
   implementation("org.veupathdb.lib:hash-id:1.1.0")
 
   // Logging
-  implementation("org.slf4j:slf4j-api:1.7.36")
-  implementation("org.apache.logging.log4j:log4j-core:2.18.0")
-  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.18.0")
+  implementation("org.apache.logging.log4j:log4j-core:2.19.0")
+  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
 
 
-  // Example Dependencies
-  //
-  // These dependencies were added for the demo/example project and may not be
-  // needed
-
-  // Pico CLI
-  // Only required if your project adds custom CLI/environment options, see
-  // the "MyOptions" class in the demo source code.
-  implementation("info.picocli:picocli:4.6.3")
-
-  // Jackson
-  // Only required if you are going to be directly using Jackson's JSON api.
   implementation("org.veupathdb.lib:jackson-singleton:3.0.0")
 
-  // Prometheus Metrics Gathering
-  // Only required if your project will be doing custom metric reporting outside
-  // of the metrics provided by the container core library.
   implementation("io.prometheus:simpleclient:0.16.0")
   implementation("io.prometheus:simpleclient_common:0.16.0")
 
   implementation("io.foxcapades.lib:env-access:1.0.0")
-  implementation("org.veupathdb.lib:blast-types:6.0.0-2.11.0")
+  implementation("io.foxcapades.lib:md5:1.0.0")
 
-  // Recommended Dependencies
-  //
-  // These dependencies are not required, but are recommended.
+  implementation("org.veupathdb.lib:blast-types:8.0.0")
+  implementation("org.veupathdb.lib:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
+  implementation("org.veupathdb.lib:blast-query-parser:1.0-SNAPSHOT") { isChanging = true }
 
-  // JUnit 5
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-
-  // Mockito Test Mocking
   testImplementation("org.mockito:mockito-core:4.8.0")
 }
