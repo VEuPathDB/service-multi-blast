@@ -1,7 +1,9 @@
 @file:JvmName("Main")
 
-package mblast
+package org.veupathdb.service.mblast.query
 
+import org.veupathdb.service.mblast.query.ExecutorFactory
+import org.veupathdb.service.mblast.query.Resources
 import org.veupathdb.lib.compute.platform.AsyncPlatform
 import org.veupathdb.lib.compute.platform.config.*
 import org.veupathdb.lib.container.jaxrs.config.Options

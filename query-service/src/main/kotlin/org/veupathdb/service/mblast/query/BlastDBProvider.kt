@@ -1,4 +1,4 @@
-package mblast
+package org.veupathdb.service.mblast.query
 
 import java.nio.file.Paths
 import kotlin.io.path.exists
