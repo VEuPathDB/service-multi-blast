@@ -1,6 +1,5 @@
 CREATE USER mblast NO AUTHENTICATION;
 
-
 CREATE TABLE mblast.query_configs (
   query_job_id CHAR(32)
     NOT NULL
@@ -22,27 +21,30 @@ CREATE TABLE mblast.query_to_subqueries (
     CONSTRAINT mblast_query_to_subqueries_fk_2 REFERENCES mblast.query_configs (query_job_id)
 , position      NUMBER(9)
     NOT NULL
+, CONSTRAINT mblast_query_to_subqueries_uq UNIQUE (parent_job_id, child_job_id)
 );
 
 CREATE TABLE mblast.query_to_targets (
   query_job_id CHAR(32)
     NOT NULL
     CONSTRAINT mblast_target_to_queries_fk REFERENCES mblast.query_configs (query_job_id)
-, organism     VARCHAR2(512)
+, target_name  VARCHAR2(512)
     NOT NULL
 , target_file  VARCHAR2(512)
     NOT NULL
+, CONSTRAINT mblast_query_to_targets_uq UNIQUE (query_job_id, target_name, target_file)
 );
 
 
-CREATE TABLE mblast.user_to_queries (
+CREATE TABLE mblast.query_to_users (
   query_job_id CHAR(32)
     NOT NULL
-    CONSTRAINT mblast_user_to_queries_fk REFERENCES mblast.query_configs (query_job_id)
+    CONSTRAINT mblast_query_to_users_fk REFERENCES mblast.query_configs (query_job_id)
 , user_id      NUMBER(12)
     NOT NULL
 , summary      VARCHAR2(512)
 , description  CLOB
+, CONSTRAINT mblast_query_to_users_uq UNIQUE (query_job_id, user_id)
 );
 
 
