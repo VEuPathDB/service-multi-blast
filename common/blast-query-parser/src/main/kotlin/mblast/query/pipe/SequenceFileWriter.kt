@@ -63,7 +63,7 @@ class SequenceFileWriter(
   private val fileNamePrefix: String,
   private val targetDir: File,
   private val stream: InStream,
-) : SequenceStateMachine(), Closeable {
+) : SequenceStateRunnable(), Closeable {
 
   /**
    * Handle on the file that will contain the entire multi-query.
@@ -111,7 +111,7 @@ class SequenceFileWriter(
    * If the input stream contains only one sequence, the returned result
    * sub-query list will be empty as the overall query file is the only result.
    */
-  fun writeOutFiles(): SequenceFileWriteResult {
+  override fun run(): SequenceFileWriteResult {
     try {
       super.run()
     } catch (e: Throwable) {
@@ -121,10 +121,6 @@ class SequenceFileWriter(
       close()
     }
     return SequenceFileWriteResult(overallOutputFile, childOutputFiles)
-  }
-
-  override fun run() {
-    throw UnsupportedOperationException("Use #writeOutFiles() instead.")
   }
 
   override fun pipe(c: Int) {
