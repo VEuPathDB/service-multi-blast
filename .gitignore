@@ -10,7 +10,6 @@ blastdb/
 *.tmp
 *.bak
 *.swp
-*.jar
 *.class
 
 local.properties
