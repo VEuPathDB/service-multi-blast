@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>OutFormat</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>blast-types</span>
+            </a>
+    </div>
+    <div>
+8.0.0    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="blast-types::org.veupathdb.lib.blast.common.fields/OutFormat///PointingToDeclaration//-742218116">
+  <div class="breadcrumbs"><a href="../../../index.html">blast-types</a><span class="delimiter">/</span><a href="../index.html">org.veupathdb.lib.blast.common.fields</a><span class="delimiter">/</span><a href="index.html">OutFormat</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Out</span><wbr></wbr><span><span>Format</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">OutFormat</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>type<span class="token operator">: </span><a href="../-format-type/index.html">FormatType</a><span class="token operator"> = </span>DefaultFormatType<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>delimiter<span class="token operator">: </span><a href="../-format-delimiter/index.html">FormatDelimiter</a><span class="token operator"> = </span>FormatDelimiter()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>fields<span class="token operator">: </span><a href="../-format-fields/index.html">FormatFields</a><span class="token operator"> = </span>FormatFields()</span></span><span class="token punctuation">)</span> : <a href="../../org.veupathdb.lib.blast.serial/-blast-field/index.html">BlastField</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">-outfmt <code class="lang-kotlin">&lt;String&gt;</code></p><p class="paragraph">Alignment view options:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">0  = Pairwise<br>1  = Query-anchored showing identities<br>2  = Query-anchored no identities<br>3  = Flat query-anchored showing identities<br>4  = Flat query-anchored no identities<br>5  = BLAST XML<br>6  = Tabular<br>7  = Tabular with comment lines<br>8  = Seqalign (Text ASN.1)<br>9  = Seqalign (Binary ASN.1)<br>10 = Comma-separated values<br>11 = BLAST archive (ASN.1)<br>12 = Seqalign (JSON)<br>13 = Multiple-file BLAST JSON<br>14 = Multiple-file BLAST XML2<br>15 = Single-file BLAST JSON<br>16 = Single-file BLAST XML2<br>17 = Sequence Alignment/Map (SAM)<br>18 = Organism Report</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Options 6, 7, 10 and 17 can be additionally configured to produce a custom format specified by space delimited format specifiers, or in the case of options 6, 7, and 10, by a token specified by the delim keyword. E.g.: &quot;17 delim=@ qacc sacc score&quot;.</p><p class="paragraph">The delim keyword must appear after the numeric output format specification.</p><p class="paragraph">The supported format specifiers for options 6, 7 and 10 are:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">qseqid     means Query Seq-id<br>qgi        means Query GI<br>qacc       means Query accesion<br>qaccver    means Query accesion.version<br>qlen       means Query sequence length<br>sseqid     means Subject Seq-id<br>sallseqid  means All subject Seq-id(s), separated by a ';'<br>sgi        means Subject GI<br>sallgi     means All subject GIs<br>sacc       means Subject accession<br>saccver    means Subject accession.version<br>sallacc    means All subject accessions<br>slen       means Subject sequence length<br>qstart     means Start of alignment in query<br>qend       means End of alignment in query<br>sstart     means Start of alignment in subject<br>send       means End of alignment in subject<br>qseq       means Aligned part of query sequence<br>sseq       means Aligned part of subject sequence<br>evalue     means Expect value<br>bitscore   means Bit score<br>score      means Raw score<br>length     means Alignment length<br>pident     means Percentage of identical matches<br>nident     means Number of identical matches<br>mismatch   means Number of mismatches<br>positive   means Number of positive-scoring matches<br>gapopen    means Number of gap openings<br>gaps       means Total number of gaps<br>ppos       means Percentage of positive-scoring matches<br>frames     means Query and subject frames separated by a '/'<br>qframe     means Query frame<br>sframe     means Subject frame<br>btop       means Blast traceback operations (BTOP)<br>staxid     means Subject Taxonomy ID<br>ssciname   means Subject Scientific Name<br>scomname   means Subject Common Name<br>sblastname means Subject Blast Name<br>sskingdom  means Subject Super Kingdom<br>staxids    means unique Subject Taxonomy ID(s), separated by a ';'<br>                 (in numerical order)<br>sscinames  means unique Subject Scientific Name(s), separated by a ';'<br>scomnames  means unique Subject Common Name(s), separated by a ';'<br>sblastnamesmeans unique Subject Blast Name(s), separated by a ';'<br>                 (in alphabetical order)<br>sskingdoms means unique Subject Super Kingdom(s), separated by a ';'<br>                 (in alphabetical order)<br>stitle     means Subject Title<br>salltitles means All Subject Title(s), separated by a '&lt;&gt;'<br>sstrand    means Subject Strand<br>qcovs      means Query Coverage Per Subject<br>qcovhsp    means Query Coverage Per HSP<br>qcovus     means Query Coverage Per Unique Subject (blastn only)</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">When not provided, the default value is:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">qaccver saccver pident length mismatch gapopen qstart qend sstart send evalue bitscore</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">which is equivalent to the keyword <code class="lang-kotlin">std</code></p><p class="paragraph">The supported format specifier for option 17 is:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">SQ means Include Sequence Data<br>SR means Subject as Reference Seq</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Default = <code class="lang-kotlin">0</code></p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="1653723690%2FConstructors%2F-742218116" anchor-label="OutFormat" id="1653723690%2FConstructors%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-out-format.html"><span>Out</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1653723690%2FConstructors%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-out-format.html"><span class="token function">OutFormat</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;type<span class="token operator">: </span><a href="../-format-type/index.html">FormatType</a><span class="token operator"> = </span>DefaultFormatType<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;delimiter<span class="token operator">: </span><a href="../-format-delimiter/index.html">FormatDelimiter</a><span class="token operator"> = </span>FormatDelimiter()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;fields<span class="token operator">: </span><a href="../-format-fields/index.html">FormatFields</a><span class="token operator"> = </span>FormatFields()</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="1113767022%2FFunctions%2F-742218116" anchor-label="appendCliParts" id="1113767022%2FFunctions%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-cli-parts.html"><span>append</span><wbr></wbr><span>Cli</span><wbr></wbr><span><span>Parts</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1113767022%2FFunctions%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="append-cli-parts.html"><span class="token function">appendCliParts</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cli<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1822334791%2FFunctions%2F-742218116" anchor-label="appendCliSegment" id="1822334791%2FFunctions%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-cli-segment.html"><span>append</span><wbr></wbr><span>Cli</span><wbr></wbr><span><span>Segment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1822334791%2FFunctions%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="append-cli-segment.html"><span class="token function">appendCliSegment</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cli<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html">StringBuilder</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html">StringBuilder</a> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="2044704098%2FFunctions%2F-742218116" anchor-label="appendJson" id="2044704098%2FFunctions%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-json.html"><span>append</span><wbr></wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2044704098%2FFunctions%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="append-json.html"><span class="token function">appendJson</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">js<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given JSON <span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1175663034%2FFunctions%2F-742218116" anchor-label="toJson" id="1175663034%2FFunctions%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.serial/-blast-field/to-json.html"><span>to</span><wbr></wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1175663034%2FFunctions%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../../org.veupathdb.lib.blast.serial/-blast-field/to-json.html"><span class="token function">toJson</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Serializes this field into a JSON <span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span>.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="704432321%2FProperties%2F-742218116" anchor-label="delimiter" id="704432321%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="delimiter.html"><span><span>delimiter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="704432321%2FProperties%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><a data-name="704432321%2FProperties%2F-742218116" anchor-label="delimiter" id="704432321%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="delimiter.html">delimiter</a><span class="token operator">: </span><a href="../-format-delimiter/index.html">FormatDelimiter</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1957856807%2FProperties%2F-742218116" anchor-label="fields" id="-1957856807%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="fields.html"><span><span>fields</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1957856807%2FProperties%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><a data-name="-1957856807%2FProperties%2F-742218116" anchor-label="fields" id="-1957856807%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="fields.html">fields</a><span class="token operator">: </span><a href="../-format-fields/index.html">FormatFields</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-658630895%2FProperties%2F-742218116" anchor-label="isDefault" id="-658630895%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="is-default.html"><span>is</span><wbr></wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-658630895%2FProperties%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><a data-name="-658630895%2FProperties%2F-742218116" anchor-label="isDefault" id="-658630895%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="is-default.html">isDefault</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-658630895%2FProperties%2F-742218116" anchor-label="isDefault" id="-658630895%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><p class="paragraph">Indicates whether the field is currently set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-37668985%2FProperties%2F-742218116" anchor-label="name" id="-37668985%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="name.html"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-37668985%2FProperties%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><a data-name="-37668985%2FProperties%2F-742218116" anchor-label="name" id="-37668985%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="name.html">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-37668985%2FProperties%2F-742218116" anchor-label="name" id="-37668985%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><p class="paragraph">The name of this field.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="892106168%2FProperties%2F-742218116" anchor-label="type" id="892106168%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-types:dokkaHtml/main" data-filterable-set=":common:blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="type.html"><span><span>type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="892106168%2FProperties%2F-742218116"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-types:dokkaHtml/main"><a data-name="892106168%2FProperties%2F-742218116" anchor-label="type" id="892106168%2FProperties%2F-742218116" data-filterable-set=":common:blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="type.html">type</a><span class="token operator">: </span><a href="../-format-type/index.html">FormatType</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
