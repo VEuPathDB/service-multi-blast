@@ -43,7 +43,13 @@ abstract class SequenceStateRunnable : HeadlessSequenceStateMachine(), Runnable 
    * Outlet pipe for characters read from the input query.
    *
    * Each character read from the query (including the EOF `-1` value) will be
-   * passed to this method before executing anything else in the state machine.
+   * passed to this method after executing everything else in the backing state
+   * machine.
+   *
+   * This means all event callback methods will be hit before this method is
+   * called.
+   *
+   * @param c Character to handle.
    */
   protected open fun handleChar(c: Int) {}
 
