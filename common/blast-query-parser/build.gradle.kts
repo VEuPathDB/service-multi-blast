@@ -8,7 +8,7 @@ group = "org.veupathdb.lib"
 version = "1.0-SNAPSHOT"
 
 dependencies {
-  implementation("org.veupathdb.lib:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
+  implementation("org.veupathdb.lib.mblast:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
 }
 
 java {
