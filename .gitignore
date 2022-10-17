@@ -3,7 +3,6 @@
 build/
 .tools/
 bin/
-tmp/
 .bin/
 blastdb/
 
