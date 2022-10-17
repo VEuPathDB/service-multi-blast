@@ -4,7 +4,7 @@ plugins {
   `maven-publish`
 }
 
-group = "org.veupathdb.lib"
+group = "org.veupathdb.lib.mblast"
 version = "1.0-SNAPSHOT"
 
 java {
