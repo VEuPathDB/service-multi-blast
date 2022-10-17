@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.query.generated.resources;
 
+import jakarta.ws.rs.core.StreamingOutput;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -35,7 +36,7 @@ public interface JobsJobIdQuery {
       return new HeadersFor200();
     }
 
-    public static GetJobsQueryByJobIdResponse respond200WithTextPlain(String entity,
+    public static GetJobsQueryByJobIdResponse respond200WithTextPlain(StreamingOutput entity,
         HeadersFor200 headers) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "text/plain");
       responseBuilder.entity(entity);
