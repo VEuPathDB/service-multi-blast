@@ -175,11 +175,8 @@ uses:
     displayName: Restart Job
     description: Causes the target job to be restarted (if it is expired).
     responses:
-      200:
+      204:
         description: Job was successfully requeued for execution.
-        body:
-          application/json:
-            type: lib.QueryJobDetails
       401:
         description: |
           No valid user authentication provided.
@@ -277,7 +274,7 @@ uses:
             required: false
         body:
           text/plain:
-            type: string
+            type: file
             displayName: Job Query
             description: Raw query text
       401:
@@ -334,7 +331,7 @@ uses:
             required: true
         body:
           text/plain:
-            type: string
+            type: file
             displayName: Job Result
             description: Raw job result.
       401:
