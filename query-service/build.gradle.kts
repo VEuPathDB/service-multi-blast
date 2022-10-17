@@ -2,7 +2,7 @@ import org.veupathdb.lib.gradle.container.util.Logger.Level
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "4.4.0"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "4.5.2"
   id("com.github.johnrengelman.shadow") version "7.1.2"
   kotlin("jvm") version "1.7.20"
 }
@@ -102,6 +102,8 @@ dependencies {
   implementation("org.veupathdb.lib:blast-types:8.0.0")
   implementation("org.veupathdb.lib:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
   implementation("org.veupathdb.lib:blast-query-parser:1.0-SNAPSHOT") { isChanging = true }
+
+  implementation(project(":common:utils:temp-cache"))
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
