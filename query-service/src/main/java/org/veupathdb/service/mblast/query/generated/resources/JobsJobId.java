@@ -108,10 +108,9 @@ public interface JobsJobId {
       super(response);
     }
 
-    public static PostJobsByJobIdResponse respond200WithApplicationJson(QueryJobDetails entity) {
-      Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      responseBuilder.entity(entity);
-      return new PostJobsByJobIdResponse(responseBuilder.build(), entity);
+    public static PostJobsByJobIdResponse respond204() {
+      Response.ResponseBuilder responseBuilder = Response.status(204);
+      return new PostJobsByJobIdResponse(responseBuilder.build());
     }
 
     public static PostJobsByJobIdResponse respond401WithApplicationJson(UnauthorizedError entity) {
