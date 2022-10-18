@@ -1,5 +1,9 @@
 version: '3.5'
 
+networks:
+  monitoring-ext:
+    external: true
+
 services:
 
   queue-db:
@@ -22,6 +26,8 @@ services:
     environment:
       MINIO_ROOT_USER:     ${S3_ACCESS_TOKEN:?}
       MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:?}
+    networks:
+    - internal
 
   minio-create-buckets:
     image: minio/mc
@@ -37,6 +43,8 @@ services:
       /usr/bin/mc policy set public minioc/${REPORT_SERVICE_S3_BUCKET:?};
       exit 0;
       "
+    networks:
+    - internal
 
   query-service:
     build:

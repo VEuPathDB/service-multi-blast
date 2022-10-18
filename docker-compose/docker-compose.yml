@@ -1,7 +1,15 @@
 version: "3.5"
 
+name: mblast
+
 volumes:
   vol-queue-db:
+
+networks:
+  internal:
+    internal: true
+  traefik:
+    external: true
 
 services:
 
@@ -18,6 +26,12 @@ services:
       REPORT_SERVICE_PG_USER:    ${REPORT_SERVICE_PG_USER:?}
       REPORT_SERVICE_PG_PASS:    ${REPORT_SERVICE_PG_PASS:?}
       REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
+    networks:
+    - internal
+    labels:
+    - "prometheus.scrape_enabled=false"
+    - "com.centurylinklabs.watchtower.enable=${POSTGRES_WATCHTOWER:-false}"
+    - "traefik.docker.network=traefik"
 
 
   queue:
@@ -25,6 +39,12 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_ROOT_USER:?}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_ROOT_PASS:?}
+    networks:
+    - internal
+    labels:
+    - "prometheus.scrape_enabled=false"
+    - "com.centurylinklabs.watchtower.enable=false"
+    - "traefik.docker.network=traefik"
 
 
   query-service:
@@ -71,6 +91,7 @@ services:
       S3_ACCESS_TOKEN: ${S3_ACCESS_TOKEN:?}
       S3_SECRET_KEY:   ${S3_SECRET_KEY:?}
       S3_PORT:         ${S3_PORT:-9000}
+      S3_USE_HTTPS:    ${S3_USE_HTTPS:-false}
 
       JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
 
@@ -86,6 +107,18 @@ services:
       QUERY_SERVICE_QUEUE_NAME_2: ${QUERY_SERVICE_QUEUE_NAME_2:-secondary-queries}
 
       BLAST_DB_ROOT_DIR: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+    networks:
+    - internal
+    - traefik
+    labels:
+    - "prometheus.scrape_enabled=true"
+    - "com.centurylinklabs.watchtower.enable=${QUERY_SERVICE_WATCHTOWER:-false}"
+    - "traefik.http.services.${TRAEFIK_QUERY_ROUTER:-mblast-query-dev}.loadbalancer.server.port=${QUERY_SERVER_PORT:-8080}"
+    - "traefik.http.routers.${TRAEFIK_QUERY_ROUTER:-mblast-query-dev}.rule=Host(`${TRAEFIK_MBLAST_HOST:-mblast.local.apidb.org}`) && PathPrefix(`/query`)"
+    - "traefik.http.routers.${TRAEFIK_QUERY_ROUTER:-mblast-query-dev}.tls=true"
+    - "traefik.http.routers.${TRAEFIK_QUERY_ROUTER:-mblast-query-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+    - "traefik.docker.network=traefik"
+
 
 
 #  report-service:
