@@ -1,9 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 SLEEP_SECONDS=2
 MAX_WAIT_TIME=30
 
-function await() {
+function await {
   sleeps=0
 
   echo "Waiting for $1 to become available"
