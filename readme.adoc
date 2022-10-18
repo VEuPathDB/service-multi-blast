@@ -15,11 +15,11 @@ https://veupathdb.github.io/service-multi-blast/
 
 == Projects
 
-link:query-service/[BLAST+ Query Service]::
+link:service-query/[BLAST+ Query Service]::
 A containerized service whose purpose is the asynchronous execution of BLAST
 queries against mounted databases.
 
-link:report-service/[BLAST+ Result Formatting Service]::
+link:service-report/[BLAST+ Result Formatting Service]::
 A containerized services whose purpose is the asynchronous formatting of ASN.1
 BLAST query results into various other formats via the BLAST+ `blast_formatter`
 tool.
