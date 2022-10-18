@@ -25,6 +25,26 @@ internal abstract class BlastCLIImpl(
   override var parseDefLines: ParseDefLines
 ) :  BlastCLI {
 
+  override fun shortHelp(value: Boolean) { shortHelp = HelpShort(value) }
+  override fun longHelp(value: Boolean) { longHelp = HelpLong(value) }
+  override fun version(value: Boolean) { version = Version(value) }
+  override fun outFile(value: String) { outFile = OutFile(value) }
+  override fun showGIs(value: Boolean) { showGIs = ShowGIs(value) }
+  override fun numDescriptions(value: UInt) { numDescriptions = NumDescriptions(value) }
+  override fun numAlignments(value: UInt) { numAlignments = NumAlignments(value) }
+  override fun lineLength(value: UInt) { lineLength = LineLength(value) }
+  override fun html(value: Boolean) { html = HTML(value) }
+  override fun sortHits(value: HitSorting) { sortHits = SortHits(value) }
+  override fun sortHSPs(value: HSPSorting) { sortHSPs = SortHSPs(value) }
+
+  override fun maxTargetSeqs(value: UInt) {
+    TODO("Not yet implemented")
+  }
+
+  override fun parseDefLines(value: Boolean) {
+    TODO("Not yet implemented")
+  }
+
   override fun toJson() = Json.new<ObjectNode> {
     put("tool", tool.value)
 

@@ -76,6 +76,17 @@ internal abstract class BlastQueryWithListsImpl(
   remote,
 ) {
 
+  override fun giListFile(value: String) { giListFile = GIList(value) }
+  override fun negativeGIListFile(value: String) { negativeGIListFile = NegativeGIList(value) }
+  override fun seqIDListFile(value: String) { seqIDListFile = SeqIDList(value) }
+  override fun negativeSeqIDListFile(value: String) { negativeSeqIDListFile = NegativeSeqIDList(value) }
+  override fun taxIDListFile(value: String) { taxIDListFile = TaxIDList(value) }
+  override fun negativeTaxIDListFile(value: String) { negativeTaxIDListFile = NegativeTaxIDList(value) }
+  override fun taxIDs(value: Iterable<String>) { taxIDs = TaxIDs(value.toList()) }
+  override fun taxIDs(vararg values: String) { taxIDs = TaxIDs(values.asList()) }
+  override fun negativeTaxIDs(value: List<String>) { negativeTaxIDs = NegativeTaxIDs(value.toList()) }
+  override fun negativeTaxIDs(vararg values: String) { negativeTaxIDs = NegativeTaxIDs(values.asList()) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

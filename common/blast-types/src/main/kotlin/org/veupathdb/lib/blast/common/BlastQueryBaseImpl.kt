@@ -54,6 +54,21 @@ internal abstract class BlastQueryBaseImpl(
   parseDefLines,
 ) {
 
+  override fun queryFile(value: String) { queryFile = QueryFile(value) }
+  override fun queryLocation(start: UInt, stop: UInt) { queryLocation = QueryLocation(start, stop) }
+  override fun dbFiles(vararg files: String) { dbFile = DBFiles(*files) }
+  override fun expectValue(value: String) { expectValue = ExpectValue(value) }
+  override fun lowercaseMasking(value: Boolean) { lowercaseMasking = LowercaseMasking(value) }
+  override fun entrezQuery(value: String) { entrezQuery = EntrezQuery(value) }
+  override fun maxHSPs(value: UInt) { maxHSPs = MaxHSPs(value) }
+  override fun dbSize(value: Byte) { dbSize = DBSize(value) }
+  override fun searchSpace(value: Byte) { searchSpace = SearchSpace(value) }
+  override fun importSearchStrategy(value: String) { importSearchStrategy = ImportSearchStrategy(value) }
+  override fun exportSearchStrategy(value: String) { exportSearchStrategy = ExportSearchStrategy(value) }
+  override fun extensionDropoffUngapped(value: Double) { extensionDropoffUngapped = ExtensionDropoffUngapped(value) }
+  override fun windowSize(value: UInt) { windowSize = WindowSize(value) }
+  override fun remote(value: Boolean) { remote = Remote(value) }
+
   override fun appendJson(js: ObjectNode) {
     queryFile.appendJson(js)
     queryLocation.appendJson(js)
