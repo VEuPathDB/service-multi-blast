@@ -197,6 +197,39 @@ internal class PSIBlastImpl(
     ParsePhiPatternFile(js)
   )
 
+  override fun wordSize(value: UInt) { wordSize = WordSizePSI(value)  }
+  override fun gapOpen(value: Int) { gapOpen = GapOpen(value)  }
+  override fun gapExtend(value: Int) { gapExtend = GapExtend(value)  }
+  override fun matrix(value: ScoringMatrixPSIType) { matrix = ScoringMatrixPSI(value)  }
+  override fun threshold(value: Double) { threshold = Threshold(value)  }
+  override fun compBasedStats(value: CompBasedStatsPSIValue) { compBasedStats = CompBasedStatsPSI(value)  }
+  override fun subjectFile(value: String) { subjectFile = SubjectFile(value)  }
+  override fun subjectLocation(start: UInt, stop: UInt) { subjectLocation = SubjectLocation(start, stop) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingPSI(value)  }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value)  }
+  override fun cullingLimit(value: UInt) { cullingLimit = CullingLimit(value)  }
+  override fun bestHitOverhang(value: Double) { bestHitOverhang = BestHitOverhang(value)  }
+  override fun bestHitScoreEdge(value: Double) { bestHitScoreEdge = BestHitScoreEdge(value)  }
+  override fun subjectBestHit(value: Boolean) { subjectBestHit = SubjectBestHit(value)  }
+  override fun sumStats(value: Boolean) { sumStats = SumStats(value)  }
+  override fun extensionDropoffPrelimGapped(value: Double) { extensionDropoffPrelimGapped = ExtensionDropoffPrelimGapped(value)  }
+  override fun extensionDropoffFinalGapped(value: Double) { extensionDropoffFinalGapped = ExtensionDropoffFinalGapped(value)  }
+  override fun gapTrigger(value: Double) { gapTrigger = GapTrigger(value)  }
+  override fun numCPUCores(value: UByte) { numCPUCores = NumCPUCores(value)  }
+  override fun useSmithWatermanTraceback(value: Boolean) { useSmithWatermanTraceback = UseSmithWatermanTraceback(value)  }
+  override fun numIterations(value: UByte) { numIterations = NumIterations(value)  }
+  override fun outPSSMFile(value: String) { outPSSMFile = OutPSSMFile(value)  }
+  override fun outASCIIPSSMFile(value: String) { outASCIIPSSMFile = OutASCIIPSSMFile(value)  }
+  override fun savePSSMAfterLastRound(value: Boolean) { savePSSMAfterLastRound = SavePSSMAfterLastRound(value)  }
+  override fun saveEachPSSM(value: Boolean) { saveEachPSSM = SaveEachPSSM(value)  }
+  override fun inMSAFile(value: String) { inMSAFile = InMSAFile(value)  }
+  override fun msaMasterIndex(value: UInt) { msaMasterIndex = MSAMasterIndex(value)  }
+  override fun ignoreMSAMaster(value: Boolean) { ignoreMSAMaster = IgnoreMSAMaster(value)  }
+  override fun inPSSMFile(value: String) { inPSSMFile = InPSSMFile(value)  }
+  override fun pseudoCount(value: Int) { pseudoCount = PseudoCount(value)  }
+  override fun inclusionEValueThreshold(value: Double) { inclusionEValueThreshold = InclusionEValueThreshold(value)  }
+  override fun phiPatternFile(value: String) { phiPatternFile = PHIPatternFile(value)  }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

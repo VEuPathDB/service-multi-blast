@@ -125,6 +125,19 @@ internal class RPSTBlastNImpl(
     ParseUseSWTBack(js)
   )
 
+  override fun queryGenCode(value: UByte) { queryGenCode = QueryGenCode(value) }
+  override fun strand(value: StrandType) { strand = Strand(value) }
+  override fun compBasedStats(value: CompBasedStatsRPSTNValue) { compBasedStats = CompBasedStatsRPSTN(value) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingRPSTN(value) }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value) }
+  override fun sumStats(value: Boolean) { sumStats = SumStats(value) }
+  override fun extensionDropoffPrelimGapped(value: Double) { extensionDropoffPrelimGapped = ExtensionDropoffPrelimGapped(value) }
+  override fun extensionDropoffFinalGapped(value: Double) { extensionDropoffFinalGapped = ExtensionDropoffFinalGapped(value) }
+  override fun ungappedAlignmentsOnly(value: Boolean) { ungappedAlignmentsOnly = UngappedAlignmentsOnly(value) }
+  override fun autoCPUCores(value: AutoCPUCoresValue) { autoCPUCores = AutoCPUCores(value) }
+  override fun multiThreadingMode(value: MultiThreadingModeValue) { multiThreadingMode = MultiThreadingMode(value) }
+  override fun useSmithWatermanTraceback(value: Boolean) { useSmithWatermanTraceback = UseSmithWatermanTraceback(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

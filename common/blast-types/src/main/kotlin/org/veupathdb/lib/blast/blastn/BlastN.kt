@@ -5,7 +5,7 @@ import org.veupathdb.lib.blast.common.BlastQueryWithLists
 import org.veupathdb.lib.blast.common.fields.*
 
 /**
- * Nucleotide-Nucleotide BLAST 2.11.0+
+ * Nucleotide-Nucleotide BLAST 2.13.0+
  */
 interface BlastN : BlastQueryWithLists {
 

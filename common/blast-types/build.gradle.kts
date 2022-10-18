@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   kotlin("jvm") version "1.7.20"
   id("org.jetbrains.dokka") version "1.7.10"
@@ -5,7 +7,7 @@ plugins {
 }
 
 group = "org.veupathdb.lib"
-version = "8.0.1"
+version = "8.1.0"
 
 java {
   targetCompatibility = JavaVersion.VERSION_1_8
@@ -35,6 +37,13 @@ tasks.jar {
   manifest {
     attributes["Implementation-Title"] = project.name
     attributes["Implementation-Version"] = project.version
+  }
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    jvmTarget = "1.8"
+    freeCompilerArgs = listOf("-Xjvm-default=all")
   }
 }
 

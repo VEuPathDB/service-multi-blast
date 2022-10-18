@@ -164,6 +164,26 @@ internal class TBlastXImpl(
     ParseNumCPUCores(js),
   )
 
+  override fun strand(value: StrandType) { strand = Strand(value) }
+  override fun queryGenCode(value: UByte) { queryGenCode = QueryGenCode(value) }
+  override fun wordSize(value: UInt) { wordSize = WordSizeTX(value) }
+  override fun maxIntronLength(value: UInt) { maxIntronLength = MaxIntronLength(value) }
+  override fun matrix(value: ScoringMatrixTXType) { matrix = ScoringMatrixTX(value) }
+  override fun threshold(value: Double) { threshold = Threshold(value) }
+  override fun dbGenCode(value: UByte) { dbGenCode = DBGenCode(value) }
+  override fun subjectFile(value: String) { subjectFile = SubjectFile(value) }
+  override fun subjectLocation(start: UInt, stop: UInt) { subjectLocation = SubjectLocation(start, stop) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingTX(value) }
+  override fun dbSoftMask(value: String) { dbSoftMask = DBSoftMask(value) }
+  override fun dbHardMask(value: String) { dbHardMask = DBHardMask(value) }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value) }
+  override fun cullingLimit(value: UInt) { cullingLimit = CullingLimit(value) }
+  override fun bestHitOverhang(value: Double) { bestHitOverhang = BestHitOverhang(value) }
+  override fun bestHitScoreEdge(value: Double) { bestHitScoreEdge = BestHitScoreEdge(value) }
+  override fun subjectBestHit(value: Boolean) { subjectBestHit = SubjectBestHit(value) }
+  override fun sumStats(value: Boolean) { sumStats = SumStats(value) }
+  override fun numCPUCores(value: UByte) { numCPUCores = NumCPUCores(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 
