@@ -10,7 +10,6 @@ build/
 
 mblast-dev.properties
 
-*.tmp
 *.bak
 *.swp
 *.class
