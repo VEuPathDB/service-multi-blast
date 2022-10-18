@@ -78,6 +78,7 @@ object Blast {
    * `"tool"` property, or if the value of that property is not a valid BLAST+
    * tool name.
    */
+  @JvmStatic
   fun of(js: ObjectNode): BlastCLI {
     return js.optString("tool") {
       when (parseTool(it)) {
@@ -103,6 +104,7 @@ object Blast {
    *
    * @return The new [BlastN] instance.
    */
+  @JvmStatic
   fun blastn(js: ObjectNode): BlastN = BlastNImpl(js)
 
   /**
@@ -110,6 +112,7 @@ object Blast {
    *
    * @return The new [BlastN] instance.
    */
+  @JvmStatic
   fun blastn(): BlastN = BlastNImpl()
 
   /**
@@ -119,6 +122,7 @@ object Blast {
    *
    * @return The new [BlastP] instance.
    */
+  @JvmStatic
   fun blastp(js: ObjectNode): BlastP = BlastPImpl(js)
 
   /**
@@ -126,6 +130,7 @@ object Blast {
    *
    * @return The new [BlastP] instance.
    */
+  @JvmStatic
   fun blastp(): BlastP = BlastPImpl()
 
   /**
@@ -135,6 +140,7 @@ object Blast {
    *
    * @return The new [BlastX] instance.
    */
+  @JvmStatic
   fun blastx(js: ObjectNode): BlastX = BlastXImpl(js)
 
   /**
@@ -142,6 +148,7 @@ object Blast {
    *
    * @return The new [BlastX] instance.
    */
+  @JvmStatic
   fun blastx(): BlastX = BlastXImpl()
 
   /**
@@ -151,6 +158,7 @@ object Blast {
    *
    * @return The new [DeltaBlast] instance.
    */
+  @JvmStatic
   fun deltablast(js: ObjectNode): DeltaBlast = DeltaBlastImpl(js)
 
   /**
@@ -158,6 +166,7 @@ object Blast {
    *
    * @return The new [DeltaBlast] instance.
    */
+  @JvmStatic
   fun deltablast(): DeltaBlast = DeltaBlastImpl()
 
   /**
@@ -167,6 +176,7 @@ object Blast {
    *
    * @return The new [PSIBlast] instance.
    */
+  @JvmStatic
   fun psiblast(js: ObjectNode): PSIBlast = PSIBlastImpl(js)
 
   /**
@@ -174,6 +184,7 @@ object Blast {
    *
    * @return The new [PSIBlast] instance.
    */
+  @JvmStatic
   fun psiblast(): PSIBlast = PSIBlastImpl()
 
   /**
@@ -183,6 +194,7 @@ object Blast {
    *
    * @return The new [RPSBlast] instance.
    */
+  @JvmStatic
   fun rpsblast(js: ObjectNode): RPSBlast = RPSBlastImpl(js)
 
   /**
@@ -190,6 +202,7 @@ object Blast {
    *
    * @return The new [RPSBlast] instance.
    */
+  @JvmStatic
   fun rpsblast(): RPSBlast = RPSBlastImpl()
 
   /**
@@ -199,6 +212,7 @@ object Blast {
    *
    * @return The new [RPSTBlastN] instance.
    */
+  @JvmStatic
   fun rpstblastn(js: ObjectNode): RPSTBlastN = RPSTBlastNImpl(js)
 
   /**
@@ -206,6 +220,7 @@ object Blast {
    *
    * @return The new [RPSTBlastN] instance.
    */
+  @JvmStatic
   fun rpstblastn(): RPSTBlastN = RPSTBlastNImpl()
 
   /**
@@ -215,6 +230,7 @@ object Blast {
    *
    * @return The new [TBlastN] instance.
    */
+  @JvmStatic
   fun tblastn(js: ObjectNode): TBlastN = TBlastNImpl(js)
 
   /**
@@ -222,6 +238,7 @@ object Blast {
    *
    * @return The new [TBlastN] instance.
    */
+  @JvmStatic
   fun tblastn(): TBlastN = TBlastNImpl()
 
   /**
@@ -231,6 +248,7 @@ object Blast {
    *
    * @return The new [TBlastX] instance.
    */
+  @JvmStatic
   fun tblastx(js: ObjectNode): TBlastX = TBlastXImpl(js)
 
   /**
@@ -238,6 +256,7 @@ object Blast {
    *
    * @return The new [TBlastX] instance.
    */
+  @JvmStatic
   fun tblastx(): TBlastX = TBlastXImpl()
 
   /**
@@ -247,6 +266,7 @@ object Blast {
    *
    * @return The new [BlastFormatter] instance.
    */
+  @JvmStatic
   fun blastFormatter(js: ObjectNode): BlastFormatter = BlastFormatterImpl(js)
 
   /**
@@ -254,5 +274,6 @@ object Blast {
    *
    * @return The new [BlastFormatter] instance.
    */
+  @JvmStatic
   fun blastFormatter(): BlastFormatter = BlastFormatterImpl()
 }
