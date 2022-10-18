@@ -22,11 +22,15 @@ project(":service-query:api-test").name = "query-api-test"
 include(":service-report")
 project(":service-report").name = "report-service"
 
-include("common:blast-query-parser")
+include(":lib-blast-query-parser")
+project(":lib-blast-query-parser").name = "blast-query-parser"
 
 include(":lib-blast-types")
 project(":lib-blast-types").name = "blast-types"
 
-include("common:mblast-utils")
-include("common:temp-cache")
+include(":lib-mblast-utils")
+project(":lib-mblast-utils").name = "mblast-utils"
+
+include(":lib-temp-cache")
+project(":lib-temp-cache").name = "temp-cache"
 

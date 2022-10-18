@@ -13,7 +13,11 @@ link:docs/development.adoc[Developer Info] doc.
 An index of available API documentation can be found at
 https://veupathdb.github.io/service-multi-blast/
 
-== Projects
+== Projects / Components
+
+link:stack-mblast[MultiBlast Docker Compose Stack]::
+Docker Compose stack configuration for MultiBlast.
+
 
 link:service-query/[BLAST+ Query Service]::
 A containerized service whose purpose is the asynchronous execution of BLAST
@@ -24,14 +28,28 @@ A containerized services whose purpose is the asynchronous formatting of ASN.1
 BLAST query results into various other formats via the BLAST+ `blast_formatter`
 tool.
 
-link:common/blast-types/[BLAST+ CLI API Wrapper Type Library]::
+
+link:lib-blast-types/[BLAST+ CLI API Wrapper Type Library]::
 BLAST+ tool CLI API wrapper.
 +
 Allows easy programmatic construction and validation of CLI calls to BLAST+
 tools.
 
-link:common/blast-query-parser/[BLAST+ Query Parsing Tools]::
+link:lib-blast-query-parser/[BLAST+ Query Parsing Tools]::
 Multi-sequence BLAST query parsing tool kit.
 
-link:common/mblast-utils/[MultiBlast Common Utilities]::
+link:lib-mblast-utils/[MultiBlast Common Utilities]::
 Various utilities common to the other  services and libraries in this repo.
+
+link:lib-temp-cache/[Temp File Management Utilities]::
+Expiring temporary file factory.
+
+
+link:docker-queue-db/[MultiBlast Queue Database]::
+Docker image containing setup scripts to provision the database schemata
+necessary to support the MultiBlast query and report services.
+
+
+link:ddl-oracle/[User Database DDL]::
+DDL for the database schema and tables backing MultiBlast in the VEuPathDB user
+database.
