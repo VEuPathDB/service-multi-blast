@@ -53,7 +53,7 @@ private fun Project.createProcess(vararg args: String) =
     "-f", "docker-compose.dev.yml",
     *args
   )
-    .directory(file("docker-compose"))
+    .directory(file("stack-mblast"))
 
 
 
