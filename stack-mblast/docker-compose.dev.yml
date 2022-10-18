@@ -8,8 +8,8 @@ services:
 
   queue-db:
     build:
-      dockerfile: ../postgres/Dockerfile
-      context: ../postgres
+      dockerfile: ../docker-queue-db/Dockerfile
+      context: ../docker-queue-db
     ports:
     - "5432:5432"
 
