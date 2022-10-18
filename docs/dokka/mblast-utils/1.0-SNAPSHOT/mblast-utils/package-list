@@ -1,0 +1,56 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:mblast.util.io////PointingToDeclaration/mblast-utils/mblast.util.io/index.html
+$dokka.location:mblast.util.io//toIOStream/java.io.InputStream#/PointingToDeclaration/mblast-utils/mblast.util.io/to-i-o-stream.html
+$dokka.location:mblast.util.io//toIOStream/java.io.OutputStream#/PointingToDeclaration/mblast-utils/mblast.util.io/to-i-o-stream.html
+$dokka.location:mblast.util.io//toJDKStream/mblast.util.io.InStream#/PointingToDeclaration/mblast-utils/mblast.util.io/to-j-d-k-stream.html
+$dokka.location:mblast.util.io//toJDKStream/mblast.util.io.OutStream#/PointingToDeclaration/mblast-utils/mblast.util.io/to-j-d-k-stream.html
+$dokka.location:mblast.util.io/IOInputStream///PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/index.html
+$dokka.location:mblast.util.io/IOInputStream/IOInputStream/#mblast.util.io.InStream/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/-i-o-input-stream.html
+$dokka.location:mblast.util.io/IOInputStream/close/#/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/close.html
+$dokka.location:mblast.util.io/IOInputStream/read/#/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/read.html
+$dokka.location:mblast.util.io/IOInputStream/read/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/read.html
+$dokka.location:mblast.util.io/IOInputStream/read/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-input-stream/read.html
+$dokka.location:mblast.util.io/IOOutputStream///PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/index.html
+$dokka.location:mblast.util.io/IOOutputStream/IOOutputStream/#mblast.util.io.OutStream/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/-i-o-output-stream.html
+$dokka.location:mblast.util.io/IOOutputStream/close/#/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/close.html
+$dokka.location:mblast.util.io/IOOutputStream/flush/#/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/flush.html
+$dokka.location:mblast.util.io/IOOutputStream/write/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/write.html
+$dokka.location:mblast.util.io/IOOutputStream/write/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/write.html
+$dokka.location:mblast.util.io/IOOutputStream/write/#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-i-o-output-stream/write.html
+$dokka.location:mblast.util.io/InStream///PointingToDeclaration/mblast-utils/mblast.util.io/-in-stream/index.html
+$dokka.location:mblast.util.io/InStream/read/#/PointingToDeclaration/mblast-utils/mblast.util.io/-in-stream/read.html
+$dokka.location:mblast.util.io/InStream/read/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-in-stream/read.html
+$dokka.location:mblast.util.io/InStream/read/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-in-stream/read.html
+$dokka.location:mblast.util.io/InStream/transferTo/#mblast.util.io.OutStream/PointingToDeclaration/mblast-utils/mblast.util.io/-in-stream/transfer-to.html
+$dokka.location:mblast.util.io/InputIOStream///PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/index.html
+$dokka.location:mblast.util.io/InputIOStream/InputIOStream/#java.io.InputStream/PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/-input-i-o-stream.html
+$dokka.location:mblast.util.io/InputIOStream/close/#/PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/close.html
+$dokka.location:mblast.util.io/InputIOStream/read/#/PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/read.html
+$dokka.location:mblast.util.io/InputIOStream/read/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/read.html
+$dokka.location:mblast.util.io/InputIOStream/read/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-input-i-o-stream/read.html
+$dokka.location:mblast.util.io/OutStream///PointingToDeclaration/mblast-utils/mblast.util.io/-out-stream/index.html
+$dokka.location:mblast.util.io/OutStream/flush/#/PointingToDeclaration/mblast-utils/mblast.util.io/-out-stream/flush.html
+$dokka.location:mblast.util.io/OutStream/write/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-out-stream/write.html
+$dokka.location:mblast.util.io/OutStream/write/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-out-stream/write.html
+$dokka.location:mblast.util.io/OutStream/write/#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-out-stream/write.html
+$dokka.location:mblast.util.io/OutputIOStream///PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/index.html
+$dokka.location:mblast.util.io/OutputIOStream/OutputIOStream/#java.io.OutputStream/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/-output-i-o-stream.html
+$dokka.location:mblast.util.io/OutputIOStream/close/#/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/close.html
+$dokka.location:mblast.util.io/OutputIOStream/flush/#/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/flush.html
+$dokka.location:mblast.util.io/OutputIOStream/write/#kotlin.ByteArray#kotlin.Int#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/write.html
+$dokka.location:mblast.util.io/OutputIOStream/write/#kotlin.ByteArray/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/write.html
+$dokka.location:mblast.util.io/OutputIOStream/write/#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util.io/-output-i-o-stream/write.html
+$dokka.location:mblast.util////PointingToDeclaration/mblast-utils/mblast.util/index.html
+$dokka.location:mblast.util//ifExists/TypeParam(bounds=[kotlin.Any?])?#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/mblast-utils/mblast.util/if-exists.html
+$dokka.location:mblast.util//ifNotExists/TypeParam(bounds=[kotlin.Any?])?#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/mblast-utils/mblast.util/if-not-exists.html
+$dokka.location:mblast.util//isNotNullOrEmpty/kotlin.String?#/PointingToDeclaration/mblast-utils/mblast.util/is-not-null-or-empty.html
+$dokka.location:mblast.util//shr/kotlin.UByte#kotlin.Int/PointingToDeclaration/mblast-utils/mblast.util/shr.html
+$dokka.location:mblast.util//toHexString/kotlin.ByteArray#/PointingToDeclaration/mblast-utils/mblast.util/to-hex-string.html
+$dokka.location:mblast.util/StreamIterable///PointingToDeclaration/mblast-utils/mblast.util/-stream-iterable/index.html
+$dokka.location:mblast.util/StreamIterable/StreamIterable/#java.util.stream.Stream[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/mblast-utils/mblast.util/-stream-iterable/-stream-iterable.html
+$dokka.location:mblast.util/StreamIterable/iterator/#/PointingToDeclaration/mblast-utils/mblast.util/-stream-iterable/iterator.html
+$dokka.location:mblast.util/StreamIterable/stream/#/PointingToDeclaration/mblast-utils/mblast.util/-stream-iterable/stream.html
+mblast.util
+mblast.util.io
+

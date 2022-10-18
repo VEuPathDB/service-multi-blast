@@ -1,7 +1,16 @@
 = MultiBlast Developer Info
 :toc:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
-== Prerequisites
+== Developing the Service
+
+=== Prerequisites
 
 The following tools are required or strongly recommended for developers working
 on the MultiBlast stack.
@@ -12,7 +21,7 @@ on the MultiBlast stack.
 * link:https://nodejs.org/en/[Node & NPM]
 * link:https://openjdk.org/projects/jdk/[Java 18+]
 
-== Gradle Tasks
+=== Gradle Tasks
 
 The following are root level gradle tasks that operate on the entire project.
 
@@ -49,13 +58,13 @@ subproject.
 ----
 
 `compose-build`::
-See <<Build The Stack>>.
+See <<Build>>.
 
 `compose-up`::
-See <<In The Background,Run The Stack>>.
+See <<In The Background,Run>>.
 
 `compose-stop`::
-See <<Stop The Stack>>.
+See <<Stop>>.
 
 `compose-down`::
 See <<Teardown>>.
@@ -77,11 +86,9 @@ called directly.
 ./gradlew download-blast-dbs
 ----
 
-== Local Development Stack
+== Running Locally
 
-=== Spinning it Up
-
-==== Prerequisites
+=== Prerequisites
 
 TODO: Setup sshuttle
 
@@ -106,7 +113,7 @@ service-multi-blast/
 ----
 
 
-==== Build The Stack
+=== Build
 
 Builds the development docker compose stack.
 
@@ -116,10 +123,10 @@ Builds the development docker compose stack.
 ----
 
 
-==== Run The Stack
+=== Run
 
 
-===== In The Background
+==== In The Background
 
 Spins up the docker compose stack in the background.
 
@@ -128,19 +135,36 @@ Spins up the docker compose stack in the background.
 ./gradlew compose-up
 ----
 
+Tailing the logs for a specific background container can be done by using the
+following command:
 
-===== In The Foreground
+[source, shell]
+----
+docker logs --follow ${CONTAINER_NAME} <1>
+----
+<1> `CONTAINER_NAME` may be one of:
++
+* `mblast-minio-1`
+* `mblast-minio-create-buckets`
+* `mblast-queue-1`
+* `mblast-queue-db-1`
+* `mblast-query-service-1`
+* `mblast-report-service-1`
+
+WARNING: `sudo` may be required to run `docker` commands in your environment.
+
+==== In The Foreground
 
 Manually spin up the docker compose stack in the console foreground.
 
 [source, shell]
 ----
-cd service-stack
-docker compose -f docker-compose.dev.yml up
+cd docker-compose
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ----
 
 
-==== Stop The Stack
+=== Stop
 
 Shuts down a running development docker compose stack without removing the
 containers.
@@ -151,7 +175,7 @@ containers.
 ----
 
 
-==== Teardown
+=== Teardown
 
 Shuts down and/or removes the containers for the development docker compose
 stack.
@@ -161,77 +185,7 @@ stack.
 ./gradlew compose-down
 ----
 
-
-== Environment Variables
-
-
-=== Explanation
-
-The following is an explanation of all the environment variables that should be
-set and available (using a .env file) for spinning up the docker compose stack.
-
-=== Example `.env` Contents
-
-[source, shell]
-----
-#
-# Connection Configuration
-#
-POSTGRES_ROOT_USER=rootuser
-POSTGRES_ROOT_PASS=rootpass
-POSTGRES_PORT=5432
-
-RABBITMQ_ROOT_USER=rabbitmquser
-RABBITMQ_ROOT_PASS=rabbitmqpass
-RABBITMQ_PORT=5672
-
-MINIO_ROOT_USER=miniouser
-MINIO_ROOT_PASS=miniopass
-MINIO_PORT=9000
-
-QUERY_SERVICE_PG_USER=queryuser
-QUERY_SERVICE_PG_PASS=querypass
-QUERY_SERVICE_PG_DB_NAME=querydb
-QUERY_SERVICE_PG_POOL_SIZE=10
-QUERY_SERVICE_S3_BUCKET=querybucket
-QUERY_SERVICE_QUEUE_POOL_SIZE=5
-
-REPORT_SERVICE_PG_USER=reportuser
-REPORT_SERVICE_PG_PASS=reportpass
-REPORT_SERVICE_PG_DB_NAME=reportdb
-REPORT_SERVICE_PG_POOL_SIZE=10
-REPORT_SERVICE_S3_BUCKET=reportbucket
-REPORT_SERVICE_QUEUE_POOL_SIZE=5
-
-SERVER_PORT=8080
-LDAP_SERVERS=
-ORACLE_BASE_DN=
-USER_DB_TNS_NAME=
-USER_DB_USER=
-USER_DB_PASS=
-USER_DB_POOL_SIZE=
-
-#
-# Service Configuration
-#
-AUTH_SECRET_KEY=
-
-JOB_CACHE_TIMEOUT_DAYS=30
-
-SITE_BUILD=build-59
-
-MAX_QUERIES_PER_JOB=100
-MAX_RESULTS_PER_QUERY=10000
-MAX_INPUT_QUERY_SIZE=3145728
-MAX_NA_SEQ_SIZE=1048576
-MAX_AA_SEQ_SIZE=102400
-
-QUEUES_QUERY_NAME_1=primary-queries
-QUEUES_QUERY_NAME_2=secondary-queries
-QUEUES_REPORT_NAME=report-jobs
-----
-
-== Exposed Ports
+=== Exposed Ports
 
 [%header, cols="1m,2"]
 |===
@@ -243,3 +197,98 @@ QUEUES_REPORT_NAME=report-jobs
 | 9001 | MinIO management console
 | 9002 | RabbitMQ management console
 |===
+
+== Environment Variables
+
+
+=== Example `.env` Contents
+
+[source, shell]
+----
+POSTGRES_WATCHTOWER=false
+QUERY_SERVICE_WATCHTOWER=false
+
+TRAEFIK_ENTRYPOINTS=local
+TRAEFIK_MBLAST_HOST=mblast.local.apidb.org
+TRAEFIK_QUERY_ROUTER=mblast-query-dev
+TRAEFIK_REPORT_ROUTER=mblast-report-dev
+
+
+MBLAST_QUERY_SERVICE_TAG=latest
+MBLAST_QUEUE_DB_TAG=latest
+MBLAST_REPORT_SERVICE_TAG=latest
+
+
+AUTH_SECRET_KEY=
+
+
+REPORT_SERVER_PORT=8080
+QUERY_SERVER_PORT=8080
+
+
+BLAST_DB_MOUNT_SOURCE=../blastdb
+BLAST_DB_MOUNT_TARGET=/blastdb
+SITE_BUILD_DIR=build-59
+
+
+LDAP_SERVERS=
+
+ORACLE_BASE_DN=
+
+ACCT_DB_TNS_NAME=
+ACCT_DB_USER=
+ACCT_DB_PASS=
+ACCT_DB_POOL_SIZE=5
+
+USER_DB_TNS_NAME=
+USER_DB_USER=
+USER_DB_PASS=
+USER_DB_POOL_SIZE=5
+
+
+POSTGRES_PORT=5432
+POSTGRES_ROOT_PASS=dbrootuser
+POSTGRES_ROOT_USER=dbrootpass
+
+QUERY_SERVICE_PG_DB_NAME=query
+QUERY_SERVICE_PG_USER=querypguser
+QUERY_SERVICE_PG_PASS=querypgpass
+QUERY_SERVICE_PG_POOL_SIZE=10
+
+REPORT_SERVICE_PG_DB_NAME=report
+REPORT_SERVICE_PG_USER=reportpguser
+REPORT_SERVICE_PG_PASS=reportpgpass
+REPORT_SERVICE_PG_POOL_SIZE=10
+
+
+S3_ACCESS_TOKEN=miniouser
+S3_HOST=minio
+S3_PORT=9000
+S3_SECRET_KEY=miniopass
+S3_USE_HTTPS=false
+
+QUERY_SERVICE_S3_BUCKET=mblast-query-jobs
+
+REPORT_SERVICE_S3_BUCKET=mblast-report-jobs
+
+JOB_CACHE_TIMEOUT_DAYS=30
+
+
+RABBITMQ_ROOT_USER=rabbitmquser
+RABBITMQ_ROOT_PASS=rabbitmqpass
+RABBITMQ_PORT=5672
+
+QUERY_SERVICE_QUEUE_NAME_1=primary-queries
+QUERY_SERVICE_QUEUE_NAME_2=secondary-queries
+QUERY_SERVICE_QUEUE_POOL_SIZE=5
+
+REPORT_SERVICE_QUEUE_NAME=report-jobs
+REPORT_SERVICE_QUEUE_POOL_SIZE=5
+
+
+MAX_NA_SEQ_SIZE=1048576
+MAX_AA_SEQ_SIZE=102400
+MAX_INPUT_QUERY_SIZE=3145728
+MAX_SEQUENCES_PER_JOB=100
+MAX_RESULTS_PER_QUERY=10000
+----

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>SequenceValidationStream</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>blast-query-parser</span>
+            </a>
+    </div>
+    <div>
+1.0-SNAPSHOT    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="blast-query-parser::mblast.query.validate/SequenceValidationStream///PointingToDeclaration//-884295043">
+  <div class="breadcrumbs"><a href="../../../index.html">blast-query-parser</a><span class="delimiter">/</span><a href="../index.html">mblast.query.validate</a><span class="delimiter">/</span><a href="index.html">SequenceValidationStream</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Sequence</span><wbr></wbr><span>Validation</span><wbr></wbr><span><span>Stream</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">SequenceValidationStream</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxSequenceLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxSequenceCount<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxTotalQueryLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;stream<span class="token operator">: </span><span data-unresolved-link="mblast.util.io/InStream///PointingToDeclaration/">InStream</span></span></span><span class="token punctuation">)</span> : <a href="../../mblast.query/-sequence-state-stream/index.html">SequenceStateStream</a>, <span data-unresolved-link="mblast.util.io/InStream///PointingToDeclaration/">InStream</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h1 class="">BLAST Multi-Sequence Query Validation Stream</h1><p class="paragraph">A stream wrapper that performs validations as defined below on a BLAST query of one or more sequences as they pass through.</p><p class="paragraph">As this type is a stream wrapper that itself implements a streaming API, the stream will need to be fully or partially consumed for any validation to be performed.</p><h2 class=""> Validations</h2><h3 class=""> Sequence Length</h3><p class="paragraph">The stream will test the count of non-ignorable sequence characters in each sequence against the configured <span data-unresolved-link="mblast.query.validate/SequenceValidationStream/maxSequenceLength/#/PointingToDeclaration/">maxSequenceLength</span> value.  If any individual sequence is found to have more non-ignorable characters than that limit, a <a href="../-sequence-too-long-exception/index.html">SequenceTooLongException</a> will be thrown.</p><p class="paragraph">Additionally, if any sequence in the query is found to have <code class="lang-kotlin">0</code> total non-ignorable characters an <a href="../-empty-sequence-exception/index.html">EmptySequenceException</a> will be thrown.</p><h3 class=""> Total Query Length</h3><p class="paragraph">The stream will test the total count of non-ignorable sequence characters across all sequences in the stream against the configured <span data-unresolved-link="mblast.query.validate/SequenceValidationStream/maxTotalQueryLength/#/PointingToDeclaration/">maxTotalQueryLength</span> value.  If the total number of non-ignorable characters read exceeds that value, a <a href="../-query-too-long-exception/index.html">QueryTooLongException</a> will be thrown.</p><h3 class=""> Total Sequence Count</h3><p class="paragraph">The stream will count the number of sequences passing through.  If the total count of sequences is greater than the configured <span data-unresolved-link="mblast.query.validate/SequenceValidationStream/maxSequenceCount/#/PointingToDeclaration/">maxSequenceCount</span> value, a <a href="../-too-many-sequences-exception/index.html">TooManySequencesException</a> will be thrown.</p><h3 class=""> Invalid Sequence Characters</h3><p class="paragraph">Implementations this class are tasked with implementing their own character validation, however if any non-ignorable character in any sequence is found to not be valid by the rules the implementation defines, a <a href="../-invalid-sequence-character-exception/index.html">InvalidSequenceCharacterException</a> will be thrown.</p><h4 class="">Author</h4><p class="paragraph">Elizabeth Paige Harper - https://github.com/foxcapades</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Parameters">Parameters</button><button class="section-tab" data-togglable="Inheritors">Inheritors</button></div>
+    <div class="tabs-section-body">
+      <h2 class="">Parameters</h2>
+      <div data-togglable="Parameters">
+        <div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>max</span><wbr></wbr><span>Sequence</span><wbr></wbr><span><span>Length</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The maximum allowed count of non-ignorable characters in an individual sequence.</p></div></div></div></div></div><div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>max</span><wbr></wbr><span>Sequence</span><wbr></wbr><span><span>Count</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The maximum allowed count of total sequences in a multi-query stream.</p></div></div></div></div></div><div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>max</span><wbr></wbr><span>Total</span><wbr></wbr><span>Query</span><wbr></wbr><span><span>Length</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The maximum allowed count of non-ignorable characters in a multi-query stream.</p></div></div></div></div></div><div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span><span>stream</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">Source stream from which the query will be read.</p></div></div></div></div></div></div></div></div></div>
+      </div>
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="-663459429%2FConstructors%2F-884295043" anchor-label="SequenceValidationStream" id="-663459429%2FConstructors%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-sequence-validation-stream.html"><span>Sequence</span><wbr></wbr><span>Validation</span><wbr></wbr><span><span>Stream</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-663459429%2FConstructors%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sequence-validation-stream.html"><span class="token function">SequenceValidationStream</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxSequenceLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxSequenceCount<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;maxTotalQueryLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;stream<span class="token operator">: </span><span data-unresolved-link="mblast.util.io/InStream///PointingToDeclaration/">InStream</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Constructs a new <code class="lang-kotlin">SequenceValidationStream</code> instance.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="1087341098%2FFunctions%2F-884295043" anchor-label="close" id="1087341098%2FFunctions%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="close.html"><span><span>close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1087341098%2FFunctions%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="close.html"><span class="token function">close</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="559746142%2FFunctions%2F-884295043" anchor-label="read" id="559746142%2FFunctions%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../mblast.query/-sequence-state-stream/read.html"><span><span>read</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="559746142%2FFunctions%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../../mblast.query/-sequence-state-stream/read.html"><span class="token function">read</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns the next byte in the sequence or -1 if the end of the stream has been reached.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1921218983%2FFunctions%2F-884295043"><span class="token function">read</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">b<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#510083449%2FFunctions%2F-884295043"><span class="token function">read</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;b<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;off<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;len<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="252955710%2FFunctions%2F-884295043" anchor-label="transferTo" id="252955710%2FFunctions%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="index.html#252955710%2FFunctions%2F-884295043"><span>transfer</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="252955710%2FFunctions%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#252955710%2FFunctions%2F-884295043"><span class="token function">transferTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">out<span class="token operator">: </span><span data-unresolved-link="mblast.util.io/OutStream///PointingToDeclaration/">OutStream</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-241761155%2FProperties%2F-884295043" anchor-label="sequenceType" id="-241761155%2FProperties%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="sequence-type.html"><span>sequence</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-241761155%2FProperties%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:blast-query-parser:dokkaHtml/main"><a data-name="-241761155%2FProperties%2F-884295043" anchor-label="sequenceType" id="-241761155%2FProperties%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="sequence-type.html">sequenceType</a><span class="token operator">: </span><a href="../-sequence-type/index.html">SequenceType</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-241761155%2FProperties%2F-884295043" anchor-label="sequenceType" id="-241761155%2FProperties%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a><p class="paragraph">Type of sequences that an implementation of this class handles.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Inheritors</h2>
+      <div class="table" data-togglable="Inheritors"><a data-name="-1813119945%2FInheritors%2F-884295043" anchor-label="NucleotideSequenceValidationStream" id="-1813119945%2FInheritors%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-nucleotide-sequence-validation-stream/index.html">NucleotideSequenceValidationStream</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1813119945%2FInheritors%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1825266948%2FInheritors%2F-884295043" anchor-label="ProteinSequenceValidationStream" id="1825266948%2FInheritors%2F-884295043" data-filterable-set=":common:blast-query-parser:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:blast-query-parser:dokkaHtml/main" data-filterable-set=":common:blast-query-parser:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-protein-sequence-validation-stream/index.html">ProteinSequenceValidationStream</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1825266948%2FInheritors%2F-884295043"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
