@@ -118,7 +118,7 @@ tasks.create("generate-env-file") {
   val pat = Regex("\\$\\{(\\w+)(?::(?:\\-(.+?)|\\?))?\\}")
 
   doLast {
-    val lines = file("docker-compose")
+    val lines = file("stack-mblast")
       .listFiles()
       .filter { it.name.endsWith(".yml") }
       .stream()
@@ -135,7 +135,7 @@ tasks.create("generate-env-file") {
       .sorted()
       .toList()
 
-    file("docker-compose/sample.env").bufferedWriter().use { writer ->
+    file("stack-mblast/sample.env").bufferedWriter().use { writer ->
       lines.forEach {
         writer.write(it)
         writer.newLine()
@@ -144,7 +144,7 @@ tasks.create("generate-env-file") {
 
     println("\u001b[38:5:203m")
     println("""
-      Generated file "docker-compose/sample.env".
+      Generated file "stack-mblast/sample.env".
       
       Please edit this file with the correct values and rename it to just \".env\" for it to be automatically picked up
       by docker compose.
