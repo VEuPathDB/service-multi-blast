@@ -12,43 +12,6 @@ on the MultiBlast stack.
 * link:https://nodejs.org/en/[Node & NPM]
 * link:https://openjdk.org/projects/jdk/[Java 18+]
 
-== Getting Started
-
-1. Clone this repository into your development environment.
-+
-[source, bash]
-----
-git clone git@github.com:veupathdb/service-multi-blast
-----
-
-2. CD into the cloned directory
-+
-[source, bash]
-----
-cd service-multi-blast
-----
-
-3. Run the initialization Gradle task. The first time you run this task, it will
-fail, but create a file in the root of the project named
-`mblast-dev.properties`.
-+
-[source, bash]
-----
-./gradlew initialize
-----
-
-4. Edit the `mblast-dev.properties` file with your details.
-
-5. Re-run the Gradle `initialize` task.
-+
-[source, bash]
-----
-./gradlew initialize
-----
-
-6. Setup complete! You're good to go!
-
-
 == Gradle Tasks
 
 The following are root level gradle tasks that operate on the entire project.
@@ -64,20 +27,6 @@ This list does not include the available default gradle tasks such as `build` or
 For a full listing of available gradle tasks, run `./gradlew tasks` in the repo
 root.
 ====
-
-`initialize`::
-Initializes the repository for local development.
-+
-This target performs all the necessary setup steps at the root level of the
-project and in all the subprojects to put the project into a state where it
-should be buildable locally assuming the environment has the necessary
-prerequisites.
-+
-.Example
-[source, bash]
-----
-./gradlew initialize
-----
 
 `generate-raml-docs`::
 Generates HTML documentation of the service APIs based on the RAML API
@@ -110,6 +59,23 @@ See <<Stop The Stack>>.
 
 `compose-down`::
 See <<Teardown>>.
+
+`download-blast-dbs`::
+Attempts to download several example BLAST databases from the configured remote
+server over SFTP.
++
+On first run, this task will fail and will create a file named
+`mblast-dev.properties`.  The created file should be edited with your details,
+then the task can be re-run.
++
+NOTE: This task is automatically called by `compose-up` and shouldn't need to be
+called directly.
++
+.Example
+[source, bash]
+----
+./gradlew download-blast-dbs
+----
 
 == Local Development Stack
 
