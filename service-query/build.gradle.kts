@@ -99,7 +99,7 @@ dependencies {
   implementation("io.foxcapades.lib:env-access:1.0.0")
   implementation("io.foxcapades.lib:md5:1.0.0")
 
-  implementation("org.veupathdb.lib:blast-types:8.0.0")
+  implementation("org.veupathdb.lib:blast-types:8.1.0")
   implementation("org.veupathdb.lib:blast-query-parser:1.0-SNAPSHOT") { isChanging = true }
   implementation("org.veupathdb.lib.mblast:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
   implementation("org.veupathdb.lib.mblast:temp-cache:1.0-SNAPSHOT") { isChanging = true }
