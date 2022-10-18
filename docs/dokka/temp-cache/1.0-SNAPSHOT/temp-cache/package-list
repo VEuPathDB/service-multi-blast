@@ -1,0 +1,25 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp////PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/index.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/CustomTempFileFactory///PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-custom-temp-file-factory/index.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/CustomTempFileFactory/CustomTempFileFactory/#java.io.File#kotlin.Long#kotlin.Long/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-custom-temp-file-factory/-custom-temp-file-factory.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory///PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/index.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/cleanup/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/cleanup.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/cleanupInterval/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/cleanup-interval.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/create/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/create.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/create/#kotlin.Long/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/create.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/defaultLifetime/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/default-lifetime.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/rootDir/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/root-dir.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactory/shutDown/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory/shut-down.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase///PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/index.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/cleanup/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/cleanup.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/cleanupInterval/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/cleanup-interval.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/create/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/create.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/create/#kotlin.Long/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/create.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/defaultLifetime/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/default-lifetime.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/rootDir/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/root-dir.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFileFactoryBase/shutDown/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-file-factory-base/shut-down.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFiles///PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-files/index.html
+$dokka.location:org.veupathdb.lib.mblast.utils.tmp/TempFiles/shutDown/#/PointingToDeclaration/temp-cache/org.veupathdb.lib.mblast.utils.tmp/-temp-files/shut-down.html
+org.veupathdb.lib.mblast.utils.tmp
+

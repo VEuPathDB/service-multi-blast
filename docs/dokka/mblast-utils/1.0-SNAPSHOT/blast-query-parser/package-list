@@ -1,0 +1,66 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:mblast.query.pipe////PointingToDeclaration/blast-query-parser/mblast.query.pipe/index.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult///PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/index.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult/SequenceFileWriteResult/#java.io.File#kotlin.collections.List[java.io.File]/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/-sequence-file-write-result.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult/deleteAll/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/delete-all.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult/isSingleQuery/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/is-single-query.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult/overallQueryFile/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/overall-query-file.html
+$dokka.location:mblast.query.pipe/SequenceFileWriteResult/subQueryFiles/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-write-result/sub-query-files.html
+$dokka.location:mblast.query.pipe/SequenceFileWriter///PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-writer/index.html
+$dokka.location:mblast.query.pipe/SequenceFileWriter/SequenceFileWriter/#kotlin.String#java.io.File#mblast.util.io.InStream/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-writer/-sequence-file-writer.html
+$dokka.location:mblast.query.pipe/SequenceFileWriter/close/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-writer/close.html
+$dokka.location:mblast.query.pipe/SequenceFileWriter/getResult/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-writer/get-result.html
+$dokka.location:mblast.query.pipe/SequenceFileWriter/run/#/PointingToDeclaration/blast-query-parser/mblast.query.pipe/-sequence-file-writer/run.html
+$dokka.location:mblast.query.validate////PointingToDeclaration/blast-query-parser/mblast.query.validate/index.html
+$dokka.location:mblast.query.validate/EmptySequenceException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-empty-sequence-exception/index.html
+$dokka.location:mblast.query.validate/EmptySequenceException/EmptySequenceException/#kotlin.Int#kotlin.Int/PointingToDeclaration/blast-query-parser/mblast.query.validate/-empty-sequence-exception/-empty-sequence-exception.html
+$dokka.location:mblast.query.validate/EmptySequenceException/lineNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-empty-sequence-exception/line-number.html
+$dokka.location:mblast.query.validate/EmptySequenceException/sequenceNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-empty-sequence-exception/sequence-number.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/index.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/InvalidSequenceCharacterException/#mblast.query.validate.SequenceType#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Char/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/-invalid-sequence-character-exception.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/character/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/character.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/colIndex/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/col-index.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/lineNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/line-number.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/sequenceNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/sequence-number.html
+$dokka.location:mblast.query.validate/InvalidSequenceCharacterException/sequenceType/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-invalid-sequence-character-exception/sequence-type.html
+$dokka.location:mblast.query.validate/MBlastQueryParseException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-m-blast-query-parse-exception/index.html
+$dokka.location:mblast.query.validate/NucleotideSequenceValidationStream///PointingToDeclaration/blast-query-parser/mblast.query.validate/-nucleotide-sequence-validation-stream/index.html
+$dokka.location:mblast.query.validate/NucleotideSequenceValidationStream/NucleotideSequenceValidationStream/#kotlin.Int#kotlin.Int#kotlin.Int#mblast.util.io.InStream/PointingToDeclaration/blast-query-parser/mblast.query.validate/-nucleotide-sequence-validation-stream/-nucleotide-sequence-validation-stream.html
+$dokka.location:mblast.query.validate/NucleotideSequenceValidationStream/sequenceType/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-nucleotide-sequence-validation-stream/sequence-type.html
+$dokka.location:mblast.query.validate/ProteinSequenceValidationStream///PointingToDeclaration/blast-query-parser/mblast.query.validate/-protein-sequence-validation-stream/index.html
+$dokka.location:mblast.query.validate/ProteinSequenceValidationStream/ProteinSequenceValidationStream/#kotlin.Int#kotlin.Int#kotlin.Int#mblast.util.io.InStream/PointingToDeclaration/blast-query-parser/mblast.query.validate/-protein-sequence-validation-stream/-protein-sequence-validation-stream.html
+$dokka.location:mblast.query.validate/ProteinSequenceValidationStream/sequenceType/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-protein-sequence-validation-stream/sequence-type.html
+$dokka.location:mblast.query.validate/QueryTooLongException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-query-too-long-exception/index.html
+$dokka.location:mblast.query.validate/QueryTooLongException/QueryTooLongException/#kotlin.Int/PointingToDeclaration/blast-query-parser/mblast.query.validate/-query-too-long-exception/-query-too-long-exception.html
+$dokka.location:mblast.query.validate/QueryTooLongException/maxTotalLength/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-query-too-long-exception/max-total-length.html
+$dokka.location:mblast.query.validate/SequenceTooLongException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/index.html
+$dokka.location:mblast.query.validate/SequenceTooLongException/SequenceTooLongException/#mblast.query.validate.SequenceType#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/-sequence-too-long-exception.html
+$dokka.location:mblast.query.validate/SequenceTooLongException/lineNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/line-number.html
+$dokka.location:mblast.query.validate/SequenceTooLongException/maxSequenceSize/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/max-sequence-size.html
+$dokka.location:mblast.query.validate/SequenceTooLongException/sequenceNumber/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/sequence-number.html
+$dokka.location:mblast.query.validate/SequenceTooLongException/sequenceType/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-too-long-exception/sequence-type.html
+$dokka.location:mblast.query.validate/SequenceType.Nucleotide///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}blast-query-parser/mblast.query.validate/-sequence-type/-nucleotide/index.html
+$dokka.location:mblast.query.validate/SequenceType.Protein///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}blast-query-parser/mblast.query.validate/-sequence-type/-protein/index.html
+$dokka.location:mblast.query.validate/SequenceType///PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-type/index.html
+$dokka.location:mblast.query.validate/SequenceType/toString/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-type/to-string.html
+$dokka.location:mblast.query.validate/SequenceValidationStream///PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-validation-stream/index.html
+$dokka.location:mblast.query.validate/SequenceValidationStream/SequenceValidationStream/#kotlin.Int#kotlin.Int#kotlin.Int#mblast.util.io.InStream/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-validation-stream/-sequence-validation-stream.html
+$dokka.location:mblast.query.validate/SequenceValidationStream/close/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-validation-stream/close.html
+$dokka.location:mblast.query.validate/SequenceValidationStream/sequenceType/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-sequence-validation-stream/sequence-type.html
+$dokka.location:mblast.query.validate/TooManySequencesException///PointingToDeclaration/blast-query-parser/mblast.query.validate/-too-many-sequences-exception/index.html
+$dokka.location:mblast.query.validate/TooManySequencesException/TooManySequencesException/#kotlin.Int/PointingToDeclaration/blast-query-parser/mblast.query.validate/-too-many-sequences-exception/-too-many-sequences-exception.html
+$dokka.location:mblast.query.validate/TooManySequencesException/maxSequences/#/PointingToDeclaration/blast-query-parser/mblast.query.validate/-too-many-sequences-exception/max-sequences.html
+$dokka.location:mblast.query////PointingToDeclaration/blast-query-parser/mblast.query/index.html
+$dokka.location:mblast.query/HeadlessSequenceStateMachine///PointingToDeclaration/blast-query-parser/mblast.query/-headless-sequence-state-machine/index.html
+$dokka.location:mblast.query/HeadlessSequenceStateMachine/HeadlessSequenceStateMachine/#/PointingToDeclaration/blast-query-parser/mblast.query/-headless-sequence-state-machine/-headless-sequence-state-machine.html
+$dokka.location:mblast.query/SequenceStateRunnable///PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-runnable/index.html
+$dokka.location:mblast.query/SequenceStateRunnable/SequenceStateRunnable/#/PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-runnable/-sequence-state-runnable.html
+$dokka.location:mblast.query/SequenceStateRunnable/run/#/PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-runnable/run.html
+$dokka.location:mblast.query/SequenceStateStream///PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-stream/index.html
+$dokka.location:mblast.query/SequenceStateStream/SequenceStateStream/#/PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-stream/-sequence-state-stream.html
+$dokka.location:mblast.query/SequenceStateStream/read/#/PointingToDeclaration/blast-query-parser/mblast.query/-sequence-state-stream/read.html
+mblast.query
+mblast.query.pipe
+mblast.query.validate
+
