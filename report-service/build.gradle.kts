@@ -2,7 +2,8 @@ import org.veupathdb.lib.gradle.container.util.Logger.Level
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "4.1.0"
+  kotlin("jvm") version "1.7.20"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "4.4.0"
   id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -16,16 +17,16 @@ containerBuild {
   project {
 
     // Project Name
-    name = "demo-service"
+    name = "mblast-report-service"
 
     // Project Group
     group = "org.veupathdb.service"
 
     // Project Version
-    version = "1.0.0"
+    version = "2.0.0"
 
     // Project Root Package
-    projectPackage = "org.veupathdb.service.demo"
+    projectPackage = "org.veupathdb.service.mblast.report"
 
     // Main Class Name
     mainClassName = "Main"
@@ -41,7 +42,7 @@ containerBuild {
     dockerFile = "Dockerfile"
 
     // Resulting image tag
-    imageName = "example-service"
+    imageName = "mblast-report"
 
   }
 
@@ -57,9 +58,8 @@ containerBuild {
 }
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
+  targetCompatibility = JavaVersion.VERSION_18
+  sourceCompatibility = JavaVersion.VERSION_18
 }
 
 tasks.shadowJar {
