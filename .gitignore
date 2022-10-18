@@ -1,10 +1,14 @@
 .gradle/
 .idea/
-build/
 .tools/
 bin/
 .bin/
 blastdb/
+build/
+
+!buildSrc/src/main/kotlin/mblast/build
+
+mblast-dev.properties
 
 *.tmp
 *.bak

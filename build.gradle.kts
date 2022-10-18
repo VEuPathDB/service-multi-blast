@@ -1,3 +1,5 @@
+import mblast.build.*
+
 allprojects {
   repositories {
     mavenLocal()
@@ -22,14 +24,9 @@ allprojects {
  *
  * Each step should be commented with what it's doing and why.
  */
-tasks.create("initialize") {
+tasks.create("download-blast-dbs") {
   group = "monorepo"
-  doLast {
-    // Create blast input directory.  The blastdb directory is required to spin
-    // up the service locally.  This directory is mounted into the mblast
-    // service containers when spinning up the stack.
-    file("blastdb").mkdir()
-  }
+  doLast { CreateBlastDBDirectoryIfNotExists() }
 }
 
 
@@ -40,26 +37,7 @@ tasks.create("initialize") {
  */
 tasks.create("compose-build") {
   group = "monorepo"
-  doLast {
-    with(
-      ProcessBuilder(
-        "docker", "compose",
-        "-f", "docker-compose.yml",
-        "-f", "docker-compose.dev.yml",
-        "build",
-        "--build-arg=GITHUB_USERNAME=" + if (extra.has("gpr.user")) extra["gpr.user"] as String? else System.getenv("GITHUB_USERNAME"),
-        "--build-arg=GITHUB_TOKEN=" + if (extra.has("gpr.key")) extra["gpr.key"] as String? else System.getenv("GITHUB_TOKEN"),
-      )
-        .directory(file("service-stack"))
-        .start()
-    ) {
-      inputStream.transferTo(System.out)
-      errorStream.transferTo(System.err)
-
-      if (waitFor() != 0)
-        throw RuntimeException("Failed to build docker compose stack.")
-    }
-  }
+  doLast { DockerComposeBuild() }
 }
 
 
@@ -70,25 +48,8 @@ tasks.create("compose-build") {
  */
 tasks.create("compose-up") {
   group = "monorepo"
-  doLast {
-    with(
-      ProcessBuilder(
-        "docker", "compose",
-        "-f", "docker-compose.yml",
-        "-f", "docker-compose.dev.yml",
-        "up",
-        "--detach"
-      )
-        .directory(file("service-stack"))
-        .start()
-    ) {
-      inputStream.transferTo(System.out)
-      errorStream.transferTo(System.err)
-
-      if (waitFor() != 0)
-        throw RuntimeException("Failed to spin up docker compose stack.")
-    }
-  }
+  dependsOn("download-blast-dbs")
+  doLast { DockerComposeUp() }
 }
 
 
@@ -99,24 +60,7 @@ tasks.create("compose-up") {
  */
 tasks.create("compose-stop") {
   group = "monorepo"
-  doLast {
-    with(
-      ProcessBuilder(
-        "docker", "compose",
-        "-f", "docker-compose.yml",
-        "-f", "docker-compose.dev.yml",
-        "stop"
-      )
-        .directory(file("service-stack"))
-        .start()
-    ) {
-      inputStream.transferTo(System.out)
-      errorStream.transferTo(System.err)
-
-      if (waitFor() != 0)
-        throw RuntimeException("Failed to stop running docker compose stack.")
-    }
-  }
+  doLast { DockerComposeStop() }
 }
 
 
@@ -127,24 +71,7 @@ tasks.create("compose-stop") {
  */
 tasks.create("compose-down") {
   group = "monorepo"
-  doLast {
-    with(
-      ProcessBuilder(
-        "docker", "compose",
-        "-f", "docker-compose.yml",
-        "-f", "docker-compose.dev.yml",
-        "down"
-      )
-        .directory(file("service-stack"))
-        .start()
-    ) {
-      inputStream.transferTo(System.out)
-      errorStream.transferTo(System.err)
-
-      if (waitFor() != 0)
-        throw RuntimeException("Failed to tear down docker compose stack.")
-    }
-  }
+  doLast { DockerComposeDown() }
 }
 
 

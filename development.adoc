@@ -25,18 +25,28 @@ git clone git@github.com:veupathdb/service-multi-blast
 +
 [source, bash]
 ----
-cd service-multi-blaste
+cd service-multi-blast
 ----
 
-3. Run the initialization Gradle task to perform any setup steps needed before
-working on or attempting to spin up the project.
+3. Run the initialization Gradle task. The first time you run this task, it will
+fail, but create a file in the root of the project named
+`mblast-dev.properties`.
 +
 [source, bash]
 ----
 ./gradlew initialize
 ----
 
-4. Setup complete! You're good to go!
+4. Edit the `mblast-dev.properties` file with your details.
+
+5. Re-run the Gradle `initialize` task.
++
+[source, bash]
+----
+./gradlew initialize
+----
+
+6. Setup complete! You're good to go!
 
 
 == Gradle Tasks
