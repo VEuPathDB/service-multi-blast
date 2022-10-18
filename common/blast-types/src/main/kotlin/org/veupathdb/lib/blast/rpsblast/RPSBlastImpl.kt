@@ -127,6 +127,20 @@ internal class RPSBlastImpl(
     ParseUseSWTBack(js),
   )
 
+  override fun compBasedStats(value: CompBasedStatsRPSValue) { compBasedStats = CompBasedStatsRPS(value) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingRPS(value) }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value) }
+  override fun cullingLimit(value: UInt) { cullingLimit = CullingLimit(value) }
+  override fun bestHitOverhang(value: Double) { bestHitOverhang = BestHitOverhang(value) }
+  override fun bestHitScoreEdge(value: Double) { bestHitScoreEdge = BestHitScoreEdge(value) }
+  override fun subjectBestHit(value: Boolean) { subjectBestHit = SubjectBestHit(value) }
+  override fun sumStats(value: Boolean) { sumStats = SumStats(value) }
+  override fun extensionDropoffPrelimGapped(value: Double) { extensionDropoffPrelimGapped = ExtensionDropoffPrelimGapped(value) }
+  override fun extensionDropoffFinalGapped(value: Double) { extensionDropoffFinalGapped = ExtensionDropoffFinalGapped(value) }
+  override fun autoCPUCores(value: AutoCPUCoresValue) { autoCPUCores = AutoCPUCores(value) }
+  override fun multiThreadingMode(value: MultiThreadingModeValue) { multiThreadingMode = MultiThreadingMode(value) }
+  override fun useSmithWatermanTraceback(value: Boolean) { useSmithWatermanTraceback = UseSmithWatermanTraceback(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

@@ -176,6 +176,29 @@ internal class BlastPImpl(
     ParseSoftMaskingP(js),
   )
 
+  override fun task(value: BlastPTaskType) { task = BlastPTask(value) }
+  override fun wordSize(value: UInt) { wordSize = WordSizeP(value) }
+  override fun gapOpen(value: Int) { gapOpen = GapOpen(value) }
+  override fun gapExtend(value: Int) { gapExtend = GapExtend(value) }
+  override fun matrix(value: ScoringMatrixPType) { matrix = ScoringMatrixP(value) }
+  override fun threshold(value: Double) { threshold = Threshold(value) }
+  override fun compBasedStats(value: CompBasedStatsPValue) { compBasedStats = CompBasedStatsP(value) }
+  override fun subjectFile(value: String) { subjectFile = SubjectFile(value) }
+  override fun subjectLocation(start: UInt, stop: UInt) { subjectLocation = SubjectLocation(start, stop) }
+  override fun dbSoftMask(value: String) { dbSoftMask = DBSoftMask(value) }
+  override fun dbHardMask(value: String) { dbHardMask = DBHardMask(value) }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value) }
+  override fun cullingLimit(value: UInt) { cullingLimit = CullingLimit(value) }
+  override fun extensionDropoffPrelimGapped(value: Double) { extensionDropoffPrelimGapped = ExtensionDropoffPrelimGapped(value) }
+  override fun extensionDropoffFinalGapped(value: Double) { extensionDropoffFinalGapped = ExtensionDropoffFinalGapped(value) }
+  override fun ungappedAlignmentsOnly(value: Boolean) { ungappedAlignmentsOnly = UngappedAlignmentsOnly(value) }
+  override fun numCPUCores(value: UByte) { numCPUCores = NumCPUCores(value) }
+  override fun useSmithWatermanTraceback(value: Boolean) { useSmithWatermanTraceback = UseSmithWatermanTraceback(value) }
+  override fun bestHitOverhang(value: Double) { bestHitOverhang = BestHitOverhang(value) }
+  override fun bestHitScoreEdge(value: Double) { bestHitScoreEdge = BestHitScoreEdge(value) }
+  override fun subjectBestHit(value: Boolean) { subjectBestHit = SubjectBestHit(value) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingP(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

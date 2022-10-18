@@ -108,6 +108,18 @@ object Blast {
   fun blastn(js: ObjectNode): BlastN = BlastNImpl(js)
 
   /**
+   * Creates a new [BlastN] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `BlastN`
+   * instance.
+   *
+   * @return The new [BlastN] instance.
+   */
+  @JvmStatic
+  fun blastn(fn: BlastN.() -> Unit): BlastN = BlastNImpl().apply(fn)
+
+  /**
    * Creates a new, defaulted [BlastN] instance.
    *
    * @return The new [BlastN] instance.
@@ -124,6 +136,18 @@ object Blast {
    */
   @JvmStatic
   fun blastp(js: ObjectNode): BlastP = BlastPImpl(js)
+
+  /**
+   * Creates a new [BlastP] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `BlastP`
+   * instance.
+   *
+   * @return The new [BlastP] instance.
+   */
+  @JvmStatic
+  fun blastp(fn: BlastP.() -> Unit): BlastP = BlastPImpl().apply(fn)
 
   /**
    * Creates a new, defaulted [BlastP] instance.
@@ -144,6 +168,18 @@ object Blast {
   fun blastx(js: ObjectNode): BlastX = BlastXImpl(js)
 
   /**
+   * Creates a new [BlastX] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `BlastX`
+   * instance.
+   *
+   * @return The new [BlastX] instance.
+   */
+  @JvmStatic
+  fun blastx(fn: BlastX.() -> Unit): BlastX = BlastXImpl().apply(fn)
+
+  /**
    * Creates a new, defaulted [BlastX] instance.
    *
    * @return The new [BlastX] instance.
@@ -160,6 +196,18 @@ object Blast {
    */
   @JvmStatic
   fun deltablast(js: ObjectNode): DeltaBlast = DeltaBlastImpl(js)
+
+  /**
+   * Creates a new [DeltaBlast] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `DeltaBlast`
+   * instance.
+   *
+   * @return The new [DeltaBlast] instance.
+   */
+  @JvmStatic
+  fun deltablast(fn: DeltaBlast.() -> Unit): DeltaBlast = DeltaBlastImpl().apply(fn)
 
   /**
    * Creates a new, defaulted [DeltaBlast] instance.
@@ -180,6 +228,18 @@ object Blast {
   fun psiblast(js: ObjectNode): PSIBlast = PSIBlastImpl(js)
 
   /**
+   * Creates a new [PSIBlast] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `PSIBlast`
+   * instance.
+   *
+   * @return The new [PSIBlast] instance.
+   */
+  @JvmStatic
+  fun psiblast(fn: PSIBlast.() -> Unit): PSIBlast = PSIBlastImpl().apply(fn)
+
+  /**
    * Creates a new, defaulted [PSIBlast] instance.
    *
    * @return The new [PSIBlast] instance.
@@ -196,6 +256,18 @@ object Blast {
    */
   @JvmStatic
   fun rpsblast(js: ObjectNode): RPSBlast = RPSBlastImpl(js)
+
+  /**
+   * Creates a new [RPSBlast] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `RPSBlast`
+   * instance.
+   *
+   * @return The new [RPSBlast] instance.
+   */
+  @JvmStatic
+  fun rpsblast(fn: RPSBlast.() -> Unit): RPSBlast = RPSBlastImpl().apply(fn)
 
   /**
    * Creates a new, defaulted [RPSBlast] instance.
@@ -216,6 +288,18 @@ object Blast {
   fun rpstblastn(js: ObjectNode): RPSTBlastN = RPSTBlastNImpl(js)
 
   /**
+   * Creates a new [RPSTBlastN] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `RPSTBlastN`
+   * instance.
+   *
+   * @return The new [RPSTBlastN] instance.
+   */
+  @JvmStatic
+  fun rpstblastn(fn: RPSTBlastN.() -> Unit): RPSTBlastN = RPSTBlastNImpl().apply(fn)
+
+  /**
    * Creates a new, defaulted [RPSTBlastN] instance.
    *
    * @return The new [RPSTBlastN] instance.
@@ -232,6 +316,18 @@ object Blast {
    */
   @JvmStatic
   fun tblastn(js: ObjectNode): TBlastN = TBlastNImpl(js)
+
+  /**
+   * Creates a new [TBlastN] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `TBlastN`
+   * instance.
+   *
+   * @return The new [TBlastN] instance.
+   */
+  @JvmStatic
+  fun tblastn(fn: TBlastN.() -> Unit): TBlastN = TBlastNImpl().apply(fn)
 
   /**
    * Creates a new, defaulted [TBlastN] instance.
@@ -252,6 +348,18 @@ object Blast {
   fun tblastx(js: ObjectNode): TBlastX = TBlastXImpl(js)
 
   /**
+   * Creates a new [TBlastX] instance and applies the given builder function
+   * before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `TBlastX`
+   * instance.
+   *
+   * @return The new [TBlastX] instance.
+   */
+  @JvmStatic
+  fun tblastx(fn: TBlastX.() -> Unit): TBlastX = TBlastXImpl().apply(fn)
+
+  /**
    * Creates a new, defaulted [TBlastX] instance.
    *
    * @return The new [TBlastX] instance.
@@ -268,6 +376,18 @@ object Blast {
    */
   @JvmStatic
   fun blastFormatter(js: ObjectNode): BlastFormatter = BlastFormatterImpl(js)
+
+  /**
+   * Creates a new [BlastFormatter] instance and applies the given builder
+   * function before returning it.
+   *
+   * @param fn Builder function that will be applied to the new `BlastFormatter`
+   * instance.
+   *
+   * @return The new [BlastFormatter] instance.
+   */
+  @JvmStatic
+  fun blastFormatter(fn: BlastFormatter.() -> Unit): BlastFormatter = BlastFormatterImpl().apply(fn)
 
   /**
    * Creates a new, defaulted [BlastFormatter] instance.

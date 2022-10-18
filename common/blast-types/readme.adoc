@@ -1,7 +1,7 @@
 = blast-types
 :source-highlighter: highlightjs
 :toc: preamble
-:lib-version: 8.0.1
+:lib-version: 8.1.0
 
 image:https://img.shields.io/github/license/veupathdb/service-multi-blast[GitHub]
 image:https://img.shields.io/badge/docs-dokka-green[title="Dokka Docs", link="https://veupathdb.github.io/service-multi-blast/dokka/blast-types/"]
@@ -52,11 +52,11 @@ formats including a CLI call string.
 .Building a CLI Command
 [source, kotlin]
 ----
-val config = Blast.blastn()
-
-config.task      = BlastNTaskType.DiscontiguousMegablast
-config.queryFile = "my-query.txt"
-config.dbFile    = "my-blast-db"
+val config = Blast.blastn {
+  task(BlastNTaskType.DiscontiguousMegablast)
+  queryFile("my-query.txt")
+  dbFiles("my-blast-db")
+}
 
 config.toCliString() == "blastn -task 'dc-megablast' -query 'my-query.txt' -db 'my-blast-db'"
 ----
@@ -65,10 +65,10 @@ config.toCliString() == "blastn -task 'dc-megablast' -query 'my-query.txt' -db '
 .Serializing to JSON
 [source, kotlin]
 ----
-val config = Blast.blastp().apply {
+val config = Blast.blastp {
   task = BlastPTask(BlastPTaskType.BlastPFast)
-  queryFile = QueryFile("my-query.txt")
-  dbFile = DBFiles("my-blast-db-1", "my-blast-db-2")
+  queryFile("my-query.txt")
+  dbFiles("my-blast-db-1", "my-blast-db-2")
 }
 
 
@@ -123,10 +123,10 @@ tools have a large number of flags and options.
 .Setting Default Values
 [source, kotlin]
 ----
-val config = Blast.deltablast().apply {
-  seg            = SegDelta.no()
-  gapTrigger     = GapTrigger(22.0)
-  compBasedStats = CompBasedStatsDelta(CompBasedStatsDeltaValue.CompBasedStats)
+val config = Blast.deltablast {
+  seg = SegDelta.no()
+  gapTrigger(22.0)
+  compBasedStats(CompBasedStatsDeltaValue.CompBasedStats)
 }
 
 require(config.toCliString() == "deltablast")
@@ -163,9 +163,9 @@ the name of the relevant flag.
 
 [source, kotlin]
 ----
-val config = Blast.blastFormatter().apply {
-  archive = Archive("some-archive")
-  rid     = RID("some-request-id")
+val config = Blast.blastFormatter {
+  archive("some-archive")
+  rid("some-request-id")
 }
 
 val errors = config.validate()
@@ -180,9 +180,15 @@ errors.toJson() == """
 
 == Release Notes
 
+=== v8.1.0
+
+* Adds convenience methods for all properties that allow setting the properties
+  using a raw type rather than a field wrapper type.
+* Adds blast config type constructors that accept builder callbacks.
+
 === v8.0.1
 
-* Added missing `@JvmStatic` annotations for easer interop with plain Java.
+* Added missing `@JvmStatic` annotations for easier interop with plain Java.
 
 === v8.0.0
 

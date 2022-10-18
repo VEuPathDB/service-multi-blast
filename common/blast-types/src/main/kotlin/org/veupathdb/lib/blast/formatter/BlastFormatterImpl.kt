@@ -65,6 +65,9 @@ internal class BlastFormatterImpl(
     ParseArchive(js),
   )
 
+  override fun rid(value: String) { rid = RID(value) }
+  override fun archive(value: String) { archive = Archive(value) }
+
   override fun appendJson(js: ObjectNode) {
     rid.appendJson(js)
     archive.appendJson(js)
