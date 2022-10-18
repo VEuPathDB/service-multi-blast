@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package mblast.build
 
 import net.schmizz.sshj.SSHClient
@@ -29,7 +31,7 @@ fun Project.CreateBlastDBDirectoryIfNotExists() {
 
       val baseRemoteDir = "${props.filesRoot}/${props.siteName}/${props.siteBuild}"
 
-      val blastFiles = sftp.dirStream(baseRemoteDir)
+      sftp.dirStream(baseRemoteDir)
         // Filter to only dirs that contain a "blast" sub-dir
         .filter { it.containsBlastDir(sftp) }
         // Filter to only dirs whose "blast" sub-dir is not empty.
