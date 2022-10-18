@@ -23,7 +23,10 @@ include(":service-report")
 project(":service-report").name = "report-service"
 
 include("common:blast-query-parser")
-include("common:blast-types")
+
+include(":lib-blast-types")
+project(":lib-blast-types").name = "blast-types"
+
 include("common:mblast-utils")
 include("common:temp-cache")
 
