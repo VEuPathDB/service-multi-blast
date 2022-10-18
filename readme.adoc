@@ -8,7 +8,7 @@ This repository is a "monorepo" containing various projects relating to and
 supporting the VEuPathDB MultiBlast service stack.
 
 For development details and information see the
-link:development.adoc[Developer Info] doc.
+link:docs/development.adoc[Developer Info] doc.
 
 An index of available API documentation can be found at
 https://veupathdb.github.io/service-multi-blast/
