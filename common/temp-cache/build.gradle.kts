@@ -20,7 +20,7 @@ dependencies {
 }
 
 tasks.dokkaHtml {
-  outputDirectory.set(rootDir.resolve("docs/dokka/utils/temp-cache/$version"))
+  outputDirectory.set(rootDir.resolve("docs/dokka/temp-cache/$version"))
 }
 
 tasks.jar {
