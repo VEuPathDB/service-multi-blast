@@ -14,12 +14,16 @@ pluginManagement {
   }
 }
 
-include("query-service", "report-service")
+include(":service-query")
+project(":service-query").name = "query-service"
+include(":service-query:api-test")
+project(":service-query:api-test").name = "query-api-test"
+
+include(":service-report")
+project(":service-report").name = "report-service"
 
 include("common:blast-query-parser")
 include("common:blast-types")
 include("common:mblast-utils")
 include("common:temp-cache")
 
-include("query-service:api-test")
-project(":query-service:api-test").name = "query-api-test"
