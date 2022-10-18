@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>CustomTempFileFactory</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>temp-cache</span>
+            </a>
+    </div>
+    <div>
+1.0-SNAPSHOT    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="temp-cache::org.veupathdb.lib.mblast.utils.tmp/CustomTempFileFactory///PointingToDeclaration//-1407122867">
+  <div class="breadcrumbs"><a href="../../../index.html">temp-cache</a><span class="delimiter">/</span><a href="../index.html">org.veupathdb.lib.mblast.utils.tmp</a><span class="delimiter">/</span><a href="index.html">CustomTempFileFactory</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Custom</span><wbr></wbr><span>Temp</span><wbr></wbr><span>File</span><wbr></wbr><span><span>Factory</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">CustomTempFileFactory</a> <span><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation">JvmOverloads</span></a> </span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>rootDir<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token operator"> = </span>File(DEFAULT_TEMP_DIR_PATH)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>defaultLifetime<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>DEFAULT_FILE_LIFE_TIME<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>cleanupInterval<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>CLEANUP_INTERVAL</span></span><span class="token punctuation">)</span> : <a href="../-temp-file-factory-base/index.html">TempFileFactoryBase</a>, <a href="../-temp-file-factory/index.html">TempFileFactory</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Instantiable Custom Temp File Factory</p><h4 class="">Author</h4><p class="paragraph">Elizabeth Paige Harper - https://github.com/foxcapades</p><h4 class="">Since</h4><p class="paragraph">1.0.0</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Parameters">Parameters</button></div>
+    <div class="tabs-section-body">
+      <h2 class="">Parameters</h2>
+      <div data-togglable="Parameters">
+        <div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>root</span><wbr></wbr><span><span>Dir</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">Root directory in which all temp files created by this factory will be created.</p><p class="paragraph">Defaults to <code class="lang-kotlin">/tmp</code></p></div></div></div></div></div><div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>default</span><wbr></wbr><span><span>Lifetime</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">Default lifetime assigned to temp files created without specifying a lifetime in milliseconds.</p><p class="paragraph">Defaults to 10 min.</p></div></div></div></div></div><div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><div><span>cleanup</span><wbr></wbr><span><span>Interval</span></span></div></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">Temp file cleanup process execution interval in milliseconds.</p><p class="paragraph">Defaults to 10 min.</p></div></div></div></div></div></div></div></div></div>
+      </div>
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="1152054358%2FConstructors%2F-1407122867" anchor-label="CustomTempFileFactory" id="1152054358%2FConstructors%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-custom-temp-file-factory.html"><span>Custom</span><wbr></wbr><span>Temp</span><wbr></wbr><span>File</span><wbr></wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1152054358%2FConstructors%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation">JvmOverloads</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-custom-temp-file-factory.html"><span class="token function">CustomTempFileFactory</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;rootDir<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token operator"> = </span>File(DEFAULT_TEMP_DIR_PATH)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;defaultLifetime<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>DEFAULT_FILE_LIFE_TIME<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;cleanupInterval<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>CLEANUP_INTERVAL</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Constructs a new <a href="index.html">CustomTempFileFactory</a> instance.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-838487235%2FFunctions%2F-1407122867" anchor-label="cleanup" id="-838487235%2FFunctions%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/cleanup.html"><span><span>cleanup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-838487235%2FFunctions%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-temp-file-factory-base/cleanup.html"><span class="token function">cleanup</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Manually triggers a temp file cleanup.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="955949771%2FFunctions%2F-1407122867" anchor-label="create" id="955949771%2FFunctions%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/create.html"><span><span>create</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="955949771%2FFunctions%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-temp-file-factory-base/create.html"><span class="token function">create</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Creates a temp file with the configured <a href="../-temp-file-factory-base/default-lifetime.html">defaultLifetime</a>.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-temp-file-factory-base/create.html"><span class="token function">create</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lifeTime<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Creates a temp file with the given <a href="../-temp-file-factory-base/create.html">lifeTime</a>.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2078603037%2FFunctions%2F-1407122867" anchor-label="shutDown" id="-2078603037%2FFunctions%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/shut-down.html"><span>shut</span><wbr></wbr><span><span>Down</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2078603037%2FFunctions%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-temp-file-factory-base/shut-down.html"><span class="token function">shutDown</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Stops the thread backing this <a href="../-temp-file-factory/index.html">TempFileFactory</a>, meaning no more automatic temp file cleanup will occur.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-286505480%2FProperties%2F-1407122867" anchor-label="cleanupInterval" id="-286505480%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/cleanup-interval.html"><span>cleanup</span><wbr></wbr><span><span>Interval</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-286505480%2FProperties%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><a data-name="-286505480%2FProperties%2F-1407122867" anchor-label="cleanupInterval" id="-286505480%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-temp-file-factory-base/cleanup-interval.html">cleanupInterval</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-286505480%2FProperties%2F-1407122867" anchor-label="cleanupInterval" id="-286505480%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><p class="paragraph">Interval in milliseconds at which the temp file cleanup process will be automatically executed.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="329898871%2FProperties%2F-1407122867" anchor-label="defaultLifetime" id="329898871%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/default-lifetime.html"><span>default</span><wbr></wbr><span><span>Lifetime</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="329898871%2FProperties%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><a data-name="329898871%2FProperties%2F-1407122867" anchor-label="defaultLifetime" id="329898871%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-temp-file-factory-base/default-lifetime.html">defaultLifetime</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="329898871%2FProperties%2F-1407122867" anchor-label="defaultLifetime" id="329898871%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><p class="paragraph">Default temporary file lifetime as a duration in milliseconds.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-254076042%2FProperties%2F-1407122867" anchor-label="rootDir" id="-254076042%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":common:temp-cache:dokkaHtml/main" data-filterable-set=":common:temp-cache:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../-temp-file-factory-base/root-dir.html"><span>root</span><wbr></wbr><span><span>Dir</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-254076042%2FProperties%2F-1407122867"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":common:temp-cache:dokkaHtml/main"><a data-name="-254076042%2FProperties%2F-1407122867" anchor-label="rootDir" id="-254076042%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-temp-file-factory-base/root-dir.html">rootDir</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-254076042%2FProperties%2F-1407122867" anchor-label="rootDir" id="-254076042%2FProperties%2F-1407122867" data-filterable-set=":common:temp-cache:dokkaHtml/main"></a><p class="paragraph">Directory in which all temp files will be created.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
