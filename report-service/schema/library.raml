@@ -7,6 +7,137 @@
 ################################################################################
 
 types:
+  ReportJobRequest:
+    displayName: Report Job Request
+    description: |
+      Request body sent to start a new report job.
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      blastConfig:
+        type: BlastFormatConfig
+        default:
+          formatType: pairwise
+        required: false
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobDetails:
+    displayName: Report Job Details
+    description: |
+      Longform details about a report job that has been submitted.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      blastConfig: BlastFormatConfig
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobListEntry:
+    displayName: Report Job List Entry
+    description: |
+      Short-form details about a report job that has been submitted.  This
+      object is intended to appear in a list of similar objects for report job
+      list endpoints.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        description: Hash ID of the report job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        description: Hash ID of the source query job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        description: Current status of the represented report job.
+        type: JobStatus
+      userMeta:
+        displayName: Job Meta
+        description: User provided metadata about the represented report job.
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobUserMeta:
+    displayName: Report Job User Meta
+    description: User provided metadata about a report job.
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Summary
+        description: Optional, one line user summary about a target job.
+        type: string
+        default: null
+        required: false
+        maxLength: 512
+      description:
+        displayName: Description
+        description: Optional, longform description of a target job.
+        type: string
+        default: null
+        required: false
+  FileEntry:
+    displayName: File Entry
+    description: List entry item for a file.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        description: Name of the target file.
+        type: string
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
+        type: integer
+        format: long
+  JobBulkStatusResponse:
+    displayName: Bulk Job Status Response
+    description: |
+      Returns a mapping of job-id to status for each of the valid job IDs that
+      appeared in the original bulk status request.
+    type: object
+    properties:
+      /^[\dA-Fa-f]{32}$/: JobStatus
+  JobStatus:
+    type: string
+    enum:
+      - queued
+      - in-progress
+      - complete
+      - failed
+      - expired
   BlastFormatConfig:
     type: object
     additionalProperties: false
@@ -128,6 +259,29 @@ types:
         default: false
         required: false
   BlastOutFormat:
+    displayName: Blast Report Format
+    description: |
+      | Identifier                          | Description                             |
+      | ----------------------------------- | --------------------------------------- |
+      | pairwise                            | Pairwise                                |
+      | query-anchored-with-identities      | Query-anchored showing identities       |
+      | query-anchored-no-identities        | Query-anchored no identities            |
+      | flat-query-anchored-with-identities | Flat query-anchored showing identities  |
+      | flat-query-anchored-no-identities   | Flat query-anchored no identities       |
+      | xml                                 | BLAST XML                               |
+      | tabular                             | Tabular                                 |
+      | tabular-with-comments               | Tabular with comment lines              |
+      | seqalign-text                       | Seqalign (Text ASN.1)                   |
+      | seqalign-binary                     | Seqalign (Binary ASN.1)                 |
+      | csv                                 | Comma-separated values                  |
+      | asn1                                | BLAST archive (ASN.1)                   |
+      | seqalign-json                       | Seqalign (JSON)                         |
+      | multi-file-blast-json               | Multiple-file BLAST JSON                |
+      | multi-file-blast-xml2               | Multiple-file BLAST XML2                |
+      | single-file-blast-json              | Single-file BLAST JSON                  |
+      | single-file-blast-xml2              | Single-file BLAST XML2                  |
+      | sam                                 | Sequence Alignment/Map (SAM)            |
+      | organism-report                     | Organism Report                         |
     type: string
     enum:
       - pairwise
@@ -145,11 +299,68 @@ types:
       - seqalign-json
       - multi-file-blast-json
       - multi-file-blast-xml2
-      - Single-file-blast-json
-      - Single-file-blast-xml2
+      - single-file-blast-json
+      - single-file-blast-xml2
       - sam
       - organism-report
   BlastOutField:
+    displayName: Blast Report Field
+    description: |
+      | Field       | Meaning                                                                                  |
+      | ----------- | ---------------------------------------------------------------------------------------- |
+      | qseqid      | Query Seq-id                                                                             |
+      | qgi         | Query GI                                                                                 |
+      | qacc        | Query accesion                                                                           |
+      | qaccver     | Query accesion.version                                                                   |
+      | qlen        | Query sequence length                                                                    |
+      | sseqid      | Subject Seq-id                                                                           |
+      | sallseqid   | All subject Seq-id(s), separated by a ';'                                                |
+      | sgi         | Subject GI                                                                               |
+      | sallgi      | All subject GIs                                                                          |
+      | sacc        | Subject accession                                                                        |
+      | saccver     | Subject accession.version                                                                |
+      | sallacc     | All subject accessions                                                                   |
+      | slen        | Subject sequence length                                                                  |
+      | qstart      | Start of alignment in query                                                              |
+      | qend        | End of alignment in query                                                                |
+      | sstart      | Start of alignment in subject                                                            |
+      | send        | End of alignment in subject                                                              |
+      | qseq        | Aligned part of query sequence                                                           |
+      | sseq        | Aligned part of subject sequence                                                         |
+      | evalue      | Expect value                                                                             |
+      | bitscore    | Bit score                                                                                |
+      | score       | Raw score                                                                                |
+      | length      | Alignment length                                                                         |
+      | pident      | Percentage of identical matches                                                          |
+      | nident      | Number of identical matches                                                              |
+      | mismatch    | Number of mismatches                                                                     |
+      | positive    | Number of positive-scoring matches                                                       |
+      | gapopen     | Number of gap openings                                                                   |
+      | gaps        | Total number of gaps                                                                     |
+      | ppos        | Percentage of positive-scoring matches                                                   |
+      | frames      | Query and subject frames separated by a '/'                                              |
+      | qframe      | Query frame                                                                              |
+      | sframe      | Subject frame                                                                            |
+      | btop        | Blast traceback operations (BTOP)                                                        |
+      | staxid      | Subject Taxonomy ID                                                                      |
+      | ssciname    | Subject Scientific Name                                                                  |
+      | scomname    | Subject Common Name                                                                      |
+      | sblastname  | Subject Blast Name                                                                       |
+      | sskingdom   | Subject Super Kingdom                                                                    |
+      | staxids     | unique Subject Taxonomy ID(s), separated by a ';' (in numerical order)                   |
+      | sscinames   | unique Subject Scientific Name(s), separated by a ';'                                    |
+      | scomnames   | unique Subject Common Name(s), separated by a ';'                                        |
+      | sblastnames | unique Subject Blast Name(s), separated by a ';' (in alphabetical order)                 |
+      | sskingdoms  | unique Subject Super Kingdom(s), separated by a ';' (in alphabetical order)              |
+      | stitle      | Subject Title                                                                            |
+      | salltitles  | All Subject Title(s), separated by a '<>'                                                |
+      | sstrand     | Subject Strand                                                                           |
+      | qcovs       | Query Coverage Per Subject                                                               |
+      | qcovhsp     | Query Coverage Per HSP                                                                   |
+      | qcovus      | Query Coverage Per Unique Subject (blastn only)                                          |
+      | SQ          | Include Sequence Data                                                                    |
+      | SR          | Subject as Reference Seq                                                                 |
+      | std         | 'qaccver saccver pident length mismatch gapopen qstart qend sstart send evalue bitscore' |
     type: string
     enum:
       - qseqid
@@ -206,6 +417,8 @@ types:
       - SR
       - std
   BlastHitSorting:
+    displayName: Hit Sorting
+    description: Sorting option for hits.
     type: string
     enum:
       - by-evalue
@@ -214,6 +427,8 @@ types:
       - by-percent-identity
       - by-query-coverage
   BlastHSPSorting:
+    displayName: HSP Sorting
+    description: Sorting option for High Scoring Pairs
     type: string
     enum:
       - by-hsp-evalue
@@ -221,127 +436,4 @@ types:
       - by-hsp-query-start
       - by-hsp-percent-identity
       - by-hsp-subject-start
-  ReportJobRequest:
-    displayName: Report Job Request
-    description: |
-      Request body sent to start a new report job.
-    type: object
-    additionalProperties: false
-    properties:
-      queryJobID:
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      blastConfig:
-        type: BlastFormatConfig
-        default:
-          formatType: pairwise
-        required: false
-      userMeta:
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobDetails:
-    displayName: Report Job Details
-    description: |
-      Longform details about a report job that has been submitted.
-    type: object
-    additionalProperties: false
-    properties:
-      reportJobID:
-        displayName: Report Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      queryJobID:
-        displayName: Query Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        type: JobStatus
-      blastConfig: BlastFormatConfig
-      userMeta:
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobListEntry:
-    displayName: Report Job List Entry
-    description: |
-      Short-form details about a report job that has been submitted.  This
-      object is intended to appear in a list of similar objects for report job
-      list endpoints.
-    type: object
-    additionalProperties: false
-    properties:
-      reportJobID:
-        displayName: Report Job ID
-        description: Hash ID of the report job.
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      queryJobID:
-        displayName: Query Job ID
-        description: Hash ID of the source query job.
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        description: Current status of the represented report job.
-        type: JobStatus
-      userMeta:
-        displayName: Job Meta
-        description: User provided metadata about the represented report job.
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobUserMeta:
-    displayName: Report Job User Meta
-    description: User provided metadata about a report job.
-    type: object
-    additionalProperties: false
-    properties:
-      summary:
-        displayName: Summary
-        description: Optional, one line user summary about a target job.
-        type: string
-        default: null
-        required: false
-        maxLength: 512
-      description:
-        displayName: Description
-        description: Optional, longform description of a target job.
-        type: string
-        default: null
-        required: false
-  FileEntry:
-    displayName: File Entry
-    description: List entry item for a file.
-    type: object
-    additionalProperties: false
-    properties:
-      name:
-        displayName: File Name
-        description: Name of the target file.
-        type: string
-      size:
-        displayName: File Size
-        description: Size of the file in bytes.
-        type: integer
-        format: long
-  JobStatus:
-    type: string
-    enum:
-      - queued
-      - in-progress
-      - complete
-      - failed
-      - expired
 
