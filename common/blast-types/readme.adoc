@@ -42,9 +42,9 @@ formats including a CLI call string.
 [%header]
 |===
 | Lib Version | BLAST+ Version | JDK Version
-| 6.0.0       | 2.11.0+        | 16+
-| 7.0.0       | 2.13.0+        | 17+
-| 8.0.0       | 2.13.0+        | 8+
+| 6.x.x       | 2.11.0+        | 16+
+| 7.x.x       | 2.13.0+        | 17+
+| 8.x.x       | 2.13.0+        | 8+
 |===
 
 == Usage
