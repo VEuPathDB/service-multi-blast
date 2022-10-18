@@ -182,6 +182,21 @@ types:
       /^[\dA-Fa-f]{32}$/:
         type: JobStatus
 
+  JobCreateResponse:
+    displayName: Job Creation Response
+    description: |
+      Response body returned on the successful creation of a new BLAST query
+      job.
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+
   JobStatus:
     type: string
     enum:

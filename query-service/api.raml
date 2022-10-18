@@ -76,9 +76,12 @@ uses:
             type: file
             required: false
     responses:
-      204:
+      200:
         description: |
           Query job was successfully submitted to the job queue for execution.
+        body:
+          application/json:
+            type: lib.JobCreateResponse
       400:
         description: |
           Invalid request body or parameters.
