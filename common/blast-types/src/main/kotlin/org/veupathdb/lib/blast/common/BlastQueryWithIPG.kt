@@ -9,9 +9,11 @@ interface BlastQueryWithIPG : BlastQueryWithLists {
    * -ipglist `<String>`
    */
   var ipgListFile: IPGList
+  fun ipgListFile(value: String)
 
   /**
    * -negative_ipglist `<String>`
    */
   var negativeIPGListFile: NegativeIPGList
+  fun negativeIPGListFile(value: String)
 }

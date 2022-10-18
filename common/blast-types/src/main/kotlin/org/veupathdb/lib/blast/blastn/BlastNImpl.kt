@@ -191,6 +191,40 @@ internal class BlastNImpl(
     ParseSoftMaskingN(js),
   )
 
+  override fun strand(value: StrandType) { strand = Strand(value) }
+  override fun task(value: BlastNTaskType) { task = BlastNTask(value) }
+  override fun wordSize(value: UInt) { wordSize = WordSizeN(value) }
+  override fun gapOpen(value: Int) { gapOpen = GapOpen(value) }
+  override fun gapExtend(value: Int) { gapExtend = GapExtend(value) }
+  override fun penalty(value: Int) { penalty = Penalty(value) }
+  override fun reward(value: UInt) { reward = Reward(value) }
+  override fun useIndex(value: Boolean) { useIndex = UseIndex(value) }
+  override fun indexName(value: String) { indexName = IndexName(value) }
+  override fun subjectFile(value: String) { subjectFile = SubjectFile(value) }
+  override fun subjectLocation(start: UInt, stop: UInt) { subjectLocation = SubjectLocation(start, stop) }
+  override fun filteringDBFile(value: String) { filteringDBFile = FilteringDB(value) }
+  override fun windowMaskerTaxID(value: Int) { windowMaskerTaxID = WindowMaskerTaxID(value) }
+  override fun windowMaskerDBFile(value: String) { windowMaskerDBFile = WindowMaskerDB(value) }
+  override fun dbSoftMask(value: String) { dbSoftMask = DBSoftMask(value) }
+  override fun dbHardMask(value: String) { dbHardMask = DBHardMask(value) }
+  override fun percentIdentity(value: Double) { percentIdentity = PercentIdentity(value) }
+  override fun queryCoverageHSPPercent(value: Double) { queryCoverageHSPPercent = QueryCoverageHSPPercent(value) }
+  override fun cullingLimit(value: UInt) { cullingLimit = CullingLimit(value) }
+  override fun templateType(value: TemplateTypeValue) { templateType = TemplateType(value) }
+  override fun templateLength(value: TemplateLengthValue) { templateLength = TemplateLength(value) }
+  override fun sumStats(value: Boolean) { sumStats = SumStats(value) }
+  override fun extensionDropoffPrelimGapped(value: Double) { extensionDropoffPrelimGapped = ExtensionDropoffPrelimGapped(value) }
+  override fun extensionDropoffFinalGapped(value: Double) { extensionDropoffFinalGapped = ExtensionDropoffFinalGapped(value) }
+  override fun nonGreedy(value: Boolean) { nonGreedy = NonGreedy(value) }
+  override fun minRawGappedScore(value: Int) { minRawGappedScore = MinRawGappedScore(value) }
+  override fun ungappedAlignmentsOnly(value: Boolean) { ungappedAlignmentsOnly = UngappedAlignmentsOnly(value) }
+  override fun offDiagonalRange(value: UInt) { offDiagonalRange = OffDiagonalRange(value) }
+  override fun numCPUCores(value: UByte) { numCPUCores = NumCPUCores(value) }
+  override fun bestHitOverhang(value: Double) { bestHitOverhang = BestHitOverhang(value) }
+  override fun bestHitScoreEdge(value: Double) { bestHitScoreEdge = BestHitScoreEdge(value) }
+  override fun subjectBestHit(value: Boolean) { subjectBestHit = SubjectBestHit(value) }
+  override fun softMasking(value: Boolean) { softMasking = SoftMaskingN(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 

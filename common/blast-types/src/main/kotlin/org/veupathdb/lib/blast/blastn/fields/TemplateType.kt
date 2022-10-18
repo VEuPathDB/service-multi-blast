@@ -23,10 +23,10 @@ internal fun ParseTemplateType(js: ObjectNode) =
  * Discontiguous MegaBLAST template type
  */
 @JvmInline
-value class TemplateType(val value: TemplateTypeType = TemplateTypeType.None)
+value class TemplateType(val value: TemplateTypeValue = TemplateTypeValue.None)
   : BlastField
 {
-  override val isDefault get() = value == TemplateTypeType.None
+  override val isDefault get() = value == TemplateTypeValue.None
 
   override val name: String
     get() = FlagTemplateType
@@ -42,16 +42,18 @@ value class TemplateType(val value: TemplateTypeType = TemplateTypeType.None)
 }
 
 
-private fun parseEnum(value: String): TemplateTypeType {
+private fun parseEnum(value: String): TemplateTypeValue {
   return when(value) {
-    "coding"             -> TemplateTypeType.Coding
-    "coding_and_optimal" -> TemplateTypeType.CodingAndOptimal
-    "optimal"            -> TemplateTypeType.Optimal
+    "coding"             -> TemplateTypeValue.Coding
+    "coding_and_optimal" -> TemplateTypeValue.CodingAndOptimal
+    "optimal"            -> TemplateTypeValue.Optimal
     else                 -> throw IllegalArgumentException("Invalid $FlagTemplateType value: $value")
   }
 }
 
+typealias TemplateTypeValue = TemplateTypeType
 
+@Deprecated("this will be removed in favor of the name \"TemplateTypeValue\" in a future release")
 enum class TemplateTypeType {
   Coding,
   CodingAndOptimal,

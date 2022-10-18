@@ -85,6 +85,10 @@ internal abstract class BlastQueryWithIPGImpl(
   taxIds,
   negativeTaxIds,
 ) {
+
+  override fun ipgListFile(value: String) { ipgListFile = IPGList(value) }
+  override fun negativeIPGListFile(value: String) { negativeIPGListFile = NegativeIPGList(value) }
+
   override fun appendJson(js: ObjectNode) {
     super.appendJson(js)
 
