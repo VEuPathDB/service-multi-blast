@@ -2,8 +2,8 @@
 
 ## Service Docs
 
-* [Query Service API](https://veupathdb.github.io/service-multi-blast/query-service/api.html)
-* [Report Service API](https://veupathdb.github.io/service-multi-blast/report-service/api.html)
+* [Query Service API](https://veupathdb.github.io/service-multi-blast/service-query/api.html)
+* [Report Service API](https://veupathdb.github.io/service-multi-blast/service-report/api.html)
 
 ## Library Docs
 

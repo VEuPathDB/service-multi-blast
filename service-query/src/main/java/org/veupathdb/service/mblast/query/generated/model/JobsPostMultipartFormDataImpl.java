@@ -12,18 +12,18 @@ import java.io.File;
 })
 public class JobsPostMultipartFormDataImpl implements JobsPostMultipartFormData {
   @JsonProperty("config")
-  private QueryJobRequest config;
+  private QueryJobPostRequest config;
 
   @JsonProperty("query")
   private File query;
 
   @JsonProperty("config")
-  public QueryJobRequest getConfig() {
+  public QueryJobPostRequest getConfig() {
     return this.config;
   }
 
   @JsonProperty("config")
-  public void setConfig(QueryJobRequest config) {
+  public void setConfig(QueryJobPostRequest config) {
     this.config = config;
   }
 

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(
-    as = QueryJobRequestImpl.class
+    as = QueryJobPostRequestImpl.class
 )
-public interface QueryJobRequest {
+public interface QueryJobPostRequest {
   @JsonProperty("jobConfig")
   QueryJobConfig getJobConfig();
 

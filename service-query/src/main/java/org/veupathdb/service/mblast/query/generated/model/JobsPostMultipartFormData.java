@@ -9,10 +9,10 @@ import java.io.File;
 )
 public interface JobsPostMultipartFormData {
   @JsonProperty("config")
-  QueryJobRequest getConfig();
+  QueryJobPostRequest getConfig();
 
   @JsonProperty("config")
-  void setConfig(QueryJobRequest config);
+  void setConfig(QueryJobPostRequest config);
 
   @JsonProperty("query")
   File getQuery();

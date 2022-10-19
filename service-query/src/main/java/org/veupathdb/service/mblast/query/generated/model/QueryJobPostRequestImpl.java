@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "blastConfig",
     "meta"
 })
-public class QueryJobRequestImpl implements QueryJobRequest {
+public class QueryJobPostRequestImpl implements QueryJobPostRequest {
   @JsonProperty("jobConfig")
   private QueryJobConfig jobConfig;
 
