@@ -48,8 +48,8 @@ services:
 
   query-service:
     build:
-      dockerfile: ../query-service/Dockerfile
-      context: ../query-service
+      dockerfile: service-query/Dockerfile
+      context: ..
     ports:
     - "8080:8080"
     depends_on:

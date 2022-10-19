@@ -4,7 +4,7 @@ plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "4.5.2"
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "1.7.20"
+  kotlin("jvm")
 }
 
 // configure VEupathDB container plugin
@@ -54,7 +54,7 @@ java {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   kotlinOptions {
-    jvmTarget = "18"
+    jvmTarget = "17"
   }
 }
 
@@ -91,7 +91,7 @@ dependencies {
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
 
 
-  implementation("org.veupathdb.lib:jackson-singleton:3.0.0")
+  implementation("org.veupathdb.lib:jackson-singleton:3.0.1")
 
   implementation("io.prometheus:simpleclient:0.16.0")
   implementation("io.prometheus:simpleclient_common:0.16.0")

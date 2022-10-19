@@ -1,5 +1,9 @@
 import mblast.build.*
 
+plugins {
+  kotlin("jvm") version "1.7.20"
+}
+
 allprojects {
   repositories {
     mavenLocal()
@@ -94,7 +98,7 @@ tasks.create("generate-raml-docs") {
 
   doLast {
     // List of subprojects with APIs
-    val subProjects = arrayOf("query-service", "report-service")
+    val subProjects = arrayOf("service-query", "service-report")
 
     // For each of the defined subprojects
     for (svc in subProjects) {

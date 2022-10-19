@@ -1,28 +1,31 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#   Build Service & Dependencies
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM veupathdb/alpine-dev-base:jdk-18 AS prep
-
-LABEL service="demo-service"
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
 
+# CONTEXT ../
 WORKDIR /workspace
 
 RUN apk add --no-cache git npm \
     && git config --global advice.detachedHead false
 
-ENV DOCKER=build
+COPY gradle/ gradle/
+COPY buildSrc/ buildSrc/
+COPY [ \
+    "build.gradle.kts", \
+    "settings.gradle.kts", \
+    "gradlew", \
+    "./" \
+]
 
 # copy files required to build dev environment and fetch dependencies
-COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY [ \
+    "service-query/build.gradle.kts", \
+    "service-query/" \
+]
 
-COPY gradle/ gradle/
-COPY schema/ schema/
-COPY src/ src/
+COPY service-query/schema/ service-query/schema/
+COPY service-query/src/ service-query/src/
 
 # build the project
 RUN ./gradlew clean test shadowJar
@@ -34,7 +37,7 @@ RUN ./gradlew clean test shadowJar
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM ncbi/blast:2.13.0
 
-LABEL service="demo-service"
+LABEL service="mblast-query"
 
 RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-18-x64-linux-jdk.deb --output java.deb \
     && apt-get update \
@@ -47,8 +50,8 @@ RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-18-x64-linux-j
 ENV JVM_MEM_ARGS="-Xms32M -Xmx256M" \
     JVM_ARGS=""
 
-COPY --from=prep /workspace/build/libs/service.jar /service.jar
+COPY --from=prep /workspace/service-query/build/libs/service.jar /service.jar
 
-COPY startup.sh startup.sh
+COPY service-query/startup.sh /startup.sh
 
-CMD ./startup.sh
+CMD /startup.sh
