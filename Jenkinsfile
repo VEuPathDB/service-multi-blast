@@ -10,8 +10,11 @@ node('centos8') {
 
   builder.gitClone()
   builder.buildContainers([
-    [ name: 'mblast-queue-db',       path: 'postgres'       ],
-    [ name: 'mblast-query-service',  path: 'query-service'  ],
-    [ name: 'mblast-report-service', path: 'report-service' ],
+    [ name: 'mblast-queue-db',
+      path: 'docker-queue-db' ],
+    [ name: 'mblast-query-service',
+      dockerfile: 'service-query/Dockerfile' ],
+    [ name: 'mblast-report-service',
+      dockerfile: 'service-report/Dockerfile' ],
   ])
 }

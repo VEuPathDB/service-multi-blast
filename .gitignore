@@ -6,7 +6,7 @@ bin/
 blastdb/
 build/
 
-!buildSrc/src/main/kotlin/mblast/build
+!lib-mblast-gradle/src/main/kotlin/mblast/build
 
 mblast-dev.properties
 

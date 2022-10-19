@@ -1,4 +1,4 @@
-FROM veupathdb/alpine-dev-base:jdk-18 AS prep
+FROM veupathdb/alpine-dev-base:jdk-18-gradle-7.5.1 AS prep
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
@@ -10,11 +10,16 @@ RUN apk add --no-cache git npm \
     && git config --global advice.detachedHead false
 
 COPY gradle/ gradle/
-COPY buildSrc/ buildSrc/
+
+# Copy over our dependency libs
+COPY lib-mblast-gradle/ lib-mblast-gradle/
+COPY lib-blast-query-parser/ lib-blast-query-parser/
+COPY lib-temp-cache/ lib-temp-cache/
+
+
 COPY [ \
     "build.gradle.kts", \
     "settings.gradle.kts", \
-    "gradlew", \
     "./" \
 ]
 
@@ -28,7 +33,7 @@ COPY service-query/schema/ service-query/schema/
 COPY service-query/src/ service-query/src/
 
 # build the project
-RUN ./gradlew clean test shadowJar
+RUN gradle --no-daemon test shadowJar
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
