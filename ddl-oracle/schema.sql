@@ -60,12 +60,13 @@ CREATE TABLE mblast.report_configs (
 );
 
 
-CREATE TABLE mblast.user_to_reports (
+CREATE TABLE mblast.report_to_users (
   report_job_id CHAR(32)
     NOT NULL
-    CONSTRAINT mblast_user_to_reports_fk REFERENCES mblast.report_configs (report_job_id)
+    CONSTRAINT mblast_report_to_users_fk REFERENCES mblast.report_configs (report_job_id)
 , user_id       NUMBER(12)
     NOT NULL
 , summary       VARCHAR2(512)
 , description   CLOB
+, CONSTRAINT mblast_report_to_users_uq UNIQUE (report_job_id, user_id)
 );
