@@ -14,6 +14,8 @@ pluginManagement {
   }
 }
 
+includeBuild("lib-mblast-gradle")
+
 include(":service-query")
 project(":service-query").name = "query-service"
 include(":service-query:api-test")
