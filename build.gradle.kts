@@ -19,6 +19,11 @@ allprojects {
   }
 }
 
+buildscript {
+  dependencies {
+    classpath("mblast:lib-mblast-gradle:0") { isChanging = true }
+  }
+}
 
 /**
  * Initialize the repository for development.
