@@ -100,9 +100,9 @@ dependencies {
   implementation("io.foxcapades.lib:md5:1.0.0")
 
   implementation("org.veupathdb.lib:blast-types:8.1.0")
-  implementation("org.veupathdb.lib:blast-query-parser:1.0-SNAPSHOT") { isChanging = true }
+  implementation(project(":lib-blast-query-parser"))
   implementation("org.veupathdb.lib.mblast:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
-  implementation("org.veupathdb.lib.mblast:temp-cache:1.0-SNAPSHOT") { isChanging = true }
+  implementation(project(":lib-temp-cache"))
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
