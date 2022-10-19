@@ -2,7 +2,7 @@
 :source-highlighter: highlightjs
 :icons: font
 
-image:https://img.shields.io/github/license/veupathdb/service-multi-blast[GitHub]
+image:https://img.shields.io/github/license/veupathdb/service-multi-blast[License]
 
 This repository is a "monorepo" containing various projects relating to and
 supporting the VEuPathDB MultiBlast service stack.
@@ -48,6 +48,9 @@ Various utilities common to the other  services and libraries in this repo.
 link:lib-temp-cache/[Temp File Management Utilities]::
 Expiring temporary file factory.
 
+link:lib-mblast-gradle/[MultiBlast Gradle Plugin]::
+A Gradle extension that adds utilities to support the MultiBlast project build
+tasks.
 
 === Deployment
 
