@@ -1,8 +1,8 @@
 = MultiBlast Query Service
-:toc:
+:toc: preamble
 :source-highlighter: highlightjs
 :icons: font
-// Github specifics
+// GitHub specifics
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
@@ -11,4 +11,25 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 Elizabeth Paige Harper <epharper@upenn.edu>
-v1.0.0
+
+image:https://img.shields.io/github/license/veupathdb/service-multi-blast[License]
+image:https://img.shields.io/badge/docs-API-brightgreen[link="https://veupathdb.github.io/service-multi-blast/service-query/api.html"]
+
+
+== Notes
+
+=== Manually Building the Docker Image
+
+1. `cd` to the root of the project repository.
+
+2. Run `docker build`
++
+[source, bash]
+----
+docker build \
+  -t veupathdb/mblast-query-service \
+  -f service-query/Dockerfile \
+  --build-arg=GITHUB_USERNAME=$GITHUB_USERNAME \
+  --build-arg=GITHUB_TOKEN=$GITHUB_TOKEN \
+  .
+----
