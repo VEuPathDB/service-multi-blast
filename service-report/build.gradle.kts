@@ -2,7 +2,7 @@ import org.veupathdb.lib.gradle.container.util.Logger.Level
 
 plugins {
   java
-  kotlin("jvm") version "1.7.20"
+  kotlin("jvm")
   id("org.veupathdb.lib.gradle.container.container-utils") version "4.4.0"
   id("com.github.johnrengelman.shadow") version "7.1.2"
 }
