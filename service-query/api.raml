@@ -64,7 +64,7 @@ uses:
         properties:
           config:
             displayName: Job Configuration
-            type: lib.QueryJobRequest
+            type: lib.QueryJobPostRequest
             required: true
           query:
             displayName: Query File
@@ -204,6 +204,52 @@ uses:
         body:
           application/json:
             type: error.ServerError
+
+  patch:
+    displayName: Update Job
+    description: Updates a user's job.
+    body:
+      application/json:
+        type: lib.QueryJobPatchRequest
+    responses:
+      204:
+        description: |
+          Success.
+          
+          The user's job record was successfully updated.
+      400:
+        description: |
+          Bad Request.
+          
+          The request did not resemble or could not be parsed as the expected
+          type.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      422:
+        description: |
+          Invalid job configuration.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
 
   delete:
     displayName: Delete Job

@@ -4,7 +4,7 @@ uses:
   base: ./blast/blast-cli.raml
 
 types:
-  QueryJobRequest:
+  QueryJobPostRequest:
     displayName: Query Job Request
     type: object
     additionalProperties: false
@@ -30,6 +30,17 @@ types:
           - [TBlastNConfig](#type:lib.TBlastNConfig)
           - [TBlastXConfig](#type:lib.TBlastXConfig)
         type: base.BlastQueryConfig
+      meta:
+        displayName: User Metadata
+        type: QueryJobUserMeta
+        required: false
+        default: null
+
+  QueryJobPatchRequest:
+    displayName: Query Job Update
+    type: object
+    additionalProperties: false
+    properties:
       meta:
         displayName: User Metadata
         type: QueryJobUserMeta
