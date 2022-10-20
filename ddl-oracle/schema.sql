@@ -10,6 +10,8 @@ CREATE TABLE mblast.query_configs (
     NOT NULL
 , query        CLOB
     NOT NULL
+, created_on   TIMESTAMP WITH TIME ZONE
+    NOT NULL
 );
 
 CREATE TABLE mblast.query_to_subqueries (
@@ -56,6 +58,8 @@ CREATE TABLE mblast.report_configs (
     NOT NULL
     CONSTRAINT mblast_report_to_queries_fk REFERENCES mblast.query_configs (query_job_id)
 , config        CLOB
+    NOT NULL
+, created_on    TIMESTAMP WITH TIME ZONE
     NOT NULL
 );
 
