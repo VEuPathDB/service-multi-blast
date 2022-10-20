@@ -1,12 +1,12 @@
 .gradle/
 .idea/
 .tools/
-bin/
-.bin/
 blastdb/
 build/
+.bin/
 
 !lib-mblast-gradle/src/main/kotlin/mblast/build
+!script-blast-db-migration/bin
 
 mblast-dev.properties
 
