@@ -3,9 +3,6 @@ plugins {
   id("org.jetbrains.dokka") version "1.7.10"
 }
 
-group = "org.veupathdb.lib.mblast"
-version = "1.0-SNAPSHOT"
-
 java {
   targetCompatibility = JavaVersion.VERSION_1_8
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -20,13 +17,6 @@ dependencies {
 
 tasks.dokkaHtml {
   outputDirectory.set(rootDir.resolve("docs/dokka/temp-cache/$version"))
-}
-
-tasks.jar {
-  manifest {
-    attributes["Implementation-Title"] = project.name
-    attributes["Implementation-Version"] = project.version
-  }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
