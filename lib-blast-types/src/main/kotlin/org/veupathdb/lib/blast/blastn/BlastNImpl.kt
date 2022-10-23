@@ -369,4 +369,47 @@ internal class BlastNImpl(
     errs.incompatible(cullingLimit, bestHitOverhang, bestHitScoreEdge)
     errs.incompatible(numCPUCores, remote)
   }
+
+  override fun clone(): BlastN {
+    val cli = BlastNImpl()
+
+    super.copyInto(cli)
+
+    cli.strand                       = strand.clone()
+    cli.task                         = task.clone()
+    cli.wordSize                     = wordSize.clone()
+    cli.gapOpen                      = gapOpen.clone()
+    cli.gapExtend                    = gapExtend.clone()
+    cli.penalty                      = penalty.clone()
+    cli.reward                       = reward.clone()
+    cli.useIndex                     = useIndex.clone()
+    cli.indexName                    = indexName.clone()
+    cli.subjectFile                  = subjectFile.clone()
+    cli.subjectLocation              = subjectLocation.clone()
+    cli.dust                         = dust.clone()
+    cli.filteringDBFile              = filteringDBFile.clone()
+    cli.windowMaskerTaxID            = windowMaskerTaxID.clone()
+    cli.windowMaskerDBFile           = windowMaskerDBFile.clone()
+    cli.dbSoftMask                   = dbSoftMask.clone()
+    cli.dbHardMask                   = dbHardMask.clone()
+    cli.percentIdentity              = percentIdentity.clone()
+    cli.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    cli.cullingLimit                 = cullingLimit.clone()
+    cli.templateType                 = templateType.clone()
+    cli.templateLength               = templateLength.clone()
+    cli.sumStats                     = sumStats.clone()
+    cli.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    cli.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    cli.nonGreedy                    = nonGreedy.clone()
+    cli.minRawGappedScore            = minRawGappedScore.clone()
+    cli.ungappedAlignmentsOnly       = ungappedAlignmentsOnly.clone()
+    cli.offDiagonalRange             = offDiagonalRange.clone()
+    cli.numCPUCores                  = numCPUCores.clone()
+    cli.bestHitOverhang              = bestHitOverhang.clone()
+    cli.bestHitScoreEdge             = bestHitScoreEdge.clone()
+    cli.subjectBestHit               = subjectBestHit.clone()
+    cli.softMasking                  = softMasking.clone()
+
+    return cli
+  }
 }

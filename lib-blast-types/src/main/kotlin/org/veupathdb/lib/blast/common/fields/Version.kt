@@ -34,4 +34,6 @@ value class Version(val value: Boolean = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagVersion)
+
+  override fun clone() = this
 }

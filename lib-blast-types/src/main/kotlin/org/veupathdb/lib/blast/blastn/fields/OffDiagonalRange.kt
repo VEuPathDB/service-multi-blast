@@ -37,4 +37,6 @@ value class OffDiagonalRange(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagOffDiagonalRange, value)
+
+  override fun clone() = this
 }

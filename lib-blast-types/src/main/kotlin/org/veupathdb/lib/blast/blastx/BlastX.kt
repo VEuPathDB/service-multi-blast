@@ -169,4 +169,6 @@ interface BlastX : BlastQueryWithIPG {
    */
   var softMasking: SoftMaskingX
   fun softMasking(value: Boolean)
+
+  override fun clone(): BlastX
 }

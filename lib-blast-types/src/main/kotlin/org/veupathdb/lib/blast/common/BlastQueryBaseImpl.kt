@@ -124,4 +124,23 @@ internal abstract class BlastQueryBaseImpl(
     errs.requires(entrezQuery, remote)
     errs.incompatible(importSearchStrategy, exportSearchStrategy)
   }
+
+  fun copyInto(cli: BlastQueryBase) {
+    super.copyInto(cli)
+
+    cli.queryFile                = queryFile.clone()
+    cli.queryLocation            = queryLocation.clone()
+    cli.dbFile                   = dbFile.clone()
+    cli.expectValue              = expectValue.clone()
+    cli.lowercaseMasking         = lowercaseMasking.clone()
+    cli.entrezQuery              = entrezQuery.clone()
+    cli.maxHSPs                  = maxHSPs.clone()
+    cli.dbSize                   = dbSize.clone()
+    cli.searchSpace              = searchSpace.clone()
+    cli.importSearchStrategy     = importSearchStrategy.clone()
+    cli.exportSearchStrategy     = exportSearchStrategy.clone()
+    cli.extensionDropoffUngapped = extensionDropoffUngapped.clone()
+    cli.windowSize               = windowSize.clone()
+    cli.remote                   = remote.clone()
+  }
 }

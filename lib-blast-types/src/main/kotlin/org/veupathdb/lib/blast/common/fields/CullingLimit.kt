@@ -38,4 +38,6 @@ value class CullingLimit(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagCullingLimit, value)
+
+  override fun clone() = this
 }

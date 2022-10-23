@@ -49,6 +49,8 @@ value class NegativeTaxIDs(val value: List<String> = emptyList()) : BlastField {
       cli.add(sb.toString())
     }
   }
+
+  override fun clone() = NegativeTaxIDs(value.toList())
 }
 
 

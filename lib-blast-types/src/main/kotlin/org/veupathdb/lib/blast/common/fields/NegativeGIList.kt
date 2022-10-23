@@ -31,4 +31,6 @@ value class NegativeGIList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNegativeGIList, file)
+
+  override fun clone() = this
 }

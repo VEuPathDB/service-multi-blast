@@ -94,4 +94,9 @@ interface BlastCLI : BlastCommand {
    */
   var parseDefLines: ParseDefLines
   fun parseDefLines(value: Boolean)
+
+  /**
+   * Clones this `BlastCLI` instance and all of it's configured options.
+   */
+  override fun clone(): BlastCLI
 }

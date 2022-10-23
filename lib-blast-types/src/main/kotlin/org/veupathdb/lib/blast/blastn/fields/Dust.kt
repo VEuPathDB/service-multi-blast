@@ -100,6 +100,8 @@ sealed interface Dust : BlastField {
     ): Dust =
       ValDust(level, window, linker)
   }
+
+  override fun clone(): Dust
 }
 
 
@@ -190,6 +192,8 @@ internal data class ValDust(
       cli.add("$level $window $linker")
     }
   }
+
+  override fun clone() = this
 }
 
 
@@ -238,6 +242,8 @@ internal object YesDust : Dust {
     cli.add(FlagDust)
     cli.add("yes")
   }
+
+  override fun clone() = this
 }
 
 
@@ -275,4 +281,6 @@ internal object NoDust : Dust {
     cli.add(FlagDust)
     cli.add("no")
   }
+
+  override fun clone() = this
 }

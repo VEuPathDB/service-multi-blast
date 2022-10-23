@@ -40,6 +40,8 @@ value class BlastPTask(val value: BlastPTaskType = BlastPTaskType.BlastP)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagTask, value.value)
+
+  override fun clone() = this
 }
 
 

@@ -37,4 +37,6 @@ value class GapOpen(val value: Int = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagGapOpen, value)
+
+  override fun clone() = this
 }

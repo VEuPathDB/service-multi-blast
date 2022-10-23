@@ -16,4 +16,9 @@ interface BlastQueryWithIPG : BlastQueryWithLists {
    */
   var negativeIPGListFile: NegativeIPGList
   fun negativeIPGListFile(value: String)
+
+  /**
+   * Clones this `BlastQueryWithIPG` instance and all of it's configured options.
+   */
+  override fun clone(): BlastQueryWithIPG
 }

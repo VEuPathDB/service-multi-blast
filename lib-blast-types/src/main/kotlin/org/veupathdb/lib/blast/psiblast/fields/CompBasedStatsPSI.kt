@@ -48,6 +48,8 @@ value class CompBasedStatsPSI(val value: CompBasedStatsPSIValue = Def)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagCompBasedStats, value.value)
+
+  override fun clone() = this
 }
 
 

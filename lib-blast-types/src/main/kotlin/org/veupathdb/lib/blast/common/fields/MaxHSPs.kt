@@ -40,5 +40,7 @@ value class MaxHSPs(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMaxHSPs, value)
+
+  override fun clone() = this
 }
 

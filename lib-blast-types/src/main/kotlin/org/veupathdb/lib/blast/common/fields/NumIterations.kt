@@ -36,4 +36,6 @@ value class NumIterations(val value: UByte = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNumIterations, value)
+
+  override fun clone() = this
 }

@@ -34,4 +34,6 @@ value class HTML(val value: Boolean = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagHTML)
+
+  override fun clone() = this
 }

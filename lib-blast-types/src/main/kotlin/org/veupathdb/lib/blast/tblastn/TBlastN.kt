@@ -168,4 +168,6 @@ interface TBlastN : BlastQueryWithLists {
    */
   var inPSSMFile: InPSSMFile
   fun inPSSMFile(value: String)
+
+  override fun clone(): TBlastN
 }

@@ -38,6 +38,8 @@ value class Strand(val value: StrandType = StrandType.Both) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagStrand, value.value)
+
+  override fun clone() = this
 }
 
 

@@ -32,4 +32,6 @@ value class NegativeTaxIDList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNegativeTaxIDList, file)
+
+  override fun clone() = this
 }

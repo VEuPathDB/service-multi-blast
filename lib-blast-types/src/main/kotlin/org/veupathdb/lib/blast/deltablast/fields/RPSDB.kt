@@ -33,4 +33,6 @@ value class RPSDB(val value: String = "cdd_delta") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagRPSDB, value)
+
+  override fun clone() = this
 }

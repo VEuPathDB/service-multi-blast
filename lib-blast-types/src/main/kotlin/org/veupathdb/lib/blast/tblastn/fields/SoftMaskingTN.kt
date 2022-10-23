@@ -49,4 +49,6 @@ value class SoftMaskingTN(val value: Boolean = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSoftMasking, value)
+
+  override fun clone() = this
 }

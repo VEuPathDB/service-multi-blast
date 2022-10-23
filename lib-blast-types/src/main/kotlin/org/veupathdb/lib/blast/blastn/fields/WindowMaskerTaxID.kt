@@ -34,4 +34,6 @@ value class WindowMaskerTaxID(val value: Int = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagWindowMaskerTaxID, value)
+
+  override fun clone() = this
 }

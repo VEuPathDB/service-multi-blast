@@ -41,6 +41,8 @@ sealed interface SegTN : Seg {
     fun of(window: Int = DefWindow, locut: Double = DefLoCut, hicut: Double = DefHiCut): SegTN =
       ValSegTN(window, locut, hicut)
   }
+
+  override fun clone(): SegTN
 }
 
 
@@ -48,7 +50,7 @@ internal fun ParseSegTN(js: ObjectNode): SegTN {
   val tmp = js[FlagSeg] ?: return NoSegTN
 
   if (tmp.isTextual) {
-    return when (js.textValue()) {
+    return when (tmp.textValue()) {
       "yes" -> YesSegTN
       "no"  -> NoSegTN
       else  -> throw IllegalArgumentException("$FlagSeg must be an object or one of the string values \"yes\" or \"no\".")
@@ -93,6 +95,8 @@ internal object YesSegTN : SegTN {
     cli.add(FlagSeg)
     cli.add("yes")
   }
+
+  override fun clone() = this
 }
 
 
@@ -120,6 +124,8 @@ internal object NoSegTN : SegTN {
   override fun appendCliSegment(cli: StringBuilder) {}
 
   override fun appendCliParts(cli: MutableList<String>) {}
+
+  override fun clone() = this
 }
 
 
@@ -180,4 +186,6 @@ internal data class ValSegTN(
       cli.add("$window $locut $hicut")
     }
   }
+
+  override fun clone() = this
 }

@@ -31,4 +31,6 @@ value class DBHardMask(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagDBHardMask, value)
+
+  override fun clone() = this
 }

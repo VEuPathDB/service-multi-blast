@@ -45,6 +45,8 @@ value class BlastNTask(val value: BlastNTaskType = BlastNTaskType.Megablast)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagTask, value.value)
+
+  override fun clone() = this
 }
 
 

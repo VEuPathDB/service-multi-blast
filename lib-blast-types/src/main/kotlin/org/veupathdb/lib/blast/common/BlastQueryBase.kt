@@ -91,4 +91,9 @@ interface BlastQueryBase : BlastCLI {
    */
   var remote: Remote
   fun remote(value: Boolean)
+
+  /**
+   * Clones this `BlastQueryBase` instance and all of it's configured options.
+   */
+  override fun clone(): BlastQueryBase
 }

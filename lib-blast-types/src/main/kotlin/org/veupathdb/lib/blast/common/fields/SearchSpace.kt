@@ -34,4 +34,6 @@ value class SearchSpace(val value: Byte = DefaultSearchSpace) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSearchSpace, value)
+
+  override fun clone() = this
 }

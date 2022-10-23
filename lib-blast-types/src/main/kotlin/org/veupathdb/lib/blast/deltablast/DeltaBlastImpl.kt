@@ -340,4 +340,44 @@ internal class DeltaBlastImpl(
     errs.incompatible(numIterations, remote)
     errs.incompatible(showDomainHits, remote, subjectFile)
   }
+
+  override fun clone(): DeltaBlast {
+    val out = DeltaBlastImpl()
+
+    super.copyInto(out)
+
+    out.wordSize                       = wordSize.clone()
+    out.gapOpen                        = gapOpen.clone()
+    out.gapExtend                      = gapExtend.clone()
+    out.matrix                         = matrix.clone()
+    out.threshold                      = threshold.clone()
+    out.compBasedStats                 = compBasedStats.clone()
+    out.subjectFile                    = subjectFile.clone()
+    out.subjectLocation                = subjectLocation.clone()
+    out.seg                            = seg.clone()
+    out.softMasking                    = softMasking.clone()
+    out.queryCoverageHSPPercent        = queryCoverageHSPPercent.clone()
+    out.cullingLimit                   = cullingLimit.clone()
+    out.bestHitOverhang                = bestHitOverhang.clone()
+    out.bestHitScoreEdge               = bestHitScoreEdge.clone()
+    out.subjectBestHit                 = subjectBestHit.clone()
+    out.sumStats                       = sumStats.clone()
+    out.extensionDropoffPrelimGapped   = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped    = extensionDropoffFinalGapped.clone()
+    out.gapTrigger                     = gapTrigger.clone()
+    out.numCPUCores                    = numCPUCores.clone()
+    out.useSmithWatermanTraceback      = useSmithWatermanTraceback.clone()
+    out.numIterations                  = numIterations.clone()
+    out.outPSSMFile                    = outPSSMFile.clone()
+    out.outASCIIPSSMFile               = outASCIIPSSMFile.clone()
+    out.savePSSMAfterLastRound         = savePSSMAfterLastRound.clone()
+    out.saveEachPSSM                   = saveEachPSSM.clone()
+    out.pseudoCount                    = pseudoCount.clone()
+    out.domainInclusionEValueThreshold = domainInclusionEValueThreshold.clone()
+    out.inclusionEValueThreshold       = inclusionEValueThreshold.clone()
+    out.rpsDB                          = rpsDB.clone()
+    out.showDomainHits                 = showDomainHits.clone()
+
+    return out
+  }
 }

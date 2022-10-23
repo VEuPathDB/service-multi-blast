@@ -19,4 +19,6 @@ interface BlastFormatter : BlastCLI {
    */
   var archive: Archive
   fun archive(value: String)
+
+  override fun clone(): BlastFormatter
 }

@@ -40,4 +40,6 @@ value class InclusionEValueThreshold(val value: Double = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagInclusionEThresh, value)
+
+  override fun clone() = this
 }

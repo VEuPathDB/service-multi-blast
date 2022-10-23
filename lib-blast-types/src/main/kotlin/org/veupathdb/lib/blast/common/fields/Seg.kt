@@ -46,4 +46,6 @@ interface Seg : BlastField {
    * @throws IllegalStateException If this SEG value equals "yes" or "no".
    */
   val hicut: Double
+
+  override fun clone(): Seg
 }

@@ -86,4 +86,15 @@ internal class BlastFormatterImpl(
   override fun validate(errs: ErrorMap) {
     errs.incompatible(archive, rid)
   }
+
+  override fun clone(): BlastFormatter {
+    val out = BlastFormatterImpl()
+
+    super.copyInto(out)
+
+    out.rid     = rid.clone()
+    out.archive = archive.clone()
+
+    return out
+  }
 }

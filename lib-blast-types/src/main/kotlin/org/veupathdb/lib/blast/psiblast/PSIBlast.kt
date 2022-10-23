@@ -205,4 +205,6 @@ interface PSIBlast : BlastQueryWithIPG {
    */
   var phiPatternFile: PHIPatternFile
   fun phiPatternFile(value: String)
+
+  override fun clone(): PSIBlast
 }

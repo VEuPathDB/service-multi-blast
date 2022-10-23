@@ -36,4 +36,6 @@ value class NumAlignments(val value: UInt = DefaultNumAlignments) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNumAlignments, value)
+
+  override fun clone() = this
 }

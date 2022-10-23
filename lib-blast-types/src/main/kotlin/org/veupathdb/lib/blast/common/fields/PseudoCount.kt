@@ -33,4 +33,6 @@ value class PseudoCount(val value: Int = 0) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagPseudoCount, value)
+
+  override fun clone() = this
 }

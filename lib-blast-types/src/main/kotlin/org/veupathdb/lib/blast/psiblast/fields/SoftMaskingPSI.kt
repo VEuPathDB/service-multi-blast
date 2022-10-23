@@ -33,4 +33,6 @@ value class SoftMaskingPSI(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSoftMasking, value)
+
+  override fun clone() = this
 }

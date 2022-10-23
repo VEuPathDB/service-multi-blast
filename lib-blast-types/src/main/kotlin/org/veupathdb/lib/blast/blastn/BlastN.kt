@@ -211,4 +211,6 @@ interface BlastN : BlastQueryWithLists {
    */
   var softMasking: SoftMaskingN
   fun softMasking(value: Boolean)
+
+  override fun clone(): BlastN
 }

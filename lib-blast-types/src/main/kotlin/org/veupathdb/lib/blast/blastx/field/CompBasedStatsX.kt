@@ -48,6 +48,8 @@ value class CompBasedStatsX(val value: CompBasedStatsXValue = Def)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagCompBasedStats, value.value)
+
+  override fun clone() = this
 }
 
 

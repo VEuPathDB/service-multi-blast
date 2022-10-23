@@ -46,6 +46,8 @@ value class TemplateLength(
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagTemplateLength, value.value)
+
+  override fun clone() = this
 }
 
 

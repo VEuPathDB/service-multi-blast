@@ -55,4 +55,6 @@ data class SubjectLocation(val start: UInt = DefStart, val stop: UInt = DefStop)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSubjectLocation) { "$start-$stop" }
+
+  override fun clone() = this
 }

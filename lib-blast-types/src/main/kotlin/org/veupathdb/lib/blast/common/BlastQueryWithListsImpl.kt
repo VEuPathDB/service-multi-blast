@@ -138,4 +138,17 @@ internal abstract class BlastQueryWithListsImpl(
     errs.incompatible(negativeTaxIDs, negativeSeqIDListFile, remote)
     errs.incompatible(negativeSeqIDListFile, remote)
   }
+
+  fun copyInto(cli: BlastQueryWithLists) {
+    super.copyInto(cli)
+
+    cli.giListFile            = giListFile.clone()
+    cli.negativeGIListFile    = negativeGIListFile.clone()
+    cli.seqIDListFile         = seqIDListFile.clone()
+    cli.negativeSeqIDListFile = negativeSeqIDListFile.clone()
+    cli.taxIDListFile         = taxIDListFile.clone()
+    cli.negativeTaxIDListFile = negativeTaxIDListFile.clone()
+    cli.taxIDs                = taxIDs.clone()
+    cli.negativeTaxIDs        = negativeTaxIDs.clone()
+  }
 }

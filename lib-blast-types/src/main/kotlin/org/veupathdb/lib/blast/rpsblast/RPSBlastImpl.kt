@@ -203,4 +203,27 @@ internal class RPSBlastImpl(
 
     errs.incompatible(cullingLimit, bestHitOverhang, bestHitScoreEdge)
   }
+
+  override fun clone(): RPSBlast {
+    val out = RPSBlastImpl()
+
+    super.copyInto(out)
+
+    out.compBasedStats               = compBasedStats.clone()
+    out.seg                          = seg.clone()
+    out.softMasking                  = softMasking.clone()
+    out.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    out.cullingLimit                 = cullingLimit.clone()
+    out.bestHitOverhang              = bestHitOverhang.clone()
+    out.bestHitScoreEdge             = bestHitScoreEdge.clone()
+    out.subjectBestHit               = subjectBestHit.clone()
+    out.sumStats                     = sumStats.clone()
+    out.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    out.autoCPUCores                 = autoCPUCores.clone()
+    out.multiThreadingMode           = multiThreadingMode.clone()
+    out.useSmithWatermanTraceback    = useSmithWatermanTraceback.clone()
+
+    return out
+  }
 }

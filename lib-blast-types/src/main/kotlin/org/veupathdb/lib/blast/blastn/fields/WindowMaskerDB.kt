@@ -32,4 +32,6 @@ value class WindowMaskerDB(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagWindowMaskerDB, file)
+
+  override fun clone() = this
 }

@@ -31,4 +31,6 @@ value class HelpShort(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagHelpShort)
+
+  override fun clone() = this
 }

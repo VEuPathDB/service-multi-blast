@@ -56,6 +56,8 @@ value class DBGenCode(val value: UByte = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagDBGenCode, value)
+
+  override fun clone() = this
 }
 
 

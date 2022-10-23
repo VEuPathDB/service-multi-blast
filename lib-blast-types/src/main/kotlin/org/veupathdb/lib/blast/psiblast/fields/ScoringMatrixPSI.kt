@@ -36,6 +36,8 @@ value class ScoringMatrixPSI(val value: ScoringMatrixPSIType = ScoringMatrixPSIT
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMatrix, value.value)
+
+  override fun clone() = this
 }
 
 

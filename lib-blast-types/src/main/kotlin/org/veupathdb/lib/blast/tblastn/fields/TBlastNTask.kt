@@ -54,6 +54,8 @@ value class TBlastNTask(val value: TBlastNTaskType = Def) : BlastField {
   override fun appendCliSegment(cli: StringBuilder) = cli.append(isDefault, FlagTask, value.value)
 
   override fun appendCliParts(cli: MutableList<String>) = cli.add(isDefault, FlagTask, value.value)
+
+  override fun clone() = this
 }
 
 

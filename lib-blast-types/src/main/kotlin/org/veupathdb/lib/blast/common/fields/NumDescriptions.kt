@@ -40,4 +40,6 @@ value class NumDescriptions(val value: UInt = DefaultNumDescriptions)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNumDescriptions, value)
+
+  override fun clone() = this
 }

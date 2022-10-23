@@ -8,21 +8,21 @@ import org.veupathdb.lib.blast.serial.BlastField
 import org.veupathdb.lib.jackson.Json
 
 internal abstract class BlastCLIImpl(
-  override val tool: BlastTool,
-  override var shortHelp: HelpShort,
-  override var longHelp: HelpLong,
-  override var version: Version,
-  override var outFile: OutFile,
-  override var outFormat: OutFormat,
-  override var showGIs: ShowGIs,
+  override val tool:            BlastTool,
+  override var shortHelp:       HelpShort,
+  override var longHelp:        HelpLong,
+  override var version:         Version,
+  override var outFile:         OutFile,
+  override var outFormat:       OutFormat,
+  override var showGIs:         ShowGIs,
   override var numDescriptions: NumDescriptions,
-  override var numAlignments: NumAlignments,
-  override var lineLength: LineLength,
-  override var html: HTML,
-  override var sortHits: SortHits,
-  override var sortHSPs: SortHSPs,
-  override var maxTargetSeqs: MaxTargetSeqs,
-  override var parseDefLines: ParseDefLines
+  override var numAlignments:   NumAlignments,
+  override var lineLength:      LineLength,
+  override var html:            HTML,
+  override var sortHits:        SortHits,
+  override var sortHSPs:        SortHSPs,
+  override var maxTargetSeqs:   MaxTargetSeqs,
+  override var parseDefLines:   ParseDefLines
 ) :  BlastCLI {
 
   override fun shortHelp(value: Boolean) { shortHelp = HelpShort(value) }
@@ -36,14 +36,8 @@ internal abstract class BlastCLIImpl(
   override fun html(value: Boolean) { html = HTML(value) }
   override fun sortHits(value: HitSorting) { sortHits = SortHits(value) }
   override fun sortHSPs(value: HSPSorting) { sortHSPs = SortHSPs(value) }
-
-  override fun maxTargetSeqs(value: UInt) {
-    TODO("Not yet implemented")
-  }
-
-  override fun parseDefLines(value: Boolean) {
-    TODO("Not yet implemented")
-  }
+  override fun maxTargetSeqs(value: UInt) { maxTargetSeqs = MaxTargetSeqs(value) }
+  override fun parseDefLines(value: Boolean) { parseDefLines = ParseDefLines(value) }
 
   override fun toJson() = Json.new<ObjectNode> {
     put("tool", tool.value)
@@ -134,4 +128,21 @@ internal abstract class BlastCLIImpl(
   }
 
   protected abstract fun validate(errs: ErrorMap)
+
+  protected open fun copyInto(cli: BlastCLI) {
+    cli.shortHelp       = shortHelp.clone()
+    cli.longHelp        = longHelp.clone()
+    cli.version         = version.clone()
+    cli.outFile         = outFile.clone()
+    cli.outFormat       = outFormat.clone()
+    cli.showGIs         = showGIs.clone()
+    cli.numDescriptions = numDescriptions.clone()
+    cli.numAlignments   = numAlignments.clone()
+    cli.lineLength      = lineLength.clone()
+    cli.html            = html.clone()
+    cli.sortHits        = sortHits.clone()
+    cli.sortHSPs        = sortHSPs.clone()
+    cli.maxTargetSeqs   = maxTargetSeqs.clone()
+    cli.parseDefLines   = parseDefLines.clone()
+  }
 }

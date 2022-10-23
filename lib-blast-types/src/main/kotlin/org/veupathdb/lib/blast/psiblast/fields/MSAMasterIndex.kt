@@ -35,4 +35,6 @@ value class MSAMasterIndex(val value: UInt = 0u) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMSAMasterIndex, value)
+
+  override fun clone() = this
 }

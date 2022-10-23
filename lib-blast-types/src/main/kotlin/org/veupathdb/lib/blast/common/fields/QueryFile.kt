@@ -36,4 +36,6 @@ value class QueryFile(val file: String = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagQueryFile, file)
+
+  override fun clone() = this
 }

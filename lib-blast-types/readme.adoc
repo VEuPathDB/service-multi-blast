@@ -1,7 +1,7 @@
 = blast-types
 :source-highlighter: highlightjs
 :toc: preamble
-:lib-version: 8.1.0
+:lib-version: 8.2.0
 
 image:https://img.shields.io/github/license/veupathdb/service-multi-blast[GitHub]
 image:https://img.shields.io/badge/docs-dokka-green[title="Dokka Docs", link="https://veupathdb.github.io/service-multi-blast/dokka/blast-types/"]
@@ -180,24 +180,26 @@ errors.toJson() == """
 
 == Release Notes
 
-=== v8.1.0
+[cols="1h,11a"]
+|===
+| v8.2.0
+| * Adds `clone()` methods to all the BLAST+ configuration types that return a
+new copy of the config instance with the same field values.
 
-* Adds convenience methods for all properties that allow setting the properties
-  using a raw type rather than a field wrapper type.
+| v8.1.2
+| * Fixes issue with expect value validation.
+
+| v8.1.1
+| * Fixes issue with deserializing the -seg field from JSON.
+
+| v8.1.0
+| * Adds convenience methods for all properties that allow setting the
+properties using a raw type rather than a field wrapper type.
 * Adds blast config type constructors that accept builder callbacks.
 
-=== v8.0.1
+| v8.0.1
+| * Added missing `@JvmStatic` annotations for easier interop with plain Java.
 
-* Added missing `@JvmStatic` annotations for easier interop with plain Java.
-
-=== v8.0.0
-
-* Re-release of version 7.0.0 targeting JDK 8 for wider usability.
-
-=== v7.0.0
-
-* Add new options for BLAST+ 2.13.0
-** `blastn -mt_mode`
-** `blastp -mt_mode`
-** `blastx -mt_mode`
-** `tblastn -mt_mode`
+| v8.0.0
+| * Re-release of version 7.0.0 targeting JDK 8 for wider usability.
+|===

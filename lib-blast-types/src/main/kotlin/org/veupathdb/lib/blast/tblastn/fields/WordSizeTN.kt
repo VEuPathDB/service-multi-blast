@@ -49,4 +49,6 @@ value class WordSizeTN(val value: UInt = Def) : BlastField {
   override fun appendCliSegment(cli: StringBuilder) = cli.append(isDefault, FlagWordSize, value)
 
   override fun appendCliParts(cli: MutableList<String>) = cli.add(isDefault, FlagWordSize, value)
+
+  override fun clone() = this
 }

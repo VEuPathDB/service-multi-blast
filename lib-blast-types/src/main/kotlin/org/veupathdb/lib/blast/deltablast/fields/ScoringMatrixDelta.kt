@@ -36,6 +36,8 @@ value class ScoringMatrixDelta(val value: ScoringMatrixDeltaType = ScoringMatrix
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMatrix, value.value)
+
+  override fun clone() = this
 }
 
 

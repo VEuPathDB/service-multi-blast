@@ -31,4 +31,6 @@ value class Remote(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagRemote)
+
+  override fun clone() = this
 }

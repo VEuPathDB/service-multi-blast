@@ -36,4 +36,6 @@ value class MinRawGappedScore(val value: Int = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMinRawGappedScore, value)
+
+  override fun clone() = this
 }

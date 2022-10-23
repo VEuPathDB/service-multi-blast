@@ -34,4 +34,6 @@ value class Reward(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagReward, value)
+
+  override fun clone() = this
 }

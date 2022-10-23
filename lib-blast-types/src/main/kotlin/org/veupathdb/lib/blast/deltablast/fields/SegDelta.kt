@@ -28,6 +28,8 @@ sealed interface SegDelta : Seg {
     fun of(window: Int, locut: Double, hicut: Double): SegDelta =
       ValSegD(window, locut, hicut)
   }
+
+  override fun clone(): SegDelta
 }
 
 
@@ -35,7 +37,7 @@ internal fun ParseSegDelta(js: ObjectNode): SegDelta {
   val tmp = js[KeySeg] ?: return NoSegD
 
   if (tmp.isTextual) {
-    return when (js.textValue()) {
+    return when (tmp.textValue()) {
       "yes" -> YesSegD
       "no"  -> NoSegD
       else  -> throw IllegalArgumentException("$KeySeg must be an object or one of the string values \"yes\" or \"no\".")
@@ -80,6 +82,8 @@ internal object YesSegD : SegDelta {
     cli.add(KeySeg)
     cli.add("yes")
   }
+
+  override fun clone() = this
 }
 
 
@@ -107,6 +111,8 @@ internal object NoSegD : SegDelta {
   override fun appendCliSegment(cli: StringBuilder) {}
 
   override fun appendCliParts(cli: MutableList<String>) {}
+
+  override fun clone() = this
 }
 
 
@@ -161,4 +167,6 @@ internal data class ValSegD(
     cli.add(KeySeg)
     cli.add("$window $locut $hicut")
   }
+
+  override fun clone() = this
 }

@@ -275,4 +275,33 @@ internal class TBlastXImpl(
       negativeGIListFile, negativeSeqIDListFile, negativeTaxIDs,
       negativeTaxIDListFile)
   }
+
+  override fun clone(): TBlastX {
+    val out = TBlastXImpl()
+
+    super.copyInto(out)
+
+    out.strand                  = strand.clone()
+    out.queryGenCode            = queryGenCode.clone()
+    out.wordSize                = wordSize.clone()
+    out.maxIntronLength         = maxIntronLength.clone()
+    out.matrix                  = matrix.clone()
+    out.threshold               = threshold.clone()
+    out.dbGenCode               = dbGenCode.clone()
+    out.subjectFile             = subjectFile.clone()
+    out.subjectLocation         = subjectLocation.clone()
+    out.seg                     = seg.clone()
+    out.softMasking             = softMasking.clone()
+    out.dbSoftMask              = dbSoftMask.clone()
+    out.dbHardMask              = dbHardMask.clone()
+    out.queryCoverageHSPPercent = queryCoverageHSPPercent.clone()
+    out.cullingLimit            = cullingLimit.clone()
+    out.bestHitOverhang         = bestHitOverhang.clone()
+    out.bestHitScoreEdge        = bestHitScoreEdge.clone()
+    out.subjectBestHit          = subjectBestHit.clone()
+    out.sumStats                = sumStats.clone()
+    out.numCPUCores             = numCPUCores.clone()
+
+    return out
+  }
 }

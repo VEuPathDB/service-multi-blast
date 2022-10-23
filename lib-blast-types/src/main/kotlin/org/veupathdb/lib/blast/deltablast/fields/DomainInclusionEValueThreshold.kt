@@ -36,4 +36,6 @@ value class DomainInclusionEValueThreshold(val value: Double = 0.05)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagDomainInclusionEThresh, value)
+
+  override fun clone() = this
 }

@@ -31,4 +31,6 @@ value class IndexName(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagIndexName, value)
+
+  override fun clone() = this
 }

@@ -43,4 +43,6 @@ value class MaxTargetSeqs(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMaxTargetSeqs, value)
+
+  override fun clone() = this
 }

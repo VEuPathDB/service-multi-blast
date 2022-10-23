@@ -39,6 +39,8 @@ value class TemplateType(val value: TemplateTypeValue = TemplateTypeValue.None)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagTemplateType, value.value)
+
+  override fun clone() = this
 }
 
 

@@ -32,4 +32,6 @@ value class SaveEachPSSM(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSaveEachPSSM)
+
+  override fun clone() = this
 }

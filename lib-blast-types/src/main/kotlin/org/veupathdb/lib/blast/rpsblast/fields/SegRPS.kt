@@ -36,6 +36,8 @@ sealed interface SegRPS : Seg {
     fun of(window: Int, locut: Double, hicut: Double): SegRPS =
       ValSegRPS(window, locut, hicut)
   }
+
+  override fun clone(): SegRPS
 }
 
 
@@ -43,7 +45,7 @@ internal fun ParseSegRPS(js: ObjectNode): SegRPS {
   val tmp = js[KeySeg] ?: return NoSegRPS
 
   if (tmp.isTextual) {
-    return when (js.textValue()) {
+    return when (tmp.textValue()) {
       "yes" -> YesSegRPS
       "no"  -> NoSegRPS
       else  -> throw IllegalArgumentException("$KeySeg must be an object or one of the string values \"yes\" or \"no\".")
@@ -88,6 +90,8 @@ internal object YesSegRPS : SegRPS {
     cli.add(KeySeg)
     cli.add("yes")
   }
+
+  override fun clone() = this
 }
 
 
@@ -115,6 +119,8 @@ internal object NoSegRPS : SegRPS {
   override fun appendCliSegment(cli: StringBuilder) {}
 
   override fun appendCliParts(cli: MutableList<String>) {}
+
+  override fun clone() = this
 }
 
 
@@ -169,4 +175,6 @@ internal data class ValSegRPS(
     cli.add(KeySeg)
     cli.add("$window $locut $hicut")
   }
+
+  override fun clone() = this
 }

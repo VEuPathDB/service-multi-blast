@@ -31,5 +31,7 @@ value class SeqIDList(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSeqIDList, value)
+
+  override fun clone() = this
 }
 

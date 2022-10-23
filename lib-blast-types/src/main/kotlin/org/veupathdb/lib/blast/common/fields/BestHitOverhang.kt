@@ -55,4 +55,6 @@ value class BestHitOverhang(val value: Double = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagBestHitOverhang, value)
+
+  override fun clone() = this
 }

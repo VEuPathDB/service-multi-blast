@@ -57,4 +57,9 @@ interface BlastQueryWithLists : BlastQueryBase {
   var negativeTaxIDs: NegativeTaxIDs
   fun negativeTaxIDs(value: List<String>)
   fun negativeTaxIDs(vararg values: String)
+
+  /**
+   * Clones this `BlastQueryWithLists` instance and all of it's configured options.
+   */
+  override fun clone(): BlastQueryWithLists
 }
