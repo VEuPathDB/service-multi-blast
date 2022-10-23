@@ -37,6 +37,8 @@ value class ScoringMatrixTX(val value: ScoringMatrixTXType = ScoringMatrixTXType
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMatrix, value.value)
+
+  override fun clone() = this
 }
 
 

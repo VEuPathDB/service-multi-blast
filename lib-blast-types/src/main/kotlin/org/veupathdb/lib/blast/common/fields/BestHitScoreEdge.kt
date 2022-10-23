@@ -56,4 +56,6 @@ value class BestHitScoreEdge(val value: Double = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagBestHitScoreEdge, value)
+
+  override fun clone() = this
 }

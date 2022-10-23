@@ -31,4 +31,6 @@ value class NegativeIPGList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNegativeIPGList, file)
+
+  override fun clone() = this
 }

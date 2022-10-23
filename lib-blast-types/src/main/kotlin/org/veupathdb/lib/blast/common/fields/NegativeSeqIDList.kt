@@ -32,4 +32,6 @@ value class NegativeSeqIDList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNegativeSeqIDList, file)
+
+  override fun clone() = this
 }

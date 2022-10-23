@@ -39,6 +39,8 @@ value class AutoCPUCores(val value: AutoCPUCoresValue = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNumThreads, value.ordinal)
+
+  override fun clone() = this
 }
 
 

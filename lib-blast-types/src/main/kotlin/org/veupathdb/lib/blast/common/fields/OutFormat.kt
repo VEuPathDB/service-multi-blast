@@ -170,6 +170,8 @@ data class OutFormat(
       cli.add(tmp.toString())
     }
   }
+
+  override fun clone() = OutFormat(type, delimiter, FormatFields(fields.value.toList()))
 }
 
 

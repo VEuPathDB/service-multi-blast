@@ -93,4 +93,6 @@ interface RPSBlast : BlastQueryBase {
    */
   var useSmithWatermanTraceback: UseSmithWatermanTraceback
   fun useSmithWatermanTraceback(value: Boolean)
+
+  override fun clone(): RPSBlast
 }

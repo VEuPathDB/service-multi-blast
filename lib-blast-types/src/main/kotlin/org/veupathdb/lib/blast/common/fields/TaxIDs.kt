@@ -48,6 +48,8 @@ value class TaxIDs(val value: List<String> = emptyList()) : BlastField {
       cli.add(sb.toString())
     }
   }
+
+  override fun clone() = TaxIDs(value.toList())
 }
 
 

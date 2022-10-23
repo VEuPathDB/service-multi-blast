@@ -47,4 +47,9 @@ interface BlastField {
    * default value.
    */
   fun appendCliParts(cli: MutableList<String>)
+
+  /**
+   * Clones this `BlastField` instance, copying its value.
+   */
+  fun clone(): BlastField
 }

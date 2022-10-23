@@ -44,4 +44,6 @@ value class LineLength(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagLineLength, value)
+
+  override fun clone() = this
 }

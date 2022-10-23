@@ -367,4 +367,46 @@ internal class PSIBlastImpl(
     errs.incompatible(inPSSMFile, queryFile, queryLocation, phiPatternFile)
     errs.incompatible(remote, numIterations)
   }
+
+  override fun clone(): PSIBlast {
+    val out = PSIBlastImpl()
+
+    super.copyInto(out)
+
+    out.wordSize                     = wordSize.clone()
+    out.gapOpen                      = gapOpen.clone()
+    out.gapExtend                    = gapExtend.clone()
+    out.matrix                       = matrix.clone()
+    out.threshold                    = threshold.clone()
+    out.compBasedStats               = compBasedStats.clone()
+    out.subjectFile                  = subjectFile.clone()
+    out.subjectLocation              = subjectLocation.clone()
+    out.seg                          = seg.clone()
+    out.softMasking                  = softMasking.clone()
+    out.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    out.cullingLimit                 = cullingLimit.clone()
+    out.bestHitOverhang              = bestHitOverhang.clone()
+    out.bestHitScoreEdge             = bestHitScoreEdge.clone()
+    out.subjectBestHit               = subjectBestHit.clone()
+    out.sumStats                     = sumStats.clone()
+    out.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    out.gapTrigger                   = gapTrigger.clone()
+    out.numCPUCores                  = numCPUCores.clone()
+    out.useSmithWatermanTraceback    = useSmithWatermanTraceback.clone()
+    out.numIterations                = numIterations.clone()
+    out.outPSSMFile                  = outPSSMFile.clone()
+    out.outASCIIPSSMFile             = outASCIIPSSMFile.clone()
+    out.savePSSMAfterLastRound       = savePSSMAfterLastRound.clone()
+    out.saveEachPSSM                 = saveEachPSSM.clone()
+    out.inMSAFile                    = inMSAFile.clone()
+    out.msaMasterIndex               = msaMasterIndex.clone()
+    out.ignoreMSAMaster              = ignoreMSAMaster.clone()
+    out.inPSSMFile                   = inPSSMFile.clone()
+    out.pseudoCount                  = pseudoCount.clone()
+    out.inclusionEValueThreshold     = inclusionEValueThreshold.clone()
+    out.phiPatternFile               = phiPatternFile.clone()
+
+    return out
+  }
 }

@@ -113,4 +113,11 @@ internal abstract class BlastQueryWithIPGImpl(
   override fun validate(errs: ErrorMap) {
     super.validate(errs)
   }
+
+  fun copyInto(cli: BlastQueryWithIPG) {
+    super.copyInto(cli)
+
+    cli.ipgListFile         = ipgListFile.clone()
+    cli.negativeIPGListFile = negativeIPGListFile.clone()
+  }
 }

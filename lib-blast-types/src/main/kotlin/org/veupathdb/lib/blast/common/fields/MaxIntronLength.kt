@@ -37,4 +37,6 @@ value class MaxIntronLength(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMaxIntronLength, value)
+
+  override fun clone() = this
 }

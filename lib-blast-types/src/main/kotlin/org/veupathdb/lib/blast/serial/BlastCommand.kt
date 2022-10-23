@@ -9,6 +9,11 @@ import org.veupathdb.lib.blast.err.ErrorMap
 interface BlastCommand {
 
   /**
+   * Clones this `BlastCommand` instance and all of it's configured options.
+   */
+  fun clone(): BlastCommand
+
+  /**
    * Serializes the current [BlastCommand] to a JSON [ObjectNode].
    *
    * Only non-default properties and the `"tool"` property should be present in

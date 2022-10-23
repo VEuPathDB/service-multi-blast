@@ -36,4 +36,6 @@ value class PercentIdentity(val value: Double = Def)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagPercentIdentity, value)
+
+  override fun clone() = this
 }

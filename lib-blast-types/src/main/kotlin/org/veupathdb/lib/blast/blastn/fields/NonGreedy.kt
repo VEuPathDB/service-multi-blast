@@ -37,4 +37,6 @@ value class NonGreedy(val value: Boolean = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNonGreedy)
+
+  override fun clone() = this
 }

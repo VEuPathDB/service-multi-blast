@@ -32,4 +32,6 @@ value class SavePSSMAfterLastRound(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSavePSSMAfterLastRound)
+
+  override fun clone() = this
 }

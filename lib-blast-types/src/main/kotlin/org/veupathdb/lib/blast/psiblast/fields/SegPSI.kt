@@ -28,6 +28,8 @@ sealed interface SegPSI : Seg {
     fun of(window: Int, locut: Double, hicut: Double): SegPSI =
       ValSegPSI(window, locut, hicut)
   }
+
+  override fun clone(): SegPSI
 }
 
 
@@ -35,7 +37,7 @@ internal fun ParseSegPSI(js: ObjectNode): SegPSI {
   val tmp = js[KeySeg] ?: return NoSegPSI
 
   if (tmp.isTextual) {
-    return when (js.textValue()) {
+    return when (tmp.textValue()) {
       "yes" -> YesSegPSI
       "no"  -> NoSegPSI
       else  -> throw IllegalArgumentException("$KeySeg must be an object or one of the string values \"yes\" or \"no\".")
@@ -80,6 +82,8 @@ internal object YesSegPSI : SegPSI {
     cli.add(KeySeg)
     cli.add("yes")
   }
+
+  override fun clone() = this
 }
 
 
@@ -107,6 +111,8 @@ internal object NoSegPSI : SegPSI {
   override fun appendCliSegment(cli: StringBuilder) {}
 
   override fun appendCliParts(cli: MutableList<String>) {}
+
+  override fun clone() = this
 }
 
 
@@ -161,4 +167,6 @@ internal data class ValSegPSI(
     cli.add(KeySeg)
     cli.add("$window $locut $hicut")
   }
+
+  override fun clone() = this
 }

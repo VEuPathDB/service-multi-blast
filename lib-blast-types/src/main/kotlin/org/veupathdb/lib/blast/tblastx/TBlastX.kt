@@ -127,4 +127,6 @@ interface TBlastX : BlastQueryWithLists {
    */
   var numCPUCores: NumCPUCores
   fun numCPUCores(value: UByte)
+
+  override fun clone(): TBlastX
 }

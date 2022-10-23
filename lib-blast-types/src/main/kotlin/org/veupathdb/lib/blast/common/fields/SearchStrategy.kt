@@ -33,6 +33,8 @@ value class ImportSearchStrategy(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagImportSearchStrategy, file)
+
+  override fun clone() = this
 }
 
 
@@ -56,4 +58,6 @@ value class ExportSearchStrategy(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagExportSearchStrategy, file)
+
+  override fun clone() = this
 }

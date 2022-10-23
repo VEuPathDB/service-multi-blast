@@ -31,4 +31,6 @@ value class EntrezQuery(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagEntrezQuery, value)
+
+  override fun clone() = this
 }

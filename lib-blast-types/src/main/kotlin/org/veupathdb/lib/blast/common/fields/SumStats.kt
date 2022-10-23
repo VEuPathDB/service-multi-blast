@@ -34,4 +34,6 @@ value class SumStats(val value: Boolean = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSumStats, value)
+
+  override fun clone() = this
 }

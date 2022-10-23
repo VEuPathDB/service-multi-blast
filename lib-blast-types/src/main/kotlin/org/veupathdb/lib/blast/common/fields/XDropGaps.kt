@@ -34,6 +34,8 @@ value class ExtensionDropoffUngapped(val value: Double = Double.NaN) : BlastFiel
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagXDropUngap, value)
+
+  override fun clone() = this
 }
 
 
@@ -62,6 +64,8 @@ value class ExtensionDropoffPrelimGapped(val value: Double = Double.NaN) : Blast
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagXDropPrelimGap, value)
+
+  override fun clone() = this
 }
 
 
@@ -90,4 +94,6 @@ value class ExtensionDropoffFinalGapped(val value: Double = Double.NaN) : BlastF
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagXDropFinalGap, value)
+
+  override fun clone() = this
 }

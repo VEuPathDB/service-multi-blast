@@ -191,4 +191,26 @@ internal class RPSTBlastNImpl(
     multiThreadingMode.appendCliParts(cli)
     useSmithWatermanTraceback.appendCliParts(cli)
   }
+
+  override fun clone(): RPSTBlastN {
+    val out = RPSTBlastNImpl()
+
+    super.copyInto(out)
+
+    out.queryGenCode                 = queryGenCode.clone()
+    out.strand                       = strand.clone()
+    out.compBasedStats               = compBasedStats.clone()
+    out.seg                          = seg.clone()
+    out.softMasking                  = softMasking.clone()
+    out.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    out.sumStats                     = sumStats.clone()
+    out.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    out.ungappedAlignmentsOnly       = ungappedAlignmentsOnly.clone()
+    out.autoCPUCores                 = autoCPUCores.clone()
+    out.multiThreadingMode           = multiThreadingMode.clone()
+    out.useSmithWatermanTraceback    = useSmithWatermanTraceback.clone()
+
+    return out
+  }
 }

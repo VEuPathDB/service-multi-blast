@@ -32,4 +32,6 @@ value class UseSmithWatermanTraceback(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagUseSWTBack)
+
+  override fun clone() = this
 }

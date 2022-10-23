@@ -193,4 +193,6 @@ interface DeltaBlast : BlastQueryWithLists {
    */
   var showDomainHits: ShowDomainHits
   fun showDomainHits(value: Boolean)
+
+  override fun clone(): DeltaBlast
 }

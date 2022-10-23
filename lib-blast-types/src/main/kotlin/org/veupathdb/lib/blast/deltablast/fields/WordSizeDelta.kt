@@ -39,4 +39,6 @@ value class WordSizeDelta(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagWordSize, value)
+
+  override fun clone() = this
 }

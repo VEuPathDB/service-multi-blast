@@ -39,4 +39,6 @@ value class OutFile(val file: String = Def): BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagOut, file)
+
+  override fun clone() = this
 }

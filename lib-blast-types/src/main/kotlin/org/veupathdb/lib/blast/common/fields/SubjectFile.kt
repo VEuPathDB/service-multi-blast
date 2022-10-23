@@ -31,4 +31,6 @@ value class SubjectFile(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSubjectFile, file)
+
+  override fun clone() = this
 }

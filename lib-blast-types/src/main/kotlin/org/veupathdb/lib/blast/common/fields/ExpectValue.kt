@@ -9,7 +9,7 @@ import org.veupathdb.lib.blast.util.*
 
 private const val Def = "10"
 
-private val Rgx = Regex("^\\d+(?:\\.\\d+)?(?:[eE][-+]\\d+)?$")
+private val Rgx = Regex("^-?\\d+(?:\\.\\d+)?(?:[eE][-+]\\d+)?$")
 
 
 internal fun ParseEValue(j: ObjectNode): ExpectValue {
@@ -53,4 +53,6 @@ value class ExpectValue(val value: String = Def): BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagExpectValue, value)
+
+  override fun clone() = this
 }

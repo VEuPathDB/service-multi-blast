@@ -31,4 +31,6 @@ value class FilteringDB(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagFilteringDB, value)
+
+  override fun clone() = this
 }

@@ -31,4 +31,6 @@ value class OutASCIIPSSMFile(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagOutASCIIPSSM, file)
+
+  override fun clone() = this
 }

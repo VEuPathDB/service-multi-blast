@@ -31,5 +31,7 @@ value class DBSoftMask(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagDBSoftMask, value)
+
+  override fun clone() = this
 }
 

@@ -31,4 +31,6 @@ value class PHIPatternFile(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagPHIPattern, value)
+
+  override fun clone() = this
 }

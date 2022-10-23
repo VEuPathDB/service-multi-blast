@@ -44,4 +44,6 @@ value class RID(val value: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagRID, value)
+
+  override fun clone() = this
 }

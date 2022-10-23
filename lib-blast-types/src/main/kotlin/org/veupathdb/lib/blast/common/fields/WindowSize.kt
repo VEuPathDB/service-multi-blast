@@ -34,4 +34,6 @@ value class WindowSize(val value: UInt = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagWindowSize, value)
+
+  override fun clone() = this
 }

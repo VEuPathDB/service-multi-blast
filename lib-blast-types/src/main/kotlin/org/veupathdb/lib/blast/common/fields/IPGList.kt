@@ -31,4 +31,6 @@ value class IPGList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagIPGList, file)
+
+  override fun clone() = this
 }

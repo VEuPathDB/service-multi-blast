@@ -31,4 +31,6 @@ value class GIList(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagGIList, file)
+
+  override fun clone() = this
 }

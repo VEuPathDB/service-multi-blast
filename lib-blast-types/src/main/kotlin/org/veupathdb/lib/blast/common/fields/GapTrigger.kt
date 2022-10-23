@@ -39,4 +39,6 @@ value class GapTrigger(val value: Double = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagGapTrigger, value)
+
+  override fun clone() = this
 }

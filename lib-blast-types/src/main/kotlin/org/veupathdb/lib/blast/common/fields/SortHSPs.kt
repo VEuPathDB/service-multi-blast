@@ -38,6 +38,8 @@ value class SortHSPs(val value: HSPSorting = HSPSorting.None) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSortHSPs, value.value)
+
+  override fun clone() = this
 }
 
 

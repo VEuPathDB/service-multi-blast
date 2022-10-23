@@ -39,4 +39,6 @@ value class Threshold(val value: Double = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagThreshold, value)
+
+  override fun clone() = this
 }

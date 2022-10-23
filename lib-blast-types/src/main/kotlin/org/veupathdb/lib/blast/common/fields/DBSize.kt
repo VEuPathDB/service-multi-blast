@@ -34,4 +34,6 @@ value class DBSize(val value: Byte = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagDBSize, value)
+
+  override fun clone() = this
 }

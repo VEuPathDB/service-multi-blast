@@ -40,6 +40,8 @@ value class SortHits(val value: HitSorting = HitSorting.None) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagSortHits, value.value)
+
+  override fun clone() = this
 }
 
 

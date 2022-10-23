@@ -86,6 +86,8 @@ class DBFiles : BlastField {
       cli.add(sb.toString())
     }
   }
+
+  override fun clone() = DBFiles(files.toList())
 }
 
 /**

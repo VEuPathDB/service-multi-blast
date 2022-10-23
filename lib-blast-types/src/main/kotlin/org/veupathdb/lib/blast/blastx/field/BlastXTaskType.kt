@@ -40,6 +40,8 @@ value class BlastXTask(val value: BlastXTaskType = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagTask, value.value)
+
+  override fun clone() = this
 }
 
 

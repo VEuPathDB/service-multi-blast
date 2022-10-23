@@ -316,4 +316,40 @@ internal class TBlastNImpl(
     errs.incompatible(remote, inPSSMFile)
     errs.incompatible(inPSSMFile, queryFile, queryLocation)
   }
+
+  override fun clone(): TBlastN {
+    val out = TBlastNImpl()
+
+    super.copyInto(out)
+
+    out.task                         = task.clone()
+    out.wordSize                     = wordSize.clone()
+    out.gapOpen                      = gapOpen.clone()
+    out.gapExtend                    = gapExtend.clone()
+    out.dbGenCode                    = dbGenCode.clone()
+    out.maxIntronLength              = maxIntronLength.clone()
+    out.matrix                       = matrix.clone()
+    out.threshold                    = threshold.clone()
+    out.compBasedStats               = compBasedStats.clone()
+    out.subjectFile                  = subjectFile.clone()
+    out.subjectLocation              = subjectLocation.clone()
+    out.seg                          = seg.clone()
+    out.softMasking                  = softMasking.clone()
+    out.dbSoftMask                   = dbSoftMask.clone()
+    out.dbHardMask                   = dbHardMask.clone()
+    out.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    out.cullingLimit                 = cullingLimit.clone()
+    out.bestHitOverhang              = bestHitOverhang.clone()
+    out.bestHitScoreEdge             = bestHitScoreEdge.clone()
+    out.subjectBestHit               = subjectBestHit.clone()
+    out.sumStats                     = sumStats.clone()
+    out.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    out.ungappedAlignmentsOnly       = ungappedAlignmentsOnly.clone()
+    out.numCPUCores                  = numCPUCores.clone()
+    out.useSmithWatermanTraceback    = useSmithWatermanTraceback.clone()
+    out.inPSSMFile                   = inPSSMFile.clone()
+
+    return out
+  }
 }

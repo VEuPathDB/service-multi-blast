@@ -32,4 +32,6 @@ value class UngappedAlignmentsOnly(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagUngapped)
+
+  override fun clone() = this
 }

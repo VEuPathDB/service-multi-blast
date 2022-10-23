@@ -55,6 +55,8 @@ value class QueryGenCode(val value: UByte = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagQueryGenCode, value)
+
+  override fun clone() = this
 }
 
 

@@ -36,4 +36,6 @@ value class QueryCoverageHSPPercent(val value: Double = Def)
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagQueryCoverageHSPPercent, value)
+
+  override fun clone() = this
 }

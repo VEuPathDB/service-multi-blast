@@ -37,6 +37,8 @@ value class MultiThreadingMode(val value: MultiThreadingModeValue = Def) : Blast
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagMultiThreadingMode, value.ordinal)
+
+  override fun clone() = this
 }
 
 @Suppress("NOTHING_TO_INLINE")

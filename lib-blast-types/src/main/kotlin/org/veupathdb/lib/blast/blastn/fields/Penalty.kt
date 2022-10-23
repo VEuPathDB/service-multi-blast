@@ -39,4 +39,6 @@ value class Penalty(val value: Int = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagPenalty, value)
+
+  override fun clone() = this
 }

@@ -31,4 +31,6 @@ value class OutPSSMFile(val file: String = "") : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagOutPSSM, file)
+
+  override fun clone() = this
 }

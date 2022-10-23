@@ -31,4 +31,6 @@ value class HelpLong(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagHelpLong)
+
+  override fun clone() = this
 }

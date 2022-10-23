@@ -298,4 +298,36 @@ internal class BlastPImpl(
     errs.incompatible(cullingLimit, bestHitOverhang, bestHitScoreEdge)
     errs.incompatible(numCPUCores, remote)
   }
+
+  override fun clone(): BlastP {
+    val out = BlastPImpl()
+
+    super.copyInto(out)
+
+    out.task                         = task.clone()
+    out.wordSize                     = wordSize.clone()
+    out.gapOpen                      = gapOpen.clone()
+    out.gapExtend                    = gapExtend.clone()
+    out.matrix                       = matrix.clone()
+    out.threshold                    = threshold.clone()
+    out.compBasedStats               = compBasedStats.clone()
+    out.subjectFile                  = subjectFile.clone()
+    out.subjectLocation              = subjectLocation.clone()
+    out.seg                          = seg.clone()
+    out.dbSoftMask                   = dbSoftMask.clone()
+    out.dbHardMask                   = dbHardMask.clone()
+    out.queryCoverageHSPPercent      = queryCoverageHSPPercent.clone()
+    out.cullingLimit                 = cullingLimit.clone()
+    out.extensionDropoffPrelimGapped = extensionDropoffPrelimGapped.clone()
+    out.extensionDropoffFinalGapped  = extensionDropoffFinalGapped.clone()
+    out.ungappedAlignmentsOnly       = ungappedAlignmentsOnly.clone()
+    out.numCPUCores                  = numCPUCores.clone()
+    out.useSmithWatermanTraceback    = useSmithWatermanTraceback.clone()
+    out.bestHitOverhang              = bestHitOverhang.clone()
+    out.bestHitScoreEdge             = bestHitScoreEdge.clone()
+    out.subjectBestHit               = subjectBestHit.clone()
+    out.softMasking                  = softMasking.clone()
+
+    return out
+  }
 }

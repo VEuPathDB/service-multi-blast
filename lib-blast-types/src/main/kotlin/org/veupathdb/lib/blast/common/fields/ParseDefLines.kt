@@ -31,4 +31,6 @@ value class ParseDefLines(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagParseDefLines)
+
+  override fun clone() = this
 }

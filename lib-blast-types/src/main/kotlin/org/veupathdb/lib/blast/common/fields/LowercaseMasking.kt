@@ -32,4 +32,6 @@ value class LowercaseMasking(val value: Boolean = false) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagLowercaseMasking)
+
+  override fun clone() = this
 }

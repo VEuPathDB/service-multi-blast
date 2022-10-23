@@ -44,6 +44,8 @@ value class CompBasedStatsRPS(
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagCompBasedStats, value.value)
+
+  override fun clone() = this
 }
 
 

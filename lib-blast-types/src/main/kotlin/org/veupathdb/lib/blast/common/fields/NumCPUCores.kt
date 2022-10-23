@@ -37,4 +37,6 @@ value class NumCPUCores(val value: UByte = Def) : BlastField {
 
   override fun appendCliParts(cli: MutableList<String>) =
     cli.add(isDefault, FlagNumThreads, value)
+
+  override fun clone() = this
 }
