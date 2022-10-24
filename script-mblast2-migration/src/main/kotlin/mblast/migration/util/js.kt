@@ -44,6 +44,3 @@ fun ArrayNode.add(any: Any) {
     else          -> add(Json.convert(any))
   }
 }
-
-fun List<String>.toJsonArray() = Json.newArray(size)
-  .also { js -> forEach { js.add(it) } }
