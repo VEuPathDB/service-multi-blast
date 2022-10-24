@@ -1,16 +1,13 @@
 package mblast.migration.db.sql
 
 import mblast.migration.db.ResultSetIterator
-import mblast.migration.db.model.MultiBlastJobToTargetsRow
 import mblast.migration.db.model.MultiBlastJobsRow
-import mblast.migration.db.stream
 import org.intellij.lang.annotations.Language
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
 import java.sql.Connection
 import java.sql.ResultSet
 import java.time.OffsetDateTime
-import java.util.stream.Stream
 
 
 @Language("Oracle")

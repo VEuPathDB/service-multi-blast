@@ -9,8 +9,6 @@ application {
 
 dependencies {
   implementation("org.veupathdb.lib:blast-types:8.1.2")
-  implementation("io.foxcapades.lib:md5:1.0.0")
-  implementation("io.foxcapades.lib:jdbc-ro-result-set:1.0.0")
   runtimeOnly("com.oracle.database.jdbc:ojdbc8:21.7.0.0")
   implementation("org.veupathdb.lib:hash-id:1.1.0")
   implementation("org.veupathdb.lib:jackson-singleton:3.0.1")

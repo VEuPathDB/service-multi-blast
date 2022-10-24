@@ -5,7 +5,6 @@ import mblast.migration.db.model.QueryConfigsRow
 import mblast.migration.db.sql.QueryJobInserter
 import mblast.migration.db.sql.selectOldJobConfigStream
 import java.sql.Connection
-import kotlin.time.measureTime
 
 fun _migrateQueryJobs(con: Connection) {
   println("Migrating job records")
