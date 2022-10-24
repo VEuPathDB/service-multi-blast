@@ -1,0 +1,40 @@
+= MultiBlast 1.x -> 2.x Migration Script
+:icons: font
+:this-dir: script-mblast2-migration
+
+Kotlin script that migrates MultiBlast v0.x and v1.x records into the new format
+and schema used by MultiBlast v2.x.
+
+== Usage
+
+=== Setup
+
+1. Copy the `sample.env` file to a new file named `migration.env`.
++
+[source, bash]
+----
+cp sample.env migration.env
+----
+
+2. Edit the new `migration.env` file and fill in the variable values.
++
+[source, bash]
+----
+vim migration.env
+----
+
+3. Start up `sshuttle` (see the guide in Confluence for more information)
++
+[source, bash]
+----
+sshuttle ...
+----
+
+=== Run
+
+1. Execute the script via Gradle
++
+[source, bash]
+----
+./gradlew :script-mblast2-migration:run
+----
