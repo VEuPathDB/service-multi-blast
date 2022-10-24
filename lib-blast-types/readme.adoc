@@ -184,7 +184,7 @@ errors.toJson() == """
 |===
 | v8.2.0
 | * Adds `clone()` methods to all the BLAST+ configuration types that return a
-new copy of the config instance with the same field values.
+new copy of the config instance with the same (cloned) field values.
 
 | v8.1.2
 | * Fixes issue with expect value validation.
