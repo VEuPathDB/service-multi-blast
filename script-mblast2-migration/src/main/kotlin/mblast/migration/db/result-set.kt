@@ -1,50 +1,6 @@
 package mblast.migration.db
 
-import io.foxcapades.lib.jdbc.ro.ReadOnlyResultSet
 import java.sql.ResultSet
-import java.util.*
-import java.util.function.Consumer
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
-
-/**
- * Returns a stream over an immutable ResultSet where the stream elements are
- * rows in the query result.
- *
- * When the given stream is closed, the underlying ResultSet and Statement will
- * also be closed.
- *
- * @param closeConnectionWithStream Whether the backing connection that created
- * the wrapped ResultSet should also be closed when closing the returned stream.
- *
- * @return A stream over the rows in the wrapped ResultSet.
- */
-fun ResultSet.stream(closeConnectionWithStream: Boolean): Stream<ResultSet> {
-  return StreamSupport.stream(ResultSetSpliterator(this), false)
-    .onClose {
-      this.close()
-      this.statement.close()
-
-      if (closeConnectionWithStream)
-        this.statement.connection.close()
-    }
-}
-
-
-private data class ResultSetSpliterator(val raw: ResultSet): Spliterator<ResultSet> {
-  private val wrapper = ReadOnlyResultSet(raw)
-
-  override fun tryAdvance(action: Consumer<in ResultSet>): Boolean {
-    raw.next() || return false
-    action.accept(wrapper)
-    return true
-  }
-
-  override fun trySplit() = null
-  override fun estimateSize() = Long.MAX_VALUE
-  override fun characteristics() = Spliterator.ORDERED or Spliterator.IMMUTABLE
-}
-
 
 data class ResultSetIterator<T>(
   val raw: ResultSet,

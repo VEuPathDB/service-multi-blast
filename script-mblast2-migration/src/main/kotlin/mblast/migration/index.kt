@@ -4,7 +4,6 @@ import mblast.migration.db.GetOracleDataSource
 import mblast.migration.ldap.LDAP
 import mblast.migration.ldap.ParseDNString
 import mblast.migration.mig.RunMigration
-import org.apache.logging.log4j.LogManager
 
 fun main() {
   println("Connecting to Oracle")

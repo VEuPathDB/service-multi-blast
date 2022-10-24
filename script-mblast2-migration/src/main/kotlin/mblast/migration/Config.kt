@@ -1,7 +1,7 @@
 package mblast.migration
 
 import java.io.File
-import java.util.Properties
+import java.util.*
 
 object Config {
 
