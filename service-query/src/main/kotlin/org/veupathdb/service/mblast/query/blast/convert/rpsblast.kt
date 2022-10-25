@@ -7,11 +7,7 @@ import org.veupathdb.lib.blast.rpsblast.fields.CompBasedStatsRPS
 import org.veupathdb.lib.blast.rpsblast.fields.CompBasedStatsRPSValue
 import org.veupathdb.lib.blast.rpsblast.fields.SegRPS
 import org.veupathdb.lib.blast.rpsblast.fields.SoftMaskingRPS
-import org.veupathdb.service.mblast.query.generated.model.BlastSeg
-import org.veupathdb.service.mblast.query.generated.model.BlastSegImpl
-import org.veupathdb.service.mblast.query.generated.model.RPSBlastCompBasedStats
-import org.veupathdb.service.mblast.query.generated.model.RPSBlastConfig
-import org.veupathdb.service.mblast.query.generated.model.RPSBlastConfigImpl
+import org.veupathdb.service.mblast.query.generated.model.*
 
 fun RPSBlastConfig.toInternal() = Blast.rpsblast().also {
   if (queryLocation           != null) it.queryLocation                = queryLocation.toInternal()
