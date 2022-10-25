@@ -4,6 +4,7 @@ import org.veupathdb.lib.compute.platform.AsyncPlatform
 import org.veupathdb.lib.compute.platform.config.*
 import org.veupathdb.lib.container.jaxrs.config.Options
 import org.veupathdb.lib.container.jaxrs.server.Server
+import org.veupathdb.lib.container.jaxrs.server.middleware.PrometheusFilter
 import org.veupathdb.service.mblast.query.jobs.ExecutorFactory
 
 class Main : Server() {
@@ -40,7 +41,7 @@ class Main : Server() {
         .password(ServiceOptions.jobQueuePassword)
         .host(ServiceOptions.jobQueueHost)
         .port(ServiceOptions.jobQueuePort)
-        .workers(ServiceOptions.jobQueueWorkers)
+        .workers(ServiceOptions.parentJobQueueWorkers)
         .build())
       .addQueue(AsyncQueueConfig.builder()
         .id(ServiceOptions.childJobQueueName)
@@ -48,7 +49,7 @@ class Main : Server() {
         .password(ServiceOptions.jobQueuePassword)
         .host(ServiceOptions.jobQueueHost)
         .port(ServiceOptions.jobQueuePort)
-        .workers(ServiceOptions.jobQueueWorkers)
+        .workers(ServiceOptions.childJobQueueWorkers)
         .build())
       .build())
   }
@@ -60,6 +61,8 @@ class Main : Server() {
 
       server.enableAccountDB()
       server.enableUserDB()
+
+      PrometheusFilter.setPathTransform { it.replace(Regex("[0-9A-Fa-f]{32}"), "{id}") }
 
       server.start(args)
     }
