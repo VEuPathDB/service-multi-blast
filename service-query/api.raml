@@ -22,6 +22,14 @@ uses:
   get:
     displayName: Get Job List
     description: Lists the current user's collected blast query jobs.
+    queryParameters:
+      site:
+        displayName: Target Site
+        description: |
+          Optionally filters the results of the job list endpoint down to only
+          records relevant to the specified `TargetSite`.
+        type: string
+        required: false
     responses:
       200:
         description: Success
