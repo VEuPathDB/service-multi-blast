@@ -14,6 +14,8 @@ pluginManagement {
   }
 }
 
+rootProject.name = "mblast"
+
 includeBuild("lib-mblast-gradle")
 
 include(":service-query")
@@ -25,12 +27,10 @@ include(":service-report")
 project(":service-report").name = "report-service"
 
 include(":lib-blast-types")
-
 project(":lib-blast-types").name = "blast-types"
+
 include(":lib-mblast-utils")
-
-project(":lib-mblast-utils").name = "mblast-utils"
-
 include(":lib-temp-cache")
 include(":lib-blast-query-parser")
 
+include(":script-mblast2-migration")
