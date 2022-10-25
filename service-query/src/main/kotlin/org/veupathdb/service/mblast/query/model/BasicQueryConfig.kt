@@ -1,9 +1,7 @@
 package org.veupathdb.service.mblast.query.model
 
-import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.common.BlastQueryBase
 import org.veupathdb.lib.hash_id.HashID
-import org.veupathdb.lib.jackson.Json
 import java.io.File
 import java.io.Reader
 
