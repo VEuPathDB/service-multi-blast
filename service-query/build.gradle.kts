@@ -75,13 +75,13 @@ dependencies {
   implementation("org.gusdb:fgputil-db:2.7.4")
 
   // Core lib
-  implementation("org.veupathdb.lib:jaxrs-container-core:6.10.1")
+  implementation("org.veupathdb.lib:jaxrs-container-core:6.11.0")
 
   // Jersey
   implementation("org.glassfish.jersey.core:jersey-server:3.0.8")
 
   // Async platform core
-  implementation("org.veupathdb.lib:compute-platform:1.3.1")
+  implementation("org.veupathdb.lib:compute-platform:1.3.3")
 
   // Job IDs
   implementation("org.veupathdb.lib:hash-id:1.1.0")
@@ -99,9 +99,9 @@ dependencies {
   implementation("io.foxcapades.lib:env-access:1.0.0")
   implementation("io.foxcapades.lib:md5:1.0.0")
 
-  implementation("org.veupathdb.lib:blast-types:8.1.0")
+  implementation("org.veupathdb.lib:blast-types:8.2.0")
   implementation(project(":lib-blast-query-parser"))
-  implementation("org.veupathdb.lib.mblast:mblast-utils:1.0-SNAPSHOT") { isChanging = true }
+  implementation(project(":lib-mblast-utils"))
   implementation(project(":lib-temp-cache"))
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
