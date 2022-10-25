@@ -13,9 +13,9 @@ COPY gradle/ gradle/
 
 # Copy over our dependency libs
 COPY lib-mblast-gradle/ lib-mblast-gradle/
+COPY lib-mblast-utils/ lib-mblast-utils/
 COPY lib-blast-query-parser/ lib-blast-query-parser/
 COPY lib-temp-cache/ lib-temp-cache/
-
 
 COPY [ \
     "build.gradle.kts", \
