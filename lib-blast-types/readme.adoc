@@ -4,7 +4,7 @@
 :lib-version: 8.2.0
 
 image:https://img.shields.io/github/license/veupathdb/service-multi-blast[GitHub]
-image:https://img.shields.io/badge/docs-dokka-green[title="Dokka Docs", link="https://veupathdb.github.io/service-multi-blast/dokka/blast-types/"]
+image:https://img.shields.io/badge/docs-dokka-green[title="Dokka Docs", link="https://veupathdb.github.io/service-multi-blast/dokka/blast-types/{lib-version}"]
 image:https://img.shields.io/badge/version-{lib-version}-blue[link="https://github.com/VEuPathDB/lib-jvm-blast/packages/1359582"]
 
 Library for parsing, serializing, and validating JSON BLAST+ cli configs.
