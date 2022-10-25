@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>BlastField</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>blast-types</span>
+            </a>
+    </div>
+    <div>
+8.2.0    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="blast-types::org.veupathdb.lib.blast.serial/BlastField///PointingToDeclaration//-1466297415">
+  <div class="breadcrumbs"><a href="../../../index.html">blast-types</a><span class="delimiter">/</span><a href="../index.html">org.veupathdb.lib.blast.serial</a><span class="delimiter">/</span><a href="index.html">BlastField</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Blast</span><wbr></wbr><span><span>Field</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">BlastField</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Represents a single, defaultable field/argument for a blast tool.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Inheritors">Inheritors</button></div>
+    <div class="tabs-section-body">
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="1497976163%2FFunctions%2F-1466297415" anchor-label="appendCliParts" id="1497976163%2FFunctions%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-cli-parts.html"><span>append</span><wbr></wbr><span>Cli</span><wbr></wbr><span><span>Parts</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1497976163%2FFunctions%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="append-cli-parts.html"><span class="token function">appendCliParts</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cli<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1219329212%2FFunctions%2F-1466297415" anchor-label="appendCliSegment" id="1219329212%2FFunctions%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-cli-segment.html"><span>append</span><wbr></wbr><span>Cli</span><wbr></wbr><span><span>Segment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1219329212%2FFunctions%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="append-cli-segment.html"><span class="token function">appendCliSegment</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cli<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html">StringBuilder</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html">StringBuilder</a> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1114820749%2FFunctions%2F-1466297415" anchor-label="appendJson" id="1114820749%2FFunctions%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="append-json.html"><span>append</span><wbr></wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1114820749%2FFunctions%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="append-json.html"><span class="token function">appendJson</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">js<span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Appends this field to the given JSON <span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span> only if it is not set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1881093728%2FFunctions%2F-1466297415" anchor-label="clone" id="1881093728%2FFunctions%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="clone.html"><span><span>clone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1881093728%2FFunctions%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="clone.html"><span class="token function">clone</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">BlastField</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Clones this <code class="lang-kotlin">BlastField</code> instance, copying its value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1175663034%2FFunctions%2F-1466297415" anchor-label="toJson" id="1175663034%2FFunctions%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="to-json.html"><span>to</span><wbr></wbr><span><span>Json</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1175663034%2FFunctions%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="to-json.html"><span class="token function">toJson</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Serializes this field into a JSON <span data-unresolved-link="com.fasterxml.jackson.databind.node/ObjectNode///PointingToDeclaration/">ObjectNode</span>.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="109150022%2FProperties%2F-1466297415" anchor-label="isDefault" id="109150022%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="is-default.html"><span>is</span><wbr></wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="109150022%2FProperties%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><a data-name="109150022%2FProperties%2F-1466297415" anchor-label="isDefault" id="109150022%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="is-default.html">isDefault</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="109150022%2FProperties%2F-1466297415" anchor-label="isDefault" id="109150022%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a><p class="paragraph">Indicates whether the field is currently set to its default value.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="904970802%2FProperties%2F-1466297415" anchor-label="name" id="904970802%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="name.html"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="904970802%2FProperties%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":blast-types:dokkaHtml/main"><a data-name="904970802%2FProperties%2F-1466297415" anchor-label="name" id="904970802%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="name.html">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="904970802%2FProperties%2F-1466297415" anchor-label="name" id="904970802%2FProperties%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a><p class="paragraph">The name of this field.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Inheritors</h2>
+      <div class="table" data-togglable="Inheritors"><a data-name="1539137907%2FInheritors%2F-1466297415" anchor-label="Dust" id="1539137907%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-dust/index.html">Dust</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1539137907%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1840013205%2FInheritors%2F-1466297415" anchor-label="FilteringDB" id="1840013205%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-filtering-d-b/index.html">FilteringDB</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1840013205%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1055196448%2FInheritors%2F-1466297415" anchor-label="IndexName" id="1055196448%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-index-name/index.html">IndexName</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1055196448%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1481025254%2FInheritors%2F-1466297415" anchor-label="MinRawGappedScore" id="-1481025254%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-min-raw-gapped-score/index.html">MinRawGappedScore</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1481025254%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1669145552%2FInheritors%2F-1466297415" anchor-label="NonGreedy" id="1669145552%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-non-greedy/index.html">NonGreedy</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1669145552%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1905877804%2FInheritors%2F-1466297415" anchor-label="OffDiagonalRange" id="1905877804%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-off-diagonal-range/index.html">OffDiagonalRange</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1905877804%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-933129324%2FInheritors%2F-1466297415" anchor-label="Penalty" id="-933129324%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-penalty/index.html">Penalty</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-933129324%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-532579014%2FInheritors%2F-1466297415" anchor-label="PercentIdentity" id="-532579014%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-percent-identity/index.html">PercentIdentity</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-532579014%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1372702358%2FInheritors%2F-1466297415" anchor-label="Reward" id="1372702358%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-reward/index.html">Reward</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1372702358%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1674820163%2FInheritors%2F-1466297415" anchor-label="SoftMaskingN" id="1674820163%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-soft-masking-n/index.html">SoftMaskingN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1674820163%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1527014070%2FInheritors%2F-1466297415" anchor-label="BlastNTask" id="-1527014070%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-blast-n-task/index.html">BlastNTask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1527014070%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-24195355%2FInheritors%2F-1466297415" anchor-label="TemplateLength" id="-24195355%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-template-length/index.html">TemplateLength</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24195355%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="976990097%2FInheritors%2F-1466297415" anchor-label="TemplateType" id="976990097%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-template-type/index.html">TemplateType</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="976990097%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="787400890%2FInheritors%2F-1466297415" anchor-label="UseIndex" id="787400890%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-use-index/index.html">UseIndex</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="787400890%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1150475810%2FInheritors%2F-1466297415" anchor-label="WindowMaskerDB" id="-1150475810%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-window-masker-d-b/index.html">WindowMaskerDB</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1150475810%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1091110080%2FInheritors%2F-1466297415" anchor-label="WindowMaskerTaxID" id="1091110080%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-window-masker-tax-i-d/index.html">WindowMaskerTaxID</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1091110080%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1141323482%2FInheritors%2F-1466297415" anchor-label="WordSizeN" id="1141323482%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastn.fields/-word-size-n/index.html">WordSizeN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1141323482%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="913359927%2FInheritors%2F-1466297415" anchor-label="BlastPTask" id="913359927%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastp.field/-blast-p-task/index.html">BlastPTask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="913359927%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-861240135%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsP" id="-861240135%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastp.field/-comp-based-stats-p/index.html">CompBasedStatsP</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-861240135%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1165371340%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixP" id="-1165371340%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastp.field/-scoring-matrix-p/index.html">ScoringMatrixP</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1165371340%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1609367664%2FInheritors%2F-1466297415" anchor-label="SoftMaskingP" id="1609367664%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastp.field/-soft-masking-p/index.html">SoftMaskingP</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1609367664%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1142807433%2FInheritors%2F-1466297415" anchor-label="WordSizeP" id="1142807433%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastp.field/-word-size-p/index.html">WordSizeP</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1142807433%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1709283127%2FInheritors%2F-1466297415" anchor-label="BlastXTask" id="1709283127%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastx.field/-blast-x-task/index.html">BlastXTask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1709283127%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1446368087%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsX" id="-1446368087%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastx.field/-comp-based-stats-x/index.html">CompBasedStatsX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1446368087%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1965400884%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixX" id="1965400884%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastx.field/-scoring-matrix-x/index.html">ScoringMatrixX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1965400884%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1136504176%2FInheritors%2F-1466297415" anchor-label="SoftMaskingX" id="1136504176%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastx.field/-soft-masking-x/index.html">SoftMaskingX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1136504176%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1911415431%2FInheritors%2F-1466297415" anchor-label="WordSizeX" id="-1911415431%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.blastx.field/-word-size-x/index.html">WordSizeX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1911415431%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1617096907%2FInheritors%2F-1466297415" anchor-label="AutoCPUCores" id="-1617096907%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-auto-c-p-u-cores/index.html">AutoCPUCores</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1617096907%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-759096163%2FInheritors%2F-1466297415" anchor-label="BestHitOverhang" id="-759096163%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-best-hit-overhang/index.html">BestHitOverhang</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-759096163%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1729853680%2FInheritors%2F-1466297415" anchor-label="BestHitScoreEdge" id="1729853680%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-best-hit-score-edge/index.html">BestHitScoreEdge</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1729853680%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="906888069%2FInheritors%2F-1466297415" anchor-label="CullingLimit" id="906888069%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-culling-limit/index.html">CullingLimit</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="906888069%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="2061745369%2FInheritors%2F-1466297415" anchor-label="DBFiles" id="2061745369%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-d-b-files/index.html">DBFiles</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2061745369%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="915605747%2FInheritors%2F-1466297415" anchor-label="DBGenCode" id="915605747%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-d-b-gen-code/index.html">DBGenCode</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="915605747%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="579416571%2FInheritors%2F-1466297415" anchor-label="DBHardMask" id="579416571%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-d-b-hard-mask/index.html">DBHardMask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="579416571%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1344301105%2FInheritors%2F-1466297415" anchor-label="DBSize" id="1344301105%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-d-b-size/index.html">DBSize</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1344301105%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="223550236%2FInheritors%2F-1466297415" anchor-label="DBSoftMask" id="223550236%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-d-b-soft-mask/index.html">DBSoftMask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="223550236%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1217385946%2FInheritors%2F-1466297415" anchor-label="EntrezQuery" id="-1217385946%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-entrez-query/index.html">EntrezQuery</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1217385946%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1150271142%2FInheritors%2F-1466297415" anchor-label="ExpectValue" id="-1150271142%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-expect-value/index.html">ExpectValue</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1150271142%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-51864496%2FInheritors%2F-1466297415" anchor-label="GIList" id="-51864496%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-g-i-list/index.html">GIList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-51864496%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="535021474%2FInheritors%2F-1466297415" anchor-label="GapExtend" id="535021474%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-gap-extend/index.html">GapExtend</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="535021474%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1071721778%2FInheritors%2F-1466297415" anchor-label="GapOpen" id="1071721778%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-gap-open/index.html">GapOpen</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1071721778%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1108568462%2FInheritors%2F-1466297415" anchor-label="GapTrigger" id="1108568462%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-gap-trigger/index.html">GapTrigger</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1108568462%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-985129115%2FInheritors%2F-1466297415" anchor-label="HTML" id="-985129115%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-h-t-m-l/index.html">HTML</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-985129115%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1687899565%2FInheritors%2F-1466297415" anchor-label="HelpLong" id="-1687899565%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-help-long/index.html">HelpLong</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1687899565%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="420174295%2FInheritors%2F-1466297415" anchor-label="HelpShort" id="420174295%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-help-short/index.html">HelpShort</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="420174295%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-318447532%2FInheritors%2F-1466297415" anchor-label="IPGList" id="-318447532%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-i-p-g-list/index.html">IPGList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-318447532%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1403711538%2FInheritors%2F-1466297415" anchor-label="InPSSMFile" id="1403711538%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-in-p-s-s-m-file/index.html">InPSSMFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1403711538%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-2089975955%2FInheritors%2F-1466297415" anchor-label="InclusionEValueThreshold" id="-2089975955%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-inclusion-e-value-threshold/index.html">InclusionEValueThreshold</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2089975955%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1979473258%2FInheritors%2F-1466297415" anchor-label="LineLength" id="-1979473258%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-line-length/index.html">LineLength</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1979473258%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="885204779%2FInheritors%2F-1466297415" anchor-label="LowercaseMasking" id="885204779%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-lowercase-masking/index.html">LowercaseMasking</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="885204779%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1663251424%2FInheritors%2F-1466297415" anchor-label="MaxHSPs" id="1663251424%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-max-h-s-ps/index.html">MaxHSPs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1663251424%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1788825754%2FInheritors%2F-1466297415" anchor-label="MaxIntronLength" id="-1788825754%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-max-intron-length/index.html">MaxIntronLength</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1788825754%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="416425257%2FInheritors%2F-1466297415" anchor-label="MaxTargetSeqs" id="416425257%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-max-target-seqs/index.html">MaxTargetSeqs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="416425257%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-789603858%2FInheritors%2F-1466297415" anchor-label="MultiThreadingMode" id="-789603858%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-multi-threading-mode/index.html">MultiThreadingMode</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-789603858%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="2121216603%2FInheritors%2F-1466297415" anchor-label="NegativeGIList" id="2121216603%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-negative-g-i-list/index.html">NegativeGIList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2121216603%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1672410199%2FInheritors%2F-1466297415" anchor-label="NegativeIPGList" id="-1672410199%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-negative-i-p-g-list/index.html">NegativeIPGList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1672410199%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1164052175%2FInheritors%2F-1466297415" anchor-label="NegativeSeqIDList" id="1164052175%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-negative-seq-i-d-list/index.html">NegativeSeqIDList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1164052175%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1148492291%2FInheritors%2F-1466297415" anchor-label="NegativeTaxIDList" id="1148492291%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-negative-tax-i-d-list/index.html">NegativeTaxIDList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1148492291%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="374368334%2FInheritors%2F-1466297415" anchor-label="NegativeTaxIDs" id="374368334%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-negative-tax-i-ds/index.html">NegativeTaxIDs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="374368334%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1486639196%2FInheritors%2F-1466297415" anchor-label="NumAlignments" id="1486639196%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-num-alignments/index.html">NumAlignments</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1486639196%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-359061088%2FInheritors%2F-1466297415" anchor-label="NumCPUCores" id="-359061088%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-num-c-p-u-cores/index.html">NumCPUCores</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-359061088%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1034484341%2FInheritors%2F-1466297415" anchor-label="NumDescriptions" id="1034484341%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-num-descriptions/index.html">NumDescriptions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1034484341%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1910179626%2FInheritors%2F-1466297415" anchor-label="NumIterations" id="-1910179626%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-num-iterations/index.html">NumIterations</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1910179626%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1999006004%2FInheritors%2F-1466297415" anchor-label="OutASCIIPSSMFile" id="1999006004%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-out-a-s-c-i-i-p-s-s-m-file/index.html">OutASCIIPSSMFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1999006004%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1655518008%2FInheritors%2F-1466297415" anchor-label="OutFile" id="-1655518008%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-out-file/index.html">OutFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1655518008%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1974739437%2FInheritors%2F-1466297415" anchor-label="OutFormat" id="1974739437%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-out-format/index.html">OutFormat</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1974739437%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1180253387%2FInheritors%2F-1466297415" anchor-label="OutPSSMFile" id="1180253387%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-out-p-s-s-m-file/index.html">OutPSSMFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1180253387%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1925137019%2FInheritors%2F-1466297415" anchor-label="ParseDefLines" id="-1925137019%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-parse-def-lines/index.html">ParseDefLines</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1925137019%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1276773921%2FInheritors%2F-1466297415" anchor-label="PseudoCount" id="1276773921%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-pseudo-count/index.html">PseudoCount</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1276773921%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1840414526%2FInheritors%2F-1466297415" anchor-label="QueryCoverageHSPPercent" id="-1840414526%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-query-coverage-h-s-p-percent/index.html">QueryCoverageHSPPercent</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1840414526%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="295797070%2FInheritors%2F-1466297415" anchor-label="QueryFile" id="295797070%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-query-file/index.html">QueryFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="295797070%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="2025922491%2FInheritors%2F-1466297415" anchor-label="QueryGenCode" id="2025922491%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-query-gen-code/index.html">QueryGenCode</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2025922491%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1181902005%2FInheritors%2F-1466297415" anchor-label="QueryLocation" id="1181902005%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-query-location/index.html">QueryLocation</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1181902005%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="194236234%2FInheritors%2F-1466297415" anchor-label="Remote" id="194236234%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-remote/index.html">Remote</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="194236234%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="596557877%2FInheritors%2F-1466297415" anchor-label="SaveEachPSSM" id="596557877%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-save-each-p-s-s-m/index.html">SaveEachPSSM</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="596557877%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1762534342%2FInheritors%2F-1466297415" anchor-label="SavePSSMAfterLastRound" id="-1762534342%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-save-p-s-s-m-after-last-round/index.html">SavePSSMAfterLastRound</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1762534342%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1375185012%2FInheritors%2F-1466297415" anchor-label="SearchSpace" id="1375185012%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-search-space/index.html">SearchSpace</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1375185012%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1690407504%2FInheritors%2F-1466297415" anchor-label="ImportSearchStrategy" id="1690407504%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-import-search-strategy/index.html">ImportSearchStrategy</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1690407504%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1516703585%2FInheritors%2F-1466297415" anchor-label="ExportSearchStrategy" id="1516703585%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-export-search-strategy/index.html">ExportSearchStrategy</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1516703585%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-185755331%2FInheritors%2F-1466297415" anchor-label="Seg" id="-185755331%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-seg/index.html">Seg</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-185755331%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="947084474%2FInheritors%2F-1466297415" anchor-label="SeqIDList" id="947084474%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-seq-i-d-list/index.html">SeqIDList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="947084474%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-617133506%2FInheritors%2F-1466297415" anchor-label="ShowGIs" id="-617133506%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-show-g-is/index.html">ShowGIs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-617133506%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="944190340%2FInheritors%2F-1466297415" anchor-label="SortHSPs" id="944190340%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-sort-h-s-ps/index.html">SortHSPs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="944190340%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-106680110%2FInheritors%2F-1466297415" anchor-label="SortHits" id="-106680110%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-sort-hits/index.html">SortHits</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-106680110%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1945894282%2FInheritors%2F-1466297415" anchor-label="Strand" id="1945894282%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-strand/index.html">Strand</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1945894282%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-523216147%2FInheritors%2F-1466297415" anchor-label="SubjectBestHit" id="-523216147%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-subject-best-hit/index.html">SubjectBestHit</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-523216147%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1891462358%2FInheritors%2F-1466297415" anchor-label="SubjectFile" id="-1891462358%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-subject-file/index.html">SubjectFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1891462358%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="121579665%2FInheritors%2F-1466297415" anchor-label="SubjectLocation" id="121579665%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-subject-location/index.html">SubjectLocation</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="121579665%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1059762812%2FInheritors%2F-1466297415" anchor-label="SumStats" id="1059762812%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-sum-stats/index.html">SumStats</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1059762812%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="931524590%2FInheritors%2F-1466297415" anchor-label="TaxIDList" id="931524590%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-tax-i-d-list/index.html">TaxIDList</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="931524590%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1798712765%2FInheritors%2F-1466297415" anchor-label="TaxIDs" id="-1798712765%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-tax-i-ds/index.html">TaxIDs</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1798712765%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1531609383%2FInheritors%2F-1466297415" anchor-label="Threshold" id="1531609383%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-threshold/index.html">Threshold</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1531609383%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-24190750%2FInheritors%2F-1466297415" anchor-label="UngappedAlignmentsOnly" id="-24190750%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-ungapped-alignments-only/index.html">UngappedAlignmentsOnly</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24190750%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-506939611%2FInheritors%2F-1466297415" anchor-label="UseSmithWatermanTraceback" id="-506939611%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-use-smith-waterman-traceback/index.html">UseSmithWatermanTraceback</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-506939611%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="107018650%2FInheritors%2F-1466297415" anchor-label="Version" id="107018650%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-version/index.html">Version</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="107018650%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="766145119%2FInheritors%2F-1466297415" anchor-label="WindowSize" id="766145119%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-window-size/index.html">WindowSize</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="766145119%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-681560547%2FInheritors%2F-1466297415" anchor-label="ExtensionDropoffUngapped" id="-681560547%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-extension-dropoff-ungapped/index.html">ExtensionDropoffUngapped</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-681560547%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-281348599%2FInheritors%2F-1466297415" anchor-label="ExtensionDropoffPrelimGapped" id="-281348599%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-extension-dropoff-prelim-gapped/index.html">ExtensionDropoffPrelimGapped</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-281348599%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="6550212%2FInheritors%2F-1466297415" anchor-label="ExtensionDropoffFinalGapped" id="6550212%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.common.fields/-extension-dropoff-final-gapped/index.html">ExtensionDropoffFinalGapped</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="6550212%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1376337162%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsDelta" id="1376337162%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-comp-based-stats-delta/index.html">CompBasedStatsDelta</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1376337162%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1851144404%2FInheritors%2F-1466297415" anchor-label="DomainInclusionEValueThreshold" id="1851144404%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-domain-inclusion-e-value-threshold/index.html">DomainInclusionEValueThreshold</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1851144404%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1878379124%2FInheritors%2F-1466297415" anchor-label="RPSDB" id="1878379124%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-r-p-s-d-b/index.html">RPSDB</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1878379124%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-517617997%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixDelta" id="-517617997%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-scoring-matrix-delta/index.html">ScoringMatrixDelta</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-517617997%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1958485254%2FInheritors%2F-1466297415" anchor-label="ShowDomainHits" id="-1958485254%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-show-domain-hits/index.html">ShowDomainHits</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1958485254%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="59922095%2FInheritors%2F-1466297415" anchor-label="SoftMaskingDelta" id="59922095%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-soft-masking-delta/index.html">SoftMaskingDelta</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="59922095%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-840052070%2FInheritors%2F-1466297415" anchor-label="WordSizeDelta" id="-840052070%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.deltablast.fields/-word-size-delta/index.html">WordSizeDelta</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-840052070%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-55861517%2FInheritors%2F-1466297415" anchor-label="Archive" id="-55861517%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.formatter.fields/-archive/index.html">Archive</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-55861517%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1319835896%2FInheritors%2F-1466297415" anchor-label="RID" id="-1319835896%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.formatter.fields/-r-i-d/index.html">RID</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1319835896%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="825066158%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsPSI" id="825066158%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-comp-based-stats-p-s-i/index.html">CompBasedStatsPSI</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="825066158%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1294090162%2FInheritors%2F-1466297415" anchor-label="IgnoreMSAMaster" id="-1294090162%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-ignore-m-s-a-master/index.html">IgnoreMSAMaster</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1294090162%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="590836103%2FInheritors%2F-1466297415" anchor-label="InMSAFile" id="590836103%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-in-m-s-a-file/index.html">InMSAFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="590836103%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1076854284%2FInheritors%2F-1466297415" anchor-label="MSAMasterIndex" id="-1076854284%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-m-s-a-master-index/index.html">MSAMasterIndex</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1076854284%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-368623922%2FInheritors%2F-1466297415" anchor-label="PHIPatternFile" id="-368623922%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-p-h-i-pattern-file/index.html">PHIPatternFile</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-368623922%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1744319757%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixPSI" id="-1744319757%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-scoring-matrix-p-s-i/index.html">ScoringMatrixPSI</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1744319757%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="311039343%2FInheritors%2F-1466297415" anchor-label="SoftMaskingPSI" id="311039343%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-soft-masking-p-s-i/index.html">SoftMaskingPSI</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="311039343%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1405998658%2FInheritors%2F-1466297415" anchor-label="WordSizePSI" id="-1405998658%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.psiblast.fields/-word-size-p-s-i/index.html">WordSizePSI</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1405998658%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="781643344%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsRPS" id="781643344%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.rpsblast.fields/-comp-based-stats-r-p-s/index.html">CompBasedStatsRPS</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="781643344%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-480817457%2FInheritors%2F-1466297415" anchor-label="SoftMaskingRPS" id="-480817457%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.rpsblast.fields/-soft-masking-r-p-s/index.html">SoftMaskingRPS</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-480817457%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="417049352%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsRPSTN" id="417049352%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.rpstblastn.fields/-comp-based-stats-r-p-s-t-n/index.html">CompBasedStatsRPSTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="417049352%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-962319965%2FInheritors%2F-1466297415" anchor-label="SoftMaskingRPSTN" id="-962319965%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.rpstblastn.fields/-soft-masking-r-p-s-t-n/index.html">SoftMaskingRPSTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-962319965%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-136647272%2FInheritors%2F-1466297415" anchor-label="CompBasedStatsTN" id="-136647272%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastn.fields/-comp-based-stats-t-n/index.html">CompBasedStatsTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-136647272%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1286268565%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixTN" id="-1286268565%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastn.fields/-scoring-matrix-t-n/index.html">ScoringMatrixTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1286268565%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1071815057%2FInheritors%2F-1466297415" anchor-label="SoftMaskingTN" id="-1071815057%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastn.fields/-soft-masking-t-n/index.html">SoftMaskingTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1071815057%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="835658086%2FInheritors%2F-1466297415" anchor-label="TBlastNTask" id="835658086%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastn.fields/-t-blast-n-task/index.html">TBlastNTask</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="835658086%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1668611976%2FInheritors%2F-1466297415" anchor-label="WordSizeTN" id="1668611976%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastn.fields/-word-size-t-n/index.html">WordSizeTN</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1668611976%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="-1053664085%2FInheritors%2F-1466297415" anchor-label="ScoringMatrixTX" id="-1053664085%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastx.fields/-scoring-matrix-t-x/index.html">ScoringMatrixTX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1053664085%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="1767908399%2FInheritors%2F-1466297415" anchor-label="SoftMaskingTX" id="1767908399%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastx.fields/-soft-masking-t-x/index.html">SoftMaskingTX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1767908399%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+<a data-name="321805428%2FInheritors%2F-1466297415" anchor-label="WordSizeTX" id="321805428%2FInheritors%2F-1466297415" data-filterable-set=":blast-types:dokkaHtml/main"></a>
+        <div class="table-row" data-filterable-current=":blast-types:dokkaHtml/main" data-filterable-set=":blast-types:dokkaHtml/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="../../org.veupathdb.lib.blast.tblastx.fields/-word-size-t-x/index.html">WordSizeTX</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="321805428%2FInheritors%2F-1466297415"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
