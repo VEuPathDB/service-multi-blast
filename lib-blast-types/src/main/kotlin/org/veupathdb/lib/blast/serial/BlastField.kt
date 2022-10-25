@@ -50,6 +50,8 @@ interface BlastField {
 
   /**
    * Clones this `BlastField` instance, copying its value.
+   *
+   * @since v8.2.0
    */
   fun clone(): BlastField
 }

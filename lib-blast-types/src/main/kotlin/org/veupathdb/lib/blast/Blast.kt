@@ -115,6 +115,8 @@ object Blast {
    * instance.
    *
    * @return The new [BlastN] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun blastn(fn: BlastN.() -> Unit): BlastN = BlastNImpl().apply(fn)
@@ -145,6 +147,8 @@ object Blast {
    * instance.
    *
    * @return The new [BlastP] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun blastp(fn: BlastP.() -> Unit): BlastP = BlastPImpl().apply(fn)
@@ -175,6 +179,8 @@ object Blast {
    * instance.
    *
    * @return The new [BlastX] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun blastx(fn: BlastX.() -> Unit): BlastX = BlastXImpl().apply(fn)
@@ -205,6 +211,8 @@ object Blast {
    * instance.
    *
    * @return The new [DeltaBlast] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun deltablast(fn: DeltaBlast.() -> Unit): DeltaBlast = DeltaBlastImpl().apply(fn)
@@ -235,6 +243,8 @@ object Blast {
    * instance.
    *
    * @return The new [PSIBlast] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun psiblast(fn: PSIBlast.() -> Unit): PSIBlast = PSIBlastImpl().apply(fn)
@@ -265,6 +275,8 @@ object Blast {
    * instance.
    *
    * @return The new [RPSBlast] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun rpsblast(fn: RPSBlast.() -> Unit): RPSBlast = RPSBlastImpl().apply(fn)
@@ -295,6 +307,8 @@ object Blast {
    * instance.
    *
    * @return The new [RPSTBlastN] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun rpstblastn(fn: RPSTBlastN.() -> Unit): RPSTBlastN = RPSTBlastNImpl().apply(fn)
@@ -325,6 +339,8 @@ object Blast {
    * instance.
    *
    * @return The new [TBlastN] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun tblastn(fn: TBlastN.() -> Unit): TBlastN = TBlastNImpl().apply(fn)
@@ -385,6 +401,8 @@ object Blast {
    * instance.
    *
    * @return The new [BlastFormatter] instance.
+   *
+   * @since v8.1.0
    */
   @JvmStatic
   fun blastFormatter(fn: BlastFormatter.() -> Unit): BlastFormatter = BlastFormatterImpl().apply(fn)

@@ -94,6 +94,8 @@ interface BlastQueryBase : BlastCLI {
 
   /**
    * Clones this `BlastQueryBase` instance and all of it's configured options.
+   *
+   * @since v8.2.0
    */
   override fun clone(): BlastQueryBase
 }

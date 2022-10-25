@@ -10,6 +10,8 @@ interface BlastCommand {
 
   /**
    * Clones this `BlastCommand` instance and all of it's configured options.
+   *
+   * @since v8.2.0
    */
   fun clone(): BlastCommand
 
