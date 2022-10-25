@@ -49,6 +49,46 @@ fun Connection.selectQueryConfigByID(jobID: HashID) =
 
 // ---------------------------------------------------------------------------------------------------------------------
 //
+// -- Select Jobs By User ID and Site
+//
+// ---------------------------------------------------------------------------------------------------------------------
+
+private const val SQL_BY_USER_AND_SITE = """
+SELECT
+  a.${Column.QueryJobID}
+, a.${Column.ProjectID}
+, a.${Column.Config} 
+, a.${Column.Query}
+, b.${Column.UserID}
+, b.${Column.Summary}
+, b.${Column.Description}
+FROM
+  ${Schema.MBlast}.${Table.QueryConfigs} a
+  INNER JOIN ${Schema.MBlast}.${Table.QueryToUsers} b
+    ON a.${Column.QueryJobID} = b.${Column.QueryJobID}
+WHERE
+  b.${Column.UserID} = ?
+  AND a.${Column.ProjectID} = ?
+"""
+
+/**
+ * Retrieves a list of configurations for BLAST queries that are linked to a
+ * target user.
+ *
+ * @param userID ID of the user whose query configs should be fetched.
+ *
+ * @return A list of zero or more query configurations.
+ */
+fun Connection.selectQueriesByUserAndSite(userID: Long, site: String) =
+  prepareStatement(SQL_BY_USER_AND_SITE).use { ps ->
+    ps.setLong(1, userID)
+    ps.setString(2, site)
+    ps.fetchList { parseUserQueryRecord() }
+  }
+
+
+// ---------------------------------------------------------------------------------------------------------------------
+//
 // -- Select Jobs By User ID
 //
 // ---------------------------------------------------------------------------------------------------------------------
