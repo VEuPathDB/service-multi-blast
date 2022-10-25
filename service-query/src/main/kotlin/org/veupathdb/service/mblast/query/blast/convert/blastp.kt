@@ -4,12 +4,7 @@ import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.blastp.BlastP
 import org.veupathdb.lib.blast.blastp.field.*
 import org.veupathdb.lib.blast.common.fields.*
-import org.veupathdb.service.mblast.query.generated.model.BlastPCompBasedStats
-import org.veupathdb.service.mblast.query.generated.model.BlastPConfig
-import org.veupathdb.service.mblast.query.generated.model.BlastPConfigImpl
-import org.veupathdb.service.mblast.query.generated.model.BlastPMatrix
-import org.veupathdb.service.mblast.query.generated.model.BlastSeg
-import org.veupathdb.service.mblast.query.generated.model.BlastSegImpl
+import org.veupathdb.service.mblast.query.generated.model.*
 import org.veupathdb.service.mblast.query.generated.model.BlastPTask as IOBlastPTask
 
 fun BlastPConfig.toInternal() = Blast.blastp().also {

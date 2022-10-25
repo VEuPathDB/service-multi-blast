@@ -4,11 +4,7 @@ import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.common.fields.*
 import org.veupathdb.lib.blast.tblastx.TBlastX
 import org.veupathdb.lib.blast.tblastx.fields.*
-import org.veupathdb.service.mblast.query.generated.model.BlastSeg
-import org.veupathdb.service.mblast.query.generated.model.BlastSegImpl
-import org.veupathdb.service.mblast.query.generated.model.TBlastXConfig
-import org.veupathdb.service.mblast.query.generated.model.TBlastXConfigImpl
-import org.veupathdb.service.mblast.query.generated.model.TBlastXMatrix
+import org.veupathdb.service.mblast.query.generated.model.*
 
 fun TBlastXConfig.toInternal() = Blast.tblastx().also {
   if (queryLocation           != null) it.queryLocation                = queryLocation.toInternal()

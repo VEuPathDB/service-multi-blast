@@ -4,11 +4,7 @@ import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.blastn.BlastN
 import org.veupathdb.lib.blast.blastn.fields.*
 import org.veupathdb.lib.blast.common.fields.*
-import org.veupathdb.service.mblast.query.generated.model.BlastNConfig
-import org.veupathdb.service.mblast.query.generated.model.BlastNConfigImpl
-import org.veupathdb.service.mblast.query.generated.model.BlastNDust
-import org.veupathdb.service.mblast.query.generated.model.BlastNDustImpl
-import org.veupathdb.service.mblast.query.generated.model.BlastNTemplateType
+import org.veupathdb.service.mblast.query.generated.model.*
 import org.veupathdb.service.mblast.query.generated.model.BlastNTask as IOBlastNTask
 
 fun BlastNConfig.toInternal() = Blast.blastn().also {
