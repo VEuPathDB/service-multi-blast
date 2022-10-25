@@ -1,7 +1,7 @@
 package org.veupathdb.service.mblast.query.sql.queries
 
-import org.veupathdb.service.mblast.query.model.BlastTarget
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.service.mblast.query.model.BlastTarget
 import java.sql.Connection
 import java.sql.ResultSet
 

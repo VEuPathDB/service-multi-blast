@@ -6,7 +6,6 @@ import org.veupathdb.service.mblast.query.model.BasicQueryConfig
 import org.veupathdb.service.mblast.query.sql.util.insertWithRaceCheck
 import java.sql.Connection
 import java.sql.SQLException
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 @Language("Oracle")
