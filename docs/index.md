@@ -9,6 +9,7 @@
 
 ### `blast-types`
 
+* [v8.2.0](https://veupathdb.github.io/service-multi-blast/dokka/blast-types/8.2.0)
 * [v8.1.0](https://veupathdb.github.io/service-multi-blast/dokka/blast-types/8.1.0)
 * [v8.0.0](https://veupathdb.github.io/service-multi-blast/dokka/blast-types/8.0.0)
 
