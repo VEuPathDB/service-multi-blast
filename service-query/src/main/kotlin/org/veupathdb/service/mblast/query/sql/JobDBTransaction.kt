@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.query.sql
 
+import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.query.model.*
 import org.veupathdb.service.mblast.query.sql.queries.*
@@ -18,6 +19,8 @@ import java.sql.Connection
  */
 class JobDBTransaction(private val con: Connection) : AutoCloseable {
 
+  private val logger = LogManager.getLogger(javaClass)
+
   init {
     con.autoCommit = false
   }
@@ -28,6 +31,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * @param config Config to insert.
    */
   fun insertQueryConfig(config: BasicQueryConfig) {
+    logger.debug("insertQueryConfig(config=...)")
     con.insertQueryConfig(config)
   }
 
@@ -40,6 +44,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * @param targets BLAST-target links to insert.
    */
   fun insertTargetLinks(queryJobID: HashID, targets: List<BlastTarget>) {
+    logger.debug("insertTargetLinks(queryJobID={}, targets=[...])", queryJobID)
     con.insertJobTargetLinks(queryJobID, targets)
   }
 
@@ -51,6 +56,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * @param meta User metadata to insert.
    */
   fun insertUserLink(queryJobID: HashID, meta: QueryUserMeta) {
+    logger.debug("insertUserLink(queryJobID={}, meta=...)", queryJobID)
     con.insertUserLink(queryJobID, meta)
   }
 
@@ -63,6 +69,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * @param meta User metadata to update with.
    */
   fun updateUserMeta(queryJobID: HashID, meta: QueryUserMeta) {
+    logger.debug("updateUserMeta(queryJobID={}, meta=...)", queryJobID)
     con.updateUserLink(queryJobID, meta)
   }
 
@@ -75,6 +82,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * found.
    */
   fun getFullJob(queryJobID: HashID): FullParentQueryConfig? {
+    logger.debug("getFullJob(queryJobID={})", queryJobID)
     val parent   = con.selectQueryConfigByID(queryJobID) ?: return null
     val targets  = con.selectQueryTargetsByJob(queryJobID)
     val children = con.selectChildQueriesByParent(queryJobID)
@@ -97,6 +105,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * target job was not found or was not linked to the target user.
    */
   fun getFullUserJob(queryJobID: HashID, userID: Long): FullParentUserQueryConfig? {
+    logger.debug("getFullUserJob(queryJobID={}, userID={})", queryJobID, userID)
     val parent   = con.selectQueryConfigByJobAndUser(queryJobID, userID) ?: return null
     val targets  = con.selectQueryTargetsByJob(queryJobID)
     val children = con.selectChildQueriesByParent(queryJobID)
@@ -113,10 +122,18 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    *
    * @param userID ID of the user whose jobs should be fetched.
    *
+   * @param site Optional name of a target site used to further filter the
+   * results.
+   *
+   * If this value is not `null`, only rows whose project ID matches this value
+   * will be returned.
+   *
    * @return A list of zero or more job configuration records.
    */
-  fun getFullUserJobs(userID: Long): List<FullParentUserQueryConfig> {
-    val parents  = con.selectQueriesByUser(userID)
+  fun getFullUserJobs(userID: Long, site: String? = null): List<FullParentUserQueryConfig> {
+    logger.debug("getFullUserJobs(userID={}, site={})", userID, site)
+    val parents  = site?.let { con.selectQueriesByUserAndSite(userID, it) }
+      ?: con.selectQueriesByUser(userID)
     val targets  = con.selectQueryTargetsByUser(userID)
     val children = con.selectChildQueriesByUser(userID)
 
@@ -139,6 +156,7 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
    * @param userID ID of the user whose link should be deleted.
    */
   fun deleteUserLink(queryJobID: HashID, userID: Long) {
+    logger.debug("deleteUserLink(queryJobID={}, userID={})", queryJobID, userID)
     con.deleteUserLink(queryJobID, userID)
   }
 

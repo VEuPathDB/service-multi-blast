@@ -52,10 +52,16 @@ object JobDBManager {
    *
    * @param userID ID of the user whose job configs should be fetched.
    *
+   * @param site Optional name of a target site used to further filter the
+   * results.
+   *
+   * If this value is not `null`, only rows whose project ID matches this value
+   * will be returned.
+   *
    * @return A list of zero or more job configs linked to the target user.
    */
-  fun getFullUserJobs(userID: Long) =
-    JobDBTransaction(getConnection()).use { it.getFullUserJobs(userID) }
+  fun getFullUserJobs(userID: Long, site: String? = null) =
+    JobDBTransaction(getConnection()).use { it.getFullUserJobs(userID, site) }
 
   /**
    * Deletes the target link between a user and a query job.
