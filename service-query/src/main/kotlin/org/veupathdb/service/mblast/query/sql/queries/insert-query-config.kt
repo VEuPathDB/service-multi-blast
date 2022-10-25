@@ -1,10 +1,15 @@
 package org.veupathdb.service.mblast.query.sql.queries
 
+import org.intellij.lang.annotations.Language
+import org.veupathdb.service.mblast.query.mixins.toReader
 import org.veupathdb.service.mblast.query.model.BasicQueryConfig
 import org.veupathdb.service.mblast.query.sql.util.insertWithRaceCheck
 import java.sql.Connection
 import java.sql.SQLException
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
+@Language("Oracle")
 private const val SQL = """
 INSERT INTO
   ${Schema.MBlast}.${Table.QueryConfigs} (
@@ -12,9 +17,10 @@ INSERT INTO
   , ${Column.ProjectID}
   , ${Column.Config}
   , ${Column.Query}
+  , ${Column.CreatedOn}
   )
 VALUES
-  (?, ?, ?, ?)
+  (?, ?, ?, ?, ?)
 """
 
 /**
@@ -39,13 +45,14 @@ VALUES
  */
 fun Connection.insertQueryConfig(config: BasicQueryConfig) =
   prepareStatement(SQL).use {
-    val cReader = config.getConfigReader()
+    val cReader = config.config.toReader()
     val qReader = config.getQueryReader()
 
     it.setString(1, config.queryJobID.string)
     it.setString(2, config.projectID)
     it.setClob(3, cReader)
     it.setClob(4, qReader)
+    it.setObject(5, OffsetDateTime.now())
 
     try {
       it.insertWithRaceCheck()
