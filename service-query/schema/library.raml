@@ -7,6 +7,897 @@
 ################################################################################
 
 types:
+  DeltaBlastConfig:
+    type: BlastQueryConfig
+    discriminatorValue: deltablast
+    additionalProperties: false
+    properties:
+      wordSize:
+        displayName: Word Size
+        description: |
+          Word size for wordfinder algorithm (length of best perfect match).
+        type: integer
+        format: int
+        minimum: 2
+        required: false
+        default: null
+      gapOpen:
+        displayName: Gap Open
+        description: Cost to open a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      gapExtend:
+        displayName: Gap Extend
+        description: Cost to extend a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      matrix:
+        displayName: Scoring Matrix
+        description: Scoring matrix name (normally BLOSUM62)
+        type: DeltaBlastMatrix
+        required: false
+        default: null
+      threshold:
+        displayName: Minimum Word Score Threshold
+        description: |
+          Minimum word score such that the word is added to the BLAST lookup
+          table.
+        type: number
+        format: double
+        minimum: 0.0
+        required: false
+        default: null
+      compBasedStats:
+        displayName: Composition Based Statistics
+        description: |
+          Use composition-based statistics:
+
+          - No composition-based statistics
+          - Composition-based statistics as in NAR 29:2994-3005, 2001
+        type: DeltaBlastCompBasedStats
+        required: false
+        default: comp-based-stats
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: BlastSeg
+        required: false
+        default: null
+      cullingLimit:
+        displayName: Culling Limit
+        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      gapTrigger:
+        displayName: Gap Trigger
+        description: Number of bits to trigger gapping.
+        type: number
+        format: double
+        required: false
+        default: 22.0
+      useSWTraceback:
+        displayName: Use Smith-Waterman Traceback
+        description: Compute locally optimal Smith-Waterman alignments?
+        type: boolean
+        required: false
+        default: false
+  DeltaBlastMatrix:
+    type: string
+    enum:
+      - BLOSUM45
+      - BLOSUM50
+      - BLOSUM62
+      - BLOSUM80
+      - BLOSUM90
+      - PAM30
+      - PAM70
+      - PAM250
+  DeltaBlastCompBasedStats:
+    type: string
+    enum:
+      - none
+      - comp-based-stats
+  QueryJobPostRequest:
+    displayName: Query Job Request
+    type: object
+    additionalProperties: false
+    properties:
+      jobConfig:
+        displayName: Job Config
+        description: Job Configuration.
+        type: QueryJobConfig
+      blastConfig:
+        displayName: Blast Tool Config
+        description: |
+          Blast Tool Configuration.
+
+          Implemented by one of:
+
+          - [BlastNConfig](#type:lib.BlastNConfig)
+          - [BlastPConfig](#type:lib.BlastPConfig)
+          - [BlastXConfig](#type:lib.BlastXConfig)
+          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
+          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
+          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
+          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
+          - [TBlastNConfig](#type:lib.TBlastNConfig)
+          - [TBlastXConfig](#type:lib.TBlastXConfig)
+        type: BlastQueryConfig
+      meta:
+        displayName: User Metadata
+        type: QueryJobUserMeta
+        default: null
+        required: false
+  QueryJobPatchRequest:
+    displayName: Query Job Update
+    type: object
+    additionalProperties: false
+    properties:
+      meta:
+        displayName: User Metadata
+        type: QueryJobUserMeta
+        default: null
+        required: false
+  QueryJobConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      site:
+        displayName: Target Site
+        type: TargetSite
+      targets:
+        displayName: Query Targets
+        type: array
+        minItems: 1
+        items: QueryJobTarget
+      query:
+        displayName: Blast Query
+        description: |
+          **For Requests**
+
+          Inline query definition.
+
+          This field is to be used for non-file-upload blast queries.
+
+          If this field is not set, a query file must be uploaded for the
+          request to be valid.
+
+          **For Responses**
+
+          This field will be omitted.
+        type: string
+        required: false
+      addToUserCollection:
+        displayName: Add to Collection
+        description: |
+          Adds this job to the users collection of jobs.
+
+          The user's collection of jobs is what is returned by the `/jobs`
+          endpoint.
+        type: boolean
+        default: false
+        required: false
+  QueryJobUserMeta:
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Brief Summary
+        description: Brief, user defined summary or tagline for the job.
+        type: string
+        required: false
+        maxLength: 512
+      description:
+        displayName: Long Description
+        description: Longform, user provided description of the job.
+        type: string
+        required: false
+  QueryJobTarget:
+    type: object
+    additionalProperties: false
+    properties:
+      targetDisplayName:
+        description: Blast target display name, e.g. organism name.
+        type: string
+      targetFile:
+        description: Target blast database file.
+        type: string
+  QueryJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      site:
+        displayName: Target Site
+        type: TargetSite
+      meta:
+        displayName: User Metadata
+        type: QueryJobUserMeta
+        required: false
+  QueryJobDetails:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      jobConfig:
+        displayName: Job Config
+        description: Job Configuration.
+        type: QueryJobConfig
+      blastConfig:
+        displayName: Blast Tool Config
+        description: |
+          Blast Tool Configuration.
+
+          Implemented by one of:
+
+          - [BlastNConfig](#type:lib.BlastNConfig)
+          - [BlastPConfig](#type:lib.BlastPConfig)
+          - [BlastXConfig](#type:lib.BlastXConfig)
+          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
+          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
+          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
+          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
+          - [TBlastNConfig](#type:lib.TBlastNConfig)
+          - [TBlastXConfig](#type:lib.TBlastXConfig)
+        type: BlastQueryConfig
+      meta:
+        displayName: User Metadata
+        type: QueryJobUserMeta
+        required: false
+      subJobs:
+        displayName: Sub-Job IDs
+        description: List of IDs of sub-jobs that belong to this job.
+        type: array
+        required: false
+        minItems: 1
+        items:
+          type: string
+          pattern: ^[\dA-Fa-f]{32}$
+          minLength: 32
+          maxLength: 32
+  JobBulkStatusResponse:
+    displayName: Bulk Job Status Response
+    description: |
+      Returns a mapping of job-id to status for each of the valid job IDs that
+      appeared in the original bulk status request.
+    type: object
+    properties:
+      /^[\dA-Fa-f]{32}$/: JobStatus
+  JobCreateResponse:
+    displayName: Job Creation Response
+    description: |
+      Response body returned on the successful creation of a new BLAST query
+      job.
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+  JobStatus:
+    type: string
+    enum:
+      - queued
+      - in-progress
+      - complete
+      - failed
+      - expired
+  TargetSite:
+    type: string
+    enum:
+      - AmoebaDB
+      - CryptoDB
+      - FungiDB
+      - GiardiaDB
+      - HostDB
+      - MicrosporidiaDB
+      - PiroplasmaDB
+      - PlasmoDB
+      - ToxoDB
+      - TrichDB
+      - TriTrypDB
+      - VectorBase
+      - VEuPathDB
+  BlastNConfig:
+    type: BlastQueryConfig
+    discriminatorValue: blastn
+    additionalProperties: false
+    properties:
+      strand:
+        displayName: Strand
+        description: Query strand(s) to search against database/subject.
+        type: BlastStrand
+        required: false
+        default: both
+      task:
+        displayName: Task
+        description: Task to execute.
+        type: BlastNTask
+        required: false
+        default: megablast
+      wordSize:
+        displayName: Word Size
+        description: |
+          Word size for wordfinder algorithm (length of best perfect match).
+        type: integer
+        format: int
+        minimum: 4
+        required: false
+        default: null
+      gapOpen:
+        displayName: Gap Open
+        description: Cost to open a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      gapExtend:
+        displayName: Gap Extend
+        description: Cost to extend a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      penalty:
+        displayName: Penalty
+        description: Penalty for a nucleotide mismatch.
+        type: integer
+        format: int
+        maximum: 0
+        required: false
+        default: null
+      reward:
+        displayName: Reward
+        description: Reward for a nucleotide match.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      useIndex:
+        displayName: Use Index
+        description: Use MegaBLAST database index.
+        type: boolean
+        required: false
+        default: false
+      indexName:
+        displayName: Index Name
+        description: |
+          MegaBLAST database index name (deprecated; use only for old style
+          indices).
+        type: string
+        minLength: 1
+        required: false
+        default: null
+      dust:
+        displayName: DUST
+        description: Filter query sequence with DUST.
+        type: BlastNDust
+        required: false
+        default:
+          level: 20
+          window: 64
+          linker: 1
+      dbSoftMask:
+        displayName: DB Soft Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft masking
+
+          Incompatible with: `dbHardMask`
+        type: string
+        required: false
+        default: null
+      dbHardMask:
+        displayName: DB Hard Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard masking
+
+          Incompatible with:  `dbSoftMask`
+        type: string
+        required: false
+        default: null
+      percentIdentity:
+        displayName: Percent Identity
+        description: Percent identity.
+        type: number
+        format: double
+        minimum: 0.0
+        maximum: 100.0
+        required: false
+        default: null
+      cullingLimit:
+        displayName: Culling Limit
+        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      templateType:
+        displayName: Template Type
+        description: |
+          Discontiguous MegaBLAST template type.
+
+          Requires:
+          - `templateLength`
+        type: BlastNTemplateType
+        required: false
+        default: null
+      templateLength:
+        displayName: Template Length
+        description: |
+          Discontiguous MegaBLAST template length.
+
+          Requires:
+          - `templateType`
+        type: BlastNTemplateLength
+        required: false
+        default: null
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      nonGreedy:
+        displayName: Non Greedy Extension
+        description: Use non-greedy dynamic programming extension.
+        type: boolean
+        required: false
+        default: false
+      minRawGappedScore:
+        displayName: Minimum Raw Gapped Score
+        description: |
+          Minimum raw gapped score to keep an alignment in the preliminary
+          gapped and traceback stages
+        type: integer
+        format: int
+        required: false
+        default: null
+      ungappedOnly:
+        displayName: Ungapped Alignment Only
+        description: Perform ungapped alignment only?
+        type: boolean
+        required: false
+        default: false
+      offDiagonalRange:
+        displayName: Off-Diagonal Range
+        description: |
+          Number of off-diagonals to search for the 2nd hit, use 0 to turn off.
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: 0
+  BlastNTask:
+    type: string
+    enum:
+      - blastn
+      - blastn-short
+      - dc-megablast
+      - megablast
+      - rmblastn
+  BlastNDust:
+    type: object
+    additionalProperties: false
+    properties:
+      level:
+        displayName: Level
+        description: Score threshold for subwindows.
+        type: integer
+        default: 20
+        required: false
+        format: int
+      window:
+        displayName: Window
+        description: Window length.
+        type: integer
+        default: 64
+        required: false
+        format: int
+      linker:
+        displayName: Linker
+        description: |
+          How close masked intervals should be to get merged together.
+        type: integer
+        default: 1
+        required: false
+        format: int
+  BlastNTemplateType:
+    type: string
+    enum:
+      - coding
+      - coding-and-optimal
+      - optimal
+  BlastNTemplateLength:
+    type: integer
+    format: int
+    enum:
+      - 16
+      - 18
+      - 21
+  BlastPConfig:
+    type: BlastQueryConfig
+    discriminatorValue: blastp
+    additionalProperties: false
+    properties:
+      task:
+        displayName: Task
+        description: Task to execute.
+        type: BlastPTask
+        required: false
+        default: blastp
+      wordSize:
+        displayName: Word Size
+        description: |
+          Word size for wordfinder algorithm (length of best perfect match).
+        type: integer
+        format: int
+        minimum: 2
+        required: false
+        default: null
+      gapOpen:
+        displayName: Gap Open
+        description: Cost to open a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      gapExtend:
+        displayName: Gap Extend
+        description: Cost to extend a gap.
+        type: integer
+        format: int
+        required: false
+        default: null
+      matrix:
+        displayName: Scoring Matrix
+        description: Scoring matrix name (normally BLOSUM62)
+        type: BlastPMatrix
+        required: false
+        default: null
+      threshold:
+        displayName: Minimum Word Score Threshold
+        description: |
+          Minimum word score such that the word is added to the BLAST lookup
+          table.
+        type: number
+        format: double
+        minimum: 0.0
+        required: false
+        default: null
+      compBasedStats:
+        displayName: Composition Based Statistics
+        description: |
+          Use composition-based statistics:
+
+          - No composition-based statistics
+          - Composition-based statistics as in NAR 29:2994-3005, 2001
+          - Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+          - Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+        type: BlastPCompBasedStats
+        required: false
+        default: comp-based-score-adjustment-conditional
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: BlastSeg
+        required: false
+        default: null
+      dbSoftMask:
+        displayName: DB Soft Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as soft masking
+
+          Incompatible with: `dbHardMask`
+        type: string
+        required: false
+        default: null
+      dbHardMask:
+        displayName: DB Hard Masking
+        description: |
+          Filtering algorithm ID to apply to the BLAST database as hard masking
+
+          Incompatible with:  `dbSoftMask`
+        type: string
+        required: false
+        default: null
+      cullingLimit:
+        displayName: Culling Limit
+        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
+        type: integer
+        format: int
+        minimum: 0
+        required: false
+        default: null
+      bestHitOverhang:
+        displayName: Best Hit Overhang
+        description: |
+          Best Hit algorithm overhang value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      bestHitScoreEdge:
+        displayName: Best Hit Score Edge
+        description: |
+          Best Hit algorithm score edge value (recommended value: 0.1)
+
+          Incompatible with:
+          - `cullingLimit`
+        type: number
+        format: double
+        minimum: 0.000000000000001
+        maximum: 0.499999999999999
+        required: false
+        default: null
+      subjectBestHit:
+        displayName: Subject Best Hit
+        description: Turn on best hit per subject sequence.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      ungappedOnly:
+        displayName: Ungapped Alignment Only
+        description: Perform ungapped alignment only?
+        type: boolean
+        required: false
+        default: false
+      useSWTraceback:
+        displayName: Use Smith-Waterman Traceback
+        description: Compute locally optimal Smith-Waterman alignments?
+        type: boolean
+        required: false
+        default: false
+  BlastPCompBasedStats:
+    type: string
+    enum:
+      - none
+      - comp-based-stats
+      - comp-based-score-adjustment-conditional
+      - comp-based-score-adjustment-unconditional
+  BlastPMatrix:
+    type: string
+    enum:
+      - BLOSUM45
+      - BLOSUM50
+      - BLOSUM62
+      - BLOSUM80
+      - BLOSUM90
+      - PAM30
+      - PAM70
+      - PAM250
+      - IDENTITY
+  BlastPTask:
+    type: string
+    enum:
+      - blastp
+      - blastp-fast
+      - blastp-short
+  RPSTBlastNConfig:
+    type: BlastQueryConfig
+    discriminatorValue: rpstblastn
+    additionalProperties: false
+    properties:
+      queryGenCode:
+        displayName: Translation Genetic Code
+        description: |
+          Genetic code to use to translate query (see
+          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes
+          for details)
+        type: BlastGenCode
+        required: false
+        default: 1
+      strand:
+        displayName: Strand
+        description: Query strand(s) to search against database/subject.
+        type: BlastStrand
+        required: false
+        default: both
+      compBasedStats:
+        displayName: Composition Based Statistics
+        description: |
+          Use composition-based statistics:
+
+          - No composition-based statistics
+          - Composition-based statistics as in NAR 29:2994-3005, 2001
+        type: RPSTBlastNCompBasedStats
+        required: false
+        default: comp-based-stats
+      seg:
+        displayName: SEG
+        description: Filter query sequence with SEG.
+        type: BlastSeg
+        required: false
+        default: null
+      sumStats:
+        displayName: Use Sum Stats
+        description: Use sum statistics.
+        type: boolean
+        required: false
+        default: false
+      xDropoffPrelimGapped:
+        displayName: Preliminary Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for preliminary gapped extensions.
+        type: number
+        format: double
+        required: false
+        default: null
+      xDropoffFinalGapped:
+        displayName: Final Gapped Extension X-Dropoff
+        description: |
+          X-dropoff value (in bits) for final gapped alignment.
+        type: number
+        format: double
+        required: false
+        default: null
+      ungappedOnly:
+        displayName: Ungapped Alignment Only
+        description: Perform ungapped alignment only?
+        type: boolean
+        required: false
+        default: false
+      useSWTraceback:
+        displayName: Use Smith-Waterman Traceback
+        description: Compute locally optimal Smith-Waterman alignments?
+        type: boolean
+        required: false
+        default: false
+  RPSTBlastNCompBasedStats:
+    type: string
+    enum:
+      - none
+      - comp-based-stats
   TBlastXConfig:
     type: BlastQueryConfig
     discriminatorValue: tblastx
@@ -171,232 +1062,179 @@ types:
       - PAM30
       - PAM70
       - PAM250
-  RPSTBlastNConfig:
-    type: BlastQueryConfig
-    discriminatorValue: rpstblastn
+  BlastQueryConfig:
+    type: object
     additionalProperties: false
+    discriminator: tool
     properties:
-      queryGenCode:
-        displayName: Translation Genetic Code
-        description: |
-          Genetic code to use to translate query (see
-          https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes
-          for details)
-        type: BlastGenCode
+      tool:
+        displayName: Blast Tool
+        description: Target Blast+ query tool to execute.
+        type: BlastQueryTool
+      queryLocation:
+        displayName: Query Location
+        description: Location on the query sequence in 1-based offsets.
+        type: BlastLocation
+        default: null
         required: false
-        default: 1
-      strand:
-        displayName: Strand
-        description: Query strand(s) to search against database/subject.
-        type: BlastStrand
+      eValue:
+        displayName: Expectation Value
+        description: Expectation value (E) threshold for saving hits.
+        type: string
+        default: '10'
         required: false
-        default: both
-      compBasedStats:
-        displayName: Composition Based Statistics
+        pattern: ^\d+(?:\.\d+)?(?:[eE]-?\d+)?$
+      softMasking:
+        displayName: Soft Masking
+        description: Apply filtering locations as soft masks.
+        type: boolean
+        default: false
+        required: false
+      lowercaseMasking:
+        displayName: Lowercase Masking
+        description: Use lower case filtering in query and subject sequence(s)?
+        type: boolean
+        default: false
+        required: false
+      queryCoverageHSPPercent:
+        displayName: Query Coverage HSP Percent
+        description: Percent query coverage per High Scoring Pair.
+        type: number
+        default: null
+        required: false
+        format: double
+        minimum: !!float 0
+        maximum: !!float 100
+      maxHSPs:
+        displayName: Max HSPs
         description: |
-          Use composition-based statistics:
+          Set maximum number of High Scoring Pairs per subject sequence to save
+          for each query.
+        type: integer
+        default: null
+        required: false
+        format: int
+        minimum: 1
+      maxTargetSequences:
+        displayName: Max Target Sequences
+        description: Maximum number of aligned sequences to keep.
+        type: integer
+        default: 500
+        required: false
+        minimum: 5
+      dbSize:
+        displayName: DB Size
+        description: Effective length of the database.
+        type: integer
+        default: null
+        required: false
+        format: int8
+        minimum: -128
+        maximum: 127
+      searchSpace:
+        displayName: Search Space
+        description: Effective length of the search space.
+        type: integer
+        default: null
+        required: false
+        format: int8
+        minimum: 0
+        maximum: 127
+      xDropoffUngapped:
+        displayName: Ungapped Extension X-Dropoff
+        description: X-dropoff value (in bits) for ungapped extensions
+        type: number
+        default: null
+        required: false
+        format: double
+      windowSize:
+        displayName: Window Size
+        description: |
+          Multiple hits window size.
 
-          - No composition-based statistics
-          - Composition-based statistics as in NAR 29:2994-3005, 2001
-        type: RPSTBlastNCompBasedStats
-        required: false
-        default: comp-based-stats
-      seg:
-        displayName: SEG
-        description: Filter query sequence with SEG.
-        type: BlastSeg
-        required: false
-        default: null
-      sumStats:
-        displayName: Use Sum Stats
-        description: Use sum statistics.
-        type: boolean
-        required: false
-        default: false
-      xDropoffPrelimGapped:
-        displayName: Preliminary Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions.
-        type: number
-        format: double
-        required: false
-        default: null
-      xDropoffFinalGapped:
-        displayName: Final Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for final gapped alignment.
-        type: number
-        format: double
-        required: false
-        default: null
-      ungappedOnly:
-        displayName: Ungapped Alignment Only
-        description: Perform ungapped alignment only?
-        type: boolean
-        required: false
-        default: false
-      useSWTraceback:
-        displayName: Use Smith-Waterman Traceback
-        description: Compute locally optimal Smith-Waterman alignments?
-        type: boolean
-        required: false
-        default: false
-  RPSTBlastNCompBasedStats:
-    type: string
-    enum:
-      - none
-      - comp-based-stats
-  DeltaBlastConfig:
-    type: BlastQueryConfig
-    discriminatorValue: deltablast
-    additionalProperties: false
-    properties:
-      wordSize:
-        displayName: Word Size
-        description: |
-          Word size for wordfinder algorithm (length of best perfect match).
+          0 to specify 1-hit algorithm.
         type: integer
-        format: int
-        minimum: 2
-        required: false
         default: null
-      gapOpen:
-        displayName: Gap Open
-        description: Cost to open a gap.
-        type: integer
-        format: int
         required: false
-        default: null
-      gapExtend:
-        displayName: Gap Extend
-        description: Cost to extend a gap.
-        type: integer
-        format: int
-        required: false
-        default: null
-      matrix:
-        displayName: Scoring Matrix
-        description: Scoring matrix name (normally BLOSUM62)
-        type: DeltaBlastMatrix
-        required: false
-        default: null
-      threshold:
-        displayName: Minimum Word Score Threshold
-        description: |
-          Minimum word score such that the word is added to the BLAST lookup
-          table.
-        type: number
-        format: double
-        minimum: 0.0
-        required: false
-        default: null
-      compBasedStats:
-        displayName: Composition Based Statistics
-        description: |
-          Use composition-based statistics:
-
-          - No composition-based statistics
-          - Composition-based statistics as in NAR 29:2994-3005, 2001
-        type: DeltaBlastCompBasedStats
-        required: false
-        default: comp-based-stats
-      seg:
-        displayName: SEG
-        description: Filter query sequence with SEG.
-        type: BlastSeg
-        required: false
-        default: null
-      cullingLimit:
-        displayName: Culling Limit
-        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
-        type: integer
         format: int
         minimum: 0
-        required: false
-        default: null
-      bestHitOverhang:
-        displayName: Best Hit Overhang
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      bestHitScoreEdge:
-        displayName: Best Hit Score Edge
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      subjectBestHit:
-        displayName: Subject Best Hit
-        description: Turn on best hit per subject sequence.
+      parseDefLines:
+        displayName: Parse Query Definition Lines
+        description: Should the query and subject defline(s) be parsed?
         type: boolean
-        required: false
         default: false
-      sumStats:
-        displayName: Use Sum Stats
-        description: Use sum statistics.
-        type: boolean
         required: false
-        default: false
-      xDropoffPrelimGapped:
-        displayName: Preliminary Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions.
+  BlastSeg:
+    type: object
+    additionalProperties: false
+    properties:
+      window:
+        displayName: Window
+        description: SEG window.
+        type: integer
+        default: 12
+        required: false
+        format: int
+      locut:
+        displayName: Locut
+        description: SEG locut.
         type: number
-        format: double
+        default: 2.2
         required: false
-        default: null
-      xDropoffFinalGapped:
-        displayName: Final Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for final gapped alignment.
+        format: double
+      hicut:
+        displayName: Hicut
+        description: SEG hicut.
         type: number
+        default: 2.5
+        required: false
         format: double
-        required: false
-        default: null
-      gapTrigger:
-        displayName: Gap Trigger
-        description: Number of bits to trigger gapping.
-        type: number
-        format: double
-        required: false
-        default: 22.0
-      useSWTraceback:
-        displayName: Use Smith-Waterman Traceback
-        description: Compute locally optimal Smith-Waterman alignments?
-        type: boolean
-        required: false
-        default: false
-  DeltaBlastMatrix:
+  BlastQueryTool:
     type: string
     enum:
-      - BLOSUM45
-      - BLOSUM50
-      - BLOSUM62
-      - BLOSUM80
-      - BLOSUM90
-      - PAM30
-      - PAM70
-      - PAM250
-  DeltaBlastCompBasedStats:
+      - blastn
+      - blastp
+      - blastx
+      - deltablast
+      - psiblast
+      - rpsblast
+      - rpstblastn
+      - tblastn
+      - tblastx
+  BlastGenCode:
+    description: |
+      Translation Gen Code
+
+      Valid values are:
+      - 1, 2, 3, 4, 5, 6
+      - 9, 10, 11, 12, 13, 14, 15, 16
+      - 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+      - 33
+
+      This type _should_ be an enum, however the code generated from the RAML
+      when it _is_ an enum is broken.
+    type: integer
+    format: int8
+    minimum: 1
+    maximum: 33
+  BlastLocation:
+    type: object
+    additionalProperties: false
+    properties:
+      start:
+        type: integer
+        format: long
+        minimum: 0
+      stop:
+        type: integer
+        format: long
+        minimum: 0
+  BlastStrand:
     type: string
     enum:
-      - none
-      - comp-based-stats
+      - both
+      - minus
+      - plus
   PSIBlastConfig:
     type: BlastQueryConfig
     discriminatorValue: psiblast
@@ -852,451 +1690,6 @@ types:
       - comp-based-stats
       - comp-based-score-adjustment-conditional
       - comp-based-score-adjustment-unconditional
-  BlastPConfig:
-    type: BlastQueryConfig
-    discriminatorValue: blastp
-    additionalProperties: false
-    properties:
-      task:
-        displayName: Task
-        description: Task to execute.
-        type: BlastPTask
-        required: false
-        default: blastp
-      wordSize:
-        displayName: Word Size
-        description: |
-          Word size for wordfinder algorithm (length of best perfect match).
-        type: integer
-        format: int
-        minimum: 2
-        required: false
-        default: null
-      gapOpen:
-        displayName: Gap Open
-        description: Cost to open a gap.
-        type: integer
-        format: int
-        required: false
-        default: null
-      gapExtend:
-        displayName: Gap Extend
-        description: Cost to extend a gap.
-        type: integer
-        format: int
-        required: false
-        default: null
-      matrix:
-        displayName: Scoring Matrix
-        description: Scoring matrix name (normally BLOSUM62)
-        type: BlastPMatrix
-        required: false
-        default: null
-      threshold:
-        displayName: Minimum Word Score Threshold
-        description: |
-          Minimum word score such that the word is added to the BLAST lookup
-          table.
-        type: number
-        format: double
-        minimum: 0.0
-        required: false
-        default: null
-      compBasedStats:
-        displayName: Composition Based Statistics
-        description: |
-          Use composition-based statistics:
-
-          - No composition-based statistics
-          - Composition-based statistics as in NAR 29:2994-3005, 2001
-          - Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-          - Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
-        type: BlastPCompBasedStats
-        required: false
-        default: comp-based-score-adjustment-conditional
-      seg:
-        displayName: SEG
-        description: Filter query sequence with SEG.
-        type: BlastSeg
-        required: false
-        default: null
-      dbSoftMask:
-        displayName: DB Soft Masking
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft masking
-
-          Incompatible with: `dbHardMask`
-        type: string
-        required: false
-        default: null
-      dbHardMask:
-        displayName: DB Hard Masking
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard masking
-
-          Incompatible with:  `dbSoftMask`
-        type: string
-        required: false
-        default: null
-      cullingLimit:
-        displayName: Culling Limit
-        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
-        type: integer
-        format: int
-        minimum: 0
-        required: false
-        default: null
-      bestHitOverhang:
-        displayName: Best Hit Overhang
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      bestHitScoreEdge:
-        displayName: Best Hit Score Edge
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      subjectBestHit:
-        displayName: Subject Best Hit
-        description: Turn on best hit per subject sequence.
-        type: boolean
-        required: false
-        default: false
-      xDropoffPrelimGapped:
-        displayName: Preliminary Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions.
-        type: number
-        format: double
-        required: false
-        default: null
-      xDropoffFinalGapped:
-        displayName: Final Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for final gapped alignment.
-        type: number
-        format: double
-        required: false
-        default: null
-      ungappedOnly:
-        displayName: Ungapped Alignment Only
-        description: Perform ungapped alignment only?
-        type: boolean
-        required: false
-        default: false
-      useSWTraceback:
-        displayName: Use Smith-Waterman Traceback
-        description: Compute locally optimal Smith-Waterman alignments?
-        type: boolean
-        required: false
-        default: false
-  BlastPCompBasedStats:
-    type: string
-    enum:
-      - none
-      - comp-based-stats
-      - comp-based-score-adjustment-conditional
-      - comp-based-score-adjustment-unconditional
-  BlastPMatrix:
-    type: string
-    enum:
-      - BLOSUM45
-      - BLOSUM50
-      - BLOSUM62
-      - BLOSUM80
-      - BLOSUM90
-      - PAM30
-      - PAM70
-      - PAM250
-      - IDENTITY
-  BlastPTask:
-    type: string
-    enum:
-      - blastp
-      - blastp-fast
-      - blastp-short
-  BlastNConfig:
-    type: BlastQueryConfig
-    discriminatorValue: blastn
-    additionalProperties: false
-    properties:
-      strand:
-        displayName: Strand
-        description: Query strand(s) to search against database/subject.
-        type: BlastStrand
-        required: false
-        default: both
-      task:
-        displayName: Task
-        description: Task to execute.
-        type: BlastNTask
-        required: false
-        default: megablast
-      wordSize:
-        displayName: Word Size
-        description: |
-          Word size for wordfinder algorithm (length of best perfect match).
-        type: integer
-        format: int
-        minimum: 4
-        required: false
-        default: null
-      gapOpen:
-        displayName: Gap Open
-        description: Cost to open a gap.
-        type: integer
-        format: int
-        required: false
-        default: null
-      gapExtend:
-        displayName: Gap Extend
-        description: Cost to extend a gap.
-        type: integer
-        format: int
-        required: false
-        default: null
-      penalty:
-        displayName: Penalty
-        description: Penalty for a nucleotide mismatch.
-        type: integer
-        format: int
-        maximum: 0
-        required: false
-        default: null
-      reward:
-        displayName: Reward
-        description: Reward for a nucleotide match.
-        type: integer
-        format: int
-        minimum: 0
-        required: false
-        default: null
-      useIndex:
-        displayName: Use Index
-        description: Use MegaBLAST database index.
-        type: boolean
-        required: false
-        default: false
-      indexName:
-        displayName: Index Name
-        description: |
-          MegaBLAST database index name (deprecated; use only for old style
-          indices).
-        type: string
-        minLength: 1
-        required: false
-        default: null
-      dust:
-        displayName: DUST
-        description: Filter query sequence with DUST.
-        type: BlastNDust
-        required: false
-        default:
-          level: 20
-          window: 64
-          linker: 1
-      dbSoftMask:
-        displayName: DB Soft Masking
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as soft masking
-
-          Incompatible with: `dbHardMask`
-        type: string
-        required: false
-        default: null
-      dbHardMask:
-        displayName: DB Hard Masking
-        description: |
-          Filtering algorithm ID to apply to the BLAST database as hard masking
-
-          Incompatible with:  `dbSoftMask`
-        type: string
-        required: false
-        default: null
-      percentIdentity:
-        displayName: Percent Identity
-        description: Percent identity.
-        type: number
-        format: double
-        minimum: 0.0
-        maximum: 100.0
-        required: false
-        default: null
-      cullingLimit:
-        displayName: Culling Limit
-        description: "If the query range of a hit is enveloped by that of at least this many\nhigher-scoring hits, delete the hit\n\nIncompatible with: \n- `bestHitOverhang`\n- `bestHitScoreEdge`\n"
-        type: integer
-        format: int
-        minimum: 0
-        required: false
-        default: null
-      bestHitOverhang:
-        displayName: Best Hit Overhang
-        description: |
-          Best Hit algorithm overhang value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      bestHitScoreEdge:
-        displayName: Best Hit Score Edge
-        description: |
-          Best Hit algorithm score edge value (recommended value: 0.1)
-
-          Incompatible with:
-          - `cullingLimit`
-        type: number
-        format: double
-        minimum: 0.000000000000001
-        maximum: 0.499999999999999
-        required: false
-        default: null
-      subjectBestHit:
-        displayName: Subject Best Hit
-        description: Turn on best hit per subject sequence.
-        type: boolean
-        required: false
-        default: false
-      templateType:
-        displayName: Template Type
-        description: |
-          Discontiguous MegaBLAST template type.
-
-          Requires:
-          - `templateLength`
-        type: BlastNTemplateType
-        required: false
-        default: null
-      templateLength:
-        displayName: Template Length
-        description: |
-          Discontiguous MegaBLAST template length.
-
-          Requires:
-          - `templateType`
-        type: BlastNTemplateLength
-        required: false
-        default: null
-      sumStats:
-        displayName: Use Sum Stats
-        description: Use sum statistics.
-        type: boolean
-        required: false
-        default: false
-      xDropoffPrelimGapped:
-        displayName: Preliminary Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for preliminary gapped extensions.
-        type: number
-        format: double
-        required: false
-        default: null
-      xDropoffFinalGapped:
-        displayName: Final Gapped Extension X-Dropoff
-        description: |
-          X-dropoff value (in bits) for final gapped alignment.
-        type: number
-        format: double
-        required: false
-        default: null
-      nonGreedy:
-        displayName: Non Greedy Extension
-        description: Use non-greedy dynamic programming extension.
-        type: boolean
-        required: false
-        default: false
-      minRawGappedScore:
-        displayName: Minimum Raw Gapped Score
-        description: |
-          Minimum raw gapped score to keep an alignment in the preliminary
-          gapped and traceback stages
-        type: integer
-        format: int
-        required: false
-        default: null
-      ungappedOnly:
-        displayName: Ungapped Alignment Only
-        description: Perform ungapped alignment only?
-        type: boolean
-        required: false
-        default: false
-      offDiagonalRange:
-        displayName: Off-Diagonal Range
-        description: |
-          Number of off-diagonals to search for the 2nd hit, use 0 to turn off.
-        type: integer
-        format: int
-        minimum: 0
-        required: false
-        default: 0
-  BlastNTask:
-    type: string
-    enum:
-      - blastn
-      - blastn-short
-      - dc-megablast
-      - megablast
-      - rmblastn
-  BlastNDust:
-    type: object
-    additionalProperties: false
-    properties:
-      level:
-        displayName: Level
-        description: Score threshold for subwindows.
-        type: integer
-        default: 20
-        required: false
-        format: int
-      window:
-        displayName: Window
-        description: Window length.
-        type: integer
-        default: 64
-        required: false
-        format: int
-      linker:
-        displayName: Linker
-        description: |
-          How close masked intervals should be to get merged together.
-        type: integer
-        default: 1
-        required: false
-        format: int
-  BlastNTemplateType:
-    type: string
-    enum:
-      - coding
-      - coding-and-optimal
-      - optimal
-  BlastNTemplateLength:
-    type: integer
-    format: int
-    enum:
-      - 16
-      - 18
-      - 21
   BlastXConfig:
     type: BlastQueryConfig
     discriminatorValue: blastx
@@ -1508,397 +1901,4 @@ types:
       - comp-based-stats
       - comp-based-score-adjustment-conditional
       - comp-based-score-adjustment-unconditional
-  QueryJobPostRequest:
-    displayName: Query Job Request
-    type: object
-    additionalProperties: false
-    properties:
-      jobConfig:
-        displayName: Job Config
-        description: Job Configuration.
-        type: QueryJobConfig
-      blastConfig:
-        displayName: Blast Tool Config
-        description: |
-          Blast Tool Configuration.
-
-          Implemented by one of:
-
-          - [BlastNConfig](#type:lib.BlastNConfig)
-          - [BlastPConfig](#type:lib.BlastPConfig)
-          - [BlastXConfig](#type:lib.BlastXConfig)
-          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
-          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
-          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
-          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
-          - [TBlastNConfig](#type:lib.TBlastNConfig)
-          - [TBlastXConfig](#type:lib.TBlastXConfig)
-        type: BlastQueryConfig
-      meta:
-        displayName: User Metadata
-        type: QueryJobUserMeta
-        default: null
-        required: false
-  QueryJobPatchRequest:
-    displayName: Query Job Update
-    type: object
-    additionalProperties: false
-    properties:
-      meta:
-        displayName: User Metadata
-        type: QueryJobUserMeta
-        default: null
-        required: false
-  QueryJobConfig:
-    type: object
-    additionalProperties: false
-    properties:
-      site:
-        displayName: Target Site
-        type: TargetSite
-      targets:
-        displayName: Query Targets
-        type: array
-        minItems: 1
-        items: QueryJobTarget
-      query:
-        displayName: Blast Query
-        description: |
-          **For Requests**
-
-          Inline query definition.
-
-          This field is to be used for non-file-upload blast queries.
-
-          If this field is not set, a query file must be uploaded for the
-          request to be valid.
-
-          **For Responses**
-
-          This field will be omitted.
-        type: string
-        required: false
-      addToUserCollection:
-        displayName: Add to Collection
-        description: |
-          Adds this job to the users collection of jobs.
-
-          The user's collection of jobs is what is returned by the `/jobs`
-          endpoint.
-        type: boolean
-        default: false
-        required: false
-  QueryJobUserMeta:
-    type: object
-    additionalProperties: false
-    properties:
-      summary:
-        displayName: Brief Summary
-        description: Brief, user defined summary or tagline for the job.
-        type: string
-        required: false
-        maxLength: 512
-      description:
-        displayName: Long Description
-        description: Longform, user provided description of the job.
-        type: string
-        required: false
-  QueryJobTarget:
-    type: object
-    additionalProperties: false
-    properties:
-      targetDisplayName:
-        description: Blast target display name, e.g. organism name.
-        type: string
-      targetFile:
-        description: Target blast database file.
-        type: string
-  QueryJobListEntry:
-    type: object
-    additionalProperties: false
-    properties:
-      queryJobID:
-        displayName: Query Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        type: JobStatus
-      site:
-        displayName: Target Site
-        type: TargetSite
-      meta:
-        displayName: User Metadata
-        type: QueryJobUserMeta
-        required: false
-  QueryJobDetails:
-    type: object
-    additionalProperties: false
-    properties:
-      queryJobID:
-        displayName: Query Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        type: JobStatus
-      jobConfig:
-        displayName: Job Config
-        description: Job Configuration.
-        type: QueryJobConfig
-      blastConfig:
-        displayName: Blast Tool Config
-        description: |
-          Blast Tool Configuration.
-
-          Implemented by one of:
-
-          - [BlastNConfig](#type:lib.BlastNConfig)
-          - [BlastPConfig](#type:lib.BlastPConfig)
-          - [BlastXConfig](#type:lib.BlastXConfig)
-          - [DeltaBlastConfig](#type:lib.DeltaBlastConfig)
-          - [PSIBlastConfig](#type:lib.PSIBlastConfig)
-          - [RPSBlastConfig](#type:lib.RPSBlastConfig)
-          - [RPSTBlastNConfig](#type:lib.RPSTBlastNConfig)
-          - [TBlastNConfig](#type:lib.TBlastNConfig)
-          - [TBlastXConfig](#type:lib.TBlastXConfig)
-        type: BlastQueryConfig
-      meta:
-        displayName: User Metadata
-        type: QueryJobUserMeta
-        required: false
-      subJobs:
-        displayName: Sub-Job IDs
-        description: List of IDs of sub-jobs that belong to this job.
-        type: array
-        required: false
-        minItems: 1
-        items:
-          type: string
-          pattern: ^[\dA-Fa-f]{32}$
-          minLength: 32
-          maxLength: 32
-  JobBulkStatusResponse:
-    displayName: Bulk Job Status Response
-    description: |
-      Returns a mapping of job-id to status for each of the valid job IDs that
-      appeared in the original bulk status request.
-    type: object
-    properties:
-      /^[\dA-Fa-f]{32}$/: JobStatus
-  JobCreateResponse:
-    displayName: Job Creation Response
-    description: |
-      Response body returned on the successful creation of a new BLAST query
-      job.
-    type: object
-    additionalProperties: false
-    properties:
-      queryJobID:
-        displayName: Query Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-  JobStatus:
-    type: string
-    enum:
-      - queued
-      - in-progress
-      - complete
-      - failed
-      - expired
-  TargetSite:
-    type: string
-    enum:
-      - AmoebaDB
-      - CryptoDB
-      - FungiDB
-      - GiardiaDB
-      - HostDB
-      - MicrosporidiaDB
-      - PiroplasmaDB
-      - PlasmoDB
-      - ToxoDB
-      - TrichDB
-      - TriTrypDB
-      - VectorBase
-      - VEuPathDB
-  BlastQueryConfig:
-    type: object
-    additionalProperties: false
-    discriminator: tool
-    properties:
-      tool:
-        displayName: Blast Tool
-        description: Target Blast+ query tool to execute.
-        type: BlastQueryTool
-      queryLocation:
-        displayName: Query Location
-        description: Location on the query sequence in 1-based offsets.
-        type: BlastLocation
-        default: null
-        required: false
-      eValue:
-        displayName: Expectation Value
-        description: Expectation value (E) threshold for saving hits.
-        type: string
-        default: '10'
-        required: false
-        pattern: ^\d+(?:\.\d+)?(?:[eE]-?\d+)?$
-      softMasking:
-        displayName: Soft Masking
-        description: Apply filtering locations as soft masks.
-        type: boolean
-        default: false
-        required: false
-      lowercaseMasking:
-        displayName: Lowercase Masking
-        description: Use lower case filtering in query and subject sequence(s)?
-        type: boolean
-        default: false
-        required: false
-      queryCoverageHSPPercent:
-        displayName: Query Coverage HSP Percent
-        description: Percent query coverage per High Scoring Pair.
-        type: number
-        default: null
-        required: false
-        format: double
-        minimum: !!float 0
-        maximum: !!float 100
-      maxHSPs:
-        displayName: Max HSPs
-        description: |
-          Set maximum number of High Scoring Pairs per subject sequence to save
-          for each query.
-        type: integer
-        default: null
-        required: false
-        format: int
-        minimum: 1
-      maxTargetSequences:
-        displayName: Max Target Sequences
-        description: Maximum number of aligned sequences to keep.
-        type: integer
-        default: 500
-        required: false
-        minimum: 5
-      dbSize:
-        displayName: DB Size
-        description: Effective length of the database.
-        type: integer
-        default: null
-        required: false
-        format: int8
-        minimum: -128
-        maximum: 127
-      searchSpace:
-        displayName: Search Space
-        description: Effective length of the search space.
-        type: integer
-        default: null
-        required: false
-        format: int8
-        minimum: 0
-        maximum: 127
-      xDropoffUngapped:
-        displayName: Ungapped Extension X-Dropoff
-        description: X-dropoff value (in bits) for ungapped extensions
-        type: number
-        default: null
-        required: false
-        format: double
-      windowSize:
-        displayName: Window Size
-        description: |
-          Multiple hits window size.
-
-          0 to specify 1-hit algorithm.
-        type: integer
-        default: null
-        required: false
-        format: int
-        minimum: 0
-      parseDefLines:
-        displayName: Parse Query Definition Lines
-        description: Should the query and subject defline(s) be parsed?
-        type: boolean
-        default: false
-        required: false
-  BlastSeg:
-    type: object
-    additionalProperties: false
-    properties:
-      window:
-        displayName: Window
-        description: SEG window.
-        type: integer
-        default: 12
-        required: false
-        format: int
-      locut:
-        displayName: Locut
-        description: SEG locut.
-        type: number
-        default: 2.2
-        required: false
-        format: double
-      hicut:
-        displayName: Hicut
-        description: SEG hicut.
-        type: number
-        default: 2.5
-        required: false
-        format: double
-  BlastQueryTool:
-    type: string
-    enum:
-      - blastn
-      - blastp
-      - blastx
-      - deltablast
-      - psiblast
-      - rpsblast
-      - rpstblastn
-      - tblastn
-      - tblastx
-  BlastGenCode:
-    description: |
-      Translation Gen Code
-
-      Valid values are:
-      - 1, 2, 3, 4, 5, 6
-      - 9, 10, 11, 12, 13, 14, 15, 16
-      - 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-      - 33
-
-      This type _should_ be an enum, however the code generated from the RAML
-      when it _is_ an enum is broken.
-    type: integer
-    format: int8
-    minimum: 1
-    maximum: 33
-  BlastLocation:
-    type: object
-    additionalProperties: false
-    properties:
-      start:
-        type: integer
-        format: long
-        minimum: 0
-      stop:
-        type: integer
-        format: long
-        minimum: 0
-  BlastStrand:
-    type: string
-    enum:
-      - both
-      - minus
-      - plus
 
