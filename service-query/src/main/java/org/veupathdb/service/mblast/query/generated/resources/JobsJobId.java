@@ -188,6 +188,12 @@ public interface JobsJobId {
       return new PostJobsByJobIdResponse(responseBuilder.build(), entity);
     }
 
+    public static PostJobsByJobIdResponse respond410WithApplicationJson(String entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(410).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PostJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+
     public static PostJobsByJobIdResponse respond500WithApplicationJson(ServerError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "queryJobID",
     "status",
+    "site",
     "meta"
 })
 public class QueryJobListEntryImpl implements QueryJobListEntry {
@@ -16,6 +17,9 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
 
   @JsonProperty("status")
   private JobStatus status;
+
+  @JsonProperty("site")
+  private TargetSite site;
 
   @JsonProperty("meta")
   private QueryJobUserMeta meta;
@@ -38,6 +42,16 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
   @JsonProperty("status")
   public void setStatus(JobStatus status) {
     this.status = status;
+  }
+
+  @JsonProperty("site")
+  public TargetSite getSite() {
+    return this.site;
+  }
+
+  @JsonProperty("site")
+  public void setSite(TargetSite site) {
+    this.site = site;
   }
 
   @JsonProperty("meta")

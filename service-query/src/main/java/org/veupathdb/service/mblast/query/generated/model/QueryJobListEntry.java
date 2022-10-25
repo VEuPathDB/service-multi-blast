@@ -19,6 +19,12 @@ public interface QueryJobListEntry {
   @JsonProperty("status")
   void setStatus(JobStatus status);
 
+  @JsonProperty("site")
+  TargetSite getSite();
+
+  @JsonProperty("site")
+  void setSite(TargetSite site);
+
   @JsonProperty("meta")
   QueryJobUserMeta getMeta();
 

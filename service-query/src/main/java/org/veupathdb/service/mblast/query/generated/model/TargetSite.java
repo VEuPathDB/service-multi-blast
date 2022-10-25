@@ -36,8 +36,8 @@ public enum TargetSite {
   @JsonProperty("TriTrypDB")
   TRITRYPDB("TriTrypDB"),
 
-  @JsonProperty("Vectorbase")
-  VECTORBASE("Vectorbase"),
+  @JsonProperty("VectorBase")
+  VECTORBASE("VectorBase"),
 
   @JsonProperty("VEuPathDB")
   VEUPATHDB("VEuPathDB");
