@@ -1,9 +1,12 @@
 package org.veupathdb.service.mblast.query.sql.queries
 
+import org.veupathdb.lib.blast.Blast
+import org.veupathdb.lib.blast.common.BlastQueryBase
 import org.veupathdb.service.mblast.query.sql.util.clobToFile
 import org.veupathdb.service.mblast.query.sql.util.fetchList
 import org.veupathdb.service.mblast.query.sql.util.fetchOpt
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 import org.veupathdb.service.mblast.query.model.BasicQueryConfig
 import org.veupathdb.service.mblast.query.model.BasicQueryConfigImpl
 import org.veupathdb.service.mblast.query.model.QueryUserMetaImpl
@@ -238,7 +241,7 @@ private fun ResultSet.parseQueryConfig(): BasicQueryConfig =
   BasicQueryConfigImpl(
     HashID(getString(Column.QueryJobID)),
     getString(Column.ProjectID),
-    clobToFile(Column.Config),
+    Blast.of(Json.parse(getString(Column.Config))) as BlastQueryBase,
     clobToFile(Column.Query),
   )
 

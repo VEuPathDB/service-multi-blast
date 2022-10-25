@@ -17,6 +17,7 @@ object Table {
 object Column {
   const val ChildJobID  = "child_job_id"
   const val Config      = "config"
+  const val CreatedOn   = "created_on"
   const val Description = "description"
   const val ParentJobID = "parent_job_id"
   const val Position    = "position"
