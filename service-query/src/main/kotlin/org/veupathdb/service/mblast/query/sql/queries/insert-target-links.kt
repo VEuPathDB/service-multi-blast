@@ -1,8 +1,8 @@
 package org.veupathdb.service.mblast.query.sql.queries
 
+import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.query.model.BlastTarget
 import org.veupathdb.service.mblast.query.sql.util.insertBatchWithRaceCheck
-import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 
 private const val SQL = """
