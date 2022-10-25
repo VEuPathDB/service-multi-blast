@@ -129,10 +129,17 @@ private fun BlastNDust.toInternal() = Dust.of(
   linker ?: DefDustLinker,
 )
 
+
 private fun Dust.toExternal() : BlastNDust = BlastNDustImpl().also {
-  it.level  = level
-  it.window = window
-  it.linker = linker
+  if (isYes) {
+    it.level  = DefDustLevel
+    it.window = DefDustWindow
+    it.linker = DefDustLinker
+  } else {
+    it.level  = level
+    it.window = window
+    it.linker = linker
+  }
 }
 
 //
