@@ -19,6 +19,8 @@ interface BlastQueryWithIPG : BlastQueryWithLists {
 
   /**
    * Clones this `BlastQueryWithIPG` instance and all of it's configured options.
+   *
+   * @since v8.2.0
    */
   override fun clone(): BlastQueryWithIPG
 }

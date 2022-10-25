@@ -89,5 +89,12 @@ interface RPSTBlastN : BlastQueryBase {
   var useSmithWatermanTraceback: UseSmithWatermanTraceback
   fun useSmithWatermanTraceback(value: Boolean)
 
+  /**
+   * Clones the current config and all it's field values.
+   *
+   * @return A cloned copy of this config instance.
+   *
+   * @since v8.2.0
+   */
   override fun clone(): RPSTBlastN
 }
