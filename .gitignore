@@ -5,9 +5,6 @@ blastdb/
 build/
 .bin/
 
-!lib-mblast-gradle/src/main/kotlin/mblast/build
-!script-blast-db-migration/bin
-
 mblast-dev.properties
 
 *.bak
@@ -27,3 +24,6 @@ local.properties
 *~
 .*~
 .envrc
+
+!lib-mblast-gradle/src/main/kotlin/mblast/build
+!script-mblast2-migration/sample.env
