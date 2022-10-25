@@ -6,6 +6,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.query.generated.model.BadRequestError;
@@ -21,7 +22,7 @@ import org.veupathdb.service.mblast.query.generated.support.ResponseDelegate;
 public interface Jobs {
   @GET
   @Produces("application/json")
-  GetJobsResponse getJobs();
+  GetJobsResponse getJobs(@QueryParam("site") String site);
 
   @POST
   @Produces("application/json")
