@@ -1,13 +1,13 @@
 #%RAML 1.0 Extension
 
-extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.1.0/libraries/base-service.raml
+extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.2.0/libraries/base-service.raml
 
 title: MultiBlast Query Service
 version: 2.0.0
 mediaType: application/json
 
 uses:
-  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.1.0/libraries/errors.raml
+  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.2.0/libraries/errors.raml
   lib: schema/library.raml
 
 
@@ -32,12 +32,15 @@ uses:
               type: lib.QueryJobListEntry
             example:
             - queryJobID: 9f444b23ceec3ee5588cc4c784c16696
+              site: PlasmoDB
               status: expired
             - queryJobID: bc49f1a3bc36cd15b84890439d19d395
+              site: TriTrypDB
               status: complete
               meta:
                 summary: A blast job
             - queryJobID: 297a61dda47317f11d8e50e6ab8508c9
+              site: VectorBase
               status: failed
               meta:
                 summary: Another blast job.
@@ -199,6 +202,16 @@ uses:
         body:
           application/json:
             type: error.NotFoundError
+      410:
+        description: |
+          Gone.
+          
+          The BLAST+ target databases that the target job was originally run
+          against no longer exist on this server.
+        body:
+          application/json:
+            type: error.GoneError
+
       500:
         description: Server Error
         body:
