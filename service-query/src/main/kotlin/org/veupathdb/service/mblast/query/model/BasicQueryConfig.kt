@@ -30,7 +30,7 @@ interface BasicQueryConfig : AutoCloseable {
   /**
    * Handle on the config file in the filesystem.
    */
-  val configFile: File
+  val config: BlastQueryBase
 
   /**
    * Handle on the query file in the filesystem.
@@ -41,16 +41,6 @@ interface BasicQueryConfig : AutoCloseable {
    * Returns a stream over the raw FASTA query.
    */
   fun getQueryReader(): Reader
-
-  /**
-   * Returns a stream over the raw JSON BLAST+ tool configuration.
-   */
-  fun getConfigReader(): Reader
-
-  /**
-   * Loads the BLAST+ tool configuration into memory and returns it.
-   */
-  fun getConfig(): BlastQueryBase
 
   /**
    * Loads the raw FASTA query into memory and returns it.
@@ -66,19 +56,14 @@ interface BasicQueryConfig : AutoCloseable {
 data class BasicQueryConfigImpl(
   override val queryJobID: HashID,
   override val projectID: String,
-  override val configFile: File,
+  override val config: BlastQueryBase,
   override val queryFile: File
 ) : BasicQueryConfig {
   override fun getQueryReader() = queryFile.reader()
 
-  override fun getConfigReader() = configFile.reader()
-
-  override fun getConfig() = configFile.inputStream().use { Blast.of(Json.parse(it)) as BlastQueryBase }
-
-  override fun getQuery() = configFile.readText()
+  override fun getQuery() = queryFile.readText()
 
   override fun close() {
-    configFile.delete()
     queryFile.delete()
   }
 }
