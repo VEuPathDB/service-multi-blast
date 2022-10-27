@@ -1,4 +1,4 @@
-FROM mysql:8
+FROM mysql:8.0.31
 
 RUN apt update \
  && apt install -y expect \
