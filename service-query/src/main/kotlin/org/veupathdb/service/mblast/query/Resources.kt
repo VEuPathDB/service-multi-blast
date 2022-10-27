@@ -7,13 +7,10 @@ import org.veupathdb.service.mblast.query.controller.*
 class Resources(opts: Options) : ContainerResources(opts) {
   init {
     enableAuth()
-
-    property("jersey.config.server.tracing.type", "ALL")
-    property("jersey.config.server.tracing.threshold", "VERBOSE");
   }
 
   override fun resources() =
-    arrayOf<Any>(
+    arrayOf(
       JobsController::class.java,
       JobQueryDownloadController::class.java,
       JobResultDownloadController::class.java,
