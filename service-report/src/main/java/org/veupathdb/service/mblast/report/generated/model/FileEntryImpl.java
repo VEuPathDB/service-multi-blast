@@ -14,7 +14,7 @@ public class FileEntryImpl implements FileEntry {
   private String name;
 
   @JsonProperty("size")
-  private Integer size;
+  private Long size;
 
   @JsonProperty("name")
   public String getName() {
@@ -27,12 +27,12 @@ public class FileEntryImpl implements FileEntry {
   }
 
   @JsonProperty("size")
-  public Integer getSize() {
+  public Long getSize() {
     return this.size;
   }
 
   @JsonProperty("size")
-  public void setSize(Integer size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 }

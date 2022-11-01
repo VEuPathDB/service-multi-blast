@@ -10,7 +10,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.report.generated.model.BadRequestError;
-import org.veupathdb.service.mblast.report.generated.model.ReportJobDetails;
+import org.veupathdb.service.mblast.report.generated.model.JobCreateResponse;
 import org.veupathdb.service.mblast.report.generated.model.ReportJobListEntry;
 import org.veupathdb.service.mblast.report.generated.model.ReportJobRequest;
 import org.veupathdb.service.mblast.report.generated.model.ServerError;
@@ -67,7 +67,7 @@ public interface Jobs {
       super(response);
     }
 
-    public static PostJobsResponse respond200WithApplicationJson(ReportJobDetails entity) {
+    public static PostJobsResponse respond200WithApplicationJson(JobCreateResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new PostJobsResponse(responseBuilder.build(), entity);

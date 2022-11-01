@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
+import jakarta.ws.rs.core.StreamingOutput;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -29,7 +30,7 @@ public interface JobsJobIdStderr {
       super(response);
     }
 
-    public static GetJobsStderrByJobIdResponse respond200WithTextPlain(Object entity) {
+    public static GetJobsStderrByJobIdResponse respond200WithTextPlain(StreamingOutput entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "text/plain");
       responseBuilder.entity(entity);
       return new GetJobsStderrByJobIdResponse(responseBuilder.build(), entity);
