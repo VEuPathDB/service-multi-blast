@@ -6,6 +6,7 @@ build/
 .bin/
 
 mblast-dev.properties
+test-config.properties
 
 *.bak
 *.swp
