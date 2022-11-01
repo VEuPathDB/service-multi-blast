@@ -14,8 +14,8 @@ public interface FileEntry {
   void setName(String name);
 
   @JsonProperty("size")
-  Integer getSize();
+  Long getSize();
 
   @JsonProperty("size")
-  void setSize(Integer size);
+  void setSize(Long size);
 }
