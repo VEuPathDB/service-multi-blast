@@ -33,4 +33,8 @@ include(":lib-mblast-utils")
 include(":lib-temp-cache")
 include(":lib-blast-query-parser")
 
+include(":lib-jvm-mblast-sdk")
+project(":lib-jvm-mblast-sdk").name = "mblast-sdk"
+
 include(":script-mblast2-migration")
+include(":script-mblast-e2e")
