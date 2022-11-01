@@ -70,7 +70,7 @@ uses:
           Job was submitted successfully and the job details have been returned.
         body:
           application/json:
-            type: lib.ReportJobDetails
+            type: lib.JobCreateResponse
       400:
         description: |
           Bad Request
@@ -149,11 +149,8 @@ uses:
     description: |
       Requeues a job to be executed if the job was previously expired.
     responses:
-      200:
+      204:
         description: Success
-        body:
-          application/json:
-            type: lib.ReportJobDetails
       401:
         description: |
           No valid user authentication provided.
@@ -348,7 +345,7 @@ uses:
         description: Success
         body:
           text/plain:
-            type: any
+            type: file
             example: |
               FASTA-Reader: Ignoring invalid residues at position(s): On line 1: 1, 62-63
               FASTA-Reader: Ignoring invalid residues at position(s): On line 2: 44-46

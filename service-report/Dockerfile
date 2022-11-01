@@ -1,59 +1,55 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#
-#   Build Service & Dependencies
-#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM veupathdb/alpine-dev-base:jdk-18 AS prep
-
-LABEL service="demo-service"
+FROM veupathdb/alpine-dev-base:jdk-18-gradle-7.5.1 AS prep
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
 
+# CONTEXT ../
 WORKDIR /workspace
 
-RUN jlink --compress=2 --module-path /opt/jdk/jmods \
-       --add-modules java.base,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
-       --output /jlinked \
-    && apk add --no-cache git sed findutils coreutils make npm curl gawk \
+RUN apk add --no-cache git npm \
     && git config --global advice.detachedHead false
 
-ENV DOCKER=build
+COPY gradle/ gradle/
+COPY lib-mblast-gradle/ lib-mblast-gradle/
 
-# copy files required to build dev environment and fetch dependencies
-COPY makefile build.gradle.kts settings.gradle.kts gradlew ./
-COPY gradle gradle
+COPY [ \
+    "build.gradle.kts", \
+    "settings.gradle.kts", \
+    "./" \
+]
 
-# cache build environment
-RUN make install-dev-env
+COPY [ \
+    "service-report/build.gradle.kts", \
+    "service-report/" \
+]
 
-# copy remaining files
-COPY . .
+COPY service-report/src/ service-report/src/
 
 # build the project
-RUN ./gradlew clean test shadowJar
+RUN gradle --no-daemon test shadowJar
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM alpine:3.16
+FROM ncbi/blast:2.13.0
 
-LABEL service="demo-service"
+LABEL service="mblast-report"
 
-RUN apk add --no-cache tzdata \
+RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-18-x64-linux-jdk.deb --output java.deb \
+    && apt-get update \
+    && apt-get install -y java-common netcat \
+    && dpkg --install java.deb \
+    && rm java.deb \
     && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
     && echo "America/New_York" > /etc/timezone
 
-ENV JAVA_HOME=/opt/jdk \
-    PATH=/opt/jdk/bin:$PATH \
-    JVM_MEM_ARGS="-Xms32M -Xmx256M" \
+ENV JVM_MEM_ARGS="-Xms32M -Xmx256M" \
     JVM_ARGS=""
 
-COPY --from=prep /jlinked /opt/jdk
-COPY --from=prep /workspace/build/libs/service.jar /service.jar
+COPY --from=prep /workspace/service-report/build/libs/service.jar /service.jar
 
-COPY startup.sh startup.sh
+COPY service-query/startup.sh /startup.sh
 
-CMD ./startup.sh
+CMD /startup.sh
