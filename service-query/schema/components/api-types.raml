@@ -236,3 +236,32 @@ types:
     - TriTrypDB
     - VectorBase
     - VEuPathDB
+
+  BlastTargetIndex:
+    type: object
+    properties:
+      /^\w+$/:
+        type: BlastTargetMap
+
+  BlastTargetMap:
+    type: object
+    properties:
+      /^\w+$/:
+        type: BlastableTarget
+
+  BlastableTarget:
+    type: object
+    additionalProperties: false
+    properties:
+      naTargets:
+        type: array
+        items:
+          type: string
+        required: false
+        default: []
+      aaTargets:
+        type: array
+        items:
+          type: string
+        required: false
+        default: []

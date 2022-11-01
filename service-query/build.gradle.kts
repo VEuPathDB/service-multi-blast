@@ -47,7 +47,7 @@ dependencies {
   implementation("org.gusdb:fgputil-db:2.7.4")
 
   implementation("org.veupathdb.lib:jaxrs-container-core:6.11.0")
-  implementation("org.veupathdb.lib:compute-platform:1.3.3")
+  implementation("org.veupathdb.lib:compute-platform:1.3.4")
   implementation("org.veupathdb.lib:hash-id:1.1.0")
   implementation("org.veupathdb.lib:jackson-singleton:3.0.1")
   implementation("org.veupathdb.lib:blast-types:8.2.0")

@@ -1,10 +1,14 @@
 package org.veupathdb.service.mblast.query.service.jobs.submit.conv
 
 import mblast.query.pipe.SequenceFileWriter
+import mblast.query.validate.MBlastQueryParseException
 import mblast.query.validate.NucleotideSequenceValidationStream
 import mblast.query.validate.ProteinSequenceValidationStream
 import mblast.util.io.toIOStream
 import org.veupathdb.lib.blast.common.fields.DBFiles
+import org.veupathdb.lib.blast.common.fields.FormatType
+import org.veupathdb.lib.blast.common.fields.OutFormat
+import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
 import org.veupathdb.service.mblast.query.Const
 import org.veupathdb.service.mblast.query.ServiceOptions
 import org.veupathdb.service.mblast.query.blast.convert.toInternal
@@ -35,6 +39,7 @@ fun JobsPostMultipartFormData.toJobSubmission(userID: Long) =
       .apply {
         queryFile(Const.QueryFileName)
         outFile(Const.ReportFileName)
+        outFormat = OutFormat(FormatType.BlastArchiveASN1)
       }
 
     // Translate the IO target values to the internal type
@@ -81,9 +86,13 @@ fun JobsPostMultipartFormData.toJobSubmission(userID: Long) =
  * Writes out the query from the job post to query file(s).
  */
 private fun JobsPostMultipartFormData.queryToFiles(dir: File) =
-  SequenceFileWriter(UUID.randomUUID().toString(), dir, getSequenceValidator())
-    .also { it.run() }
-    .getResult()
+  try {
+    SequenceFileWriter(UUID.randomUUID().toString(), dir, getSequenceValidator())
+      .also { it.run() }
+      .getResult()
+  } catch (e: MBlastQueryParseException) {
+    throw UnprocessableEntityException(mapOf("jobConfig.query" to listOf(e.message)))
+  }
 
 /**
  * Translates the IO blast-target data type into the internally used

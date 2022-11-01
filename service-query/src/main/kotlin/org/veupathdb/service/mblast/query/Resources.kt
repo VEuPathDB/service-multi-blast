@@ -16,5 +16,6 @@ class Resources(opts: Options) : ContainerResources(opts) {
       JobResultDownloadController::class.java,
       JobByIDController::class.java,
       JobStatusController::class.java,
+      TargetsController::class.java,
     )
 }
