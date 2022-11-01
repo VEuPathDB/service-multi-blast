@@ -132,7 +132,7 @@ types:
         displayName: File Size
         description: Size of the file in bytes.
         type: integer
-        format: long
+        format: int64
         required: true
 
   JobBulkStatusResponse:
@@ -153,3 +153,18 @@ types:
     - complete
     - failed
     - expired
+
+  JobCreateResponse:
+    displayName: Job Creation Response
+    description: |
+      Response body returned on the successful creation of a new BLAST report
+      job.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
