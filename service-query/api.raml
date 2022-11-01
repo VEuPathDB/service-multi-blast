@@ -271,7 +271,6 @@ uses:
           application/json:
             type: error.ServerError
 
-
   delete:
     displayName: Delete Job
     description: Deletes the target job from the user's job collection.
@@ -302,7 +301,6 @@ uses:
         body:
           application/json:
             type: error.ServerError
-
 
 
 # ---------------------------------------------------------------------------- #
@@ -431,8 +429,11 @@ uses:
           application/json:
             type: error.ServerError
 
-
-
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#   Bulk Status Lookup Endpoint                                                #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
 /statuses:
   displayName: Bulk Statuses
 
@@ -492,3 +493,27 @@ uses:
           application/json:
             type: error.ServerError
 
+/targets:
+  displayName: Target Index
+  get:
+    displayName: Get Target Index
+    description:
+      Retrieves an index of all the available blast targets.
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            type: lib.BlastTargetIndex
+            example:
+              PlasmoDB:
+                Pberghei:
+                  naTargets:
+                  - PbergheiESTs
+                PfalciparumGB4:
+                  naTargets:
+                  - PfalciparumGB4AnnotatedCDSs
+                  - PfalciparumGB4AnnotatedTranscripts
+                  - PfalciparumGB4Genome
+                  aaTargets:
+                  - PfalciparumGB4AnnotatedProteins

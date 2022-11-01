@@ -56,14 +56,14 @@ fun SubmitJob(request: JobsPostMultipartFormData, userID: Long): JobCreateRespon
 private fun submitJob(sub: JobSubmission) {
   // If the user has already submitted this exact job
   JobDBManager.getFullUserJob(sub.parentJobID, sub.userMeta.userID)
-    ?.use { return _handleJobExistsAndIsLinked(sub) }
+    ?.use { return _handleJobExistsAndIsLinked(sub, it) }
 
   // So we know the user doesn't already have this job, but we don't know
   // whether the job exists in general or not.
   //
   // It probably doesn't, but let's check anyway just to be sure.
   JobDBManager.getFullJob(sub.parentJobID)
-    ?.use { return _handleJobExistsButIsNotLinked(it) }
+    ?.use { return _handleJobExistsButIsNotLinked(sub, it) }
 
   // Okay, so the user doesn't have this job and the job itself just doesn't
   // exist.

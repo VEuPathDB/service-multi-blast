@@ -1,6 +1,9 @@
 package org.veupathdb.service.mblast.query.service
 
 import org.veupathdb.service.mblast.query.ServiceOptions
+import org.veupathdb.service.mblast.query.model.BlastableTarget
+import org.veupathdb.service.mblast.query.model.BlastableTargetImpl
+import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
 
@@ -66,6 +69,63 @@ object BlastTargetManager {
       return path.toString().let { it.substring(0, it.length-4) }
 
     throw IllegalStateException()
+  }
+
+  fun indexBlastTargets(): Map<String, Map<String, BlastableTarget>> {
+    val output  = HashMap<String, MutableMap<String, BlastableTargetImpl>>(1)
+    val rootDir = File(rootDir)
+
+    if (!rootDir.isDirectory)
+      throw IllegalStateException("root path must be a directory")
+
+    for (siteDir in rootDir.listFiles()!!) {
+
+      if (!siteDir.isDirectory)
+        continue
+
+      val site = siteDir.name
+
+      for (buildDir in siteDir.listFiles()!!) {
+
+        if (!buildDir.isDirectory || buildDir.name != this.buildDir)
+          continue
+
+        for (targetDir in buildDir.listFiles()!!) {
+
+          if (!targetDir.isDirectory)
+            continue
+
+          val target = targetDir.name
+
+          for (blastDir in targetDir.listFiles()!!) {
+
+            if (!blastDir.isDirectory || blastDir.name != "blast")
+              continue
+
+            for (targetFile in blastDir.listFiles()!!) {
+
+              if (!targetFile.isFile)
+                continue
+
+              val db = targetFile.name
+
+              if (db.endsWith(".pin")) {
+                output.computeIfAbsent(site) { HashMap(1) }
+                  .computeIfAbsent(target) { BlastableTargetImpl() }
+                  .aaTargets.add(db.substring(0, db.length - 4))
+              } else if (db.endsWith(".nin")) {
+                output.computeIfAbsent(site) { HashMap(1) }
+                  .computeIfAbsent(target) { BlastableTargetImpl() }
+                  .naTargets.add(db.substring(0, db.length - 4))
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return output
+
   }
 
   private fun nucleotideDBPath(site: String, target: String, dbName: String) =

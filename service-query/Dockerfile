@@ -23,13 +23,11 @@ COPY [ \
     "./" \
 ]
 
-# copy files required to build dev environment and fetch dependencies
 COPY [ \
     "service-query/build.gradle.kts", \
     "service-query/" \
 ]
 
-COPY service-query/schema/ service-query/schema/
 COPY service-query/src/ service-query/src/
 
 # build the project

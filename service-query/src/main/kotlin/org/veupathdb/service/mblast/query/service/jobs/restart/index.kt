@@ -8,11 +8,11 @@ import org.veupathdb.lib.blast.common.fields.DBFiles
 import org.veupathdb.lib.compute.platform.job.JobStatus
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.query.Const
+import org.veupathdb.service.mblast.query.mixins.toDBFiles
 import org.veupathdb.service.mblast.query.mixins.toInputStream
 import org.veupathdb.service.mblast.query.model.BlastTarget
 import org.veupathdb.service.mblast.query.service.BlastTargetManager
 import org.veupathdb.service.mblast.query.service.MBlastPlatform
-import org.veupathdb.service.mblast.query.service.jobs.submit.toDBFiles
 
 
 /**
