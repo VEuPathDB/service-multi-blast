@@ -61,7 +61,7 @@ services:
       LDAP_SERVER:     ${LDAP_SERVERS:?}
       ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
 
-      SERVER_PORT: ${QUERY_SERVER_PORT:-8080}
+      SERVER_PORT: ${QUERY_SERVER_PORT:-80}
 
       ACCT_DB_TNS_NAME:  ${ACCT_DB_TNS_NAME:?}
       ACCT_DB_USER:      ${ACCT_DB_USER:?}
@@ -121,58 +121,64 @@ services:
     - "traefik.http.routers.${TRAEFIK_QUERY_ROUTER:-mblast-query-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
     - "traefik.docker.network=traefik"
 
+  report-service:
+    image: veupathdb/mblast-report-service:${MBLAST_REPORT_SERVICE_TAG:-latest}
+    depends_on:
+    - queue
+    - queue-db
+    - query-service
+    volumes:
+    - type: bind
+      source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
+      target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+    environment:
+      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+      LDAP_SERVER:     ${LDAP_SERVERS:?}
+      ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
 
+      SERVER_PORT: ${QUERY_SERVER_PORT:-80}
 
-#  report-service:
-#    image: veupathdb/mblast-report-service:${MBLAST_REPORT_SERVICE_TAG:-latest}
-#    depends_on:
-#    - queue
-#    - queue-db
-#    - query-service
-#    volumes:
-#    - type: bind
-#      source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
-#      target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
-#    environment:
-#      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
-#      LDAP_SERVER:     ${LDAP_SERVERS:?}
-#      ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
-#
-#      SERVER_PORT: ${REPORT_SERVER_PORT:-8080}
-#
-#      ACCT_DB_TNS_NAME:  ${ACCT_DB_TNS_NAME:?}
-#      ACCT_DB_USER:      ${ACCT_DB_USER:?}
-#      ACCT_DB_PASS:      ${ACCT_DB_PASS:?}
-#      ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-5}
-#
-#      USER_DB_TNS_NAME:  ${USER_DB_TNS_NAME:?}
-#      USER_DB_USER:      ${USER_DB_USER:?}
-#      USER_DB_PASS:      ${USER_DB_PASS:?}
-#      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
-#
-#      QUEUE_DB_HOST:      queue-db
-#      QUEUE_DB_NAME:      ${REPORT_SERVICE_PG_DB_NAME:?}
-#      QUEUE_DB_USERNAME:  ${REPORT_SERVICE_PG_USER:?}
-#      QUEUE_DB_PASSWORD:  ${REPORT_SERVICE_PG_PASS:?}
-#      QUEUE_DB_POOL_SIZE: ${REPORT_SERVICE_PG_POOL_SIZE:-10}
-#      QUEUE_DB_PORT:      ${POSTGRES_PORT:-5432}
-#
-#      JOB_QUEUE_HOST:     queue
-#      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
-#      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
-#      JOB_QUEUE_PORT:     ${RABBITMQ_PORT:-5672}
-#      JOB_QUEUE_WORKERS:  ${REPORT_SERVICE_QUEUE_POOL_SIZE:-5}
-#
-#      S3_HOST:         ${S3_HOST:?}
-#      S3_BUCKET:       ${REPORT_SERVICE_S3_BUCKET:?}
-#      S3_ACCESS_TOKEN: ${S3_ACCESS_TOKEN:?}
-#      S3_SECRET_KEY:   ${S3_SECRET_KEY:?}
-#      S3_PORT:         ${S3_PORT:-9000}
-#
-#      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
-#
-#      SITE_BUILD_DIR: ${SITE_BUILD_DIR:?}
-#
-#      REPORT_SERVICE_QUEUE_NAME: ${REPORT_SERVICE_QUEUE_NAME:-report-jobs}
-#
-#      BLAST_DB_ROOT: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+      ACCT_DB_TNS_NAME:  ${ACCT_DB_TNS_NAME:?}
+      ACCT_DB_USER:      ${ACCT_DB_USER:?}
+      ACCT_DB_PASS:      ${ACCT_DB_PASS:?}
+      ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-5}
+
+      USER_DB_TNS_NAME:  ${USER_DB_TNS_NAME:?}
+      USER_DB_USER:      ${USER_DB_USER:?}
+      USER_DB_PASS:      ${USER_DB_PASS:?}
+      USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-5}
+
+      QUEUE_DB_HOST:      queue-db
+      QUEUE_DB_NAME:      ${REPORT_SERVICE_PG_DB_NAME:?}
+      QUEUE_DB_PORT:      ${POSTGRES_PORT:-5432}
+      QUEUE_DB_USERNAME:  ${REPORT_SERVICE_PG_USER:?}
+      QUEUE_DB_PASSWORD:  ${REPORT_SERVICE_PG_PASS:?}
+      QUEUE_DB_POOL_SIZE: ${REPORT_SERVICE_PG_POOL_SIZE:-10}
+
+      JOB_QUEUE_HOST:     queue
+      JOB_QUEUE_USERNAME: ${RABBITMQ_ROOT_USER:?}
+      JOB_QUEUE_PASSWORD: ${RABBITMQ_ROOT_PASS:?}
+      JOB_QUEUE_PORT:     ${RABBITMQ_PORT:-5672}
+
+      S3_HOST:         ${S3_HOST:?}
+      S3_BUCKET:       ${REPORT_SERVICE_S3_BUCKET:?}
+      S3_ACCESS_TOKEN: ${S3_ACCESS_TOKEN:?}
+      S3_SECRET_KEY:   ${S3_SECRET_KEY:?}
+      S3_PORT:         ${S3_PORT:-9000}
+      S3_USE_HTTPS:    ${S3_USE_HTTPS:-false}
+
+      JOB_CACHE_TIMEOUT_DAYS: ${JOB_CACHE_TIMEOUT_DAYS:-30}
+
+      JOB_QUEUE_WORKERS:  ${REPORT_SERVICE_QUEUE_POOL_SIZE:-5}
+      JOB_QUEUE_NAME:     ${REPORT_SERVICE_QUEUE_NAME:-report-jobs}
+    networks:
+    - internal
+    - traefik
+    labels:
+    - "prometheus.scrape_enabled=true"
+    - "com.centurylinklabs.watchtower.enable=${REPORT_SERVICE_WATCHTOWER:-false}"
+    - "traefik.http.services.${TRAEFIK_REPORT_ROUTER:-mblast-query-dev}.loadbalancer.server.port=${REPORT_SERVER_PORT:-8080}"
+    - "traefik.http.routers.${TRAEFIK_REPORT_ROUTER:-mblast-query-dev}.rule=Host(`${TRAEFIK_MBLAST_HOST:-mblast.local.apidb.org}`) && PathPrefix(`/report`)"
+    - "traefik.http.routers.${TRAEFIK_REPORT_ROUTER:-mblast-query-dev}.tls=true"
+    - "traefik.http.routers.${TRAEFIK_REPORT_ROUTER:-mblast-query-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+    - "traefik.docker.network=traefik"
