@@ -1,6 +1,7 @@
 package org.veupathdb.lib.mblast.sdk
 
 import java.net.URI
+import java.net.http.HttpClient
 
 internal class MultiBlastClientConfigBuilderImpl : MultiBlastClientConfigBuilder {
 
@@ -9,6 +10,13 @@ internal class MultiBlastClientConfigBuilderImpl : MultiBlastClientConfigBuilder
   private var port: UShort? = null
 
   private var authKey: String? = null
+
+  private var client: HttpClient? = null
+
+  override fun httpClient(client: HttpClient): MultiBlastClientConfigBuilder {
+    this.client = client
+    return this
+  }
 
   override fun url(host: String): MultiBlastClientConfigBuilder {
     if (!(host.startsWith("http://") || host.startsWith("https://")))
@@ -47,6 +55,6 @@ internal class MultiBlastClientConfigBuilderImpl : MultiBlastClientConfigBuilder
     else
       URI("$host:$port")
 
-    return MultiBlastClientConfig(uri, authKey!!)
+    return MultiBlastClientConfig(uri, authKey!!, client ?: HttpClient.newHttpClient())
   }
 }
