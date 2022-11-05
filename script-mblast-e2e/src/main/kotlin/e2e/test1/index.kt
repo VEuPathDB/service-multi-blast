@@ -5,11 +5,16 @@ import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.mblast.sdk.MultiBlast
 import org.veupathdb.lib.mblast.sdk.MultiBlastClient
 import org.veupathdb.lib.mblast.sdk.query.blast.BlastQueryTool
-import org.veupathdb.lib.mblast.sdk.query.http.JobStatus
-import org.veupathdb.lib.mblast.sdk.query.http.QueryJobTarget
-import org.veupathdb.lib.mblast.sdk.query.http.TargetSite
+import org.veupathdb.lib.mblast.sdk.common.model.JobStatus
+import org.veupathdb.lib.mblast.sdk.query.model.QueryJobPatchRequest
+import org.veupathdb.lib.mblast.sdk.query.model.QueryJobTarget
+import org.veupathdb.lib.mblast.sdk.query.model.QueryJobUserMeta
+import org.veupathdb.lib.mblast.sdk.query.model.TargetSite
+import org.veupathdb.lib.mblast.sdk.report.blast.BlastFormatConfig
+import org.veupathdb.lib.mblast.sdk.report.blast.BlastOutFormat
+import java.util.*
 
-private const val Query1 = "catacatacat"
+private const val Query1   = "catacatacat"
 
 private data class BlastTarget(val site: TargetSite, val target: String, val db: String)
 
@@ -17,8 +22,8 @@ fun RunEndToEndTest1(config: E2EConfig) {
   println("Running end to end test 1")
 
   val client = MultiBlast.newClient {
-    url("http://localhost")
-    port(8080)
+    url(config.serviceHost)
+    port(config.servicePort)
     authKey(config.authToken)
   }
 
@@ -38,7 +43,7 @@ fun RunEndToEndTest1(config: E2EConfig) {
   client.verifyQueryJob1Config(job1ID, target)
 
   // Resubmit the same job and verify the ID is the same
-  println("  attempt to recreate the same job expecting the same hash ID")
+  println("  attempt to recreate the same query job expecting the same hash ID")
   require(job1ID == client.createQueryJob1(target))
 
   // Fetch the query for the job and ensure it resembles the input query
@@ -62,15 +67,15 @@ fun RunEndToEndTest1(config: E2EConfig) {
   client.verifyQueryJobNotInJobList(job1ID)
 
   // Get the job details with saveJob = false
-  println("  looking up job $job1ID with saveJob=false")
+  println("  looking up job $job1ID with save_job=false")
   client.query.getJob(job1ID, false)
 
   // list the user's jobs and ensure the target job still doesn't appear
   println("  verifying that $job1ID is not in the user's collection")
   client.verifyQueryJobNotInJobList(job1ID)
 
-  // Get the job details with saveJob = true
-  println("  looking up job $job1ID with saveJob=true")
+  // Get the job details with save_job = true
+  println("  looking up job $job1ID with save_job=true")
   client.query.getJob(job1ID, true)
 
   // list the user's jobs and ensure the target job appears again
@@ -81,12 +86,42 @@ fun RunEndToEndTest1(config: E2EConfig) {
   println("  running bulk status check")
   require(client.query.getBulkJobStatuses(listOf(job1ID)).contains(job1ID))
 
+  // patch the job summary
+  println("  patching job summary")
+  val newSummary = UUID.randomUUID().toString()
+  client.query.patchJob(job1ID, QueryJobPatchRequest(QueryJobUserMeta(summary = newSummary, description = null)))
+
+  // verify the new job summary
+  println("  verifying patched summary")
+  require(client.query.getJob(job1ID)!!.meta!!.summary == newSummary)
+
   // Create a report job for the created query job
+  println("  creating a report job for $job1ID")
+  val rJobID = client.createReportJob1(job1ID)
+
   // verify the report job exists in the user's job list
+  println("  verifying report job $rJobID is in report job list")
+  client.verifyReportJobInJobList(rJobID)
+
   // Go to the report job directly and verify the config
+  println("  verifying report job $rJobID configuration")
+  client.verifyReportJob1Config(rJobID, job1ID)
+
   // Resubmit the same config and verify the ID is the same
+  println("  attempt to recreate the same report job expecting the same hash ID")
+  require(rJobID == client.createReportJob1(job1ID))
+
+  // Change the report job summary
+  // verify the changed report job summary
   // wait for the job to complete
 }
+
+// // //
+//
+//   Query Job Mixins
+//
+// // //
+
 
 private fun MultiBlastClient.selectBlastNTarget(): BlastTarget {
   val res = query.getBlastableTargets()
@@ -156,9 +191,50 @@ private fun MultiBlastClient.waitForQueryJob(jobID: HashID) {
   while (true) {
     when (query.getJob(jobID)!!.status) {
       JobStatus.Complete -> return
-      JobStatus.Failed   -> return
-      JobStatus.Expired  -> return
+      JobStatus.Failed   -> throw IllegalStateException("Job $jobID marked as failed")
+      JobStatus.Expired  -> throw IllegalStateException("Job $jobID marked as expired")
       else               -> {}
     }
+    Thread.sleep(100)
+  }
+}
+
+// // //
+//
+//   Report Job Mixins
+//
+// // //
+
+private fun MultiBlastClient.createReportJob1(queryJobID: HashID): HashID =
+  report.createJob {
+    this.queryJobID = queryJobID
+    blastConfig { formatType = BlastOutFormat.MultiFileBlastJSON }
+  }
+    .value!!
+    .reportJobID
+
+private fun MultiBlastClient.verifyReportJob1Config(reportJobID: HashID, queryJobID: HashID) {
+  val res = report.getJob(reportJobID)
+    ?: throw IllegalStateException("404 when attempting to get job $reportJobID")
+
+  require(res.queryJobID == queryJobID)
+  require(res.blastConfig.formatType == BlastOutFormat.MultiFileBlastJSON)
+}
+
+private fun MultiBlastClient.verifyReportJobInJobList(reportJobID: HashID) {
+  report.listJobs()
+    .find { it.reportJobID == reportJobID }
+    ?: throw IllegalStateException("Job ID $reportJobID did not appear in the job list results.")
+}
+
+private fun MultiBlastClient.waitForReportJob(reportJobID: HashID) {
+  while (true) {
+    when (report.getJob(reportJobID)!!.status) {
+      JobStatus.Complete -> return
+      JobStatus.Failed   -> throw IllegalStateException("Job $reportJobID marked as failed")
+      JobStatus.Expired  -> throw IllegalStateException("Job $reportJobID marked as expired")
+      else               -> {}
+    }
+    Thread.sleep(100)
   }
 }
