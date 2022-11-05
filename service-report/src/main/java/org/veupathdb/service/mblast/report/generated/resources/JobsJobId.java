@@ -1,27 +1,41 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
+import org.veupathdb.service.mblast.report.generated.model.BadRequestError;
 import org.veupathdb.service.mblast.report.generated.model.ForbiddenError;
 import org.veupathdb.service.mblast.report.generated.model.NotFoundError;
 import org.veupathdb.service.mblast.report.generated.model.ReportJobDetails;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobPatchRequest;
 import org.veupathdb.service.mblast.report.generated.model.ServerError;
 import org.veupathdb.service.mblast.report.generated.model.UnauthorizedError;
+import org.veupathdb.service.mblast.report.generated.model.UnprocessableEntityError;
+import org.veupathdb.service.mblast.report.generated.support.PATCH;
 import org.veupathdb.service.mblast.report.generated.support.ResponseDelegate;
 
 @Path("/jobs/{job-id}")
 public interface JobsJobId {
   @GET
   @Produces("application/json")
-  GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") String jobId);
+  GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") String jobId,
+      @QueryParam("save_job") @DefaultValue("true") boolean saveJob);
 
   @POST
   @Produces("application/json")
   PostJobsByJobIdResponse postJobsByJobId(@PathParam("job-id") String jobId);
+
+  @PATCH
+  @Produces("application/json")
+  @Consumes("application/json")
+  PatchJobsByJobIdResponse patchJobsByJobId(@PathParam("job-id") String jobId,
+      ReportJobPatchRequest entity);
 
   class GetJobsByJobIdResponse extends ResponseDelegate {
     private GetJobsByJobIdResponse(Response response, Object entity) {
@@ -54,6 +68,52 @@ public interface JobsJobId {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+  }
+
+  class PatchJobsByJobIdResponse extends ResponseDelegate {
+    private PatchJobsByJobIdResponse(Response response, Object entity) {
+      super(response, entity);
+    }
+
+    private PatchJobsByJobIdResponse(Response response) {
+      super(response);
+    }
+
+    public static PatchJobsByJobIdResponse respond204() {
+      Response.ResponseBuilder responseBuilder = Response.status(204);
+      return new PatchJobsByJobIdResponse(responseBuilder.build());
+    }
+
+    public static PatchJobsByJobIdResponse respond400WithApplicationJson(BadRequestError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(400).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PatchJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+
+    public static PatchJobsByJobIdResponse respond401WithApplicationJson(UnauthorizedError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PatchJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+
+    public static PatchJobsByJobIdResponse respond404WithApplicationJson(NotFoundError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PatchJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+
+    public static PatchJobsByJobIdResponse respond422WithApplicationJson(
+        UnprocessableEntityError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(422).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PatchJobsByJobIdResponse(responseBuilder.build(), entity);
+    }
+
+    public static PatchJobsByJobIdResponse respond500WithApplicationJson(ServerError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PatchJobsByJobIdResponse(responseBuilder.build(), entity);
     }
   }
 

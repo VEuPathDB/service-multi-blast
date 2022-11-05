@@ -4,7 +4,7 @@ uses:
   blast: blast-types.raml
 
 types:
-  ReportJobRequest:
+  ReportJobPostRequest:
     displayName: Report Job Request
     description: |
       Request body sent to start a new report job.
@@ -22,7 +22,24 @@ types:
         required: false
         default:
           formatType: pairwise
+      addToUserCollection:
+        type: boolean
+        required: false
+        default: true
       userMeta:
+        type: ReportJobUserMeta
+        required: false
+        default: null
+
+  ReportJobPatchRequest:
+    displayName: Report Job Update
+    description: |
+      Request body sent to update an existing report job.
+    type: object
+    additionalProperties: false
+    properties:
+      userMeta:
+        displayName: User Metadata
         type: ReportJobUserMeta
         required: false
         default: null

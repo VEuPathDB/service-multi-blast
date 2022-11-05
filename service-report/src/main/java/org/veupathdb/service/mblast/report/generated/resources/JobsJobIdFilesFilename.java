@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
+import jakarta.ws.rs.core.StreamingOutput;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -37,7 +38,7 @@ public interface JobsJobIdFilesFilename {
       return new HeadersFor200();
     }
 
-    public static GetJobsFilesByJobIdAndFilenameResponse respond200With(Object entity,
+    public static GetJobsFilesByJobIdAndFilenameResponse respond200With(StreamingOutput entity,
         HeadersFor200 headers) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "*/*");
       responseBuilder.entity(entity);

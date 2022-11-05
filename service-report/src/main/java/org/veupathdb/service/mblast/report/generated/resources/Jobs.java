@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.report.generated.model.BadRequestError;
 import org.veupathdb.service.mblast.report.generated.model.JobCreateResponse;
 import org.veupathdb.service.mblast.report.generated.model.ReportJobListEntry;
-import org.veupathdb.service.mblast.report.generated.model.ReportJobRequest;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobPostRequest;
 import org.veupathdb.service.mblast.report.generated.model.ServerError;
 import org.veupathdb.service.mblast.report.generated.model.UnauthorizedError;
 import org.veupathdb.service.mblast.report.generated.model.UnprocessableEntityError;
@@ -27,7 +27,7 @@ public interface Jobs {
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  PostJobsResponse postJobs(ReportJobRequest entity);
+  PostJobsResponse postJobs(ReportJobPostRequest entity);
 
   class GetJobsResponse extends ResponseDelegate {
     private GetJobsResponse(Response response, Object entity) {

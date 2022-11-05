@@ -1,13 +1,13 @@
 #%RAML 1.0 Extension
 
-extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/base-service.raml
+extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.2.0/libraries/base-service.raml
 
 title: MultiBlast Report Service
 version: 2.0.0
 mediaType: application/json
 
 uses:
-  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.2/libraries/errors.raml
+  error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.2.0/libraries/errors.raml
   lib: schema/library.raml
 
 
@@ -61,7 +61,7 @@ uses:
     description: Creates a new report job from the posted configuration.
     body:
       application/json:
-        type: lib.ReportJobRequest
+        type: lib.ReportJobPostRequest
     responses:
       200:
         description: |
@@ -120,6 +120,18 @@ uses:
   get:
     displayName: Get Job by ID
     description: Lookup a job's details by the job's ID.
+    queryParameters:
+      save_job:
+        displayName: Save Job
+        description: |
+          Flag that specifies whether the requested job should be saved to the
+          user's job collection.
+          
+          To maintain legacy job sharing behavior, this parameter defaults to
+          `true`.
+        type: boolean
+        default: true
+        required: false
     responses:
       200:
         description: Success
@@ -171,6 +183,51 @@ uses:
         body:
           application/json:
             type: error.NotFoundError
+      500:
+        description: Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  patch:
+    displayName: Update Job
+    description: Update's a user's job.
+    body:
+      application/json:
+        type: lib.ReportJobPatchRequest
+    responses:
+      204:
+        description: |
+          Success.
+          
+          The users job record was successfully updated.
+      400:
+        description: |
+          Bad Request.
+          
+          The request did not resemble or could not be parsed as the expected
+          type.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      404:
+        description: |
+          Target job does not exist in the user's job collection.
+        body:
+          application/json:
+            type: error.NotFoundError
+      422:
+        description: |
+          Invalid job configuration.
+        body:
+          application/json:
+            type: error.UnprocessableEntityError
       500:
         description: Server Error
         body:
@@ -288,7 +345,7 @@ uses:
             required: false
         body:
           '*/*':
-            type: any
+            type: file
       401:
         description: |
           No valid user authentication provided.
@@ -340,9 +397,26 @@ uses:
       Returns the stderr output for the blast tool execution for this job.
       
       This output may be empty.
+    queryParameters:
+      download:
+        displayName: Download
+        description: |
+          When set to true, indicates that the service should mark the returned
+          file as an attachment using the `Content-Disposition` header to cause
+          the file to be downloaded by the browser rather than rendered.
+        type: boolean
+        required: false
+        default: false
     responses:
       200:
         description: Success
+        headers:
+          Content-Disposition:
+            description: |
+              Present if the `download` query parameter was sent in with the
+              request.
+            type: string
+            required: false
         body:
           text/plain:
             type: file

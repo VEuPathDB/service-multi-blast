@@ -1,10 +1,12 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
 import jakarta.ws.rs.core.StreamingOutput;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.report.generated.model.ForbiddenError;
 import org.veupathdb.service.mblast.report.generated.model.NotFoundError;
@@ -19,7 +21,8 @@ public interface JobsJobIdStderr {
       "application/json",
       "text/plain"
   })
-  GetJobsStderrByJobIdResponse getJobsStderrByJobId(@PathParam("job-id") String jobId);
+  GetJobsStderrByJobIdResponse getJobsStderrByJobId(@PathParam("job-id") String jobId,
+      @QueryParam("download") @DefaultValue("false") boolean download);
 
   class GetJobsStderrByJobIdResponse extends ResponseDelegate {
     private GetJobsStderrByJobIdResponse(Response response, Object entity) {
@@ -30,9 +33,15 @@ public interface JobsJobIdStderr {
       super(response);
     }
 
-    public static GetJobsStderrByJobIdResponse respond200WithTextPlain(StreamingOutput entity) {
+    public static HeadersFor200 headersFor200() {
+      return new HeadersFor200();
+    }
+
+    public static GetJobsStderrByJobIdResponse respond200WithTextPlain(StreamingOutput entity,
+        HeadersFor200 headers) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "text/plain");
       responseBuilder.entity(entity);
+      headers.toResponseBuilder(responseBuilder);
       return new GetJobsStderrByJobIdResponse(responseBuilder.build(), entity);
     }
 
@@ -60,6 +69,16 @@ public interface JobsJobIdStderr {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetJobsStderrByJobIdResponse(responseBuilder.build(), entity);
+    }
+
+    public static class HeadersFor200 extends HeaderBuilderBase {
+      private HeadersFor200() {
+      }
+
+      public HeadersFor200 withContentDisposition(final String p) {
+        headerMap.put("Content-Disposition", String.valueOf(p));;
+        return this;
+      }
     }
   }
 }
