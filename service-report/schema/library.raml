@@ -7,7 +7,7 @@
 ################################################################################
 
 types:
-  ReportJobRequest:
+  ReportJobPostRequest:
     displayName: Report Job Request
     description: |
       Request body sent to start a new report job.
@@ -24,7 +24,23 @@ types:
         default:
           formatType: pairwise
         required: false
+      addToUserCollection:
+        type: boolean
+        default: true
+        required: false
       userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobPatchRequest:
+    displayName: Report Job Update
+    description: |
+      Request body sent to update an existing report job.
+    type: object
+    additionalProperties: false
+    properties:
+      userMeta:
+        displayName: User Metadata
         type: ReportJobUserMeta
         default: null
         required: false
