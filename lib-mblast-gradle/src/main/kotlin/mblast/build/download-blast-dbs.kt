@@ -37,7 +37,7 @@ fun Project.CreateBlastDBDirectoryIfNotExists() {
         // Filter to only dirs whose "blast" sub-dir is not empty.
         .filter { it.containsBlastFiles(sftp) }
         // We don't need to download the whole thing, just a few is enough
-        .limit(3)
+        .limit(10)
         // Get the path to the directory we are going to download into
         .map { Pair(it, file("blastdb/${props.siteName}/${props.siteBuild}/${it.name}/blast")) }
         // Create the directory path
