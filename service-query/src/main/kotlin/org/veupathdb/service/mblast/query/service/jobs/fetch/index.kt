@@ -51,8 +51,8 @@ fun GetAndLinkJob(queryJobID: HashID, userID: Long): QueryJobDetails {
  * @throws NotFoundException If the target job doesn't exist.
  */
 fun GetJob(queryJobID: HashID, userID: Long) =
-  (MBlastPlatform.getJob(queryJobID, userID) ?: MBlastPlatform.getJob(queryJobID))
-    ?.let { (dbJob, s3Job) -> dbJob.toIODetails(s3Job) }
+  MBlastPlatform.getJob(queryJobID, userID)
+    ?.let { (db, s3) -> db.toIODetails(s3) }
+    ?: MBlastPlatform.getJob(queryJobID)
+    ?.let { (db, s3) -> db.toIODetails(s3) }
     ?: throw NotFoundException()
-
-

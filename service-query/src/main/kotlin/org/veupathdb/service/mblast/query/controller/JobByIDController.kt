@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.query.controller
 
+import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.core.Context
 import org.glassfish.jersey.server.ContainerRequest
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
@@ -33,8 +34,8 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
     return JobsJobId.DeleteJobsByJobIdResponse.respond204()
   }
 
-  override fun patchJobsByJobId(jobId: String, entity: QueryJobPatchRequest): JobsJobId.PatchJobsByJobIdResponse {
-    PatchUserJob(jobId.toHashIDOr404(), userID, entity)
+  override fun patchJobsByJobId(jobId: String, entity: QueryJobPatchRequest?): JobsJobId.PatchJobsByJobIdResponse {
+    PatchUserJob(jobId.toHashIDOr404(), userID, entity ?: throw BadRequestException())
     return JobsJobId.PatchJobsByJobIdResponse.respond204()
   }
 }

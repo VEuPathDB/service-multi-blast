@@ -69,11 +69,6 @@ public class ResponseDelegate extends Response {
     return this.entity;}
 
   @Override
-  public int getStatus() {
-    return this.delegate.getStatus();
-  }
-
-  @Override
   public Response.StatusType getStatusInfo() {
     return this.delegate.getStatusInfo();
   }
@@ -96,6 +91,11 @@ public class ResponseDelegate extends Response {
   @Override
   public <T> T readEntity(Class<T> p0) {
     return this.delegate.readEntity(p0);
+  }
+
+  @Override
+  public int getStatus() {
+    return this.delegate.getStatus();
   }
 
   @Override
