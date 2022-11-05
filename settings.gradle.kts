@@ -20,8 +20,6 @@ includeBuild("lib-mblast-gradle")
 
 include(":service-query")
 project(":service-query").name = "query-service"
-include(":service-query:api-test")
-project(":service-query:api-test").name = "query-api-test"
 
 include(":service-report")
 project(":service-report").name = "report-service"
