@@ -1,18 +1,72 @@
 package org.veupathdb.lib.mblast.sdk
 
-import org.veupathdb.lib.mblast.sdk.util.BOUNDARY_LEADER
-import org.veupathdb.lib.mblast.sdk.util.CRLF
-import java.io.BufferedWriter
-import java.io.Reader
-import java.net.HttpURLConnection
+import io.foxcapades.lib.k.multipart.MultiPartBody
+import java.io.InputStream
 import java.net.URI
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
+@Suppress("NOTHING_TO_INLINE")
 internal sealed class MultiBlastServiceClient(
   protected val config: MultiBlastClientConfig,
 ) {
 
   protected inline fun resolvePath(path: String) =
     config.baseURI.resolve(path)
+
+
+  protected inline fun HttpRequest.Builder.addAuthHeader(): HttpRequest.Builder =
+    header("Auth-Key", config.authKey)
+
+  protected inline fun HttpRequest.Builder.submit(): HttpResponse<InputStream> =
+    config.client.send(build(), HttpResponse.BodyHandlers.ofInputStream())
+
+
+  // // //
+  //
+  //   HttpResponse Mixins
+  //
+  // // //
+
+
+  protected inline fun <reified T> HttpResponse<InputStream>.listResponse(): List<T> =
+    when (statusCode()) {
+      200  -> body().use { MultiBlast.JSON.readerForListOf(T::class.java).readValue(it) }
+      else -> throwUnexpectedResponse()
+    }
+
+  protected inline fun <reified T> HttpResponse<InputStream>.response(): T =
+    when (statusCode()) {
+      200  -> body().use { MultiBlast.JSON.readValue(it, T::class.java) }
+      else -> throwUnexpectedResponse()
+    }
+
+  protected inline fun <reified T> HttpResponse<InputStream>.optionalResponse(): T? =
+    when (statusCode()) {
+      200  -> body().use { MultiBlast.JSON.readValue(it, T::class.java) }
+      404  -> null
+      else -> throwUnexpectedResponse()
+    }
+
+  protected inline fun HttpResponse<InputStream>.optionalStreamResponse(): InputStream? =
+    when (statusCode()) {
+      200  -> body()
+      404  -> null
+      else -> throwUnexpectedResponse()
+    }
+
+  protected inline fun HttpResponse<InputStream>.require204(err404: String) =
+    when (statusCode()) {
+      204  -> {}
+      404  -> throw IllegalStateException(err404)
+      else -> throwUnexpectedResponse()
+    }
+
+  protected inline fun HttpResponse<InputStream>.throwUnexpectedResponse(): Nothing {
+    val body = String(body().readAllBytes())
+    throw IllegalStateException("Unexpected response from ${uri()} : ${statusCode()} : $body")
+  }
+
 
   // // //
   //
@@ -21,64 +75,39 @@ internal sealed class MultiBlastServiceClient(
   // // //
 
 
-  protected inline fun URI.openHTTP() =
-    (toURL().openConnection() as HttpURLConnection).apply { addAuthHeader() }
+  protected inline fun URI.toRequest() =
+    HttpRequest.newBuilder(this)
+      .addAuthHeader()
 
+  protected inline fun URI.getRequest(): HttpRequest.Builder =
+    toRequest()
+      .GET()
 
-  protected inline fun URI.openSimplePATCH() =
-    openHTTP().apply { requestMethod = "PATCH" }
+  protected inline fun URI.deleteRequest(): HttpRequest.Builder =
+    toRequest()
+      .DELETE()
 
-  protected inline fun URI.openSimpleDELETE() =
-    openHTTP().apply { requestMethod = "DELETE" }
+  protected inline fun URI.postRequest(): HttpRequest.Builder =
+    toRequest()
+      .POST(HttpRequest.BodyPublishers.noBody())
 
-  protected inline fun URI.openSimplePOST() =
-    openHTTP().apply { requestMethod = "POST" }
+  protected inline fun URI.postRequest(contentType: String, body: InputStream): HttpRequest.Builder =
+    toRequest()
+      .header("Content-Type", contentType)
+      .POST(HttpRequest.BodyPublishers.ofInputStream { body })
 
-  protected inline fun URI.openSimpleGET() =
-    openHTTP().apply { requestMethod = "GET" }
+  protected inline fun URI.postRequest(body: MultiPartBody): HttpRequest.Builder =
+    toRequest()
+      .header("Content-Type", body.getContentTypeHeader())
+      .POST(body.makePublisher())
 
+  protected inline fun URI.jsonPostRequest(body: Any): HttpRequest.Builder =
+    toRequest()
+      .header("Content-Type", "application/json")
+      .POST(HttpRequest.BodyPublishers.ofString(MultiBlast.JSON.writeValueAsString(body)))
 
-  protected inline fun URI.openGETWithBody() =
-    openSimpleGET().apply { doInput = true }
-
-  protected inline fun URI.openPOSTWithIO(contentType: String) =
-    openSimplePOST().apply {
-      doInput = true
-      doOutput = true
-      setRequestProperty("Content-Type", contentType)
-    }
-
-
-  protected inline fun HttpURLConnection.addAuthHeader() =
-    setRequestProperty("Auth-Key", config.authKey)
-
-  protected inline fun newBoundary() =
-    "MBLAST_CLIENT_" + System.currentTimeMillis().toString(16)
-
-  protected fun HttpURLConnection.throwUnexpectedResponse(): Nothing {
-    val body = String(errorStream.readAllBytes())
-    throw IllegalStateException("Unexpected response from ${this.url} : $responseCode : $body")
-  }
-
-  protected fun BufferedWriter.endTransmission(boundary: String) =
-    append(BOUNDARY_LEADER).append(boundary).append(BOUNDARY_LEADER).append(CRLF)
-
-  protected fun BufferedWriter.writeJsonPart(boundary: String, name: String, body: Any) {
-    append(BOUNDARY_LEADER).append(boundary).append(CRLF)
-    append("Content-Disposition: form-data; name=\"$name\"").append(CRLF)
-    append("Content-Type: application/json").append(CRLF)
-    append(CRLF)
-    MultiBlast.JSON.writeValue(MultiBlast.JSON.createGenerator(this), body)
-    append(CRLF)
-  }
-
-  protected fun BufferedWriter.writeStringPart(boundary: String, name: String, body: Reader) {
-    append(BOUNDARY_LEADER).append(boundary).append(CRLF)
-    append("Content-Disposition: form-data; name=\"$name\"").append(CRLF)
-    append("Content-Type: text/plain").append(CRLF)
-    append(CRLF)
-    body.transferTo(this)
-    append(CRLF)
-  }
-
+  protected inline fun URI.jsonPatchRequest(body: Any): HttpRequest.Builder =
+    toRequest()
+      .header("Content-Type", "application/json")
+      .method("PATCH", HttpRequest.BodyPublishers.ofString(MultiBlast.JSON.writeValueAsString(body)))
 }

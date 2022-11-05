@@ -1,6 +1,10 @@
 package org.veupathdb.lib.mblast.sdk
 
+import java.net.http.HttpClient
+
 sealed interface MultiBlastClientConfigBuilder {
+
+  fun httpClient(client: HttpClient): MultiBlastClientConfigBuilder
 
   fun url(host: String): MultiBlastClientConfigBuilder
 
