@@ -43,6 +43,6 @@ private fun QueryJobPatchRequest.hasSomethingToSet() =
   }
 
 private fun QueryJobPatchRequest.validate() {
-  if (meta.summary.length > Const.MaxSummaryLength)
+  if (meta.summary != null && meta.summary.length > Const.MaxSummaryLength)
     throw UnprocessableEntityException(mapOf("meta.summary" to listOf("cannot be greater than ${Const.MaxSummaryLength} characters in length")))
 }

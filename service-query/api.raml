@@ -144,13 +144,13 @@ uses:
       As a side effect, interactions with this endpoint will cause the target
       job to be added to the requesting user's job collection if it was not
       already present in that user's collection.  This default behavior can be
-      defeated by setting the `saveJob` query parameter to `false`.
+      defeated by setting the `save_job` query parameter to `false`.
       
       The reason this is done is to maintain a legacy job sharing behavior where
       a job is "shared with" a user automatically when they follow a link to
       that job.
     queryParameters:
-      saveJob:
+      save_job:
         displayName: Save Job
         description: |
           Flag that specifies whether the requested job should be saved to the
