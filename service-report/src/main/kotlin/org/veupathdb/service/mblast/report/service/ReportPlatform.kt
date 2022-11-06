@@ -13,6 +13,10 @@ import org.veupathdb.service.mblast.report.model.JobInfo
 import org.veupathdb.service.mblast.report.model.UserJobInfo
 import java.io.InputStream
 
+/**
+ * Facade over the [ReportDB] and [AsyncPlatform] objects that provides
+ * functions for common tasks.
+ */
 object ReportPlatform {
 
   fun getJob(reportJobID: HashID): JobInfo? {
@@ -26,16 +30,6 @@ object ReportPlatform {
       return null
 
     return JobInfo(dbRow, s3Row)
-  }
-
-  fun getJob(reportJobID: HashID, userID: Long): UserJobInfo? {
-    val db = ReportDB.selectReportJob(reportJobID, userID)
-    val s3 = AsyncPlatform.getJob(reportJobID)
-
-    if (db == null)
-      return null
-
-    return UserJobInfo(db, s3)
   }
 
   fun getJobFiles(reportJobID: HashID) = AsyncPlatform.getJobFiles(reportJobID)
