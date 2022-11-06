@@ -2,10 +2,10 @@ package org.veupathdb.service.mblast.report.service.cache.files
 
 import jakarta.ws.rs.ForbiddenException
 import jakarta.ws.rs.NotFoundException
-import org.veupathdb.lib.compute.platform.AsyncPlatform
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.report.generated.model.FileEntry
 import org.veupathdb.service.mblast.report.generated.model.FileEntryImpl
+import org.veupathdb.service.mblast.report.service.ReportPlatform
 
 /**
  * Returns a list of result files present in the cache for a target report job.
@@ -19,13 +19,13 @@ import org.veupathdb.service.mblast.report.generated.model.FileEntryImpl
  * @throws ForbiddenException If the target job is not in a finished state.
  */
 fun ListJobFiles(jobID: HashID): List<FileEntry> {
-  val job = AsyncPlatform.getJob(jobID)
+  val job = ReportPlatform.getJob(jobID)
     ?: throw NotFoundException()
 
   if (!job.status.isFinished)
     throw ForbiddenException()
 
-  return AsyncPlatform.getJobFiles(jobID)
+  return ReportPlatform.getJobFiles(jobID)
     .stream()
     .filter {
       when (it.name) {
