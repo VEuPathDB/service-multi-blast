@@ -11,7 +11,7 @@ import java.util.List;
     "status",
     "jobConfig",
     "blastConfig",
-    "meta",
+    "userMeta",
     "subJobs"
 })
 public class QueryJobDetailsImpl implements QueryJobDetails {
@@ -27,8 +27,8 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   @JsonProperty("blastConfig")
   private BlastQueryConfig blastConfig;
 
-  @JsonProperty("meta")
-  private QueryJobUserMeta meta;
+  @JsonProperty("userMeta")
+  private QueryJobUserMeta userMeta;
 
   @JsonProperty("subJobs")
   private List<String> subJobs;
@@ -73,14 +73,14 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
     this.blastConfig = blastConfig;
   }
 
-  @JsonProperty("meta")
-  public QueryJobUserMeta getMeta() {
-    return this.meta;
+  @JsonProperty("userMeta")
+  public QueryJobUserMeta getUserMeta() {
+    return this.userMeta;
   }
 
-  @JsonProperty("meta")
-  public void setMeta(QueryJobUserMeta meta) {
-    this.meta = meta;
+  @JsonProperty("userMeta")
+  public void setUserMeta(QueryJobUserMeta userMeta) {
+    this.userMeta = userMeta;
   }
 
   @JsonProperty("subJobs")

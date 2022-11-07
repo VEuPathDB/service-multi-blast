@@ -7,167 +7,6 @@
 ################################################################################
 
 types:
-  ReportJobPostRequest:
-    displayName: Report Job Request
-    description: |
-      Request body sent to start a new report job.
-    type: object
-    additionalProperties: false
-    properties:
-      queryJobID:
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      blastConfig:
-        type: BlastFormatConfig
-        default:
-          formatType: pairwise
-        required: false
-      addToUserCollection:
-        type: boolean
-        default: true
-        required: false
-      userMeta:
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobPatchRequest:
-    displayName: Report Job Update
-    description: |
-      Request body sent to update an existing report job.
-    type: object
-    additionalProperties: false
-    properties:
-      userMeta:
-        displayName: User Metadata
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobDetails:
-    displayName: Report Job Details
-    description: |
-      Longform details about a report job that has been submitted.
-    type: object
-    additionalProperties: false
-    properties:
-      reportJobID:
-        displayName: Report Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      queryJobID:
-        displayName: Query Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        type: JobStatus
-      blastConfig: BlastFormatConfig
-      userMeta:
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobListEntry:
-    displayName: Report Job List Entry
-    description: |
-      Short-form details about a report job that has been submitted.  This
-      object is intended to appear in a list of similar objects for report job
-      list endpoints.
-    type: object
-    additionalProperties: false
-    properties:
-      reportJobID:
-        displayName: Report Job ID
-        description: Hash ID of the report job.
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      queryJobID:
-        displayName: Query Job ID
-        description: Hash ID of the source query job.
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
-      status:
-        displayName: Job Status
-        description: Current status of the represented report job.
-        type: JobStatus
-      userMeta:
-        displayName: Job Meta
-        description: User provided metadata about the represented report job.
-        type: ReportJobUserMeta
-        default: null
-        required: false
-  ReportJobUserMeta:
-    displayName: Report Job User Meta
-    description: User provided metadata about a report job.
-    type: object
-    additionalProperties: false
-    properties:
-      summary:
-        displayName: Summary
-        description: Optional, one line user summary about a target job.
-        type: string
-        default: null
-        required: false
-        maxLength: 512
-      description:
-        displayName: Description
-        description: Optional, longform description of a target job.
-        type: string
-        default: null
-        required: false
-  FileEntry:
-    displayName: File Entry
-    description: List entry item for a file.
-    type: object
-    additionalProperties: false
-    properties:
-      name:
-        displayName: File Name
-        description: Name of the target file.
-        type: string
-      size:
-        displayName: File Size
-        description: Size of the file in bytes.
-        type: integer
-        format: int64
-  JobBulkStatusResponse:
-    displayName: Bulk Job Status Response
-    description: |
-      Returns a mapping of job-id to status for each of the valid job IDs that
-      appeared in the original bulk status request.
-    type: object
-    properties:
-      /^[\dA-Fa-f]{32}$/: JobStatus
-  JobStatus:
-    type: string
-    enum:
-      - queued
-      - in-progress
-      - complete
-      - failed
-      - expired
-  JobCreateResponse:
-    displayName: Job Creation Response
-    description: |
-      Response body returned on the successful creation of a new BLAST report
-      job.
-    type: object
-    additionalProperties: false
-    properties:
-      reportJobID:
-        displayName: Report Job ID
-        type: string
-        pattern: ^[\dA-Fa-f]{32}$
-        minLength: 32
-        maxLength: 32
   BlastFormatConfig:
     type: object
     additionalProperties: false
@@ -466,4 +305,165 @@ types:
       - by-hsp-query-start
       - by-hsp-percent-identity
       - by-hsp-subject-start
+  ReportJobPostRequest:
+    displayName: Report Job Request
+    description: |
+      Request body sent to start a new report job.
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      blastConfig:
+        type: BlastFormatConfig
+        default:
+          formatType: pairwise
+        required: false
+      addToUserCollection:
+        type: boolean
+        default: true
+        required: false
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobPatchRequest:
+    displayName: Report Job Update
+    description: |
+      Request body sent to update an existing report job.
+    type: object
+    additionalProperties: false
+    properties:
+      userMeta:
+        displayName: User Metadata
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobDetails:
+    displayName: Report Job Details
+    description: |
+      Longform details about a report job that has been submitted.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        type: JobStatus
+      blastConfig: BlastFormatConfig
+      userMeta:
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobListEntry:
+    displayName: Report Job List Entry
+    description: |
+      Short-form details about a report job that has been submitted.  This
+      object is intended to appear in a list of similar objects for report job
+      list endpoints.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        description: Hash ID of the report job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      queryJobID:
+        displayName: Query Job ID
+        description: Hash ID of the source query job.
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      status:
+        displayName: Job Status
+        description: Current status of the represented report job.
+        type: JobStatus
+      userMeta:
+        displayName: Job Meta
+        description: User provided metadata about the represented report job.
+        type: ReportJobUserMeta
+        default: null
+        required: false
+  ReportJobUserMeta:
+    displayName: Report Job User Meta
+    description: User provided metadata about a report job.
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        displayName: Summary
+        description: Optional, one line user summary about a target job.
+        type: string
+        default: null
+        required: false
+        maxLength: 512
+      description:
+        displayName: Description
+        description: Optional, longform description of a target job.
+        type: string
+        default: null
+        required: false
+  FileEntry:
+    displayName: File Entry
+    description: List entry item for a file.
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        displayName: File Name
+        description: Name of the target file.
+        type: string
+      size:
+        displayName: File Size
+        description: Size of the file in bytes.
+        type: integer
+        format: int64
+  JobBulkStatusResponse:
+    displayName: Bulk Job Status Response
+    description: |
+      Returns a mapping of job-id to status for each of the valid job IDs that
+      appeared in the original bulk status request.
+    type: object
+    properties:
+      /^[\dA-Fa-f]{32}$/: JobStatus
+  JobStatus:
+    type: string
+    enum:
+      - queued
+      - in-progress
+      - complete
+      - failed
+      - expired
+  JobCreateResponse:
+    displayName: Job Creation Response
+    description: |
+      Response body returned on the successful creation of a new BLAST report
+      job.
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
 
