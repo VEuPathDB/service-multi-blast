@@ -40,7 +40,7 @@ private fun FullParentUserQueryConfig.convertToIORecord() =
     it.queryJobID = queryJobID.string
     it.status     = lookupStatus()
     it.site       = projectID.toTargetSite()
-    it.meta       = toUserMeta()
+    it.userMeta   = toUserMeta()
   }
 
 private fun FullParentUserQueryConfig.lookupStatus() =

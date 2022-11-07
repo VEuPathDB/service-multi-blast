@@ -14,6 +14,6 @@ data class QueryJobListEntry(
   @JsonProperty("site")
   val site: TargetSite,
 
-  @JsonProperty("meta")
-  val meta: QueryJobUserMeta?
+  @JsonProperty("userMeta")
+  val userMeta: QueryJobUserMeta?
 )
