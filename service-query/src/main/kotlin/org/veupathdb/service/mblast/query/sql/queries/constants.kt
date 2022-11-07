@@ -5,6 +5,7 @@ const val ORA_CODE_UNIQUE_VIOLATION = 1
 
 object Schema {
   const val MBlast = "mblast"
+  const val Users  = "userlogins5"
 }
 
 object Table {
@@ -12,6 +13,7 @@ object Table {
   const val QueryToQueries = "query_to_subqueries"
   const val QueryToTargets = "query_to_targets"
   const val QueryToUsers   = "query_to_users"
+  const val Users          = "users"
 }
 
 object Column {
@@ -19,6 +21,7 @@ object Column {
   const val Config      = "config"
   const val CreatedOn   = "created_on"
   const val Description = "description"
+  const val IsGuest     = "is_guest"
   const val ParentJobID = "parent_job_id"
   const val Position    = "position"
   const val ProjectID   = "project_id"

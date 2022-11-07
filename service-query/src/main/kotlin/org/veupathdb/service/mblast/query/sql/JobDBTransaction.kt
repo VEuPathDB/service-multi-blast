@@ -161,6 +161,22 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
   }
 
   /**
+   * Gets the value of the `is_guest` column on the user's table for the target
+   * user ID.
+   *
+   * If no such record exists, `null` will be returned.
+   *
+   * @param userID ID of the user to test.
+   *
+   * @return The value of the `is_guest` column, or `null`.
+   */
+  fun userIsGuest(userID: Long): Boolean? =
+    con.selectUserIsGuest(userID)
+
+  fun updateUserLinksOwner(oldUserID: Long, newUserID: Long) =
+    con.updateUserLinksOwner(oldUserID, newUserID)
+
+  /**
    * Commits this transaction.
    */
   fun commit() {
