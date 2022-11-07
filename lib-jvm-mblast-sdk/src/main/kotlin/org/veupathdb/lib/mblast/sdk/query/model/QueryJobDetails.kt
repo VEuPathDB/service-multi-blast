@@ -18,8 +18,8 @@ data class QueryJobDetails(
   @JsonProperty("blastConfig")
   val blastConfig: BlastQueryConfig,
 
-  @JsonProperty("meta")
-  val meta: QueryJobUserMeta?,
+  @JsonProperty("userMeta")
+  val userMeta: QueryJobUserMeta?,
 
   @JsonProperty("subJobs")
   val subJobs: List<HashID>,

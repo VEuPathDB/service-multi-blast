@@ -10,8 +10,8 @@ data class QueryJobPostRequest(
   @JsonProperty("blastConfig")
   val blastConfig: BlastQueryConfig,
 
-  @JsonProperty("meta")
-  val meta: QueryJobUserMeta?,
+  @JsonProperty("userMeta")
+  val userMeta: QueryJobUserMeta?,
 )
 
 

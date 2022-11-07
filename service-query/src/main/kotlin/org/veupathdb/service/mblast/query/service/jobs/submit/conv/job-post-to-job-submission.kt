@@ -60,8 +60,8 @@ fun JobsPostMultipartFormData.toJobSubmission(userID: Long) =
     // Grab the user metadata
     userMeta = QueryUserMetaImpl(
       userID,
-      if (addToUserJobs == true) config.meta?.summary else null,
-      if (addToUserJobs == true) config.meta?.description else null,
+      if (addToUserJobs == true) config.userMeta?.summary else null,
+      if (addToUserJobs == true) config.userMeta?.description else null,
     )
 
     // Split the query into sequence files.

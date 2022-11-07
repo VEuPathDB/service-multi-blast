@@ -20,7 +20,7 @@ import org.veupathdb.service.mblast.query.model.FullParentUserQueryConfig
  */
 fun FullParentUserQueryConfig.toIODetails(s3Job: AsyncJob?): QueryJobDetails =
   (this as FullParentQueryConfig).toIODetails(s3Job).also {
-    it.meta = toUserMeta()
+    it.userMeta = toUserMeta()
   }
 
 

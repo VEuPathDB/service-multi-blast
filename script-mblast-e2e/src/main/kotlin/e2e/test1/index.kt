@@ -10,7 +10,6 @@ import org.veupathdb.lib.mblast.sdk.query.model.QueryJobPatchRequest
 import org.veupathdb.lib.mblast.sdk.query.model.QueryJobTarget
 import org.veupathdb.lib.mblast.sdk.query.model.QueryJobUserMeta
 import org.veupathdb.lib.mblast.sdk.query.model.TargetSite
-import org.veupathdb.lib.mblast.sdk.report.blast.BlastFormatConfig
 import org.veupathdb.lib.mblast.sdk.report.blast.BlastOutFormat
 import org.veupathdb.lib.mblast.sdk.report.model.ReportJobPatchRequest
 import org.veupathdb.lib.mblast.sdk.report.model.ReportJobUserMeta
@@ -96,7 +95,7 @@ fun RunEndToEndTest1(config: E2EConfig) {
 
   // verify the new job summary
   println("  verifying patched summary")
-  require(client.query.getJob(job1ID)!!.meta!!.summary == newSummary)
+  require(client.query.getJob(job1ID)!!.userMeta!!.summary == newSummary)
 
   // Create a report job for the created query job
   println("  creating a report job for $job1ID")

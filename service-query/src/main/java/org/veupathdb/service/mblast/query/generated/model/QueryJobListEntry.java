@@ -25,9 +25,9 @@ public interface QueryJobListEntry {
   @JsonProperty("site")
   void setSite(TargetSite site);
 
-  @JsonProperty("meta")
-  QueryJobUserMeta getMeta();
+  @JsonProperty("userMeta")
+  QueryJobUserMeta getUserMeta();
 
-  @JsonProperty("meta")
-  void setMeta(QueryJobUserMeta meta);
+  @JsonProperty("userMeta")
+  void setUserMeta(QueryJobUserMeta userMeta);
 }
