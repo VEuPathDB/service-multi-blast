@@ -19,9 +19,9 @@ public interface QueryJobPostRequest {
   @JsonProperty("blastConfig")
   void setBlastConfig(BlastQueryConfig blastConfig);
 
-  @JsonProperty("meta")
-  QueryJobUserMeta getMeta();
+  @JsonProperty("userMeta")
+  QueryJobUserMeta getUserMeta();
 
-  @JsonProperty("meta")
-  void setMeta(QueryJobUserMeta meta);
+  @JsonProperty("userMeta")
+  void setUserMeta(QueryJobUserMeta userMeta);
 }

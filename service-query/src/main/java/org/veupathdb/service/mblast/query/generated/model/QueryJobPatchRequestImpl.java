@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder("meta")
+@JsonPropertyOrder("userMeta")
 public class QueryJobPatchRequestImpl implements QueryJobPatchRequest {
-  @JsonProperty("meta")
-  private QueryJobUserMeta meta;
+  @JsonProperty("userMeta")
+  private QueryJobUserMeta userMeta;
 
-  @JsonProperty("meta")
-  public QueryJobUserMeta getMeta() {
-    return this.meta;
+  @JsonProperty("userMeta")
+  public QueryJobUserMeta getUserMeta() {
+    return this.userMeta;
   }
 
-  @JsonProperty("meta")
-  public void setMeta(QueryJobUserMeta meta) {
-    this.meta = meta;
+  @JsonProperty("userMeta")
+  public void setUserMeta(QueryJobUserMeta userMeta) {
+    this.userMeta = userMeta;
   }
 }
