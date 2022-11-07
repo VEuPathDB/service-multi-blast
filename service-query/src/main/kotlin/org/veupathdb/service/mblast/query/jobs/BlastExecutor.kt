@@ -8,6 +8,7 @@ import org.veupathdb.lib.compute.platform.job.JobExecutor
 import org.veupathdb.lib.compute.platform.job.JobResult
 import org.veupathdb.lib.jackson.Json
 import org.veupathdb.service.mblast.query.Const
+import org.veupathdb.service.mblast.query.service.Metrics
 
 /**
  * # BLAST+ Command Executor
@@ -39,6 +40,10 @@ class BlastExecutor : JobExecutor {
 
     logger.debug("Executing command: {}", { blastConfig.toCliString() })
 
+    val timer = Metrics.BlastTimes
+      .labels(blastConfig.tool.value)
+      .startTimer()
+
     val exitCode = with(
       ProcessBuilder(*blastConfig.toCliArray())
         .directory(ctx.workspace.path.toFile())
@@ -47,7 +52,7 @@ class BlastExecutor : JobExecutor {
       // Write the stderr for the BLAST+ command out to file (which will be
       // persisted to S3)
       ctx.workspace.write(Const.StdErrFileName, errorStream)
-      waitFor()
+      waitFor().also { timer.observeDuration() }
     }
 
     logger.debug("Exit code: $exitCode")
