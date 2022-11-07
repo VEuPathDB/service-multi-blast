@@ -55,7 +55,7 @@ fun JobsPostMultipartFormData.toJobSubmission(userID: Long) =
       .apply { dbFile = DBFiles(blastTargets!!.toDBFiles(projectID!!)) }
 
     // Does the user want to collect this job?
-    addToUserJobs = config.jobConfig.addToUserCollection ?: false
+    addToUserJobs = config.jobConfig.addToUserCollection ?: true
 
     // Grab the user metadata
     userMeta = QueryUserMetaImpl(
