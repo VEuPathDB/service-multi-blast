@@ -12,6 +12,8 @@ import org.veupathdb.lib.mblast.sdk.query.model.QueryJobUserMeta
 import org.veupathdb.lib.mblast.sdk.query.model.TargetSite
 import org.veupathdb.lib.mblast.sdk.report.blast.BlastFormatConfig
 import org.veupathdb.lib.mblast.sdk.report.blast.BlastOutFormat
+import org.veupathdb.lib.mblast.sdk.report.model.ReportJobPatchRequest
+import org.veupathdb.lib.mblast.sdk.report.model.ReportJobUserMeta
 import java.util.*
 
 private const val Query1   = "catacatacat"
@@ -51,8 +53,9 @@ fun RunEndToEndTest1(config: E2EConfig) {
   require(Query1 == client.getJobQuery(job1ID))
 
   // Wait for the job to complete (if it hasn't already)
-  println("  waiting for the query job to be completed")
+  print("  waiting for the query job to be completed... ")
   client.waitForQueryJob(job1ID)
+  println("job complete")
 
   // Fetch the job result
   println("  checking the query job result")
@@ -112,8 +115,17 @@ fun RunEndToEndTest1(config: E2EConfig) {
   require(rJobID == client.createReportJob1(job1ID))
 
   // Change the report job summary
+  println("  updating the summary on report job $rJobID")
+  client.report.patchJob(rJobID, ReportJobPatchRequest(ReportJobUserMeta(summary = newSummary, description = null)))
+
   // verify the changed report job summary
+  println("  verifying patched summary")
+  require(client.report.getJob(rJobID, false)!!.userMeta!!.summary == newSummary)
+
   // wait for the job to complete
+  print("  waiting for the report job to complete... ")
+  client.waitForReportJob(rJobID)
+  println("job complete")
 }
 
 // // //
