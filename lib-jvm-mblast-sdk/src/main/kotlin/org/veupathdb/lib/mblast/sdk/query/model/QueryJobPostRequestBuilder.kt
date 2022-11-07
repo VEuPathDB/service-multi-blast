@@ -5,7 +5,7 @@ import org.veupathdb.lib.mblast.sdk.query.blast.*
 data class QueryJobPostRequestBuilder(
   var jobConfig: QueryJobConfig? = null,
   var blastConfig: BlastQueryConfig? = null,
-  var meta: QueryJobUserMeta? = null,
+  var userMeta: QueryJobUserMeta? = null,
 ) {
 
   fun withJobConfig(fn: QueryJobConfigBuilder.() -> Unit) {
@@ -49,7 +49,7 @@ data class QueryJobPostRequestBuilder(
   }
 
   fun withMeta(fn: QueryJobUserMetaBuilder.() -> Unit) {
-    meta = QueryJobUserMetaBuilder().apply(fn).build()
+    userMeta = QueryJobUserMetaBuilder().apply(fn).build()
   }
 
   fun build(): QueryJobPostRequest {
@@ -58,6 +58,6 @@ data class QueryJobPostRequestBuilder(
     if (blastConfig == null)
       throw IllegalStateException("blastConfig is required")
 
-    return QueryJobPostRequest(jobConfig!!, blastConfig!!, meta)
+    return QueryJobPostRequest(jobConfig!!, blastConfig!!, userMeta)
   }
 }

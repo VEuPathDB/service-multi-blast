@@ -18,7 +18,7 @@ private object JsonPath {
 
   const val JOB_CONFIG   = "jobConfig"
   const val BLAST_CONFIG = "blastConfig"
-  const val META         = "meta"
+  const val META         = "userMeta"
 
   object JobConfig {
     const val SITE                   = "$JOB_CONFIG.site"
@@ -98,7 +98,7 @@ private fun QueryJobPostRequest.validate(errors: ErrorMap) {
   else
     jobConfig.validate(errors)
 
-  meta?.validate(errors)
+  userMeta?.validate(errors)
 }
 
 

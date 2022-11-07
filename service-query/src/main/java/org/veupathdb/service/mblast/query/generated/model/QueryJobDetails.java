@@ -32,11 +32,11 @@ public interface QueryJobDetails {
   @JsonProperty("blastConfig")
   void setBlastConfig(BlastQueryConfig blastConfig);
 
-  @JsonProperty("meta")
-  QueryJobUserMeta getMeta();
+  @JsonProperty("userMeta")
+  QueryJobUserMeta getUserMeta();
 
-  @JsonProperty("meta")
-  void setMeta(QueryJobUserMeta meta);
+  @JsonProperty("userMeta")
+  void setUserMeta(QueryJobUserMeta userMeta);
 
   @JsonProperty("subJobs")
   List<String> getSubJobs();

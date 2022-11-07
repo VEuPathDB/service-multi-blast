@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "jobConfig",
     "blastConfig",
-    "meta"
+    "userMeta"
 })
 public class QueryJobPostRequestImpl implements QueryJobPostRequest {
   @JsonProperty("jobConfig")
@@ -17,8 +17,8 @@ public class QueryJobPostRequestImpl implements QueryJobPostRequest {
   @JsonProperty("blastConfig")
   private BlastQueryConfig blastConfig;
 
-  @JsonProperty("meta")
-  private QueryJobUserMeta meta;
+  @JsonProperty("userMeta")
+  private QueryJobUserMeta userMeta;
 
   @JsonProperty("jobConfig")
   public QueryJobConfig getJobConfig() {
@@ -40,13 +40,13 @@ public class QueryJobPostRequestImpl implements QueryJobPostRequest {
     this.blastConfig = blastConfig;
   }
 
-  @JsonProperty("meta")
-  public QueryJobUserMeta getMeta() {
-    return this.meta;
+  @JsonProperty("userMeta")
+  public QueryJobUserMeta getUserMeta() {
+    return this.userMeta;
   }
 
-  @JsonProperty("meta")
-  public void setMeta(QueryJobUserMeta meta) {
-    this.meta = meta;
+  @JsonProperty("userMeta")
+  public void setUserMeta(QueryJobUserMeta userMeta) {
+    this.userMeta = userMeta;
   }
 }

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "queryJobID",
     "status",
     "site",
-    "meta"
+    "userMeta"
 })
 public class QueryJobListEntryImpl implements QueryJobListEntry {
   @JsonProperty("queryJobID")
@@ -21,8 +21,8 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
   @JsonProperty("site")
   private TargetSite site;
 
-  @JsonProperty("meta")
-  private QueryJobUserMeta meta;
+  @JsonProperty("userMeta")
+  private QueryJobUserMeta userMeta;
 
   @JsonProperty("queryJobID")
   public String getQueryJobID() {
@@ -54,13 +54,13 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
     this.site = site;
   }
 
-  @JsonProperty("meta")
-  public QueryJobUserMeta getMeta() {
-    return this.meta;
+  @JsonProperty("userMeta")
+  public QueryJobUserMeta getUserMeta() {
+    return this.userMeta;
   }
 
-  @JsonProperty("meta")
-  public void setMeta(QueryJobUserMeta meta) {
-    this.meta = meta;
+  @JsonProperty("userMeta")
+  public void setUserMeta(QueryJobUserMeta userMeta) {
+    this.userMeta = userMeta;
   }
 }

@@ -26,8 +26,8 @@ fun PatchUserJob(queryJobID: HashID, userID: Long, entity: QueryJobPatchRequest)
 
   val newMeta = QueryUserMetaImpl(
     userID,
-    entity.meta.summary ?: dbJob.summary,
-    entity.meta.description ?: dbJob.description,
+    entity.userMeta.summary ?: dbJob.summary,
+    entity.userMeta.description ?: dbJob.description,
   )
 
   JobDBManager.withTransaction {
@@ -37,12 +37,12 @@ fun PatchUserJob(queryJobID: HashID, userID: Long, entity: QueryJobPatchRequest)
 
 private fun QueryJobPatchRequest.hasSomethingToSet() =
   when {
-    meta == null                                     -> false
-    meta.summary == null && meta.description == null -> false
+    userMeta == null                                     -> false
+    userMeta.summary == null && userMeta.description == null -> false
     else                                             -> true
   }
 
 private fun QueryJobPatchRequest.validate() {
-  if (meta.summary != null && meta.summary.length > Const.MaxSummaryLength)
-    throw UnprocessableEntityException(mapOf("meta.summary" to listOf("cannot be greater than ${Const.MaxSummaryLength} characters in length")))
+  if (userMeta.summary != null && userMeta.summary.length > Const.MaxSummaryLength)
+    throw UnprocessableEntityException(mapOf("userMeta.summary" to listOf("cannot be greater than ${Const.MaxSummaryLength} characters in length")))
 }
