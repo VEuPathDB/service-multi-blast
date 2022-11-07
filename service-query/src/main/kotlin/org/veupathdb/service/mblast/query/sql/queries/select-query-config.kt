@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.query.sql.queries
 
+import org.intellij.lang.annotations.Language
 import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.common.BlastQueryBase
 import org.veupathdb.lib.hash_id.HashID
@@ -182,6 +183,7 @@ fun Connection.selectQueryConfigByJobAndUser(queryJobID: HashID, userID: Long) =
  * then uses that set to get the list of blast configurations that are marked as
  * children under the set of parent jobs.
  */
+@Language("Oracle")
 private const val SQL_CHILDREN_BY_USER = """
 SELECT
   a.${Column.QueryJobID}
@@ -202,6 +204,8 @@ WHERE
     WHERE
       ${Column.UserID} = ?
   )
+ORDER BY
+  ${Column.Position}
 """
 
 /**
@@ -226,23 +230,21 @@ fun Connection.selectChildQueriesByUser(userID: Long) =
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
+@Language("Oracle")
 private const val SQL_CHILDREN_BY_PARENT = """
 SELECT
-  ${Column.QueryJobID}
-, ${Column.ProjectID}
-, ${Column.Config}
-, ${Column.Query}
+  a.${Column.QueryJobID}
+, a.${Column.ProjectID}
+, a.${Column.Config}
+, a.${Column.Query}
 FROM
-  ${Schema.MBlast}.${Table.QueryConfigs}
+  ${Schema.MBlast}.${Table.QueryConfigs} a
+  INNER JOIN ${Schema.MBlast}.${Table.QueryToQueries} b
+    ON a.${Column.QueryJobID} = b.${Column.ChildJobID}
 WHERE
-  ${Column.QueryJobID} IN (
-    SELECT
-      ${Column.ChildJobID}
-    FROM
-      ${Schema.MBlast}.${Table.QueryToQueries}
-    WHERE
-      ${Column.ParentJobID} = ?
-  )
+  b.${Column.ParentJobID} = ?
+ORDER BY
+  b.${Column.Position}
 """
 
 /**

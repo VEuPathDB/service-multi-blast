@@ -22,6 +22,7 @@ fun _handleJobNotExists(sub: JobSubmission) {
   JobDBManager.withTransaction { db -> createParentJob(sub, db) }
 
   // For the child jobs
+  var position = 0u
   sub.queryFiles.subQueryFiles.forEach { childQuery ->
     val childID = JobHasher.hashJob(sub.blastConfig.forDB, sub.projectID, childQuery, sub.blastTargets)
 
@@ -42,7 +43,7 @@ fun _handleJobNotExists(sub: JobSubmission) {
       // If the job exists in the cache, throw an exception for inconsistent
       // state.
       childCacheJob.ifExists { throwJobInCacheNotDB(childID) }
-      JobDBManager.withTransaction { db -> createChildJob(sub, db, childID, childQuery) }
+      JobDBManager.withTransaction { db -> createChildJob(sub, db, childID, childQuery, position++) }
     }
   }
 
@@ -65,9 +66,10 @@ private fun createParentJob(sub: JobSubmission, db: JobDBTransaction) {
   sub.submitToParentQueue()
 }
 
-private fun createChildJob(sub: JobSubmission, db: JobDBTransaction, jobID: HashID, query: File) {
+private fun createChildJob(sub: JobSubmission, db: JobDBTransaction, jobID: HashID, query: File, position: UInt) {
   db.insertQueryConfig(sub.newBasicQueryConfig(jobID, query))
   db.insertTargetLinks(jobID, sub.blastTargets)
+  db.insertQueryToSubqueryLink(sub.parentJobID, jobID, position)
 
   sub.submitToChildQueue(jobID, query)
 }
