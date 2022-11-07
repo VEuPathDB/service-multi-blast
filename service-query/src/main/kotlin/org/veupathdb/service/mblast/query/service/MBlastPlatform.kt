@@ -33,6 +33,14 @@ object MBlastPlatform {
     return if (dbJob == null) null else Pair(dbJob, s3Job)
   }
 
+  fun getJobFiles(queryJobID: HashID) =
+    AsyncPlatform.getJobFiles(queryJobID)
+
+  fun openJobFile(queryJobID: HashID, fileName: String) =
+    getJobFiles(queryJobID)
+      .find { it.name == fileName }
+      ?.open()
+
   fun requireAsyncJob(queryJobID: HashID) =
     AsyncPlatform.getJob(queryJobID)
       ?: throw IllegalStateException("Job $queryJobID was required to be in S3 but was not found.")
