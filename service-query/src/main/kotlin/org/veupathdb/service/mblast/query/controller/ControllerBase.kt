@@ -10,10 +10,12 @@ import org.veupathdb.lib.hash_id.HashID
  */
 sealed class ControllerBase(protected val request: ContainerRequest) {
 
+  protected val user by lazy { UserProvider.lookupUser(request).orElseThrow() }
+
   /**
    * User ID associated with the current request.
    */
-  protected val userID by lazy { UserProvider.lookupUser(request).orElseThrow().userID }
+  protected val userID by lazy { user.userID }
 
   /**
    * Convert the target string to a [HashID] instance or throw a 404 if the

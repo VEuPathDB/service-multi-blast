@@ -73,6 +73,12 @@ object JobDBManager {
   fun deleteUserLink(queryJobID: HashID, userID: Long) =
     JobDBTransaction(getConnection()).use { it.deleteUserLink(queryJobID, userID) }
 
+  fun userIsGuest(userID: Long): Boolean? =
+    JobDBTransaction(getConnection()).use { it.userIsGuest(userID) }
+
+  fun updateUserLinksOwner(oldUserID: Long, newUserID: Long) =
+    JobDBTransaction(getConnection()).use { it.updateUserLinksOwner(oldUserID, newUserID) }
+
   /**
    * Executes the given function in the context of a database transaction that
    * will be committed on successful return.
