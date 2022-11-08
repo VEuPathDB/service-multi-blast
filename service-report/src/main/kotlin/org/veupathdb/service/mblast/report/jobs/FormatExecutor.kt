@@ -1,6 +1,7 @@
 package org.veupathdb.service.mblast.report.jobs
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+import org.apache.logging.log4j.CloseableThreadContext
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.ThreadContext
 import org.veupathdb.lib.blast.Blast
@@ -22,9 +23,7 @@ class FormatExecutor : JobExecutor {
   private val logger = LogManager.getLogger(javaClass)
 
   override fun execute(ctx: JobContext): JobResult {
-    ThreadContext.put(Const.THREAD_CONTEXT_JOB_ID, ctx.jobID.string)
-
-    try {
+    CloseableThreadContext.put(Const.THREAD_CONTEXT_JOB_ID, ctx.jobID.string).use { tctx ->
       val blastConfig = ctx.workspace
         .openStream(Const.CONFIG_FILE)
         .use { Blast.blastFormatter(Json.parse<ObjectNode>(it)) }
@@ -35,8 +34,6 @@ class FormatExecutor : JobExecutor {
       blastConfig.archive(Const.ARCHIVE_FILE)
 
       return execute(ctx, jobConfig, blastConfig)
-    } finally {
-      ThreadContext.remove(Const.THREAD_CONTEXT_JOB_ID)
     }
   }
 
