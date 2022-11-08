@@ -3,7 +3,6 @@ package org.veupathdb.service.mblast.report.jobs
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.logging.log4j.CloseableThreadContext
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.ThreadContext
 import org.veupathdb.lib.blast.Blast
 import org.veupathdb.lib.blast.formatter.BlastFormatter
 import org.veupathdb.lib.compute.platform.job.JobContext
@@ -13,7 +12,7 @@ import org.veupathdb.lib.jackson.Json
 import org.veupathdb.service.mblast.report.Const
 import org.veupathdb.service.mblast.report.ext.makeOutFileName
 import org.veupathdb.service.mblast.report.model.JobConfig
-import org.veupathdb.service.mblast.report.service.mblast.MBlastQuerySvc
+import org.veupathdb.service.mblast.report.service.mblast.MBlastQueryClient
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import kotlin.io.path.listDirectoryEntries
@@ -40,7 +39,7 @@ class FormatExecutor : JobExecutor {
   private fun execute(ctx: JobContext, config: JobConfig, blast: BlastFormatter): JobResult {
     logger.debug("Downloading result for query job {}", config.queryID)
     // Download the report that we will be formatting from the query service
-    MBlastQuerySvc.getQueryResult(config.queryID, config.userAuth)
+    MBlastQueryClient.getQueryResult(config.queryID, config.userAuth)
       .use { ctx.workspace.write(Const.ARCHIVE_FILE, it) }
 
 

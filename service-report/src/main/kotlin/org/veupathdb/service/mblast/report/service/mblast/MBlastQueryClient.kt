@@ -1,7 +1,6 @@
 package org.veupathdb.service.mblast.report.service.mblast
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.apache.logging.log4j.LogManager
 import org.gusdb.fgputil.Tuples.TwoTuple
 import org.veupathdb.lib.compute.platform.job.JobStatus
 import org.veupathdb.lib.hash_id.HashID
@@ -14,7 +13,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-object MBlastQuerySvc {
+object MBlastQueryClient {
   private val client  = HttpClient.newHttpClient()
   private val baseURL = "http://${ServiceOptions.queryServiceHost}"
 

@@ -5,7 +5,7 @@ import org.veupathdb.lib.compute.platform.job.JobStatus
 import org.veupathdb.service.mblast.report.generated.model.JobCreateResponse
 import org.veupathdb.service.mblast.report.generated.model.JobCreateResponseImpl
 import org.veupathdb.service.mblast.report.service.ReportPlatform
-import org.veupathdb.service.mblast.report.service.mblast.MBlastQuerySvc
+import org.veupathdb.service.mblast.report.service.mblast.MBlastQueryClient
 
 /**
  * Handles the submission of a job that already exists in the user database.
@@ -16,8 +16,8 @@ import org.veupathdb.service.mblast.report.service.mblast.MBlastQuerySvc
 fun JobSubmission.handleSubmitJob(): JobCreateResponse {
   // Verify the query job is in the correct status.
   val queryJobStatus = try {
-    MBlastQuerySvc.getQueryStatus(queryID, userAuth)
-  } catch (e: MBlastQuerySvc.QueryJobNotFoundException) {
+    MBlastQueryClient.getQueryStatus(queryID, userAuth)
+  } catch (e: MBlastQueryClient.QueryJobNotFoundException) {
     throw BadRequestException(e)
   }
 
