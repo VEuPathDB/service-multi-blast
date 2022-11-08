@@ -16,5 +16,6 @@ class Resources(opts: Options) : ContainerResources(opts) {
       JobsStdErrController::class.java,
       JobFileListController::class.java,
       JobFileDownloadController::class.java,
+      GuestLinkController::class.java,
     )
 }

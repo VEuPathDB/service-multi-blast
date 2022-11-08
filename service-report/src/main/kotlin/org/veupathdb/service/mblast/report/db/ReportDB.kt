@@ -56,6 +56,12 @@ object ReportDB {
   fun selectReportJob(reportJobID: HashID) =
     withTransaction { it.selectReportJob(reportJobID) }
 
+  fun userIsGuest(userID: Long): Boolean? =
+    withTransaction { it.userIsGuest(userID) }
+
+  fun updateUserLinksOwner(oldUserID: Long, newUserID: Long) =
+    withTransaction { it.updateUserLinksOwner(oldUserID, newUserID) }
+
   /**
    * Executes the given function in the context of the provided open database
    * transaction.

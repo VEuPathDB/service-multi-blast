@@ -4,6 +4,21 @@ uses:
   blast: blast-types.raml
 
 types:
+  GuestJobTransferRequest:
+    displayName: Guest to User Job Transfer Request
+    description: |
+      Request body for a request to transfer ownership of jobs from a guest user
+      to a logged in user.
+    type: object
+    additionalProperties: false
+    properties:
+      guestID:
+        displayName: Guest ID
+        description: ID assigned to the user before they were logged in.
+        type: integer
+        format: int64
+        required: true
+
   ReportJobPostRequest:
     displayName: Report Job Request
     description: |
