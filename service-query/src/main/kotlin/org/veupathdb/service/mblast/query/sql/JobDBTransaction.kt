@@ -73,6 +73,9 @@ class JobDBTransaction(private val con: Connection) : AutoCloseable {
     con.updateUserLink(queryJobID, meta)
   }
 
+  fun insertQueryToSubqueryLink(parentJobID: HashID, childJobID: HashID, position: UInt) =
+    con.insertQueryToSubqueryLink(parentJobID, childJobID, position)
+
   /**
    * Fetches a [FullParentQueryConfig] for a target job if that job exists.
    *
