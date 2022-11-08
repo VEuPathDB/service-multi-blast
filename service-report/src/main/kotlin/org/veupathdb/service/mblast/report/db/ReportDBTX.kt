@@ -107,6 +107,9 @@ class ReportDBTX(private val con: Connection) : AutoCloseable {
   fun updateUserMeta(reportJobID: HashID, meta: UserMeta) =
     con.updateReportUserLink(reportJobID, meta.userID, meta.summary, meta.description)
 
+  fun deleteUserLink(reportJobID: HashID, userID: Long) =
+    con.deleteUserLink(reportJobID, userID)
+
   fun userIsGuest(userID: Long) =
     con.selectUserIsGuest(userID)
 
