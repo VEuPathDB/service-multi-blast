@@ -518,3 +518,42 @@ uses:
         body:
           application/json:
             type: error.ServerError
+
+/link-guest:
+  displayName: Link Guest
+  post:
+    displayName: Post Link
+    description: |
+      A request to transfer ownership of jobs from a guest user to a logged in
+      user, linking the logged in user to the jobs they created before they
+      logged in.
+    body:
+      application/json:
+        type: lib.GuestJobTransferRequest
+    responses:
+      204:
+        description: Success
+      400:
+        description: |
+          Bad Request.
+          
+          Request body did not resemble the expected form.
+        body:
+          application/json:
+            type: error.BadRequestError
+      401:
+        description: |
+          No valid user authentication provided.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      403:
+        description: "Forbidden: Target user ID was not a guest user ID."
+        body:
+          application/json:
+            type: error.ForbiddenError
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            type: error.ServerError
