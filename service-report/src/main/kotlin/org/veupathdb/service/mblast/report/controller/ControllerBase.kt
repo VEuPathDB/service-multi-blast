@@ -25,5 +25,5 @@ sealed class ControllerBase(protected val request: ContainerRequest) {
    * string is not a valid MD5 hash.
    */
   protected fun String.toHashIDOr404() =
-    try { HashID(this) } catch (e: Throwable) { throw NotFoundException() }
+    try { HashID(this) } catch (e: IllegalArgumentException) { throw NotFoundException() }
 }
