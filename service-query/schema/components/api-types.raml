@@ -280,3 +280,15 @@ types:
           type: string
         required: false
         default: []
+
+  RPCParamsJobExpire:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+        required: true

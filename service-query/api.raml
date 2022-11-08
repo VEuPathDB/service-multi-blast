@@ -510,6 +510,58 @@ uses:
           application/json:
             type: error.ServerError
 
+/rpc/jobs:
+  displayName: Job RPC
+
+  /expire:
+    displayName: Expire Job
+    description: |
+      Marks a target job as expired.
+    post:
+      displayName: Execute
+      body:
+        application/json:
+          type: lib.RPCParamsJobExpire
+      responses:
+        204:
+          description: |
+            Success.
+            
+            The target job was found and marked as expired.
+        400:
+          description: |
+            Bad Request.
+            
+            Invalid request body or parameter.
+          body:
+            application/json:
+              type: error.BadRequestError
+        401:
+          description: |
+            Unauthorized.
+            
+            Request did not contain valid authorization.
+        403:
+          description: |
+            Forbidden.
+            
+            Job did not belong to the user making the request and thus it is not
+            permitted to alter the job's state.
+          body:
+            application/json:
+              type: error.ForbiddenError
+        500:
+          description: |
+            Server Error.
+            
+            An unhandled exception occurred in the server while attempting to
+            process this request.
+          body:
+            application/json:
+              type: error.ServerError
+
+
+
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
