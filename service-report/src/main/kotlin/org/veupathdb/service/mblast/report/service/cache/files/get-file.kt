@@ -11,7 +11,7 @@ fun GetJobFile(jobID: HashID, fileName: String): InputStream {
     ?: throw NotFoundException()
 
   if (!job.status.isFinished)
-    throw ForbiddenException()
+    throw ForbiddenException("Cannot get files from a job that is not in a finished state.")
 
 
   return ReportPlatform.openJobFile(jobID, fileName)
