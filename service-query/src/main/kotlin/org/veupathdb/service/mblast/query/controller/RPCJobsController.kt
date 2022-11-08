@@ -35,6 +35,7 @@ class RPCJobsController(@Context request: ContainerRequest) : ControllerBase(req
       throw ForbiddenException("Attempted to expire a job that has not yet finished.")
 
     // Delete the workspace (effectively marking the job as expired)
+    // TODO FIXME WARNING!!!!! THIS WILL NOT WORK, ONLY THE SERVICE/CAMPUS THAT 'OWNS' THE JOB MAY DELETE IT
     AsyncPlatform.deleteJob(jobID)
 
     return RpcJobs.PostRpcJobsExpireResponse.respond204()
