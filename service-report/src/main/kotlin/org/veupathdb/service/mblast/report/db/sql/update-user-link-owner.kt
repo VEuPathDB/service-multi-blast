@@ -1,12 +1,15 @@
-package org.veupathdb.service.mblast.query.sql.queries
+package org.veupathdb.service.mblast.report.db.sql
 
 import org.intellij.lang.annotations.Language
+import org.veupathdb.service.mblast.report.db.Column
+import org.veupathdb.service.mblast.report.db.Schema
+import org.veupathdb.service.mblast.report.db.Table
 import java.sql.Connection
 
 @Language("Oracle")
 private const val SQL = """
 UPDATE
-  ${Schema.MBlast}.${Table.QueryToUsers} a
+  ${Schema.MBlast}.${Table.ReportToUsers} a
 SET
   ${Column.UserID} = ?
 WHERE
@@ -15,9 +18,9 @@ WHERE
     SELECT
       1
     FROM
-      ${Schema.MBlast}.${Table.QueryToUsers} b
+      ${Schema.MBlast}.${Table.ReportToUsers} b
     WHERE
-      a.${Column.QueryJobID} = b.${Column.QueryJobID}
+      a.${Column.ReportJobID} = b.${Column.ReportJobID}
       AND b.${Column.UserID} = ?
   )
 """
