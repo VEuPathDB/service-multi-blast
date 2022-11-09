@@ -94,6 +94,8 @@ TODO: Setup sshuttle
 
 TODO: gradle.properties OR direnv
 
+TODO: traefik
+
 Setup local blastdb path::
 . Create a local directory in the project root named `blastdb`
 . In the `blastdb` directory, create a directory structure mirroring the
@@ -184,16 +186,6 @@ stack.
 ----
 ./gradlew compose-down
 ----
-
-
-=== Accessing the Service
-
-The development docker compose stack includes a Traefik instance which will make
-the MultiBlast Service APIs available under the singular URL
-link:http://mblast.local.apidb.org[].
-
-The individual services are published under this URL at `/query` for the query
-service and `/report` for the report service.
 
 
 == Environment Variables
