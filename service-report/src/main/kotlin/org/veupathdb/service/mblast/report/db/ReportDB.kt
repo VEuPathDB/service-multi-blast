@@ -62,6 +62,9 @@ object ReportDB {
   fun updateUserLinksOwner(oldUserID: Long, newUserID: Long) =
     withTransaction { it.updateUserLinksOwner(oldUserID, newUserID) }
 
+  fun deleteUserLink(reportJobID: HashID, userID: Long) =
+    withTransaction { it.deleteUserLink() }
+
   /**
    * Executes the given function in the context of the provided open database
    * transaction.
