@@ -92,7 +92,7 @@ called directly.
 
 TODO: Setup sshuttle
 
-TODO: gradle.properties OR .direnv
+TODO: gradle.properties OR direnv
 
 Setup local blastdb path::
 . Create a local directory in the project root named `blastdb`
@@ -185,18 +185,16 @@ stack.
 ./gradlew compose-down
 ----
 
-=== Exposed Ports
 
-[%header, cols="1m,2"]
-|===
-| Port | Purpose
-| 5432 | Queue management postgres access.
-| 8080 | Query service API
-| 8081 | Report service API
-| 9000 | MinIO S3 API Access
-| 9001 | MinIO management console
-| 9002 | RabbitMQ management console
-|===
+=== Accessing the Service
+
+The development docker compose stack includes a Traefik instance which will make
+the MultiBlast Service APIs available under the singular URL
+link:http://mblast.local.apidb.org[].
+
+The individual services are published under this URL at `/query` for the query
+service and `/report` for the report service.
+
 
 == Environment Variables
 
