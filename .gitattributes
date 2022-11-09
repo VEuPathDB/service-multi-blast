@@ -4,5 +4,5 @@
 gradlew linguist-generated
 gradlew.bat linguist-generated
 
-query-service/schema/library.raml linguist-generated
-report-service/schema/library.raml linguist-generated
+service-query/schema/library.raml linguist-generated
+service-report/schema/library.raml linguist-generated
