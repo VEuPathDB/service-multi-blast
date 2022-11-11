@@ -119,19 +119,27 @@ private fun BlastNTaskType.toExternal() = when(this) {
 private const val DefDustLevel  = 20
 private const val DefDustWindow = 64
 private const val DefDustLinker = 1
-private fun BlastNDust.toInternal() = Dust.of(
-  level  ?: DefDustLevel,
-  window ?: DefDustWindow,
-  linker ?: DefDustLinker,
-)
+private fun BlastNDust.toInternal(): Dust {
+  if (enable == false)
+    return Dust.no()
 
+  if (level == null && window == null && linker == null)
+    return Dust.yes()
+
+  return Dust.of(
+    level  ?: DefDustLevel,
+    window ?: DefDustWindow,
+    linker ?: DefDustLinker,
+  )
+}
 
 private fun Dust.toExternal() : BlastNDust = BlastNDustImpl().also {
   if (isYes) {
-    it.level  = DefDustLevel
-    it.window = DefDustWindow
-    it.linker = DefDustLinker
+    it.enable = true
+  } else if (isNo) {
+    it.enable = false
   } else {
+    it.enable = true
     it.level  = level
     it.window = window
     it.linker = linker
