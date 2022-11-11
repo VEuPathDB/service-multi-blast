@@ -1,6 +1,7 @@
 package org.veupathdb.service.mblast.query.blast.convert
 
 import org.veupathdb.lib.blast.Blast
+import org.veupathdb.lib.blast.blastp.field.SegP
 import org.veupathdb.lib.blast.common.fields.*
 import org.veupathdb.lib.blast.deltablast.DeltaBlast
 import org.veupathdb.lib.blast.deltablast.fields.*
@@ -15,7 +16,7 @@ fun DeltaBlastConfig.toInternal() = Blast.deltablast().also {
   if (matrix                  != null) it.matrix                       = matrix.toInternal()
   if (threshold               != null) it.threshold                    = Threshold(threshold)
   if (compBasedStats          != null) it.compBasedStats               = compBasedStats.toInternal()
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingDelta(softMasking)
   if (lowercaseMasking        != null) it.lowercaseMasking             = LowercaseMasking(lowercaseMasking)
   if (queryCoverageHSPPercent != null) it.queryCoverageHSPPercent      = QueryCoverageHSPPercent(queryCoverageHSPPercent)
@@ -72,17 +73,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegDelta.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegDelta? {
+  if (enabled == false)
+    return SegDelta.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegDelta.yes()
+    else
+      SegDelta.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegDelta.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegDelta.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 
