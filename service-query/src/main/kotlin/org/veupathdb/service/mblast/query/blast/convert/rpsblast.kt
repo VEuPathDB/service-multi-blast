@@ -13,7 +13,7 @@ fun RPSBlastConfig.toInternal() = Blast.rpsblast().also {
   if (queryLocation           != null) it.queryLocation                = queryLocation.toInternal()
   if (eValue                  != null) it.expectValue                  = ExpectValue(eValue)
   if (compBasedStats          != null) it.compBasedStats               = compBasedStats.toInternal()
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingRPS(softMasking)
   if (lowercaseMasking        != null) it.lowercaseMasking             = LowercaseMasking(lowercaseMasking)
   if (queryCoverageHSPPercent != null) it.queryCoverageHSPPercent      = QueryCoverageHSPPercent(queryCoverageHSPPercent)
@@ -63,17 +63,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegRPS.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegRPS? {
+  if (enabled == false)
+    return SegRPS.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegRPS.yes()
+    else
+      SegRPS.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegRPS.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegRPS.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 private fun RPSBlastCompBasedStats.toInternal() = CompBasedStatsRPS(when (this) {
