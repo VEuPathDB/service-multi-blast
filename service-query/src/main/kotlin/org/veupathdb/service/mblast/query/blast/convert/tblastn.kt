@@ -19,7 +19,7 @@ fun TBlastNConfig.toInternal() = Blast.tblastn().also {
   if (matrix                  != null) it.matrix                       = matrix.toInternal()
   if (threshold               != null) it.threshold                    = Threshold(threshold)
   if (compBasedStats          != null) it.compBasedStats               = compBasedStats.toInternal()
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingTN(softMasking)
   if (lowercaseMasking        != null) it.lowercaseMasking             = LowercaseMasking(lowercaseMasking)
   if (dbSoftMask              != null) it.dbSoftMask                   = DBSoftMask(dbSoftMask)
@@ -83,17 +83,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegTN.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegTN? {
+  if (enabled == false)
+    return SegTN.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegTN.yes()
+    else
+      SegTN.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegTN.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegTN.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 private fun TBlastNCompBasedStats.toInternal() = CompBasedStatsTN(when(this) {
