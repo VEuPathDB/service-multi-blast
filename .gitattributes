@@ -6,3 +6,5 @@ gradlew.bat linguist-generated
 
 service-query/schema/library.raml linguist-generated
 service-report/schema/library.raml linguist-generated
+
+ResponseDelegate.java linguist-generated
