@@ -1,7 +1,6 @@
 package org.veupathdb.service.mblast.query.blast.convert
 
 import org.veupathdb.lib.blast.Blast
-import org.veupathdb.lib.blast.blastp.field.SegP
 import org.veupathdb.lib.blast.common.fields.*
 import org.veupathdb.lib.blast.deltablast.DeltaBlast
 import org.veupathdb.lib.blast.deltablast.fields.*

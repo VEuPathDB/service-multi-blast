@@ -15,7 +15,7 @@ fun PSIBlastConfig.toInternal() = Blast.psiblast().also {
   if (matrix                  != null) it.matrix                       = matrix.toInternal()
   if (threshold               != null) it.threshold                    = Threshold(threshold)
   if (compBasedStats          != null) it.compBasedStats               = compBasedStats.toInternal()
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingPSI(softMasking)
   if (lowercaseMasking        != null) it.lowercaseMasking             = LowercaseMasking(lowercaseMasking)
   if (queryCoverageHSPPercent != null) it.queryCoverageHSPPercent      = QueryCoverageHSPPercent(queryCoverageHSPPercent)
@@ -70,17 +70,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegPSI.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegPSI? {
+  if (enabled == false)
+    return SegPSI.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegPSI.yes()
+    else
+      SegPSI.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegPSI.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegPSI.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 private fun PSIBlastCompBasedStats.toInternal() = CompBasedStatsPSI(when (this) {
