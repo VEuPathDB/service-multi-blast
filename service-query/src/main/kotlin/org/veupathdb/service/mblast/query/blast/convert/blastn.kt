@@ -123,6 +123,9 @@ private fun BlastNDust.toInternal(): Dust {
   if (enable == false)
     return Dust.no()
 
+  if (level == null && window == null && linker == null)
+    return Dust.yes()
+
   return Dust.of(
     level  ?: DefDustLevel,
     window ?: DefDustWindow,
@@ -133,9 +136,6 @@ private fun BlastNDust.toInternal(): Dust {
 private fun Dust.toExternal() : BlastNDust = BlastNDustImpl().also {
   if (isYes) {
     it.enable = true
-    it.level  = DefDustLevel
-    it.window = DefDustWindow
-    it.linker = DefDustLinker
   } else if (isNo) {
     it.enable = false
   } else {
