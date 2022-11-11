@@ -6,11 +6,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "enable",
     "level",
     "window",
     "linker"
 })
 public class BlastNDustImpl implements BlastNDust {
+  @JsonProperty(
+      value = "enable",
+      defaultValue = "true"
+  )
+  private Boolean enable;
+
   @JsonProperty(
       value = "level",
       defaultValue = "20"
@@ -28,6 +35,22 @@ public class BlastNDustImpl implements BlastNDust {
       defaultValue = "1"
   )
   private Integer linker;
+
+  @JsonProperty(
+      value = "enable",
+      defaultValue = "true"
+  )
+  public Boolean getEnable() {
+    return this.enable;
+  }
+
+  @JsonProperty(
+      value = "enable",
+      defaultValue = "true"
+  )
+  public void setEnable(Boolean enable) {
+    this.enable = enable;
+  }
 
   @JsonProperty(
       value = "level",
