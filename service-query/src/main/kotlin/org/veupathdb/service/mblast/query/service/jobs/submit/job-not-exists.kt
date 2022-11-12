@@ -13,6 +13,8 @@ import org.veupathdb.service.mblast.query.service.jobs.submit.model.JobSubmissio
 import org.veupathdb.service.mblast.query.sql.JobDBManager
 import org.veupathdb.service.mblast.query.sql.JobDBTransaction
 import java.io.File
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 fun _handleJobNotExists(sub: JobSubmission) {
   // For the parent job
@@ -92,4 +94,4 @@ private inline fun JobSubmission.submitToChildQueue(queryJobID: HashID, query: F
   )
 
 private inline fun JobSubmission.newBasicQueryConfig(jobID: HashID, queryFile: File) =
-  BasicQueryConfigImpl(jobID, projectID, blastConfig.forDB, queryFile)
+  BasicQueryConfigImpl(jobID, projectID, blastConfig.forDB, queryFile, OffsetDateTime.now())
