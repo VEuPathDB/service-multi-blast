@@ -6,11 +6,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "enabled",
     "window",
     "locut",
     "hicut"
 })
 public class BlastSegImpl implements BlastSeg {
+  @JsonProperty("enabled")
+  private Boolean enabled;
+
   @JsonProperty(
       value = "window",
       defaultValue = "12"
@@ -28,6 +32,16 @@ public class BlastSegImpl implements BlastSeg {
       defaultValue = "2.5"
   )
   private Double hicut;
+
+  @JsonProperty("enabled")
+  public Boolean getEnabled() {
+    return this.enabled;
+  }
+
+  @JsonProperty("enabled")
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 
   @JsonProperty(
       value = "window",
