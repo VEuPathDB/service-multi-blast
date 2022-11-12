@@ -4,6 +4,7 @@ import org.veupathdb.lib.blast.common.BlastQueryBase
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
 import java.io.Reader
+import java.time.OffsetDateTime
 
 /**
  * # Basic Query Configuration
@@ -26,7 +27,7 @@ interface BasicQueryConfig : AutoCloseable {
   val projectID:  String
 
   /**
-   * Handle on the config file in the filesystem.
+   * BLAST+ tool config.
    */
   val config: BlastQueryBase
 
@@ -34,6 +35,11 @@ interface BasicQueryConfig : AutoCloseable {
    * Handle on the query file in the filesystem.
    */
   val queryFile: File
+
+  /**
+   * Timestamp of when the job was created.
+   */
+  val createdOn: OffsetDateTime
 
   /**
    * Returns a stream over the raw FASTA query.
@@ -55,7 +61,8 @@ data class BasicQueryConfigImpl(
   override val queryJobID: HashID,
   override val projectID: String,
   override val config: BlastQueryBase,
-  override val queryFile: File
+  override val queryFile: File,
+  override val createdOn: OffsetDateTime,
 ) : BasicQueryConfig {
   override fun getQueryReader() = queryFile.reader()
 
