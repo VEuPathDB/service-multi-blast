@@ -15,7 +15,7 @@ fun RPSTBlastNConfig.toInternal() = Blast.rpstblastn().also {
   if (strand                  != null) it.strand                       = strand.toInternal()
   if (eValue                  != null) it.expectValue                  = ExpectValue(eValue)
   if (compBasedStats          != null) it.compBasedStats               = compBasedStats.toInternal()
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingRPSTN(softMasking)
   if (queryCoverageHSPPercent != null) it.queryCoverageHSPPercent      = QueryCoverageHSPPercent(queryCoverageHSPPercent)
   if (maxHSPs                 != null) it.maxHSPs                      = MaxHSPs(maxHSPs.toUInt())
@@ -59,17 +59,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegRPSTN.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegRPSTN? {
+  if (enabled == false)
+    return SegRPSTN.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegRPSTN.yes()
+    else
+      SegRPSTN.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegRPSTN.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegRPSTN.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 private fun RPSTBlastNCompBasedStats.toInternal() = CompBasedStatsRPSTN(when (this) {

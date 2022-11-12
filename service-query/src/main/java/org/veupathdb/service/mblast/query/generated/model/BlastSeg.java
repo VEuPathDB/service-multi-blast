@@ -7,6 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
     as = BlastSegImpl.class
 )
 public interface BlastSeg {
+  @JsonProperty("enabled")
+  Boolean getEnabled();
+
+  @JsonProperty("enabled")
+  void setEnabled(Boolean enabled);
+
   @JsonProperty(
       value = "window",
       defaultValue = "12"

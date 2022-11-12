@@ -16,7 +16,7 @@ fun TBlastXConfig.toInternal() = Blast.tblastx().also {
   if (matrix                  != null) it.matrix                       = matrix.toInternal()
   if (threshold               != null) it.threshold                    = Threshold(threshold)
   if (dbGenCode               != null) it.dbGenCode                    = DBGenCode(dbGenCode.toUByte())
-  if (seg                     != null) it.seg                          = seg.toInternal()
+  if (seg                     != null) it.seg                          = seg.toInternal() ?: it.seg
   if (softMasking             != null) it.softMasking                  = SoftMaskingTX(softMasking)
   if (lowercaseMasking        != null) it.lowercaseMasking             = LowercaseMasking(lowercaseMasking)
   if (dbSoftMask              != null) it.dbSoftMask                   = DBSoftMask(dbSoftMask)
@@ -70,17 +70,44 @@ private const val DefSegWindow = 12
 private const val DefSegLocut  = 2.2
 private const val DefSegHicut  = 2.5
 
-private fun BlastSeg.toInternal() = SegTX.of(
-  window ?: DefSegWindow,
-  locut  ?: DefSegLocut,
-  hicut  ?: DefSegHicut,
-)
+private fun BlastSeg.toInternal(): SegTX? {
+  if (enabled == false)
+    return SegTX.no()
+
+  val allNull = window == null && locut == null && hicut == null
+
+  if (enabled == true) {
+    return if (allNull)
+      SegTX.yes()
+    else
+      SegTX.of(
+        window ?: DefSegWindow,
+        locut  ?: DefSegLocut,
+        hicut  ?: DefSegHicut,
+      )
+  }
+
+  return if (allNull)
+    null
+  else
+    SegTX.of(
+      window ?: DefSegWindow,
+      locut  ?: DefSegLocut,
+      hicut  ?: DefSegHicut,
+    )
+}
 
 private fun SegTX.toExternal(): BlastSeg =
   BlastSegImpl().also {
-    it.window = window
-    it.locut  = locut
-    it.hicut  = hicut
+    if (isYes) {
+      it.enabled = true
+    } else if (isNo) {
+      it.enabled = false
+    } else {
+      it.window = window
+      it.locut = locut
+      it.hicut = hicut
+    }
   }
 
 private fun TBlastXMatrix.toInternal() = ScoringMatrixTX(when (this) {
