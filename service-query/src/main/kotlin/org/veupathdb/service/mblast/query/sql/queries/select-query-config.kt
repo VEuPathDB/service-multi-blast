@@ -28,7 +28,7 @@ SELECT
 , ${Column.ProjectID}
 , ${Column.Config}
 , ${Column.Query}
-, a.${Column.CreatedOn}
+, ${Column.CreatedOn}
 FROM
   ${Schema.MBlast}.${Table.QueryConfigs}
 WHERE
