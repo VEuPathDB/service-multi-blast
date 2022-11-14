@@ -8,16 +8,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface BlastNDust {
   @JsonProperty(
-      value = "enable",
+      value = "enabled",
       defaultValue = "true"
   )
-  Boolean getEnable();
+  Boolean getEnabled();
 
   @JsonProperty(
-      value = "enable",
+      value = "enabled",
       defaultValue = "true"
   )
-  void setEnable(Boolean enable);
+  void setEnabled(Boolean enabled);
 
   @JsonProperty(
       value = "level",
