@@ -120,7 +120,7 @@ private const val DefDustLevel  = 20
 private const val DefDustWindow = 64
 private const val DefDustLinker = 1
 private fun BlastNDust.toInternal(): Dust {
-  if (enable == false)
+  if (enabled == false)
     return Dust.no()
 
   if (level == null && window == null && linker == null)
@@ -135,11 +135,11 @@ private fun BlastNDust.toInternal(): Dust {
 
 private fun Dust.toExternal() : BlastNDust = BlastNDustImpl().also {
   if (isYes) {
-    it.enable = true
+    it.enabled = true
   } else if (isNo) {
-    it.enable = false
+    it.enabled = false
   } else {
-    it.enable = true
+    it.enabled = true
     it.level  = level
     it.window = window
     it.linker = linker
