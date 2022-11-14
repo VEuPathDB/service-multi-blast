@@ -1,8 +1,11 @@
 package org.veupathdb.service.mblast.query.generated.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -11,6 +14,7 @@ import java.util.List;
     "status",
     "jobConfig",
     "blastConfig",
+    "createdOn",
     "userMeta",
     "subJobs"
 })
@@ -26,6 +30,16 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
 
   @JsonProperty("blastConfig")
   private BlastQueryConfig blastConfig;
+
+  @JsonFormat(
+      shape = JsonFormat.Shape.STRING,
+      pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+  )
+  @JsonDeserialize(
+      using = TimestampDeserializer.class
+  )
+  @JsonProperty("createdOn")
+  private Date createdOn;
 
   @JsonProperty("userMeta")
   private QueryJobUserMeta userMeta;
@@ -71,6 +85,16 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   @JsonProperty("blastConfig")
   public void setBlastConfig(BlastQueryConfig blastConfig) {
     this.blastConfig = blastConfig;
+  }
+
+  @JsonProperty("createdOn")
+  public Date getCreatedOn() {
+    return this.createdOn;
+  }
+
+  @JsonProperty("createdOn")
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
   }
 
   @JsonProperty("userMeta")

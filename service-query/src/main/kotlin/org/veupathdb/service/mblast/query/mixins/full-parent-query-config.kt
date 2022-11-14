@@ -6,6 +6,7 @@ import org.veupathdb.service.mblast.query.generated.model.JobStatus
 import org.veupathdb.service.mblast.query.generated.model.QueryJobDetails
 import org.veupathdb.service.mblast.query.generated.model.QueryJobDetailsImpl
 import org.veupathdb.service.mblast.query.model.FullParentQueryConfig
+import java.util.*
 
 /**
  * Translates the target config into a form suitable for sending to the HTTP
@@ -23,6 +24,7 @@ fun FullParentQueryConfig.toIODetails(s3Job: AsyncJob?): QueryJobDetails =
     it.queryJobID  = queryJobID.string
     it.status      = s3Job?.status?.toIOType() ?: JobStatus.EXPIRED
     it.blastConfig = config.toExternal()
+    it.createdOn   = Date.from(createdOn.toInstant())
     it.jobConfig   = toJobConfig()
     it.subJobs     = childJobs.map { it.queryJobID.string }
   }

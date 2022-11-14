@@ -2,6 +2,7 @@ package org.veupathdb.service.mblast.query.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 
 @JsonDeserialize(
     as = QueryJobListEntryImpl.class
@@ -24,6 +25,12 @@ public interface QueryJobListEntry {
 
   @JsonProperty("site")
   void setSite(TargetSite site);
+
+  @JsonProperty("createdOn")
+  Date getCreatedOn();
+
+  @JsonProperty("createdOn")
+  void setCreatedOn(Date createdOn);
 
   @JsonProperty("userMeta")
   QueryJobUserMeta getUserMeta();
