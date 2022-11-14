@@ -146,6 +146,11 @@ types:
       site:
         displayName: Target Site
         type: TargetSite
+      createdOn:
+        displayName: Created On
+        description: Job creation timestamp.
+        type: datetime
+        required: true
       userMeta:
         displayName: User Metadata
         type: QueryJobUserMeta
@@ -185,6 +190,11 @@ types:
           - [TBlastNConfig](#type:lib.TBlastNConfig)
           - [TBlastXConfig](#type:lib.TBlastXConfig)
         type: base.BlastQueryConfig
+      createdOn:
+        displayName: Created On
+        description: Job creation timestamp.
+        type: datetime
+        required: true
       userMeta:
         displayName: User Metadata
         type: QueryJobUserMeta

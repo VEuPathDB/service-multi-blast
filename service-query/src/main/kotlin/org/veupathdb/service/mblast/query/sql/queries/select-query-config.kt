@@ -14,6 +14,7 @@ import org.veupathdb.service.mblast.query.sql.util.fetchList
 import org.veupathdb.service.mblast.query.sql.util.fetchOpt
 import java.sql.Connection
 import java.sql.ResultSet
+import java.time.OffsetDateTime
 
 // ---------------------------------------------------------------------------------------------------------------------
 //
@@ -27,6 +28,7 @@ SELECT
 , ${Column.ProjectID}
 , ${Column.Config}
 , ${Column.Query}
+, ${Column.CreatedOn}
 FROM
   ${Schema.MBlast}.${Table.QueryConfigs}
 WHERE
@@ -60,6 +62,7 @@ SELECT
 , a.${Column.ProjectID}
 , a.${Column.Config} 
 , a.${Column.Query}
+, a.${Column.CreatedOn}
 , b.${Column.UserID}
 , b.${Column.Summary}
 , b.${Column.Description}
@@ -100,6 +103,7 @@ SELECT
 , a.${Column.ProjectID}
 , a.${Column.Config} 
 , a.${Column.Query}
+, a.${Column.CreatedOn}
 , b.${Column.UserID}
 , b.${Column.Summary}
 , b.${Column.Description}
@@ -138,6 +142,7 @@ SELECT
 , a.${Column.ProjectID}
 , a.${Column.Config} 
 , a.${Column.Query}
+, a.${Column.CreatedOn}
 , b.${Column.UserID}
 , b.${Column.Summary}
 , b.${Column.Description}
@@ -190,6 +195,7 @@ SELECT
 , a.${Column.ProjectID}
 , a.${Column.Config}
 , a.${Column.Query}
+, a.${Column.CreatedOn}
 , b.${Column.ParentJobID}
 FROM
   ${Schema.MBlast}.${Table.QueryConfigs} a
@@ -237,6 +243,7 @@ SELECT
 , a.${Column.ProjectID}
 , a.${Column.Config}
 , a.${Column.Query}
+, a.${Column.CreatedOn}
 FROM
   ${Schema.MBlast}.${Table.QueryConfigs} a
   INNER JOIN ${Schema.MBlast}.${Table.QueryToQueries} b
@@ -285,6 +292,7 @@ private fun ResultSet.parseQueryConfig(): BasicQueryConfig =
     getString(Column.ProjectID),
     Blast.of(Json.parse(getString(Column.Config))) as BlastQueryBase,
     clobToFile(Column.Query),
+    getObject(Column.CreatedOn, OffsetDateTime::class.java),
   )
 
 private fun ResultSet.parseUserQueryRecord() =

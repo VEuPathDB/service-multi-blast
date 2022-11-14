@@ -9,6 +9,7 @@ import org.veupathdb.service.mblast.query.mixins.toTargetSite
 import org.veupathdb.service.mblast.query.mixins.toUserMeta
 import org.veupathdb.service.mblast.query.model.FullParentUserQueryConfig
 import org.veupathdb.service.mblast.query.sql.JobDBManager
+import java.util.*
 
 /**
  * Retrieves and returns the list of query jobs linked to the given user ID.
@@ -41,6 +42,7 @@ private fun FullParentUserQueryConfig.convertToIORecord() =
     it.status     = lookupStatus()
     it.site       = projectID.toTargetSite()
     it.userMeta   = toUserMeta()
+    it.createdOn  = Date.from(createdOn.toInstant())
   }
 
 private fun FullParentUserQueryConfig.lookupStatus() =
