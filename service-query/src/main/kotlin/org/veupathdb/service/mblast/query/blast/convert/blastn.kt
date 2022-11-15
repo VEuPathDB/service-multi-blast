@@ -151,17 +151,17 @@ private fun Dust.toExternal() : BlastNDust = BlastNDustImpl().also {
 //
 
 private fun BlastNTemplateType.toInternal() = TemplateType(when(this) {
-  BlastNTemplateType.CODING           -> TemplateTypeType.Coding
-  BlastNTemplateType.CODINGANDOPTIMAL -> TemplateTypeType.CodingAndOptimal
-  BlastNTemplateType.OPTIMAL          -> TemplateTypeType.Optimal
+  BlastNTemplateType.CODING           -> TemplateTypeValue.Coding
+  BlastNTemplateType.CODINGANDOPTIMAL -> TemplateTypeValue.CodingAndOptimal
+  BlastNTemplateType.OPTIMAL          -> TemplateTypeValue.Optimal
 })
 
 private fun TemplateType.toExternal(): BlastNTemplateType =
   when(this.value) {
-    TemplateTypeType.Coding           -> BlastNTemplateType.CODING
-    TemplateTypeType.CodingAndOptimal -> BlastNTemplateType.CODINGANDOPTIMAL
-    TemplateTypeType.Optimal          -> BlastNTemplateType.OPTIMAL
-    TemplateTypeType.None             -> throw IllegalStateException()
+    TemplateTypeValue.Coding           -> BlastNTemplateType.CODING
+    TemplateTypeValue.CodingAndOptimal -> BlastNTemplateType.CODINGANDOPTIMAL
+    TemplateTypeValue.Optimal          -> BlastNTemplateType.OPTIMAL
+    TemplateTypeValue.None             -> throw IllegalStateException()
   }
 
 //
