@@ -6,6 +6,7 @@ import org.veupathdb.lib.compute.platform.AsyncPlatform
 import org.veupathdb.lib.compute.platform.job.AsyncJob
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.query.Const
+import org.veupathdb.service.mblast.query.sql.JobDBManager
 
 /**
  * Get Job Query File
@@ -18,8 +19,11 @@ import org.veupathdb.service.mblast.query.Const
  * @return An input stream over the contents of the target job's query file.
  */
 fun GetJobQuery(queryJobID: HashID) =
-  AsyncPlatform.getJobOr404(queryJobID)
-    .ifFinishedOr403 { getFileOrFail(Const.QueryFileName).open() }
+  JobDBManager.getFullJob(queryJobID)
+    ?.queryFile
+    ?.inputStream()
+    ?.buffered()
+    ?: throw NotFoundException()
 
 
 /**
