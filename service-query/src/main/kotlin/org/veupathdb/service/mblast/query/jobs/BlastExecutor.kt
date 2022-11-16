@@ -38,7 +38,7 @@ class BlastExecutor : JobExecutor {
       .openStream(Const.ConfigFileName)
       .use { Blast.of(Json.parse(it)) }
 
-    logger.debug("Executing command: {}", { blastConfig.toCliString() })
+    logger.info("Executing command: {}", { blastConfig.toCliString() })
 
     val timer = Metrics.BlastTimes
       .labels(blastConfig.tool.value)
