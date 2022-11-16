@@ -56,7 +56,7 @@ dependencies {
   implementation(project(":lib-mblast-utils"))
   implementation(project(":lib-temp-cache"))
 
-  implementation("org.glassfish.jersey.core:jersey-server:3.0.8")
+  implementation("org.glassfish.jersey.core:jersey-server:3.1.0")
 
   implementation("org.apache.logging.log4j:log4j-core:2.19.0")
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
