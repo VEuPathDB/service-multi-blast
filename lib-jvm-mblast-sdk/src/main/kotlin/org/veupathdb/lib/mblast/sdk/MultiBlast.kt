@@ -19,7 +19,7 @@ import org.veupathdb.lib.mblast.sdk.util.TargetSiteDeserializer
 
 object MultiBlast {
   @JvmStatic
-  val JSON = ObjectMapper()
+  internal val JSON = ObjectMapper()
     .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
     .registerModule(JsonOrgModule())
     .registerModule(JavaTimeModule())
@@ -38,6 +38,14 @@ object MultiBlast {
       it.addDeserializer(TargetSite::class.java, TargetSiteDeserializer())
     })
 
+  /**
+   * Creates a new Multi-Blast client from the configuration built by the passed
+   * lambda.
+   *
+   * @param fn Lambda function used to configure the new client being created.
+   *
+   * @return A new [MultiBlastClient] instance.
+   */
   fun newClient(fn: MultiBlastClientConfigBuilder.() -> Unit): MultiBlastClient =
     MultiBlastClientImpl(MultiBlastClientConfigBuilderImpl().also(fn).build())
 }

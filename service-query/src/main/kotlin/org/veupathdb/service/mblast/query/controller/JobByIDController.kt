@@ -15,7 +15,7 @@ import org.veupathdb.service.mblast.query.service.jobs.restart.RestartJob
 @Authenticated(allowGuests = true)
 class JobByIDController(@Context request: ContainerRequest) : ControllerBase(request), JobsJobId {
 
-  override fun getJobsByJobId(jobId: String, saveJob: Boolean) =
+  override fun getJobsByJobId(jobId: String, saveJob: Boolean): JobsJobId.GetJobsByJobIdResponse =
     JobsJobId.GetJobsByJobIdResponse
       .respond200WithApplicationJson(
         if (saveJob)

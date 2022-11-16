@@ -35,6 +35,9 @@ internal class MultiBlastClientConfigBuilderImpl : MultiBlastClientConfigBuilder
   }
 
   override fun port(port: UShort): MultiBlastClientConfigBuilder {
+    if (port < 1u)
+      throw IllegalArgumentException("port number must be in the valid port range")
+
     this.port = port
     return this
   }

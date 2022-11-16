@@ -10,8 +10,8 @@ group = "org.veupathdb.lib"
 version = "1.0.0"
 
 java {
-  targetCompatibility = JavaVersion.VERSION_16
-  sourceCompatibility = JavaVersion.VERSION_16
+  targetCompatibility = JavaVersion.VERSION_11
+  sourceCompatibility = JavaVersion.VERSION_11
 
   withSourcesJar()
   withJavadocJar()
@@ -23,12 +23,12 @@ tasks.dokkaHtml {
 
 
 dependencies {
-  api("com.fasterxml.jackson.core:jackson-databind:2.13.4")
-  api("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.13.4")
-  api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
-  api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.4")
-  api("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
-  api("com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.4")
+  api("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+  api("com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.14.0")
+  api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
+  api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.0")
+  api("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+  api("com.fasterxml.jackson.module:jackson-module-parameter-names:2.14.0")
 
   api("org.veupathdb.lib:hash-id:1.1.0")
 
@@ -48,7 +48,7 @@ tasks.jar {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
-    jvmTarget = "16"
+    jvmTarget = "11"
     freeCompilerArgs = listOf("-Xjvm-default=all")
   }
 }
@@ -78,11 +78,7 @@ publishing {
     maven {
       name = "GitHub"
 
-      // DO NOT CHANGE THIS URL!!
-      // GitHub won't allow you to associate an artifact with a new repo and
-      // gradle will fail to publish with a mysterious and contextless 422 if
-      // you try.
-      url = uri("https://maven.pkg.github.com/veupathdb/lib-jvm-blast")
+      url = uri("https://maven.pkg.github.com/veupathdb/service-multi-blast")
 
       credentials {
         username = rootProject.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
@@ -95,8 +91,8 @@ publishing {
     create<MavenPublication>("gpr") {
       from(components["java"])
       pom {
-        name.set("Blast CLI/JSON Library")
-        description.set("Provides a set of types representing blast tool configurations.")
+        name.set("Multi-Blast Service API SDK")
+        description.set("A small SDK providing programatic access to the Multi-Blast REST APIs.")
         url.set("https://github.com/VEuPathDB/service-multi-blast")
         developers {
           developer {
