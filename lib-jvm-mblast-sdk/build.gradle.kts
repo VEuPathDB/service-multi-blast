@@ -10,8 +10,8 @@ group = "org.veupathdb.lib"
 version = "1.0.0"
 
 java {
-  targetCompatibility = JavaVersion.VERSION_11
-  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_16
+  sourceCompatibility = JavaVersion.VERSION_16
 
   withSourcesJar()
   withJavadocJar()
@@ -48,7 +48,7 @@ tasks.jar {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
-    jvmTarget = "11"
+    jvmTarget = "16"
     freeCompilerArgs = listOf("-Xjvm-default=all")
   }
 }
