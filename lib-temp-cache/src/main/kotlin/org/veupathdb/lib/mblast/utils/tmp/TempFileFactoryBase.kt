@@ -91,7 +91,7 @@ sealed class TempFileFactoryBase(
       deleteQueue.addAll(tmp)
     }
 
-    logger.info("temp file cleanup completed.  deleted {} files", deletedFiles)
+    logger.debug("temp file cleanup completed.  deleted {} files", deletedFiles)
   }
 
   override fun shutDown() {
