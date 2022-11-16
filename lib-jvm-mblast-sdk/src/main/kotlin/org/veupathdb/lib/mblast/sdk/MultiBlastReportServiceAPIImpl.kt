@@ -48,19 +48,19 @@ internal class MultiBlastReportServiceAPIImpl(config: MultiBlastClientConfig)
     pathJob(jobID)
       .postRequest()
       .submit()
-      .require204("Job could not be restarted due to job not found")
+      .require204(jobID, "Job could not be restarted due to job not found")
 
   override fun patchJob(jobID: HashID, request: ReportJobPatchRequest) =
     pathJob(jobID)
       .jsonPatchRequest(request)
       .submit()
-      .require204("Job could not be patched due to job not found.")
+      .require204(jobID, "Job could not be patched due to job not found.")
 
   override fun deleteJob(jobID: HashID) =
     pathJob(jobID)
       .deleteRequest()
       .submit()
-      .require204("Could not delete job due to job not found.")
+      .require204(jobID, "Could not delete job due to job not found.")
 
   override fun createJob(fn: ReportJobPostRequestBuilder.() -> Unit): Either<JsonNode, JobCreateResponse> {
     val body = ReportJobPostRequestBuilder().apply(fn).build()

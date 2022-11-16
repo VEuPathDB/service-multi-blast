@@ -42,19 +42,19 @@ internal class MultiBlastQueryServiceAPIImpl(config: MultiBlastClientConfig)
     pathJob(jobID)
       .postRequest()
       .submit()
-      .require204("Job could not be restarted due to job not found.")
+      .require204(jobID, "Job could not be restarted due to job not found.")
 
   override fun patchJob(jobID: HashID, patch: QueryJobPatchRequest) =
     pathJob(jobID)
       .jsonPatchRequest(patch)
       .submit()
-      .require204("Job could not be patched due to job not found.")
+      .require204(jobID, "Job could not be patched due to job not found.")
 
   override fun deleteJob(jobID: HashID) =
     pathJob(jobID)
       .deleteRequest()
       .submit()
-      .require204("Could not delete job due to job not found.")
+      .require204(jobID, "Could not delete job due to job not found.")
 
   override fun getJobQuery(jobID: HashID) =
     pathJobQuery(jobID)

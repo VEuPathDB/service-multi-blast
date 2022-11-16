@@ -1,5 +1,6 @@
 package org.veupathdb.lib.mblast.sdk
 
+import org.veupathdb.lib.mblast.sdk.except.MBlastAPIException
 import java.net.URI
 import java.net.http.HttpClient
 
@@ -49,9 +50,9 @@ internal class MultiBlastClientConfigBuilderImpl : MultiBlastClientConfigBuilder
 
   internal fun build(): MultiBlastClientConfig {
     if (host == null)
-      throw IllegalStateException("MultiBlastClientConfig service hostname was not set.")
+      throw MBlastAPIException("MultiBlastClientConfig service hostname was not set.")
     if (authKey == null)
-      throw IllegalStateException("MultiBlastClientConfig service auth key was not set.")
+      throw MBlastAPIException("MultiBlastClientConfig service auth key was not set.")
 
     val uri = if (port == null)
       URI(host!!)
