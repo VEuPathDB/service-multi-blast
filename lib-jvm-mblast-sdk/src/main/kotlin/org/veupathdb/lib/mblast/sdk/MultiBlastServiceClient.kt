@@ -1,6 +1,9 @@
 package org.veupathdb.lib.mblast.sdk
 
 import io.foxcapades.lib.k.multipart.MultiPartBody
+import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.mblast.sdk.except.MBlastAPIException
+import org.veupathdb.lib.mblast.sdk.except.MBlastJobNotFoundException
 import java.io.InputStream
 import java.net.URI
 import java.net.http.HttpRequest
@@ -55,16 +58,16 @@ internal sealed class MultiBlastServiceClient(
       else -> throwUnexpectedResponse()
     }
 
-  protected inline fun HttpResponse<InputStream>.require204(err404: String) =
+  protected inline fun HttpResponse<InputStream>.require204(jobID: HashID, err404: String) =
     when (statusCode()) {
       204  -> {}
-      404  -> throw IllegalStateException(err404)
+      404  -> throw MBlastJobNotFoundException(jobID, err404)
       else -> throwUnexpectedResponse()
     }
 
   protected inline fun HttpResponse<InputStream>.throwUnexpectedResponse(): Nothing {
     val body = String(body().readAllBytes())
-    throw IllegalStateException("Unexpected response from ${uri()} : ${statusCode()} : $body")
+    throw MBlastAPIException("Unexpected response from ${uri()} : ${statusCode()} : $body")
   }
 
 
