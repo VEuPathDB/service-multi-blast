@@ -4,8 +4,6 @@
 import org.veupathdb.lib.Builder
 
 node('centos8') {
-  sh "env"
-
   def builder = new Builder(this)
 
   builder.gitClone()
