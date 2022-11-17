@@ -33,14 +33,17 @@ necessary to support the MultiBlast query and report services.
 
 === Libraries
 
+link:lib-blast-query-parser/[BLAST+ Query Parsing Tools]::
+Multi-sequence BLAST query parsing tool kit.
+
 link:lib-blast-types/[BLAST+ CLI API Wrapper Type Library]::
-BLAST+ tool CLI API wrapper.
+NCBI BLAST+ tool CLI API wrapper.
 +
 Allows easy programmatic construction and validation of CLI calls to BLAST+
 tools.
 
-link:lib-blast-query-parser/[BLAST+ Query Parsing Tools]::
-Multi-sequence BLAST query parsing tool kit.
+link:lib-jvm-mblast-sdk[MultiBlast API SDK]::
+JVM SDK for working with the MultiBlast API.
 
 link:lib-mblast-utils/[MultiBlast Common Utilities]::
 Various utilities common to the other  services and libraries in this repo.
@@ -60,3 +63,12 @@ Docker Compose stack configuration for MultiBlast.
 link:ddl-oracle/[User Database DDL]::
 DDL for the database schema and tables backing MultiBlast in the VEuPathDB user
 database.
+
+link:script-mblast2-migration/[v2.0 Migration Script]::
+Script to migrate the backing user database from `v0.x` and `v1.x` data to
+`v2.x`.
+
+=== Test / Support
+
+link:script-mblast-e2e/[End-to-End Tests]::
+Test script that performs end-to-end testing on a running MultiBlast instance.

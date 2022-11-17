@@ -1,0 +1,42 @@
+= Multi-Blast End-to-End Tests
+:source-highlighter: highlightjs
+
+A test script for running end-to-end tests against a running Multi-Blast service
+stack.
+
+== Set-Up
+
+To run the end-to-end tests, a configuration must first be created to point the
+test script at the instance it will be testing.
+
+In the `script-mblast-e2e` directory (the directory containing this readme),
+create a file named `test-config.properties` containing the following:
+
+[source, properties]
+----
+service.host=
+service.port=
+auth.token=
+----
+
+Once the file is created, populate the properties with the correct values and
+continue to the <<Running>> section.
+
+If you are testing a local instance of the Multi-Blast service, Traefik will be
+required.  In this case, the value of the `service.host` and `service.port`
+properties will be constant:
+
+[source, properties]
+----
+service.host=http://mblast.local.apidb.org
+service.port=80
+auth.token=
+----
+
+== Running
+
+The end-to-end tests can be executed from anywhere in the project by calling:
+[source, bash]
+----
+./gradlew :script-mblast-e2e:run
+----
