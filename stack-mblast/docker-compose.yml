@@ -4,6 +4,7 @@ name: mblast
 
 volumes:
   vol-queue-db:
+  gcloud-config:
 
 networks:
   internal:
@@ -30,6 +31,10 @@ services:
       REPORT_SERVICE_PG_DB_NAME: ${REPORT_SERVICE_PG_DB_NAME:?}
     networks:
     - internal
+    volumes:
+    - type: volume
+      source: vol-queue-db
+      target: /var/lib/postgresql/data
     labels:
     - "prometheus.scrape_enabled=false"
     - "com.centurylinklabs.watchtower.enable=${POSTGRES_WATCHTOWER:-false}"
@@ -58,6 +63,13 @@ services:
     - type: bind
       source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
       target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+    # because the ncbi/blast container is based on gcloud-sdk it creates a
+    # volume in /root/.confg.  We don't care about this, we configure a
+    # volume so that it is at least tied to the project, instead of a hash.
+    - type: volume
+      source: gcloud-config
+      target: /root/.config
+      read_only: true
     environment:
       JVM_MEM_ARGS: ${QUERY_SERVICE_JVM_MEM_ARGS:-"-Xms32M -Xmx256M"}
       JVM_ARGS:     ${QUERY_SERVICE_JVM_ARGS:-""}
@@ -139,6 +151,13 @@ services:
     - type: bind
       source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
       target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
+    # because the ncbi/blast container is based on gcloud-sdk it creates a
+    # volume in /root/.confg.  We don't care about this, we configure a
+    # volume so that it is at least tied to the project, instead of a hash.
+    - type: volume
+      source: gcloud-config
+      target: /root/.config
+      read_only: true
     environment:
       JVM_MEM_ARGS: ${REPORT_SERVICE_JVM_MEM_ARGS:-"-Xms32M -Xmx256M"}
       JVM_ARGS:     ${REPORT_SERVICE_JVM_ARGS:-""}
