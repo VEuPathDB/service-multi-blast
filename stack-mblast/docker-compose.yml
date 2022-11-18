@@ -10,6 +10,8 @@ networks:
     internal: true
   traefik:
     external: true
+  monitoring-ext:
+    external: true
 
 services:
 
@@ -31,7 +33,7 @@ services:
     labels:
     - "prometheus.scrape_enabled=false"
     - "com.centurylinklabs.watchtower.enable=${POSTGRES_WATCHTOWER:-false}"
-    - "traefik.docker.network=traefik"
+    - "traefik.enable=false"
 
 
   queue:
@@ -44,7 +46,7 @@ services:
     labels:
     - "prometheus.scrape_enabled=false"
     - "com.centurylinklabs.watchtower.enable=false"
-    - "traefik.docker.network=traefik"
+    - "traefik.enable=false"
 
 
   query-service:
@@ -112,6 +114,7 @@ services:
     networks:
     - internal
     - traefik
+    - monitoring-ext
     labels:
     - "prometheus.scrape_enabled=true"
     - "com.centurylinklabs.watchtower.enable=${QUERY_SERVICE_WATCHTOWER:-false}"
@@ -176,6 +179,7 @@ services:
     networks:
     - internal
     - traefik
+    - monitoring-ext
     labels:
     - "prometheus.scrape_enabled=true"
     - "com.centurylinklabs.watchtower.enable=${REPORT_SERVICE_WATCHTOWER:-false}"
