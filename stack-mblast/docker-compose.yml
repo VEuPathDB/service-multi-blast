@@ -59,6 +59,9 @@ services:
       source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
       target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
     environment:
+      JVM_MEM_ARGS: ${QUERY_SERVICE_JVM_MEM_ARGS:-"-Xms32M -Xmx256M"}
+      JVM_ARGS:     ${QUERY_SERVICE_JVM_ARGS:-""}
+
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
       LDAP_SERVER:     ${LDAP_SERVERS:?}
       ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
@@ -137,6 +140,9 @@ services:
       source: ${BLAST_DB_MOUNT_SOURCE:-../blastdb}
       target: ${BLAST_DB_MOUNT_TARGET:-/blastdb}
     environment:
+      JVM_MEM_ARGS: ${REPORT_SERVICE_JVM_MEM_ARGS:-"-Xms32M -Xmx256M"}
+      JVM_ARGS:     ${REPORT_SERVICE_JVM_ARGS:-""}
+
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
       LDAP_SERVER:     ${LDAP_SERVERS:?}
       ORACLE_BASE_DN:  ${ORACLE_BASE_DN:?}
