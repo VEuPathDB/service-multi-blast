@@ -90,11 +90,8 @@ called directly.
 
 === Prerequisites
 
-TODO: Setup sshuttle
-
-TODO: gradle.properties OR direnv
-
-TODO: traefik
+Follow the steps under the "Prerequisites" heading in the VEuPathDB Confluence
+document "Deploy Containerized Services for Local Development".
 
 Setup local blastdb path::
 . Create a local directory in the project root named `blastdb`
