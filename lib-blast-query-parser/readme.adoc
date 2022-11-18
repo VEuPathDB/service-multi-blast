@@ -1,0 +1,4 @@
+= BLAST+ Query Parser
+
+Library containing utilities for parsing, validating, and splitting
+multi-sequence BLAST+ queries.
