@@ -161,7 +161,7 @@ following:
 
 [source, properties]
 ----
-ssh.user=ellie
+ssh.user=username
 ssh.host=some.ssh.server.org
 ssh.port=21
 
