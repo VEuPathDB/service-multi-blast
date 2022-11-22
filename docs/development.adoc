@@ -10,7 +10,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-== Developing the Service
+== Developing the Services
 
 === Prerequisites
 
