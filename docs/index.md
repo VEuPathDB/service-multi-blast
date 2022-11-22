@@ -1,5 +1,8 @@
 # MultiBlast Docs
 
+* [Design Doc](https://github.com/VEuPathDB/service-multi-blast/blob/dev/docs/design/2.0/design.adoc)
+* [Developer Doc](https://github.com/VEuPathDB/service-multi-blast/blob/dev/docs/development.adoc)
+
 ## Service Docs
 
 * [Query Service API](https://veupathdb.github.io/service-multi-blast/service-query/api.html)
