@@ -86,12 +86,15 @@ private fun parseMBlastProps(file: File) = Properties().let { props ->
     props.requireString(KEY_SSH_HOST),
     props.requireInt(KEY_SSH_PORT),
     props.requireString(KEY_SSH_PATH),
-    props.requireString(KEY_SSH_PASS),
+    props.optionalString(KEY_SSH_PASS),
     props.requireString(KEY_SITE_NAME),
     props.requireString(KEY_SITE_BUILD),
     props.requireString(KEY_REMOTE_DIR),
   )
 }
+
+private inline fun Properties.optionalString(key: String) =
+  (this[key] as String?) ?: ""
 
 private inline fun Properties.requireString(key: String) =
   (this[key] as String?)
