@@ -70,15 +70,15 @@ image:assets/mblast-query-overview.png[]
 | Client
 | Unlink a job from the requesting user.
 
-| Get Job Query
+| <<get-job-query,Get Job Query>>
 | Client
 | Retrieve the raw query submitted for a target job.
 
-| Get Job Result
+| <<get-job-result,Get Job Result>>
 | Client
 | Retrieve the ASN1 query result of the target job.
 
-| Get Job Errors
+| <<get-job-errors,Get Job Errors>>
 | Client
 | Retrieve the stderr output for a target job.
 
@@ -121,7 +121,6 @@ image:assets/mblast-query-overview.png[]
 . Check the status of the job
 . Return the job details
 
-
 [#restart-query-job]
 ==== Restart Job
 
@@ -143,6 +142,28 @@ image:assets/mblast-query-overview.png[]
 . Look up the target job in the user database
 . Verify the requesting user is linked to the target job
 . Delete the link between the requesting user and the target job
+
+[#get-job-query]
+==== Get Job Query
+
+. Look up the target job in the user database
+. Return the job's query
+
+[#get-job-result]
+==== Get Job Result
+
+. Look up the target job in the user database
+. Look up the target job in S3
+. Verify the job's status is "complete"
+. Return the job's result file
+
+[#get-job-errors]
+==== Get Job Errors
+
+. Look up the target job in the user database
+. Look up the target job in S3
+. Verify the job's status is "complete"
+. Return the job's stderr file
 
 
 === Dependencies
