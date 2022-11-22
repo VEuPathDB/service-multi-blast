@@ -97,7 +97,8 @@ called directly.
 ==== General Local Deployment Requirements
 
 Follow the steps under the "Prerequisites" heading in the VEuPathDB Confluence
-document "Deploy Containerized Services for Local Development".
+document
+link:https://veupathdb.atlassian.net/wiki/spaces/TECH/pages/108560402/Deploy+Containerized+Services+for+Local+Development[Deploy Containerized Services for Local Development].
 
 
 ==== Multi-Blast Specific Requirements
