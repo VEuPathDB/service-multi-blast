@@ -1,6 +1,8 @@
 = Multi-Blast 2.0 Design
 :source-highlighter: highlightjs
 :toc: preamble
+:var-github-url: https://github.com
+:var-git-org-url: {var-github-url}/VEuPathDB
 
 image:assets/mblast-overview.png[]
 
@@ -17,15 +19,18 @@ dependencies.
 
 .Dependencies
 1. The VEuPathDB Oracle user database.
-2. The VEuPathDB BLAST+ databases.
+2. The VEuPathDB link:https://blast.ncbi.nlm.nih.gov/Blast.cgi[BLAST+]
+   databases.
 3. An S3 instance with a bucket created for each of the Query Service and Report
 Service.
 
 == Query Service
 
-The Query Service exposes a REST API through which API consumers may create,
-customize, and execute asynchronous BLAST+ query jobs against VEuPathDB's BLAST+
-databases.
+The Query Service, built on the
+link:{var-git-org-url}lib-compute-platform[Async Platform], exposes a REST API
+through which API consumers may create, customize, and execute asynchronous
+link:https://blast.ncbi.nlm.nih.gov/Blast.cgi[BLAST+] query jobs against
+VEuPathDB's BLAST+ databases.
 
 link:https://veupathdb.github.io/service-multi-blast/service-query/api.html[REST API Documentation]
 
@@ -35,53 +40,126 @@ image:assets/mblast-query-overview.png[]
 
 === Actions
 
-[%header, cols="2,8"]
+[%header, cols="2,1,7"]
 |===
-| Action | Description
+| Action | Source | Description
 
-| List Jobs
-| Lists the top level jobs that are linked to the requesting user.
+| <<#list-query-jobs,List Jobs>>
+| Client
+| Lists the <<Primary Jobs>> that are <<linked>> to the requesting user.
 
-| Create Job
-| Creates a new query job and may optionally link the new job to the requesting
-  user.
+| <<#create-query-job,Create Job>>
+| Client
+| Creates a new query job and may optionally <<link>> the new job to the
+  requesting user.
 
-| Lookup Job
-| Get the details and configuration for an existing job.
+| <<#lookup-query-job,Lookup Job>>
+| Client
+| Get the details and configuration for an existing job and optionally link the
+  requesting user to the target job.
 
-| Restart Job
+| <<restart-query-job,Restart Job>>
+| Client
 | Re-runs an existing job that has expired.
 
-| Update Job
+| <<update-query-job,Update Job>>
+| Client
 | Update a user's metadata attached to a job.
 
-| Delete Job
+| <<delete-query-job,Delete Job>>
+| Client
 | Unlink a job from the requesting user.
 
 | Get Job Query
+| Client
 | Retrieve the raw query submitted for a target job.
 
 | Get Job Result
+| Client
 | Retrieve the ASN1 query result of the target job.
 
 | Get Job Errors
+| Client
 | Retrieve the stderr output for a target job.
 
 | Bulk Status Check
+| Client
 | Check the current statuses for a batch of job IDs.
 
 | Get Targets
+| Client
 | List the BLAST+ databases currently visible to the service.
 
 | Link Guest
+| Client
 | Links the jobs associated with a guest user with a target non-guest user.
+
+| Execute Query
+| Queue
+| Asynchronously executes a BLAST+ query.
 |===
+
+[#list-query-jobs]
+==== List Jobs
+
+. Look up jobs attached to the requesting user in the user database
+. Return the list
+
+[#create-query-job]
+==== Create Job
+
+. Validate the job configuration
+. Record the job in the user database
+. Optionally link the requesting user to the job in the user database
+. Submit the job to the Async Platform
+
+[#lookup-query-job]
+==== Lookup Job
+
+. Look up job in user database
+. Optionally link requesting user to the job in the user database
+. Check the status of the job
+. Return the job details
+
+
+[#restart-query-job]
+==== Restart Job
+
+. Look up job in user database
+. Verify user is linked to job
+. Verify job is in the status "expired"
+. Resubmit the job to the Async Platform
+
+[#update-query-job]
+==== Update Job
+
+. Look up the target job in the user database
+. Verify user is linked to the target job
+. Update the user's metadata for the job in the user database
+
+[#delete-query-job]
+==== Delete Job
+
+. Look up the target job in the user database
+. Verify the requesting user is linked to the target job
+. Delete the link between the requesting user and the target job
+
+
+=== Dependencies
+
+. S3
+. RabbitMQ
+. PostgreSQL
+. Oracle
+. BLAST+ Databases
 
 
 == Report Service
 
-The Report Service exposes a REST API through which API consumers may generate
-custom reports from BLAST+ queries executed using the <<Query Service>>.
+The Report Service, built on the
+link:{var-git-org-url}lib-compute-platform[Async Platform], exposes a REST API
+through which API consumers may generate custom reports from BLAST+ queries
+executed using the <<Query Service>>.
 
 link:https://veupathdb.github.io/service-multi-blast/service-report/api.html[REST API Documentation]
 
@@ -129,3 +207,20 @@ image:assets/mblast-report-overview.png[]
 | Link Guest
 | Links the jobs associated with a guest user with a target non-guest user.
 |===
+
+=== Dependencies
+
+. Query Service
+. S3
+. RabbitMQ
+. PostgreSQL
+. Oracle
+. BLAST+ Databases
+
+== Concepts
+
+TODO
+
+* Parent / child jobs
+* Primary / secondary jobs
+* Job Links
