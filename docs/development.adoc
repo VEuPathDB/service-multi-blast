@@ -165,6 +165,8 @@ following:
 ssh.user=username
 ssh.host=some.ssh.server.org
 ssh.port=21
+ssh.key.path=/home/username/.ssh/id_rsa
+ssh.key.pass=blank-for-no-password
 
 site.name=PlasmoDB
 site.build=build-59
@@ -177,13 +179,19 @@ This file will need to be edited with the following details:
 [cols="1m,7"]
 |===
 | ssh.user
-| The user name you normally use when connecting to the VEuPathDB servers.
+| The username you normally use when connecting to the VEuPathDB servers.
 
 | ssh.host
 | The target server from which you will download BLAST+ databases.
 
 | ssh.port
 | The port number to connect to the target server using.
+
+| ssh.key.path
+| Path to the private key to use when authenticating with the target server.
+
+| ssh.key.pass
+| Password for your SSH key (set to nothing for no password).
 
 | site.name
 | Name or Project ID of the site for which BLAST+ database files will be
@@ -273,6 +281,12 @@ BUILD SUCCESSFUL in 20s
 4 actionable tasks: 2 executed, 2 up-to-date
 ----
 ====
+
+===== 4. (Optional) Delete the mblast-dev.properties file
+
+The `mblast-dev.properties` file is only necessary to download blast databases.
+Once that task has been completed, it is fine and probably advisable to delete
+the file to avoid any mishaps where secrets get pushed to GitHub.
 
 === Build
 

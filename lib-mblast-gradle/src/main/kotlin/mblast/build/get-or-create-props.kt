@@ -9,6 +9,8 @@ import java.util.*
 private const val KEY_SSH_USER = "ssh.user"
 private const val KEY_SSH_HOST = "ssh.host"
 private const val KEY_SSH_PORT = "ssh.port"
+private const val KEY_SSH_PATH = "ssh.key.path"
+private const val KEY_SSH_PASS = "ssh.key.pass"
 private const val KEY_SITE_NAME = "site.name"
 private const val KEY_SITE_BUILD = "site.build"
 private const val KEY_REMOTE_DIR = "files.root"
@@ -17,6 +19,8 @@ private fun makePropsContent() = """
 $KEY_SSH_USER=${System.getProperty("user.name")}
 $KEY_SSH_HOST=some.ssh.server.org
 $KEY_SSH_PORT=21
+$KEY_SSH_PATH=${System.getProperty("user.home")}/.ssh/id_rsa
+$KEY_SSH_PASS=blank-for-no-password
 
 $KEY_SITE_NAME=PlasmoDB
 $KEY_SITE_BUILD=build-59
@@ -64,6 +68,8 @@ internal data class DevProps(
   val sshUser: String,
   val sshHost: String,
   val sshPort: Int,
+  val sshPath: String,
+  val sshPass: String,
 
   val siteName:  String,
   val siteBuild: String,
@@ -79,6 +85,8 @@ private fun parseMBlastProps(file: File) = Properties().let { props ->
     props.requireString(KEY_SSH_USER),
     props.requireString(KEY_SSH_HOST),
     props.requireInt(KEY_SSH_PORT),
+    props.requireString(KEY_SSH_PATH),
+    props.requireString(KEY_SSH_PASS),
     props.requireString(KEY_SITE_NAME),
     props.requireString(KEY_SITE_BUILD),
     props.requireString(KEY_REMOTE_DIR),

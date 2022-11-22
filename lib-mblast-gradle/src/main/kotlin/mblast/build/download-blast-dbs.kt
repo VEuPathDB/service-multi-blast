@@ -14,7 +14,7 @@ fun Project.CreateBlastDBDirectoryIfNotExists() {
   val blastDir = file("blastdb")
   blastDir.exists() && return
 
-  println("\nBlast DB directory does not exist, download blast files...")
+  println("\nDirectory ./blastdb does not exist, downloading blast files...")
 
   val props = getPropsOrCreateAndFail()
 
@@ -23,7 +23,13 @@ fun Project.CreateBlastDBDirectoryIfNotExists() {
   SSHClient().use { ssh ->
     ssh.addHostKeyVerifier(PromiscuousVerifier())
     ssh.connect(props.sshHost, props.sshPort)
-    ssh.authPublickey(props.sshUser)
+    ssh.authPublickey(
+      props.sshUser,
+      if (props.sshPass == "")
+        ssh.loadKeys(props.sshPath)
+      else
+        ssh.loadKeys(props.sshPath, props.sshPass)
+    )
 
     ssh.newSFTPClient().use { sftp ->
 
