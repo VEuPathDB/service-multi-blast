@@ -34,6 +34,9 @@ VEuPathDB's BLAST+ databases.
 
 link:https://veupathdb.github.io/service-multi-blast/service-query/api.html[REST API Documentation]
 
+The results of jobs executed through the query service will be cached for a
+configurable amount of time before they are automatically expired.
+
 .Query Service Overview
 image:assets/mblast-query-overview.png[]
 
@@ -82,19 +85,19 @@ image:assets/mblast-query-overview.png[]
 | Client
 | Retrieve the stderr output for a target job.
 
-| Bulk Status Check
+| <<bulk-query-status,Bulk Status Check>>
 | Client
 | Check the current statuses for a batch of job IDs.
 
-| Get Targets
+| <<Get Targets>>
 | Client
 | List the BLAST+ databases currently visible to the service.
 
-| Link Guest
+| <<link-query-guest,Link Guest>>
 | Client
 | Links the jobs associated with a guest user with a target non-guest user.
 
-| Execute Query
+| <<Execute Query>>
 | Queue
 | Asynchronously executes a BLAST+ query.
 |===
@@ -108,13 +111,23 @@ image:assets/mblast-query-overview.png[]
 [#create-query-job]
 ==== Create Job
 
+Creates a new job record if one does not already exist matching the POSTed
+configuration.  See <<Job IDs>>.
+
 . Validate the job configuration
+. Validate the input query
+. Hash the config and query to generate a job ID
+. Verify no matching job already exists in the database
 . Record the job in the user database
 . Optionally link the requesting user to the job in the user database
 . Submit the job to the Async Platform
 
 [#lookup-query-job]
 ==== Lookup Job
+
+Endpoint used to look up the details of a job, and it's configuration.
+
+===== Workflow
 
 . Look up job in user database
 . Optionally link requesting user to the job in the user database
@@ -124,6 +137,10 @@ image:assets/mblast-query-overview.png[]
 [#restart-query-job]
 ==== Restart Job
 
+Endpoint used to re-queue a job that has expired from the cache in S3.
+
+===== Workflow
+
 . Look up job in user database
 . Verify user is linked to job
 . Verify job is in the status "expired"
@@ -132,12 +149,21 @@ image:assets/mblast-query-overview.png[]
 [#update-query-job]
 ==== Update Job
 
+Endpoint used to update the metadata the requesting user has saved for the
+target job.
+
+===== Workflow
+
 . Look up the target job in the user database
 . Verify user is linked to the target job
 . Update the user's metadata for the job in the user database
 
 [#delete-query-job]
 ==== Delete Job
+
+Endpoint used to remove a link between a user and a job.
+
+===== Workflow
 
 . Look up the target job in the user database
 . Verify the requesting user is linked to the target job
@@ -146,11 +172,20 @@ image:assets/mblast-query-overview.png[]
 [#get-job-query]
 ==== Get Job Query
 
+Endpoint used to retrieve the input query submitted for a job.
+
+===== Workflow
+
 . Look up the target job in the user database
 . Return the job's query
 
 [#get-job-result]
 ==== Get Job Result
+
+Endpoint used to retrieve the ASN1 query result file output by the BLAST+
+command-line tool executed as part of a job.
+
+===== Workflow
 
 . Look up the target job in the user database
 . Look up the target job in S3
@@ -160,19 +195,73 @@ image:assets/mblast-query-overview.png[]
 [#get-job-errors]
 ==== Get Job Errors
 
+Endpoint used to retrieve the stderr output from the BLAST+ command-line tool
+that was executed as part of a job.
+
+===== Workflow
+
 . Look up the target job in the user database
 . Look up the target job in S3
-. Verify the job's status is "complete"
+. Verify the job's is in either the "complete" or "failed" status
 . Return the job's stderr file
 
+[#bulk-query-status]
+==== Bulk Status Check
+
+. For each ID POSTed
+.. Look up the job in S3
+.. Get the job's status
+. Return the found statuses
+
+==== Get Targets
+
+Endpoint used to list the available BLAST+ targets that may be queried.
+
+===== Workflow
+
+1. Traverse the BLAST+ store directory structure to build a list of available
+   BLAST+ target databases
+2. Return the assembled list
+
+[#link-query-guest]
+==== Link Guest
+
+RPC-like API endpoint used to migrate ownership of jobs created by a WDK guest
+user to a logged-in user.  The use case being situations where a user creates
+jobs before either realizing they weren't logged in, or deciding to create an
+account.
+
+===== Workflow
+
+. Verify the target user from which jobs will be migrated is actually a WDK
+  guest user.
+. Verify the requesting user to which jobs will be migrated is actually a
+  logged-in WDK user.
+. Transfer user link ownership from the guest user to the logged-in user for all
+  jobs linked to the guest.
+
+==== Execute Query
+
+Internal, asynchronous execution of a target BLAST+ command-line tool using a
+user provided configuration.
+
+This execution happens in worker threads that pull jobs from the RabbitMQ
+message queue backing the Async Platform.
+
+===== Workflow
+
+. Translate the query config to a CLI call
+. Execute the BLAST+ CLI tool
+. Record the stderr output to file
+. Post the exit code back to the response channel of the message queue
 
 === Dependencies
 
-. S3
-. RabbitMQ
-. PostgreSQL
-. Oracle
-. BLAST+ Databases
+* S3
+* RabbitMQ
+* PostgreSQL
+* Oracle
+* BLAST+ Databases
 
 
 == Report Service
@@ -242,6 +331,7 @@ image:assets/mblast-report-overview.png[]
 
 TODO
 
+* Job IDs
 * Parent / child jobs
 * Primary / secondary jobs
 * Job Links
