@@ -364,10 +364,33 @@ image:assets/mblast-report-overview.png[]
 
 == Concepts
 
-TODO
-
+.TODO
 * User metadata
-* Job IDs
 * Parent / child jobs
 * Primary / secondary jobs
 * Job Links
+
+=== Job IDs
+
+A job ID is a hash of the job's configuration and query.  This means that if the
+same configuration is submitted multiple times, the resulting job ID will be the
+same every time.
+
+==== For the Query Service
+
+For the <<Query Service>>, the generated job IDs are dependent on:
+
+* the BLAST+ query tool configuration
+* the target project ID
+* the input query text
+* the selected query targets
+** the name of the target
+** the name of the database file
+
+==== For the Report Service
+
+For the <<Report Service>>, the generated job IDs are dependent on:
+
+* the ID of the query service job for which the report will be generated
+* the BLAST+ formatter tool configuration
+
