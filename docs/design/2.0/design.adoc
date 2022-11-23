@@ -105,14 +105,27 @@ image:assets/mblast-query-overview.png[]
 [#list-query-jobs]
 ==== List Jobs
 
+Look up the jobs that are linked to the requesting user.  Optionally, the
+results may be filtered by project ID.
+
+===== Workflow
+
 . Look up jobs attached to the requesting user in the user database
-. Return the list
+. Optionally filter results by project id
+. Look up statuses of jobs from the Async Platform
+. Return the list of items which will include:
+* job id
+* job status
+* project id
+* user metadata
 
 [#create-query-job]
 ==== Create Job
 
 Creates a new job record if one does not already exist matching the POSTed
 configuration.  See <<Job IDs>>.
+
+===== Workflow
 
 . Validate the job configuration
 . Validate the input query
@@ -121,23 +134,45 @@ configuration.  See <<Job IDs>>.
 . Record the job in the user database
 . Optionally link the requesting user to the job in the user database
 . Submit the job to the Async Platform
+. Return the generated job ID
 
 [#lookup-query-job]
 ==== Lookup Job
 
-Endpoint used to look up the details of a job, and it's configuration.
+Retrieves a detailed record for a specific target job which will include the
+original configuration from which the job was created.
+
+Additionally, as a simplistic form of job "sharing", users who make a request to
+get a job's details may optionally be linked to the target job, adding it to the
+requesting user's job collection.
+
+To maintain compatibility with the legacy behavior of the `v0.x` and `v1.x`
+Multi-Blast API, the job saving behavior is opt-out only and by default users
+will be linked to jobs they request that they are not already linked to.
 
 ===== Workflow
 
 . Look up job in user database
 . Optionally link requesting user to the job in the user database
 . Check the status of the job
-. Return the job details
+. Return the job details which will include:
+* job id
+* job status
+* job configuration:
+** target BLAST+ databases
+** target project id
+* blast configuration
+* user metadata
+
 
 [#restart-query-job]
 ==== Restart Job
 
-Endpoint used to re-queue a job that has expired from the cache in S3.
+Restarts an expired job.  Once a job has expired from the cache, users are
+allowed to re-run the job without needing to resubmit the configuration.
+
+The configuration for the job is stored and will be resubmitted to the job queue
+the same as if the job was brand new.
 
 ===== Workflow
 
@@ -331,6 +366,7 @@ image:assets/mblast-report-overview.png[]
 
 TODO
 
+* User metadata
 * Job IDs
 * Parent / child jobs
 * Primary / secondary jobs
