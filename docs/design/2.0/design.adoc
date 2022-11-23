@@ -22,7 +22,7 @@ dependencies.
 2. The VEuPathDB link:https://blast.ncbi.nlm.nih.gov/Blast.cgi[BLAST+]
    databases.
 3. An S3 instance with a bucket created for each of the Query Service and Report
-Service.
+   Service.
 
 == Query Service
 
@@ -561,4 +561,3 @@ For the <<Report Service>>, the generated job IDs are dependent on:
 
 * the ID of the query service job for which the report will be generated
 * the BLAST+ formatter tool configuration
-
