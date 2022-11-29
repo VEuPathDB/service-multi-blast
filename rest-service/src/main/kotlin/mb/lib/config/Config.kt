@@ -212,4 +212,15 @@ object Config : Options() {
   var maxAASeqSize = 102_400
     private set
 
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+  @Option(
+    names = ["--db-build"],
+    arity = "1",
+    defaultValue = "\${env:DB_BUILD}",
+    description = ["Site DB build number"],
+    required = true,
+  )
+  var dbBuild = 60
+    private set
 }
