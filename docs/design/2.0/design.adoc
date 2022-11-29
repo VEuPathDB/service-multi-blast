@@ -292,11 +292,22 @@ message queue backing the Async Platform.
 
 === Dependencies
 
-* S3
-* RabbitMQ
-* PostgreSQL
-* Oracle
-* BLAST+ Databases
+S3::
+S3 is used to store a temporary cache of query job inputs and outputs.
+
+RabbitMQ::
+RabbitMQ is used to queue up query jobs for eventual execution.
+
+PostgreSQL::
+PostgreSQL is used as a backing database for queue and job history bookkeeping.
+
+Oracle::
+The permanent store of job configurations and user to job-links are stored in
+the Oracle user database.
+
+BLAST+ Databases::
+BLAST+ database files that are the targets of user queries.  These have to be
+mounted into the running container for the service to be able to access them.
 
 
 == Report Service
@@ -375,6 +386,17 @@ image:assets/mblast-report-overview.png[]
 Looks up the jobs that are linked to the requesting user.  Optionally the
 results may be filtered by query job ID.
 
+===== Workflow
+
+. Look up the jobs attached to the requesting user in the user database.
+. Optionally filter results by query job ID.
+. Look up statuses of result jobs from the Async Platform
+. Return the list of items which include:
+* report job id
+* query job id
+* job status
+* user metadata
+
 [#create-report-job]
 ==== Create Job
 
@@ -397,6 +419,18 @@ requesting user's job collection.
 To maintain compatibility with the legacy behavior of the `v0.x` and `v1.x`
 Multi-Blast API, the job saving behavior is opt-out only and by default, users
 will be linked to jobs they request that they are not already linked to.
+
+===== Workflow
+
+. Look up job in the user database
+. Optionally link the requesting user to the job in the user database
+. Check the status of the job
+. Return the job details which will include:
+* report job id
+* query job id
+* job status
+* blast configuration
+* user metadata
 
 [#restart-report-job]
 ==== Restart Job
