@@ -2,9 +2,9 @@
 package mb.lib.path
 
 import mb.lib.config.Config
-import java.io.File
 import java.util.*
 import java.util.stream.Stream
+import kotlin.io.path.Path
 
 fun findDBPath(site: String, organism: String, target: String): Optional<String> {
   val root = Config.dbMountPath
@@ -24,14 +24,14 @@ fun findDBPath(site: String, organism: String, target: String): Optional<String>
  * @return An array of zero or more builds available for the given [site].  If
  * the site is invalid, or no builds exist, an empty array will be returned.
  */
-fun findBuildVersionsFor(site: String): Stream<String> = File(Config.dbMountPath, site)
-  .takeIf(File::isDirectory)
-  ?.listFiles(File::isDirectory)
-  ?.let(Arrays::stream)
-  ?.map(File::getName)
-  ?.sorted(Comparator.reverseOrder())
-?:
-  Stream.empty()
+fun findBuildVersionsFor(site: String): Stream<String> =
+  Path(Config.dbMountPath, site, "build-${Config.dbBuild}").toFile()
+    .let {
+      if (it.exists())
+        Stream.of(it.name)
+      else
+        Stream.empty()
+    }
 
 /**
  * Attempts to locate the correct, possibly new Blast target DB path.
