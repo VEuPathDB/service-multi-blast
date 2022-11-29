@@ -406,6 +406,17 @@ configuration.
 If the job did not previously exist, or was previously expired, it will be
 queued to be executed.
 
+===== Workflow
+
+. Validate the job configuration
+. Validate the status of the target query job
+. Hash the config and query job ID to generate a job ID
+. Verify no matching job already exists in the database
+. Record the job in the user database
+. Optionally link the requesting user to the job in the user database
+. Submit the job to the Async Platform
+. Return the generated job ID
+
 [#lookup-report-job]
 ==== Lookup Job
 
