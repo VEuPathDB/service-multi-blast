@@ -568,12 +568,22 @@ message queue backing the Async Platform.
 
 === Dependencies
 
-. Query Service
-. S3
-. RabbitMQ
-. PostgreSQL
-. Oracle
-. BLAST+ Databases
+Query Service::
+The query service is used to retrieve the result of the target query job on
+which a report will be run.
+
+S3::
+S3 is used to store a temporary cache of query job inputs and outputs.
+
+RabbitMQ::
+RabbitMQ is used to queue up query jobs for eventual execution.
+
+PostgreSQL::
+PostgreSQL is used as a backing database for queue and job history bookkeeping.
+
+Oracle::
+The permanent store of job configurations and user to job-links are stored in
+the Oracle user database.
 
 == Concepts
 
