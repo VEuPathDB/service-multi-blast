@@ -49,12 +49,13 @@ image:assets/mblast-query-overview.png[]
 
 | <<#list-query-jobs,List Jobs>>
 | Client
-| Lists the <<Primary Jobs>> that are <<linked>> to the requesting user.
+| Lists the query jobs that are <<job-to-user-links,linked>> to the requesting
+  user.
 
 | <<#create-query-job,Create Job>>
 | Client
-| Creates a new query job and may optionally <<link>> the new job to the
-  requesting user.
+| Creates a new query job and may optionally link the new job to the requesting
+  user.
 
 | <<#lookup-query-job,Lookup Job>>
 | Client
@@ -661,6 +662,7 @@ TSEPFHNVYVTTSSHYSSPYGLRREVPASPRCPPSPYPVFFKEPFVNMTA
 |===
 --
 
+[#job-to-user-links]
 === Job to User Links
 
 TODO
