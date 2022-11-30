@@ -1,0 +1,203 @@
+digraph {
+  splines=polyline
+
+  {
+    node [
+      shape="circle"
+    ]
+    start [
+      label="Start"
+      color="blue"
+    ]
+    200 [
+      color="green"
+    ]
+    422 [
+      color="red"
+    ]
+  }
+
+  {
+    node [
+      shape="component"
+    ]
+    containerCore [
+      label="Container Core"
+    ]
+    asyncPlatform [
+      label="Async Platform"
+    ]
+  }
+
+  {
+    node [
+      shape="cylinder"
+    ]
+    oracle [
+      label="User DB"
+    ]
+  }
+
+  lookupUser [
+    label="Lookup user"
+    shape="rectangle"
+  ]
+
+  validateJobConfig [
+    label="Validate job config"
+    shape="rectangle"
+  ]
+
+  validateBlastConfig [
+    label="Validate blast config"
+    shape="rectangle"
+  ]
+
+  validateQuery [
+    label="Validate query"
+    shape="rectangle"
+  ]
+
+  isRequestValid [
+    label="Is request\nvalid?"
+    shape="diamond"
+  ]
+
+  generateHash [
+    label="Generate Job Hash"
+    shape="rectangle"
+  ]
+
+  lookupJob [
+    label="Lookup job in\nuser DB"
+    shape="rectangle"
+  ]
+
+  doesJobExist [
+    label="Does job\nalready exist?"
+    shape="diamond"
+  ]
+
+  isLinkUserSet1 [
+    label="Is 'link user'\ntrue?"
+    shape="diamond"
+  ]
+
+  isLinkUserSet2 [
+    label="Is 'link user'\ntrue?"
+    shape="diamond"
+  ]
+
+  recordJob [
+    label="Write job to DB"
+    shape="rectangle"
+  ]
+
+  linkUser1 [
+    label="Link user to job"
+    shape="rectangle"
+  ]
+
+  linkUser2 [
+    label="Link user to job"
+    shape="rectangle"
+  ]
+
+  getJobStatus [
+    label="Get job status"
+    shape="rectangle"
+  ]
+
+  isJobExpired [
+    label="Is job expired?"
+    shape="diamond"
+  ]
+
+  submitJob [
+    label="Submit job"
+    shape="rectangle"
+  ]
+
+  start -> lookupUser
+
+  lookupUser -> containerCore [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  lookupUser -> validateJobConfig
+
+  validateJobConfig -> validateBlastConfig
+
+  validateBlastConfig -> validateQuery
+
+  validateQuery -> isRequestValid
+
+  isRequestValid -> 422
+  isRequestValid -> generateHash
+
+  generateHash -> lookupJob
+
+  lookupJob -> oracle [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  lookupJob -> doesJobExist
+
+  doesJobExist -> recordJob
+  doesJobExist -> isLinkUserSet1
+
+  recordJob -> isLinkUserSet2
+
+  isLinkUserSet1 -> linkUser1
+  isLinkUserSet2 -> linkUser2
+
+  linkUser1 -> oracle [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  linkUser1 -> getJobStatus
+
+  getJobStatus -> asyncPlatform [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  getJobStatus -> isJobExpired
+
+  isJobExpired -> submitJob
+
+  linkUser2 -> oracle [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  linkUser2 -> submitJob
+
+  submitJob -> asyncPlatform [
+    color="gray35"
+    style="dashed"
+    constraint=false
+  ]
+
+  submitJob -> 200
+
+  {
+    edge [style="invis"]
+    a [shape="point", color="white"]
+    a -> containerCore -> oracle -> asyncPlatform
+  }
+
+  { rank=same; lookupUser; containerCore }
+  { rank=same; lookupJob; oracle }
+  { rank=same; linkUser2; asyncPlatform }
+
+  { rank=max; 200; 422 }
+}

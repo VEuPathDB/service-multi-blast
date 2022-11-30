@@ -110,6 +110,11 @@ results may be filtered by project ID.
 
 ===== Workflow
 
+[%collapsible]
+====
+image:assets/list-query-jobs.svg[]
+====
+
 . Look up jobs attached to the requesting user in the user database
 . Optionally filter results by project id
 . Look up statuses of jobs from the Async Platform
@@ -126,6 +131,11 @@ Creates a new job record if one does not already exist matching the POSTed
 configuration.  See <<Job IDs>>.
 
 ===== Workflow
+
+[%collapsible]
+====
+image:assets/create-query-job.svg[]
+====
 
 . Validate the job configuration
 . Validate the input query
