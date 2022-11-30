@@ -587,11 +587,79 @@ the Oracle user database.
 
 == Concepts
 
-.TODO
-* User metadata
-* Parent / child jobs
-* Primary / secondary jobs
-* Job Links
+=== Parent & Child Jobs
+
+TODO
+
+* A "parent" job is the job run using the entirety of the user input query
+* A "child" job is a job run using a single sequence pulled out of a user input
+  query
+* child jobs are linked to the parent job run using the sequence source query
+* An input query that contains only 1 sequence will not have any child jobs
+
+.Single-Sequence Query
+[source]
+----
+> First
+IYSLVCWPLDDPFSRPDMLSLSERMLDVWRGKQVAEDLSPLINQLSLADMIRSCERNETL
+----
+
+.Resulting Jobs:
+[cols="1,2,9"]
+|===
+| Parent | Name | Sequences
+
+| :heavy_check_mark:
+| Parent Job 1
+| First
+|===
+
+.Multi-Sequence Query
+[source]
+----
+> First
+IYSLVCWPLDDPFSRPDMLSLSERMLDVWRGKQVAEDLSPLINQLSLADMIRSCERNETL
+> Second
+QKQRAYLRSMEEKARERRRIFIQNEQARLERFAKERAERQTTTTTTTTATTPTTTTPTTT
+TPTTTPTTTKAPGIP
+> Third
+YRPQNSSVDTVTSEQSIPVWMYGLVLLLLLSVGLLTCLSLLLSYKLKQLKVASCADSSTA
+TSEPFHNVYVTTSSHYSSPYGLRREVPASPRCPPSPYPVFFKEPFVNMTA
+----
+
+.Resulting Jobs:
+[cols="1,2,9"]
+|===
+| Parent | Name | Sequences
+
+| :heavy_check_mark:
+| Parent Job 1
+| First, Second, Third
+
+|
+| Child Job 1
+| First
+
+|
+| Child Job 2
+| Second
+
+|
+| Child Job 3
+| Third
+|===
+
+=== Job to User Links
+
+TODO
+
+* Jobs may be linked to users
+* When creating a job, only the parent job is linked
+* Job link contains user metadata
+* When accessing a job's details, a user may optionally be linked to a job
+  regardless of whether it is a parent job or child job
+* Only jobs that are linked to the requesting user will be returned in list
+  endpoints.
 
 === Job IDs
 
@@ -616,3 +684,5 @@ For the <<Report Service>>, the generated job IDs are dependent on:
 
 * the ID of the query service job for which the report will be generated
 * the BLAST+ formatter tool configuration
+
+== Metrics
