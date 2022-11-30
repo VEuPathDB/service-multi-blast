@@ -597,6 +597,8 @@ TODO
 * child jobs are linked to the parent job run using the sequence source query
 * An input query that contains only 1 sequence will not have any child jobs
 
+==== Single Sequence
+
 .Single-Sequence Query
 [source]
 ----
@@ -605,6 +607,7 @@ IYSLVCWPLDDPFSRPDMLSLSERMLDVWRGKQVAEDLSPLINQLSLADMIRSCERNETL
 ----
 
 .Resulting Jobs:
+--
 [cols="1,2,9"]
 |===
 | Parent | Name | Sequences
@@ -613,6 +616,9 @@ IYSLVCWPLDDPFSRPDMLSLSERMLDVWRGKQVAEDLSPLINQLSLADMIRSCERNETL
 | Parent Job 1
 | First
 |===
+--
+
+==== Multi-Sequence
 
 .Multi-Sequence Query
 [source]
@@ -628,6 +634,7 @@ TSEPFHNVYVTTSSHYSSPYGLRREVPASPRCPPSPYPVFFKEPFVNMTA
 ----
 
 .Resulting Jobs:
+--
 [cols="1,2,9"]
 |===
 | Parent | Name | Sequences
@@ -648,6 +655,7 @@ TSEPFHNVYVTTSSHYSSPYGLRREVPASPRCPPSPYPVFFKEPFVNMTA
 | Child Job 3
 | Third
 |===
+--
 
 === Job to User Links
 
