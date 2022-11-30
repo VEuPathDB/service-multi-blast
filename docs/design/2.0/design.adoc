@@ -110,19 +110,20 @@ results may be filtered by project ID.
 
 ===== Workflow
 
-[%collapsible]
-====
 image:assets/list-query-jobs.svg[]
-====
 
-. Look up jobs attached to the requesting user in the user database
-. Optionally filter results by project id
-. Look up statuses of jobs from the Async Platform
-. Return the list of items which will include:
+===== Response
+
+The response will be a list of entries representing jobs that are linked to the
+requesting user.
+
+Each item in the result list will include:
+
 * job id
 * job status
 * project id
 * user metadata
+
 
 [#create-query-job]
 ==== Create Job
@@ -132,19 +133,12 @@ configuration.  See <<Job IDs>>.
 
 ===== Workflow
 
-[%collapsible]
-====
 image:assets/create-query-job.svg[]
-====
 
-. Validate the job configuration
-. Validate the input query
-. Hash the config and query to generate a job ID
-. Verify no matching job already exists in the database
-. Record the job in the user database
-. Optionally link the requesting user to the job in the user database
-. Submit the job to the Async Platform
-. Return the generated job ID
+===== Response
+
+The response will be an object containing the ID of the job that was created or
+found.
 
 [#lookup-query-job]
 ==== Lookup Job
