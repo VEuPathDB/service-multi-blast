@@ -12,6 +12,7 @@ import org.veupathdb.lib.jackson.Json
 import org.veupathdb.service.mblast.report.Const
 import org.veupathdb.service.mblast.report.ext.makeOutFileName
 import org.veupathdb.service.mblast.report.model.JobConfig
+import org.veupathdb.service.mblast.report.service.Metrics
 import org.veupathdb.service.mblast.report.service.mblast.MBlastQueryClient
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -92,13 +93,17 @@ class FormatExecutor : JobExecutor {
   private fun runFormatter(ctx: JobContext, blast: BlastFormatter): Boolean {
     logger.info("Executing command: {}", blast.toCliString())
 
+    val timer = Metrics.BlastTimes
+      .labels(blast.tool.value)
+      .startTimer()
+
     val exitCode = with(
       ProcessBuilder(*blast.toCliArray())
         .directory(ctx.workspace.path.toFile())
         .start()
     ) {
       ctx.workspace.write(Const.STD_ERR_FILE_NAME, errorStream)
-      waitFor()
+      waitFor().also { timer.observeDuration() }
     }
 
     logger.debug("Exit code: {}", exitCode)
