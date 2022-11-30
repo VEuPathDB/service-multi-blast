@@ -589,13 +589,18 @@ the Oracle user database.
 
 === Parent & Child Jobs
 
-TODO
+When submitting a query to the Multi-Blast service, if the config is valid, one
+or more jobs will be created.  One job will be created for the entire input, and
+child jobs may be created for each individual sequence in the input query.
 
-* A "parent" job is the job run using the entirety of the user input query
-* A "child" job is a job run using a single sequence pulled out of a user input
-  query
-* child jobs are linked to the parent job run using the sequence source query
-* An input query that contains only 1 sequence will not have any child jobs
+If the input query contains only one sequence, only one job will be created, a
+"parent" job with no children.
+
+If the input query contains multiple sequences, a parent job will be created for
+the overall input, and a child job will be created for each individual sequence
+in the input.
+
+Child jobs are linked to the parent job from which they were created.
 
 ==== Single Sequence
 
@@ -608,11 +613,10 @@ IYSLVCWPLDDPFSRPDMLSLSERMLDVWRGKQVAEDLSPLINQLSLADMIRSCERNETL
 
 .Resulting Jobs:
 --
-[cols="1,2,9"]
+[cols="1,7"]
 |===
-| Parent | Name | Sequences
+| Name | Sequences
 
-| :heavy_check_mark:
 | Parent Job 1
 | First
 |===
@@ -635,23 +639,19 @@ TSEPFHNVYVTTSSHYSSPYGLRREVPASPRCPPSPYPVFFKEPFVNMTA
 
 .Resulting Jobs:
 --
-[cols="1,2,9"]
+[cols="1,7"]
 |===
-| Parent | Name | Sequences
+| Name | Sequences
 
-| :heavy_check_mark:
 | Parent Job 1
 | First, Second, Third
 
-|
 | Child Job 1
 | First
 
-|
 | Child Job 2
 | Second
 
-|
 | Child Job 3
 | Third
 |===
@@ -668,6 +668,7 @@ TODO
   regardless of whether it is a parent job or child job
 * Only jobs that are linked to the requesting user will be returned in list
   endpoints.
+* User metadata is stored on the job-to-user link
 
 === Job IDs
 
@@ -694,3 +695,77 @@ For the <<Report Service>>, the generated job IDs are dependent on:
 * the BLAST+ formatter tool configuration
 
 == Metrics
+
+The following metrics are gathered from the Multi-Blast services:
+
+=== Common Metrics
+
+Metrics common to both the query and report services.
+
+[cols="1m,1,1a,2"]
+|===
+| Name | By | Params | Description
+
+| http_total_requests
+| jaxrs-container-core
+| * HTTP method
+  * path
+  * response code
+| Counter of requests.
+
+| http_request_duration
+| jaxrs-container-core
+| * HTTP method
+  * path
+| Histogram of request durations.
+
+| process_total_memory
+| prometheus-jvm-stats
+|
+| Total memory allocated by the Java process
+
+| process_free_memory
+| prometheus-jvm-stats
+|
+| Unused allocated memory
+
+| process_active_memory
+| prometheus-jvm-stats
+|
+| Allocated memory currently in use
+
+| gc_count
+| prometheus-jvm-stats
+|
+| Total number of garbage collections
+
+| gc_time
+| prometheus-jvm-stats
+|
+| Total time used by the garbage collector
+|===
+
+=== Query Service
+
+Metrics specific to the query service.
+
+[cols="1m,1a,3"]
+|===
+| Name | Params | Description
+
+| blast_command_time_millis
+| * BLAST+ tool
+| BLAST+ CLI tool execution time in milliseconds.
+|===
+
+=== Report Service
+
+Metrics specific to the report service.
+
+[cols="1m,1a,3"]
+|===
+| Name | Params | Description
+
+| blast_command_time_millis
+| * BLAST+ tool
+| BLAST+ CLI tool execution time in milliseconds.
