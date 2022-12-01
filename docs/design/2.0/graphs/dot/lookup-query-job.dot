@@ -1,0 +1,90 @@
+digraph {
+  splines="polyline"
+
+  #
+  # End Points
+  #
+  {
+    node [shape="circle"]
+    start [label="Start", color="blue"]
+    {
+      rank=max
+      200 [color="green"]
+      404 [color="red"]
+    }
+  }
+
+  #
+  # Components
+  #
+  {
+    node [shape="component"]
+    containerCore [label="Container Core"]
+    asyncPlatform [label="Async Platform"]
+  }
+
+  #
+  # Databases
+  #
+  {
+    node [shape="cylinder"]
+    oracle [label="User DB"]
+  }
+
+  #
+  # Processes
+  #
+  {
+    node [shape="rectangle"]
+    lookupUser [label="Lookup user"]
+    lookupJob1 [label="Lookup job in User DB"]
+    lookupJob2 [label="Get job status"]
+    linkUser   [label="Link user to job"]
+  }
+
+  #
+  # Decisions
+  #
+  {
+    node [shape="diamond"]
+    wasJobFound1 [label="Was job\nfound?"]
+    isLinkUser [label="Is 'link user'\n true?"]
+  }
+
+  #
+  # Positioning
+  #
+  {
+    node [shape="point", color="white"]
+    edge [style="invis"]
+    A -> B -> containerCore -> oracle -> asyncPlatform -> 200
+  }
+
+  start -> lookupUser
+
+  lookupUser -> containerCore [color="gray35", style="dashed", constraint=false]
+  lookupUser -> lookupJob1
+
+  lookupJob1 -> oracle [color="gray35", style="dashed", constraint=false]
+  lookupJob1 -> wasJobFound1
+
+  wasJobFound1 -> 404 [label="no"]
+  wasJobFound1 -> lookupJob2 [label="yes"]
+
+  lookupJob2 -> asyncPlatform [color="gray35", style="dashed", constraint=false]
+  lookupJob2 -> isLinkUser
+
+  isLinkUser -> 200 [label="no"]
+  isLinkUser -> linkUser [label="yes"]
+
+  linkUser -> oracle [color="gray35", style="dashed", constraint=false]
+  linkUser -> 200
+
+
+  #
+  # Organization
+  #
+  { rank=same; start; A; B }
+  { rank=same; lookupUser; containerCore }
+  { rank=same; lookupJob2; asyncPlatform }
+}
