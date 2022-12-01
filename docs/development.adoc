@@ -208,7 +208,7 @@ downloaded.
 ===== 3. Download the BLAST+ database files.
 
 Once the `mblast-dev.properties` file has been configured, the following command
-may be run again to download the BLAST+ database files.
+may be run again to download the BLAST+ database files.  It will write blast files to the `blastdb/` directory in the cwd. Before proceeding confirm that the source directory exists on the server (eg, `/var/www/Common/apiSiteFilesMirror/webServices/site.name/site.project`)
 
 [source, bash]
 ----
