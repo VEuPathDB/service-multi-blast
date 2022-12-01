@@ -134,7 +134,13 @@ configuration.  See <<Job IDs>>.
 
 ===== Workflow
 
-image:assets/create-query-job.svg[]
+====== Overall
+
+image:assets/create-query-job.png[]
+
+====== Job Config Validation
+
+image:assets/validate-query-job-config.png[]
 
 ===== Response
 
@@ -193,9 +199,7 @@ already linked.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Verify user is linked to the target job
-. Update the user's metadata for the job in the user database
+image:assets/update-query-job.svg[]
 
 [#delete-query-job]
 ==== Delete Job
