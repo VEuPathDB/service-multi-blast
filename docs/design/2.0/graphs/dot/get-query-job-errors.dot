@@ -1,0 +1,81 @@
+digraph {
+  graph [nodesep=0.5]
+
+  #
+  # Node Definitions
+  #
+
+  # Ends
+  {
+    start [label=Start, color=blue]
+    200 [color=green]
+    404 [color=red]
+  }
+
+  # Components
+  {
+    node [shape=component]
+    asyncPlatform [label="Async Platform"]
+  }
+
+  # Databases
+  {
+    node [shape=cylinder]
+    oracle [label="User DB"]
+  }
+
+  # Processes
+  {
+    node [shape=rectangle]
+    lookupJob1 [label="Lookup job in User DB"]
+    lookupJob2 [label="Lookup job in platform"]
+    getError   [label="Get error file"]
+  }
+
+  # Decisions
+  {
+    node [shape=diamond]
+    doesJobExist [label="Does job\nexist?"]
+  }
+
+  # Layout
+  {
+    node [shape=square, fontcolor=white, color=white]
+    A; B
+  }
+
+  #
+  # Edge Definitions
+  #
+
+  # Process
+  {
+    start        -> lookupJob1
+    lookupJob1   -> doesJobExist
+    doesJobExist -> 404
+    doesJobExist -> lookupJob2
+    lookupJob2   -> getError
+    getError     -> 200
+  }
+
+  # Dependencies
+  {
+    edge [constraint=false, color=gray35, style=dashed]
+    lookupJob1 -> oracle
+    lookupJob2 -> asyncPlatform
+  }
+
+  # Layout
+  {
+    edge [style=invis]
+    start -> A -> B
+    B -> oracle -> asyncPlatform
+  }
+
+  #
+  # Positioning
+  #
+
+  { rank=same; start; A; B }
+  { rank=max; 200; 404 }
+}

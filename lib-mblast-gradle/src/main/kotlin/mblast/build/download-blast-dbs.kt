@@ -25,10 +25,13 @@ fun Project.CreateBlastDBDirectoryIfNotExists() {
     ssh.connect(props.sshHost, props.sshPort)
     ssh.authPublickey(
       props.sshUser,
-      if (props.sshPass == "")
+      if (props.sshPass == "") {
+        println("  Using no password")
         ssh.loadKeys(props.sshPath)
-      else
+      } else {
+        println("  Using configured password")
         ssh.loadKeys(props.sshPath, props.sshPass)
+      }
     )
 
     ssh.newSFTPClient().use { sftp ->
