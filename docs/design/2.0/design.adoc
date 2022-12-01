@@ -157,10 +157,13 @@ will be linked to jobs they request that they are not already linked to.
 
 ===== Workflow
 
-. Look up job in user database
-. Optionally link requesting user to the job in the user database
-. Check the status of the job
-. Return the job details which will include:
+image:assets/lookup-query-job.svg[]
+
+===== Response
+
+The response will be an object describing the requested job, this  object will
+include:
+
 * job id
 * job status
 * job configuration:
@@ -180,10 +183,7 @@ the same as if the job was brand new.
 
 ===== Workflow
 
-. Look up job in user database
-. Verify user is linked to job
-. Verify job is in the status "expired"
-. Resubmit the job to the Async Platform
+image:assets/restart-query-job.svg[]
 
 [#update-query-job]
 ==== Update Job

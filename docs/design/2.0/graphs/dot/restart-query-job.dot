@@ -1,0 +1,118 @@
+digraph {
+  graph [nodesep=0.5]
+
+  #
+  # Node Definitions
+  #
+
+  # Ends
+  {
+    node [shape="circle"]
+    start [label="Start", color="blue"]
+    {
+      rank="max"
+      204 [color="green"]
+      403 [color="red"]
+    }
+  }
+
+  # Components
+  {
+    node [shape="component"]
+    containerCore [label="Container Core"]
+    asyncPlatform [label="Async Platform"]
+  }
+
+  # Databases
+  {
+    node [shape="cylinder"]
+    oracle [label="User DB"]
+    postgres [label="Queue DB"]
+  }
+
+  # File Systems
+  {
+    node [shape="folder"]
+    s3 [label="S3"]
+  }
+
+  # Processes
+  {
+    node [shape="rectangle"]
+    lookupUser [label="Lookup user"]
+    lookupJob1 [label="Lookup job in user DB"]
+    lookupJob2 [label="Get status"]
+    submitJob  [label="Submit job"]
+  }
+
+  # Decisions
+  {
+    node [shape="diamond"]
+    isUserLinkedToJob [label="Is user\nlinked to job?"]
+    isJobExpired      [label="Is job\nexpired?"]
+  }
+
+  # Layout
+  {
+    node [shape="point", color="white"]
+    A
+    B
+    C
+    D
+  }
+
+  #
+  # Edge Definitions
+  #
+
+  # Process
+
+  start -> lookupUser
+  lookupUser -> lookupJob1
+  lookupJob1 -> isUserLinkedToJob
+  isUserLinkedToJob -> 403 [taillabel="no"]
+  isUserLinkedToJob -> lookupJob2 [taillabel="yes"]
+  lookupJob2 -> isJobExpired
+  isJobExpired -> 403 [taillabel="no"]
+  isJobExpired -> submitJob [taillabel="yes"]
+  submitJob -> 204
+
+  # Component Links
+
+  {
+    edge [constraint=false, color="gray35", style="dashed"]
+    lookupUser -> containerCore
+    lookupJob1 -> oracle
+    lookupJob2 -> asyncPlatform
+    submitJob  -> asyncPlatform
+    asyncPlatform -> postgres
+    asyncPlatform -> s3
+  }
+
+  # Layout Links
+
+  {
+    edge [style="invis"]
+    
+    start -> A -> B -> C -> D
+
+    C
+    -> containerCore
+    -> oracle
+    -> asyncPlatform
+
+    D
+    -> postgres
+    -> s3
+  }
+
+  #
+  # Layout Positioning
+  #
+  { rank=same; start; A; B; C; D }
+  { rank=same; lookupUser; containerCore }
+  { rank=same; lookupJob1; oracle }
+  { rank=same; asyncPlatform; isJobExpired }
+  { rank=same; lookupJob2; postgres }
+  { rank=same; submitJob; s3 }
+}
