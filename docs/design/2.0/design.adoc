@@ -244,10 +244,7 @@ as part of a job.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Look up the target job in S3
-. Verify the job's is in either the "complete" or "failed" status
-. Return the job's stderr file
+image:assets/get-query-job-errors.svg[]
 
 [#bulk-query-status]
 ==== Bulk Status Check
