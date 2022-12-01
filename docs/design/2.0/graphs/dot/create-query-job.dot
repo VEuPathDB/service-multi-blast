@@ -1,203 +1,156 @@
 digraph {
-  splines=polyline
+  graph[nodesep=0.5]
 
+  #
+  # Node Definitions
+  #
+
+  # Ends
   {
-    node [
-      shape="circle"
-    ]
-    start [
-      label="Start"
-      color="blue"
-    ]
-    200 [
-      color="green"
-    ]
-    422 [
-      color="red"
-    ]
+    node [shape="circle"]
+    start [label="Start", color="blue"]
+    200 [color="green"]
+    422 [color="red"]
   }
 
+  # Components
   {
-    node [
-      shape="component"
-    ]
-    containerCore [
-      label="Container Core"
-    ]
-    asyncPlatform [
-      label="Async Platform"
-    ]
+    node [shape="component"]
+    containerCore [label="Container Core"]
+    asyncPlatform [label="Async Platform"]
   }
 
+  # Databases
   {
-    node [
-      shape="cylinder"
-    ]
-    oracle [
-      label="User DB"
-    ]
+    node [shape="cylinder"]
+    oracle [label="User DB"]
+    postgres [label="Queue DB"]
   }
 
-  lookupUser [
-    label="Lookup user"
-    shape="rectangle"
-  ]
+  # File Systems
+  {
+    node [shape="folder"]
+    s3 [label="S3"]
+    blast [label="Blast DBs"]
+  }
 
-  validateJobConfig [
-    label="Validate job config"
-    shape="rectangle"
-  ]
+  # Processes
+  {
+    node [shape="rectangle"]
+    lookupUser          [label="Lookup user"]
+    validateJobConfig   [label="Validate job config"]
+    validateBlastConfig [label="Validate blast config"]
+    validateQuery       [label="Validate query"]
+    generateHash        [label="Generate Job Hash"]
+    lookupJob           [label="Lookup job in\nuser DB"]
+    recordJob           [label="Write job to DB"]
+    linkUser1           [label="Link user to job"]
+    linkUser2           [label="Link user to job"]
+    getJobStatus        [label="Get job status"]
+    submitJob           [label="Submit job"]
+  }
 
-  validateBlastConfig [
-    label="Validate blast config"
-    shape="rectangle"
-  ]
+  # Decisions
+  {
+    node [shape="diamond"]
+    isRequestValid [label="Is request\nvalid?"]
+    doesJobExist   [label="Does job\nalready exist?"]
+    isLinkUserSet1 [label="Is 'link user'\ntrue?"]
+    isLinkUserSet2 [label="Is 'link user'\ntrue?"]
+    isJobExpired   [label="Is job expired?"]
+  }
 
-  validateQuery [
-    label="Validate query"
-    shape="rectangle"
-  ]
+  # Layout
+  {
+    node [shape="square", fontcolor="white", color=white]
+    A
+    B
+    C
+    D
+    E
+    F
+    G
+    H
+  }
 
-  isRequestValid [
-    label="Is request\nvalid?"
-    shape="diamond"
-  ]
+  #
+  # Edge Definitions
+  #
 
-  generateHash [
-    label="Generate Job Hash"
-    shape="rectangle"
-  ]
+  # Process
+  {
+    start -> lookupUser
+    lookupUser -> validateJobConfig
+    validateJobConfig -> validateBlastConfig
+    validateBlastConfig -> validateQuery
+    validateQuery -> isRequestValid
+    isRequestValid -> 422
+    isRequestValid -> generateHash
+    generateHash -> lookupJob
+    lookupJob -> doesJobExist
+    doesJobExist -> recordJob
+    doesJobExist -> isLinkUserSet1
+    recordJob -> isLinkUserSet2
+    isLinkUserSet1 -> linkUser1
+    isLinkUserSet2 -> linkUser2
+    linkUser1 -> getJobStatus
+    getJobStatus -> isJobExpired
+    isJobExpired -> submitJob
+    linkUser2 -> submitJob
+    submitJob -> 200
+  }
 
-  lookupJob [
-    label="Lookup job in\nuser DB"
-    shape="rectangle"
-  ]
+  # Dependencies
+  {
+    edge [color="gray35", style="dashed", constraint=false]
+    lookupUser   -> containerCore
+    containerCore -> oracle
+    validateJobConfig -> blast
+    lookupJob    -> oracle
+    linkUser1    -> oracle
+    getJobStatus -> asyncPlatform
+    linkUser2    -> oracle
+    submitJob    -> asyncPlatform
+    asyncPlatform -> postgres
+    asyncPlatform -> s3
+  }
 
-  doesJobExist [
-    label="Does job\nalready exist?"
-    shape="diamond"
-  ]
-
-  isLinkUserSet1 [
-    label="Is 'link user'\ntrue?"
-    shape="diamond"
-  ]
-
-  isLinkUserSet2 [
-    label="Is 'link user'\ntrue?"
-    shape="diamond"
-  ]
-
-  recordJob [
-    label="Write job to DB"
-    shape="rectangle"
-  ]
-
-  linkUser1 [
-    label="Link user to job"
-    shape="rectangle"
-  ]
-
-  linkUser2 [
-    label="Link user to job"
-    shape="rectangle"
-  ]
-
-  getJobStatus [
-    label="Get job status"
-    shape="rectangle"
-  ]
-
-  isJobExpired [
-    label="Is job expired?"
-    shape="diamond"
-  ]
-
-  submitJob [
-    label="Submit job"
-    shape="rectangle"
-  ]
-
-  start -> lookupUser
-
-  lookupUser -> containerCore [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  lookupUser -> validateJobConfig
-
-  validateJobConfig -> validateBlastConfig
-
-  validateBlastConfig -> validateQuery
-
-  validateQuery -> isRequestValid
-
-  isRequestValid -> 422
-  isRequestValid -> generateHash
-
-  generateHash -> lookupJob
-
-  lookupJob -> oracle [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  lookupJob -> doesJobExist
-
-  doesJobExist -> recordJob
-  doesJobExist -> isLinkUserSet1
-
-  recordJob -> isLinkUserSet2
-
-  isLinkUserSet1 -> linkUser1
-  isLinkUserSet2 -> linkUser2
-
-  linkUser1 -> oracle [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  linkUser1 -> getJobStatus
-
-  getJobStatus -> asyncPlatform [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  getJobStatus -> isJobExpired
-
-  isJobExpired -> submitJob
-
-  linkUser2 -> oracle [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  linkUser2 -> submitJob
-
-  submitJob -> asyncPlatform [
-    color="gray35"
-    style="dashed"
-    constraint=false
-  ]
-
-  submitJob -> 200
-
+  # Layout
   {
     edge [style="invis"]
-    a [shape="point", color="white"]
-    a -> containerCore -> oracle -> asyncPlatform
+
+    start
+    -> A
+    -> B
+    -> C
+    -> D
+    -> E
+    -> F
+    -> G
+    -> H
+
+    G
+    -> containerCore
+    -> blast
+    -> oracle
+    -> asyncPlatform
+
+    H
+    -> postgres
+    -> s3
   }
+
+  #
+  # Positioning
+  #
+
+  { rank=same; start; A; B; C; D; E; F; G; H }
 
   { rank=same; lookupUser; containerCore }
   { rank=same; lookupJob; oracle }
   { rank=same; linkUser2; asyncPlatform }
+  { rank=same; linkUser1; postgres }
+  { rank=same; isJobExpired; s3}
 
   { rank=max; 200; 422 }
 }

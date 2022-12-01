@@ -1,0 +1,94 @@
+digraph {
+  graph [nodesep=0.5]
+
+  #
+  # Node Definitions
+  #
+
+  # Ends
+  {
+    node [shape="circle"]
+    start [label="Start", color="blue"]
+    {
+      rank="max"
+      204 [color="green"]
+      404 [color="red"]
+    }
+  }
+
+  # Components
+  {
+    node [shape="component"]
+    containerCore [label="Container Core"]
+  }
+
+  # Databases
+  {
+    node [shape="cylinder"]
+    oracle   [label="User DB"]
+  }
+
+  # Processes
+  {
+    node [shape="rectangle"]
+    lookupUser [label="Lookup user"]
+    lookupJob  [label="Lookup job"]
+    updateJob  [label="Update user metadata\nfor job"]
+  }
+
+  # Decisions
+  {
+    node [shape="diamond"]
+    isUserLinkedToJob [label="Is user\nlinked to job?"]
+  }
+
+  # Layout
+  {
+    node [shape="point", color="white"]
+    A
+    B
+    C
+  }
+
+  #
+  # Edge Definitions
+  #
+
+  # Process
+  {
+    start             -> lookupUser
+    lookupUser        -> lookupJob
+    lookupJob         -> isUserLinkedToJob
+    isUserLinkedToJob -> 404 [taillabel="no"]
+    isUserLinkedToJob -> updateJob [taillabel="yes"]
+    updateJob         -> 204
+  }
+
+  # Dependencies
+  {
+    edge [constraint=false, color="gray35", style="dashed"]
+    lookupUser    -> containerCore
+    containerCore -> oracle
+    lookupJob     -> oracle
+    updateJob     -> oracle
+  }
+
+  # Layout
+  {
+    edge [style="invis"]
+
+    start
+    -> A
+    -> B
+    -> C
+    
+    C
+    -> containerCore
+    -> oracle
+  }
+
+  #
+  # Positioning
+  #
+  { rank=same; start; A; B; C; }
+}
