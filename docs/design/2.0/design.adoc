@@ -142,10 +142,17 @@ image:assets/create-query-job.png[]
 
 image:assets/validate-query-job-config.png[]
 
-===== Response
+===== Result
 
 The response will be an object containing the ID of the job that was created or
 found.
+
+[source, json]
+----
+{
+  "<job-id-key>": "<job-id>"
+}
+----
 
 [#lookup-query-job]
 ==== Lookup Job
@@ -165,7 +172,7 @@ will be linked to jobs they request that they are not already linked to.
 
 image:assets/lookup-query-job.svg[]
 
-===== Response
+===== Result
 
 The response will be an object describing the requested job, this  object will
 include:
@@ -317,10 +324,12 @@ message queue backing the Async Platform.
 
 ===== Workflow
 
-. Translate the query config to a CLI call
-. Execute the BLAST+ CLI tool
-. Record the stderr output to file
-. Post the exit code back to the response channel of the message queue
+image:assets/execute-query.png[]
+
+===== Result
+
+The result of the job execution will be a CLI call exit code and a list of files
+that will be persisted to S3 by the Async Platform.
 
 === Dependencies
 
@@ -557,10 +566,20 @@ Looks up a bulk batch of job statuses for the jobs whose IDs were requested.
 
 ===== Workflow
 
-. For each ID posted
-.. Look up the job in S3
-.. Get the job's status
-. Return the found statuses
+image:assets/bulk-query-job-status-check.png[]
+
+===== Result
+
+A JSON object containing key/value pairs of query job ID mapped to job status.
+
+[source, json]
+----
+{
+  "<job-id[0]>": "<status>",
+  "<job-id[1]>": "<status>",
+  "<job-id[2]>": "<status>"
+}
+----
 
 [#link-report-guest]
 ==== Link Guest
