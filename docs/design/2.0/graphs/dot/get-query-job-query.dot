@@ -1,0 +1,57 @@
+digraph {
+  graph [nodesep=0.5]
+
+  #
+  # Node Definitions
+  #
+
+  # Ends
+  {
+    start [label=Start, color=blue]
+    200 [color=green]
+    404 [color=red]
+  }
+
+  # Databases
+  {
+    node [shape=cylinder]
+    oracle [label="User DB"]
+  }
+
+  # Process
+  {
+    node [shape=rectangle]
+    lookupJob [label="Lookup job in User DB"]
+  }
+
+  # Decisions
+  {
+    node [shape=diamond]
+    doesJobExist [label="Does job\nexist?"]
+  }
+
+  #
+  # Edge Definitions
+  #
+
+  # Process
+  {
+    start        -> lookupJob
+    lookupJob    -> doesJobExist
+    doesJobExist -> 404 [label="No", color=red]
+    doesJobExist -> 200 [label="Yes", color=green]
+  }
+
+  # Dependencies
+  {
+    edge [constraint=false, color=gray35, style=dashed]
+    lookupJob -> oracle
+  }
+
+  #
+  # Positioning
+  #
+
+  { rank=same; lookupJob; oracle }
+
+}
