@@ -447,12 +447,7 @@ account.
 
 ===== Workflow
 
-. Verify the target user from which jobs will be migrated is actually a WDK
-  guest user.
-. Verify the requesting user to which jobs will be migrated is actually a
-  logged-in WDK user.
-. Transfer user link ownership from the guest user to the logged-in user for all
-  jobs linked to the guest.
+image:assets/link-guest.png[]
 
 ==== Execute Query
 
@@ -773,12 +768,7 @@ create an account.
 
 ===== Workflow
 
-. Verify the target user from which jobs will be migrated is actually a WDK
-  guest users.
-. Verify the requesting user to which jobs will be migrated is actually a
-  logged-in WDK user.
-. Transfer user link ownership from the guest user to the logged-in user for all
-  jobs linked to the guest.
+image:assets/link-guest.png[]
 
 [#execute-report]
 ==== Execute Report
