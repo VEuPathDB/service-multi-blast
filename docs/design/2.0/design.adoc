@@ -274,9 +274,21 @@ Returns a tree of all the queryable BLAST+ databases that are available to use.
 
 ===== Workflow
 
-1. Traverse the BLAST+ store directory structure to build a list of available
-   BLAST+ target databases
-2. Return the assembled list
+image:assets/target-lookup.png[]
+
+===== Result
+
+[source, json]
+----
+{
+  "<project-id>": {
+    "<target-name>": [
+      "<target-db>",
+      "<target-db>"
+    ]
+  }
+}
+----
 
 [#link-query-guest]
 ==== Link Guest
