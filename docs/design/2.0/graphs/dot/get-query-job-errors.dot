@@ -9,6 +9,7 @@ digraph {
   {
     start [label=Start, color=blue]
     200 [color=green]
+    403 [color=red]
     404 [color=red]
   }
 
@@ -35,7 +36,9 @@ digraph {
   # Decisions
   {
     node [shape=diamond]
-    doesJobExist [label="Does job\nexist?"]
+    doesJobExist  [label="Does job\nexist?"]
+    isJobComplete [label="Is job\nstatus\n'complete'?"]
+    isJobFailed   [label="Is job\nstatus\n'failed'?"]
   }
 
   # Layout
@@ -50,13 +53,23 @@ digraph {
 
   # Process
   {
-    start        -> lookupJob1
-    lookupJob1   -> doesJobExist
-    doesJobExist -> 404
-    doesJobExist -> lookupJob2
-    lookupJob2   -> getError
-    getError     -> 200
+    start         -> lookupJob1
+    lookupJob1    -> doesJobExist
+    doesJobExist  -> 404         [taillabel="\nNo", color=red]
+    doesJobExist  -> lookupJob2  [taillabel="Yes", color=green]
+    lookupJob2    -> isJobComplete
+    isJobComplete -> isJobFailed [taillabel="\nNo", color=red]
+    isJobComplete -> getError    [taillabel="Yes", color=green]
+    isJobFailed   -> 403         [taillabel="No", color=red]
+    isJobFailed   -> getError    [taillabel="\nYes", color=green]
+    getError      -> 200
   }
+
+  #
+  #
+  #  TODO!!! Missing the job status check
+  #
+  #
 
   # Dependencies
   {
@@ -77,5 +90,7 @@ digraph {
   #
 
   { rank=same; start; A; B }
-  { rank=max; 200; 404 }
+  { rank=same; lookupJob1; oracle }
+  { rank=same; lookupJob2; asyncPlatform }
+  { rank=max; 200; 403; 404 }
 }

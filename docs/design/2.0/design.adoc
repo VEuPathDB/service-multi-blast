@@ -220,8 +220,7 @@ Retrieves the query submitted for a job.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Return the job's query
+image:assets/get-query-job-query.svg[]
 
 [#get-job-result]
 ==== Get Job Result
@@ -231,10 +230,7 @@ successful.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Look up the target job in S3
-. Verify the job's status is "complete"
-. Return the job's result file
+image:assets/get-query-job-result.svg[]
 
 [#get-job-errors]
 ==== Get Job Errors
@@ -249,10 +245,28 @@ image:assets/get-query-job-errors.svg[]
 [#bulk-query-status]
 ==== Bulk Status Check
 
-. For each ID POSTed
-.. Look up the job in S3
-.. Get the job's status
-. Return the found statuses
+The bulk status check takes a JSON array of job IDs as input, and for each valid
+ID in the input, returns the job status in a map.
+
+All job IDs that are found to be invalid will be ignored and will not appear in
+the result status map.
+
+===== Workflow
+
+image:assets/bulk-query-job-status-check.png[]
+
+===== Result
+
+A JSON object containing key/value pairs of query job ID mapped to job status.
+
+[source, json]
+----
+{
+  "<job-id[0]>": "<status>",
+  "<job-id[1]>": "<status>",
+  "<job-id[2]>": "<status>"
+}
+----
 
 ==== Get All Targets
 
