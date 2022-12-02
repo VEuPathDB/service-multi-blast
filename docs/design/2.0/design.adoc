@@ -111,20 +111,61 @@ results may be filtered by project ID.
 
 ===== Workflow
 
-image:assets/list-query-jobs.svg[]
+image:assets/list-query-jobs.png[]
 
 ===== Response
 
 The response will be a list of entries representing jobs that are linked to the
 requesting user.
 
-Each item in the result list will include:
+.Result Objects
+[source, typescript]
+----
+interface Result {
+  queryJobID: string
+  status:     string
+  site:       string
+  createdOn:  string
+  userMeta?:  UserMeta
+}
 
-* job id
-* job status
-* project id
-* user metadata
+interface UserMeta {
+  summary?:     string
+  description?: string
+}
+----
 
+.Example Result
+[source, json]
+----
+[
+  {
+    "queryJobID": "9f444b23ceec3ee5588cc4c784c16696",
+    "site": "PlasmoDB",
+    "status": "expired",
+    "createdOn": "2020-10-31T23:00:00Z"
+  },
+  {
+    "queryJobID": "bc49f1a3bc36cd15b84890439d19d395",
+    "site": "TriTrypDB",
+    "status": "complete",
+    "createdOn": "2020-10-31T23:00:00Z",
+    "userMeta": {
+      "summary": "A blast job"
+    }
+  },
+  {
+    "queryJobID": "297a61dda47317f11d8e50e6ab8508c9",
+    "site": "VectorBase",
+    "status": "failed",
+    "createdOn": "2020-10-31T23:00:00Z",
+    "userMeta": {
+      "summary": "Another blast job.",
+      "description": "This job will fail."
+    }
+  }
+]
+----
 
 [#create-query-job]
 ==== Create Job
@@ -147,10 +188,19 @@ image:assets/validate-query-job-config.png[]
 The response will be an object containing the ID of the job that was created or
 found.
 
+.Result Object
+[source, typescript]
+----
+interface Result {
+  queryJobID: string
+}
+----
+
+.Example Result
 [source, json]
 ----
 {
-  "<job-id-key>": "<job-id>"
+  "queryJobID": "9f444b23ceec3ee5588cc4c784c16696"
 }
 ----
 
@@ -170,7 +220,7 @@ will be linked to jobs they request that they are not already linked to.
 
 ===== Workflow
 
-image:assets/lookup-query-job.svg[]
+image:assets/lookup-query-job.png[]
 
 ===== Result
 
@@ -184,6 +234,59 @@ include:
 ** target project id
 * blast configuration
 * user metadata
+
+.Result Object
+[source, typescript]
+----
+interface Result {
+  queryJobID:  string
+  status:      string
+  jobConfig:   JobConfig
+  blastConfig: Object
+  createdOn:   string
+  userMeta?:   UserMeta
+}
+
+interface JobConfig {
+  site:    string
+  targets: QueryTarget[]
+}
+
+interface QueryTarget {
+  targetDisplayName: string
+  targetFile:        string
+}
+
+interface UserMeta {
+  summary?:     string
+  description?: string
+}
+----
+
+.Example Result
+[source, json]
+----
+{
+  "queryJobID": "9f444b23ceec3ee5588cc4c784c16696",
+  "status": "complete",
+  "jobConfig": {
+    "site": "PlasmoDB",
+    "targets": [
+      {
+        "targetDisplayName": "PfalciparumGB4",
+        "targetFile": "PfalciparumGB4AnnotatedTranscripts"
+      }
+    ]
+  },
+  "blastConfig": {
+    ...
+  },
+  "createdOn": "2020-10-31T23:00:00Z",
+  "userMeta": {
+    "summary": "Some blast job"
+  }
+}
+----
 
 [#restart-query-job]
 ==== Restart Job
@@ -266,12 +369,10 @@ image:assets/bulk-query-job-status-check.png[]
 
 A JSON object containing key/value pairs of query job ID mapped to job status.
 
-[source, json]
+[source, typescript]
 ----
-{
-  "<job-id[0]>": "<status>",
-  "<job-id[1]>": "<status>",
-  "<job-id[2]>": "<status>"
+interface BulkStatusResult {
+  [queryJobID: string]: string
 }
 ----
 
@@ -285,14 +386,45 @@ image:assets/target-lookup.png[]
 
 ===== Result
 
+.Result Types
+[source, typescript]
+----
+interface Result {
+  [project: string]: TargetMap
+}
+
+interface TargetMap {
+  [target: string]: TargetDatabases
+}
+
+interface TargetDatabases {
+  naTargets?: string[]
+  aaTargets?: string[]
+}
+
+
+----
+
+.Example Result
 [source, json]
 ----
 {
-  "<project-id>": {
-    "<target-name>": [
-      "<target-db>",
-      "<target-db>"
-    ]
+  "PlasmoDB": {
+    "Pberghei": {
+      "naTargets": [
+        "PbergheiESTs"
+      ]
+    },
+    "PfalciparumGB4": {
+      "naTargets": [
+        "PfalciparumGB4AnnotatedCDSs",
+        "PfalciparumGB4AnnotatedTranscripts",
+        "PfalciparumGB4Genome"
+      ],
+      "aaTargets": [
+        "PfalciparumGB4AnnotatedProteins"
+      ]
+    }
   }
 }
 ----
