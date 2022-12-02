@@ -369,10 +369,22 @@ image:assets/bulk-query-job-status-check.png[]
 
 A JSON object containing key/value pairs of query job ID mapped to job status.
 
+.Result Type
 [source, typescript]
 ----
-interface BulkStatusResult {
+interface Result {
   [queryJobID: string]: string
+}
+----
+
+.Example Result
+[source, json]
+----
+{
+  "dd6060e5367622e574ffb38f32bfa049": "queued",
+  "29e07b0b80181222ad33cbc8f679d672": "complete",
+  "748ba381dd81bb8de615319837ffa350": "in-progress",
+  "f4757ea84c455b04a1d307d4ac33049d": "expired"
 }
 ----
 
@@ -401,8 +413,6 @@ interface TargetDatabases {
   naTargets?: string[]
   aaTargets?: string[]
 }
-
-
 ----
 
 .Example Result
@@ -561,14 +571,47 @@ results may be filtered by query job ID.
 
 ===== Workflow
 
-. Look up the jobs attached to the requesting user in the user database.
-. Optionally filter results by query job ID.
-. Look up statuses of result jobs from the Async Platform
-. Return the list of items which include:
-* report job id
-* query job id
-* job status
-* user metadata
+image:assets/list-report-jobs.png[]
+
+===== Result
+
+The result will be a list of zero or more report job items that are linked to
+the requesting user and optionally limited to only those items whose target
+query job ID matches a provided filter value.
+
+.Result Definition
+[source, typescript]
+----
+type Result = ResultItem[]
+
+interface ResultItem {
+  reportJobID: string
+  queryJobID:  string
+  status:      string
+  userMeta?:   UserMeta
+}
+
+interface UserMeta {
+  summary?:     string
+  description?: string
+}
+----
+
+.Result Example
+[source, json]
+----
+[
+  {
+    "reportJobID": "37b4e2d82900d5e94b8da524fbeb33c0",
+    "queryJobID": "64e8bb9742929ab718dba7bc048e6120",
+    "status": "failed",
+    "userMeta": {
+      "summary": "some report job summary"
+    }
+  }
+]
+----
+
 
 [#create-report-job]
 ==== Create Job
