@@ -319,9 +319,7 @@ the user and the target job.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Verify the requesting user is linked to the target job
-. Delete the link between the requesting user and the target job
+image:assets/delete-query-job.svg[]
 
 [#get-job-query]
 ==== Get Job Query
@@ -695,9 +693,7 @@ the user and the target job.
 
 ===== Workflow
 
-. Look up the target job in the user database
-. Verify the requesting user is linked to the target job
-. Delete the link between the requesting user and the target job
+image:assets/delete-query-job.svg[]
 
 [#list-report-job-files]
 ==== List Job Outputs
@@ -745,16 +741,27 @@ image:assets/bulk-query-job-status-check.png[]
 
 ===== Result
 
-A JSON object containing key/value pairs of query job ID mapped to job status.
+A JSON object containing key/value pairs of report job ID mapped to job status.
 
+.Result Type
+[source, typescript]
+----
+interface Result {
+  [reportJobID: string]: string
+}
+----
+
+.Example Result
 [source, json]
 ----
 {
-  "<job-id[0]>": "<status>",
-  "<job-id[1]>": "<status>",
-  "<job-id[2]>": "<status>"
+  "dd6060e5367622e574ffb38f32bfa049": "queued",
+  "29e07b0b80181222ad33cbc8f679d672": "complete",
+  "748ba381dd81bb8de615319837ffa350": "in-progress",
+  "f4757ea84c455b04a1d307d4ac33049d": "expired"
 }
 ----
+
 
 [#link-report-guest]
 ==== Link Guest
