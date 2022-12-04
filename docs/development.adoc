@@ -336,7 +336,7 @@ Manually spin up the docker compose stack in the console foreground.
 
 [source, shell]
 ----
-cd docker-compose
+cd stack-mblast$
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ----
 
