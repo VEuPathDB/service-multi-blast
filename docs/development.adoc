@@ -290,7 +290,9 @@ the file to avoid any mishaps where secrets get pushed to GitHub.
 
 === Build
 
-Builds the development docker compose stack.
+Configure your running environment by creating a `stack-mblast/.env` file.  Initialize it with `stack-mblast/env.sample`, and add missing configurations.
+
+Then use the following command to build the development docker compose stack.
 
 [source, shell]
 ----
