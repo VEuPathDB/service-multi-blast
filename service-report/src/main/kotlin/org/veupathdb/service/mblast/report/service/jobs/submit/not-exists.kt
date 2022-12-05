@@ -13,7 +13,9 @@ import org.veupathdb.service.mblast.report.generated.model.JobCreateResponse
 fun JobSubmission.handleJobNotExists() : JobCreateResponse {
   return ReportDB.withTransaction { db ->
     db.insertReportJob(reportID, queryID, config)
-    db.insertReportUserLink(reportID, userID, userSummary, userDescription)
+
+    if (addToUserCollection)
+      db.insertReportUserLink(reportID, userID, userSummary, userDescription)
 
     handleSubmitJob()
   }
