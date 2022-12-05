@@ -317,7 +317,7 @@ following command:
 
 [source, shell]
 ----
-docker logs --follow ${CONTAINER_NAME} <1>
+docker logs --follow ${CONTAINER_NAME}
 ----
 <1> `CONTAINER_NAME` may be one of:
 +
@@ -342,9 +342,13 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 ==== Testing Access
 
-Once the services have spun up successfully, the reachability of the services
-may be tested by accessing link:http://mblast.local.apidb.org/query/health[] or
-link:http://mblast.local.apidb.org/report/health[].
+Once the services have spun up successfully, test you can reach them by accessing
+may be tested by accessing:
+
+- link:http://mblast.local.apidb.org/query/health[]
+- link:http://mblast.local.apidb.org/report/health[].
+
+*Note*: use `http` not `https`
 
 
 === Stop
