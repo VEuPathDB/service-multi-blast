@@ -781,13 +781,7 @@ message queue backing the Async Platform.
 
 ===== Workflow
 
-. Download the job configuration from S3
-. Download the query job result from the <<Query Service>>
-. Translate the report config to a CLI call
-. Execute the BLAST+ `blast_formatter` tool
-. Record the stderr output to file
-. Persist the generated files to S3
-. Post the exit code back to the response channel of the message queue.
+image:assets/execute-report.png[]
 
 === Dependencies
 
