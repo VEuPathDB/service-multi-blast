@@ -159,8 +159,8 @@ services:
       target: /root/.config
       read_only: true
     environment:
-      JVM_MEM_ARGS: ${REPORT_SERVICE_JVM_MEM_ARGS:-"-Xms32M -Xmx256M"}
-      JVM_ARGS:     ${REPORT_SERVICE_JVM_ARGS:-""}
+      JVM_MEM_ARGS: ${REPORT_SERVICE_JVM_MEM_ARGS:--Xms32M -Xmx256M}
+      JVM_ARGS:     ${REPORT_SERVICE_JVM_ARGS:-}
 
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
       LDAP_SERVER:     ${LDAP_SERVERS:?}
