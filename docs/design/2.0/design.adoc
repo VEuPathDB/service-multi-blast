@@ -37,6 +37,8 @@ link:https://veupathdb.github.io/service-multi-blast/service-query/api.html[REST
 The results of jobs executed through the query service will be cached for a
 configurable amount of time before they are automatically expired.
 
+Expired jobs may be re-run at a later date by any user linked to the expired job.
+
 .Query Service Overview
 image:assets/mblast-query-overview.png[]
 
