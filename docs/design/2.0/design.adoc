@@ -1054,6 +1054,26 @@ Metrics common to both the query and report services.
 | prometheus-jvm-stats
 |
 | Total time used by the garbage collector
+
+| job_failures
+| lib-compute-platform
+| * queue name
+| Number of async job executions that ended with a failed status
+
+| job_successes
+| lib-compute-platform
+| * queue name
+| Number of async job executions that ended with a success status
+
+| queue_time
+| lib-compute-platform
+| * queue name
+| Histogram of time spent by jobs waiting in the queue.
+
+| queued_jobs
+| lib-compute-platform
+| * queue name
+| Gauge of the number of currently queued jobs.
 |===
 
 === Query Service
