@@ -27,7 +27,7 @@ dependencies.
 == Query Service
 
 The Query Service, built on the
-link:{var-git-org-url}lib-compute-platform[Async Platform], exposes a REST API
+link:{var-git-org-url}/lib-compute-platform[Async Platform], exposes a REST API
 through which API consumers may create, customize, and execute asynchronous
 link:https://blast.ncbi.nlm.nih.gov/Blast.cgi[BLAST+] query jobs against
 VEuPathDB's BLAST+ databases.
