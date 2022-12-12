@@ -30,7 +30,6 @@ project(":lib-blast-types").name = "blast-types"
 include(":lib-mblast-utils")
 include(":lib-temp-cache")
 include(":lib-blast-query-parser")
-include(":lib-logging-output-stream")
 
 include(":lib-jvm-mblast-sdk")
 project(":lib-jvm-mblast-sdk").name = "mblast-sdk"
