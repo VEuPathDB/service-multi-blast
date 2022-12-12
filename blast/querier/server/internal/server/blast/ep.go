@@ -14,6 +14,7 @@ import (
 	"github.com/veupathdb/lib-go-blast/v2/pkg/blast"
 	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
+	"github.com/vulpine-io/split-pipe/v1/pkg/spipe"
 
 	"server/internal/config"
 	"server/internal/mtx"
@@ -83,7 +84,7 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	}
 	defer stdout.Close()
 
-	stderr, err := os.Create(filepath.Join(workDir, "error.txt"))
+	errFile, err := os.Create(filepath.Join(workDir, "error.txt"))
 	if err != nil {
 		log.Debug("Failed to create stderr log file: ", err.Error())
 
@@ -92,7 +93,10 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 
 		return server.NewFailResponse(err.Error())
 	}
-	defer stderr.Close()
+	defer errFile.Close()
+
+	stderr := spipe.NewSplitWriter(errFile, util.StdErrLogger(log))
+	stderr.IgnoreErrors(true)
 
 	cmd := config.ToCLI()
 	cmd.Path = "/blast/bin/" + cmd.Args[0]
