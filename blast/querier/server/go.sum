@@ -368,11 +368,15 @@ github.com/veupathdb/lib-go-blast/v2 v2.0.11 h1:8AKhM+/fe9KWi26VQQFIlNQGX+u+F3E6
 github.com/veupathdb/lib-go-blast/v2 v2.0.11/go.mod h1:9va7OZ1zzLwOU1Zg06BpC+GIKTxMZW/Gp4gkthYE7QQ=
 github.com/viant/assertly v0.4.8/go.mod h1:aGifi++jvCrUaklKEKT0BU95igDNaqkvz+49uaYMPRU=
 github.com/viant/toolbox v0.24.0/go.mod h1:OxMCG57V0PXuIP2HNQrtJf2CjqdmbrOx5EkMILuUhzM=
+github.com/vulpine-io/io-test v1.0.0 h1:Ot8vMh+ssm1VWDAwJ3U4C5qG9aRnr5YfQFZPNZBAUGI=
+github.com/vulpine-io/io-test v1.0.0/go.mod h1:X1I+p5GCxVX9m4nFd1HBtr2bVX9v1ZE6x8w+Obt36AU=
 github.com/vulpine-io/midl v1.1.1/go.mod h1:7hxF0KIfLAjgB73MInhYaoXlHNv1Q4t81zi5Pqz7f28=
 github.com/vulpine-io/midl v1.2.2 h1:hrbhauXJxCYd+OPIgZZObXyR9JOjQwPc0nd+PDZoHAI=
 github.com/vulpine-io/midl v1.2.2/go.mod h1:7hxF0KIfLAjgB73MInhYaoXlHNv1Q4t81zi5Pqz7f28=
 github.com/vulpine-io/midl-layers/request-id/short-id v1.0.0 h1:I/bY15KrwU5PD/PYVg11UMBHSf9txBM3DEg/4bE73Xs=
 github.com/vulpine-io/midl-layers/request-id/short-id v1.0.0/go.mod h1:qmfoCJTzk2lBhUyGjb4qC25SnRyGz+Ol3ueVX1p1q1M=
+github.com/vulpine-io/split-pipe v1.1.1 h1:gAJD7PnNPxwriJ4ypgdRRqqfqj8DIM+ekoCGgKhX+RY=
+github.com/vulpine-io/split-pipe v1.1.1/go.mod h1:Q9F0fEjqy/F4IMHEhIUDubmX573JbYcirUk+YV4Ugfc=
 github.com/x-cray/logrus-prefixed-formatter v0.5.2 h1:00txxvfBM9muc0jiLIEAkAcIMJzfthRT6usrui8uGmg=
 github.com/x-cray/logrus-prefixed-formatter v0.5.2/go.mod h1:2duySbKsL6M18s5GU7VPsoEPHyzalCE06qoARUCeBBE=
 github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f/go.mod h1:N2zxlSyiKSe5eX1tZViRH5QA0qijqEDrYZiPEAiq3wU=
