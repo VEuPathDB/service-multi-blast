@@ -66,7 +66,7 @@ dependencies {
   implementation("io.prometheus:simpleclient_common:0.16.0")
 
   implementation("io.foxcapades.lib:env-access:1.0.0")
-  implementation("io.foxcapades.lib:md5:1.0.0")
+  implementation("io.foxcapades.lib:md5:1.0.1")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")

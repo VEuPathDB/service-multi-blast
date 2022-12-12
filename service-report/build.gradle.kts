@@ -59,7 +59,7 @@ dependencies {
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
 
   implementation("io.foxcapades.lib:env-access:1.0.0")
-  implementation("io.foxcapades.lib:md5:1.0.0")
+  implementation("io.foxcapades.lib:md5:1.0.1")
 
   implementation("io.prometheus:simpleclient:0.16.0")
   implementation("io.prometheus:simpleclient_common:0.16.0")
