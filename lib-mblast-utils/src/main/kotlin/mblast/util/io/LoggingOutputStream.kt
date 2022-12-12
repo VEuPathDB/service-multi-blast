@@ -1,10 +1,11 @@
-package org.veupathdb.lib.io
+package mblast.util.io
 
 import io.foxcapades.lib.kps.kpd.UByteDeque
-import io.klibs.ascii.ubyte.ASCII_CR
-import io.klibs.ascii.ubyte.ASCII_LF
-import io.klibs.ascii.ubyte.ASCII_NUL
 import java.io.OutputStream
+
+private const val ASCII_NUL: UByte = 0u
+private const val ASCII_LF: UByte = 10u
+private const val ASCII_CR: UByte = 13u
 
 /**
  * OutputStream implementation that outputs lines of text to a logger function.
