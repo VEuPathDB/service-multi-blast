@@ -56,12 +56,8 @@ class LoggingOutputStream(private val logWriter: (line: String) -> Unit) : Outpu
 
   @OptIn(ExperimentalUnsignedTypes::class)
   private inline fun flushToLogger() {
-    val bytes = UByteArray(buffer.size)
-
-    buffer.copyInto(bytes)
+    logWriter(buffer.toArray().asByteArray().decodeToString())
     buffer.clear()
-
-    logWriter(bytes.asByteArray().decodeToString())
   }
 
   private inline fun isLineBreak(b: UByte)=
