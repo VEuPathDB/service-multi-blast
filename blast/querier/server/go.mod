@@ -15,5 +15,6 @@ require (
 	github.com/veupathdb/lib-go-blast/v2 v2.0.11
 	github.com/vulpine-io/midl v1.2.2
 	github.com/vulpine-io/midl-layers/request-id/short-id v1.0.0
+	github.com/vulpine-io/split-pipe v1.1.1
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 )
