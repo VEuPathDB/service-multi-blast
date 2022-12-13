@@ -1,5 +1,7 @@
 package org.veupathdb.service.mblast.query.jobs
 
+import mblast.util.io.LoggingOutputStream
+import mblast.util.io.TeeInputStream
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.ThreadContext
 import org.veupathdb.lib.blast.Blast
@@ -51,7 +53,7 @@ class BlastExecutor : JobExecutor {
     ) {
       // Write the stderr for the BLAST+ command out to file (which will be
       // persisted to S3)
-      ctx.workspace.write(Const.StdErrFileName, errorStream)
+      ctx.workspace.write(Const.StdErrFileName, TeeInputStream(errorStream, LoggingOutputStream(logger::warn), true))
       waitFor().also { timer.observeDuration() }
     }
 
