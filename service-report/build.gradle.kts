@@ -47,6 +47,8 @@ dependencies {
   implementation("org.gusdb:fgputil-core:2.7.4")
   implementation("org.gusdb:fgputil-db:2.7.4")
 
+  implementation(project(":lib-mblast-utils"))
+
   implementation("org.veupathdb.lib:jaxrs-container-core:6.11.0")
   implementation("org.veupathdb.lib:compute-platform:1.3.4")
   implementation("org.veupathdb.lib:hash-id:1.1.0")

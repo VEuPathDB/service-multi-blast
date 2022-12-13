@@ -1,6 +1,8 @@
 package org.veupathdb.service.mblast.report.jobs
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+import mblast.util.io.LoggingOutputStream
+import mblast.util.io.TeeInputStream
 import org.apache.logging.log4j.CloseableThreadContext
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.Blast
@@ -102,7 +104,7 @@ class FormatExecutor : JobExecutor {
         .directory(ctx.workspace.path.toFile())
         .start()
     ) {
-      ctx.workspace.write(Const.STD_ERR_FILE_NAME, errorStream)
+      ctx.workspace.write(Const.STD_ERR_FILE_NAME, TeeInputStream(errorStream, LoggingOutputStream(logger::warn), true))
       waitFor().also { timer.observeDuration() }
     }
 
