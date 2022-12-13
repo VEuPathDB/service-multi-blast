@@ -30,3 +30,6 @@ class SequenceTooLongException(
 
 class QueryTooLongException(val maxTotalLength: Int)
   : MBlastQueryParseException("The input query was longer than the max allowed query length of $maxTotalLength characters.")
+
+class TooManyDashesOnFirstLineException(val sequenceNumber: Int)
+  : MBlastQueryParseException("The first line of input sequence #$sequenceNumber contained too many dashes.")
