@@ -14,7 +14,51 @@ import mblast.util.io.InStream
  * stream will need to be fully or partially consumed for any validation to be
  * performed.
  *
+ * TODO: Allow for comment lines!
+ *
  * ## Validations
+ *
+ * ### First Line Dashes
+ *
+ * Validates that the first line of the sequence does not contain too many
+ * dashes.  "Too many" here is calculated as any value for `dashCount` that is
+ * greater than or equal to `nonDashCount / 3`
+ *
+ * ```
+ * if (dashCount >= nonDashCount / 3)
+ *   ERROR: First line of the sequence does not look like plausible data, but it
+ *          is not marked as a defline or comment.
+ * else
+ *   OK:    First line has an acceptable ratio of dashes to non-dashes
+ * ```
+ *
+ * This check is based on the C++ source code of the CFastaReader type as of
+ * 2022-12-13, specifically the method `CFastaReader::CheckDataLine`.
+ *
+ * The relevant snippets are:
+ *
+ * Definition of how many characters max to check on the first line:
+ * ```
+ * // in case the data has huge sequences all on the first line we do need
+ * // a cutoff and "70" seems reasonable since it's the default width of
+ * // CFastaOstream (as of 2017-03-09)
+ * size_t len_to_check = min(s.length(),
+ *                           static_cast<size_t>(70));
+ * ```
+ *
+ * Definition of the line content validation ("bad" here is invalid or dash
+ * characters):
+ * ```
+ * if (bad >= good / 3  &&
+ *     (len_to_check > 3  ||  good == 0  ||  bad > good))
+ * {
+ *     FASTA_ERROR( LineNumber(),
+ *         "CFastaReader: Near line " << LineNumber()
+ *         << ", there's a line that doesn't look like plausible data, "
+ *         "but it's not marked as defline or comment.",
+ *         CObjReaderParseException::eFormat);
+ * }
+ * ```
  *
  * ### Sequence Length
  *
@@ -68,6 +112,15 @@ abstract class SequenceValidationStream(
   private val stream: InStream
 ) : SequenceStateStream(), InStream {
 
+  /**
+   * Maximum number of characters to check on the first line for the hyphen
+   * count validation.
+   */
+  private val maxFirstLineCheckingChars = 70
+  private var lookingForDashes = false
+  private var dashesOnFirstLine = 0
+  private var nonDashesOnFirstLine = 0
+
   private var currentSequenceLength = 0
   private var totalQueryLength = 0
 
@@ -102,6 +155,12 @@ abstract class SequenceValidationStream(
   }
 
   override fun onSequenceStart() {
+    // Check the first line of the new sequence to ensure there are not too many
+    // dashes (which will cause the BLAST+ CLI tool to fail).
+    lookingForDashes = true
+    dashesOnFirstLine = 0
+    nonDashesOnFirstLine = 0
+
     // If we are not on the first sequence (meaning this is not the first call
     // to this method) AND the previous sequence had no non-ignorable characters
     // then throw an empty sequence error
@@ -116,12 +175,39 @@ abstract class SequenceValidationStream(
     currentSequenceLength = 0
   }
 
+  override fun onSequenceLineEnd() {
+    // If we were looking for dashes (on the first sequence line) then...
+    if (lookingForDashes) {
+      // We are no longer looking for dashes
+      lookingForDashes = false
+
+      // Sum the number of characters we looked at
+      val checkedCharacters = dashesOnFirstLine + nonDashesOnFirstLine
+
+      // Verify that the number of dashes will not cause a problem for the
+      // BLAST+ CLI tool by applying the same logic the CLI tool does to
+      // validate the line.
+      if (
+        dashesOnFirstLine >= nonDashesOnFirstLine / 3
+        && (checkedCharacters > 3 || nonDashesOnFirstLine == 0 || dashesOnFirstLine > nonDashesOnFirstLine)
+      )
+        throw TooManyDashesOnFirstLineException(sequenceCount)
+    }
+  }
+
   override fun onSequenceCharacter(c: Char) {
     if (isIgnorable(c))
       return
 
     if (!isValid(c))
       throwBadChar()
+
+    if (lookingForDashes && columnIndex <= maxFirstLineCheckingChars) {
+      if (c == '-')
+        dashesOnFirstLine++
+      else
+        nonDashesOnFirstLine++
+    }
 
     currentSequenceLength++
     totalQueryLength++

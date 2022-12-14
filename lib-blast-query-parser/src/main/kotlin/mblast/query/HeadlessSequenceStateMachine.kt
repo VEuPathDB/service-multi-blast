@@ -34,7 +34,7 @@ private const val DEF_LINE_LEADER = '>'
  * implement query stream processing.
  *
  * @see SequenceStateStream
- * @see SequenceStateMachine
+ * @see SequenceStateRunnable
  *
  * @author Elizabeth Paige Harper - https://github.com/foxcapades
  */
@@ -87,8 +87,7 @@ abstract class HeadlessSequenceStateMachine {
   /**
    * Cursor position in the current line.
    *
-   * This value is 1 based, however it is set to 0 before the first character of
-   * a line is processed.
+   * This value is 1 based.
    */
   protected var columnIndex: Int = 1
     private set
@@ -144,6 +143,23 @@ abstract class HeadlessSequenceStateMachine {
    */
   protected open fun onSequenceCharacter(c: Char) {}
 
+  /**
+   * Extension point that is called when the end of a sequence line is reached.
+   *
+   * This method is called "on" the line that is ending, meaning the line number
+   * values will be for the line that is ending.
+   */
+  protected open fun onSequenceLineEnd() {}
+
+  /**
+   * Extension point that is called before parsing the first sequence character
+   * of a new sequence line.
+   *
+   * This method is called "on" the new line, meaning the line number values
+   * will be for the new line that is being started.
+   */
+  protected open fun onSequenceLineBegin() {}
+
 
   ////////////////////////////////////////////////////////////////////////////
   //                                                                        //
@@ -180,14 +196,33 @@ abstract class HeadlessSequenceStateMachine {
     columnIndex++
   }
 
+  /**
+   * Handles the state where we are beginning a new line in an already started
+   * sequence.
+   */
+  private fun internalHandleSequenceNextLine() {
+    state = STATE_IN_SEQUENCE
+    onSequenceLineBegin()
+    internalHandleSequenceContinuation()
+  }
+
+  /**
+   * Handles the state where we are in a sequence and processing the next
+   * character.
+   */
   private fun internalHandleSequenceContinuation() {
     if (isNewLine(currentChar)) {
       state = STATE_START_LINE
+      onSequenceLineEnd()
     } else {
       onSequenceCharacter(currentChar)
     }
   }
 
+  /**
+   * Handles the state where we are in a defline and processing the next
+   * character.
+   */
   private fun internalHandleDefLineContinuation() {
     if (isNewLine(currentChar))
       state = STATE_START_LINE
@@ -195,9 +230,13 @@ abstract class HeadlessSequenceStateMachine {
       onDefLineCharacter(currentChar)
   }
 
+  /**
+   * Handles the state where we are starting a new line and need to determine
+   * whether it is a defline, a blank line, the beginning of a sequence, or the
+   * continuation of an already started sequence.
+   */
   private fun internalHandleLineStart() {
     incrementLineNumber()
-
     when {
       // Blank line, keep the same state and continue.
       isNewLine(currentChar)         -> {}
@@ -212,17 +251,16 @@ abstract class HeadlessSequenceStateMachine {
       // are in the middle of a sequence, otherwise we are starting a new one.
       else                           ->
         if (rawCharactersThisSequence > 0) {
-          state = STATE_IN_SEQUENCE
-          internalHandleSequenceContinuation()
+          internalHandleSequenceNextLine()
         } else {
           internalHandleSequenceBodyStart()
         }
-
     }
   }
 
   private fun internalHandleSequenceBodyStart() {
     onSequenceBodyStart()
+    onSequenceLineBegin()
     state = STATE_IN_SEQUENCE
     internalHandleSequenceContinuation()
   }
@@ -270,12 +308,13 @@ abstract class HeadlessSequenceStateMachine {
       // doesn't actually mean we've hit a valid def line, if there are spaces
       // before this character in the line, then it is _not_ valid, and we will
       // count it as part of a sequence (an invalid sequence).
-      currentChar == DEF_LINE_LEADER ->
+      currentChar == DEF_LINE_LEADER -> {
         if (columnIndex == 1) {
           internalHandleDefLineStart()
         } else {
           internalHandleHeadlessSequenceStart()
         }
+      }
 
       // Else it's part of a sequence, valid or not.
       else                           -> internalHandleHeadlessSequenceStart()
@@ -284,7 +323,9 @@ abstract class HeadlessSequenceStateMachine {
 
   private fun incrementLineNumber() {
     lineNumber++
-    columnIndex = 1
+    // We set this to zero here because the end of the [index] method will
+    // increment the value to one for us after this call.
+    columnIndex = 0
   }
 
   private fun incrementSequenceIndex() {
