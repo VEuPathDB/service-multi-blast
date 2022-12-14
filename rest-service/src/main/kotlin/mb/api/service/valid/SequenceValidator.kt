@@ -94,14 +94,14 @@ interface SequenceValidator {
         var nonDashes = 0
 
         // Count the dashes + nondashes in the line
-        for (i in 0 .. min(line.length, 70)) {
+        for (i in 0 until min(line.length, 70)) {
           when (line[i]) {
             '-'  -> dashes++
             else -> nonDashes++
           }
         }
 
-        val checked = dashes+nonDashes
+        val checked = dashes + nonDashes
 
         return if (
           dashes >= nonDashes / 3
