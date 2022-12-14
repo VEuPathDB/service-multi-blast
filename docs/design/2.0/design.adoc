@@ -202,6 +202,12 @@ Handle Child Jobs::
 image:assets/handle-new-query-child-job.png[]
 ====
 
+.Handle existing root job w/o link
+[%collapsible]
+====
+image:assets/handle-existing-root-job-without-link.png[]
+====
+
 ===== Result
 
 The response will be an object containing the ID of the job that was created or
