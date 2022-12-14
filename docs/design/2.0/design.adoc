@@ -183,13 +183,24 @@ configuration.  See <<Job IDs>>.
 
 ===== Workflow
 
-====== Overall
-
+.Query Job Submission Flow
 image:assets/create-query-job.png[]
 
-====== Job Config Validation
-
+.Validate job submission
+[%collapsible]
+====
 image:assets/validate-query-job-config.png[]
+====
+
+.Handle new root job creation
+[%collapsible]
+====
+Handle Parent Job::
+image:assets/handle-new-query-job.png[]
+
+Handle Child Jobs::
+image:assets/handle-new-query-child-job.png[]
+====
 
 ===== Result
 
