@@ -26,3 +26,8 @@ class SequenceEmptyValidationError : SequenceValidationError {
   override val message: String
     get() = "Empty query.  Query must have 1 or more sequences."
 }
+
+class SequenceDashesValidationError(val sequence: Int) : SequenceValidationError {
+  override val message: String
+    get() = "The first line of input sequence #$sequence contained too many dashes."
+}
