@@ -38,6 +38,10 @@ fun _handleJobNotExists(sub: JobSubmission) {
         // Resubmit the expired job
         sub.submitToChildQueue(childID, childQuery)
       }
+
+      // The parent job is new, so no link to it exists yet, link the
+      // pre-existing child job to the new parent job.
+      JobDBManager.withTransaction { db -> db.insertQueryToSubqueryLink(sub.parentJobID, childID, position++) }
     }
 
     // Else, if the child job DOES NOT exist in the database
