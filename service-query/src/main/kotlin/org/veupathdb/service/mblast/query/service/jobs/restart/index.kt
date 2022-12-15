@@ -52,9 +52,9 @@ fun RestartJob(queryJobID: HashID) {
     // Stream over the jobs
     .parallelStream()
     // Retrieve the S3 state for the job
-    .map { Pair(it, MBlastPlatform.requireAsyncJob(it.queryJobID)) }
+    .map { Pair(it, MBlastPlatform.getAsyncJob(it.queryJobID)) }
     // Filter the jobs down to only those that have expired
-    .filter { (_, it) -> it.status == JobStatus.Expired }
+    .filter { (_, it) -> (it?.status ?: JobStatus.Expired) == JobStatus.Expired }
     // Requeue the expired jobs
     .forEach { (it, _) -> MBlastPlatform.queueChildJob(it.queryJobID, it.config.toInputStream(), it.queryFile) }
 }

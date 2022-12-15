@@ -45,6 +45,9 @@ object MBlastPlatform {
     AsyncPlatform.getJob(queryJobID)
       ?: throw IllegalStateException("Job $queryJobID was required to be in S3 but was not found.")
 
+  fun getAsyncJob(queryJobID: HashID) =
+    AsyncPlatform.getJob(queryJobID)
+
   fun queueParentJob(queryJobID: HashID, config: InputStream, query: File) =
     queueJob(ServiceOptions.parentJobQueueName, queryJobID, config, query)
 
