@@ -208,6 +208,12 @@ image:assets/handle-new-query-child-job.png[]
 image:assets/handle-existing-root-job-without-link.png[]
 ====
 
+.Handle existing root job with link
+[%collapsible]
+====
+image:assets/handle-existing-root-job-with-link.png[]
+====
+
 ===== Result
 
 The response will be an object containing the ID of the job that was created or
@@ -329,7 +335,7 @@ the same as if the job was brand new.
 
 ===== Workflow
 
-image:assets/restart-query-job.svg[]
+image:assets/restart-query-job.png[]
 
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// //
