@@ -42,14 +42,13 @@ public enum TargetSite {
   @JsonProperty("VEuPathDB")
   VEUPATHDB("VEuPathDB");
 
-  public final String name;
+  private final String value;
 
-  TargetSite(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  TargetSite(String name) {
+    this.value = name;
   }
 }

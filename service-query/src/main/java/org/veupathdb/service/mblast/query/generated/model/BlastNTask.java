@@ -18,14 +18,13 @@ public enum BlastNTask {
   @JsonProperty("rmblastn")
   RMBLASTN("rmblastn");
 
-  public final String name;
+  private final String value;
 
-  BlastNTask(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastNTask(String name) {
+    this.value = name;
   }
 }

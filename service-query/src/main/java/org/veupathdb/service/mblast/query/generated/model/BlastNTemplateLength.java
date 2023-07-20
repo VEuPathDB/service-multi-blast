@@ -7,14 +7,9 @@ public enum BlastNTemplateLength {
 
   _21(21);
 
-  public final Number name;
+  private Number name;
 
   BlastNTemplateLength(Number name) {
-    this.name = name;
-  }
-
-
-  public Number getName() {
-    return this.name;
+    this.value = name;
   }
 }

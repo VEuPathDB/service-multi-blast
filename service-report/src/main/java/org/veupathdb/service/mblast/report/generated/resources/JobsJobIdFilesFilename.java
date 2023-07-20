@@ -23,7 +23,7 @@ public interface JobsJobIdFilesFilename {
   })
   GetJobsFilesByJobIdAndFilenameResponse getJobsFilesByJobIdAndFilename(
       @PathParam("job-id") String jobId, @PathParam("filename") String filename,
-      @QueryParam("download") @DefaultValue("false") boolean download);
+      @QueryParam("download") @DefaultValue("false") Boolean download);
 
   class GetJobsFilesByJobIdAndFilenameResponse extends ResponseDelegate {
     private GetJobsFilesByJobIdAndFilenameResponse(Response response, Object entity) {

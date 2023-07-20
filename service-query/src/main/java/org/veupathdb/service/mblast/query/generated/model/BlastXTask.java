@@ -9,14 +9,13 @@ public enum BlastXTask {
   @JsonProperty("blastx-fast")
   BLASTXFAST("blastx-fast");
 
-  public final String name;
+  private final String value;
 
-  BlastXTask(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastXTask(String name) {
+    this.value = name;
   }
 }

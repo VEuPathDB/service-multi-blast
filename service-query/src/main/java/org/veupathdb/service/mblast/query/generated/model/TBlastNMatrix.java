@@ -30,14 +30,13 @@ public enum TBlastNMatrix {
   @JsonProperty("IDENTITY")
   IDENTITY("IDENTITY");
 
-  public final String name;
+  private final String value;
 
-  TBlastNMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  TBlastNMatrix(String name) {
+    this.value = name;
   }
 }

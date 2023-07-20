@@ -60,14 +60,13 @@ public enum BlastOutFormat {
   @JsonProperty("organism-report")
   ORGANISMREPORT("organism-report");
 
-  public final String name;
+  private final String value;
 
-  BlastOutFormat(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastOutFormat(String name) {
+    this.value = name;
   }
 }
