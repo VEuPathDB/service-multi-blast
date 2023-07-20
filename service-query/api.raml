@@ -641,3 +641,67 @@ uses:
         body:
           application/json:
             type: error.ServerError
+
+/maintenance/cache:
+  displayName: Cache Maintenance
+
+  delete:
+    displayName: Delete Minio Cache
+    description: |
+      Deletes all jobs in the job cache.  This endpoint is to be used during
+      site releases to clear any old data that may have been invalidated by
+      the changes to the underlying site data.
+
+    headers:
+      Admin-Auth:
+        type: string
+
+    responses:
+      204:
+        description: Success
+      401:
+        description: |
+          Invalid Admin-Auth token value.
+        body:
+          application/json:
+            type: error.UnauthorizedError
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            type: error.ServerError
+
+  /{job-id}:
+    displayName: Job Cache Maintenance
+    description: Deletes the target job from the cache.
+
+    uriParameters:
+      job-id:
+        displayName: Job ID
+        type: string
+        required: false
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+
+    delete:
+      displayName: Delete Job Cache
+
+      headers:
+        Admin-Auth:
+          type: string
+
+      responses:
+        204:
+          description: Success
+        401:
+          description: |
+            Invalid Admin-Auth token value.
+          body:
+            application/json:
+              type: error.UnauthorizedError
+        500:
+          description: Internal Server Error
+          body:
+            application/json:
+              type: error.ServerError
