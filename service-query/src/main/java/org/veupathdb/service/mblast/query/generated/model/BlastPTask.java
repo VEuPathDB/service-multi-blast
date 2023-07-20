@@ -12,14 +12,13 @@ public enum BlastPTask {
   @JsonProperty("blastp-Short")
   BLASTPSHORT("blastp-Short");
 
-  public final String name;
+  private final String value;
 
-  BlastPTask(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastPTask(String name) {
+    this.value = name;
   }
 }

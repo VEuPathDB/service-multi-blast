@@ -15,14 +15,13 @@ public enum BlastXCompBasedStats {
   @JsonProperty("comp-based-score-adjustment-unconditional")
   COMPBASEDSCOREADJUSTMENTUNCONDITIONAL("comp-based-score-adjustment-unconditional");
 
-  public final String name;
+  private final String value;
 
-  BlastXCompBasedStats(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastXCompBasedStats(String name) {
+    this.value = name;
   }
 }

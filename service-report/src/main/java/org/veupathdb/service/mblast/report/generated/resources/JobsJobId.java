@@ -30,7 +30,7 @@ public interface JobsJobId {
   @GET
   @Produces("application/json")
   GetJobsByJobIdResponse getJobsByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("save_job") @DefaultValue("true") boolean saveJob);
+      @QueryParam("save_job") @DefaultValue("true") Boolean saveJob);
 
   @POST
   @Produces("application/json")

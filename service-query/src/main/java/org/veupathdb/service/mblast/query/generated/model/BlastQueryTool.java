@@ -30,14 +30,13 @@ public enum BlastQueryTool {
   @JsonProperty("tblastx")
   TBLASTX("tblastx");
 
-  public final String name;
+  private final String value;
 
-  BlastQueryTool(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastQueryTool(String name) {
+    this.value = name;
   }
 }

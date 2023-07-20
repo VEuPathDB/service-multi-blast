@@ -21,7 +21,7 @@ public interface JobsJobIdQuery {
       "text/plain"
   })
   GetJobsQueryByJobIdResponse getJobsQueryByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("download") @DefaultValue("false") boolean download);
+      @QueryParam("download") @DefaultValue("false") Boolean download);
 
   class GetJobsQueryByJobIdResponse extends ResponseDelegate {
     private GetJobsQueryByJobIdResponse(Response response, Object entity) {

@@ -27,14 +27,13 @@ public enum PSIBlastMatrix {
   @JsonProperty("PAM250")
   PAM250("PAM250");
 
-  public final String name;
+  private final String value;
 
-  PSIBlastMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  PSIBlastMatrix(String name) {
+    this.value = name;
   }
 }
