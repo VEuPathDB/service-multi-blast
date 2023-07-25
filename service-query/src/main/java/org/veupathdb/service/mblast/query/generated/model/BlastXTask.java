@@ -9,7 +9,7 @@ public enum BlastXTask {
   @JsonProperty("blastx-fast")
   BLASTXFAST("blastx-fast");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;

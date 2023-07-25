@@ -12,7 +12,7 @@ public enum BlastNTemplateType {
   @JsonProperty("optimal")
   OPTIMAL("optimal");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;
