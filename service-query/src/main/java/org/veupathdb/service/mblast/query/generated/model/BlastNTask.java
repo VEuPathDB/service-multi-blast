@@ -18,7 +18,7 @@ public enum BlastNTask {
   @JsonProperty("rmblastn")
   RMBLASTN("rmblastn");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;

@@ -9,7 +9,7 @@ public enum RPSBlastCompBasedStats {
   @JsonProperty("comp-based-stats")
   COMPBASEDSTATS("comp-based-stats");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;

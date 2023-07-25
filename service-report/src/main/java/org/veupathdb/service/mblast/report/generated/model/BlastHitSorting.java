@@ -18,7 +18,7 @@ public enum BlastHitSorting {
   @JsonProperty("by-query-coverage")
   BYQUERYCOVERAGE("by-query-coverage");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;

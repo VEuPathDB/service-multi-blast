@@ -162,7 +162,7 @@ public enum BlastOutField {
   @JsonProperty("std")
   STD("std");
 
-  private final String value;
+  public final String value;
 
   public String getValue() {
     return this.value;

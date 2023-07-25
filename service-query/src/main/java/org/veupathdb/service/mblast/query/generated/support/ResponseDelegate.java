@@ -74,17 +74,12 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public <T> T readEntity(Class<T> p0) {
-    return this.delegate.readEntity(p0);
-  }
-
-  @Override
   public <T> T readEntity(GenericType<T> p0, Annotation[] p1) {
     return this.delegate.readEntity(p0,p1);
   }
 
   @Override
-  public <T> T readEntity(GenericType<T> p0) {
+  public <T> T readEntity(Class<T> p0) {
     return this.delegate.readEntity(p0);
   }
 
@@ -94,8 +89,8 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public EntityTag getEntityTag() {
-    return this.delegate.getEntityTag();
+  public <T> T readEntity(GenericType<T> p0) {
+    return this.delegate.readEntity(p0);
   }
 
   @Override
@@ -121,6 +116,11 @@ public class ResponseDelegate extends Response {
   @Override
   public Map<String, NewCookie> getCookies() {
     return this.delegate.getCookies();
+  }
+
+  @Override
+  public EntityTag getEntityTag() {
+    return this.delegate.getEntityTag();
   }
 
   @Override

@@ -7,7 +7,11 @@ public enum BlastNTemplateLength {
 
   _21(21);
 
-  private Number name;
+  public final Number value;
+
+  public String getValue() {
+    return this.value;
+  }
 
   BlastNTemplateLength(Number name) {
     this.value = name;
