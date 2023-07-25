@@ -25,6 +25,7 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
   @JsonProperty("site")
   private TargetSite site;
 
+  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -32,7 +33,6 @@ public class QueryJobListEntryImpl implements QueryJobListEntry {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("userMeta")
