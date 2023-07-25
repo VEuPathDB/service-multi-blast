@@ -23,7 +23,7 @@ class CacheMaintenanceController(@Context request: ContainerRequest) : Controlle
         })
 
     AsyncPlatform.listJobReferences()
-      .asSequence()
+      .parallelStream()
       .filter(JobReference::owned)
       .filter { AsyncPlatform.getJob(it.jobID)!!.status != JobStatus.Expired }
       .forEach {
