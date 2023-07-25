@@ -9,7 +9,7 @@ public enum BlastNTemplateLength {
 
   public final Number value;
 
-  public String getValue() {
+  public Number getValue() {
     return this.value;
   }
 
