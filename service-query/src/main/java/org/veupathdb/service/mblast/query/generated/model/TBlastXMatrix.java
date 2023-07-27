@@ -27,14 +27,13 @@ public enum TBlastXMatrix {
   @JsonProperty("PAM250")
   PAM250("PAM250");
 
-  public final String name;
+  public final String value;
 
-  TBlastXMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  TBlastXMatrix(String name) {
+    this.value = name;
   }
 }

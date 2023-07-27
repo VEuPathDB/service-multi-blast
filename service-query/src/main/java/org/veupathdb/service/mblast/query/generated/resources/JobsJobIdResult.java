@@ -22,7 +22,7 @@ public interface JobsJobIdResult {
       "text/plain"
   })
   GetJobsResultByJobIdResponse getJobsResultByJobId(@PathParam("job-id") String jobId,
-      @QueryParam("download") @DefaultValue("false") boolean download);
+      @QueryParam("download") @DefaultValue("false") Boolean download);
 
   class GetJobsResultByJobIdResponse extends ResponseDelegate {
     private GetJobsResultByJobIdResponse(Response response, Object entity) {

@@ -9,14 +9,13 @@ public enum TBlastNTask {
   @JsonProperty("tblastn-fast")
   TBLASTNFAST("tblastn-fast");
 
-  public final String name;
+  public final String value;
 
-  TBlastNTask(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  TBlastNTask(String name) {
+    this.value = name;
   }
 }

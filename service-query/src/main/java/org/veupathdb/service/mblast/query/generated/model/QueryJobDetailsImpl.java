@@ -31,6 +31,7 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   @JsonProperty("blastConfig")
   private BlastQueryConfig blastConfig;
 
+  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -38,7 +39,6 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("userMeta")

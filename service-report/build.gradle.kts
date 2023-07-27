@@ -1,6 +1,6 @@
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "4.5.4"
+  id("org.veupathdb.lib.gradle.container.container-utils") version "4.8.9"
   id("com.github.johnrengelman.shadow") version "7.1.2"
   kotlin("jvm")
 }
@@ -47,13 +47,13 @@ dependencies {
   implementation("org.gusdb:fgputil-core:2.7.4")
   implementation("org.gusdb:fgputil-db:2.7.4")
 
+  implementation(project(":blast-types"))
   implementation(project(":lib-mblast-utils"))
 
   implementation("org.veupathdb.lib:jaxrs-container-core:6.11.0")
-  implementation("org.veupathdb.lib:compute-platform:1.3.4")
+  implementation("org.veupathdb.lib:compute-platform:1.5.1")
   implementation("org.veupathdb.lib:hash-id:1.1.0")
   implementation("org.veupathdb.lib:jackson-singleton:3.0.1")
-  implementation("org.veupathdb.lib:blast-types:8.2.0")
 
   implementation("org.glassfish.jersey.core:jersey-server:3.1.0")
 

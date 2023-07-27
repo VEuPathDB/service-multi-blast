@@ -15,14 +15,13 @@ public enum TBlastNCompBasedStats {
   @JsonProperty("comp-based-score-adjustment-unconditional")
   COMPBASEDSCOREADJUSTMENTUNCONDITIONAL("comp-based-score-adjustment-unconditional");
 
-  public final String name;
+  public final String value;
 
-  TBlastNCompBasedStats(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  TBlastNCompBasedStats(String name) {
+    this.value = name;
   }
 }

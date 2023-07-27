@@ -12,14 +12,13 @@ public enum BlastStrand {
   @JsonProperty("plus")
   PLUS("plus");
 
-  public final String name;
+  public final String value;
 
-  BlastStrand(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastStrand(String name) {
+    this.value = name;
   }
 }

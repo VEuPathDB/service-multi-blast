@@ -6,6 +6,11 @@ import org.veupathdb.lib.container.jaxrs.config.Options
 object ServiceOptions : Options() {
 
   /**
+   * Admin auth key.
+   */
+  val adminAuthKey = NBEnv.require("ADMIN_AUTH_KEY")
+
+  /**
    * Hostname of the database backing the job queue.
    */
   val queueDBHost = NBEnv.require("QUEUE_DB_HOST")
