@@ -30,14 +30,13 @@ public enum BlastPMatrix {
   @JsonProperty("IDENTITY")
   IDENTITY("IDENTITY");
 
-  public final String name;
+  public final String value;
 
-  BlastPMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastPMatrix(String name) {
+    this.value = name;
   }
 }

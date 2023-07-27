@@ -18,14 +18,13 @@ public enum BlastHSPSorting {
   @JsonProperty("by-hsp-subject-start")
   BYHSPSUBJECTSTART("by-hsp-subject-start");
 
-  public final String name;
+  public final String value;
 
-  BlastHSPSorting(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastHSPSorting(String name) {
+    this.value = name;
   }
 }

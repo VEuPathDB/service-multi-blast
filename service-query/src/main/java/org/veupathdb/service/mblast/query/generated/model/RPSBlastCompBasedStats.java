@@ -9,14 +9,13 @@ public enum RPSBlastCompBasedStats {
   @JsonProperty("comp-based-stats")
   COMPBASEDSTATS("comp-based-stats");
 
-  public final String name;
+  public final String value;
 
-  RPSBlastCompBasedStats(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  RPSBlastCompBasedStats(String name) {
+    this.value = name;
   }
 }

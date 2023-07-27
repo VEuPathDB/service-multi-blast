@@ -27,14 +27,13 @@ public enum BlastXMatrix {
   @JsonProperty("PAM250")
   PAM250("PAM250");
 
-  public final String name;
+  public final String value;
 
-  BlastXMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  BlastXMatrix(String name) {
+    this.value = name;
   }
 }

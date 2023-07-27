@@ -11,6 +11,8 @@ RUN apk add --no-cache git npm \
 
 COPY gradle/ gradle/
 COPY lib-mblast-gradle/ lib-mblast-gradle/
+COPY lib-mblast-utils/ lib-mblast-utils/
+COPY lib-blast-types/ lib-blast-types/
 
 COPY [ \
     "build.gradle.kts", \
@@ -33,7 +35,7 @@ RUN gradle --no-daemon test shadowJar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM ncbi/blast:2.13.0
+FROM ncbi/blast:2.14.0
 
 LABEL service="mblast-report"
 

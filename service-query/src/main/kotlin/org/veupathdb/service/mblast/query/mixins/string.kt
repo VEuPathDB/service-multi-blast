@@ -18,7 +18,7 @@ import org.veupathdb.service.mblast.query.generated.model.TargetSite
 fun String.toTargetSite() =
   TargetSite.values().let {
     it.forEach {
-      if (it.name == this)
+      if (it.value == this)
         return@let it
     }
 

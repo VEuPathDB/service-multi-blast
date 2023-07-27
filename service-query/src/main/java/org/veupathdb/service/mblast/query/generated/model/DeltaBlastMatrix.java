@@ -27,14 +27,13 @@ public enum DeltaBlastMatrix {
   @JsonProperty("PAM250")
   PAM250("PAM250");
 
-  public final String name;
+  public final String value;
 
-  DeltaBlastMatrix(String name) {
-    this.name = name;
+  public String getValue() {
+    return this.value;
   }
 
-
-  public String getName() {
-    return this.name;
+  DeltaBlastMatrix(String name) {
+    this.value = name;
   }
 }

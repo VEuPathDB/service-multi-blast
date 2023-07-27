@@ -37,7 +37,7 @@ fun Project.DockerComposeStop() {
 }
 
 fun Project.DockerComposeDown() {
-  with(createProcess("down").start()) {
+  with(createProcess("down", "-v").start()) {
     inputStream.transferTo(System.out)
     errorStream.transferTo(System.err)
 
