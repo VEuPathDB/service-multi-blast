@@ -46,11 +46,12 @@ class BlastExecutor : JobExecutor {
       .labels(blastConfig.tool.value)
       .startTimer()
 
-    val exitCode = with(
-      ProcessBuilder(*blastConfig.toCliArray())
-        .directory(ctx.workspace.path.toFile())
-        .start()
-    ) {
+    val proc = ProcessBuilder(*blastConfig.toCliArray())
+      .directory(ctx.workspace.path.toFile())
+
+    proc.environment()["BLAST_USAGE_REPORT"] = "false"
+
+    val exitCode = with(proc.start()) {
       // Write the stderr for the BLAST+ command out to file (which will be
       // persisted to S3)
       ctx.workspace.write(Const.StdErrFileName, TeeInputStream(errorStream, LoggingOutputStream(logger::warn), true))
