@@ -99,11 +99,12 @@ class FormatExecutor : JobExecutor {
       .labels(blast.tool.value)
       .startTimer()
 
-    val exitCode = with(
-      ProcessBuilder(*blast.toCliArray())
-        .directory(ctx.workspace.path.toFile())
-        .start()
-    ) {
+    val proc = ProcessBuilder(*blast.toCliArray())
+      .directory(ctx.workspace.path.toFile())
+
+    proc.environment()["BLAST_USAGE_REPORT"] = "false"
+
+    val exitCode = with(proc.start()) {
       ctx.workspace.write(Const.STD_ERR_FILE_NAME, TeeInputStream(errorStream, LoggingOutputStream(logger::warn), true))
       waitFor().also { timer.observeDuration() }
     }
