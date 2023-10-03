@@ -37,7 +37,7 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
     return JobsJobId.PostJobsByJobIdResponse.respond204()
   }
 
-  @PATCH
+  @DELETE
   @Produces("application/json")
   @Consumes("application/json")
   override fun deleteJobsByJobId(@PathParam("job-id") jobId: String): JobsJobId.DeleteJobsByJobIdResponse {
@@ -45,7 +45,7 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
     return JobsJobId.DeleteJobsByJobIdResponse.respond204()
   }
 
-  @DELETE
+  @PATCH
   @Produces("application/json")
   override fun patchJobsByJobId(@PathParam("job-id") jobId: String, entity: QueryJobPatchRequest?): JobsJobId.PatchJobsByJobIdResponse {
     PatchUserJob(jobId.toHashIDOr404(), userID, entity ?: throw BadRequestException())
