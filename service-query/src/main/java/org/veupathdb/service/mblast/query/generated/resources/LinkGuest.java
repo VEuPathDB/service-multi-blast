@@ -5,11 +5,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
-import org.veupathdb.service.mblast.query.generated.model.BadRequestError;
-import org.veupathdb.service.mblast.query.generated.model.ForbiddenError;
-import org.veupathdb.service.mblast.query.generated.model.GuestJobTransferRequest;
-import org.veupathdb.service.mblast.query.generated.model.ServerError;
-import org.veupathdb.service.mblast.query.generated.model.UnauthorizedError;
+import org.veupathdb.service.mblast.query.generated.model.*;
 import org.veupathdb.service.mblast.query.generated.support.ResponseDelegate;
 
 @Path("/link-guest")

@@ -2,9 +2,11 @@ package org.veupathdb.lib.blast.common.fields
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.veupathdb.lib.blast.common.FlagDBGenCode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.serial.BlastField
-import org.veupathdb.lib.blast.util.*
+import org.veupathdb.lib.blast.util.add
+import org.veupathdb.lib.blast.util.append
+import org.veupathdb.lib.blast.util.optUByte
+import org.veupathdb.lib.blast.util.put
 
 /**
  * Default Value

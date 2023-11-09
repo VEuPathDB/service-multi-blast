@@ -1,10 +1,12 @@
 package org.veupathdb.lib.blast.common.fields
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.common.FlagVersion
 import org.veupathdb.lib.blast.serial.BlastField
-import org.veupathdb.lib.blast.util.*
+import org.veupathdb.lib.blast.util.add
+import org.veupathdb.lib.blast.util.append
+import org.veupathdb.lib.blast.util.optBool
+import org.veupathdb.lib.blast.util.put
 
 
 private const val Def = false

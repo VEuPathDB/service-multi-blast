@@ -1,7 +1,7 @@
 package org.veupathdb.lib.mblast.sdk.query.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.veupathdb.lib.mblast.sdk.query.blast.*
+import org.veupathdb.lib.mblast.sdk.query.blast.BlastQueryConfig
 
 data class QueryJobPostRequest(
   @JsonProperty("jobConfig")

@@ -1,7 +1,6 @@
 package org.veupathdb.lib.blast.blastp.field
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.common.FlagSeg
 import org.veupathdb.lib.blast.common.fields.Seg
 import org.veupathdb.lib.blast.util.reqDub

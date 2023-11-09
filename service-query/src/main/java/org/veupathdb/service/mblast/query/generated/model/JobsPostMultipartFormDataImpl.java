@@ -3,6 +3,7 @@ package org.veupathdb.service.mblast.query.generated.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.io.File;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

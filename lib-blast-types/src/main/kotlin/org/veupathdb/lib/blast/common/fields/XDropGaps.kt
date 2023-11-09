@@ -1,12 +1,14 @@
 package org.veupathdb.lib.blast.common.fields
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.common.FlagXDropFinalGap
 import org.veupathdb.lib.blast.common.FlagXDropPrelimGap
 import org.veupathdb.lib.blast.common.FlagXDropUngap
 import org.veupathdb.lib.blast.serial.BlastField
-import org.veupathdb.lib.blast.util.*
+import org.veupathdb.lib.blast.util.add
+import org.veupathdb.lib.blast.util.append
+import org.veupathdb.lib.blast.util.optDub
+import org.veupathdb.lib.blast.util.put
 
 
 internal fun ParseXDropUngap(js: ObjectNode) =

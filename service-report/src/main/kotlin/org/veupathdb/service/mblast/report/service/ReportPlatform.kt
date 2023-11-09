@@ -10,8 +10,6 @@ import org.veupathdb.service.mblast.report.ServiceOptions
 import org.veupathdb.service.mblast.report.db.ReportDB
 import org.veupathdb.service.mblast.report.model.JobConfig
 import org.veupathdb.service.mblast.report.model.JobInfo
-import org.veupathdb.service.mblast.report.model.UserJobInfo
-import java.io.InputStream
 
 /**
  * Facade over the [ReportDB] and [AsyncPlatform] objects that provides

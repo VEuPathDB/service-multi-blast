@@ -1,8 +1,6 @@
 package org.veupathdb.lib.mblast.sdk.query.blast
 
 import com.fasterxml.jackson.annotation.JsonGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSetter
 
 sealed class BlastQueryConfig {

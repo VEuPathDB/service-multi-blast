@@ -6,7 +6,6 @@ import org.veupathdb.service.mblast.query.generated.model.JobStatus
 import org.veupathdb.service.mblast.query.generated.model.QueryJobDetails
 import org.veupathdb.service.mblast.query.generated.model.QueryJobDetailsImpl
 import org.veupathdb.service.mblast.query.model.FullParentQueryConfig
-import java.util.*
 
 /**
  * Translates the target config into a form suitable for sending to the HTTP

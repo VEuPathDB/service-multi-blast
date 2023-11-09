@@ -7,7 +7,6 @@ import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
 import org.veupathdb.service.mblast.report.ServiceOptions
 import java.io.InputStream
-import java.lang.Exception
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest

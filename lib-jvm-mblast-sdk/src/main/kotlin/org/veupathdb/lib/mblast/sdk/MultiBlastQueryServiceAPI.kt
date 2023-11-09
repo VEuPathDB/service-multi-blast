@@ -9,7 +9,6 @@ import org.veupathdb.lib.mblast.sdk.query.model.*
 import org.veupathdb.lib.mblast.sdk.util.Either
 import java.io.InputStream
 import java.io.Reader
-import kotlin.jvm.Throws
 
 sealed interface MultiBlastQueryServiceAPI {
 

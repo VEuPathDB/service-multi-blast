@@ -8,7 +8,6 @@ import org.veupathdb.lib.mblast.sdk.except.MBlastJobNotFoundException
 import org.veupathdb.lib.mblast.sdk.report.model.*
 import org.veupathdb.lib.mblast.sdk.util.Either
 import java.io.InputStream
-import kotlin.jvm.Throws
 
 sealed interface MultiBlastReportServiceAPI {
 

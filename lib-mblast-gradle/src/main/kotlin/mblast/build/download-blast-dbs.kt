@@ -7,7 +7,6 @@ import net.schmizz.sshj.sftp.RemoteResourceInfo
 import net.schmizz.sshj.sftp.SFTPClient
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
 import org.gradle.api.Project
-import java.util.*
 
 
 fun Project.CreateBlastDBDirectoryIfNotExists() {

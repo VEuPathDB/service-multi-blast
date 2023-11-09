@@ -1,11 +1,11 @@
 package org.veupathdb.lib.blast.rpstblastn
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.veupathdb.lib.blast.common.*
-import org.veupathdb.lib.blast.common.BlastQueryBaseImplTest
 import org.veupathdb.lib.blast.common.fields.*
 import org.veupathdb.lib.blast.rpstblastn.fields.CompBasedStatsRPSTN
 import org.veupathdb.lib.blast.rpstblastn.fields.CompBasedStatsRPSTNValue
