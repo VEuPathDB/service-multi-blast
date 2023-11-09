@@ -42,7 +42,7 @@ private fun FullParentUserQueryConfig.convertToIORecord() =
     it.status     = lookupStatus()
     it.site       = projectID.toTargetSite()
     it.userMeta   = toUserMeta()
-    it.createdOn  = Date.from(createdOn.toInstant())
+    it.createdOn  = createdOn
   }
 
 private fun FullParentUserQueryConfig.lookupStatus() =
