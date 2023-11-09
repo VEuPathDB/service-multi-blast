@@ -8,7 +8,7 @@ object ServiceOptions : Options() {
   /**
    * Admin auth key.
    */
-  val adminAuthKey = NBEnv.require("ADMIN_AUTH_KEY")
+  val adminAuthKey = NBEnv.require("ADMIN_AUTH_TOKEN")
 
   /**
    * Hostname of the database backing the job queue.
