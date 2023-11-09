@@ -1,10 +1,11 @@
 package org.veupathdb.lib.blast.common
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.veupathdb.lib.blast.common.fields.*
+import org.veupathdb.lib.blast.common.fields.IPGList
+import org.veupathdb.lib.blast.common.fields.NegativeIPGList
 
 @DisplayName("Blast Query with IPG Lists Config Interface Compliance")
 internal abstract class BlastQueryWithIPGImplTest : BlastQueryWithListsImplTest() {

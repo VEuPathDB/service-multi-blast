@@ -13,7 +13,6 @@ import org.veupathdb.service.mblast.query.service.jobs.submit.model.JobSubmissio
 import org.veupathdb.service.mblast.query.sql.JobDBManager
 import org.veupathdb.service.mblast.query.sql.JobDBTransaction
 import java.io.File
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 fun _handleJobNotExists(sub: JobSubmission) {

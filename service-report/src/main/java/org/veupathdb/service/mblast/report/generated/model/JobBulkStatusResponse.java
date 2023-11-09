@@ -3,6 +3,7 @@ package org.veupathdb.service.mblast.report.generated.model;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.util.Map;
 
 @JsonDeserialize(

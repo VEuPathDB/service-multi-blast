@@ -1,7 +1,6 @@
 package org.veupathdb.lib.blast.common.fields
 
 import org.junit.jupiter.api.*
-import org.veupathdb.lib.blast.common.FlagRemote
 import org.veupathdb.lib.blast.common.FlagSaveEachPSSM
 import org.veupathdb.lib.jackson.Json
 

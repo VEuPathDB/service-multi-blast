@@ -2,12 +2,7 @@ package org.veupathdb.service.mblast.report.convert
 
 import org.veupathdb.lib.blast.common.fields.*
 import org.veupathdb.lib.blast.formatter.BlastFormatter
-import org.veupathdb.service.mblast.report.generated.model.BlastFormatConfig
-import org.veupathdb.service.mblast.report.generated.model.BlastFormatConfigImpl
-import org.veupathdb.service.mblast.report.generated.model.BlastHSPSorting
-import org.veupathdb.service.mblast.report.generated.model.BlastHitSorting
-import org.veupathdb.service.mblast.report.generated.model.BlastOutField
-import org.veupathdb.service.mblast.report.generated.model.BlastOutFormat
+import org.veupathdb.service.mblast.report.generated.model.*
 
 fun BlastFormatter.toExternal(): BlastFormatConfig {
   return BlastFormatConfigImpl().also {

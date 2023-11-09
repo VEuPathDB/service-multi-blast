@@ -1,10 +1,12 @@
 package org.veupathdb.lib.blast.common.fields
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.common.FlagOutFormat
 import org.veupathdb.lib.blast.serial.BlastField
-import org.veupathdb.lib.blast.util.*
+import org.veupathdb.lib.blast.util.optObject
+import org.veupathdb.lib.blast.util.reqArray
+import org.veupathdb.lib.blast.util.reqInt
+import org.veupathdb.lib.blast.util.reqString
 
 
 internal fun ParseOutFormat(js: ObjectNode) =

@@ -1,12 +1,12 @@
 package org.veupathdb.lib.blast.common.fields
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.veupathdb.lib.blast.common.FlagDBFile
-import org.veupathdb.lib.blast.serial.BlastField
 import org.veupathdb.lib.jackson.Json
 
 @DisplayName(FlagDBFile)

@@ -1,18 +1,15 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
-import java.util.List;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.Response;
-import org.veupathdb.service.mblast.report.generated.model.FileEntry;
-import org.veupathdb.service.mblast.report.generated.model.ForbiddenError;
-import org.veupathdb.service.mblast.report.generated.model.NotFoundError;
-import org.veupathdb.service.mblast.report.generated.model.ServerError;
-import org.veupathdb.service.mblast.report.generated.model.UnauthorizedError;
+import org.veupathdb.service.mblast.report.generated.model.*;
 import org.veupathdb.service.mblast.report.generated.support.ResponseDelegate;
+
+import java.util.List;
 
 @Path("/jobs/{job-id}/files")
 public interface JobsJobIdFiles {

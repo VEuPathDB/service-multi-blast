@@ -1,6 +1,5 @@
 package org.veupathdb.service.mblast.query.generated.resources;
 
-import java.util.List;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -9,6 +8,8 @@ import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.query.generated.model.JobBulkStatusResponse;
 import org.veupathdb.service.mblast.query.generated.model.ServerError;
 import org.veupathdb.service.mblast.query.generated.support.ResponseDelegate;
+
+import java.util.List;
 
 @Path("/statuses")
 public interface Statuses {

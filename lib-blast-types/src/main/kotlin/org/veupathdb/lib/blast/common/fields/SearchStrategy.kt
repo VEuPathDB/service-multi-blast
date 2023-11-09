@@ -1,11 +1,13 @@
 package org.veupathdb.lib.blast.common.fields
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.veupathdb.lib.blast.common.FlagDust
 import org.veupathdb.lib.blast.common.FlagExportSearchStrategy
 import org.veupathdb.lib.blast.common.FlagImportSearchStrategy
 import org.veupathdb.lib.blast.serial.BlastField
-import org.veupathdb.lib.blast.util.*
+import org.veupathdb.lib.blast.util.add
+import org.veupathdb.lib.blast.util.append
+import org.veupathdb.lib.blast.util.optString
+import org.veupathdb.lib.blast.util.put
 
 
 internal fun ParseImportSearchStrategy(js: ObjectNode) =

@@ -3,7 +3,10 @@ package org.veupathdb.service.mblast.report.db.sql
 import org.intellij.lang.annotations.Language
 import org.veupathdb.lib.blast.formatter.BlastFormatter
 import org.veupathdb.lib.hash_id.HashID
-import org.veupathdb.service.mblast.report.db.*
+import org.veupathdb.service.mblast.report.db.Column
+import org.veupathdb.service.mblast.report.db.Schema
+import org.veupathdb.service.mblast.report.db.Table
+import org.veupathdb.service.mblast.report.db.executeWithRaceCheck
 import java.sql.Connection
 import java.time.OffsetDateTime
 

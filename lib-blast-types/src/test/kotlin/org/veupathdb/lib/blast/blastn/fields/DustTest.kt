@@ -1,12 +1,9 @@
 package org.veupathdb.lib.blast.blastn.fields
 
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.veupathdb.lib.jackson.Json
 
 
 @DisplayName("Dust")

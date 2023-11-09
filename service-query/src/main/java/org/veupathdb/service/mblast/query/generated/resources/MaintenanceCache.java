@@ -1,10 +1,6 @@
 package org.veupathdb.service.mblast.query.generated.resources;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.veupathdb.service.mblast.query.generated.model.ServerError;
 import org.veupathdb.service.mblast.query.generated.model.UnauthorizedError;

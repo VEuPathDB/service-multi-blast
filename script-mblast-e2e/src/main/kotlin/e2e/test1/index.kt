@@ -4,8 +4,8 @@ import e2e.conf.E2EConfig
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.mblast.sdk.MultiBlast
 import org.veupathdb.lib.mblast.sdk.MultiBlastClient
-import org.veupathdb.lib.mblast.sdk.query.blast.BlastQueryTool
 import org.veupathdb.lib.mblast.sdk.common.model.JobStatus
+import org.veupathdb.lib.mblast.sdk.query.blast.BlastQueryTool
 import org.veupathdb.lib.mblast.sdk.query.model.QueryJobPatchRequest
 import org.veupathdb.lib.mblast.sdk.query.model.QueryJobTarget
 import org.veupathdb.lib.mblast.sdk.query.model.QueryJobUserMeta
