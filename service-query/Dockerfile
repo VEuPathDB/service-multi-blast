@@ -1,4 +1,4 @@
-FROM veupathdb/alpine-dev-base:jdk-18-gradle-7.5.1 AS prep
+FROM veupathdb/alpine-dev-base:jdk-21-gradle-8.4 AS prep
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
@@ -43,7 +43,7 @@ FROM ncbi/blast:2.14.0
 
 LABEL service="mblast-query"
 
-RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-18-x64-linux-jdk.deb --output java.deb \
+RUN curl -L https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.deb --output java.deb \
     && apt-get update \
     && apt-get install -y java-common netcat \
     && dpkg --install java.deb \
