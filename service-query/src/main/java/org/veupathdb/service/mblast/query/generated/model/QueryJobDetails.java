@@ -2,7 +2,7 @@ package org.veupathdb.service.mblast.query.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonDeserialize(
@@ -34,10 +34,10 @@ public interface QueryJobDetails {
   void setBlastConfig(BlastQueryConfig blastConfig);
 
   @JsonProperty("createdOn")
-  Date getCreatedOn();
+  OffsetDateTime getCreatedOn();
 
   @JsonProperty("createdOn")
-  void setCreatedOn(Date createdOn);
+  void setCreatedOn(OffsetDateTime createdOn);
 
   @JsonProperty("userMeta")
   QueryJobUserMeta getUserMeta();

@@ -596,7 +596,7 @@ uses:
       the changes to the underlying site data.
 
     headers:
-      Admin-Auth:
+      Admin-Token:
         type: string
 
     responses:
@@ -604,7 +604,7 @@ uses:
         description: Success
       401:
         description: |
-          Invalid Admin-Auth token value.
+          Invalid Admin-Token token value.
         body:
           application/json:
             type: error.UnauthorizedError
@@ -631,7 +631,7 @@ uses:
       displayName: Delete Job Cache
 
       headers:
-        Admin-Auth:
+        Admin-Token:
           type: string
 
       responses:
@@ -639,7 +639,7 @@ uses:
           description: Success
         401:
           description: |
-            Invalid Admin-Auth token value.
+            Invalid Admin-Token token value.
           body:
             application/json:
               type: error.UnauthorizedError

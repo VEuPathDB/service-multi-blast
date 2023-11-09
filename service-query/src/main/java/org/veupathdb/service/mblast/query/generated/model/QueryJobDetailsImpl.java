@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -32,14 +32,7 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   private BlastQueryConfig blastConfig;
 
   @JsonProperty("createdOn")
-  @JsonFormat(
-      shape = JsonFormat.Shape.STRING,
-      pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-  )
-  @JsonDeserialize(
-      using = TimestampDeserializer.class
-  )
-  private Date createdOn;
+  private OffsetDateTime createdOn;
 
   @JsonProperty("userMeta")
   private QueryJobUserMeta userMeta;
@@ -88,12 +81,12 @@ public class QueryJobDetailsImpl implements QueryJobDetails {
   }
 
   @JsonProperty("createdOn")
-  public Date getCreatedOn() {
+  public OffsetDateTime getCreatedOn() {
     return this.createdOn;
   }
 
   @JsonProperty("createdOn")
-  public void setCreatedOn(Date createdOn) {
+  public void setCreatedOn(OffsetDateTime createdOn) {
     this.createdOn = createdOn;
   }
 
