@@ -15,13 +15,13 @@ public interface MaintenanceCache {
   @DELETE
   @Produces("application/json")
   DeleteMaintenanceCacheResponse deleteMaintenanceCache(
-      @HeaderParam("Admin-Auth") String adminAuth);
+      @HeaderParam("Admin-Token") String adminToken);
 
   @DELETE
   @Path("/{job-id}")
   @Produces("application/json")
   DeleteMaintenanceCacheByJobIdResponse deleteMaintenanceCacheByJobId(
-      @PathParam("job-id") String jobId, @HeaderParam("Admin-Auth") String adminAuth);
+      @PathParam("job-id") String jobId, @HeaderParam("Admin-Token") String adminToken);
 
   class DeleteMaintenanceCacheResponse extends ResponseDelegate {
     private DeleteMaintenanceCacheResponse(Response response, Object entity) {
