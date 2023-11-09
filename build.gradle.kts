@@ -1,7 +1,7 @@
 import mblast.build.*
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "1.9.20"
 }
 
 allprojects {

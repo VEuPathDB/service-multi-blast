@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm")
-  id("org.jetbrains.dokka") version "1.7.10"
+  id("org.jetbrains.dokka") version "1.9.10"
   `maven-publish`
 }
 
@@ -10,8 +10,8 @@ group = "org.veupathdb.lib"
 version = "8.2.0"
 
 java {
-  targetCompatibility = JavaVersion.VERSION_1_8
-  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_19
+  sourceCompatibility = JavaVersion.VERSION_19
 
   withSourcesJar()
   withJavadocJar()
@@ -26,7 +26,7 @@ tasks.dokkaJavadoc {
 }
 
 dependencies {
-  api("org.veupathdb.lib:jackson-singleton:3.0.1")
+  api("org.veupathdb.lib:jackson-singleton:3.1.1")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
   testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
@@ -42,7 +42,7 @@ tasks.jar {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = "19"
     freeCompilerArgs = listOf("-Xjvm-default=all")
   }
 }
