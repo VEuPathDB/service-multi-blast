@@ -4,6 +4,7 @@ import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.NotFoundException
 import jakarta.ws.rs.core.Context
 import org.glassfish.jersey.server.ContainerRequest
+import org.veupathdb.lib.container.jaxrs.server.annotations.AllowAdminAuth
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import org.veupathdb.service.mblast.report.generated.model.ReportJobPatchRequest
 import org.veupathdb.service.mblast.report.generated.resources.JobsJobId
@@ -15,6 +16,7 @@ import org.veupathdb.service.mblast.report.service.jobs.restart.RestartJob
 @Authenticated(allowGuests = true)
 class JobByIDController(@Context request: ContainerRequest) : ControllerBase(request), JobsJobId {
 
+  @AllowAdminAuth
   override fun getJobsByJobId(jobId: String, saveJob: Boolean): JobsJobId.GetJobsByJobIdResponse =
     GetJob(jobId.toHashIDOr404(), userID, saveJob)
       ?.let { JobsJobId.GetJobsByJobIdResponse.respond200WithApplicationJson(it) }
@@ -30,6 +32,7 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
     return JobsJobId.PatchJobsByJobIdResponse.respond204()
   }
 
+  @AllowAdminAuth
   override fun deleteJobsByJobId(jobId: String): JobsJobId.DeleteJobsByJobIdResponse {
     DeleteJob(jobId.toHashIDOr404(), userID)
     return JobsJobId.DeleteJobsByJobIdResponse.respond204()

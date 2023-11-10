@@ -16,7 +16,7 @@ class CacheMaintenanceController(@Context request: ContainerRequest) : Controlle
   private val log = LogManager.getLogger(javaClass)
 
   override fun deleteMaintenanceCache(adminAuth: String?): MaintenanceCache.DeleteMaintenanceCacheResponse {
-    if (adminAuth != ServiceOptions.adminAuthKey)
+    if (ServiceOptions.adminAuthToken.isEmpty || adminAuth != ServiceOptions.adminAuthToken.get())
       return MaintenanceCache.DeleteMaintenanceCacheResponse
         .respond401WithApplicationJson(UnauthorizedErrorImpl().apply {
           message = "unauthorized"
@@ -41,7 +41,7 @@ class CacheMaintenanceController(@Context request: ContainerRequest) : Controlle
     jobId: String,
     adminAuth: String?,
   ): MaintenanceCache.DeleteMaintenanceCacheByJobIdResponse {
-    if (adminAuth != ServiceOptions.adminAuthKey)
+    if (ServiceOptions.adminAuthToken.isEmpty || adminAuth != ServiceOptions.adminAuthToken.get())
       return MaintenanceCache.DeleteMaintenanceCacheByJobIdResponse
         .respond401WithApplicationJson(UnauthorizedErrorImpl().apply {
           message = "unauthorized"

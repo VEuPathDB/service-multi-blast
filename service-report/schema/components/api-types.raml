@@ -200,3 +200,28 @@ types:
         pattern: ^[\dA-Fa-f]{32}$
         minLength: 32
         maxLength: 32
+
+  BrokenJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      reportJobID:
+        displayName: Report Job ID
+        description: Hash ID of the report job.
+        type: string
+        minLength: 32
+        maxLength: 32
+        pattern: '^[\dA-Fa-f]{32}$'
+        required: true
+      rawConfig:
+        type: any
+      createdOn:
+        displayName: Created On
+        description: Job creation timestamp.
+        type: datetime
+        required: true
+      failedOn:
+        displayName: Failed On
+        description: Job failure timestamp.
+        type: datetime
+        required: true

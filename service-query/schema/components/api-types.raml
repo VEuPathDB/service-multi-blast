@@ -290,3 +290,26 @@ types:
           type: string
         required: false
         default: []
+
+  BrokenJobListEntry:
+    type: object
+    additionalProperties: false
+    properties:
+      queryJobID:
+        displayName: Query Job ID
+        type: string
+        pattern: ^[\dA-Fa-f]{32}$
+        minLength: 32
+        maxLength: 32
+      rawConfig:
+        type: any
+      createdOn:
+        displayName: Created On
+        description: Job creation timestamp.
+        type: datetime
+        required: true
+      failedOn:
+        displayName: Failed On
+        description: Job failure timestamp.
+        type: datetime
+        required: true
