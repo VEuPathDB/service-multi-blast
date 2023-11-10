@@ -7,9 +7,6 @@ import org.veupathdb.lib.blast.util.add
 import org.veupathdb.lib.blast.util.append
 import org.veupathdb.lib.blast.util.optString
 import org.veupathdb.lib.blast.util.put
-import kotlin.text.StringBuilder
-import kotlin.text.lowercase
-import kotlin.text.uppercase
 
 
 internal fun ParseScoringMatrixTX(js: ObjectNode) =

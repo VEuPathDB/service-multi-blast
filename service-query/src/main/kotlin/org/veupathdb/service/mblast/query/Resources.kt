@@ -20,5 +20,6 @@ class Resources(opts: Options) : ContainerResources(opts) {
       TargetsController::class.java,
       GuestLinkController::class.java,
       CacheMaintenanceController::class.java,
+      FailedJobsController::class.java
     )
 }

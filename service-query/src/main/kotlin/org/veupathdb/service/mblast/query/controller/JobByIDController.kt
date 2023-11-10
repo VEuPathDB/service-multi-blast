@@ -3,6 +3,7 @@ package org.veupathdb.service.mblast.query.controller
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.Context
 import org.glassfish.jersey.server.ContainerRequest
+import org.veupathdb.lib.container.jaxrs.server.annotations.AllowAdminAuth
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import org.veupathdb.service.mblast.query.generated.model.QueryJobPatchRequest
 import org.veupathdb.service.mblast.query.generated.resources.JobsJobId
@@ -18,6 +19,7 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
 
   @GET
   @Produces("application/json")
+  @AllowAdminAuth
   override fun getJobsByJobId(
     @PathParam("job-id") jobId: String,
     @QueryParam("save_job") @DefaultValue("true") saveJob: Boolean
@@ -40,6 +42,7 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
   @DELETE
   @Produces("application/json")
   @Consumes("application/json")
+  @AllowAdminAuth
   override fun deleteJobsByJobId(@PathParam("job-id") jobId: String): JobsJobId.DeleteJobsByJobIdResponse {
     DeleteUserJobLink(jobId.toHashIDOr404(), userID)
     return JobsJobId.DeleteJobsByJobIdResponse.respond204()

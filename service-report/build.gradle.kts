@@ -51,7 +51,7 @@ dependencies {
   implementation(project(":lib-mblast-utils"))
 
   implementation("org.veupathdb.lib:jaxrs-container-core:6.19.1")
-  implementation("org.veupathdb.lib:compute-platform:1.5.3")
+  implementation("org.veupathdb.lib:compute-platform:1.6.0")
   implementation("org.veupathdb.lib:hash-id:1.1.0")
   implementation("org.veupathdb.lib:jackson-singleton:3.1.0")
 
