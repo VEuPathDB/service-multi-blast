@@ -2,6 +2,7 @@ package org.veupathdb.service.mblast.report.controller
 
 import jakarta.ws.rs.NotFoundException
 import org.glassfish.jersey.server.ContainerRequest
+import org.veupathdb.lib.container.jaxrs.model.User
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import org.veupathdb.lib.hash_id.HashID
 
@@ -9,6 +10,10 @@ import org.veupathdb.lib.hash_id.HashID
  * Base functionality for controllers.
  */
 sealed class ControllerBase(protected val request: ContainerRequest) {
+
+  protected val optUser: User? by lazy { UserProvider.lookupUser(request).orElse(null) }
+
+  protected val optUserID by lazy { optUser?.userID }
 
   /**
    * User ID associated with the current request.

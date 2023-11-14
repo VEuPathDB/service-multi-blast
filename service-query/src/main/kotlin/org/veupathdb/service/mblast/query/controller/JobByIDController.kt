@@ -11,6 +11,7 @@ import org.veupathdb.service.mblast.query.generated.support.PATCH
 import org.veupathdb.service.mblast.query.service.jobs.delete.DeleteUserJobLink
 import org.veupathdb.service.mblast.query.service.jobs.fetch.GetAndLinkJob
 import org.veupathdb.service.mblast.query.service.jobs.fetch.GetJob
+import org.veupathdb.service.mblast.query.service.jobs.fetch.GetJobAdmin
 import org.veupathdb.service.mblast.query.service.jobs.patch.PatchUserJob
 import org.veupathdb.service.mblast.query.service.jobs.restart.RestartJob
 
@@ -23,14 +24,20 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
   override fun getJobsByJobId(
     @PathParam("job-id") jobId: String,
     @QueryParam("save_job") @DefaultValue("true") saveJob: Boolean
-  ): JobsJobId.GetJobsByJobIdResponse =
-    JobsJobId.GetJobsByJobIdResponse
+  ): JobsJobId.GetJobsByJobIdResponse {
+    // If the user ID is null then this is an admin-auth request.
+    if (optUserID == null)
+      return JobsJobId.GetJobsByJobIdResponse
+        .respond200WithApplicationJson(GetJobAdmin(jobId.toHashIDOr404()))
+
+    return JobsJobId.GetJobsByJobIdResponse
       .respond200WithApplicationJson(
         if (saveJob)
           GetAndLinkJob(jobId.toHashIDOr404(), userID)
         else
           GetJob(jobId.toHashIDOr404(), userID)
       )
+  }
 
   @POST
   @Produces("application/json")
@@ -42,7 +49,6 @@ class JobByIDController(@Context request: ContainerRequest) : ControllerBase(req
   @DELETE
   @Produces("application/json")
   @Consumes("application/json")
-  @AllowAdminAuth
   override fun deleteJobsByJobId(@PathParam("job-id") jobId: String): JobsJobId.DeleteJobsByJobIdResponse {
     DeleteUserJobLink(jobId.toHashIDOr404(), userID)
     return JobsJobId.DeleteJobsByJobIdResponse.respond204()

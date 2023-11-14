@@ -56,3 +56,9 @@ fun GetJob(queryJobID: HashID, userID: Long) =
     ?: MBlastPlatform.getJob(queryJobID)
     ?.let { (db, s3) -> db.toIODetails(s3) }
     ?: throw NotFoundException()
+
+
+fun GetJobAdmin(queryJobID: HashID) =
+  MBlastPlatform.getJob(queryJobID)
+    ?.let { (db, s3) -> db.toIODetails(s3) }
+    ?: throw NotFoundException()
