@@ -1,9 +1,11 @@
 package org.veupathdb.service.mblast.report.service.jobs.get
 
+import jakarta.ws.rs.NotFoundException
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.service.mblast.report.db.ReportDB
 import org.veupathdb.service.mblast.report.ext.toIODetails
 import org.veupathdb.service.mblast.report.generated.model.ReportJobDetails
+import org.veupathdb.service.mblast.report.service.ReportPlatform
 
 
 /**
@@ -51,3 +53,9 @@ fun GetJob(reportJobID: HashID, userID: Long, saveJob: Boolean): ReportJobDetail
     null
   }
 }
+
+
+fun GetJobAdmin(queryJobID: HashID) =
+  ReportPlatform.getJob(queryJobID)
+    ?.let { (db, _) -> db.toIODetails() }
+    ?: throw NotFoundException()
