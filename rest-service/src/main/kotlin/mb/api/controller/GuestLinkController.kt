@@ -19,7 +19,7 @@ data class GuestLinkController(@Context val req: ContainerRequest): LinkGuest {
     JobDBManager().use {
       try {
         if (it.userIsGuest(link.guestID)) {
-          it.updateJobOwner(link.guestID, user.userID)
+          it.updateJobOwner(link.guestID, user.userId)
         } else {
           throw ForbiddenException()
         }

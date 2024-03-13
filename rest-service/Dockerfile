@@ -11,7 +11,7 @@ ARG GITHUB_TOKEN
 WORKDIR /workspace
 
 RUN jlink --compress=2 --module-path /opt/jdk/jmods \
-       --add-modules java.base,java.net.http,java.security.jgss,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
+       --add-modules java.base,java.net.http,java.security.jgss,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming,jdk.management,jdk.crypto.ec \
        --output /jlinked \
     && apk add --no-cache git sed findutils coreutils make npm curl \
     && git config --global advice.detachedHead false
@@ -56,6 +56,7 @@ ENV JAVA_HOME=/opt/jdk \
     JVM_ARGS=""
 
 COPY --from=prep /jlinked /opt/jdk
+COPY --from=prep /usr/lib/jvm/default-jvm/lib/security/cacerts /opt/jdk/lib/security/cacerts
 COPY --from=prep /workspace/build/libs/service.jar /service.jar
 
 CMD java -jar -XX:+CrashOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -Xms$XMS -Xmx$XMX $JVM_ARGS /service.jar
