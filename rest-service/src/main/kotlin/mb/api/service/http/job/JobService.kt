@@ -42,11 +42,11 @@ object JobService {
    */
   fun createJob(query: InputStream, props: IOJsonJobRequest, user: User) =
     query.use {
-      Log.trace("#createJob(query={}, props={}, user={})", query, props, user.userID)
+      Log.trace("#createJob(query={}, props={}, user={})", query, props, user.userId)
 
       createJob(
         props,
-        user.userID,
+        user.userId,
         processQuery(String(query.readAllBytes(), StandardCharsets.UTF_8), props)
       )
     }

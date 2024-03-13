@@ -13,7 +13,7 @@ private const val ErrNoUser = "request reached authenticated endpoint with no us
 fun noUserExcept(): RuntimeException = InternalServerErrorException(ErrNoUser)
 
 inline fun ContainerRequest.requireUser(): User = UserProvider.lookupUser(this).orElseThrow(::noUserExcept)
-inline fun ContainerRequest.requireUserID(): Long = UserProvider.lookupUser(this).orElseThrow(::noUserExcept).userID
+inline fun ContainerRequest.requireUserID(): Long = UserProvider.lookupUser(this).orElseThrow(::noUserExcept).userId
 
 inline fun <T> enforceBody(value: T?): T =
   value ?: throw BadRequestException("Request missing one or more input body fields.")

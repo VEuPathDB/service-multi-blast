@@ -44,7 +44,7 @@ class JobController(@Context private val request: ContainerRequest) {
    */
   @GET
   @Produces(MimeType.ApplicationJSON)
-  fun getJobs() = errorWrap { translateShortResponses(BlastManager.getUserBlastJobs((getUser(request).userID))).okJSON() }
+  fun getJobs() = errorWrap { translateShortResponses(BlastManager.getUserBlastJobs((getUser(request).userId))).okJSON() }
 
 
   /**
@@ -58,7 +58,7 @@ class JobController(@Context private val request: ContainerRequest) {
   @Produces(MimeType.ApplicationJSON)
   @Consumes(MimeType.ApplicationJSON)
   fun postJob(entity: IOJsonJobRequest?) = errorWrap {
-    JobService.createJob(enforceBody(entity), getUser(request).userID).okJSON()
+    JobService.createJob(enforceBody(entity), getUser(request).userId).okJSON()
   }
 
 
@@ -108,7 +108,7 @@ class JobController(@Context private val request: ContainerRequest) {
   fun getJob(@PathParam(Vars.JobID) jobID: String) = errorWrap {
     translateLongResponse(BlastManager.getAndLinkUserBlastJob(
       hashIDorThrow(jobID, ::NotFoundException),
-      getUser(request).userID) ?: throw NotFoundException()
+      getUser(request).userId) ?: throw NotFoundException()
     ).okJSON()
   }
 
@@ -149,7 +149,7 @@ class JobController(@Context private val request: ContainerRequest) {
   @Path(Paths.JobByID)
   @Produces(MimeType.ApplicationJSON)
   fun rerunJob(@PathParam(Vars.JobID) jobID: String) = errorWrap {
-    BlastManager.rerunJob(hashIDorThrow(jobID, ::NotFoundException), getUser(request).userID)
+    BlastManager.rerunJob(hashIDorThrow(jobID, ::NotFoundException), getUser(request).userId)
   }
 
   @GET
