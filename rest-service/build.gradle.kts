@@ -109,8 +109,8 @@ dependencies {
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.1.1")
   implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.1.1")
   implementation("org.glassfish.jersey.media:jersey-media-multipart:3.1.1")
-  implementation("jakarta.platform:jakarta.jakartaee-web-api:9.1.0")
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.1.1")
+  //implementation("jakarta.platform:jakarta.jakartaee-web-api:9.1.0")
 
   // Jackson
   implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
