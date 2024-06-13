@@ -100,7 +100,7 @@ dependencies {
   // Project Dependencies
   //
 
-  implementation("org.veupathdb.lib:jaxrs-container-core:7.1.3")
+  implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
 
