@@ -8,7 +8,7 @@ plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "4.8.10"
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "1.7.0"
+  kotlin("jvm") version "1.9.0"
 }
 
 // Load Props
@@ -100,8 +100,8 @@ dependencies {
   // Project Dependencies
   //
 
-  implementation("org.veupathdb.lib:jaxrs-container-core:7.0.1")
-  implementation("org.gusdb:fgputil-db:2.13.1-jakarta")
+  implementation("org.veupathdb.lib:jaxrs-container-core:7.1.1")
+  implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
 
   // Jersey
