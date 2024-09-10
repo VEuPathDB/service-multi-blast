@@ -12,8 +12,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 	"github.com/x-cray/logrus-prefixed-formatter"
+
 	"server/internal/config"
 	"server/internal/server/blast"
+	"server/internal/server/diamond"
 )
 
 var version = "development-build"
@@ -31,7 +33,10 @@ func main() {
 	conf := config.ParseCLIConfig(version)
 
 	r := mux.NewRouter()
+
 	blast.NewBlastEndpoint(&conf).Register("/blast", r)
+	diamond.NewDiamondEndpoint(conf).Register("/diamond", r)
+
 	r.Handle("/metrics", promhttp.Handler())
 
 	sPort := strconv.FormatUint(uint64(conf.Port), 10)
@@ -48,11 +53,11 @@ func main() {
 	}()
 
 	select {
-	case <- e1:
+	case <-e1:
 		logrus.Info("Shutdown signal received.")
 		os.Exit(0)
-		case e := <- e2:
-			logrus.Fatal(e)
-			os.Exit(1)
+	case e := <-e2:
+		logrus.Fatal(e)
+		os.Exit(1)
 	}
 }
