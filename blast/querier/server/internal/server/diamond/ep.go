@@ -1,17 +1,14 @@
-package blast
+package diamond
 
 import (
 	"encoding/json"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 
-	"server/internal/util"
-
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"github.com/veupathdb/lib-go-blast/v2/pkg/blast"
-	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
 	"github.com/vulpine-io/split-pipe/v1/pkg/spipe"
 
@@ -19,18 +16,18 @@ import (
 	"server/internal/mtx"
 	"server/internal/server"
 	"server/internal/server/middleware"
+	"server/internal/util"
 )
 
-func NewBlastEndpoint(conf *config.Config) *Endpoint {
+func NewDiamondEndpoint(conf config.Config) *Endpoint {
 	return &Endpoint{config: conf}
 }
 
 type Endpoint struct {
-	config *config.Config
+	config config.Config
 }
 
-func (b Endpoint) Handle(req midl.Request) midl.Response {
-	// Increment request counter.
+func (e Endpoint) Handle(req midl.Request) midl.Response {
 	mtx.RecordRequest()
 
 	// Get logger with context.
@@ -38,45 +35,28 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 
 	log.Debug("deserializing request")
 	request := new(Request)
+
 	if err := json.Unmarshal(req.Body(), request); err != nil {
-		log.Error("failed to deserialize request: ", err.Error())
+		log.Debug("failed to deserialize request: ", err.Error())
 		return server.NewFailResponse(err.Error())
 	}
 
 	log = log.WithField("job-id", request.JobID)
 
-	log.Debug("Parsing blast configuration.")
-	config, err := blast.DecodeConfig(request.Tool, request.Config)
-	if err != nil {
-		log.Error("Failed to parse blast config: ", err.Error())
-		return server.NewFailResponse(err.Error())
-	}
-
-	// Query file is created outside this service.
-	config.(blast.BlastQueryConfig).GetQueryFile().Set("query.txt")
-
-	// Override format value to always output format 11
-	config.SetFormat(field.Format{Type: field.FormatTypeBlastArchiveASN1})
-
-	// Output to a standard file
-	config.GetOutFile().Set("report.asn1")
-
-	workDir := filepath.Join(b.config.OutDir, request.JobID)
-	log.Debug("Work directory: ", workDir)
+	workDir := filepath.Join(e.config.OutDir, request.JobID)
+	log.Debug("work directory: ", workDir)
 
 	// Check that the workspace exists
-	if _, err = os.Stat(workDir); err != nil {
-		log.Error("Failed to stat workspace directory: ", err.Error())
+	if _, err := os.Stat(workDir); err != nil {
+		log.Error("failed to stat workspace directory: ", err.Error())
 		return server.NewFailResponse(err.Error())
 	}
 
 	stdout, err := os.Create(filepath.Join(workDir, "log.txt"))
 	if err != nil {
-		log.Error("Failed to create stdout log file: ", err.Error())
-
+		log.Error("failed to create stdout log file: ", err.Error())
 		// Create failed flag
 		_ = util.TouchFailedFlag(workDir)
-
 		return server.NewFailResponse(err.Error())
 	}
 	defer stdout.Close()
@@ -84,10 +64,8 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	errFile, err := os.Create(filepath.Join(workDir, "error.txt"))
 	if err != nil {
 		log.Debug("Failed to create stderr log file: ", err.Error())
-
 		// Create failed flag
 		_ = util.TouchFailedFlag(workDir)
-
 		return server.NewFailResponse(err.Error())
 	}
 	defer errFile.Close()
@@ -95,30 +73,35 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	stderr := spipe.NewSplitWriter(errFile, util.StdErrLogger(log))
 	stderr.IgnoreErrors(true)
 
-	cmd := config.ToCLI()
-	cmd.Path = "/blast/bin/" + cmd.Args[0]
-	log.Debugf(`Command "%s"`, cmd.Args[0])
+	args := make([]string, len(request.Params)+5)
+	args[0] = request.Tool
+	args[1] = "--out"
+	args[2] = "report.pairwise"
+	args[3] = "--query"
+	args[4] = "query.txt"
+	copy(args[5:], request.Params)
+
+	cmd := exec.Command("/diamond/bin/diamond", args...)
 	cmd.Env = os.Environ()
 	cmd.Dir = workDir
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 
-	log.Infof("Starting command \"%s\"", cmd.Args)
+	log.Infof("starting command: %s", cmd.Args)
+
 	start := time.Now()
 	err = util.RunCommand(cmd, log)
-	mtx.RecordBlastTime(time.Since(start).Seconds())
+	mtx.RecordDiamondTime(time.Since(start).Seconds())
+
 	if err != nil {
-		log.Error("Command execution failed: ", err.Error())
-
-		// Increment job failure metric
-		mtx.RecordBlastFailure()
-
+		log.Error("command execution failed: ", err.Error())
+		mtx.RecordDiamondFailure()
 		// Create failed flag
 		_ = util.TouchFailedFlag(workDir)
-
 		return server.NewFailResponse(err.Error())
 	}
-	log.Info("Command completed successfully.")
+
+	log.Info("command completed successfully")
 
 	// Create success flag
 	_ = util.TouchSuccessFlag(workDir)
@@ -126,8 +109,8 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	return server.NewSuccessResponse("success")
 }
 
-func (b Endpoint) Register(path string, r *mux.Router) {
-	r.Handle(path, midl.JSONAdapter(b).
+func (e Endpoint) Register(path string, r *mux.Router) {
+	r.Handle(path, midl.JSONAdapter(e).
 		AddWrappers(
 			middleware.RequestIdentifier{},
 			middleware.RequestLogger{},
