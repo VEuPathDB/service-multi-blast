@@ -8,11 +8,13 @@
       "properties": {
         "config": {
           "oneOf": [
-            { "$ref": "../blast/blastn.json" },
+            { "$ref": "../blast/blastn.yml" },
             { "$ref": "../blast/blastp.json" },
             { "$ref": "../blast/blastx.json" },
             { "$ref": "../blast/tblastn.json" },
-            { "$ref": "../blast/tblastx.json" }
+            { "$ref": "../blast/tblastx.json" },
+            { "$ref": "../diamond/blastp.yml" },
+            { "$ref": "../diamond/blastx.yml" }
           ]
         }
       },

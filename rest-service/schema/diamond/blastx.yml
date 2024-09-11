@@ -1,4 +1,14 @@
 $schema: http://json-schema.org/draft-07/schema
 
+title: DIAMOND BlastX
+
 allOf:
+- type: object
+  properties:
+    tool:
+      type: string
+      enum:
+      - diamond-blastx
+  required:
+  - tool
 - $ref: ./cli-config.yml

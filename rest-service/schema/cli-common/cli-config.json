@@ -3,16 +3,7 @@
   "type": "object",
   "properties": {
     "tool": {
-      "type": "string",
-      "enum": [
-        "blastn",
-        "blastp",
-        "blastx",
-        "tblastn",
-        "tblastx",
-        "diamond-blastp",
-        "diamond-blastn"
-      ]
+      "type": "string"
     }
   },
   "required": [

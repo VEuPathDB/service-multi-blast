@@ -79,8 +79,8 @@ fix-path:
 gen-jaxrs: api.raml merge-raml
 	@echo "JAX-RS code generation disabled for this project."
 
-gen-docs: node_modules/.bin/redoc-cli
-	@node_modules/.bin/redoc-cli bundle openapi.yml -o ../docs/api.html
+gen-docs: node_modules/.bin/redocly
+	@node_modules/.bin/redocly build-docs openapi.yml -o ../docs/api.html
 	@cp ../docs/api.html src/main/resources/api.html
 
 merge-raml:

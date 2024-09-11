@@ -14,6 +14,7 @@ servers:
 - url: https://giardiadb.org/multi-blast
 - url: https://hostdb.org/multi-blast
 - url: https://microsporidiadb.org/multi-blast
+- url: https://orthomcl.org/multi-blast
 - url: https://piroplasmadb.org/multi-blast
 - url: https://plasmodb.org/multi-blast
 - url: https://toxodb.org/multi-blast
@@ -22,10 +23,22 @@ servers:
 - url: https://vectorbase.org/multi-blast
 - url: https://veupathdb.org/multi-blast
 
+tags:
+- name: Queries
+  description: Query management operation.
+- name: Reports
+  description: Report management operations.
+- name: RPC
+  description: Utility RPC operations.
+- name: Meta
+  description: Service meta-information.
+
 paths:
 
   /jobs:
     get:
+      tags:
+      - Queries
       security:
       - authKey: [ ]
       summary: List Blast Jobs
@@ -44,6 +57,8 @@ paths:
           $ref: "#/components/responses/err500"
 
     post:
+      tags:
+      - Queries
       security:
       - authKey: [ ]
       summary: New Blast Job
@@ -77,6 +92,8 @@ paths:
     parameters:
     - $ref: "#/components/parameters/job-id"
     get:
+      tags:
+      - Queries
       security:
       - authKey: [ ]
       summary: Blast Job Details
@@ -94,6 +111,8 @@ paths:
         500:
           $ref: "#/components/responses/err500"
     post:
+      tags:
+      - Queries
       security:
       - authKey: [ ]
       summary: Rerun Blast Job
@@ -119,6 +138,8 @@ paths:
         type: boolean
         default: false
     get:
+      tags:
+      - Queries
       security:
       - authKey: [ ]
       summary: Blast Job Query
@@ -145,6 +166,8 @@ paths:
 
   /reports:
     get:
+      tags:
+      - Reports
       security:
       - authKey: [ ]
       summary: List Report Jobs
@@ -163,6 +186,8 @@ paths:
           $ref: "#/components/responses/err500"
 
     post:
+      tags:
+      - Reports
       security:
       - authKey: [ ]
       summary: New Report Job
@@ -192,6 +217,8 @@ paths:
     parameters:
     - $ref: "#/components/parameters/report-id"
     get:
+      tags:
+      - Reports
       security:
       - authKey: [ ]
       summary: Report Job Details
@@ -210,6 +237,8 @@ paths:
           $ref: "#/components/responses/err500"
 
     post:
+      tags:
+      - Reports
       security:
       - authKey: [ ]
       summary: Rerun Report Job
@@ -224,7 +253,7 @@ paths:
           $ref: "#/components/responses/err500"
 
 
-  /reports/{report-id}/files/{filename}:
+  "/reports/{report-id}/files/{filename}":
     parameters:
     - $ref: "#/components/parameters/report-id"
     - name: filename
@@ -240,6 +269,8 @@ paths:
         type: boolean
         default: true
     get:
+      tags:
+      - Reports
       security:
       - authKey: [ ]
       summary: Report File Download
@@ -291,6 +322,8 @@ paths:
 
   /link-guest:
     post:
+      tags:
+      - RPC
       operationId: convGuestToUser
       summary: Link Guest
       requestBody:
@@ -309,6 +342,8 @@ paths:
 
   /api:
     get:
+      tags:
+      - Meta
       summary: API Docs
       responses:
         200:
@@ -323,6 +358,8 @@ paths:
 
   /health:
     get:
+      tags:
+      - Meta
       summary: Service Health
       responses:
         200:
@@ -333,6 +370,8 @@ paths:
 
   /metrics:
     get:
+      tags:
+      - Meta
       summary: Prometheus Metrics
       responses:
         200:

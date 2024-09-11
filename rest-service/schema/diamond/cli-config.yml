@@ -1,7 +1,13 @@
 $schema: http://json-schema.org/draft-07/schema
 
+title: Base DIAMOND CLI Options
+
+description: |-
+  Options common to all DIAMOND CLI tools used by the multi-blast service. 
+
 definitions:
   sensitivity-enum:
+    title: Sensitivity
     type: string
     enum:
     - faster
@@ -22,19 +28,37 @@ allOf:
       type: string
 
     eValue:
-      type: string
-      pattern: "^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$"
-      default: "10"
+      title: Maximum Expect Value
+      description: |-
+        Flag: `--evalue | -e`
+        
+        Maximum e-value to report alignments.
+      type: number
+      default: 0.001
 
     maxTargetSeqs:
+      title: Maximum Target Sequences
+      description: |-
+        Flag: `--max-target-seqs` | `-k`
+        
+        Maximum number of target sequences to report alignments for.
       type: integer
       minimum: 1
-      default: 500
+      default: 25
 
     sensitivity:
+      title: Aligner Sensitivity
+      description: |-
+        Configures the aligner sensitivity.
       $ref: '#/definitions/sensitivity-enum'
 
     masking:
+      title: Masking Algorithm
+      description: |-
+        Flag: `--masking`
+        
+        Enum values based on the textual masking algorithm option
+        representations.
       type: string
       enum:
       - none
@@ -44,9 +68,11 @@ allOf:
     compBasedStats:
       title: Composition Based Statistics
       description: |-
+        Flag: `--comp-based-stats`
+        
         Enum values based on the commonly available DIAMOND CLI option names.
         
-        Mapping of CLI input options to option names:
+        Mapping of option names to CLI inputs:
         
         | Name                         | CLI Input |
         |------------------------------|-----------|
@@ -59,9 +85,9 @@ allOf:
         This list is incomplete, however additional options require a version of
         DIAMOND compiled with those options enabled.
         
-        **WARNING**: Option `2` ("hauser-and-avg-matrix-adjust") has been marked
-        as deprecated as of DIAMOND v2.1.0 and may be removed or replaced in
-        future versions.
+        **WARNING**: Option `2` (`"hauser-and-avg-matrix-adjust"`) has been
+        marked as deprecated as of DIAMOND v2.1.0 and may be removed or replaced
+        in future versions.
       type: string
       enum:
       - disabled
@@ -98,4 +124,8 @@ allOf:
       uniqueItems: true
 
     outFormat:
+      description: |-
+        Flag: `--outfmt` | `-f`
+        
+        Configures the DIAMOND query result output format.
       $ref: './out-format.yml'

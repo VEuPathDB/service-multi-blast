@@ -48,7 +48,7 @@
     },
     "config": {
       "oneOf": [
-        { "$ref": "../blast/blastn.json" },
+        { "$ref": "../blast/blastn.yml" },
         { "$ref": "../blast/blastp.json" },
         { "$ref": "../blast/blastx.json" },
         { "$ref": "../blast/tblastn.json" },
