@@ -123,6 +123,14 @@ allOf:
       additionalItems: false
       uniqueItems: true
 
+    reportUnaligned:
+      title: Report Unaligned Queries
+      description: |-
+        Flag: `--unal`
+        
+        Trinary value represented by `true`, `undefined`, and `false`.
+      type: boolean
+
     outFormat:
       description: |-
         Flag: `--outfmt` | `-f`
