@@ -12,7 +12,6 @@ definitions:
     enum:
     - faster
     - fast
-    - default
     - mid-sensitive
     - shapes-30x10
     - sensitive
