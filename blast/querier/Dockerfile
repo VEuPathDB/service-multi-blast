@@ -28,8 +28,6 @@ RUN mkdir -p /diamond/bin \
     && tar -xzf diamond.tgz \
     && rm diamond.tgz
 
-RUN apk add --no-cache
-
 ENV BLASTDB=/:/db:/blast/blastdb:/blast/blastdb_custom
 
 EXPOSE 80
