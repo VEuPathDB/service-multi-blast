@@ -2,83 +2,164 @@ $schema: http://json-schema.org/draft-07/schema
 
 title: DIAMOND Output Format Field
 
-type: string
-
-enum:
-- query-sequence-id
-- query-gi
-- query-accesion
-- query-accesion-version
-- query-length
-- subject-sequence-id
-- all-subject-sequence-ids
-- subject-gi
-- allSubjectGIs
-- subjectAccesion
-- subjectAccesionVersion
-- allSubjectAccesions
-- subjectSequenceLength
-- queryAlignmentStart
-- queryAlignmentEnd
-- subjectAlignmentStart
-- subjectAlignmentEnd
-- alignedQuerySequence
-- alignedSubjectSequence
-- expect-value
-- bit-score
-- raw-score
-- alignment-length
-- percent-identical-matches
-- identical-matches
-- mismatches
-- positive-scoring-matches
-- gap-openings
-- total-gaps
-- percent-positive-scoring-matches
-- frames
-- query-frame
-- subject-frame
-- blast-traceback-operations
-- subject-taxonomy-ids
-- subject-scientific-names
-- subject-common-names
-- subject-blast-names
-- subject-super-kingdoms
-- subjectTitle
-- all-subject-titles
-- subject-strand
-- query-coverage-per-subject
-- query-coverage-per-hsp
-- query-coverage-per-unique-subject
-- query-title
-- sw-diff
-- time
-- full-subject-sequence
-- aligned-query-quality-values
-- query-num
-- subject-num
-- subject-coverage-per-hsp
-- full-query-quality-values
-- full-query-sequence
-- query-sequence-gapped
-- subject-sequence-gapped
-- query-strand
-- cigar
-- subject-kingdoms
-- subject-phylums
-- ungapped-score
-- full-query-sequence-of-mate
-- query-sequence-translated
-- reduced-match-bit-string
-- normalized-bit-score-semiglobal
-- hsp-num
-- normalized-bit-score-global
-- pident-global
-- ext-count
-- nw-semiglobal
-- approx-pident
-- corrected-bit-score
-- neg_evalue
-- reserved1
-- reserved2
-- subject-lineages
+oneOf:
+- title: Short
+  type: string
+  enum:
+  - qseqid
+  - qgi
+  - qacc
+  - qaccver
+  - qlen
+  - sseqid
+  - sallseqid
+  - sgi
+  - sallgi
+  - sacc
+  - saccver
+  - sallacc
+  - slen
+  - qstart
+  - qend
+  - sstart
+  - send
+  - qseq
+  - sseq
+  - evalue
+  - bitscore
+  - score
+  - length
+  - pident
+  - nident
+  - mismatch
+  - positive
+  - gapopen
+  - gaps
+  - ppos
+  - frames
+  - qframe
+  - sframe
+  - btop
+  - staxids
+  - sscinames
+  - scomnames
+  - sblastnames
+  - sskingdoms
+  - stitle
+  - salltitles
+  - sstrand
+  - qcovs
+  - qcovhsp
+  - qcovus
+  - qtitle
+  - swdiff
+  - time
+  - full_sseq
+  - qqual
+  - qnum
+  - snum
+  - scovhsp
+  - full_qqual
+  - full_qseq
+  - qseq_gapped
+  - sseq_gapped
+  - qstrand
+  - cigar
+  - skingdoms
+  - sphylums
+  - ungapped_score
+  - full_qseq_mate
+  - qseq_translated
+  - reduced_match_bitstring
+  - normalized_bitscore_semiglobal
+  - hspnum
+  - normalized_bitscore_global
+  - pident_global
+  - ext_count
+  - nw_semiglobal
+  - approx_pident
+  - corrected_bitscore
+  - neg_evalue
+  - reserved1
+  - reserved2
+  - slineages
+- title: Full
+  type: string
+  enum:
+  - query-sequence-id,
+  - query-gi,
+  - query-accesion,
+  - query-accesion-version,
+  - query-length,
+  - subject-sequence-id,
+  - all-subject-sequence-ids,
+  - subject-gi,
+  - allSubjectGIs,
+  - subjectAccesion,
+  - subjectAccesionVersion,
+  - allSubjectAccesions,
+  - subjectSequenceLength,
+  - queryAlignmentStart,
+  - queryAlignmentEnd,
+  - subjectAlignmentStart,
+  - subjectAlignmentEnd,
+  - alignedQuerySequence,
+  - alignedSubjectSequence,
+  - expect-value,
+  - bit-score,
+  - raw-score,
+  - alignment-length,
+  - percent-identical-matches,
+  - identical-matches,
+  - mismatches,
+  - positive-scoring-matches,
+  - gap-openings,
+  - total-gaps,
+  - percent-positive-scoring-matches,
+  - frames,
+  - query-frame,
+  - subject-frame,
+  - blast-traceback-operations,
+  - subject-taxonomy-ids,
+  - subject-scientific-names,
+  - subject-common-names,
+  - subject-blast-names,
+  - subject-super-kingdoms,
+  - subjectTitle,
+  - all-subject-titles,
+  - subject-strand,
+  - query-coverage-per-subject,
+  - query-coverage-per-hsp,
+  - query-coverage-per-unique-subject,
+  - query-title,
+  - sw-diff,
+  - time,
+  - full-subject-sequence,
+  - aligned-query-quality-values,
+  - query-num,
+  - subject-num,
+  - subject-coverage-per-hsp,
+  - full-query-quality-values,
+  - full-query-sequence,
+  - query-sequence-gapped,
+  - subject-sequence-gapped,
+  - query-strand,
+  - cigar,
+  - subject-kingdoms,
+  - subject-phylums,
+  - ungapped-score,
+  - full-query-sequence-of-mate,
+  - query-sequence-translated,
+  - reduced-match-bit-string,
+  - normalized-bit-score-semiglobal,
+  - hsp-num,
+  - normalized-bit-score-global,
+  - pident-global,
+  - ext-count,
+  - nw-semiglobal,
+  - approx-pident,
+  - corrected-bit-score,
+  - neg_evalue,
+  - reserved1,
+  - reserved2,
+  - subject-lineages,
