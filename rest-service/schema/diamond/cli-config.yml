@@ -1,0 +1,101 @@
+$schema: http://json-schema.org/draft-07/schema
+
+definitions:
+  sensitivity-enum:
+    type: string
+    enum:
+    - faster
+    - fast
+    - default
+    - mid-sensitive
+    - shapes-30x10
+    - sensitive
+    - more-sensitive
+    - very-sensitive
+    - ultra-sensitive
+
+allOf:
+- $ref: ../cli-common/cli-config.json
+- type: object
+  properties:
+    query:
+      type: string
+
+    eValue:
+      type: string
+      pattern: "^\\d+(?:\\.\\d+)?(?:[eE]-?\\d+)?$"
+      default: "10"
+
+    maxTargetSeqs:
+      type: integer
+      minimum: 1
+      default: 500
+
+    sensitivity:
+      $ref: '#/definitions/sensitivity-enum'
+
+    masking:
+      type: string
+      enum:
+      - none
+      - tantan
+      - seg
+
+    compBasedStats:
+      title: Composition Based Statistics
+      description: |-
+        Enum values based on the commonly available DIAMOND CLI option names.
+        
+        Mapping of CLI input options to option names:
+        
+        | Name                         | CLI Input |
+        |------------------------------|-----------|
+        | disabled                     | 0         |
+        | hauser                       | 1         |
+        | hauser-and-avg-matrix-adjust | 2         |
+        | hauser-and-matrix-adjust     | 3         |
+        | matrix-adjust                | 4         |
+        
+        This list is incomplete, however additional options require a version of
+        DIAMOND compiled with those options enabled.
+        
+        **WARNING**: Option `2` ("hauser-and-avg-matrix-adjust") has been marked
+        as deprecated as of DIAMOND v2.1.0 and may be removed or replaced in
+        future versions.
+      type: string
+      enum:
+      - disabled
+      - hauser
+      - hauser-and-avg-matrix-adjust
+      - hauser-and-matrix-adjust
+      - matrix-adjust
+
+    iterate:
+      title: Iterated Search
+      description: |-
+        Iterated search with increasing sensitivity.
+        
+        An absent value indicates the option is unused.
+        
+        This option takes an array of zero or more `sensitivity` options.  An
+        empty array is equivalent to an array of the specified target
+        sensitivity and all higher sensitivity values.
+  
+        For example, if `sensitivity` is set to `more-sensitive`, an empty array
+        value for `iterate` would be equivalent to:
+        
+        ```json
+        [
+          more-sensitive,
+          very-sensitive,
+          ultra-sensitive
+        ]
+        ```
+      type: array
+      items:
+        $ref: '#/definitions/sensitivity-enum'
+      additionalItems: false
+      uniqueItems: true
+
+    outFormat:
+      $ref: './out-format.yml'

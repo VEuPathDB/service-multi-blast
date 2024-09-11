@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.*
 
@@ -8,7 +7,7 @@ plugins {
   java
   id("org.veupathdb.lib.gradle.container.container-utils") version "4.8.10"
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "2.0.20"
 }
 
 // Load Props
@@ -16,17 +15,13 @@ val buildProps = Properties()
 buildProps.load(FileInputStream(File(rootDir, "service.properties")))
 val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.service"]}"
 
-java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
+kotlin {
+  jvmToolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+    vendor = JvmVendorSpec.AMAZON
   }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions {
-    jvmTarget = "17"
-  }
-}
 
 // configure VEupathDB container plugin
 containerBuild {
@@ -103,6 +98,7 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
+  implementation("org.veupathdb.lib:diamondcli:0.1.0")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
@@ -134,7 +130,6 @@ dependencies {
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
   implementation("org.veupathdb.lib:jvm-fireworq:1.0.3")
-  implementation("org.veupathdb.lib:jackson-singleton:2.1.0")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")

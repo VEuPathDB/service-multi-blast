@@ -7,7 +7,6 @@ abstract class QueueManager
 {
   protected abstract val fireworq: FireworqQueue
 
-
   fun getFailedJobs() = fireworq.getFailed()
 
   fun grabbedJobs() = fireworq.getGrabbed()

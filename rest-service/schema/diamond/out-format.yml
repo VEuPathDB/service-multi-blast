@@ -1,0 +1,36 @@
+$schema: http://json-schema.org/draft-07/schema
+
+oneOf:
+- type: object
+  properties:
+    format:
+      type: string
+      enum:
+      - blast-tab
+      - json-flat
+    fields:
+      type: array
+      items:
+        $ref: ./format-field.yml
+      additionalItems: false
+  required:
+  - format
+
+- type: object
+  properties:
+    format:
+      type: string
+      enum:
+      - pairwise
+      - xml
+      - daa
+      - sam
+      - taxon
+      - paf
+      - 'null'
+      - bin1
+      - clustering
+      - edge
+  required:
+  - format
+

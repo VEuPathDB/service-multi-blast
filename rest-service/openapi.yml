@@ -37,7 +37,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "./schema/io/short-job-response.json"
+                  $ref: './schema/io/short-job-response.json'
         401:
           $ref: "#/components/responses/err401"
         500:
@@ -371,34 +371,34 @@ components:
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/400.json
+            $ref: './schema/common/schemata/errors/400.json'
     err401:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/401.json
+            $ref: './schema/common/schemata/errors/401.json'
     err403:
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/403.json
+            $ref: './schema/common/schemata/errors/403.json'
     err404:
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/404.json
+            $ref: './schema/common/schemata/errors/404.json'
     err422:
       description: Unprocessable Entity
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/422.json
+            $ref: './schema/common/schemata/errors/422.json'
     err500:
       description: Internal Server Error
       content:
         application/json:
           schema:
-            $ref: https://github.com/VEuPathDB/docs-api-schema/raw/master/schemata/errors/500.json
+            $ref: './schema/common/schemata/errors/500.json'
