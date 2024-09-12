@@ -4,7 +4,8 @@ MAIN_DIR     := src/main/java/$(shell echo $(APP_PACKAGE) | sed 's/\./\//g')
 TEST_DIR     := $(shell echo $(MAIN_DIR) | sed 's/main/test/')
 GEN_DIR      := $(MAIN_DIR)/generated
 ALL_PACKABLE := $(shell find src/main -type f)
-BIN_DIR := .tools/bin
+
+GRADLE := $(shell if [ -f './gradlew' ]; then echo './gradlew'; else echo 'gradle'; fi)
 
 EXAMPLE_DIR      := src/main/java/org/veupathdb/service/demo
 EXAMPLE_TEST_DIR := src/test/java/org/veupathdb/service/demo
@@ -15,41 +16,18 @@ C_CYAN := "\\033[36m"
 
 .PHONY: default
 default:
-	@echo "Please choose one of:"
-	@echo ""
-	@echo "$(C_BLUE)  make compile$(C_NONE)"
-	@echo "    Compiles the existing code in 'src/'.  Regenerates files if the"
-	@echo "    api spec has changed."
-	@echo ""
-	@echo "$(C_BLUE)  make test$(C_NONE)"
-	@echo "    Compiles the existing code in 'src/' and runs unit tests."
-	@echo "    Regenerates files if the api spec has changed."
-	@echo ""
-	@echo "$(C_BLUE)  make jar$(C_NONE)"
-	@echo "    Compiles a 'fat jar' from this project and it's dependencies."
-	@echo ""
-	@echo "$(C_BLUE)  make docker$(C_NONE)"
-	@echo "    Builds a runnable docker image for this service"
-	@echo ""
-	@echo "$(C_BLUE)  make install-dev-env$(C_NONE)"
-	@echo "    Ensures the current dev environment has the necessary "
-	@echo "    installable tools to build this project."
-	@echo ""
-	@echo "$(C_BLUE)  make gen-jaxrs$(C_NONE)"
-	@echo "    Ensures the current dev environment has the necessary "
-	@echo "    installable tools to build this project."
-	@echo ""
+	@echo "no"
 
 .PHONY: compile
 compile: install-dev-env
 	@./gradlew clean compileJava
 
 .PHONY: test
-test: install-dev-env
+test:
 	@./gradlew clean test
 
 .PHONY: jar
-jar: install-dev-env build/libs/service.jar
+jar: build/libs/service.jar
 
 .PHONY: docker
 docker:
@@ -59,23 +37,6 @@ docker:
 		--build-arg=GITHUB_TOKEN=$(GITHUB_TOKEN) \
 		.
 
-.PHONY: cleanup-example
-cleanup-example:
-	@$(BIN_DIR)/demo-cleanup.sh $(MAIN_DIR)
-
-.PHONY: install-dev-env
-install-dev-env:
-	@if [ ! -d .tools ]; then \
-		git clone https://github.com/VEuPathDB/lib-jaxrs-container-build-utils .tools; \
-	else \
-		cd .tools && git pull && cd ..; \
-	fi
-	@$(BIN_DIR)/check-env.sh
-
-fix-path:
-	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_DIR) $(MAIN_DIR)
-	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_TEST_DIR) $(TEST_DIR)
-
 gen-jaxrs: api.raml merge-raml
 	@echo "JAX-RS code generation disabled for this project."
 
@@ -84,7 +45,7 @@ gen-docs: node_modules/.bin/redocly
 	@cp ../docs/api.html src/main/resources/api.html
 
 merge-raml:
-	@$(BIN_DIR)/merge-raml -vv schema > schema/library.raml
+	@$(GRADLE) merge-raml -vv schema > schema/library.raml
 
 #
 # File based targets
@@ -92,4 +53,4 @@ merge-raml:
 
 build/libs/service.jar: build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
-	@./gradlew clean test shadowJar
+	@$(GRADLE) clean test shadowJar

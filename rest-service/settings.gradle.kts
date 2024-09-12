@@ -1,12 +1,6 @@
 import java.io.FileInputStream
 import java.util.*
 
-val buildProps = Properties()
-buildProps.load(FileInputStream(File(rootDir, "service.properties")))
-
-rootProject.name = buildProps.getProperty("project.name")
-  ?: error("failed to retrieve project name")
-
 pluginManagement {
   repositories {
     gradlePluginPortal()
@@ -22,3 +16,13 @@ pluginManagement {
     }
   }
 }
+
+plugins {
+  id("org.gradle.toolchains.foojay-resolver-convention") version("0.8.0")
+}
+
+val buildProps = Properties()
+buildProps.load(FileInputStream(File(rootDir, "service.properties")))
+
+rootProject.name = buildProps.getProperty("project.name")
+  ?: error("failed to retrieve project name")
