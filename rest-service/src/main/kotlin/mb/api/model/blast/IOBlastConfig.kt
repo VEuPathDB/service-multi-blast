@@ -2,11 +2,11 @@ package mb.api.model.blast
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT
-import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import mb.api.model.IOJobConfig
 import mb.api.model.blast.impl.IOBlastConfigImpl
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.model.IOHSPSorting
@@ -15,8 +15,8 @@ import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.blast.field.Location
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = JsonKeys.Tool)
-@JsonSubTypes(JsonSubTypes.Type(
-  IOTBlastxConfig::class),
+@JsonSubTypes(
+  JsonSubTypes.Type(IOTBlastxConfig::class),
   JsonSubTypes.Type(IOTBlastnConfig::class),
   JsonSubTypes.Type(IOBlastpConfig::class),
   JsonSubTypes.Type(IOBlastxConfig::class),
@@ -24,7 +24,7 @@ import org.veupathdb.lib.blast.field.Location
   JsonSubTypes.Type(IOBlastConfig::class))
 @JsonDeserialize(`as` = IOBlastConfigImpl::class)
 @JsonInclude(NON_DEFAULT)
-interface IOBlastConfig {
+interface IOBlastConfig : IOJobConfig {
   @get:JsonProperty(JsonKeys.Tool)
   val tool: BlastTool
 

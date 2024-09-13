@@ -10,9 +10,14 @@ import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.hash_id.HashID
 
 data class BlastRequest(
-  @JsonProperty(JsonKeys.JobID)  val jobID:  HashID,
-  @JsonProperty(JsonKeys.Tool)   val tool:   BlastTool,
-  @JsonProperty(JsonKeys.Config) val config: BlastConfig,
+  @JsonProperty(JsonKeys.JobID)
+  val jobID:  HashID,
+
+  @JsonProperty(JsonKeys.Tool)
+  val tool:   BlastTool,
+
+  @JsonProperty(JsonKeys.Config)
+  val config: BlastConfig,
 ) {
   @JsonValue
   fun toJSON() = jsonObject {

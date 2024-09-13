@@ -221,6 +221,28 @@ object Config : Options() {
     description = ["Site DB build number"],
     required = true,
   )
-  var dbBuild = 60
+  var dbBuild = "60"
+    private set
+
+  // ╠════════════════════════════════════════════════════════════════════════════════════════╣ //
+
+  @Option(
+    names = ["--ortho-build"],
+    arity = "1",
+    defaultValue = "\${env:ORTHO_BUILD}",
+    description = ["OrthoMCL build number"],
+    required = true,
+  )
+  var orthoBuild = ""
+    private set
+
+  @Option(
+    names = ["--ortho-db-name"],
+    arity = "1",
+    defaultValue = "\${env:ORTHO_DB_NAME}",
+    description = ["OrthoMCL db name"],
+    required = true,
+  )
+  var orthoDbName = ""
     private set
 }

@@ -1,7 +1,18 @@
 package mb.api.service.valid
 
+import mb.lib.util.joinToFriendlyString
+
 sealed interface SequenceValidationError {
   val message: String
+}
+
+class SequenceDefLineValidationError(val badDefLines: List<Int>) : SequenceValidationError, RuntimeException() {
+  override val message
+    get() =
+      if (badDefLines.size == 1)
+        "No sequence id found in the defline on line ${badDefLines[0]}"
+      else
+        "No sequence id found in the deflines on lines ${badDefLines.joinToFriendlyString()}"
 }
 
 class SequenceCharacterValidationError(

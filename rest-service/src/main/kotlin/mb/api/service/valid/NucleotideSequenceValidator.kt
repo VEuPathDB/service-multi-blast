@@ -12,7 +12,7 @@ import mb.lib.config.Config
  * abcd gh k mn rstuvw y
  * </pre>
  */
-object NucleotideSequenceValidator: SequenceValidator
+internal object NucleotideSequenceValidator: SequenceValidator
 {
   override val kind = "nucleotide"
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.veupathdb.lib.blast.BlastTool
 
 @DisplayName("BlastSubQuery")
-internal class BlastSubQueryTest {
+internal class DiamondSubQueryTest {
 
   @Nested
   @DisplayName("#toStandardString")

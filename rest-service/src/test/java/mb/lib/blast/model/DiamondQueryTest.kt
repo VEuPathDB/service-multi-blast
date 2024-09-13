@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.veupathdb.lib.blast.BlastTool
 
 @DisplayName("BlastQuery")
-internal class BlastQueryTest {
+internal class DiamondQueryTest {
 
   @Nested
   @DisplayName("::fromString")

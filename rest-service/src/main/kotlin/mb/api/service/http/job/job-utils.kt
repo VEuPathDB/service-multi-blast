@@ -7,6 +7,8 @@ import mb.lib.config.Config
 import mb.lib.path.findDBPath
 import mb.lib.query.model.BlastTargetLink
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 import kotlin.math.min
 
 fun makeDBPaths(site: String, targets: Collection<IOJobTarget>) =
@@ -14,6 +16,11 @@ fun makeDBPaths(site: String, targets: Collection<IOJobTarget>) =
 
 fun makeDBPaths(site: String, targets: List<BlastTargetLink>) =
   StringBuilder().apply { targets.forEach { appendDBPath(this, site, it.organism, it.targetFile) } }.toString()
+
+internal fun makeOrthoDBPath(site: String) =
+  Path(Config.dbMountPath, site, "build-${Config.orthoBuild}", "diamond", Config.orthoDbName)
+    .takeIf { it.exists() }
+    ?: throw BadRequestException("Target site $site does not have a queryable DIAMOND database.")
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun appendDBPath(builder: StringBuilder, site: String, organism: String, target: String) {
@@ -25,7 +32,6 @@ private inline fun appendDBPath(builder: StringBuilder, site: String, organism: 
 
   builder.append(path)
 }
-
 
 fun verifyQuery(req: Any?) = nullCheck(req, "query cannot be null")
 

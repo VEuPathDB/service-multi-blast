@@ -94,7 +94,7 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
-  implementation("org.veupathdb.lib:diamondcli:0.1.0")
+  implementation("org.veupathdb.lib:diamondcli:0.4.0")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
@@ -104,8 +104,7 @@ dependencies {
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.1.1")
 
   // Jackson
-  implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3")
+  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
 
   // Log4J
   implementation("org.apache.logging.log4j:log4j-api:2.20")

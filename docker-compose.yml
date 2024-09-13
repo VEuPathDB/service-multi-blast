@@ -33,6 +33,10 @@ services:
       BLAST_QUEUE_NAME: ${BLAST_QUEUE_NAME:-blast}
       BLAST_JOB_CATEGORY: ${BLAST_JOB_CATEGORY:-blast}
 
+      # OrthoMCL & DIAMOND
+      ORTHO_BUILD: ${ORTHO_BUILD:?}
+      ORTHO_DB_NAME: ${ORTHO_DB_NAME:?}
+
       FORMATTER_HOST: ${FORMATTER_HOST:-formatter}
       FORMAT_QUEUE_NAME: ${FORMAT_QUEUE_NAME:-format}
       FORMAT_JOB_CATEGORY: ${FORMAT_JOB_CATEGORY:-format}
@@ -60,7 +64,7 @@ services:
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: ${BLAST_DATA:-/tmp/blast-data} 
+        source: ${BLAST_DATA:-/tmp/blast-data}
         target: /db
         read_only: true
     labels:
@@ -97,7 +101,7 @@ services:
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: ${BLAST_DATA:-/tmp/blast-data} 
+        source: ${BLAST_DATA:-/tmp/blast-data}
         target: /db
         read_only: true
       # because the ncbi/blast container is based on gcloud-sdk it creates a
@@ -131,7 +135,7 @@ services:
         # Replace `source` with the path to the blast db files available in your
         # work environment.
       - type: bind # volume
-        source: ${BLAST_DATA:-/tmp/blast-data} 
+        source: ${BLAST_DATA:-/tmp/blast-data}
         target: /db
         read_only: true
       # because the ncbi/blast container is based on gcloud-sdk it creates a

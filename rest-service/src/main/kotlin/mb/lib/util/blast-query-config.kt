@@ -11,3 +11,4 @@ fun BlastQueryConfig.toHashable(): JsonNode {
 
   return tmp
 }
+

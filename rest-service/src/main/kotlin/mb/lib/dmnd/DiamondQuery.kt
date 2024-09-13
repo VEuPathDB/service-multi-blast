@@ -1,20 +1,22 @@
-package mb.lib.blast.model
+package mb.lib.dmnd
 
 
+import mb.api.service.valid.SequenceDefLineValidationError
 import mb.api.service.valid.SequenceEmptyValidationError
 import mb.api.service.valid.SequenceValidationError
-import mb.lib.blast.model.BlastQuery.Companion.fromStream
-import mb.lib.blast.model.BlastQuery.Companion.fromString
+import mb.lib.dmnd.DiamondQuery.Companion.fromStream
+import mb.lib.dmnd.DiamondQuery.Companion.fromString
 import mb.lib.query.AbstractMBlastQuery
 import mb.lib.query.MBlastQuery
-import org.veupathdb.lib.blast.BlastTool
+import mb.lib.util.isWhitespace
+import org.veupathdb.lib.cli.diamond.DiamondCommand
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
 /**
  * Represents a blast query consisting of 1 or more sequences.
  *
- * @constructor Constructs a new [BlastQuery] instance.
+ * @constructor Constructs a new [DiamondQuery] instance.
  *
  * @param tool Target BLAST+ tool this query is for.
  *
@@ -23,7 +25,7 @@ import java.nio.charset.StandardCharsets
  * @see [fromString]
  * @see [fromStream]
  */
-internal data class BlastQuery(val tool: BlastTool, override val sequences: List<BlastSubQuery>)
+internal data class DiamondQuery(val tool: DiamondCommand, override val sequences: List<DiamondSubQuery>)
   : MBlastQuery
   , AbstractMBlastQuery()
 {
@@ -50,13 +52,16 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
   companion object {
     /**
      * Parses the given input string into a series of sequences and creates a
-     * new [BlastQuery] instance with those sequences.
+     * new [DiamondQuery] instance with those sequences.
      */
     @JvmStatic
-    fun fromString(tool: BlastTool, input: String): BlastQuery {
-      val subQueries = ArrayList<BlastSubQuery>()
+    fun fromString(tool: DiamondCommand, input: String): DiamondQuery {
+      val subQueries = ArrayList<DiamondSubQuery>()
       val buffer     = StringBuilder()
       var index      = 1
+      var lineNum    = 0
+
+      val badDefLines = mutableListOf<Int>()
 
       // Current defline
       //
@@ -70,15 +75,22 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
 
       // Iterate through the lines in the input query text
       for (line in input.lineSequence()) {
+        lineNum++
+
         // If the current line is a defline (starts with '>')
         if (line.startsWith(">")) {
+
+          // DIAMOND SPECIFIC: Disallow absent/blank sequence IDs
+          if (line.length == 1 || line[1].isWhitespace) {
+            badDefLines.add(lineNum)
+          }
 
           // AND we already had a current defline for the current sequence
           if (currentHeader != null) {
 
             // Then we are starting a new sequence in the query.  Close out the
             // sequence we were working on so we can start a new one.
-            subQueries.add(BlastSubQuery(
+            subQueries.add(DiamondSubQuery(
               index++,
               tool,
               currentHeader,
@@ -101,7 +113,7 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
       // We've reached the end of the input query, close out the last sequence
       // we were working on.
       if (buffer.isNotEmpty()) {
-        subQueries.add(BlastSubQuery(
+        subQueries.add(DiamondSubQuery(
           index,
           tool,
           currentHeader,
@@ -109,15 +121,19 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
         ))
       }
 
-      return BlastQuery(tool, subQueries)
+      if (badDefLines.isNotEmpty()) {
+        throw SequenceDefLineValidationError(badDefLines)
+      }
+
+      return DiamondQuery(tool, subQueries)
     }
 
     /**
      * Parses the contents of the given [InputStream] into a series of sequences
-     * and creates a new [BlastQuery] instance with those sequences.
+     * and creates a new [DiamondQuery] instance with those sequences.
      */
     @JvmStatic
-    fun fromStream(tool: BlastTool, input: InputStream) =
+    fun fromStream(tool: DiamondCommand, input: InputStream) =
       fromString(tool, String(input.readAllBytes(), StandardCharsets.UTF_8))
   }
 }

@@ -1,13 +1,11 @@
-@file:JvmName("BlastManager")
-
 package mb.lib.query
 
 import mb.api.service.http.job.makeDBPaths
 import mb.api.service.model.ErrorMap
 import mb.lib.model.*
 import mb.lib.query.model.*
+import mb.lib.util.logger
 import mb.lib.workspace.Workspaces
-import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.hash_id.HashID
 import java.lang.IllegalStateException
@@ -19,7 +17,7 @@ import kotlin.math.min
 
 // TODO: Good gourd this class needs to be refactored
 object BlastManager {
-  private val Log = LogManager.getLogger("BlastManager")
+  private val Log = logger()
 
   private const val MaxWorkers = 5
 

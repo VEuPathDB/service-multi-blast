@@ -4,14 +4,12 @@ import mb.lib.db.MBlastDBManager
 import mb.lib.model.JobStatus
 import mb.lib.query.db.*
 import mb.lib.query.model.*
-import org.apache.logging.log4j.LogManager
+import mb.lib.util.logger
 import org.veupathdb.lib.hash_id.HashID
 
 class BlastDBManager: MBlastDBManager()
 {
-  companion object {
-    private val Log = LogManager.getLogger(BlastDBManager::class.java)
-  }
+  private val Log = logger()
 
   /**
    * Retrieves a blast job record from the DB if such a row exists.

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 
+@Deprecated("use singleton json")
 val Mapper = jsonMapper {
   addModule(ParameterNamesModule())
   addModule(Jdk8Module())

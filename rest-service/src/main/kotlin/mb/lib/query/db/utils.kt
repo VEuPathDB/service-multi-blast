@@ -2,13 +2,16 @@
 
 package mb.lib.query.db
 
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import mb.api.model.io.JsonKeys
+import mb.lib.dmnd.DiamondCommandConfig
 import mb.lib.model.JobStatus
-import mb.lib.query.model.BlastJobLink
-import mb.lib.query.model.BlastRow
-import mb.lib.query.model.BlastTargetLink
-import mb.lib.query.model.UserBlastRow
+import mb.lib.query.model.*
 import mb.lib.util.convertJobConfig
+import mb.lib.util.convertLegacy
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 import java.io.File
 import java.io.FileOutputStream
 import java.sql.Clob
@@ -18,7 +21,7 @@ import java.util.*
 
 fun parseBlastRow(rs: ResultSet) = BlastRow(
   jobID     = HashID(rs.getBytes(Column.MultiBlastJobs.JobID)),
-  config    = convertJobConfig(rs.getString(Column.MultiBlastJobs.JobConfig)),
+  config    = parseJobConfig(rs.getString(Column.MultiBlastJobs.JobConfig)),
   query     = rs.getString(Column.MultiBlastJobs.Query),
   queueID   = rs.getInt(Column.MultiBlastJobs.QueueID),
   projectID = rs.getString(Column.MultiBlastJobs.ProjectID),
@@ -62,3 +65,21 @@ fun queryToFile(queryClob: Clob): File {
 
   return queryFile
 }
+
+private fun parseJobConfig(json: String): JobConfig {
+  val node = Json.Mapper.readTree(json)
+
+  if (node is ArrayNode)
+    return BlastConfig(convertLegacy(node))
+
+  if (node !is ObjectNode)
+    throw IllegalArgumentException("json config must be an array or object")
+
+  if (node[JsonKeys.Tool]?.textValue()?.startsWith("diamond-") == true) {
+    node.put(JsonKeys.Tool, node[JsonKeys.Tool].textValue().substring(8))
+    return DiamondConfig(DiamondCommandConfig(node))
+  }
+
+  return BlastConfig(convertJobConfig(node))
+}
+

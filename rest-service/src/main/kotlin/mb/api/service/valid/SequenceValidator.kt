@@ -1,6 +1,7 @@
 package mb.api.service.valid
 
 import org.veupathdb.lib.blast.BlastTool
+import org.veupathdb.lib.cli.diamond.DiamondCommand
 import java.util.*
 import kotlin.math.min
 
@@ -117,12 +118,15 @@ interface SequenceValidator {
   }
 
   companion object {
-    fun getValidator(tool: BlastTool): SequenceValidator {
-      return when (tool) {
-        BlastTool.BlastP, BlastTool.TBlastN -> ProteinSequenceValidator
-        else                                -> NucleotideSequenceValidator
+    fun getValidator(tool: BlastTool): SequenceValidator =
+      when (tool) {
+        BlastTool.BlastP,
+        BlastTool.TBlastN -> ProteinSequenceValidator
+        else              -> NucleotideSequenceValidator
       }
-    }
+
+    fun getValidator(tool: DiamondCommand): SequenceValidator =
+      ProteinSequenceValidator
   }
 
 }

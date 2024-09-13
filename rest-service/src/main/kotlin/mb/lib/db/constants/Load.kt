@@ -12,11 +12,10 @@ import java.util.regex.Pattern
  * Queries loaded through this class will also have any `${}` variables replaced
  * values from the environment.
  */
-@Suppress("GrazieInspection")
 internal object Load {
 
   private val loader = SqlLoader()
-  private val envPat = Pattern.compile("\\$\\{([\\w]+)}")
+  private val envPat = Pattern.compile("\\$\\{(\\w+)}")
 
   /**
    * Loads a select query from the resources directory and injects environment

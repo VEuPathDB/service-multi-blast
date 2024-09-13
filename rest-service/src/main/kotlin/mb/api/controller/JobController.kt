@@ -58,7 +58,7 @@ class JobController(@Context private val request: ContainerRequest) {
   @Produces(MimeType.ApplicationJSON)
   @Consumes(MimeType.ApplicationJSON)
   fun postJob(entity: IOJsonJobRequest?) = errorWrap {
-    JobService.createJob(enforceBody(entity), getUser(request).userId).okJSON()
+    JobService.createBlastJob(enforceBody(entity), getUser(request).userId).okJSON()
   }
 
 
@@ -88,7 +88,7 @@ class JobController(@Context private val request: ContainerRequest) {
     if (query == null)
       postJob(props)
     else
-      JobService.createJob(query, props, getUser(request)).okJSON()
+      JobService.createBlastJob(query, props, getUser(request)).okJSON()
   }
 
 

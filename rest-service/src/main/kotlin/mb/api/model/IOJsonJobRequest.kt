@@ -3,7 +3,6 @@ package mb.api.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.annotation.JsonProperty
-import mb.api.model.blast.IOBlastConfig
 import mb.api.model.io.JsonKeys
 
 @JsonInclude(NON_NULL)
@@ -15,7 +14,7 @@ data class IOJsonJobRequest(
   var targets: List<IOJobTarget>,
 
   @JsonProperty(JsonKeys.Config)
-  val config: IOBlastConfig,
+  val config: IOJobConfig,
 
   @JsonProperty(JsonKeys.Description)
   val description: String?,
@@ -32,3 +31,4 @@ data class IOJsonJobRequest(
   @JsonProperty(JsonKeys.IsPrimary)
   val isPrimary: Boolean?,
 )
+

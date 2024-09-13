@@ -1,41 +1,54 @@
 @file:JvmName("BlastConv")
 @file:Suppress("NOTHING_TO_INLINE")
-
 package mb.lib.util
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import mb.api.model.IOJobConfig
 import mb.api.model.IOJobTarget
 import mb.api.model.blast.*
 import mb.api.model.blast.impl.*
+import mb.api.model.dmnd.IODiamondConfig
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.*
 import mb.lib.blast.model.*
 import mb.lib.blast.model.CompositionBasedStats.Companion
 import mb.lib.model.EmptyBlastConfig
+import mb.lib.query.model.DiamondConfig
+import mb.lib.query.model.JobConfig
 import mb.lib.query.model.JobTarget
 import org.veupathdb.lib.blast.*
 import org.veupathdb.lib.blast.field.*
 import org.veupathdb.lib.blast.util.JSONObjectDecoder
+import org.veupathdb.lib.cli.diamond.commands.DiamondCommandConfig
+import org.veupathdb.lib.cli.diamond.opts.*
+import org.veupathdb.lib.cli.diamond.commands.BlastP as DiamondBlastP
+import org.veupathdb.lib.cli.diamond.commands.BlastX as DiamondBlastX
 
 fun convertReportConfig(json: String) = BlastFormatter(JSONObjectDecoder(json.parseJSON()))
 
 fun convertJobConfig(json: String): BlastConfig = convertJobConfig(json.parseJSON<JsonNode>())
 
-fun convertJobConfig(json: JsonNode): BlastConfig = when {
-  json.isArray             -> convertLegacy(json as ArrayNode)
-  !json.isObject           -> throw RuntimeException("Invalid record JSON configuration.")
-  !json.has(JsonKeys.Tool) -> throw RuntimeException("Invalid record JSON configuration.  Tool field is missing.")
-  else                     -> when (BlastTool.fromString(json.get(JsonKeys.Tool).textValue())) {
-    BlastTool.BlastN  -> convertNJSON(json as ObjectNode)
-    BlastTool.BlastP  -> convertPJSON(json as ObjectNode)
-    BlastTool.BlastX  -> convertXJSON(json as ObjectNode)
-    BlastTool.TBlastN -> convertTNJSON(json as ObjectNode)
-    BlastTool.TBlastX -> convertTXJSON(json as ObjectNode)
-    else              -> throw RuntimeException("Unsupported blast tool.")
+fun convertJobConfig(json: JsonNode): BlastConfig =
+  when {
+    json.isArray  -> convertLegacy(json as ArrayNode)
+    json.isObject -> convertJobConfig(json as ObjectNode)
+    else          -> throw RuntimeException("Invalid record JSON configuration.")
   }
-}
+
+fun convertJobConfig(json: ObjectNode): BlastConfig =
+  when {
+    !json.has(JsonKeys.Tool) -> throw RuntimeException("Invalid record JSON configuration.  Tool field is missing.")
+    else                     -> when (BlastTool.fromString(json.get(JsonKeys.Tool).textValue())) {
+      BlastTool.BlastN  -> convertNJSON(json)
+      BlastTool.BlastP  -> convertPJSON(json)
+      BlastTool.BlastX  -> convertXJSON(json)
+      BlastTool.TBlastN -> convertTNJSON(json)
+      BlastTool.TBlastX -> convertTXJSON(json)
+      else              -> throw RuntimeException("Unsupported blast tool.")
+    }
+  }
 
 fun convert(tgt: JobTarget): IOJobTarget = IOJobTarget(tgt.organism, tgt.target)
 
@@ -407,6 +420,10 @@ fun convert(b: TBlastN): IOTBlastnConfig = IOTBlastnConfigImpl().apply {
 }
 
 // ---------------------------------------------------------------------- //
+//                                                                        //
+//     TBlastX Conversions                                                //
+//                                                                        //
+// ---------------------------------------------------------------------- //
 
 fun convert(conf: IOTBlastxConfig): TBlastX = XTBlastX().apply {
   queryFile = conf.query?.let(::QueryFile)
@@ -477,7 +494,63 @@ fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
   windowSize       = b.windowSize?.toInt()
 }
 
+// ---------------------------------------------------------------------- //
+//                                                                        //
+//     Unknown Conversions                                                //
+//                                                                        //
+// ---------------------------------------------------------------------- //
 
+internal fun convert(conf: JobConfig): IOJobConfig =
+  when (conf) {
+    is mb.lib.query.model.BlastConfig -> convert(conf.config)
+    is DiamondConfig -> convert(conf.config)
+  }
+
+// ---------------------------------------------------------------------- //
+//                                                                        //
+//     DIAMOND Conversions                                                //
+//                                                                        //
+// ---------------------------------------------------------------------- //
+
+
+internal fun convert(conf: DiamondCommandConfig): IOJobConfig {
+  return when (conf) {
+    is DiamondBlastP -> convert(conf)
+    is DiamondBlastX -> convert(conf)
+    else -> throw IllegalArgumentException()
+  }
+}
+
+internal fun <T> convert(config: T): IOJobConfig
+  where
+    T : AlignerGeneralOptionContainer
+  , T : AlignerSensitivityOptionContainer
+  , T : AlignerClusteringOptionContainer
+  , T : AlignerClusteringRealignOptionContainer
+  , T : AlignerViewOptionContainer
+  , T : DiamondCommandConfig
+  , T : OutputFormatOptionContainer
+{
+  return IODiamondConfig(
+    config.tool,
+    null,
+    config.expectValue,
+    config.maxTargetSeqs,
+    config.sensitivity,
+    config.masking,
+    config.compBasedStats,
+    config.iterate,
+    config.reportUnalignedQueries,
+    config.outputFormat,
+  )
+}
+
+
+// ---------------------------------------------------------------------- //
+//                                                                        //
+//     BLAST Conversion Helpers                                           //
+//                                                                        //
+// ---------------------------------------------------------------------- //
 
 private inline fun BlastWithLists.convert(o: IOBlastWithLists) {
   o.taxIds         = convertTaxIDsToExternal(taxIDs)
