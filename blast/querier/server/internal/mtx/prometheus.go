@@ -10,11 +10,13 @@ var (
 		Name: "request_count",
 		Help: "Total number of requests handled.",
 	})
-	jobsHandled = promauto.NewCounter(prometheus.CounterOpts{
+
+	blastJobsHandled = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "blast_count",
 		Help: "Total number of blast jobs run.",
 	})
-	jobTimes = promauto.NewHistogram(prometheus.HistogramOpts{
+
+	blastJobTimes = promauto.NewHistogram(prometheus.HistogramOpts{
 		Name: "blast_times",
 		Help: "Blast job durations in seconds.",
 		Buckets: []float64{
@@ -29,19 +31,55 @@ var (
 			1800, // 30 Minutes
 		},
 	})
-	jobFailures = promauto.NewCounter(prometheus.CounterOpts{
+
+	blastJobFailures = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "blast_errors",
 		Help: "Total number of blast commands that exited with an error code.",
 	})
+
+	diamondJobsHandled = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "diamond_count",
+		Help: "Total number of diamond jobs run.",
+	})
+
+	diamondJobTimes = promauto.NewHistogram(prometheus.HistogramOpts{
+		Name: "diamond_times",
+		Help: "Diamond job durations in seconds.",
+		Buckets: []float64{
+			10,   // 10 Seconds
+			30,   // 30 Seconds
+			60,   // 1 Minute
+			150,  // 2.5 Minutes
+			300,  // 5 Minutes
+			600,  // 10 Minutes
+			900,  // 15 Minutes
+			1200, // 20 Minutes
+			1800, // 30 Minutes
+		},
+	})
+
+	diamondJobFailures = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "diamond_errors",
+		Help: "Total number of diamond commands that exited with an error code.",
+	})
 )
 
-func RecordJobTime(time float64) {
-	jobsHandled.Inc()
-	jobTimes.Observe(time)
+func RecordBlastTime(time float64) {
+	blastJobsHandled.Inc()
+	blastJobTimes.Observe(time)
 }
 
-func RecordFailedJob() {
-	jobFailures.Inc()
+func RecordDiamondTime(time float64) {
+	diamondJobsHandled.Inc()
+	diamondJobTimes.Observe(time)
+}
+
+func RecordBlastFailure() {
+	blastJobFailures.Inc()
+}
+
+func RecordDiamondFailure() {
+	diamondJobFailures.Inc()
 }
 
 func RecordRequest() {
