@@ -3,9 +3,12 @@ package mb.api.service.http.job
 import jakarta.ws.rs.BadRequestException
 import mb.api.model.IOJobTarget
 import mb.api.model.IOJsonJobRequest
+import mb.api.model.blast.IOBlastConfig
+import mb.api.model.dmnd.IODiamondConfig
 import mb.lib.config.Config
 import mb.lib.path.findDBPath
 import mb.lib.query.model.BlastTargetLink
+import mb.lib.util.then
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
 import kotlin.io.path.Path
 import kotlin.io.path.exists
@@ -55,6 +58,11 @@ fun nullCheck(req: Any?, msg: String) {
  * @throws UnprocessableEntityException if the request configuration could
  * create a result set larger than the client specified limit.
  */
-fun verifyResultLimit(req: IOJsonJobRequest, numQueries: Int) =
-  ResultLimitValidator.validateResultLimits(min(req.maxResults ?: Config.maxResults, Config.maxResults),numQueries + 1, req.config)
-    .ifPresent { throw UnprocessableEntityException(it); }
+fun verifyResultLimit(req: IOJsonJobRequest, config: IOBlastConfig, numQueries: Int) =
+  ResultLimitValidator.validateResultLimits(min(req.maxResults ?: Config.maxResults, Config.maxResults), numQueries + 1, config)
+    ?.then { throw UnprocessableEntityException(it); }
+
+fun verifyResultLimit(req: IOJsonJobRequest, config: IODiamondConfig, numQueries: Int) =
+  ResultLimitValidator.validateResultLimits(min(req.maxResults ?: Config.maxResults, Config.maxResults), numQueries + 1, config)
+    ?.then { throw UnprocessableEntityException(it); }
+

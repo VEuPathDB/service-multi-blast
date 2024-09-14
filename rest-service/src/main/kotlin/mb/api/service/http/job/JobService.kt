@@ -1,5 +1,6 @@
 package mb.api.service.http.job
 
+import jakarta.ws.rs.InternalServerErrorException
 import mb.api.model.IOJobPostResponse
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.blast.IOBlastConfig
@@ -12,28 +13,40 @@ import mb.lib.blast.model.BlastQuery
 import mb.lib.config.Config
 import mb.lib.dmnd.DiamondQuery
 import mb.lib.query.BlastManager
+import mb.lib.query.MBlastQuery
 import mb.lib.query.model.BlastConfig
 import mb.lib.query.model.BlastJob
 import mb.lib.query.model.DiamondConfig
 import mb.lib.util.convert
+import mb.lib.util.then
 import mb.lib.util.toInternal
-import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
-import org.veupathdb.lib.container.jaxrs.model.User
 import java.io.InputStream
-import java.nio.charset.StandardCharsets
+import kotlin.math.min
 
 object JobService {
-  private val Log = LogManager.getLogger(JobService::class.java)
-
   private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
+
+  fun createJob(req: IOJsonJobRequest, userID: Long) =
+    when (val config = req.config) {
+      is IOBlastConfig   -> createBlastJob(config, req, userID)
+      is IODiamondConfig -> createDiamondJob(config, req, userID)
+      else               -> throw InternalServerErrorException()
+    }
+
+  fun createJob(query: InputStream, req: IOJsonJobRequest, userID: Long) =
+    when (val config = req.config) {
+      is IOBlastConfig   -> createBlastJob(query, config, req, userID)
+      is IODiamondConfig -> createDiamondJob(query, config, req, userID)
+      else               -> throw InternalServerErrorException()
+    }
 
   // region NCBI BLAST
 
   /**
    * Creates a job from the given JSON configuration and user.
    */
-  fun createBlastJob(config: IOBlastConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
+  private fun createBlastJob(config: IOBlastConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
     val query = processBlastQuery(
       config.query ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")),
       config,
@@ -49,7 +62,7 @@ object JobService {
    * Creates a job from the given JSON configuration, user, and input stream
    * containing query file contents.
    */
-  fun createBlastJob(query: InputStream, config: IOBlastConfig, props: IOJsonJobRequest, userID: Long) =
+  private fun createBlastJob(query: InputStream, config: IOBlastConfig, props: IOJsonJobRequest, userID: Long) =
     createBlastJob(processBlastQuery(query.readAllBytes().decodeToString(), config, props), config, props, userID)
 
   private fun createBlastJob(
@@ -90,30 +103,21 @@ object JobService {
     if (input.length > Config.maxInputQuerySize)
       throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is too large."))
 
-    val query = BlastQuery.fromString(config.tool, input)
+    return BlastQuery.fromString(config.tool, input).apply {
+      if (sequences.size > Config.maxQueries)
+        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, String.format(ErrTooManySeqs, Config.maxQueries)))
 
-    // Limit input sequence count
-    if (query.sequences.size > Config.maxQueries)
-      throw UnprocessableEntityException(ErrorMap(
-        JsonKeys.Query,
-        String.format(ErrTooManySeqs, Config.maxQueries)
-      ))
+      validate()?.then { throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, it.message)) }
 
-    with(query.validate()) {
-      if (this != null)
-        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, message))
+      verifyResultLimit(req, config, sequences.size)
     }
-
-    verifyResultLimit(req, query.sequences.size)
-
-    return query
   }
 
   // endregion NCBI BLAST
 
   // region DIAMOND
 
-  fun createDiamondJob(config: IODiamondConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
+  private fun createDiamondJob(config: IODiamondConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
     val query = processDiamondQuery(
       config.query
         ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")),
@@ -126,7 +130,7 @@ object JobService {
     return createDiamondJob(query, config, req, userID)
   }
 
-  fun createDiamondJob(query: InputStream, config: IODiamondConfig, req: IOJsonJobRequest, userID: Long) =
+  private fun createDiamondJob(query: InputStream, config: IODiamondConfig, req: IOJsonJobRequest, userID: Long) =
     createDiamondJob(processDiamondQuery(query.readAllBytes().decodeToString(), config, req), config, req, userID)
 
   private fun createDiamondJob(
@@ -158,23 +162,14 @@ object JobService {
     if (input.length > Config.maxInputQuerySize)
       throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is too large."))
 
-    val query = BlastQuery.fromString(req.config.tool, input)
+    return DiamondQuery.fromString(config.tool, input).apply {
+      if (sequences.size > Config.maxQueries)
+        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, String.format(ErrTooManySeqs, Config.maxQueries)))
 
-    // Limit input sequence count
-    if (query.sequences.size > Config.maxQueries)
-      throw UnprocessableEntityException(ErrorMap(
-        JsonKeys.Query,
-        String.format(ErrTooManySeqs, Config.maxQueries)
-      ))
+      validate()?.then { throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, it.message)) }
 
-    with(query.validate()) {
-      if (this != null)
-        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, message))
+      verifyResultLimit(req, config, sequences.size)
     }
-
-    verifyResultLimit(req, query.sequences.size)
-
-    return query
   }
 
   // endregion DIAMOND

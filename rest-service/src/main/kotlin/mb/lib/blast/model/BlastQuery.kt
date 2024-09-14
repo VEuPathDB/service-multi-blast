@@ -30,7 +30,7 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
   /**
    * Validates all the sequences in this query.
    */
-  fun validate(): SequenceValidationError? {
+  override fun validate(): SequenceValidationError? {
     // If we don't have any sequences
     if (sequences.isEmpty())
       return SequenceEmptyValidationError()

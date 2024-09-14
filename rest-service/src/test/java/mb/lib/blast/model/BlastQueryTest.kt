@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.veupathdb.lib.blast.BlastTool
 
 @DisplayName("BlastQuery")
-internal class DiamondQueryTest {
+internal class BlastQueryTest {
 
   @Nested
   @DisplayName("::fromString")
@@ -51,7 +51,7 @@ somesequencetextthathasnodeflinethatwillbefedintothefromstringmethod"""
       assertEquals(1, tgt.sequences.size)
       assertEquals(exp1, tgt.sequences[0].toStandardString())
       assertEquals(exp2, tgt.sequences[0].defLine)
-      assertEquals(exp3, tgt.sequences[0].rawSequence)
+      assertEquals(exp3, tgt.sequences[0].sequence)
     }
 
     @Test
@@ -88,10 +88,10 @@ $exp2Sequence
       assertEquals(2, tgt.sequences.size)
 
       assertEquals(exp1Defline, tgt.sequences[0].defLine)
-      assertEquals(exp1Sequence, tgt.sequences[0].rawSequence)
+      assertEquals(exp1Sequence, tgt.sequences[0].sequence)
 
       assertEquals(exp2Defline, tgt.sequences[1].defLine)
-      assertEquals(exp2Sequence, tgt.sequences[1].rawSequence)
+      assertEquals(exp2Sequence, tgt.sequences[1].sequence)
     }
   }
 }

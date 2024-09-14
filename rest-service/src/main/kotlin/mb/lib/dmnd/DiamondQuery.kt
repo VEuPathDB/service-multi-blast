@@ -32,7 +32,7 @@ internal data class DiamondQuery(val tool: DiamondCommand, override val sequence
   /**
    * Validates all the sequences in this query.
    */
-  fun validate(): SequenceValidationError? {
+  override fun validate(): SequenceValidationError? {
     // If we don't have any sequences
     if (sequences.isEmpty())
       return SequenceEmptyValidationError()

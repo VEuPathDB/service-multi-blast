@@ -1,13 +1,12 @@
 package mb.lib.query.model
 
 import mb.lib.model.JobStatus
-import org.veupathdb.lib.blast.BlastConfig
 import org.veupathdb.lib.hash_id.HashID
 import java.time.OffsetDateTime
 
 open class UserBlastRow(
   jobID:               HashID,
-  config:              BlastConfig?    = null,
+  config:              JobConfig?      = null,
   query:               String?         = null,
   queueID:             Int?            = null,
   projectID:           String?         = null,

@@ -1,6 +1,7 @@
 package mb.api.service.http.job
 
 import mb.api.model.blast.IOBlastConfig
+import mb.api.model.dmnd.IODiamondConfig
 import mb.api.model.io.JsonKeys
 import mb.api.service.model.ErrorMap
 import mb.lib.blast.model.ToolOption
@@ -30,7 +31,7 @@ import kotlin.math.max
 object ResultLimitValidator {
   private val Log = LogManager.getLogger("ResultLimitValidator")
 
-  fun validateResultLimits(limit: Int, queries: Int, conf: IOBlastConfig): Optional<ErrorMap> {
+  fun validateResultLimits(limit: Int, queries: Int, conf: IOBlastConfig): ErrorMap? {
     Log.trace("validateResultLimits(limit = {}, queries = {}, conf = ...)", limit, queries)
 
     val s = conf.maxTargetSeqs
@@ -49,28 +50,34 @@ object ResultLimitValidator {
       return validateResultLimits(limit, queries, 0, a)
 
     val err = "Must provide a max_target_seqs, num_alignments, or num_descriptions value to limit results."
-    return Optional.of(ErrorMap()
+    return ErrorMap()
       .putError(JsonKeys.MaxResults, err)
       .putError(ToolOption.MaxTargetSequences, err)
       .putError(ToolOption.NumDescriptions, err)
-      .putError(ToolOption.NumAlignments, err))
+      .putError(ToolOption.NumAlignments, err)
   }
 
-  fun validateResultLimits(limit: Int, queries: Int, maxSeqs: Long): Optional<ErrorMap> {
+  fun validateResultLimits(limit: Int, queries: Int, conf: IODiamondConfig): ErrorMap? =
+    when (val mts = conf.maxTargetSeqs) {
+      null -> ErrorMap().putError(JsonKeys.MaxResults, "Must provide max_target_seqs value to limit results.")
+      else -> validateResultLimits(limit, queries, mts)
+    }
+
+  fun validateResultLimits(limit: Int, queries: Int, maxSeqs: Long): ErrorMap? {
     Log.trace("validateResultLimits(limit = {}, queries = {}, maxSeqs = {})", limit, queries, maxSeqs)
 
     if (queries * maxSeqs > limit) {
       val err = "Number of query sequences * max_target_seqs cannot exceed $limit"
-      return Optional.of(ErrorMap()
+      return ErrorMap()
         .putError(JsonKeys.MaxResults, err)
         .putError(ToolOption.Query, err)
-        .putError(ToolOption.MaxTargetSequences, err))
+        .putError(ToolOption.MaxTargetSequences, err)
     }
 
-    return Optional.empty()
+    return null
   }
 
-  fun validateResultLimits(limit: Int, queries: Int, descs: Long, aligns: Long): Optional<ErrorMap> {
+  fun validateResultLimits(limit: Int, queries: Int, descs: Long, aligns: Long): ErrorMap? {
     Log.trace("validateResultLimits(limit = {}, queries = {}, descs = {}, aligns = {})", limit, queries, descs, aligns)
 
     val max = max(descs, aligns)
@@ -79,12 +86,12 @@ object ResultLimitValidator {
       val err = "Number of query sequences * ${if (max == descs) "num_descriptions" else "num_alignments"} cannot " +
                 "exceed $limit"
 
-      return Optional.of(ErrorMap()
+      return ErrorMap()
         .putError(JsonKeys.MaxResults, err)
         .putError(ToolOption.Query, err)
-        .putError(if(max == descs) ToolOption.NumDescriptions else ToolOption.NumAlignments, err))
+        .putError(if(max == descs) ToolOption.NumDescriptions else ToolOption.NumAlignments, err)
     }
 
-    return Optional.empty()
+    return null
   }
 }

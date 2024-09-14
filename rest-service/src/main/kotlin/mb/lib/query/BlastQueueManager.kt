@@ -4,7 +4,8 @@ import io.prometheus.client.Gauge
 import mb.api.service.util.Address
 import mb.lib.config.Config
 import mb.lib.model.EmptyBlastConfig
-import mb.lib.query.model.BlastRequest
+import mb.lib.query.model.BlastConfig
+import mb.lib.query.model.BlastServerRequest
 import mb.lib.query.model.JobConfig
 import mb.lib.queue.QueueManager
 import mb.lib.queue.consts.URL
@@ -14,7 +15,8 @@ import org.veupathdb.lib.hash_id.HashID
 
 object BlastQueueManager: QueueManager()
 {
-  private const val Path = "blast"
+  private const val BlastPath = "blast"
+  private const val DiamondPath = "diamond"
 
   private val queueSizeGauge = Gauge.build(
     "blast_queue_size",
@@ -51,8 +53,8 @@ object BlastQueueManager: QueueManager()
     return submitNewJob(
       Config.blastQueueName,
       CreateRequest(
-        java.lang.String.join("/", Address.http(Config.blastHost), Path),
-        BlastRequest(jobId, config.tool, config)
+        Address.http(Config.blastHost) + "/" + if (config is BlastConfig) BlastPath else DiamondPath,
+        BlastServerRequest(jobId, config)
       )
     )
   }

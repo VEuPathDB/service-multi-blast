@@ -8,7 +8,7 @@ import org.veupathdb.lib.cli.diamond.DiamondCommand
 import org.veupathdb.lib.cli.diamond.opts.fields.CompositionBasedStats
 import org.veupathdb.lib.cli.diamond.opts.fields.MaskingMode
 import org.veupathdb.lib.cli.diamond.opts.fields.Sensitivity
-import org.veupathdb.lib.cli.diamond.opts.output_format.OutputFormatOptions
+import org.veupathdb.lib.cli.diamond.opts.fields.output_format.OutputFormatOptions
 
 data class IODiamondConfig(
   @get:JsonGetter(JsonKeys.Tool)

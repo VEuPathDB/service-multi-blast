@@ -11,14 +11,14 @@ import org.veupathdb.lib.hash_id.HashID
 
 data class BlastRequest(
   @JsonProperty(JsonKeys.JobID)
-  val jobID:  HashID,
+  override val jobID:  HashID,
 
   @JsonProperty(JsonKeys.Tool)
   val tool:   BlastTool,
 
   @JsonProperty(JsonKeys.Config)
   val config: BlastConfig,
-) {
+) : BlastServerRequest {
   @JsonValue
   fun toJSON() = jsonObject {
     put(JsonKeys.JobID, jobID.string)

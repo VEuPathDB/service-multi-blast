@@ -9,7 +9,6 @@ import mb.api.service.http.job.translateLongResponse
 import mb.api.service.http.job.translateShortResponses
 import mb.lib.http.MimeType
 import mb.lib.query.BlastManager
-import mb.lib.util.Mapper
 import org.glassfish.jersey.media.multipart.FormDataParam
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
@@ -20,12 +19,13 @@ import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.glassfish.jersey.server.ContainerRequest
+import org.veupathdb.lib.jackson.Json
 
 
 private const val ParamQuery      = "query"
 private const val ParamProperties = "properties"
 private const val ParamDownload   = "download"
-private const val AttachmentPat = "attachment; filename=\"%s.%s\""
+private const val AttachmentPat   = "attachment; filename=\"%s.%s\""
 
 
 private fun getUser(req: ContainerRequest) = UserProvider.lookupUser(req).orElseThrow(::noUserExcept)!!
@@ -58,7 +58,7 @@ class JobController(@Context private val request: ContainerRequest) {
   @Produces(MimeType.ApplicationJSON)
   @Consumes(MimeType.ApplicationJSON)
   fun postJob(entity: IOJsonJobRequest?) = errorWrap {
-    JobService.createBlastJob(enforceBody(entity), getUser(request).userId).okJSON()
+    JobService.createJob(enforceBody(entity), getUser(request).userId).okJSON()
   }
 
 
@@ -80,7 +80,7 @@ class JobController(@Context private val request: ContainerRequest) {
     val props: IOJsonJobRequest
 
     try {
-      props = Mapper.readerFor(IOJsonJobRequest::class.java).readValue(config)
+      props = Json.parse(config ?: throw BadRequestException())
     } catch (e: IOException) {
       throw BadRequestException(e)
     }
@@ -88,7 +88,7 @@ class JobController(@Context private val request: ContainerRequest) {
     if (query == null)
       postJob(props)
     else
-      JobService.createBlastJob(query, props, getUser(request)).okJSON()
+      JobService.createJob(query, props, getUser(request).userId).okJSON()
   }
 
 

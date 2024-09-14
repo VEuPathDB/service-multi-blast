@@ -88,6 +88,7 @@ object JsonKeys {
   const val OutFormat = "outFormat"
   const val OutPsiBlastCheckpointFile = "outPssm"
   const val OutputFile = "out"
+  const val Params = "params"
   const val ParentJobs = "parentJobs"
   const val ParseDefLines = "parseDefLines"
   const val Penalty = "penalty"

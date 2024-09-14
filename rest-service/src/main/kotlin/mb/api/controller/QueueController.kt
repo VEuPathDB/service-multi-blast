@@ -6,7 +6,7 @@ import jakarta.ws.rs.Produces
 import mb.api.controller.resources.Paths
 import mb.lib.http.MimeType
 import mb.lib.query.BlastQueueManager
-import mb.lib.query.model.BlastRequest
+import mb.lib.query.model.BlastServerRequest
 import mb.lib.report.ReportQueueManager
 import mb.lib.util.jsonCast
 import org.veupathdb.lib.jackson.Json
@@ -22,7 +22,7 @@ class QueueController {
     return BlastQueueManager.grabbedJobs()
       .stream()
       .map { it.payload }
-      .map { Json.jsonCast<BlastRequest>() }
+      .map { Json.jsonCast<BlastServerRequest>() }
       .map { it.jobID }
       .map { it.string }
       .collect(Collectors.toList())
@@ -35,7 +35,7 @@ class QueueController {
     return ReportQueueManager.grabbedJobs()
       .stream()
       .map { it.payload }
-      .map { Json.jsonCast<BlastRequest>() }
+      .map { Json.jsonCast<BlastServerRequest>() }
       .map { it.jobID }
       .map { it.string }
       .collect(Collectors.toList())
