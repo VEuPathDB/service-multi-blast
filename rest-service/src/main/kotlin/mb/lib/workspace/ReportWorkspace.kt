@@ -7,7 +7,7 @@ sealed interface ReportWorkspace : Workspace {
   /**
    * Parent blast workspace.
    */
-  val parent: BlastWorkspace
+  val parent: MBlastWorkspace
 
   /**
    * ID of this report workspace.
@@ -54,13 +54,12 @@ sealed interface ReportWorkspace : Workspace {
 }
 
 internal class ReportWorkspaceImpl(
-  override val parent: BlastWorkspace,
+  override val parent: MBlastWorkspace,
   override val reportID: HashID
 )
   : AbstractWorkspace(File(parent.directory, reportID.string))
   , ReportWorkspace
 {
-
   companion object {
     const val ReportZip = "report.zip"
     const val MetaJson  = "meta.json"

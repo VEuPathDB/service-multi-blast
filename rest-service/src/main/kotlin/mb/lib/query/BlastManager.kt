@@ -1,6 +1,8 @@
 package mb.lib.query
 
+import mb.api.model.dmnd.databaseFile
 import mb.api.service.http.job.makeDBPaths
+import mb.api.service.http.job.makeOrthoDBPath
 import mb.api.service.model.ErrorMap
 import mb.lib.model.*
 import mb.lib.query.model.*
@@ -12,7 +14,6 @@ import java.lang.IllegalStateException
 import java.time.OffsetDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
-import java.util.stream.Collectors
 import kotlin.math.min
 
 // TODO: Good gourd this class needs to be refactored
@@ -101,12 +102,12 @@ object BlastManager {
 
       val jobLinks = db.getUserJobLinks(userID)
       val tgtLinks = db.getUserTargetLinks(userID)
-      val out = results.stream()
+      val out = results.asSequence()
         .map(::FullUserBlastRow)
-        .peek { r -> r.childJobs = jobLinks.byParentID[r.jobID] }
-        .peek { r -> r.parentJobs = jobLinks.byChildID[r.jobID] }
-        .peek { r -> r.targetDBs = tgtLinks[r.jobID] }
-        .collect(Collectors.toList())
+        .onEach { r -> r.childJobs = jobLinks.byParentID[r.jobID] }
+        .onEach { r -> r.parentJobs = jobLinks.byChildID[r.jobID] }
+        .onEach { r -> r.targetDBs = tgtLinks[r.jobID] }
+        .toList()
 
       if (out.size == 1) {
         refreshJobStatus(db, out[0])
@@ -153,7 +154,15 @@ object BlastManager {
     //
     // If the blast target does not exist anymore the re-run request will fail
     // with a 400 error.
-    (job.config as BlastQueryConfig).dbFile = makeDBPaths(job.projectID!!, job.targetDBs!!)
+    var isDiamond = false
+
+    when (val w = job.config!!) {
+      is BlastConfig   -> (w.config as BlastQueryConfig).dbFile = makeDBPaths(job.projectID!!, job.targetDBs!!)
+      is DiamondConfig -> {
+        w.config.databaseFile = makeOrthoDBPath(job.projectID!!)
+        isDiamond = true
+      }
+    }
 
     BlastDBManager().use { db ->
       // If the job is not expired then there is nothing to do
@@ -161,8 +170,9 @@ object BlastManager {
         Log.debug("Resubmitting parent job {}", jobID)
 
         with(Workspaces.open(jobID)) {
-          if (createIfNotExists())
-            createQueryFile(job.query!!)
+          val ws = if (isDiamond) resolveAsDiamond() else resolveAsBlast()
+          if (ws.createIfNotExists())
+            ws.createQueryFile(job.query!!)
         }
 
         val qID = BlastQueueManager.submitNewJob(jobID, job.config!!)
@@ -180,8 +190,9 @@ object BlastManager {
           Log.debug("Resubmitting child job {} of parent {}", child.jobID, jobID)
 
           with(Workspaces.open(child.jobID)) {
-            if (createIfNotExists())
-              createQueryFile(child.query!!)
+            val ws = if (isDiamond) resolveAsDiamond() else resolveAsBlast()
+            if (ws.createIfNotExists())
+              ws.createQueryFile(job.query!!)
           }
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
@@ -200,10 +211,13 @@ object BlastManager {
 
   private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow) {
     if (row.status == JobStatus.Expired) {
-      with(Workspaces.open(row.jobID)) {
-        if (createIfNotExists())
-          createQueryFile(row.query!!)
+      val workspace = when (row.config!!) {
+        is BlastConfig   -> Workspaces.open(row.jobID).resolveAsBlast()
+        is DiamondConfig -> Workspaces.open(row.jobID).resolveAsDiamond()
       }
+
+      if (workspace.createIfNotExists())
+        workspace.createQueryFile(row.query!!)
 
       val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!)
 
@@ -276,14 +290,18 @@ object BlastManager {
       if (!ws.exists) {
         Log.debug("Blast workspace {} does not exist.", row.jobID)
         JobStatus.Expired
-      } else if (ws.hasSuccessFlag()) {
-        Log.debug("Blast workspace {} contains a completed flag.", row.jobID)
-        JobStatus.Completed
-      } else if (ws.hasFailedFlag()) {
-        Log.debug("Blast workspace {} contains a failed flag.", row.jobID)
-        JobStatus.Errored
       } else {
-        JobStatus.InProgress
+        val resolved = ws.resolve()
+
+        if (resolved.hasSuccessFlag()) {
+          Log.debug("Blast workspace {} contains a completed flag.", row.jobID)
+          JobStatus.Completed
+        } else if (resolved.hasFailedFlag()) {
+          Log.debug("Blast workspace {} contains a failed flag.", row.jobID)
+          JobStatus.Errored
+        } else {
+          JobStatus.InProgress
+        }
       }
     }
 
@@ -307,22 +325,21 @@ object BlastManager {
   fun updateLastModified(jobID: HashID) {
     Log.trace("::updateLastModified(jobID={})", jobID)
 
-    val wd = Workspaces.open(jobID)
-
-    wd.exists || return
-
-    wd.updateLastModified(OffsetDateTime.now())
+    Workspaces.open(jobID)
+      .takeIf { it.exists }
+      ?.resolve()
+      ?.updateLastModified(OffsetDateTime.now())
   }
 
   fun getJobError(jobID: HashID): String? {
     Log.trace("::getJobError(jobID={})", jobID)
 
-    val wd = Workspaces.open(jobID)
-
-    if (!wd.exists || !wd.hasErrorFile)
-      return null
-
-    return wd.errorFile.readText()
+    return Workspaces.open(jobID)
+      .takeIf { it.exists }
+      ?.resolve()
+      ?.takeIf { it.hasErrorFile }
+      ?.errorFile
+      ?.readText()
   }
 
   // ╔══════════════════════════════════════════════════════════════════════╗ //
@@ -334,6 +351,8 @@ object BlastManager {
   fun submitJob(job: BlastJob) = BlastDBManager().use { handleJobs(it, job) }
 
   private fun handleJobs(db: BlastDBManager, job: BlastJob): FullUserBlastRow {
+
+    TODO("does ortho do sub-jobs?")
 
     val root = handleJob(db, job, job.query.getFullQuery())
 

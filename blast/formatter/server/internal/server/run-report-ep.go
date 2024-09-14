@@ -6,16 +6,18 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
+
 	"server/internal/model"
 	"server/internal/mtx"
 	"server/internal/xfiles"
-	"time"
 
 	"github.com/francoispqt/gojay"
 	"github.com/sirupsen/logrus"
 	"github.com/veupathdb/lib-go-blast/v2/pkg/blast/field"
 	"github.com/vulpine-io/midl-layers/request-id/short-id/v1/pkg/midlid"
 	"github.com/vulpine-io/midl/v1/pkg/midl"
+
 	"server/pkg/api"
 )
 
@@ -134,7 +136,7 @@ func zipDir(path string) (err error) {
 		// If we found 1 or more files in the workspace, then the file has been
 		// copied in, and we can zip the report.
 		//
-		// The only things being zipped are the report output files, the `meta.json`
+		// The only things being zipped are the report output files. The `meta.json`
 		// file and the completed flag file are created after this zip is done.
 		if len(matches) > 0 {
 			if err := xfiles.ZipFiles(path, reportExportName, matches); err != nil {

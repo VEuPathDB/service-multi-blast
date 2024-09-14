@@ -9,11 +9,11 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.stream.Collectors
 
-object Workspaces
+internal object Workspaces
 {
   val workspaceRoot by lazy { File(Config.jobMountPath) }
 
-  fun getExpiredWorkspaces(): List<BlastWorkspace> {
+  fun getExpiredWorkspaces(): List<MBlastWorkspace> {
     val expirationThreshold = OffsetDateTime.now()
       .minus(Config.jobTimeout.toLong(), ChronoUnit.DAYS)
       .toInstant()
@@ -31,5 +31,7 @@ object Workspaces
       .collect(Collectors.toList())
   }
 
-  fun open(jobID: HashID): BlastWorkspace = BlastWorkspaceImpl(jobID)
+  fun open(jobID: HashID): UnresolvedWorkspace {
+    return UnresolvedWorkspace(jobID, File(Config.jobMountPath, jobID.string))
+  }
 }

@@ -52,6 +52,13 @@ func (e Endpoint) Handle(req midl.Request) midl.Response {
 		return server.NewFailResponse(err.Error())
 	}
 
+	if err := util.TouchFile(".diamond"); err != nil {
+		log.Error("failed to create .diamond flag for workspace: ", err.Error())
+		// try and create failed flag if possible, ignore error
+		_ = util.TouchFailedFlag(workDir)
+		return server.NewFailResponse(err.Error())
+	}
+
 	stdout, err := os.Create(filepath.Join(workDir, "log.txt"))
 	if err != nil {
 		log.Error("failed to create stdout log file: ", err.Error())

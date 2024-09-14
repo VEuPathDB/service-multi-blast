@@ -4,6 +4,7 @@ import java.io.File
 import java.time.OffsetDateTime
 import java.util.stream.Stream
 
+internal const val diamondFlagFile  = ".diamond"
 internal const val completeFlagFile = ".complete"
 internal const val failedFlagFile   = ".failed"
 

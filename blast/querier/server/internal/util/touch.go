@@ -12,15 +12,15 @@ const (
 
 // TouchSuccessFlag creates a job success flag file.
 func TouchSuccessFlag(dir string) error {
-	return touchFile(filepath.Join(dir, successFlag))
+	return TouchFile(filepath.Join(dir, successFlag))
 }
 
 // TouchFailedFlag creates a job success flag file.
 func TouchFailedFlag(dir string) error {
-	return touchFile(filepath.Join(dir, failedFlag))
+	return TouchFile(filepath.Join(dir, failedFlag))
 }
 
-func touchFile(fileName string) error {
+func TouchFile(fileName string) error {
 
 	if file, err := os.Create(fileName); err != nil {
 		return err

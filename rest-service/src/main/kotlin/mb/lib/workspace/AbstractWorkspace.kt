@@ -8,6 +8,11 @@ import java.util.stream.Stream
 internal sealed class AbstractWorkspace(final override val directory: File)
   : Workspace
 {
+  companion object {
+    const val QueryFile  = "query.txt"
+    const val ErrorFile  = "error.txt"
+    const val LogFile    = "log.txt"
+  }
 
   override val exists  get() = directory.exists()
   override val isEmpty get() = directory.list()?.isEmpty() ?: true
