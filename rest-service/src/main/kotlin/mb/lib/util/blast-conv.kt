@@ -5,6 +5,8 @@ package mb.lib.util
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import mb.api.model.IOBlastConfigWrapper
+import mb.api.model.IODiamondConfigWrapper
 import mb.api.model.IOJobConfig
 import mb.api.model.IOJobTarget
 import mb.api.model.blast.*
@@ -23,12 +25,12 @@ import org.veupathdb.lib.blast.field.*
 import org.veupathdb.lib.blast.util.JSONObjectDecoder
 import org.veupathdb.lib.cli.diamond.commands.DiamondCommandConfig
 import org.veupathdb.lib.cli.diamond.opts.*
+import org.veupathdb.lib.jackson.Json
 import org.veupathdb.lib.cli.diamond.commands.BlastP as DiamondBlastP
 import org.veupathdb.lib.cli.diamond.commands.BlastX as DiamondBlastX
 
-fun convertReportConfig(json: String) = BlastFormatter(JSONObjectDecoder(json.parseJSON()))
+fun convertReportConfig(json: String) = BlastFormatter(JSONObjectDecoder(Json.parse(json)))
 
-fun convertJobConfig(json: String): BlastConfig = convertJobConfig(json.parseJSON<JsonNode>())
 
 fun convertJobConfig(json: JsonNode): BlastConfig =
   when {
@@ -500,9 +502,9 @@ fun convert(b: TBlastX): IOTBlastxConfig = IOTBlastxConfigImpl().apply {
 //                                                                        //
 // ---------------------------------------------------------------------- //
 
-internal fun convert(conf: JobConfig): IOJobConfig =
+internal fun convert(conf: JobConfig): IOJobConfig<*> =
   when (conf) {
-    is mb.lib.query.model.BlastConfig -> convert(conf.config)
+    is mb.lib.query.model.BlastConfig -> IOBlastConfigWrapper(convert(conf.config))
     is DiamondConfig -> convert(conf.config)
   }
 
@@ -513,7 +515,7 @@ internal fun convert(conf: JobConfig): IOJobConfig =
 // ---------------------------------------------------------------------- //
 
 
-internal fun convert(conf: DiamondCommandConfig): IOJobConfig {
+internal fun convert(conf: DiamondCommandConfig): IOJobConfig<IODiamondConfig> {
   return when (conf) {
     is DiamondBlastP -> convert(conf)
     is DiamondBlastX -> convert(conf)
@@ -521,7 +523,7 @@ internal fun convert(conf: DiamondCommandConfig): IOJobConfig {
   }
 }
 
-internal fun <T> convert(config: T): IOJobConfig
+internal fun <T> convert(config: T): IOJobConfig<IODiamondConfig>
   where
     T : AlignerGeneralOptionContainer
   , T : AlignerSensitivityOptionContainer
@@ -531,7 +533,7 @@ internal fun <T> convert(config: T): IOJobConfig
   , T : DiamondCommandConfig
   , T : OutputFormatOptionContainer
 {
-  return IODiamondConfig(
+  return IODiamondConfigWrapper(IODiamondConfig(
     config.tool,
     null,
     config.expectValue,
@@ -542,7 +544,7 @@ internal fun <T> convert(config: T): IOJobConfig
     config.iterate,
     config.reportUnalignedQueries,
     config.outputFormat,
-  )
+  ))
 }
 
 

@@ -80,7 +80,7 @@ services:
       - queue
       - formatter
 
-    restart: on-failure:5
+    restart: 'on-failure:5'
     networks:
       - traefik
       - internal
@@ -159,11 +159,11 @@ services:
     image: veupathdb/mblast-queue-db:${QUEUE_DB_TAG:-latest}
     environment:
       # Root user password (IT'S A SECRET TO EVERYBODY)
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
       # Service user username
       QUEUE_DB_USER: ${QUEUE_DB_USER:-queue}
       # Service user password
-      QUEUE_DB_PASS: ${QUEUE_DB_PASS}
+      QUEUE_DB_PASS: ${QUEUE_DB_PASS:?}
     volumes:
       - type: volume
         source: mysql-data
@@ -217,8 +217,6 @@ volumes:
 
 
 networks:
-# external network used for containers that need to reach the interenet
-# (notably ncbi/blast based images)
   external:
   internal:
     internal: true

@@ -14,7 +14,7 @@ data class IOJsonJobRequest(
   var targets: List<IOJobTarget>,
 
   @JsonProperty(JsonKeys.Config)
-  val config: IOJobConfig,
+  val config: IOJobConfig<*>,
 
   @JsonProperty(JsonKeys.Description)
   val description: String?,

@@ -94,7 +94,7 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
-  implementation("org.veupathdb.lib:diamondcli:0.5.0")
+  implementation("org.veupathdb.lib:diamondcli:0.5.2")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
@@ -125,7 +125,7 @@ dependencies {
   annotationProcessor("info.picocli:picocli-codegen:4.7.3")
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
-  implementation("org.veupathdb.lib:jvm-fireworq:1.0.3")
+  implementation("org.veupathdb.lib:jvm-fireworq:1.0.4")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")

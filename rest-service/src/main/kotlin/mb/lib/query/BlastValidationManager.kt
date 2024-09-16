@@ -5,9 +5,9 @@ import mb.api.service.model.ErrorMap
 import mb.api.service.util.Address
 import mb.lib.config.Config
 import mb.lib.util.jsonStringify
-import mb.lib.util.parseJSON
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.blast.BlastConfig
+import org.veupathdb.lib.jackson.Json
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -37,7 +37,7 @@ object BlastValidationManager {
     if (res.statusCode() != 200)
       throw RuntimeException("Unexpected response from validation server: " + res.body())
 
-    val parsed = res.body().parseJSON<ValidationResponse>()
+    val parsed = Json.parse<ValidationResponse>(res.body())
 
     Log.debug("JSON Reply: {}", res.body())
     if (parsed.payload.isEmpty())

@@ -27,14 +27,14 @@ object JobService {
   private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
 
   fun createJob(req: IOJsonJobRequest, userID: Long) =
-    when (val config = req.config) {
+    when (val config = req.config.typedConfig) {
       is IOBlastConfig   -> createBlastJob(config, req, userID)
       is IODiamondConfig -> createDiamondJob(config, req, userID)
       else               -> throw InternalServerErrorException()
     }
 
   fun createJob(query: InputStream, req: IOJsonJobRequest, userID: Long) =
-    when (val config = req.config) {
+    when (val config = req.config.typedConfig) {
       is IOBlastConfig   -> createBlastJob(query, config, req, userID)
       is IODiamondConfig -> createDiamondJob(query, config, req, userID)
       else               -> throw InternalServerErrorException()
@@ -172,7 +172,8 @@ object JobService {
 
       validate()?.then { throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, it.message)) }
 
-      verifyResultLimit(req, config, sequences.size)
+      // protein mapping is locked to 1 result by the cli call itself
+      // verifyResultLimit(req, config, sequences.size)
     }
   }
 

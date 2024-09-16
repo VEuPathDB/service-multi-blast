@@ -10,6 +10,12 @@ AUTH_SECRET_KEY=
 # HTTP Server bind port
 SERVER_PORT=80
 
+OAUTH_CLIENT_ID=
+OAUTH_CLIENT_SECRET=
+OAUTH_URL=
+
+ADMIN_AUTH_TOKEN=
+
 # LDAP servers used to fetch DB connection details.
 #
 # Comma separated list of url:port combinations.
@@ -51,8 +57,12 @@ USER_DB_PASS=
 # Job data workspace mount point.
 JOB_MOUNT_PATH=/out
 
+LOCAL_HOST_WORKSPACE_MOUNT_PATH=/home/${USER}/blastout
+
 # Blast file mount point.
 DB_MOUNT_PATH=/db
+
+LOCAL_HOST_DB_MOUNT_PATH=/home/${USER}/blastdb
 
 # Site build (used to resolve blast target paths)
 DB_BUILD=51

@@ -4,7 +4,6 @@ import jakarta.ws.rs.BadRequestException
 import mb.api.model.IOJobTarget
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.blast.IOBlastConfig
-import mb.api.model.dmnd.IODiamondConfig
 import mb.lib.config.Config
 import mb.lib.path.findDBPath
 import mb.lib.query.model.BlastTargetLink
@@ -61,8 +60,3 @@ fun nullCheck(req: Any?, msg: String) {
 fun verifyResultLimit(req: IOJsonJobRequest, config: IOBlastConfig, numQueries: Int) =
   ResultLimitValidator.validateResultLimits(min(req.maxResults ?: Config.maxResults, Config.maxResults), numQueries + 1, config)
     ?.then { throw UnprocessableEntityException(it); }
-
-fun verifyResultLimit(req: IOJsonJobRequest, config: IODiamondConfig, numQueries: Int) =
-  ResultLimitValidator.validateResultLimits(min(req.maxResults ?: Config.maxResults, Config.maxResults), numQueries + 1, config)
-    ?.then { throw UnprocessableEntityException(it); }
-

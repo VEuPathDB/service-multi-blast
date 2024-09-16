@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.node.ObjectNode
 import mb.api.model.io.JsonKeys
-import mb.lib.util.jsonObject
 import org.veupathdb.lib.blast.BlastConfig
 import org.veupathdb.lib.blast.BlastTool
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 
 data class BlastRequest(
   @JsonProperty(JsonKeys.JobID)
@@ -20,7 +20,7 @@ data class BlastRequest(
   val config: BlastConfig,
 ) : BlastServerRequest {
   @JsonValue
-  fun toJSON() = jsonObject {
+  fun toJSON() = Json.newObject {
     put(JsonKeys.JobID, jobID.string)
     set<ObjectNode>(JsonKeys.Tool, tool.toJSON())
     set<ObjectNode>(JsonKeys.Config, config.toJSON().toJSON())!!

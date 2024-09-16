@@ -24,7 +24,7 @@ import org.veupathdb.lib.blast.field.Location
   JsonSubTypes.Type(IOBlastConfig::class))
 @JsonDeserialize(`as` = IOBlastConfigImpl::class)
 @JsonInclude(NON_DEFAULT)
-interface IOBlastConfig : IOJobConfig {
+interface IOBlastConfig {
   @get:JsonProperty(JsonKeys.Tool)
   val tool: BlastTool
 

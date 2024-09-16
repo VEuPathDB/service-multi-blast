@@ -2,7 +2,6 @@ package mb.api.model.dmnd
 
 import com.fasterxml.jackson.annotation.JsonGetter
 import com.fasterxml.jackson.annotation.JsonSetter
-import mb.api.model.IOJobConfig
 import mb.api.model.io.JsonKeys
 import org.veupathdb.lib.cli.diamond.DiamondCommand
 import org.veupathdb.lib.cli.diamond.opts.fields.CompositionBasedStats
@@ -49,4 +48,4 @@ data class IODiamondConfig(
   @get:JsonGetter(JsonKeys.OutFormat)
   @set:JsonSetter(JsonKeys.OutFormat)
   var outFormat: OutputFormatOptions?,
-) : IOJobConfig
+)

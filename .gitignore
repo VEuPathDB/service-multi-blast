@@ -32,3 +32,5 @@ local.properties
 *~
 .*~
 .envrc
+docker-compose.ssh.yml
+host-list.yml
