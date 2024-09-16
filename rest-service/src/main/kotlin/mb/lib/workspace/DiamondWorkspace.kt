@@ -39,7 +39,9 @@ internal class DiamondWorkspace(override val jobID: HashID, directory: File)
     }
   }
 
-  override fun reportWorkspace(reportID: HashID): ReportWorkspace =
-    DiamondReportWorkspace(this, reportID)
+  override fun reportWorkspace(reportID: HashID): ReportWorkspace {
+    require(reportID == this.jobID) { "diamond jobs do not have distinct report ids" }
+    return DiamondReportWorkspace(this)
+  }
 }
 

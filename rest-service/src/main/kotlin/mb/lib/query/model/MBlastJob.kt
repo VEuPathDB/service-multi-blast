@@ -9,8 +9,9 @@ import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.cli.diamond.commands.DiamondCommandConfig
 import org.veupathdb.lib.hash_id.HashID
 
+// Could be either a multi-blast, or diamond job.
 @Suppress("ArrayInDataClass")
-data class BlastJob(
+data class MBlastJob(
   val config:      JobConfig,
   val query:       MBlastQuery,
   val site:        String,

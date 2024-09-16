@@ -14,8 +14,8 @@ import mb.lib.report.model.UserReportRow
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.hash_id.HashID
 
-internal object ReportService {
-  private val Log = LogManager.getLogger(ReportService::class.java)
+internal object BlastReportService {
+  private val Log = LogManager.getLogger(BlastReportService::class.java)
 
   /**
    * Retrieves a list of all the report jobs created for the given {@code jobID}
@@ -31,25 +31,6 @@ internal object ReportService {
 
     try {
       return ReportManager.getUserReportsForJob(jobID, userID).map { it.convert() }
-    } catch (e: Exception) {
-      throw e.wrap()
-    }
-  }
-
-  /**
-   * Retrieves a list of all the report jobs created by the user identified by
-   * {@code userID}.
-   *
-   * @param userID ID of the user whose report jobs should be retrieved.
-   *
-   * @return A list of 0 or more report jobs linked to the user identified by
-   * {@code userID}.
-   */
-  fun listAllReports(userID: Long): List<ReportResponse> {
-    Log.trace("::listAllReports(userID={})", userID)
-
-    try {
-      return ReportManager.getAllReportsForUser(userID).map { it.convert() }
     } catch (e: Exception) {
       throw e.wrap()
     }
@@ -132,7 +113,7 @@ internal object ReportService {
       if (maxSize != null && out.length() > maxSize)
         throw BadRequestException("Requested report is larger than the specified max content size.")
 
-      if (rep.config.outFormat == null)
+      if (rep.config?.outFormat == null)
         return ReportDownload(file, download, out.inputStream())
       if (rep.config.outFormat!!.type == null)
         return ReportDownload(file, download, out.inputStream())
@@ -148,7 +129,7 @@ internal object ReportService {
   fun UserReportRow.convert() = ReportResponse(
     jobID,
     reportID,
-    config.toExternal(jobID),
+    config?.toExternal(jobID),
     status,
     description
   )

@@ -348,16 +348,17 @@ object BlastManager {
   // ║                                                                      ║ //
   // ╚══════════════════════════════════════════════════════════════════════╝ //
 
-  fun submitJob(job: BlastJob) = BlastDBManager().use { handleJobs(it, job) }
+  fun submitJob(job: MBlastJob) = BlastDBManager().use { handleJobs(it, job) }
 
-  private fun handleJobs(db: BlastDBManager, job: BlastJob): FullUserBlastRow {
-
-    TODO("does ortho do sub-jobs?")
+  private fun handleJobs(db: BlastDBManager, job: MBlastJob): FullUserBlastRow {
 
     val root = handleJob(db, job, job.query.getFullQuery())
 
+    // If the job config is not a BlastConfig then it is for protein mapping
+    // which does not have sub-jobs.
+    //
     // If size is 1 then it's the whole query, which we've already handled.
-    if (job.query.sequences.size > 1) {
+    if (job.config is BlastConfig && job.query.sequences.size > 1) {
 
       // We reuse the job instance here since we would otherwise be done with
       // it.  Just a small optimization to avoid a bunch of repeated
@@ -378,7 +379,7 @@ object BlastManager {
     return populateLinks(db, root)
   }
 
-  private fun handleJob(db: BlastDBManager, job: BlastJob, query: String): UserBlastRow {
+  private fun handleJob(db: BlastDBManager, job: MBlastJob, query: String): UserBlastRow {
 
     val jobID = job.digest(query)
 
@@ -420,14 +421,13 @@ object BlastManager {
   }
 
   private fun getUserBlastRow(
-    db: BlastDBManager,
+    db:    BlastDBManager,
     jobID: HashID,
-    job: BlastJob
+    job:   MBlastJob
   ): UserBlastRow? {
     val row = db.getUserBlastRow(jobID, job.userID) ?: return null
 
     Log.info("Cache hit for job {} and user {}.", jobID, job.userID)
-
 
     // If the user has this job already exists, refresh it to see if it needs to
     // be rerun, then rerun it if needed.
@@ -451,9 +451,9 @@ object BlastManager {
   }
 
   private fun getBlastRow(
-    db: BlastDBManager,
+    db:    BlastDBManager,
     jobID: HashID,
-    job: BlastJob
+    job:   MBlastJob
   ): UserBlastRow? {
     val unlinked = db.getBlastRow(jobID) ?: return null
 

@@ -32,12 +32,12 @@ internal class UnresolvedWorkspace(
     if (directory.exists()) {
       val flagFile = File(directory, diamondFlagFile)
 
-      if (flagFile.exists())
-        return DiamondWorkspace(jobID, directory)
+      return if (flagFile.exists())
+        DiamondWorkspace(jobID, directory)
       else
-        return BlastWorkspace(jobID, directory)
+        BlastWorkspace(jobID, directory)
     }
 
-    TODO("auto-determine if it is diamond or blast; throw if dir not exists")
+    throw IllegalStateException("attempted to resolve a workspace that does not exist: $directory")
   }
 }

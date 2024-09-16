@@ -9,7 +9,6 @@ import java.util.zip.ZipOutputStream
 
 internal class DiamondReportWorkspace(
   override val parent: MBlastWorkspace,
-  override val reportID: HashID
 )
   : ReportWorkspace
   , Workspace by parent
@@ -19,8 +18,14 @@ internal class DiamondReportWorkspace(
     const val MetaJson  = "meta.json"
   }
 
-  override val hasReportZip get() = parent.hasResult
-  override val hasMetaJson get()  = parent.hasResult
+  override val reportID: HashID
+    get() = parent.jobID
+
+  override val hasReportZip
+    get() = parent.hasResult
+
+  override val hasMetaJson
+    get()  = parent.hasResult
 
   override val reportZip by lazy { ensureZip() }
 

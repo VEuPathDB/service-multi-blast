@@ -16,9 +16,9 @@ class SequenceDefLineValidationError(val badDefLines: List<Int>) : SequenceValid
 }
 
 class SequenceCharacterValidationError(
-  val sequence: Int,
-  val line: Int,
-  val position: Int,
+  val sequence:  Int,
+  val line:      Int,
+  val position:  Int,
   val character: Char
 ) : SequenceValidationError {
   override val message

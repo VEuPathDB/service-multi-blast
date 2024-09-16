@@ -1,12 +1,17 @@
-
 package mb.lib.report
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import mb.lib.report.model.ReportMeta
 import mb.lib.model.JobStatus
+import mb.lib.query.BlastDBManager
+import mb.lib.query.model.DiamondConfig
 import mb.lib.report.model.ReportJob
 import mb.lib.report.model.ReportPayload
 import mb.lib.report.model.ReportRow
 import mb.lib.report.model.UserReportRow
+import mb.lib.workspace.BlastWorkspace
+import mb.lib.workspace.DiamondReportWorkspace
+import mb.lib.workspace.DiamondWorkspace
 import mb.lib.workspace.Workspaces
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.hash_id.HashID
@@ -29,20 +34,33 @@ object ReportManager {
    *
    * @return an optional input stream over the target file.
    */
-  fun getReportFile(row: ReportRow, file: String): File? {
-    with(Workspaces.open(row.jobID)) {
-      exists || return null
+  fun getReportFile(row: ReportRow, file: String): File? =
+    Workspaces.open(row.jobID)
+      .resolve()
+      .takeIf { it.exists }
+      ?.let {
+        when (it) {
+          is BlastWorkspace   -> getReportFile(row, it, file)
+          is DiamondWorkspace -> getReportFile(row, it, file)
+        }
+      }
 
-      val rs = reportWorkspace(row.reportID)
+  private fun getReportFile(row: ReportRow, workspace: DiamondWorkspace, file: String) =
+    if (file == DiamondReportWorkspace.ReportZip)
+      workspace.reportWorkspace(row.reportID)
+        .getFile(file)
+        .takeIf { it.exists() }
+    else
+      null
 
-      rs.exists || return null
-
-      return rs.getFile(file).let { if (it.exists()) it else null }
-    }
-  }
+  private fun getReportFile(row: ReportRow, workspace: BlastWorkspace, file: String) =
+    workspace.reportWorkspace(row.reportID)
+      .getFile(file)
+      .takeIf { it.exists() }
 
   fun getUserReportsForJob(jobID: HashID, userID: Long): List<UserReportRow> {
     Log.trace("::getUserReportsForJob(jobID={}, userID={})", jobID, userID)
+
     ReportDBManager().use {
       val out = it.getUserJobReports(jobID, userID)
 
@@ -57,16 +75,27 @@ object ReportManager {
 
   fun getAllReportsForUser(userID: Long): List<UserReportRow> {
     Log.trace("::getAllReportsForUser(userID={})", userID)
-    ReportDBManager().use {
-      val out = it.getUserJobReports(userID)
 
-      for (rep in out) {
+    // For the user's diamond jobs, create imaginary report records to have
+    // something to show and for the client to use.
+    val results = BlastDBManager().use {
+      it.getUserJobs(userID)
+        .asSequence()
+        .filter { it.config is DiamondConfig }
+        .map { UserReportRow(it.jobID, it.jobID, it.status!!, null, it.queueID!!, it.createdOn!!, userID, null) }
+        .toMutableList()
+    }
+
+    ReportDBManager().use {
+      it.getUserJobReports(userID).forEach { rep ->
         if (rep.status == JobStatus.Queued || rep.status == JobStatus.InProgress)
           updateJobStatus(rep)
-      }
 
-      return out
+        results.add(rep)
+      }
     }
+
+    return results
   }
 
   /**
@@ -79,19 +108,17 @@ object ReportManager {
     ReportDBManager().use { refreshJobStatus(it, row) }
   }
 
-  fun getReportFiles(row: ReportRow): List<String> {
-    with(Workspaces.open(row.jobID)) {
-      exists || return emptyList()
-
-      val rs = reportWorkspace(row.reportID)
-      rs.exists      || return emptyList()
-      rs.hasMetaJson || return emptyList()
-
-      return Json.Mapper
-        .readValue(rs.metaJson, ReportMeta::class.java)
-        .files
-    }
-  }
+  fun getReportFiles(row: ReportRow): List<String> =
+    Workspaces.open(row.jobID)
+      .resolve()
+      .takeIf { it is BlastWorkspace }
+      ?.takeIf { it.exists }
+      ?.reportWorkspace(row.reportID)
+      ?.takeIf { it.exists }
+      ?.takeIf { it.hasMetaJson }
+      ?.let { Json.Mapper.readValue<ReportMeta>(it.metaJson) }
+      ?.files
+      ?: emptyList()
 
   /**
    * Looks up a report by ID and links the given user to the report if they were
@@ -111,7 +138,7 @@ object ReportManager {
 
       if (userRow != null) {
         refreshJobStatus(db, userRow)
-        Log.debug("Job status = ${userRow.status}")
+        Log.debug("Job status = {}", userRow.status)
         return userRow
       }
 
@@ -129,7 +156,7 @@ object ReportManager {
       val raw = rawRow.get()
 
       refreshJobStatus(db, raw)
-      Log.debug("Job status = ${raw.status}")
+      Log.debug("Job status = {}", raw.status)
 
       return UserReportRow(
         reportID,
@@ -160,7 +187,12 @@ object ReportManager {
           return try1
 
         // Create a workspace for the report job.
-        Workspaces.open(try1.jobID).reportWorkspace(reportID).createIfNotExists()
+        val jobWs = Workspaces.open(try1.jobID).resolve()
+
+        if (jobWs !is BlastWorkspace)
+          throw IllegalStateException("attempted to rerun a report on a non-blast job")
+
+        jobWs.reportWorkspace(reportID).createIfNotExists()
 
         // Submit the job to be re-run
         val queueID = ReportQueueManager.submitNewJob(ReportPayload(
@@ -243,7 +275,12 @@ object ReportManager {
       Log.debug("No pre-existing job found.")
 
       // Create a report job workspace.
-      Workspaces.open(job.jobID).reportWorkspace(reportID).createIfNotExists()
+      Workspaces.open(job.jobID)
+        .resolve()
+        .takeIf { it is BlastWorkspace }
+        ?.reportWorkspace(reportID)
+        ?.createIfNotExists()
+        ?: throw IllegalStateException("attempted to create a new report for a non-blast query")
 
       // Queue the job to be executed.
       val queueID = ReportQueueManager.submitNewJob(ReportPayload(
@@ -288,8 +325,11 @@ object ReportManager {
 
       // Create the report job workspace.
       Workspaces.open(oldJob.jobID)
-        .reportWorkspace(oldJob.reportID)
-        .createIfNotExists()
+        .resolve()
+        .takeIf { it is BlastWorkspace }
+        ?.reportWorkspace(oldJob.reportID)
+        ?.createIfNotExists()
+        ?: throw IllegalStateException("attempted to create or link a new report on a non-blast query job")
 
       // Queue the job
       ReportQueueManager.submitNewJob(ReportPayload(job.jobID, job.getReportID(), job.config))
@@ -353,43 +393,47 @@ object ReportManager {
   private fun refreshJobStatus(db: ReportDBManager, row: ReportRow) {
 
     // Determine job status.
-    val status = Workspaces.open(row.jobID).let bw@ { bws ->
-      // If the blast workspace does not exist, the job has expired.
-      if (!bws.exists) {
-        Log.debug("Blast job workspace ${row.jobID} does not exist.")
-        return@bw JobStatus.Expired
-      }
+    val status = Workspaces.open(row.jobID)
+      .resolve()
+      .takeIf { it is BlastWorkspace }
+      ?.let bw@ { bws ->
+        // If the blast workspace does not exist, the job has expired.
+        if (!bws.exists) {
+          Log.debug("Blast job workspace {} does not exist.", row.jobID)
+          return@bw JobStatus.Expired
+        }
 
-      // Test the report workspace
-      bws.reportWorkspace(row.reportID).let { rws ->
-        when {
-          // If the report workspace does not exist, the job has expired?
-          !rws.exists -> {
-            Log.debug("Report job {}/{} does not exist.", row.jobID, row.reportID)
-            JobStatus.Expired
+        // Test the report workspace
+        bws.reportWorkspace(row.reportID).let { rws ->
+          when {
+            // If the report workspace does not exist, the job has expired?
+            !rws.exists -> {
+              Log.debug("Report job {}/{} does not exist.", row.jobID, row.reportID)
+              JobStatus.Expired
+            }
+
+            // If the report workspace contains a success flag file, the job
+            // completed successfully.
+            rws.hasSuccessFlag() -> {
+              Log.debug("Report job {}/{} has a success flag.", row.jobID, row.reportID)
+              JobStatus.Completed
+            }
+
+            // If the report workspace contains a failed flag file, the job
+            // completed unsuccessfully.
+            rws.hasFailedFlag() -> {
+              Log.debug("Report job {}/{} has a failed flag.", row.jobID, row.reportID)
+              JobStatus.Errored
+            }
+
+            // If the workspace exists, but there is no completion flag, then the
+            // job is either still in progress, or in limbo due to a filesystem
+            // error.
+            else -> JobStatus.InProgress
           }
-
-          // If the report workspace contains a success flag file, the job
-          // completed successfully.
-          rws.hasSuccessFlag() -> {
-            Log.debug("Report job {}/{} has a success flag.", row.jobID, row.reportID)
-            JobStatus.Completed
-          }
-
-          // If the report workspace contains a failed flag file, the job
-          // completed unsuccessfully.
-          rws.hasFailedFlag() -> {
-            Log.debug("Report job {}/{} has a failed flag.", row.jobID, row.reportID)
-            JobStatus.Errored
-          }
-
-          // If the workspace exists, but there is no completion flag, then the
-          // job is either still in progress, or in limbo due to a filesystem
-          // error.
-          else -> JobStatus.InProgress
         }
       }
-    }
+      ?: throw IllegalStateException("attempted to get a report job status for a non-blast query")
 
     // If the status has changed since it was last observed, update the
     // database.

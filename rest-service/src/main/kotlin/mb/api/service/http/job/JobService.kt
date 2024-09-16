@@ -6,6 +6,7 @@ import mb.api.model.IOJsonJobRequest
 import mb.api.model.blast.IOBlastConfig
 import mb.api.model.dmnd.IODiamondConfig
 import mb.api.model.dmnd.databaseFile
+import mb.api.model.dmnd.maxTargetSeqs
 import mb.api.model.dmnd.toInternal
 import mb.api.model.io.JsonKeys
 import mb.api.service.model.ErrorMap
@@ -13,16 +14,14 @@ import mb.lib.blast.model.BlastQuery
 import mb.lib.config.Config
 import mb.lib.dmnd.DiamondQuery
 import mb.lib.query.BlastManager
-import mb.lib.query.MBlastQuery
 import mb.lib.query.model.BlastConfig
-import mb.lib.query.model.BlastJob
+import mb.lib.query.model.MBlastJob
 import mb.lib.query.model.DiamondConfig
 import mb.lib.util.convert
 import mb.lib.util.then
 import mb.lib.util.toInternal
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
 import java.io.InputStream
-import kotlin.math.min
 
 object JobService {
   private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
@@ -83,7 +82,7 @@ object JobService {
     val dbPath = makeDBPaths(request.site, request.targets)
     conv.dbFile = dbPath
 
-    val res = BlastManager.submitJob(BlastJob(
+    val res = BlastManager.submitJob(MBlastJob(
       config      = BlastConfig(conv),
       query       = query,
       site        = request.site,
@@ -141,8 +140,9 @@ object JobService {
   ): IOJobPostResponse {
     val conv = config.toInternal()
     conv.databaseFile = makeOrthoDBPath(req.site)
+    conv.maxTargetSeqs = 1 // FORCE MAX TARGET SEQUENCES TO 1 FOR PROTEIN MAPPING!
 
-    val res = BlastManager.submitJob(BlastJob(
+    val res = BlastManager.submitJob(MBlastJob(
       config      = DiamondConfig(conv),
       query       = query,
       site        = req.site,
@@ -159,12 +159,16 @@ object JobService {
   }
 
   private fun processDiamondQuery(input: String, config: IODiamondConfig, req: IOJsonJobRequest): DiamondQuery {
-    if (input.length > Config.maxInputQuerySize)
-      throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is too large."))
+    // protein mapping queries may be significantly larger than multi-blast
+    // queries.
+    // if (input.length > Config.maxInputQuerySize)
+    //   throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is too large."))
 
     return DiamondQuery.fromString(config.tool, input).apply {
-      if (sequences.size > Config.maxQueries)
-        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, String.format(ErrTooManySeqs, Config.maxQueries)))
+      // protein mapping queries may have significantly more sequences than
+      // multi-blast queries.
+      // if (sequences.size > Config.maxQueries)
+      //  throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, String.format(ErrTooManySeqs, Config.maxQueries)))
 
       validate()?.then { throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, it.message)) }
 

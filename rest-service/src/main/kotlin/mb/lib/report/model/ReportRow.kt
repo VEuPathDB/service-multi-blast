@@ -14,7 +14,7 @@ open class ReportRow(
   val reportID: HashID,
   val jobID: HashID,
   var status: JobStatus,
-  val config: BlastFormatter,
+  val config: BlastFormatter?,
   var queueID: Int,
   val createdOn: OffsetDateTime
 ) {
@@ -24,7 +24,7 @@ open class ReportRow(
     put(JsonKeys.ReportID, reportID.string)
     put(JsonKeys.JobID, jobID.string)
     put(JsonKeys.Status, status.value)
-    put(JsonKeys.Config, config.toJSON().toJSON())
+    put(JsonKeys.Config, config?.toJSON()?.toJSON())
     put(JsonKeys.QueueID, queueID)
     put(JsonKeys.CreatedOn, createdOn.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
   }

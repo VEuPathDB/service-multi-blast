@@ -3,7 +3,7 @@ package mb.lib.workspace
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
 
-interface ReportWorkspace : Workspace {
+sealed interface ReportWorkspace : Workspace {
   /**
    * Parent blast workspace.
    */

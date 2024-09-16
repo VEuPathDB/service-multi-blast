@@ -12,7 +12,7 @@ class UserReportRow(
   reportID: HashID,
   jobID: HashID,
   status: JobStatus,
-  config: BlastFormatter,
+  config: BlastFormatter?,
   queueID: Int,
   createdOn: OffsetDateTime,
   val userID: Long,

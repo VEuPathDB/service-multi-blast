@@ -2,7 +2,7 @@ openapi: 3.1.0
 
 info:
   title: Multi Blast
-  version: 1.0.0
+  version: 1.9.0
   license:
     name: Apache 2.0
     identifier: Apache-2.0
@@ -85,7 +85,6 @@ paths:
           $ref: "#/components/responses/err422"
         500:
           $ref: "#/components/responses/err500"
-
 
 
   /jobs/{job-id}:
@@ -319,6 +318,7 @@ paths:
           $ref: "#/components/responses/err404"
         500:
           $ref: "#/components/responses/err500"
+
 
   /link-guest:
     post:

@@ -11,11 +11,15 @@ object JobCleanup: Runnable
     try {
       Log.info("Starting job cleanup.")
 
-      val ws = Workspaces.getExpiredWorkspaces()
-      ws.forEach { it.delete() }
+      var deleteCount = 0
 
-      Log.info("Job cleanup completed.  Deleted {} workspaces.", ws.size)
+      Workspaces.getExpiredWorkspaces()
+        .forEach {
+          it.delete()
+          deleteCount++
+        }
 
+      Log.info("Job cleanup completed.  Deleted {} workspaces.", deleteCount)
     } catch (e: Exception) {
       throw RuntimeException(e)
     }
