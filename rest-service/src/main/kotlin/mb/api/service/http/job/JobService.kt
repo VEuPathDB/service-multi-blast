@@ -4,7 +4,7 @@ import jakarta.ws.rs.InternalServerErrorException
 import mb.api.model.IOJobPostResponse
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.blast.IOBlastConfig
-import mb.api.model.dmnd.IODiamondConfig
+import mb.api.model.dmnd.*
 import mb.api.model.dmnd.databaseFile
 import mb.api.model.dmnd.maxTargetSeqs
 import mb.api.model.dmnd.toInternal
@@ -20,8 +20,11 @@ import mb.lib.query.model.DiamondConfig
 import mb.lib.util.convert
 import mb.lib.util.then
 import mb.lib.util.toInternal
+import mb.lib.workspace.AbstractWorkspace
+import mb.lib.workspace.DiamondWorkspace
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
 import java.io.InputStream
+import kotlin.io.path.Path
 
 object JobService {
   private const val ErrTooManySeqs = "Too many sequences in input query.  Queries can have at most %d sequences."
@@ -141,6 +144,9 @@ object JobService {
     val conv = config.toInternal()
     conv.databaseFile = makeOrthoDBPath(req.site)
     conv.maxTargetSeqs = 1 // FORCE MAX TARGET SEQUENCES TO 1 FOR PROTEIN MAPPING!
+    conv.quiet = true
+    conv.outputFile = Path(DiamondWorkspace.ResultFile)
+    conv.query = Path(AbstractWorkspace.QueryFile)
 
     val res = BlastManager.submitJob(MBlastJob(
       config      = DiamondConfig(conv),

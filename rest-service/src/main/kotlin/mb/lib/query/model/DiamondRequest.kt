@@ -24,6 +24,6 @@ data class DiamondRequest(
   fun toJSON() = Json.newObject {
     put(JsonKeys.JobID, jobID.string)
     put(JsonKeys.Tool, tool.command)
-    put(JsonKeys.Config, config.toBlastServerParams().toJsonArray())
+    put(JsonKeys.Params, config.toBlastServerParams().toJsonArray())
   }
 }

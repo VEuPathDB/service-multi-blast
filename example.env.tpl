@@ -10,10 +10,12 @@ AUTH_SECRET_KEY=
 # HTTP Server bind port
 SERVER_PORT=80
 
+# OAuth Config
 OAUTH_CLIENT_ID=
 OAUTH_CLIENT_SECRET=
 OAUTH_URL=
 
+# Admin endpoint auth token
 ADMIN_AUTH_TOKEN=
 
 # LDAP servers used to fetch DB connection details.
@@ -57,11 +59,18 @@ USER_DB_PASS=
 # Job data workspace mount point.
 JOB_MOUNT_PATH=/out
 
+# Local machine location where blast workspaces will be created (this dir SHOULD
+# exist before starting up the stack)
 LOCAL_HOST_WORKSPACE_MOUNT_PATH=/home/${USER}/blastout
 
 # Blast file mount point.
 DB_MOUNT_PATH=/db
 
+# Local machine location where target blast databases are saved (this dir MUST
+# exist before starting up the stack)
+#
+# This directory should match the directory structure of the webServices
+# directory on VEuPathDB servers.
 LOCAL_HOST_DB_MOUNT_PATH=/home/${USER}/blastdb
 
 # Site build (used to resolve blast target paths)

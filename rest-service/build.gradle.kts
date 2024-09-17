@@ -79,6 +79,10 @@ allprojects {
         password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
       }
     }
+    maven {
+      name = "Sonatype Releases"
+      url = uri("https://s01.oss.sonatype.org/content/repositories/releases")
+    }
   }
 }
 
@@ -94,7 +98,7 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
-  implementation("org.veupathdb.lib:diamondcli:0.5.2")
+  implementation("org.veupathdb.lib:diamondcli:0.5.12")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
@@ -121,7 +125,7 @@ dependencies {
   implementation("io.vulpine.lib:iffy:1.0.1")
   implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
   implementation("info.picocli:picocli:4.7.3")
-  implementation("io.foxcapades.kt:cli-builder:0.7.1")
+  implementation("io.foxcapades.kt:cli-builder:0.8.5")
   annotationProcessor("info.picocli:picocli-codegen:4.7.3")
 
   implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")

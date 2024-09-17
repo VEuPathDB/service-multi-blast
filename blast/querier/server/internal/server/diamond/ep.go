@@ -80,13 +80,9 @@ func (e Endpoint) Handle(req midl.Request) midl.Response {
 	stderr := spipe.NewSplitWriter(errFile, util.StdErrLogger(log))
 	stderr.IgnoreErrors(true)
 
-	args := make([]string, len(request.Params)+5)
+	args := make([]string, len(request.Params)+1)
 	args[0] = request.Tool
-	args[1] = "--out"
-	args[2] = "report.pairwise"
-	args[3] = "--query"
-	args[4] = "query.txt"
-	copy(args[5:], request.Params)
+	copy(args[1:], request.Params)
 
 	cmd := exec.Command("/diamond/bin/diamond", args...)
 	cmd.Env = os.Environ()
