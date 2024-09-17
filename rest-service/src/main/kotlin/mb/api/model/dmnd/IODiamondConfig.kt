@@ -1,6 +1,7 @@
 package mb.api.model.dmnd
 
 import com.fasterxml.jackson.annotation.JsonGetter
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
 import mb.api.model.io.JsonKeys
 import org.veupathdb.lib.cli.diamond.DiamondCommand
@@ -9,6 +10,7 @@ import org.veupathdb.lib.cli.diamond.opts.fields.MaskingMode
 import org.veupathdb.lib.cli.diamond.opts.fields.Sensitivity
 import org.veupathdb.lib.cli.diamond.opts.fields.output_format.OutputFormatOptions
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class IODiamondConfig(
   @get:JsonGetter(JsonKeys.Tool)
   val tool: DiamondCommand,

@@ -98,7 +98,7 @@ dependencies {
   implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
   implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
   implementation("org.veupathdb.lib:java-blast:5.0.9")
-  implementation("org.veupathdb.lib:diamondcli:0.5.12")
+  implementation("org.veupathdb.lib:diamondcli:0.5.17")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")

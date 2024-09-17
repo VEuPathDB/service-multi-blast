@@ -14,14 +14,18 @@ import mb.api.service.http.wrap
 import mb.lib.query.BlastDBManager
 import mb.lib.query.model.DiamondConfig
 import mb.lib.report.ReportManager
+import mb.lib.util.logger
 import mb.lib.workspace.DiamondWorkspace
 import org.glassfish.jersey.server.ContainerRequest
 import org.veupathdb.lib.container.jaxrs.server.annotations.Authenticated
 import org.veupathdb.lib.hash_id.HashID
+import org.veupathdb.lib.jackson.Json
 
 @Authenticated(allowGuests = true)
 class ReportController(@Context private val request: ContainerRequest): Reports
 {
+  private val logger = logger()
+
   override fun getAllReports(jobID: String?): List<ReportResponse> =
     if (jobID != null) {
       hashIDorThrow(jobID, ::NotFoundException).let { jobID ->
@@ -78,6 +82,7 @@ class ReportController(@Context private val request: ContainerRequest): Reports
 
   private fun isDiamondQueryJob(reportID: HashID): Boolean {
     return BlastDBManager().use { it.getBlastRow(reportID) }
+      ?.also { logger.debug("found row: {}") { Json.Mapper.writeValueAsString(it) }  }
       ?.takeIf { it.config is DiamondConfig } != null
   }
 }

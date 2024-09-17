@@ -5,7 +5,6 @@ import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.util.*
 
 data class SelectBlastJob(private val con: Connection, private val jobID: HashID) {
   companion object {

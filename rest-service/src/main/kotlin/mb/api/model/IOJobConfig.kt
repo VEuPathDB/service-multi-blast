@@ -1,5 +1,6 @@
 package mb.api.model
 
+import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
@@ -14,6 +15,7 @@ import org.veupathdb.lib.jackson.Json
 
 @JsonDeserialize(using = IOJobConfigDeserializer::class)
 sealed interface IOJobConfig<T> {
+  @get:JsonValue
   val typedConfig: T
 }
 

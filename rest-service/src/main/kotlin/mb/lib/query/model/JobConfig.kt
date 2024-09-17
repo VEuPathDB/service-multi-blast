@@ -1,3 +1,7 @@
 package mb.lib.query.model
 
-sealed interface JobConfig
+import com.fasterxml.jackson.databind.JsonNode
+
+sealed interface JobConfig {
+  fun toJson(): JsonNode
+}

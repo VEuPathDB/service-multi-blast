@@ -3,6 +3,7 @@ package mb.api.service.http.report
 import jakarta.ws.rs.NotFoundException
 import mb.api.model.reports.ReportResponse
 import mb.lib.model.JobStatus
+import mb.lib.util.logger
 import mb.lib.workspace.DiamondReportWorkspace
 import mb.lib.workspace.DiamondWorkspace
 import mb.lib.workspace.Workspaces
@@ -10,6 +11,8 @@ import org.veupathdb.lib.hash_id.HashID
 import java.io.File
 
 internal object DiamondReportService {
+  private val logger = logger()
+
   fun getReportInfo(queryJobID: HashID): ReportResponse =
     with(Workspaces.open(queryJobID).resolveAsDiamond()) {
       ReportResponse(queryJobID, queryJobID, null, when {

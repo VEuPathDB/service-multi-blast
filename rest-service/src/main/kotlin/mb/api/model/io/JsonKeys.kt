@@ -60,7 +60,7 @@ object JsonKeys {
   const val Linker = "linker"
   const val LowCut = "locut"
   const val LowercaseMasking = "lcaseMasking"
-  const val Masking = "Masking"
+  const val Masking = "masking"
   const val Matrix = "matrix"
   const val MaxHSPs = "maxHSPs"
   const val MaxIntronLength = "maxIntronLength"

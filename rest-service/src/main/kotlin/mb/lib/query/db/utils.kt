@@ -5,7 +5,6 @@ package mb.lib.query.db
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import mb.api.model.io.JsonKeys
-import mb.lib.dmnd.DiamondCommandConfig
 import mb.lib.model.JobStatus
 import mb.lib.query.model.*
 import mb.lib.util.convertJobConfig
@@ -77,7 +76,7 @@ private fun parseJobConfig(json: String): JobConfig {
 
   if (node[JsonKeys.Tool]?.textValue()?.startsWith("diamond-") == true) {
     node.put(JsonKeys.Tool, node[JsonKeys.Tool].textValue().substring(8))
-    return DiamondConfig(DiamondCommandConfig(node))
+    return DiamondConfig(Json.parse(node))
   }
 
   return BlastConfig(convertJobConfig(node))

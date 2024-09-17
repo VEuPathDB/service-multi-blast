@@ -1,20 +1,12 @@
 package mb.lib.query.model
 
-import org.veupathdb.lib.cli.diamond.commands.BlastP
-import org.veupathdb.lib.cli.diamond.commands.BlastX
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.veupathdb.lib.cli.diamond.commands.DiamondCommandConfig
+import org.veupathdb.lib.jackson.Json
 
 @JvmInline
 value class DiamondConfig(val config: DiamondCommandConfig) : JobConfig {
-  inline val isBlastP
-    get() = config is BlastP
-
-  inline val asBlastP
-    get() = config as BlastP
-
-  inline val isBlastX
-    get() = config is BlastX
-
-  inline val asBlastX
-    get() = config as BlastX
+  override fun toJson() = Json.convert(config)
+    .let { it as ObjectNode }
+    .apply { put("tool", "diamond-" + get("tool")) }
 }
