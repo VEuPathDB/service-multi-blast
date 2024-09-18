@@ -267,6 +267,45 @@ paths:
       schema:
         type: boolean
         default: true
+    - name: lines
+      description: "Content-range by lines."
+      in: query
+      required: false
+      schema:
+        type: string
+        pattern: '^\d+(-\d+)?$'
+        examples:
+        - 1
+        - 1-100
+    - name: headers
+      description: |-
+        Prepend header line.
+        
+        This value should be a comma-separated list of header fields that will
+        be written out at the start of a report's contents.
+        
+        This param is only allowed on DIAMOND reports.
+      in: query
+      required: false
+      schema:
+        type: string
+        examples:
+        - 'foo,bar,fizz,buzz'
+    - name: Content-Range
+      description: |-
+        Content range to return.
+        
+        Units may be one of:
+        * `lines`
+        * `bytes`
+      in: header
+      required: false
+      schema:
+        type: string
+        pattern: '^(lines|bytes) (\d+-\d+|\*)/(\d+|\*)$'
+        examples:
+        - 'lines 1-100/*'
+
     get:
       tags:
       - Reports
