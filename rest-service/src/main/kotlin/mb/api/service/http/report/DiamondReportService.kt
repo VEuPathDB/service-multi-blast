@@ -20,7 +20,10 @@ internal object DiamondReportService {
         hasFailedFlag()  -> JobStatus.Errored
         hasSuccessFlag() -> throw IllegalStateException("job $queryJobID marked as completed successfully, but has no report")
         else             -> JobStatus.Queued   // TODO: is it worth the effort to determine the real query job status?
-      })
+      }).also {
+        if (it.status == JobStatus.Completed)
+          it.files.add(DiamondWorkspace.ResultFile)
+      }
     }
 
   fun getReportFile(queryJobID: HashID): File =

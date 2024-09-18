@@ -3,12 +3,15 @@ package mb.api.model.dmnd
 import com.fasterxml.jackson.annotation.JsonGetter
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.JsonValue
 import mb.api.model.io.JsonKeys
+import mb.lib.util.then
 import org.veupathdb.lib.cli.diamond.DiamondCommand
 import org.veupathdb.lib.cli.diamond.opts.fields.CompositionBasedStats
 import org.veupathdb.lib.cli.diamond.opts.fields.MaskingMode
 import org.veupathdb.lib.cli.diamond.opts.fields.Sensitivity
 import org.veupathdb.lib.cli.diamond.opts.fields.output_format.OutputFormatOptions
+import org.veupathdb.lib.jackson.Json
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class IODiamondConfig(
@@ -50,4 +53,16 @@ data class IODiamondConfig(
   @get:JsonGetter(JsonKeys.OutFormat)
   @set:JsonSetter(JsonKeys.OutFormat)
   var outFormat: OutputFormatOptions?,
-)
+) {
+  @JsonValue
+  fun toJson() = Json.newObject {
+    put(JsonKeys.Tool, "diamond-" + tool.command)
+    eValue?.then { put(JsonKeys.ExpectValue, it) }
+    maxTargetSeqs?.then { put(JsonKeys.MaxTargetSequences, it) }
+    sensitivity?.then { if (it != Sensitivity.Default) put(JsonKeys.Sensitivity, it.cliValue) }
+    compBasedStats?.then { put(JsonKeys.CompositionBasedStats, it.jsonName) }
+    iterate?.then { putPOJO(JsonKeys.Iterate, it) }
+    reportUnaligned?.then { put(JsonKeys.ReportUnaligned, it) }
+    outFormat?.then { putPOJO(JsonKeys.OutFormat, it) }
+  }
+}

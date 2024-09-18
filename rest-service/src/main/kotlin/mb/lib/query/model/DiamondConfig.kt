@@ -8,5 +8,5 @@ import org.veupathdb.lib.jackson.Json
 value class DiamondConfig(val config: DiamondCommandConfig) : JobConfig {
   override fun toJson() = Json.convert(config)
     .let { it as ObjectNode }
-    .apply { put("tool", "diamond-" + get("tool")) }
+    .apply { put("tool", "diamond-" + get("tool").textValue()) }
 }

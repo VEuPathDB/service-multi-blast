@@ -23,7 +23,7 @@ data class ReportResponse(
     Json.new {
       put(JsonKeys.JobID, jobID.string)
       put(JsonKeys.ReportID, reportID.string)
-      set<ObjectNode>(JsonKeys.Config, config!!.toJson())
+      set<ObjectNode>(JsonKeys.Config, config?.toJson())
       put(JsonKeys.Status, status.value)
       description?.let { put(JsonKeys.Description, it) }
 

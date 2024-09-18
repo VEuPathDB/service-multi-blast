@@ -2,7 +2,6 @@ package mb.lib.query.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery
 import mb.lib.query.model.BlastRow
-import org.veupathdb.lib.jackson.Json
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.time.OffsetDateTime
@@ -30,7 +29,7 @@ data class InsertBlastJob(private val con: Connection, private val row: BlastRow
 
   private fun prep(ps: PreparedStatement) {
     val time = OffsetDateTime.now()
-    val json = Json.convert(row.config!!).toString()
+    val json = row.config!!.toJson().toString()
 
     ps.setBytes(1, row.jobID.bytes)
     ps.setString(2, json)
