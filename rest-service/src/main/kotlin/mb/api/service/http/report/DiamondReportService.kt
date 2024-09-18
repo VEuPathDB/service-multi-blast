@@ -1,7 +1,9 @@
 package mb.api.service.http.report
 
 import jakarta.ws.rs.NotFoundException
+import mb.api.model.ContentRange
 import mb.api.model.reports.ReportResponse
+import mb.api.service.util.RangedStream
 import mb.lib.model.JobStatus
 import mb.lib.util.logger
 import mb.lib.workspace.DiamondReportWorkspace
@@ -9,6 +11,7 @@ import mb.lib.workspace.DiamondWorkspace
 import mb.lib.workspace.Workspaces
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
+import java.io.SequenceInputStream
 
 internal object DiamondReportService {
   private val logger = logger()
@@ -41,6 +44,27 @@ internal object DiamondReportService {
       .takeIf { it.exists() }
       ?: throw NotFoundException()
 
-  fun downloadReport(queryJobID: HashID, download: Boolean): ReportDownload =
-    ReportDownload(DiamondWorkspace.ResultFile, download, getReportFile(queryJobID).inputStream().buffered())
+  fun downloadReport(
+    queryJobID: HashID,
+    download:   Boolean,
+    headers:    String?,
+    range:      ContentRange?,
+  ): ReportDownload =
+    ReportDownload(
+      DiamondWorkspace.ResultFile,
+      download,
+      RangedStream(
+        if (headers == null || range == null)
+          range
+        else
+          ContentRange(range.units, range.range.first..range.range.last+1),
+        if (headers == null)
+          getReportFile(queryJobID).inputStream()
+        else
+          SequenceInputStream(
+            (headers.replace(',', '\t') + System.lineSeparator()).byteInputStream(),
+            getReportFile(queryJobID).inputStream().buffered(),
+          )
+      )
+    )
 }

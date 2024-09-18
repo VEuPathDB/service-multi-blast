@@ -2,15 +2,15 @@ package mb.api.service.http.report
 
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.core.StreamingOutput
+import mb.api.service.util.RangedStream
 import mb.lib.http.Header
 import mb.lib.http.MimeType
-import java.io.InputStream
 import java.io.OutputStream
 
-data class ReportDownload(
+internal data class ReportDownload(
   private val fileName: String,
   private val download: Boolean,
-  private val stream:   InputStream,
+  private val stream:   RangedStream,
 ): StreamingOutput {
 
   companion object {
@@ -18,7 +18,7 @@ data class ReportDownload(
   }
 
   override fun write(output: OutputStream) {
-    stream.buffered().use { it.transferTo(output) }
+    stream.write(output)
   }
 
   fun toResponse(): Response {

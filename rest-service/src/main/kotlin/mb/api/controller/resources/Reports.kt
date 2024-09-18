@@ -56,6 +56,9 @@ interface Reports
     @PathParam(Vars.ReportID) reportID: String,
     @PathParam(Vars.FileName) fileName: String,
     @QueryParam("download") @DefaultValue("true") download: Boolean,
+    @QueryParam("headers") headers: String?,
+    @QueryParam("lines") lineRange: String?,
     @HeaderParam(Headers.ContentMaxLength) contentMaxLength: Long?,
+    @HeaderParam(Headers.ContentRange) contentRange: String?,
   ): Response
 }

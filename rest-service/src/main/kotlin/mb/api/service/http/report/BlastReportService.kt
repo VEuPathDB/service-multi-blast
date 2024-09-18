@@ -2,10 +2,12 @@ package mb.api.service.http.report
 
 import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.NotFoundException
+import mb.api.model.ContentRange
 import mb.api.model.reports.ReportRequest
 import mb.api.model.reports.ReportResponse
 import mb.api.model.reports.toExternal
 import mb.api.service.http.wrap
+import mb.api.service.util.RangedStream
 import mb.lib.model.JobStatus
 import mb.lib.query.BlastManager
 import mb.lib.report.ReportManager
@@ -102,7 +104,14 @@ internal object BlastReportService {
   }
 
 
-  fun downloadReport(reportID: HashID, userID: Long, file: String, download: Boolean, maxSize: Long?): ReportDownload {
+  fun downloadReport(
+    reportID: HashID,
+    userID: Long,
+    file: String,
+    download: Boolean,
+    maxSize: Long?,
+    range: ContentRange?,
+  ): ReportDownload {
     Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={}, maxSize={})", reportID, userID, file, download, maxSize)
     try {
       val rep = ReportManager.getAndLinkReport(reportID, userID)
@@ -114,11 +123,11 @@ internal object BlastReportService {
         throw BadRequestException("Requested report is larger than the specified max content size.")
 
       if (rep.config?.outFormat == null)
-        return ReportDownload(file, download, out.inputStream())
+        return ReportDownload(file, download, RangedStream(range, out.inputStream()))
       if (rep.config.outFormat!!.type == null)
-        return ReportDownload(file, download, out.inputStream())
+        return ReportDownload(file, download, RangedStream(range, out.inputStream()))
 
-      return ReportDownload(file, download, out.inputStream())
+      return ReportDownload(file, download, RangedStream(range, out.inputStream()))
     } catch (e: Exception) {
       throw e.wrap()
     }
