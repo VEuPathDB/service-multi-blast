@@ -188,10 +188,8 @@ services:
 networks:
   internal:
     internal: true
-  traefik:
-    external: true
-  monitoring-ext:
-    external: true
+  traefik: {}
+  monitoring-ext: {}
 
 volumes:
   blast-data:
