@@ -46,10 +46,8 @@ var (
 		Name: "diamond_times",
 		Help: "Diamond job durations in seconds.",
 		Buckets: []float64{
-			10,   // 10 Seconds
-			30,   // 30 Seconds
 			60,   // 1 Minute
-			150,  // 2.5 Minutes
+			120,  // 2 Minutes
 			300,  // 5 Minutes
 			600,  // 10 Minutes
 			900,  // 15 Minutes
