@@ -5,13 +5,13 @@ WORKDIR /server
 RUN CGO_ENABLED=0 GOOS=linux go build -o server cmd/server/main.go
 RUN pwd && ls
 
-FROM alpine:3.20.3 AS run
+FROM ubuntu:22.04 AS run
 
 # Setup timezone and dependencies
-# libc6-compat needed by diamond
-# libgcc       needed by blast
-# libbz2       needed by blast
-RUN apk add --no-cache tzdata libc6-compat libgcc libbz2\
+RUN apt-get update --fix-missing \
+    && apt-get install -y tzdata wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
     && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
     && echo "America/New_York" > /etc/timezone
 
