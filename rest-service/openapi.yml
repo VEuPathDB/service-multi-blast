@@ -48,7 +48,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './schema/io/short-job-response.json'
+                  $ref: './schema/io/short-job-response.yml'
         401:
           $ref: "#/components/responses/err401"
         500:
