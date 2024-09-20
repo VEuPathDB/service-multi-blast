@@ -1,27 +1,27 @@
 "$schema": http://json-schema.org/draft-07/schema
 
-title: BlastP
+title: BlastX
 
 allOf:
-
-- "$ref": "./cli-config.yml"
-
+- "$ref": ./cli-config.yml
 - type: object
   properties:
     tool:
       type: string
       enum:
-      - blastp
+      - blastx
   required:
   - tool
-
 - properties:
+    strand:
+      "$ref": "./strand.yml"
+    queryGeneticCode:
+      "$ref": "./gencode.yml"
     task:
       type: string
       enum:
-      - blastp
-      - blastp-fast
-      - blastp-short
+      - blastx
+      - blastx-fast
     wordSize:
       type: integer
       minimum: 2
@@ -29,6 +29,10 @@ allOf:
       type: integer
     gapExtend:
       type: integer
+    maxIntronLength:
+      type: integer
+      minimum: 0
+      default: 0
     matrix:
       type: string
       enum:
@@ -40,14 +44,10 @@ allOf:
       - PAM30
       - PAM70
       - PAM250
-      - IDENTITY
-    threshold:
-      type: number
-      minimum: 0
     compBasedStats:
-      "$ref": ./comp-based-stats.yml
+      "$ref": "./comp-based-stats.yml"
     seg:
-      "$ref": seg.yml
+      "$ref": "./seg.yml"
     softMasking:
       type: boolean
       default: false
@@ -77,6 +77,8 @@ allOf:
     subjectBestHit:
       type: boolean
       default: false
+    sumStats:
+      type: boolean
     xDropGap:
       type: number
       default: 30

@@ -6,10 +6,10 @@ allOf:
     config:
       oneOf:
       - "$ref": "../blast/blastn.yml"
-      - "$ref": "../blast/blastp.json"
-      - "$ref": "../blast/blastx.json"
-      - "$ref": "../blast/tblastn.json"
-      - "$ref": "../blast/tblastx.json"
+      - "$ref": "../blast/blastp.yml"
+      - "$ref": "../blast/blastx.yml"
+      - "$ref": "../blast/tblastn.yml"
+      - "$ref": "../blast/tblastx.yml"
       - "$ref": "../diamond/blastp.yml"
       - "$ref": "../diamond/blastx.yml"
   required:

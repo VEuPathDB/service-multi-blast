@@ -1,27 +1,21 @@
 "$schema": http://json-schema.org/draft-07/schema
-
-title: BlastP
-
+title: TBlastN
 allOf:
-
-- "$ref": "./cli-config.yml"
-
+- "$ref": cli-config.yml
 - type: object
   properties:
     tool:
       type: string
       enum:
-      - blastp
+      - tblastn
   required:
   - tool
-
 - properties:
     task:
       type: string
       enum:
-      - blastp
-      - blastp-fast
-      - blastp-short
+      - tblastn
+      - tblastn-fast
     wordSize:
       type: integer
       minimum: 2
@@ -29,6 +23,12 @@ allOf:
       type: integer
     gapExtend:
       type: integer
+    dbGencode:
+      "$ref": ./gencode.yml
+    maxIntronLength:
+      type: integer
+      minimum: 0
+      default: 0
     matrix:
       type: string
       enum:
@@ -45,7 +45,7 @@ allOf:
       type: number
       minimum: 0
     compBasedStats:
-      "$ref": ./comp-based-stats.yml
+      "$ref": './comp-based-stats.yml'
     seg:
       "$ref": seg.yml
     softMasking:
@@ -77,6 +77,8 @@ allOf:
     subjectBestHit:
       type: boolean
       default: false
+    sumStats:
+      type: boolean
     xDropGap:
       type: number
       default: 30

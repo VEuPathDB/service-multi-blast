@@ -20,7 +20,7 @@ definitions:
     - ultra-sensitive
 
 allOf:
-- $ref: ../cli-common/cli-config.json
+- $ref: ../cli-common/cli-config.yml
 - type: object
   properties:
     query:
