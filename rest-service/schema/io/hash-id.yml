@@ -1,0 +1,16 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+title: Hash ID
+description: |-
+  Hash/digest based job identifier generated from the input configuration for
+  a specific job.
+
+type: string
+
+minLength: 32
+maxLength: 32
+
+pattern: "^[a-fA-F0-9]{32}$"
+
+examples:
+- fae0b27c451c728867a567e8c1bb4e53

@@ -1,0 +1,71 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+type: object
+
+properties:
+  jobID:
+    "$ref": ./hash-id.yml
+
+  reportID:
+    "$ref": ./hash-id.yml
+
+  config:
+    type: object
+    properties:
+      format:
+        "$ref": "../blast/format-type.json"
+      fieldDelim:
+        type: string
+        minLength: 1
+        maxLength: 1
+      fields:
+        type: array
+        items:
+          "$ref": "../blast/format-field.json"
+      numDescriptions:
+        type: integer
+        minimum: 0
+        default: 500
+      numAlignments:
+        type: integer
+        minimum: 0
+        default: 250
+      lineLength:
+        type: integer
+        minimum: 1
+        default: 60
+      sortHits:
+        type: string
+        enum:
+        - by-eval
+        - by-bit-score
+        - by-total-score
+        - by-percent-identity
+        - by-query-coverage
+      sortHSPs:
+        type: string
+        enum:
+        - by-hsp-evalue
+        - by-hsp-score
+        - by-hsp-query-start
+        - by-hsp-percent-identity
+        - by-hsp-subject-start
+      maxTargetSeqs:
+        type: integer
+        minimum: 1
+        default: 500
+      parseDefLines:
+        type: boolean
+        default: false
+
+  status:
+    "$ref": ./job-status.yml
+
+  description:
+    type: string
+
+required:
+- jobID
+- reportID
+- config
+- status

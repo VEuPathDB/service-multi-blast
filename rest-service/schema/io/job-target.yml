@@ -1,0 +1,15 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+title: Query Target
+
+type: object
+
+properties:
+  organism:
+    type: string
+  target:
+    type: string
+
+required:
+- organism
+- target

@@ -1,0 +1,13 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+type: object
+
+properties:
+  query:
+    type: string
+    format: file
+  properties:
+    "$ref": ./json-blast-request.yml
+
+required:
+- properties

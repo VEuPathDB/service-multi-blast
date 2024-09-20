@@ -4,11 +4,12 @@ type: object
 
 properties:
   id:
-    "$ref": ./hash-id.json
+    title: "Query Job ID"
+    "$ref": ./hash-id.yml
   description:
     type: string
   status:
-    "$ref": ./job-status.json
+    "$ref": ./job-status.yml
   created:
     type: string
     format: date-time
@@ -33,7 +34,7 @@ properties:
   targets:
     type: array
     items:
-      "$ref": ./job-target.json
+      "$ref": ./job-target.yml
 
 required:
 - id
@@ -47,7 +48,7 @@ definitions:
     type: object
     properties:
       id:
-        "$ref": ./hash-id.json
+        "$ref": ./hash-id.yml
       index:
         type: integer
         minimum: 1

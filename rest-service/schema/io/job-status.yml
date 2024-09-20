@@ -1,0 +1,12 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+title: Job Status
+
+type: string
+
+enum:
+- queued
+- in-progress
+- completed
+- errored
+- expired

@@ -62,17 +62,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./schema/io/json-blast-request.json"
+              $ref: "./schema/io/json-blast-request.yml"
           multipart/form-data:
             schema:
-              $ref: "./schema/io/multipart-blast-request.json"
+              $ref: "./schema/io/multipart-blast-request.yml"
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: "./schema/io/new-blast-job-response.json"
+                $ref: "./schema/io/new-blast-job-response.yml"
         400:
           $ref: "#/components/responses/err400"
         401:
@@ -96,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schema/io/long-job-response.json"
+                $ref: "./schema/io/long-job-response.yml"
         401:
           $ref: "#/components/responses/err401"
         404:
@@ -166,7 +166,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "./schema/io/short-report-response.json"
+                  $ref: "./schema/io/short-report-response.yml"
         401:
           $ref: "#/components/responses/err401"
         500:
@@ -180,14 +180,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./schema/io/report-request.json"
+              $ref: "./schema/io/report-request.yml"
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: "./schema/io/short-report-response.json"
+                $ref: "./schema/io/short-report-response.yml"
         400:
           $ref: "#/components/responses/err400"
         401:
@@ -211,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schema/io/long-report-response.json"
+                $ref: "./schema/io/long-report-response.yml"
         401:
           $ref: "#/components/responses/err401"
         404:
@@ -408,13 +408,13 @@ components:
       in: path
       required: true
       schema:
-        $ref: "./schema/io/hash-id.json"
+        $ref: "./schema/io/hash-id.yml"
     report-id:
       name: report-id
       in: path
       required: true
       schema:
-        $ref: "./schema/io/hash-id.json"
+        $ref: "./schema/io/hash-id.yml"
   responses:
     err400:
       description: Bad Request

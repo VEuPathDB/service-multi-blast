@@ -1,0 +1,95 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+type: object
+
+properties:
+  site:
+    type: string
+    examples:
+    - AmoebaDB
+    - CryptoDB
+    - FungiDB
+    - GiardiaDB
+    - HostDB
+    - MicrosporidiaDB
+    - OrthoMCL
+    - PiroplasmaDB
+    - PlasmoDB
+    - ToxoDB
+    - TrichDB
+    - TriTrypDB
+    - Vectorbase
+    - VEuPathDB
+
+  targets:
+    type: array
+    items:
+      "$ref": ./job-target.yml
+    minLength: 1
+
+  maxResults:
+    type: integer
+    minimum: 1
+    description: |-
+      Number of results to limit the search to.
+
+      Clients sending this value must also send limiting fields such as
+      `max_target_seqs`, `num_descriptions`, or `num_alignments`.
+
+      The service will validate that the value of the limiting field(s)
+      multiplied by the number of query sequences does not exceed this value.
+
+      Assuming that the number of query seqs is represented as `Q` the
+      validation is performed as `(Q * max_target_seqs) <= maxResults` or
+      `(Q * max(num_descriptions, num_alignments)) <= maxResults`.
+
+  maxResultSize:
+    type: integer
+    minimum: 0
+    description: |-
+      Maximum number of bytes the client is willing to accept for report
+      results.  If a requested report for a job is greater in size than the
+      job's `maxResultSize` value, the server will return a 403 error with a
+      message indicating why it is refusing the report request.
+
+      Additionally, when requesting a report, the client may choose to override
+      this value by using the `Content-Max-Length` header to provide an
+      alternative max file size.
+
+      A value of `0` indicates no size limit for generated reports.
+    default: 0
+
+  maxSequences:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 100
+    description: |-
+      Maximum number of sequences allowed.
+
+      This will alter the service's validation to only allow the specified
+      number of input sequences in the posted query.
+
+  config:
+    oneOf:
+    - "$ref": "../blast/blastn.yml"
+    - "$ref": "../blast/blastp.json"
+    - "$ref": "../blast/blastx.json"
+    - "$ref": "../blast/tblastn.json"
+    - "$ref": "../blast/tblastx.json"
+    - "$ref": "../diamond/blastp.yml"
+    - "$ref": "../diamond/blastx.yml"
+
+  description:
+    type: string
+
+  isPrimary:
+    type: boolean
+    default: true
+    description: |-
+      Set whether this job should be treated as a "primary".  Non-primary, jobs
+      are hidden in the UI.
+
+required:
+- site
+- config
