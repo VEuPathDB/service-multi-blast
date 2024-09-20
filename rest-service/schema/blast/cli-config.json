@@ -36,7 +36,7 @@
           "additionalProperties": false,
           "properties": {
             "format": {
-              "$ref": "./format-type.json"
+              "$ref": "./format-type.yml"
             },
             "delim": {
               "type": "string",
@@ -46,7 +46,7 @@
             "fields": {
               "type": "array",
               "items": {
-                "$ref": "format-field.json"
+                "$ref": "./format-field.yml"
               }
             }
           }

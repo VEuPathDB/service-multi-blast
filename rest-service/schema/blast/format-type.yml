@@ -1,0 +1,26 @@
+"$schema": http://json-schema.org/draft-07/schema
+
+type: string
+
+enum:
+- pairwise
+- query-anchored-with-identities
+- query-anchored-without-identities
+- flat-query-anchored-with-identities
+- flat-query-anchored-without-identities
+- xml
+- tabular
+- tabular-with-comments
+- text-asn-1
+- binary-asn-1
+- csv
+- archive-asn-1
+- seqalign-json
+- multi-file-json
+- multi-file-xml2
+- single-file-json
+- single-file-xml2
+- sam
+- organism-report
+
+default: pairwise

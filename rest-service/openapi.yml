@@ -82,7 +82,6 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
-
   /jobs/{job-id}:
     parameters:
     - $ref: "#/components/parameters/job-id"
@@ -117,7 +116,6 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
-
   /jobs/{job-id}/query:
     parameters:
     - $ref: "#/components/parameters/job-id"
@@ -151,7 +149,6 @@ paths:
           $ref: "#/components/responses/err404"
         500:
           $ref: "#/components/responses/err500"
-
 
   /reports:
     get:
@@ -197,7 +194,6 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
-
   /reports/{report-id}:
     parameters:
     - $ref: "#/components/parameters/report-id"
@@ -232,7 +228,6 @@ paths:
           $ref: "#/components/responses/err404"
         500:
           $ref: "#/components/responses/err500"
-
 
   "/reports/{report-id}/files/{filename}":
     parameters:
@@ -338,7 +333,6 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
-
   /link-guest:
     post:
       tags:
@@ -357,7 +351,6 @@ paths:
                   required: true
               additionalProperties: false
 
-
   /api:
     get:
       tags:
@@ -373,7 +366,6 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
-
   /health:
     get:
       tags:
@@ -384,7 +376,6 @@ paths:
           description: Success
         500:
           $ref: "#/components/responses/err500"
-
 
   /metrics:
     get:

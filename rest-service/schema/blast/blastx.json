@@ -18,10 +18,10 @@
     {
       "properties": {
         "strand": {
-          "$ref": "./strand.json"
+          "$ref": "./strand.yml"
         },
         "queryGeneticCode": {
-          "$ref": "gencode.json"
+          "$ref": "./gencode.yml"
         },
         "task": {
           "type": "string",
@@ -56,10 +56,10 @@
           ]
         },
         "compBasedStats": {
-          "$ref": "comp-based-stats.json"
+          "$ref": "./comp-based-stats.yml"
         },
         "seg": {
-          "$ref": "seg.json"
+          "$ref": "./seg.yml"
         },
         "softMasking": {
           "type": "boolean",

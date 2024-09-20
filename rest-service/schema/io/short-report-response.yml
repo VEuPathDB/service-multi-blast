@@ -13,7 +13,7 @@ properties:
     type: object
     properties:
       format:
-        "$ref": "../blast/format-type.json"
+        "$ref": "../blast/format-type.yml"
       fieldDelim:
         type: string
         minLength: 1
@@ -21,7 +21,7 @@ properties:
       fields:
         type: array
         items:
-          "$ref": "../blast/format-field.json"
+          "$ref": "../blast/format-field.yml"
       numDescriptions:
         type: integer
         minimum: 0

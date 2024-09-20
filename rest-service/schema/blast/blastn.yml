@@ -16,7 +16,7 @@ allOf:
 
 - properties:
     strand:
-      $ref: "./strand.json"
+      $ref: "./strand.yml"
 
     task:
       type: string
