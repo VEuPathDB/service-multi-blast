@@ -380,7 +380,6 @@ object BlastManager {
   }
 
   private fun handleJob(db: BlastDBManager, job: MBlastJob, query: String): UserBlastRow {
-
     val jobID = job.digest(query)
 
     var row = getUserBlastRow(db, jobID, job) ?: getBlastRow(db, jobID, job)
