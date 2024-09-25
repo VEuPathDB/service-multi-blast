@@ -121,14 +121,21 @@ object JobService {
     return withTempFile(
       (config.query ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")))
         .byteInputStream()
+        .let { ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream()) }
     ) {
       config.query = null
-      createDiamondJob(processDiamondQuery(it, config), config, req, userID)
+      createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
     }
   }
 
   private fun createDiamondJob(query: File, config: IODiamondConfig, req: IOJsonJobRequest, userID: Long) =
-    createDiamondJob(processDiamondQuery(query, config), config, req, userID)
+    query.inputStream().buffered().use {
+      withTempFile(ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream())) {
+        query.delete()
+        createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
+      }
+    }
+
 
   private fun createDiamondJob(
     query:  DiamondQuery,
@@ -157,16 +164,6 @@ object JobService {
     })
 
     return IOJobPostResponse(res.jobID.string)
-  }
-
-  private fun processDiamondQuery(input: File, config: IODiamondConfig): DiamondQuery {
-    input.inputStream().buffered().use {
-      withTempFile(ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream())) { validatedQueryFile ->
-        input.delete()
-
-        return DiamondQuery(config.tool, validatedQueryFile)
-      }
-    }
   }
 
   // endregion DIAMOND
