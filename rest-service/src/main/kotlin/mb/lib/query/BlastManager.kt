@@ -353,7 +353,7 @@ object BlastManager {
 
   private fun handleJobs(db: BlastDBManager, job: MBlastJob): FullUserBlastRow {
 
-    val root = handleJob(db, job, job.query.getFullQuery())
+    val root = handleJob(db, job, job.query::getFullQuery)
 
     // If the job config is not a BlastConfig then it is for protein mapping
     // which does not have sub-jobs.
@@ -373,15 +373,15 @@ object BlastManager {
       job.isPrimary = false
 
       for (query in job.query.sequences) {
-        handleJob(db, job, query.toStandardString())
+        handleJob(db, job, query::toStandardString)
       }
     }
 
     return populateLinks(db, root)
   }
 
-  private fun handleJob(db: BlastDBManager, job: MBlastJob, query: InputStream): UserBlastRow {
-    val jobID = job.digest(query)
+  private fun handleJob(db: BlastDBManager, job: MBlastJob, queryProvider: () -> InputStream): UserBlastRow {
+    val jobID = queryProvider().use { job.digest(it) }
 
     var row = getUserBlastRow(db, jobID, job) ?: getBlastRow(db, jobID, job)
 
@@ -407,15 +407,14 @@ object BlastManager {
       runDirectly     = job.isPrimary
     )
 
-    db.insertJob(row, query)
+    submitToQueueIfExpired(db, row)
+
+    queryProvider().use { db.insertJob(row, it) }
     db.linkUser(row)
     db.linkTargets(jobID, *job.targets)
 
     if (!job.isPrimary && job.parentID != null)
       db.linkJobs(jobID, job.parentID!!)
-
-    submitToQueueIfExpired(db, row)
-
 
     return row
   }

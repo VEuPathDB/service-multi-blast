@@ -27,7 +27,7 @@ data class MBlastJob(
 
   fun digest(query: InputStream): HashID {
     try {
-      return HashID.ofMD5(hashWrap(site, HashID.ofMD5(query, true).toString(), config).jsonStringify())
+      return HashID.ofMD5(hashWrap(site, HashID.ofMD5(query).toString(), config).jsonStringify())
     } catch (e: Exception) {
       throw RuntimeException(e)
     }
