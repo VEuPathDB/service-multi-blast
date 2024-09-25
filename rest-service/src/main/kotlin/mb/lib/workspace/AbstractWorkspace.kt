@@ -1,6 +1,7 @@
 package mb.lib.workspace
 
 import java.io.File
+import java.io.InputStream
 import java.time.OffsetDateTime
 import java.util.*
 import java.util.stream.Stream
@@ -25,6 +26,19 @@ internal sealed class AbstractWorkspace(final override val directory: File)
   override fun contains(fileName: String) = File(directory, fileName).exists()
 
   override fun contents(): Stream<File> = Arrays.stream(directory.listFiles())
+
+  override fun createFile(name: String, contents: InputStream): File {
+    val file = File(directory, name)
+
+    if (file.exists())
+      throw IllegalStateException("Cannot create file $file, path already exists.")
+
+    file.createNewFile() || throw IllegalStateException("Failed to create file $file.")
+
+    file.outputStream().buffered().use { o -> contents.buffered().transferTo(o) }
+
+    return file
+  }
 
   override fun createFile(name: String, contents: String): File {
     val file = File(directory, name)

@@ -6,7 +6,11 @@ internal abstract class AbstractMBlastSubQuery : MBlastSubQuery {
     val matcher    = Regex(".{1,80}")
   }
 
-  override fun toStandardString(): String {
+  override fun toStandardString() = toStdString().byteInputStream()
+
+  override fun toString() = toStdString()
+
+  private fun toStdString(): String {
     val seq = sequence.replace(whitespace, "")
     val out = StringBuilder(seq.length + (defLine?.length ?: 0) + 100)
 
@@ -18,6 +22,4 @@ internal abstract class AbstractMBlastSubQuery : MBlastSubQuery {
 
     return out.toString().trim()
   }
-
-  override fun toString() = toStandardString()
 }

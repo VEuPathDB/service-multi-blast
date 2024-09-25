@@ -10,6 +10,7 @@ import mb.lib.util.logger
 import mb.lib.workspace.Workspaces
 import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.hash_id.HashID
+import java.io.InputStream
 import java.lang.IllegalStateException
 import java.time.OffsetDateTime
 import java.util.concurrent.CountDownLatch
@@ -120,11 +121,11 @@ object BlastManager {
     }
   }
 
-  fun getJobQuery(jobID: HashID): String? {
+  fun getJobQuery(jobID: HashID): InputStream? {
     Log.trace("::getJobQuery(jobID={})", jobID)
     return BlastDBManager().use { db ->
       updateLastModified(jobID)
-      db.getBlastQuery(jobID)
+      db.getJobQuery(jobID)
     }
   }
 
@@ -172,7 +173,7 @@ object BlastManager {
         with(Workspaces.open(jobID)) {
           val ws = if (isDiamond) resolveAsDiamond() else resolveAsBlast()
           if (ws.createIfNotExists())
-            ws.createQueryFile(job.query!!)
+            db.getJobQuery(jobID)!!.use { ws.createQueryFile(it) }
         }
 
         val qID = BlastQueueManager.submitNewJob(jobID, job.config!!)
@@ -192,7 +193,7 @@ object BlastManager {
           with(Workspaces.open(child.jobID)) {
             val ws = if (isDiamond) resolveAsDiamond() else resolveAsBlast()
             if (ws.createIfNotExists())
-              ws.createQueryFile(job.query!!)
+              db.getJobQuery(jobID)!!.use { ws.createQueryFile(it) }
           }
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
@@ -217,7 +218,7 @@ object BlastManager {
       }
 
       if (workspace.createIfNotExists())
-        workspace.createQueryFile(row.query!!)
+        db.getJobQuery(row.jobID)!!.use { workspace.createQueryFile(it) }
 
       val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!)
 
@@ -379,7 +380,7 @@ object BlastManager {
     return populateLinks(db, root)
   }
 
-  private fun handleJob(db: BlastDBManager, job: MBlastJob, query: String): UserBlastRow {
+  private fun handleJob(db: BlastDBManager, job: MBlastJob, query: InputStream): UserBlastRow {
     val jobID = job.digest(query)
 
     var row = getUserBlastRow(db, jobID, job) ?: getBlastRow(db, jobID, job)
@@ -396,7 +397,6 @@ object BlastManager {
     row = UserBlastRow(
       jobID           = jobID,
       config          = job.config,
-      query           = query,
       status          = JobStatus.Expired,
       projectID       = job.site,
       createdOn       = tim,
@@ -407,14 +407,15 @@ object BlastManager {
       runDirectly     = job.isPrimary
     )
 
-    submitToQueueIfExpired(db, row)
-
-    db.insertJob(row)
+    db.insertJob(row, query)
     db.linkUser(row)
     db.linkTargets(jobID, *job.targets)
 
     if (!job.isPrimary && job.parentID != null)
       db.linkJobs(jobID, job.parentID!!)
+
+    submitToQueueIfExpired(db, row)
+
 
     return row
   }
@@ -487,7 +488,6 @@ object BlastManager {
 
       // Link this job to the parent (no existing parent link was found).
       db.linkJobs(jobID, job.parentID!!)
-
     }
 
     return row

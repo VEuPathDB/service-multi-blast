@@ -2,6 +2,7 @@ package mb.lib.workspace
 
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
+import java.io.InputStream
 
 /**
  * Represents the working directory for a singular diamond job.
@@ -29,6 +30,8 @@ internal class DiamondWorkspace(override val jobID: HashID, directory: File)
     get() = listOf(jobID)
 
   override fun createQueryFile(query: String) = createFile(QueryFile, query)
+
+  override fun createQueryFile(query: InputStream) = createFile(QueryFile, query)
 
   override fun createIfNotExists(): Boolean {
     return if (super.createIfNotExists()) {

@@ -18,6 +18,8 @@ import jakarta.ws.rs.*
 import jakarta.ws.rs.core.Context
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.core.StreamingOutput
+import mb.lib.util.withTempFile
 import org.glassfish.jersey.server.ContainerRequest
 import org.veupathdb.lib.jackson.Json
 
@@ -88,9 +90,8 @@ class JobController(@Context private val request: ContainerRequest) {
     if (query == null)
       postJob(props)
     else
-      JobService.createJob(query, props, getUser(request).userId).okJSON()
+      withTempFile(query) { JobService.createJob(it, props, getUser(request).userId).okJSON() }
   }
-
 
   /**
    * Attempt to retrieve a specific job associated with the logged-in user.
@@ -141,9 +142,10 @@ class JobController(@Context private val request: ContainerRequest) {
     if (download)
       res.header("Content-Disposition", String.format(AttachmentPat, "$jobID-query", "txt"))
 
-    res.entity(BlastManager.getJobQuery(hashIDorThrow(jobID, ::NotFoundException)) ?: throw NotFoundException()).build()
-  }
+    val stream = BlastManager.getJobQuery(hashIDorThrow(jobID, ::NotFoundException)) ?: throw NotFoundException()
 
+    res.entity(StreamingOutput { o -> stream.use { i -> i.transferTo(o) } }).build()
+  }
 
   @POST
   @Path(Paths.JobByID)

@@ -166,7 +166,7 @@ tasks.withType<Test> {
       showStandardStreams = true
       enableAssertions = true
   }
-  ignoreFailures = true // Always try to run all tests for all modules
+  ignoreFailures = false
 }
 
 val test by tasks.getting(Test::class) {

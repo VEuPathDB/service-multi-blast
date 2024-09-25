@@ -5,9 +5,10 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.veupathdb.lib.blast.BlastTool
+import java.io.InputStream
 
 @DisplayName("BlastSubQuery")
-internal class DiamondSubQueryTest {
+internal class BlastSubQueryTest {
 
   @Nested
   @DisplayName("#toStandardString")
@@ -19,7 +20,7 @@ internal class DiamondSubQueryTest {
       val seq = "thisIsASequence"
       val tgt = BlastSubQuery(1, BlastTool.BlastN, null, seq)
 
-      assertEquals(seq, tgt.toStandardString())
+      assertEquals(seq, tgt.toStandardString().reader().readText())
     }
 
     @Test
@@ -30,7 +31,7 @@ internal class DiamondSubQueryTest {
       val exp = """thisIsASeriesOfCharactersThatWillHaveALengthOf160thisIsASeriesOfCharactersThatWi
 llHaveALengthOf160thisIsASeriesOfCharactersThatWillHaveALengthOf160thisIsASeries"""
 
-      assertEquals(exp, tgt.toStandardString())
+      assertEquals(exp, tgt.toStandardString().reader().readText())
     }
 
     @Test
@@ -44,7 +45,7 @@ meNumberthisIsASeriesOfCharactersThatWillHaveALengthOfSomeNumberthisIsASeriesOfC
 haractersThatWillHaveALengthOfSomeNumberthisIsASeriesOfCharactersThatWillHaveALe
 ngthOfSomeNumber"""
 
-      assertEquals(exp, tgt.toStandardString())
+      assertEquals(exp, tgt.toStandardString().reader().readText())
     }
 
     @Test
@@ -60,7 +61,7 @@ meNumberthisIsASeriesOfCharactersThatWillHaveALengthOfSomeNumberthisIsASeriesOfC
 haractersThatWillHaveALengthOfSomeNumberthisIsASeriesOfCharactersThatWillHaveALe
 ngthOfSomeNumber"""
 
-      assertEquals(exp, tgt.toStandardString())
+      assertEquals(exp, tgt.toStandardString().reader().readText())
     }
 
     @Test
@@ -73,7 +74,7 @@ willbefedintothefromstringmethod."""
 
       val exp = "somesequencetextthathasnodeflinethatwillbefedintothefromstringmethod."
 
-      assertEquals(exp, tgt.toStandardString())
+      assertEquals(exp, tgt.toStandardString().reader().readText())
 
     }
   }

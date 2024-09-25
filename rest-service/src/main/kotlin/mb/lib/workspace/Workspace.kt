@@ -1,6 +1,7 @@
 package mb.lib.workspace
 
 import java.io.File
+import java.io.InputStream
 import java.time.OffsetDateTime
 import java.util.stream.Stream
 
@@ -55,6 +56,7 @@ sealed interface Workspace {
    * @param contents Contents to write to the file.
    */
   fun createFile(name: String, contents: String): File
+  fun createFile(name: String, contents: InputStream): File
 
   /**
    * Creates this workspace directory if it does not already exist.

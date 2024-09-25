@@ -24,9 +24,9 @@ willbefedintothefromstringmethod."""
 
       val exp = "somesequencetextthathasnodeflinethatwillbefedintothefromstringmethod."
 
-      assertEquals(exp, tgt.getFullQuery())
+      assertEquals(exp, tgt.getFullQuery().reader().readText())
       assertEquals(1, tgt.sequences.size)
-      assertEquals(exp, tgt.sequences[0].toStandardString())
+      assertEquals(exp, tgt.sequences[0].toStandardString().reader().readText())
     }
 
     @Test
@@ -47,9 +47,9 @@ textthathasnodeflinethatwillbefedintothefromstringmethod"""
       val exp3 = """somesequencetextthathasnodeflinethatwillbefedintothefromstringmethod
 somesequencetextthathasnodeflinethatwillbefedintothefromstringmethod"""
 
-      assertEquals(exp1, tgt.getFullQuery())
+      assertEquals(exp1, tgt.getFullQuery().reader().readText())
       assertEquals(1, tgt.sequences.size)
-      assertEquals(exp1, tgt.sequences[0].toStandardString())
+      assertEquals(exp1, tgt.sequences[0].toStandardString().reader().readText())
       assertEquals(exp2, tgt.sequences[0].defLine)
       assertEquals(exp3, tgt.sequences[0].sequence)
     }
@@ -84,7 +84,7 @@ $exp2Sequence
 
       val tgt = BlastQuery.fromString(BlastTool.BlastN, seq)
 
-      assertEquals(fullExp, tgt.getFullQuery())
+      assertEquals(fullExp, tgt.getFullQuery().reader().readText())
       assertEquals(2, tgt.sequences.size)
 
       assertEquals(exp1Defline, tgt.sequences[0].defLine)

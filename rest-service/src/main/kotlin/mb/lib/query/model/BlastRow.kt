@@ -7,7 +7,6 @@ import java.time.OffsetDateTime
 open class BlastRow(
   var jobID:     HashID,
   var config:    JobConfig?      = null,
-  var query:     String?         = null,
   var queueID:   Int?            = null,
   var projectID: String?         = null,
   var status:    JobStatus?      = null,
@@ -18,7 +17,6 @@ open class BlastRow(
   constructor(old: BlastRow) : this(
     old.jobID,
     old.config,
-    old.query,
     old.queueID,
     old.projectID,
     old.status,

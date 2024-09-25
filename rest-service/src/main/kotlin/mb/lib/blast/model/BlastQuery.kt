@@ -5,7 +5,6 @@ import mb.api.service.valid.SequenceEmptyValidationError
 import mb.api.service.valid.SequenceValidationError
 import mb.lib.blast.model.BlastQuery.Companion.fromStream
 import mb.lib.blast.model.BlastQuery.Companion.fromString
-import mb.lib.query.AbstractMBlastQuery
 import mb.lib.query.MBlastQuery
 import org.veupathdb.lib.blast.BlastTool
 import java.io.InputStream
@@ -23,10 +22,16 @@ import java.nio.charset.StandardCharsets
  * @see [fromString]
  * @see [fromStream]
  */
-internal data class BlastQuery(val tool: BlastTool, override val sequences: List<BlastSubQuery>)
-  : MBlastQuery
-  , AbstractMBlastQuery()
-{
+internal data class BlastQuery(val tool: BlastTool, override val sequences: List<BlastSubQuery>) : MBlastQuery {
+  /**
+   * Concatenates all the sequences in this query into a single query string.
+   */
+  override fun getFullQuery(): InputStream =
+    sequences.asSequence()
+      .map { it.toStandardString().reader().readText() }
+      .joinToString("\n")
+      .byteInputStream()
+
   /**
    * Validates all the sequences in this query.
    */

@@ -2,11 +2,12 @@ package mb.lib.query.db
 
 import io.vulpine.lib.query.util.basic.BasicPreparedVoidQuery
 import mb.lib.query.model.BlastRow
+import java.io.InputStream
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.time.OffsetDateTime
 
-data class InsertBlastJob(private val con: Connection, private val row: BlastRow) {
+data class InsertBlastJob(private val con: Connection, private val row: BlastRow, private val query: InputStream) {
   companion object {
     private const val Query = """
     INSERT INTO
@@ -33,7 +34,7 @@ data class InsertBlastJob(private val con: Connection, private val row: BlastRow
 
     ps.setBytes(1, row.jobID.bytes)
     ps.setString(2, json)
-    ps.setString(3, row.query)
+    ps.setAsciiStream(3, query)
     ps.setInt(4, row.queueID!!)
     ps.setString(5, row.projectID)
     ps.setString(6, row.status!!.value)

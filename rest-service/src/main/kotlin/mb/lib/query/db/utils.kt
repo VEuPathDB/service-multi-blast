@@ -21,7 +21,6 @@ import java.util.*
 fun parseBlastRow(rs: ResultSet) = BlastRow(
   jobID     = HashID(rs.getBytes(Column.MultiBlastJobs.JobID)),
   config    = parseJobConfig(rs.getString(Column.MultiBlastJobs.JobConfig)),
-  query     = rs.getString(Column.MultiBlastJobs.Query),
   queueID   = rs.getInt(Column.MultiBlastJobs.QueueID),
   projectID = rs.getString(Column.MultiBlastJobs.ProjectID),
   status    = JobStatus.unsafeFromString(rs.getString(Column.MultiBlastJobs.Status)),

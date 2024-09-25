@@ -6,7 +6,6 @@ import org.veupathdb.lib.hash_id.HashID
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.util.*
 
 data class SelectUserBlastJob(
   private val con: Connection,
@@ -14,9 +13,16 @@ data class SelectUserBlastJob(
   private val userID: Long,
 ) {
   companion object {
+    // language=oracle
     private const val Query = """
     SELECT
-      a.*
+      a.job_digest
+    , a.job_config
+    , a.queue_id
+    , a.project_id
+    , a.status
+    , a.created_on
+    , a.delete_on
     , b.user_id
     , b.description
     , b.max_download_size

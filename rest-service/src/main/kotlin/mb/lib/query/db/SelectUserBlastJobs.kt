@@ -9,11 +9,16 @@ data class SelectUserBlastJobs(
   private val con: Connection,
   private val userID: Long
 ) {
-
   companion object {
     private const val Query = """
     SELECT
-      a.*
+      a.job_digest
+    , a.job_config
+    , a.queue_id
+    , a.project_id
+    , a.status
+    , a.created_on
+    , a.delete_on
     , b.user_id
     , b.description
     , b.max_download_size

@@ -8,6 +8,7 @@ import mb.lib.util.toHashable
 import org.veupathdb.lib.blast.BlastQueryConfig
 import org.veupathdb.lib.cli.diamond.commands.DiamondCommandConfig
 import org.veupathdb.lib.hash_id.HashID
+import java.io.InputStream
 
 // Could be either a multi-blast, or diamond job.
 @Suppress("ArrayInDataClass")
@@ -24,11 +25,11 @@ data class MBlastJob(
 
   var isPrimary:   Boolean = true
 
-  fun digest(query: String): HashID {
+  fun digest(query: InputStream): HashID {
     try {
-      return HashID.ofMD5(hashWrap(site, query, config).jsonStringify())
+      return HashID.ofMD5(hashWrap(site, HashID.ofMD5(query, true).toString(), config).jsonStringify())
     } catch (e: Exception) {
-      throw  RuntimeException(e)
+      throw RuntimeException(e)
     }
   }
 }

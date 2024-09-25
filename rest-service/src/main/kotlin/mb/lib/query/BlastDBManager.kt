@@ -3,11 +3,13 @@ package mb.lib.query
 import mb.lib.db.MBlastDBManager
 import mb.lib.model.JobStatus
 import mb.lib.query.db.*
+import mb.lib.query.db.MBlastQuery
 import mb.lib.query.model.*
 import mb.lib.util.logger
 import org.veupathdb.lib.hash_id.HashID
+import java.io.InputStream
 
-class BlastDBManager: MBlastDBManager()
+internal class BlastDBManager: MBlastDBManager()
 {
   private val Log = logger()
 
@@ -84,6 +86,8 @@ class BlastDBManager: MBlastDBManager()
     return SelectTargetLinks(connection, jobID).run()
   }
 
+  fun getJobQuery(jobID: HashID) = connection.selectQuery(jobID)
+
   /**
    * Retrieves a list of child job links for the given parent job ID.
    *
@@ -121,9 +125,9 @@ class BlastDBManager: MBlastDBManager()
     UpdateJobStatus(connection, jobID, queueID, newStatus).run()
   }
 
-  fun insertJob(job: BlastRow) {
+  fun insertJob(job: BlastRow, query: InputStream) {
     Log.trace("#insertJob(job={})", job)
-    InsertBlastJob(connection, job).run()
+    InsertBlastJob(connection, job, query).run()
   }
 
   /**
@@ -155,10 +159,5 @@ class BlastDBManager: MBlastDBManager()
   fun getUserTargetLinks(userID: Long): Map<HashID, List<BlastTargetLink>> {
     Log.trace("#getUserTargetLinks(userID={})", userID)
     return SelectUserTargetLinks(connection, userID).run()
-  }
-
-  fun getBlastQuery(jobID: HashID): String? {
-    Log.trace("#getJobQuery(jobID={})", jobID)
-    return SelectBlastQuery(connection, jobID).run()
   }
 }

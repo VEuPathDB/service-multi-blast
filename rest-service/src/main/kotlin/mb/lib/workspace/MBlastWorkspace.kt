@@ -2,6 +2,7 @@ package mb.lib.workspace
 
 import org.veupathdb.lib.hash_id.HashID
 import java.io.File
+import java.io.InputStream
 
 sealed interface MBlastWorkspace : Workspace {
 
@@ -115,6 +116,8 @@ sealed interface MBlastWorkspace : Workspace {
    * @return A handle on the new query file.
    */
   fun createQueryFile(query: String): File
+
+  fun createQueryFile(query: InputStream): File
 
   /**
    * Returns a [ReportWorkspace] instance wrapping the report workspace with the
