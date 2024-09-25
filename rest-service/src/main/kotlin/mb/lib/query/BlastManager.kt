@@ -210,7 +210,7 @@ object BlastManager {
     targetDBs = db.getTargetLinks(row.jobID)
   }
 
-  private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow) {
+  private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow, queryProvider: () -> InputStream) {
     if (row.status == JobStatus.Expired) {
       val workspace = when (row.config!!) {
         is BlastConfig   -> Workspaces.open(row.jobID).resolveAsBlast()
@@ -218,7 +218,7 @@ object BlastManager {
       }
 
       if (workspace.createIfNotExists())
-        db.getJobQuery(row.jobID)!!.use { workspace.createQueryFile(it) }
+        queryProvider().use { workspace.createQueryFile(it) }
 
       val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!)
 
@@ -407,7 +407,7 @@ object BlastManager {
       runDirectly     = job.isPrimary
     )
 
-    submitToQueueIfExpired(db, row)
+    submitToQueueIfExpired(db, row, queryProvider)
 
     queryProvider().use { db.insertJob(row, it) }
     db.linkUser(row)
@@ -432,7 +432,7 @@ object BlastManager {
     // be rerun, then rerun it if needed.
 
     refreshJobStatus(db, row)
-    submitToQueueIfExpired(db, row)
+    submitToQueueIfExpired(db, row) { db.getJobQuery(jobID)!! }
 
     if (!job.isPrimary && job.parentID != null) {
       // Look for an existing link between these jobs.
@@ -475,7 +475,7 @@ object BlastManager {
     refreshJobStatus(db, row)
 
     // Rerun the job if needed.
-    submitToQueueIfExpired(db, row)
+    submitToQueueIfExpired(db, row) { db.getJobQuery(jobID)!! }
 
     if (!job.isPrimary && job.parentID != null) {
       // Look for an existing link between these jobs.
