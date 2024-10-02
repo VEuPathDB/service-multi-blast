@@ -136,7 +136,6 @@ object JobService {
       }
     }
 
-
   private fun createDiamondJob(
     query:  DiamondQuery,
     config: IODiamondConfig,

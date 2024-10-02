@@ -37,4 +37,7 @@ open class IOShortJobResponse(
 
   @get:JsonGetter(JsonKeys.Targets)
   val targets: Array<IOJobTarget>?,
+
+  @get:JsonGetter(JsonKeys.IsRerunnable)
+  val isRerunnable: Boolean,
 )

@@ -35,6 +35,9 @@ properties:
     type: array
     items:
       "$ref": ./job-target.yml
+  isRerunnable:
+    type: boolean
+
 
 required:
 - id

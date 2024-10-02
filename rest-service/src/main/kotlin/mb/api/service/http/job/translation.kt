@@ -5,9 +5,7 @@ import mb.api.model.IOJobTarget
 import mb.api.model.IOLongJobResponse
 import mb.api.model.IOShortJobResponse
 import mb.api.service.util.Format
-import mb.lib.query.model.BlastJobLink
-import mb.lib.query.model.BlastTargetLink
-import mb.lib.query.model.FullUserBlastRow
+import mb.lib.query.model.*
 import mb.lib.util.convert
 
 fun translateLongResponse(row: FullUserBlastRow) = IOLongJobResponse(
@@ -21,6 +19,7 @@ fun translateLongResponse(row: FullUserBlastRow) = IOLongJobResponse(
   parentJobs    = translateParentLinks(row.parentJobs),
   childJobs     = translateChildLinks(row.childJobs),
   targets       = translateTargets(row.targetDBs),
+  isRerunnable  = row.config!!.isRerunnable,
   config        = convert(row.config!!)
 )
 
@@ -37,6 +36,7 @@ fun translateShortResponse(row: FullUserBlastRow): IOShortJobResponse = IOShortJ
   parentJobs    = translateParentLinks(row.parentJobs),
   childJobs     = translateChildLinks(row.childJobs),
   targets       = translateTargets(row.targetDBs),
+  isRerunnable  = row.config!!.isRerunnable,
 )
 
 fun translateTargets(links: List<BlastTargetLink>?) = links?.map(::translateTarget)?.toTypedArray()
@@ -50,3 +50,9 @@ fun translateParentLink(link: BlastJobLink): IOJobLink = IOJobLink(link.parentJo
 fun translateChildLinks(links: List<BlastJobLink>?) = links?.map(::translateChildLink)?.toTypedArray()
 
 fun translateChildLink(link: BlastJobLink): IOJobLink = IOJobLink(link.childJobID.string, link.position)
+
+private inline val JobConfig.isRerunnable
+  get() = when (this) {
+    is BlastConfig   -> true
+    is DiamondConfig -> false
+  }

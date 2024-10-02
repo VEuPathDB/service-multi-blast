@@ -50,6 +50,7 @@ object JsonKeys {
   const val InputPsiBlastCheckpointFile = "inPssm"
   const val IsCached = "isCached"
   const val IsPrimary = "isPrimary"
+  const val IsRerunnable = "isRerunnable"
   const val Iterate = "iterate"
 
   @Deprecated("")

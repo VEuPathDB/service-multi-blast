@@ -16,8 +16,9 @@ class IOLongJobResponse(
   isPrimary:     Boolean,
   site:          String,
   targets:       Array<IOJobTarget>?,
+  isRerunnable:  Boolean,
   val config:    IOJobConfig<*>
 ) : IOShortJobResponse(
   id, description, status, created, maxResultSize, parentJobs,
-  childJobs, isPrimary, site, targets
+  childJobs, isPrimary, site, targets, isRerunnable
 )
