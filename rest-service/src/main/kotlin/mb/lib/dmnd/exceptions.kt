@@ -20,3 +20,6 @@ class QueryTooLongException(val maxTotalLength: Long)
 
 class TooManyDashesOnFirstLineException(val sequenceNumber: Int)
   : MBlastQueryParseException("The first line of input sequence #$sequenceNumber contained too many dashes.")
+
+class DNASequenceException()
+  : MBlastQueryParseException("This service analyzes protein FASTA input files. Your input file contains only DNA letters (ACGT).")

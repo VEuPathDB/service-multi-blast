@@ -9,10 +9,7 @@ import mb.api.model.io.JsonKeys
 import mb.api.service.model.ErrorMap
 import mb.lib.blast.model.BlastQuery
 import mb.lib.config.Config
-import mb.lib.dmnd.DiamondQuery
-import mb.lib.dmnd.ProteinSequenceValidationStream
-import mb.lib.dmnd.toIOStream
-import mb.lib.dmnd.withTempFile
+import mb.lib.dmnd.*
 import mb.lib.query.BlastManager
 import mb.lib.query.model.BlastConfig
 import mb.lib.query.model.MBlastJob
@@ -118,21 +115,29 @@ object JobService {
   private const val MaxDiamondQuerySize = 31457280L
 
   private fun createDiamondJob(config: IODiamondConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
-    return withTempFile(
-      (config.query ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")))
-        .byteInputStream()
-        .let { ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream()) }
-    ) {
-      config.query = null
-      createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
+    return try {
+      withTempFile(
+        (config.query ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")))
+          .byteInputStream()
+          .let { ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream()) }
+      ) {
+        config.query = null
+        createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
+      }
+    } catch (e: MBlastQueryParseException) {
+      throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, e.message!!))
     }
   }
 
   private fun createDiamondJob(query: File, config: IODiamondConfig, req: IOJsonJobRequest, userID: Long) =
     query.inputStream().buffered().use {
-      withTempFile(ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream())) {
-        query.delete()
-        createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
+      try {
+        withTempFile(ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream())) {
+          query.delete()
+          createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
+        }
+      } catch (e: MBlastQueryParseException) {
+        throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, e.message!!))
       }
     }
 

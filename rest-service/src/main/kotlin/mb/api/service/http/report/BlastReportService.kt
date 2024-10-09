@@ -112,7 +112,6 @@ internal object BlastReportService {
     maxSize: Long?,
     range: ContentRange?,
   ): ReportDownload {
-    Log.trace("::downloadReport(reportID={}, userID={}, file={}, download={}, maxSize={})", reportID, userID, file, download, maxSize)
     try {
       val rep = ReportManager.getAndLinkReport(reportID, userID)
         ?: throw NotFoundException()
