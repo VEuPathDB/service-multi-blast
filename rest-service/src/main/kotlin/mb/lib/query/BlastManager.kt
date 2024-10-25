@@ -193,7 +193,7 @@ object BlastManager {
           with(Workspaces.open(child.jobID)) {
             val ws = if (isDiamond) resolveAsDiamond() else resolveAsBlast()
             if (ws.createIfNotExists())
-              db.getJobQuery(jobID)!!.use { ws.createQueryFile(it) }
+              db.getJobQuery(child.jobID)!!.use { ws.createQueryFile(it) }
           }
 
           val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
