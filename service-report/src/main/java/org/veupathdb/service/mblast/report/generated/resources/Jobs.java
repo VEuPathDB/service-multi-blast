@@ -1,12 +1,22 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
-import jakarta.ws.rs.*;
+import java.util.List;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.Response;
-import org.veupathdb.service.mblast.report.generated.model.*;
+import org.veupathdb.service.mblast.report.generated.model.BadRequestError;
+import org.veupathdb.service.mblast.report.generated.model.JobCreateResponse;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobListEntry;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobPostRequest;
+import org.veupathdb.service.mblast.report.generated.model.ServerError;
+import org.veupathdb.service.mblast.report.generated.model.UnauthorizedError;
+import org.veupathdb.service.mblast.report.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.mblast.report.generated.support.ResponseDelegate;
-
-import java.util.List;
 
 @Path("/jobs")
 public interface Jobs {

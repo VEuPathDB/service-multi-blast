@@ -1,8 +1,23 @@
 package org.veupathdb.service.mblast.report.generated.resources;
 
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
-import org.veupathdb.service.mblast.report.generated.model.*;
+import org.veupathdb.service.mblast.report.generated.model.BadRequestError;
+import org.veupathdb.service.mblast.report.generated.model.ForbiddenError;
+import org.veupathdb.service.mblast.report.generated.model.NotFoundError;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobDetails;
+import org.veupathdb.service.mblast.report.generated.model.ReportJobPatchRequest;
+import org.veupathdb.service.mblast.report.generated.model.ServerError;
+import org.veupathdb.service.mblast.report.generated.model.UnauthorizedError;
+import org.veupathdb.service.mblast.report.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.mblast.report.generated.support.PATCH;
 import org.veupathdb.service.mblast.report.generated.support.ResponseDelegate;
 

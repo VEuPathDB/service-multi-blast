@@ -1,5 +1,6 @@
 package org.veupathdb.service.mblast.query.generated.resources;
 
+import java.util.List;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
@@ -10,8 +11,6 @@ import org.veupathdb.service.mblast.query.generated.model.BrokenJobListEntry;
 import org.veupathdb.service.mblast.query.generated.model.ServerError;
 import org.veupathdb.service.mblast.query.generated.model.UnauthorizedError;
 import org.veupathdb.service.mblast.query.generated.support.ResponseDelegate;
-
-import java.util.List;
 
 @Path("/maintenance/broken-jobs")
 public interface MaintenanceBrokenJobs {
