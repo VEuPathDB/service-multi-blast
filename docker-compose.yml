@@ -94,6 +94,7 @@ services:
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
+      BLAST_USAGE_REPORT: 'false'
     volumes:
       - type: volume
         source: job-data
@@ -128,6 +129,7 @@ services:
     environment:
       DB_MOUNT_PATH: /db
       JOB_MOUNT_PATH: /out
+      BLAST_USAGE_REPORT: 'false'
     volumes:
       - type: volume
         source: job-data
