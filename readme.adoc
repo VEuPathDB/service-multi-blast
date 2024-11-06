@@ -11,8 +11,6 @@ ifdef::env-github[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
-Elizabeth Paige Harper <epharper@upenn.edu>
-v1.0.0
 
 image:https://img.shields.io/github/v/tag/veupathdb/service-multi-blast[]
 image:https://img.shields.io/github/license/veupathdb/service-multi-blast[]
