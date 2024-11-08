@@ -98,7 +98,7 @@ func (b Endpoint) Handle(req midl.Request) midl.Response {
 	cmd := config.ToCLI()
 	cmd.Path = "/blast/bin/" + cmd.Args[0]
 	log.Debugf(`Command "%s"`, cmd.Args[0])
-	cmd.Env = os.Environ()
+	cmd.Env = append(os.Environ(), "BLAST_USAGE_REPORT=false")
 	cmd.Dir = workDir
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr

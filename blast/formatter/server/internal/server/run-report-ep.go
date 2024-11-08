@@ -202,7 +202,7 @@ func runIfNeeded(cmd *exec.Cmd, outDir string, log *logrus.Entry) error {
 
 func runCommand(cmd *exec.Cmd, dir string, log *logrus.Entry) error {
 	cmd.Dir = dir
-	cmd.Env = os.Environ()
+	cmd.Env = append(os.Environ(), "BLAST_USAGE_REPORT=false")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
