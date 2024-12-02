@@ -6,6 +6,11 @@ sealed interface SequenceValidationError {
   val message: String
 }
 
+class SequenceMissingDefLineValidationError(val sequence: Int) : SequenceValidationError {
+  override val message
+    get() = "Sequence $sequence had no defline"
+}
+
 class SequenceDefLineValidationError(val badDefLines: List<Int>) : SequenceValidationError, RuntimeException() {
   override val message
     get() =

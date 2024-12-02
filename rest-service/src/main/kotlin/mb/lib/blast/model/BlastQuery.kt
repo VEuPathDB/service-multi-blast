@@ -2,6 +2,7 @@ package mb.lib.blast.model
 
 
 import mb.api.service.valid.SequenceEmptyValidationError
+import mb.api.service.valid.SequenceMissingDefLineValidationError
 import mb.api.service.valid.SequenceValidationError
 import mb.lib.blast.model.BlastQuery.Companion.fromStream
 import mb.lib.blast.model.BlastQuery.Companion.fromString
@@ -39,6 +40,9 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
     // If we don't have any sequences
     if (sequences.isEmpty())
       return SequenceEmptyValidationError()
+
+    if (sequences.size > 1 && sequences[0].defLine == null)
+      return SequenceMissingDefLineValidationError(1)
 
     var seq = 1
 
@@ -79,7 +83,8 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
         if (line.startsWith(">")) {
 
           // AND we already had a current defline for the current sequence
-          if (currentHeader != null) {
+          //  OR we did not have a current defline, BUT the buffer has content
+          if (currentHeader != null || buffer.isNotEmpty()) {
 
             // Then we are starting a new sequence in the query.  Close out the
             // sequence we were working on so we can start a new one.
