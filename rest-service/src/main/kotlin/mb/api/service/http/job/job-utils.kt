@@ -1,6 +1,7 @@
 package mb.api.service.http.job
 
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.InternalServerErrorException
 import mb.api.model.IOJobTarget
 import mb.api.model.IOJsonJobRequest
 import mb.api.model.blast.IOBlastConfig
@@ -22,7 +23,7 @@ fun makeDBPaths(site: String, targets: List<BlastTargetLink>) =
 internal fun makeOrthoDBPath(site: String) =
   Path(Config.dbMountPath, site, "build-${Config.orthoBuild}", "diamond", Config.orthoDbName)
     .takeIf { it.exists() }
-    ?: throw BadRequestException("Target site $site does not have a queryable DIAMOND database.")
+    ?: throw InternalServerErrorException("Target site $site does not have a queryable DIAMOND database.")
 
 @Suppress("NOTHING_TO_INLINE")
 private inline fun appendDBPath(builder: StringBuilder, site: String, organism: String, target: String) {

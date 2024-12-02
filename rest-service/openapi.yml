@@ -150,6 +150,23 @@ paths:
         500:
           $ref: "#/components/responses/err500"
 
+  /jobs/{job-id}/error:
+    parameters:
+    - $ref: "#/components/parameters/job-id"
+    get:
+      tags:
+      - Queries
+      summary: Query Error Message
+      responses:
+        200:
+          $ref: '#/components/responses/plainOutput'
+        401:
+          $ref: "#/components/responses/err401"
+        404:
+          $ref: "#/components/responses/err404"
+        500:
+          $ref: "#/components/responses/err500"
+
   /reports:
     get:
       tags:
@@ -384,11 +401,7 @@ paths:
       summary: Prometheus Metrics
       responses:
         200:
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
+          $ref: '#/components/responses/plainOutput'
         500:
           $ref: "#/components/responses/err500"
 
@@ -407,6 +420,12 @@ components:
       schema:
         $ref: "./schema/io/hash-id.yml"
   responses:
+    plainOutput:
+      description: Success
+      content:
+        text/plain:
+          schema:
+            type: string
     err400:
       description: Bad Request
       content:
