@@ -46,13 +46,13 @@ object BlastQueueManager: QueueManager()
    *
    * @return the queue ID for the queued job
    */
-  fun submitNewJob(jobId: HashID, config: JobConfig): Int {
+  fun submitNewJob(jobId: HashID, config: JobConfig, isDiamond: Boolean = false): Int {
     if (config is EmptyBlastConfig)
       throw RuntimeException("Invalid config cannot be submitted.")
 
     return submitNewJob(
-      Config.blastQueueName,
-      CreateRequest(
+      category = if (isDiamond) Config.diamondQueueName else Config.blastQueueName,
+      req      = CreateRequest(
         Address.http(Config.blastHost) + "/" + if (config is BlastConfig) BlastPath else DiamondPath,
         BlastServerRequest(jobId, config)
       )

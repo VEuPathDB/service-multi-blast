@@ -176,7 +176,7 @@ object BlastManager {
             db.getJobQuery(jobID)!!.use { ws.createQueryFile(it) }
         }
 
-        val qID = BlastQueueManager.submitNewJob(jobID, job.config!!)
+        val qID = BlastQueueManager.submitNewJob(jobID, job.config!!, isDiamond)
 
         db.updateJobStatus(jobID, qID, JobStatus.Queued)
       }
@@ -196,7 +196,7 @@ object BlastManager {
               db.getJobQuery(child.jobID)!!.use { ws.createQueryFile(it) }
           }
 
-          val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!)
+          val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!, isDiamond)
 
           db.updateJobStatus(child.jobID, qID, JobStatus.Queued)
         }
@@ -210,7 +210,7 @@ object BlastManager {
     targetDBs = db.getTargetLinks(row.jobID)
   }
 
-  private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow, queryProvider: () -> InputStream) {
+  private fun submitToQueueIfExpired(db: BlastDBManager, row: BlastRow, isDiamond: Boolean, queryProvider: () -> InputStream) {
     if (row.status == JobStatus.Expired) {
       val workspace = when (row.config!!) {
         is BlastConfig   -> Workspaces.open(row.jobID).resolveAsBlast()
@@ -220,7 +220,7 @@ object BlastManager {
       if (workspace.createIfNotExists())
         queryProvider().use { workspace.createQueryFile(it) }
 
-      val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!)
+      val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!, isDiamond)
 
       row.queueID = queueID
       row.status = JobStatus.Queued
@@ -351,9 +351,11 @@ object BlastManager {
 
   fun submitJob(job: MBlastJob) = BlastDBManager().use { handleJobs(it, job) }
 
-  private fun handleJobs(db: BlastDBManager, job: MBlastJob): FullUserBlastRow {
+  fun submitDiamondJob(job: MBlastJob) = BlastDBManager().use { handleJobs(it, job, true) }
 
-    val root = handleJob(db, job, job.query::getFullQuery)
+  private fun handleJobs(db: BlastDBManager, job: MBlastJob, isDiamond: Boolean = false): FullUserBlastRow {
+
+    val root = handleJob(db, job, isDiamond, job.query::getFullQuery)
 
     // If the job config is not a BlastConfig then it is for protein mapping
     // which does not have sub-jobs.
@@ -373,17 +375,17 @@ object BlastManager {
       job.isPrimary = false
 
       for (query in job.query.sequences) {
-        handleJob(db, job, query::toStandardString)
+        handleJob(db, job, isDiamond, query::toStandardString)
       }
     }
 
     return populateLinks(db, root)
   }
 
-  private fun handleJob(db: BlastDBManager, job: MBlastJob, queryProvider: () -> InputStream): UserBlastRow {
+  private fun handleJob(db: BlastDBManager, job: MBlastJob, isDiamond: Boolean, queryProvider: () -> InputStream): UserBlastRow {
     val jobID = queryProvider().use { job.digest(it) }
 
-    var row = getUserBlastRow(db, jobID, job) ?: getBlastRow(db, jobID, job)
+    var row = getUserBlastRow(db, jobID, job, isDiamond) ?: getBlastRow(db, jobID, job, isDiamond)
 
     if (row != null)
       return row
@@ -407,7 +409,7 @@ object BlastManager {
       runDirectly     = job.isPrimary
     )
 
-    submitToQueueIfExpired(db, row, queryProvider)
+    submitToQueueIfExpired(db, row, isDiamond, queryProvider)
 
     queryProvider().use { db.insertJob(row, it) }
     db.linkUser(row)
@@ -422,7 +424,8 @@ object BlastManager {
   private fun getUserBlastRow(
     db:    BlastDBManager,
     jobID: HashID,
-    job:   MBlastJob
+    job:   MBlastJob,
+    isDiamond: Boolean,
   ): UserBlastRow? {
     val row = db.getUserBlastRow(jobID, job.userID) ?: return null
 
@@ -432,7 +435,7 @@ object BlastManager {
     // be rerun, then rerun it if needed.
 
     refreshJobStatus(db, row)
-    submitToQueueIfExpired(db, row) { db.getJobQuery(jobID)!! }
+    submitToQueueIfExpired(db, row, isDiamond) { db.getJobQuery(jobID)!! }
 
     if (!job.isPrimary && job.parentID != null) {
       // Look for an existing link between these jobs.
@@ -452,7 +455,8 @@ object BlastManager {
   private fun getBlastRow(
     db:    BlastDBManager,
     jobID: HashID,
-    job:   MBlastJob
+    job:   MBlastJob,
+    isDiamond: Boolean,
   ): UserBlastRow? {
     val unlinked = db.getBlastRow(jobID) ?: return null
 
@@ -475,7 +479,7 @@ object BlastManager {
     refreshJobStatus(db, row)
 
     // Rerun the job if needed.
-    submitToQueueIfExpired(db, row) { db.getJobQuery(jobID)!! }
+    submitToQueueIfExpired(db, row, isDiamond) { db.getJobQuery(jobID)!! }
 
     if (!job.isPrimary && job.parentID != null) {
       // Look for an existing link between these jobs.

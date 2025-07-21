@@ -245,4 +245,34 @@ object Config : Options() {
   )
   var orthoDbName = ""
     private set
+
+  @Option(
+    names = ["--max-diamond-query-size"],
+    arity = "1",
+    defaultValue = "\${env:MAX_DMND_QUERY_SIZE}",
+    description = ["Max size for diamond queries in bytes."],
+    required = false
+  )
+  var maxDiamondQuerySize = 31457280L // 30MiB
+    private set
+
+  @Option(
+    names = ["--diamond-queue-name"],
+    arity = "1",
+    required = true,
+    defaultValue = "\${env:DMND_QUEUE_NAME}",
+    description = ["Name of the queue new diamond jobs will be added to."]
+  )
+  var diamondQueueName = "diamond"
+    private set
+
+  @Option(
+    names = ["--diamond-cpu-limit"],
+    arity = "1",
+    required = true,
+    defaultValue = "\${env:DMND_CPU_LIMIT}",
+    description = ["Max number of cpu threads the diamond process may use"]
+  )
+  var diamondCpuLimit = 4
+    private set
 }

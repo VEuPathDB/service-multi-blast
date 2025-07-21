@@ -112,14 +112,12 @@ object JobService {
 
   // region DIAMOND
 
-  private const val MaxDiamondQuerySize = 31457280L
-
   private fun createDiamondJob(config: IODiamondConfig, req: IOJsonJobRequest, userID: Long): IOJobPostResponse {
     return try {
       withTempFile(
         (config.query ?: throw UnprocessableEntityException(ErrorMap(JsonKeys.Query, "Query is required.")))
           .byteInputStream()
-          .let { ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream()) }
+          .let { ProteinSequenceValidationStream(Config.maxDiamondQuerySize, it.toIOStream()) }
       ) {
         config.query = null
         createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
@@ -132,7 +130,7 @@ object JobService {
   private fun createDiamondJob(query: File, config: IODiamondConfig, req: IOJsonJobRequest, userID: Long) =
     query.inputStream().buffered().use {
       try {
-        withTempFile(ProteinSequenceValidationStream(MaxDiamondQuerySize, it.toIOStream())) {
+        withTempFile(ProteinSequenceValidationStream(Config.maxDiamondQuerySize, it.toIOStream())) {
           query.delete()
           createDiamondJob(DiamondQuery(config.tool, it), config, req, userID)
         }
