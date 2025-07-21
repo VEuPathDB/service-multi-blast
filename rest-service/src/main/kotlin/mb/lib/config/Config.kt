@@ -273,6 +273,6 @@ object Config : Options() {
     defaultValue = "\${env:DMND_CPU_LIMIT}",
     description = ["Max number of cpu threads the diamond process may use"]
   )
-  var diamondCpuLimit = 4
+  var diamondCpuLimit = 2
     private set
 }

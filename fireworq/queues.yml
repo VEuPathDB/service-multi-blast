@@ -11,6 +11,6 @@ queues:
   - format
 - name: diamond
   pollingInterval: 200
-  maxWorkers: 2
+  maxWorkers: 1
   categories:
   - diamond
