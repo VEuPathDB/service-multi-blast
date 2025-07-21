@@ -259,7 +259,7 @@ object Config : Options() {
   @Option(
     names = ["--diamond-queue-name"],
     arity = "1",
-    required = true,
+    required = false,
     defaultValue = "\${env:DMND_QUEUE_NAME}",
     description = ["Name of the queue new diamond jobs will be added to."]
   )
@@ -269,7 +269,7 @@ object Config : Options() {
   @Option(
     names = ["--diamond-cpu-limit"],
     arity = "1",
-    required = true,
+    required = false,
     defaultValue = "\${env:DMND_CPU_LIMIT}",
     description = ["Max number of cpu threads the diamond process may use"]
   )
