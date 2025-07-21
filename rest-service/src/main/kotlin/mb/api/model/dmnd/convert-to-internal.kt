@@ -1,5 +1,6 @@
 package mb.api.model.dmnd
 
+import mb.lib.config.Config
 import mb.lib.util.then
 import org.veupathdb.lib.cli.diamond.Diamond
 import org.veupathdb.lib.cli.diamond.DiamondCommand
@@ -22,6 +23,7 @@ private fun <T> T.fromIO(config: IODiamondConfig): T
   , T : AlignerClusteringRealignOptionContainer
   , T : AlignerViewOptionContainer
   , T : OutputFormatOptionContainer
+  , T : GeneralOptionContainer
 {
   config.eValue?.then { expectValue = it }
   config.maxTargetSeqs?.then { maxTargetSeqs = it }
@@ -31,6 +33,8 @@ private fun <T> T.fromIO(config: IODiamondConfig): T
   config.iterate?.then { iterate = it }
   config.reportUnaligned?.then { reportUnalignedQueries = it }
   config.outFormat?.then { outputFormat = it }
+
+  threads = Config.diamondCpuLimit
 
   return this
 }
