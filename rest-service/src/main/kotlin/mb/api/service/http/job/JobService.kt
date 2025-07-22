@@ -20,6 +20,7 @@ import mb.lib.util.toInternal
 import mb.lib.util.withTempFile
 import mb.lib.workspace.AbstractWorkspace
 import mb.lib.workspace.DiamondWorkspace
+import org.veupathdb.lib.cli.diamond.opts.GeneralOptionContainer
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException
 import java.io.File
 import kotlin.io.path.Path
@@ -151,6 +152,7 @@ object JobService {
     conv.quiet = true
     conv.outputFile = Path(DiamondWorkspace.ResultFile)
     conv.query = Path(AbstractWorkspace.QueryFile)
+    (conv as GeneralOptionContainer).threads = Config.diamondCpuLimit
 
     val res = BlastManager.submitJob(MBlastJob(
       config      = DiamondConfig(conv),
