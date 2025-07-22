@@ -37,6 +37,8 @@ object BlastQueueManager: QueueManager()
   override val fireworq: FireworqQueue =
     FireworqQueue(URL.prependHTTP(Config.queueHost), Config.blastQueueName)
 
+  private val diamondQueue = FireworqQueue(URL.prependHTTP(Config.queueHost), Config.diamondQueueName)
+
   /**
    * Submits a new Blast job to the job queue.
    *
@@ -50,12 +52,25 @@ object BlastQueueManager: QueueManager()
     if (config is EmptyBlastConfig)
       throw RuntimeException("Invalid config cannot be submitted.")
 
+    if (isDiamond)
+      return submitDiamondJob(jobId, config)
+
     return submitNewJob(
-      category = if (isDiamond) Config.diamondQueueName else Config.blastQueueName,
+      category = Config.blastQueueName,
       req      = CreateRequest(
-        Address.http(Config.blastHost) + "/" + if (config is BlastConfig) BlastPath else DiamondPath,
+        Address.http(Config.blastHost) + "/" + BlastPath,
         BlastServerRequest(jobId, config)
       )
     )
+  }
+
+  private fun submitDiamondJob(jobId: HashID, config: JobConfig): Int {
+    val req = CreateRequest(
+      Address.http(Config.blastHost) + "/" + DiamondPath,
+      BlastServerRequest(jobId, config)
+    )
+
+    logger.debug("submitting job {} to the diamond queue") { req.toJSON().toString() }
+    return diamondQueue.submitJob(Config.diamondQueueName, req.toInternal()).jobID
   }
 }
