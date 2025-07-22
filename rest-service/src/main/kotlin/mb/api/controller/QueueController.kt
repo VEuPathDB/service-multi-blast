@@ -6,11 +6,11 @@ import jakarta.ws.rs.Produces
 import mb.api.controller.resources.Paths
 import mb.lib.http.MimeType
 import mb.lib.query.BlastQueueManager
+import mb.lib.query.DiamondQueueManager
 import mb.lib.query.model.BlastServerRequest
 import mb.lib.report.ReportQueueManager
 import mb.lib.util.jsonCast
 import org.veupathdb.lib.jackson.Json
-import java.util.stream.Collectors
 
 @Path(Paths.Queues)
 class QueueController {
@@ -19,13 +19,12 @@ class QueueController {
   @Path(Paths.BlastQueue)
   @Produces(value = [MimeType.ApplicationJSON])
   fun getBlastQueue(): List<String> {
-    return BlastQueueManager.grabbedJobs()
-      .stream()
+    return (BlastQueueManager.grabbedJobs().asSequence() + DiamondQueueManager.grabbedJobs().asSequence())
       .map { it.payload }
       .map { Json.jsonCast<BlastServerRequest>() }
       .map { it.jobID }
       .map { it.string }
-      .collect(Collectors.toList())
+      .toList()
   }
 
   @GET
@@ -33,11 +32,11 @@ class QueueController {
   @Produces(value = [MimeType.ApplicationJSON])
   fun getReportQueue(): List<String> {
     return ReportQueueManager.grabbedJobs()
-      .stream()
+      .asSequence()
       .map { it.payload }
       .map { Json.jsonCast<BlastServerRequest>() }
       .map { it.jobID }
       .map { it.string }
-      .collect(Collectors.toList())
+      .toList()
   }
 }

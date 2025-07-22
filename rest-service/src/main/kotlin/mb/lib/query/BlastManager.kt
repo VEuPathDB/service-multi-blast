@@ -176,7 +176,10 @@ object BlastManager {
             db.getJobQuery(jobID)!!.use { ws.createQueryFile(it) }
         }
 
-        val qID = BlastQueueManager.submitNewJob(jobID, job.config!!, isDiamond)
+        val qID = if (isDiamond)
+          DiamondQueueManager.submitNewJob(jobID, job.config!!)
+        else
+          BlastQueueManager.submitNewJob(jobID, job.config!!)
 
         db.updateJobStatus(jobID, qID, JobStatus.Queued)
       }
@@ -196,7 +199,10 @@ object BlastManager {
               db.getJobQuery(child.jobID)!!.use { ws.createQueryFile(it) }
           }
 
-          val qID = BlastQueueManager.submitNewJob(child.jobID, job.config!!, isDiamond)
+          val qID = if (isDiamond)
+            DiamondQueueManager.submitNewJob(child.jobID, job.config!!)
+          else
+            BlastQueueManager.submitNewJob(child.jobID, job.config!!)
 
           db.updateJobStatus(child.jobID, qID, JobStatus.Queued)
         }
@@ -220,7 +226,10 @@ object BlastManager {
       if (workspace.createIfNotExists())
         queryProvider().use { workspace.createQueryFile(it) }
 
-      val queueID = BlastQueueManager.submitNewJob(row.jobID, row.config!!, isDiamond)
+      val queueID = if (isDiamond)
+        DiamondQueueManager.submitNewJob(row.jobID, row.config!!)
+      else
+        BlastQueueManager.submitNewJob(row.jobID, row.config!!)
 
       row.queueID = queueID
       row.status = JobStatus.Queued

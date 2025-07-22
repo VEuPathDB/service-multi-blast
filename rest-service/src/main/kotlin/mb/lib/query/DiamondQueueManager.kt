@@ -12,19 +12,19 @@ import mb.lib.queue.model.CreateRequest
 import org.veupathdb.lib.fireworq.FireworqQueue
 import org.veupathdb.lib.hash_id.HashID
 
-object BlastQueueManager: QueueManager()
+object DiamondQueueManager: QueueManager()
 {
-  private const val BlastPath = "blast"
+  private const val DiamondPath = "diamond"
 
-  private val blastQueueSizeGauge = Gauge.build(
-    "blast_queue_size",
-    "Number of jobs currently waiting in the blast queue."
+  private val diamondQueueSizeGauge = Gauge.build(
+    "diamond_queue_size",
+    "Number of diamond jobs currently waiting in the queue."
   ).register()
 
   init {
     Thread {
       while (true) {
-        blastQueueSizeGauge.set(queueSize().toDouble())
+        diamondQueueSizeGauge.set(queueSize().toDouble())
 
         // Sleep 15 seconds
         Thread.sleep(15_000)
@@ -33,7 +33,7 @@ object BlastQueueManager: QueueManager()
   }
 
   override val fireworq: FireworqQueue =
-    FireworqQueue(URL.prependHTTP(Config.queueHost), Config.blastQueueName)
+    FireworqQueue(URL.prependHTTP(Config.queueHost), Config.diamondQueueName)
 
   /**
    * Submits a new Blast job to the job queue.
@@ -49,9 +49,9 @@ object BlastQueueManager: QueueManager()
       throw RuntimeException("Invalid config cannot be submitted.")
 
     return submitNewJob(
-      category = Config.blastQueueName,
+      category = Config.diamondQueueName,
       req      = CreateRequest(
-        Address.http(Config.blastHost) + "/" + BlastPath,
+        Address.http(Config.blastHost) + "/" + DiamondPath,
         BlastServerRequest(jobId, config)
       )
     )

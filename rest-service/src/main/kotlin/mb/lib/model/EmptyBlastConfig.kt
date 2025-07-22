@@ -8,8 +8,6 @@ import org.veupathdb.lib.blast.consts.Flag
 import org.veupathdb.lib.blast.consts.Key
 import org.veupathdb.lib.blast.field.*
 
-import java.util.function.Function
-
 /**
  * Empty Blast Config
  * <p>
