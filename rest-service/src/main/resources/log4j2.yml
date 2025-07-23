@@ -1,0 +1,14 @@
+Configuration:
+  name: Default
+  status: error
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [rid:%5X{traceId}] %highlight{%-5level} %c{1}:%L - %m%n"
+  Loggers:
+    Root:
+      level: debug
+      AppenderRef:
+      - ref: Console_Appender
