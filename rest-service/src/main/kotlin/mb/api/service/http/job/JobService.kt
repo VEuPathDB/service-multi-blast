@@ -154,7 +154,7 @@ object JobService {
     conv.query = Path(AbstractWorkspace.QueryFile)
     (conv as GeneralOptionContainer).threads = Config.diamondCpuLimit
 
-    val res = BlastManager.submitJob(MBlastJob(
+    val res = BlastManager.submitDiamondJob(MBlastJob(
       config      = DiamondConfig(conv),
       query       = query,
       site        = req.site,
