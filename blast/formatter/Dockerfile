@@ -17,7 +17,7 @@ RUN apt-get update --fix-missing \
 # Install blast binaries
 RUN wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.17.0/ncbi-blast-2.17.0+-x64-linux.tar.gz -O blast.tgz \
     && tar -xzf blast.tgz \
-    && mv ncbi-blast-2.10.1+ blast \
+    && mv ncbi-blast-2.17.0+ blast \
     && rm blast.tgz
 
 ENV BLASTDB=/:/db:/blast/blastdb:/blast/blastdb_custom
