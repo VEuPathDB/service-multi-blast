@@ -50,7 +50,7 @@ CREATE TABLE multiblast.multiblast_users
     REFERENCES multiblast.multiblast_jobs (job_digest)
     NOT NULL,
   user_id           BIGINT
-    REFERENCES wdkuser.users (user_id),
+    REFERENCES wdkuser.users (user_id)
     NOT NULL,
   description       VARCHAR(1024),
   max_download_size BIGINT
