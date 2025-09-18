@@ -13,7 +13,7 @@ private const val Query = """
   SELECT
     query
   FROM
-    userlogins5.multiblast_jobs
+    multiblast.multiblast_jobs
   WHERE
     job_digest = ?
 """

@@ -11,7 +11,7 @@ data class InsertBlastJob(private val con: Connection, private val row: BlastRow
   companion object {
     private const val Query = """
     INSERT INTO
-      userlogins5.multiblast_jobs (
+      multiblast.multiblast_jobs (
         job_digest  -- 1
       , job_config
       , query

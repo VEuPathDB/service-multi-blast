@@ -16,7 +16,7 @@ data class DeleteUserLink(
   companion object {
     private const val Query = """
     DELETE FROM
-      userlogins5.multiblast_users
+      multiblast.multiblast_users
     WHERE
       job_digest = ?
       AND user_id = ?

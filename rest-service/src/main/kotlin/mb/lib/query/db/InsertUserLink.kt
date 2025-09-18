@@ -9,7 +9,7 @@ data class InsertUserLink(private val con: Connection, private val row: UserBlas
   companion object {
     private const val Query = """
     INSERT INTO
-      userlogins5.multiblast_users
+      multiblast.multiblast_users
     SELECT
       ?, ?, ?, ?, ?
     FROM
@@ -19,7 +19,7 @@ data class InsertUserLink(private val con: Connection, private val row: UserBlas
         SELECT
           1
         FROM
-          userlogins5.multiblast_users
+          multiblast.multiblast_users
         WHERE
           job_digest = ?
         AND

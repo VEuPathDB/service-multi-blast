@@ -20,8 +20,8 @@ data class SelectUserReportRow(val con: Connection, val reportID: HashID, val us
       , b.user_id
       , b.description
       FROM
-        userlogins5.multiblast_fmt_jobs a
-        INNER JOIN userlogins5.multiblast_users_to_fmt_jobs b
+        multiblast.multiblast_fmt_jobs a
+        INNER JOIN multiblast.multiblast_users_to_fmt_jobs b
           ON a.report_digest = b.report_digest
       WHERE
         a.report_digest = ?

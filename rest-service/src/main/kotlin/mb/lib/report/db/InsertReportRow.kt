@@ -14,7 +14,7 @@ data class InsertReportRow(
     @Suppress("SpellCheckingInspection")
     private const val Query = """
     INSERT INTO
-      userlogins5.multiblast_fmt_jobs (
+      multiblast.multiblast_fmt_jobs (
         report_digest
       , job_digest
       , status
@@ -25,7 +25,7 @@ data class InsertReportRow(
     FROM dual
     WHERE NOT EXISTS (
       SELECT *
-      FROM userlogins5.multiblast_fmt_jobs
+      FROM multiblast.multiblast_fmt_jobs
       WHERE report_digest = ?
     )
     """

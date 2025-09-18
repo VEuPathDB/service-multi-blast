@@ -15,7 +15,7 @@ data class UpdateJobStatus(
   companion object {
     private const val Query = """
     UPDATE
-      userlogins5.multiblast_jobs
+      multiblast.multiblast_jobs
     SET
       status = ?
     , queue_id = ?

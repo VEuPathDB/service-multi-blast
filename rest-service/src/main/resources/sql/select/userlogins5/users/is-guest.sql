@@ -1,6 +1,6 @@
 SELECT
   is_guest
 FROM
-  userlogins5.users
+  multiblast.users
 WHERE
   user_id = ?

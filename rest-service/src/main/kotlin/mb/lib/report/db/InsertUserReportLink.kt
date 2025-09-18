@@ -15,7 +15,7 @@ data class InsertUserReportLink(
     private const val Query =
     """
       INSERT INTO
-        userlogins5.multiblast_users_to_fmt_jobs (report_digest, user_id, description)
+        multiblast.multiblast_users_to_fmt_jobs (report_digest, user_id, description)
       VALUES
         (?, ?, ?)
       """

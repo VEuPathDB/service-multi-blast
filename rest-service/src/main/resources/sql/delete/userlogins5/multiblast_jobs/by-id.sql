@@ -1,4 +1,4 @@
 DELETE FROM
-  userlogins5.multiblast_jobs
+  multiblast.multiblast_jobs
 WHERE
   job_digest = ?

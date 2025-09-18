@@ -1,5 +1,5 @@
 UPDATE
-  userlogins5.multiblast_users
+  multiblast.multiblast_users
 SET
   run_directly = ?
 WHERE

@@ -14,7 +14,7 @@ data class SelectReportRow(val con: Connection, val reportID: HashID) {
     SELECT
       *
     FROM
-      userlogins5.multiblast_fmt_jobs
+      multiblast.multiblast_fmt_jobs
     WHERE
       report_digest = ?
     """

@@ -1,9 +1,9 @@
-DELETE FROM userlogins5.multiblast_users d
+DELETE FROM multiblast.multiblast_users d
 WHERE EXISTS (
   SELECT 1
   FROM
-    userlogins5.multiblast_jobs j
-  , userlogins5.users a
+    multiblast.multiblast_jobs j
+  , multiblast.users a
   WHERE
     d.job_digest = j.job_digest
     AND d.user_id = a.user_id

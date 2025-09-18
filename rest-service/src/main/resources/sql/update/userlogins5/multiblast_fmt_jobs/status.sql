@@ -1,5 +1,5 @@
 UPDATE
- userlogins5.multiblast_fmt_jobs
+ multiblast.multiblast_fmt_jobs
 SET
   status = ?
 WHERE

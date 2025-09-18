@@ -9,7 +9,7 @@ data class UpdateUserReportRow(val con: Connection, val row: UserReportRow) {
   companion object {
     private const val Query = """
     UPDATE
-      userlogins5.multiblast_users_to_fmt_jobs
+      multiblast.multiblast_users_to_fmt_jobs
     SET
       description = ?
     WHERE

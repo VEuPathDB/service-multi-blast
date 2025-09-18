@@ -1,5 +1,5 @@
 UPDATE
-  userlogins5.multiblast_jobs
+  multiblast.multiblast_jobs
 SET
   queue_id = ?
 WHERE

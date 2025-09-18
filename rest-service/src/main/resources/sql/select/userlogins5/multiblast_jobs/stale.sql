@@ -1,6 +1,6 @@
 SELECT
   *
 FROM
-  userlogins5.multiblast_jobs
+  multiblast.multiblast_jobs
 WHERE
   delete_on < ?

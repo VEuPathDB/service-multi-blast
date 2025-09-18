@@ -9,7 +9,7 @@ data class InsertBlastJobLink(private val con: Connection, private val childID: 
   companion object {
     private const val Query = """
     INSERT INTO
-      userlogins5.multiblast_job_to_jobs (
+      multiblast.multiblast_job_to_jobs (
         job_digest,
         parent_digest,
         position
@@ -19,7 +19,7 @@ data class InsertBlastJobLink(private val con: Connection, private val childID: 
         SELECT
           COALESCE(MAX(position), 0) + 1
         FROM
-          userlogins5.multiblast_job_to_jobs
+          multiblast.multiblast_job_to_jobs
         WHERE
           parent_digest = ?
         )

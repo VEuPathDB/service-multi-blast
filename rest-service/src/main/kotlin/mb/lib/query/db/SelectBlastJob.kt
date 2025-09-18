@@ -12,7 +12,7 @@ data class SelectBlastJob(private val con: Connection, private val jobID: HashID
     SELECT
       *
     FROM
-      userlogins5.multiblast_jobs
+      multiblast.multiblast_jobs
     WHERE
       job_digest = ?
     """
