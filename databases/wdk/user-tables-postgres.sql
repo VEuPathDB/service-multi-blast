@@ -1,4 +1,5 @@
 -- Version 0 ---------------------------------------------------------------------------------------
+set role COMM_WDK_W; -- TODO: remove GRANTs to COMM_WDK_W
 
 CREATE SCHEMA IF NOT EXISTS multiblast;
 GRANT USAGE ON SCHEMA multiblast TO comm_wdk_w;
