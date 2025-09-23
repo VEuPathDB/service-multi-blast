@@ -12,6 +12,7 @@ data class SelectUserTargetLinks(
   private val userID: Long,
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       a.*

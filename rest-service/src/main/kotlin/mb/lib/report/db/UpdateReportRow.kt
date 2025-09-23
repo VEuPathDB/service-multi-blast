@@ -7,6 +7,7 @@ import java.sql.PreparedStatement
 
 data class UpdateReportRow(val con: Connection, val row: ReportRow) {
   companion object {
+    // language=postgresql
     private const val Query = """
     UPDATE
       multiblast.multiblast_fmt_jobs

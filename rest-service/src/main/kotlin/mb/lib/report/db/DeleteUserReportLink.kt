@@ -11,6 +11,7 @@ data class DeleteUserReportLink(
   val userID: Long
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     DELETE FROM
       multiblast.multiblast_users_to_fmt_jobs

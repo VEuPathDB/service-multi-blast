@@ -9,6 +9,7 @@ import java.time.OffsetDateTime
 
 data class InsertBlastJob(private val con: Connection, private val row: BlastRow, private val query: InputStream) {
   companion object {
+    // language=postgresql
     private const val Query = """
     INSERT INTO
       multiblast.multiblast_jobs (

@@ -11,6 +11,7 @@ data class InsertBlastTargets(
   private val dbs: Array<out JobTarget>,
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     INSERT INTO
       multiblast.multiblast_job_to_targets (job_digest, organism, target_file)

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement
 
 data class SelectTargetLinks(private val con: Connection, private val jobID: HashID) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       *

@@ -12,6 +12,7 @@ data class InsertUserReportLink(
   val description: String?
 ) {
   companion object {
+    // language=postgresql
     private const val Query =
     """
       INSERT INTO

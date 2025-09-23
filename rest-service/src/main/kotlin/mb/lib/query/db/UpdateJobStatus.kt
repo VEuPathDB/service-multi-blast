@@ -13,6 +13,7 @@ data class UpdateJobStatus(
   private val status: JobStatus,
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     UPDATE
       multiblast.multiblast_jobs

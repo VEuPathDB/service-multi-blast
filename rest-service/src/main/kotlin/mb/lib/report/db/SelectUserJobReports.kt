@@ -8,7 +8,7 @@ import java.sql.PreparedStatement
 
 data class SelectUserJobReports(val con: Connection, val jobID: HashID, val userID: Long) {
   companion object {
-    @Suppress("SpellCheckingInspection")
+    // language=postgresql
     private const val Query = """
     SELECT
       a.*

@@ -10,6 +10,7 @@ data class SelectUserBlastJobs(
   private val userID: Long
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       a.job_digest

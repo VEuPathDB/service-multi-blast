@@ -9,10 +9,10 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.time.OffsetDateTime
-import java.util.*
 
 data class SelectUserReportRow(val con: Connection, val reportID: HashID, val userID: Long) {
   companion object {
+    // language=postgresql
     private const val Query =
     """
       SELECT

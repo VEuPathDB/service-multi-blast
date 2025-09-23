@@ -7,6 +7,7 @@ import java.sql.PreparedStatement
 
 data class InsertBlastJobLink(private val con: Connection, private val childID: HashID, private val parentID: HashID) {
   companion object {
+    // language=postgresql
     private const val Query = """
     INSERT INTO
       multiblast.multiblast_job_to_jobs (

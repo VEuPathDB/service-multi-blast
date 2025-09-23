@@ -12,6 +12,7 @@ data class InsertReportRow(
 ) {
   companion object {
     @Suppress("SpellCheckingInspection")
+    // language=postgresql
     private const val Query = """
     INSERT INTO
       multiblast.multiblast_fmt_jobs (
@@ -21,13 +22,9 @@ data class InsertReportRow(
       , config
       , queue_id
       )
-    SELECT ?, ?, ?, ?, ?
-    FROM dual
-    WHERE NOT EXISTS (
-      SELECT *
-      FROM multiblast.multiblast_fmt_jobs
-      WHERE report_digest = ?
-    )
+    VALUES
+      (?, ?, ?, ?, ?)
+    ON CONFLICT DO NOTHING
     """
   }
 
@@ -39,6 +36,5 @@ data class InsertReportRow(
     ps.setString(3, row.status.value)
     ps.setString(4, row.config.jsonStringify())
     ps.setInt(5, row.queueID)
-    ps.setBytes(6, row.reportID.bytes)
   }
 }

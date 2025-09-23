@@ -8,7 +8,7 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
-// language=oracle
+// language=postgresql
 private const val Query = """
   SELECT
     query

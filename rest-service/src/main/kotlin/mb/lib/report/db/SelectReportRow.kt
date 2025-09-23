@@ -9,6 +9,7 @@ import java.util.*
 
 data class SelectReportRow(val con: Connection, val reportID: HashID) {
   companion object {
+    // language=postgresql
     private val Query =
     """
     SELECT

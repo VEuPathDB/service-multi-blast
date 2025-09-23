@@ -11,6 +11,7 @@ data class SelectChildBlastLinks(
   private val parentJobID: HashID
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       *
