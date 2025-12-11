@@ -13,7 +13,7 @@ data class SelectUserBlastJob(
   private val userID: Long,
 ) {
   companion object {
-    // language=oracle
+    // language=postgresql
     private const val Query = """
     SELECT
       a.job_digest
@@ -28,8 +28,8 @@ data class SelectUserBlastJob(
     , b.max_download_size
     , b.run_directly
     FROM
-      userlogins5.multiblast_jobs a
-      INNER JOIN userlogins5.multiblast_users b
+      multiblast.multiblast_jobs a
+      INNER JOIN multiblast.multiblast_users b
         ON a.job_digest = b.job_digest
     WHERE
       a.job_digest = ?

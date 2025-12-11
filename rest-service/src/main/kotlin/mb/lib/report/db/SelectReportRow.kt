@@ -9,12 +9,13 @@ import java.util.*
 
 data class SelectReportRow(val con: Connection, val reportID: HashID) {
   companion object {
+    // language=postgresql
     private val Query =
     """
     SELECT
       *
     FROM
-      userlogins5.multiblast_fmt_jobs
+      multiblast.multiblast_fmt_jobs
     WHERE
       report_digest = ?
     """

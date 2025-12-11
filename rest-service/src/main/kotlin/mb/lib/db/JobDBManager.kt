@@ -1,6 +1,5 @@
 package mb.lib.db
 
-import mb.lib.db.select.SelectUserIsGuest
 import mb.lib.db.update.UpdateJobOwner
 import org.apache.logging.log4j.LogManager
 import org.veupathdb.lib.container.jaxrs.utils.db.DbManager
@@ -24,22 +23,6 @@ class JobDBManager : AutoCloseable {
     Log.trace("#updateJobOwner(oldUserID={}, newUserID={})", oldUserID, newUserID)
 
     UpdateJobOwner(this.connection, oldUserID, newUserID).run()
-  }
-
-  /**
-   * Looks up whether the user identified by the given {@code userID} is a
-   * guest.
-   *
-   * @param userID ID of the user to test.
-   *
-   * @return {@code true} if the user was located and is marked as a guest user.
-   * {@code false} if the user was not found, or if the user was found but is
-   * not marked as a guest.
-   */
-  fun userIsGuest(userID: Long): Boolean {
-    Log.trace("#userIsGuest(userID={})", userID)
-
-    return SelectUserIsGuest(connection, userID).run()
   }
 
   @Override

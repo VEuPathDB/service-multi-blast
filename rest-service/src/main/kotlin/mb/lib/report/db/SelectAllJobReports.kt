@@ -8,11 +8,12 @@ import java.sql.PreparedStatement
 
 data class SelectAllJobReports(val con: Connection, val jobID: HashID) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       *
     FROM
-      userlogins5.multiblast_fmt_jobs
+      multiblast.multiblast_fmt_jobs
     WHERE
       job_digest = ?
     """

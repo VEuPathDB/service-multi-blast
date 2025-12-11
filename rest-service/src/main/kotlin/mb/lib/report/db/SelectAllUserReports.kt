@@ -7,15 +7,15 @@ import java.sql.PreparedStatement
 
 data class SelectAllUserReports(val con: Connection, val userID: Long) {
   companion object {
-    @Suppress("SpellCheckingInspection")
+    // language=postgresql
     private const val Query = """
     SELECT
       a.*
     , b.user_id
     , b.description
     FROM
-      userlogins5.multiblast_fmt_jobs a
-      INNER JOIN userlogins5.multiblast_users_to_fmt_jobs b
+      multiblast.multiblast_fmt_jobs a
+      INNER JOIN multiblast.multiblast_users_to_fmt_jobs b
         ON a.report_digest = b.report_digest
     WHERE
       b.user_id = ?

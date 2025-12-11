@@ -3,7 +3,6 @@ package mb.lib.query
 import mb.lib.db.MBlastDBManager
 import mb.lib.model.JobStatus
 import mb.lib.query.db.*
-import mb.lib.query.db.MBlastQuery
 import mb.lib.query.model.*
 import mb.lib.util.logger
 import org.veupathdb.lib.hash_id.HashID
