@@ -1,4 +1,4 @@
-FROM mysql:8.0.36-debian
+FROM mysql:8.0.44-debian
 
 RUN apt update \
  && apt install -y expect \
