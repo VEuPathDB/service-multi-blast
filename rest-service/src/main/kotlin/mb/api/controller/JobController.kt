@@ -39,7 +39,7 @@ private fun Any.okJSON() = Response.status(Response.Status.OK)
 
 @Path(Paths.Jobs)
 @Authenticated(allowGuests = true)
-class JobController(@Context private val request: ContainerRequest) {
+class JobController(@param:Context private val request: ContainerRequest) {
 
   /**
    * @return A list of jobs associated with the currently logged-in user.
