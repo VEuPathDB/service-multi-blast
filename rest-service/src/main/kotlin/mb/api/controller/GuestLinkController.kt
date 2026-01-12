@@ -1,5 +1,6 @@
 package mb.api.controller
 
+import jakarta.ws.rs.BadRequestException
 import mb.api.controller.resources.LinkGuest
 import mb.api.model.IOGuestLink
 import mb.lib.db.JobDBManager
@@ -16,13 +17,14 @@ data class GuestLinkController(@Context val req: ContainerRequest): LinkGuest {
   override fun convGuestToUser(link: IOGuestLink) {
     val user = UserProvider.lookupUser(req).orElseThrow(::InternalServerErrorException)
 
+    val guest = UserProvider.getUsersById(listOf(link.guestID)).values
+      .firstOrNull()
+      .let { it ?: throw BadRequestException() }
+      .let { if (!it.isGuest) throw ForbiddenException() else it }
+
     JobDBManager().use {
       try {
-        if (it.userIsGuest(link.guestID)) {
-          it.updateJobOwner(link.guestID, user.userId)
-        } else {
-          throw ForbiddenException()
-        }
+        it.updateJobOwner(guest.userId, user.userId)
       } catch (e: Exception) {
         throw InternalServerErrorException(e)
       }

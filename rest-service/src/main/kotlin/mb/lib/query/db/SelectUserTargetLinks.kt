@@ -12,12 +12,13 @@ data class SelectUserTargetLinks(
   private val userID: Long,
 ) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       a.*
     FROM
-      userlogins5.multiblast_job_to_targets a
-      INNER JOIN userlogins5.multiblast_users mu
+      multiblast.multiblast_job_to_targets a
+      INNER JOIN multiblast.multiblast_users mu
         ON a.job_digest = mu.job_digest
     WHERE
       mu.user_id = ?

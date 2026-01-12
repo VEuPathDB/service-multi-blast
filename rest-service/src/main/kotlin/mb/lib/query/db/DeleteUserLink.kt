@@ -13,10 +13,11 @@ data class DeleteUserLink(
   private val jobID: HashID,
   private val userID: Long,
 ) {
+  // language=postgresql
   companion object {
     private const val Query = """
     DELETE FROM
-      userlogins5.multiblast_users
+      multiblast.multiblast_users
     WHERE
       job_digest = ?
       AND user_id = ?

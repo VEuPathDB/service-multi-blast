@@ -8,11 +8,12 @@ import java.sql.PreparedStatement
 
 data class SelectParentJobLinks(private val con: Connection, private val childJobID: HashID) {
   companion object {
+    // language=postgresql
     private const val Query = """
     SELECT
       *
     FROM
-      userlogins5.multiblast_job_to_jobs
+      multiblast.multiblast_job_to_jobs
     WHERE
       job_digest = ?
     ORDER BY

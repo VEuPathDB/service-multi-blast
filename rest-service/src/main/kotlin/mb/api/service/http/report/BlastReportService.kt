@@ -119,7 +119,7 @@ internal object BlastReportService {
       val out = ReportManager.getReportFile(rep, file) ?: throw NotFoundException()
 
       if (maxSize != null && out.length() > maxSize)
-        throw BadRequestException("Requested report is larger than the specified max content size.")
+        throw BadRequestException("Requested report is larger than the max size specified by the Content-Max-Length request header.")
 
       if (rep.config?.outFormat == null)
         return ReportDownload(file, download, RangedStream(range, out.inputStream()))
