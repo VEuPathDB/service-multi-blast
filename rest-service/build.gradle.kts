@@ -131,10 +131,10 @@ dependencies {
   implementation("org.veupathdb.lib:jvm-fireworq:1.0.4")
 
   // Unit Testing
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.2")
   testImplementation("org.mockito:mockito-core:5.2.0")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.2")
 }
 
 tasks.compileJava {
