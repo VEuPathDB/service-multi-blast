@@ -5,9 +5,9 @@ import java.util.*
 
 plugins {
   java
-  id("org.veupathdb.lib.gradle.container.container-utils") version "5.0.5"
-  id("com.github.johnrengelman.shadow") version "7.1.2"
-  kotlin("jvm") version "2.0.20"
+  alias(libs.plugins.kotlin)
+  alias(libs.plugins.shadow)
+  alias(libs.plugins.vpdb.gradle)
 }
 
 // Load Props
@@ -18,46 +18,18 @@ val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.serv
 kotlin {
   jvmToolchain {
     languageVersion = JavaLanguageVersion.of(21)
-    vendor = JvmVendorSpec.AMAZON
   }
 }
 
 
 // configure VEupathDB container plugin
-containerBuild {
-
-  // Change if debugging the build process is necessary.
-  logLevel = org.veupathdb.lib.gradle.container.util.Logger.Level.Info
-
-  // General project level configuration.
-  project {
-
-    // Project Name
+containerService {
+  service {
     name = "multi-blast"
-
-    // Project Group
-    group = "org.veupathdb.service"
-
-    // Project Version
-    version = "1.0.0"
-
-    // Project Root Package
     projectPackage = "mb"
-
-    // Main Class Name
-    mainClassName = "Main"
   }
 
-  // Docker build configuration.
   docker {
-
-    // Docker build context
-    context = "."
-
-    // Name of the target docker file
-    dockerFile = "Dockerfile"
-
-    // Resulting image tag
     imageName = "multi-blast"
   }
 }
@@ -87,54 +59,29 @@ allprojects {
 }
 
 dependencies {
-  implementation(kotlin("stdlib"))
-  implementation(kotlin("stdlib-jdk8"))
-  implementation("org.veupathdb.lib:hash-id:1.0.2")
+  implementation(libs.vpdb.hashId)
+  implementation(libs.vpdb.containerCore)
+  implementation(libs.vpdb.fgpUtil.db)
+  implementation(libs.vpdb.blast)
+  implementation(libs.vpdb.diamond)
+  implementation(libs.vpdb.metrics)
+  implementation(libs.vpdb.fireworq)
 
-  //
-  // Project Dependencies
-  //
+  implementation(libs.bundles.jersey)
+  implementation(libs.bundles.logging)
+  implementation(libs.bundles.metrics)
+  implementation(libs.bundles.trashLibs)
 
-  implementation("org.veupathdb.lib:jaxrs-container-core:7.1.4")
-  implementation("org.gusdb:fgputil-db:2.14.1-jakarta")
-  implementation("org.veupathdb.lib:java-blast:5.0.9")
-  implementation("org.veupathdb.lib:diamondcli:0.5.19")
+  implementation(libs.jackson.yaml)
+  implementation(libs.friendlyId)
+  implementation(libs.pico.lib)
+  annotationProcessor(libs.pico.generator)
 
-  // Jersey
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.1.1")
-  implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.1.1")
-  implementation("org.glassfish.jersey.media:jersey-media-multipart:3.1.1")
-  runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.1.1")
+  testImplementation(libs.bundles.testing)
 
-  // Jackson
-  implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
-
-  // Log4J
-  implementation("org.apache.logging.log4j:log4j-api:2.20")
-  implementation("org.apache.logging.log4j:log4j-core:2.20")
-
-  // Metrics
-  implementation("io.prometheus:simpleclient:0.16.0")
-  implementation("io.prometheus:simpleclient_common:0.16.0")
-
-  // Utils
-  implementation("io.vulpine.lib", "sql-import", "0.2.1")
-  implementation("io.vulpine.lib", "lib-query-util", "2.1.0")
-  implementation("io.vulpine.lib:Jackfish:1.1.0")
-  implementation("io.vulpine.lib:iffy:1.0.1")
-  implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
-  implementation("info.picocli:picocli:4.7.3")
-  annotationProcessor("info.picocli:picocli-codegen:4.7.3")
-
-  implementation("org.veupathdb.lib:lib-prometheus-stats:1.1.0")
-  implementation("org.veupathdb.lib:jvm-fireworq:1.0.4")
-
-  // Unit Testing
-  testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.2")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.2")
-  testImplementation("org.mockito:mockito-core:5.2.0")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.2")
+  testRuntimeOnly(libs.test.junit.engine)
+  testRuntimeOnly(libs.test.junit.compat)
+  testRuntimeOnly(libs.test.junit.launcher)
 }
 
 tasks.compileJava {
