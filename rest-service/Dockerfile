@@ -33,7 +33,7 @@ RUN gradle test shadowJar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM amazoncorretto:22-alpine3.20
+FROM amazoncorretto:25-alpine3.20
 
 LABEL service="multi-blast"
 
