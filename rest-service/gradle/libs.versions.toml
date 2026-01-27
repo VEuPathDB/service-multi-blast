@@ -48,8 +48,8 @@ test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version
 test-mockito = { module = "org.mockito:mockito-core", version = "5.2.0" }
 
 test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-test-junit-compat   = { module = "org.junit.vintage:junit-vintage-engine",     version.ref = "junit" }
-test-junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version     = "6.0.2" }
+test-junit-compat = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit" }
+test-junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.2" }
 
 
 [bundles]
