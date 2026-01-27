@@ -29,7 +29,7 @@ jersey-hk2 = { module = "org.glassfish.jersey.inject:jersey-hk2", version = "4.0
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j2" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j2" }
 
-jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version = "2.17.2" }
+jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version = "2.21.0" }
 
 prometheus-client = { module = "io.prometheus:simpleclient", version.ref = "prometheus" }
 prometheus-common = { module = "io.prometheus:simpleclient_common", version.ref = "prometheus" }
