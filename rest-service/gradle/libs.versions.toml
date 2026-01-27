@@ -40,8 +40,8 @@ fxcpds-checkedLambas = { module = "io.vulpine.lib:Jackfish", version = "1.1.0" }
 fxcpds-either = { module = "io.vulpine.lib:iffy", version = "1.0.1" }
 
 friendlyId = { module = "com.devskiller.friendly-id:friendly-id", version = "1.1.0" }
-pico-lib = { module = "info.picocli:picocli", version = "4.7.3" }
-pico-generator = { module = "info.picocli:picocli-codegen", version = "4.7.3" }
+pico-lib = { module = "info.picocli:picocli", version = "4.7.7" }
+pico-generator = { module = "info.picocli:picocli-codegen", version = "4.7.7" }
 
 test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version = "junit" }
 test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
