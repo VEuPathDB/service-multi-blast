@@ -101,8 +101,8 @@ dependencies {
   implementation("org.veupathdb.lib:diamondcli:0.5.19")
 
   // Jersey
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.1")
-  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:3.1.1")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:4.0.1")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-servlet:4.0.1")
   implementation("org.glassfish.jersey.media:jersey-media-json-jackson:3.1.1")
   implementation("org.glassfish.jersey.media:jersey-media-multipart:3.1.1")
   runtimeOnly("org.glassfish.jersey.inject:jersey-hk2:3.1.1")
