@@ -24,7 +24,7 @@ jersey-grizzly-servlet = { module = "org.glassfish.jersey.containers:jersey-cont
 jersey-media-jackson = { module = "org.glassfish.jersey.media:jersey-media-json-jackson", version.ref = "jersey" }
 jersey-media-multipart = { module = "org.glassfish.jersey.media:jersey-media-multipart", version.ref = "jersey" }
 
-jersey-hk2 = { module = "org.glassfish.jersey.inject:jersey-hk2", version = "3.1.1" }
+jersey-hk2 = { module = "org.glassfish.jersey.inject:jersey-hk2", version = "4.0.1" }
 
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j2" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j2" }
