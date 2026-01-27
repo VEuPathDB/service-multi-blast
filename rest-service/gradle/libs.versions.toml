@@ -11,7 +11,7 @@ vpdb-gradle = { id = "org.veupathdb.lib.gradle.container.container-utils", versi
 
 
 [libraries]
-vpdb-hashId = { module = "org.veupathdb.lib:hash-id", version = "1.0.2" }
+vpdb-hashId = { module = "org.veupathdb.lib:hash-id", version = "1.1.0" }
 vpdb-containerCore = { module = "org.veupathdb.lib:jaxrs-container-core", version = "7.1.4" }
 vpdb-fgpUtil-db = { module = "org.gusdb:fgputil-db", version = "3.1.0-jakarta" }
 vpdb-blast = { module = "org.veupathdb.lib:java-blast", version = "5.0.9" }
