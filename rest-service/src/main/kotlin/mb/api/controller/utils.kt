@@ -1,6 +1,5 @@
 package mb.api.controller
 
-import org.veupathdb.lib.container.jaxrs.model.User
 import org.veupathdb.lib.container.jaxrs.providers.UserProvider
 import jakarta.ws.rs.BadRequestException
 import jakarta.ws.rs.InternalServerErrorException
@@ -12,9 +11,8 @@ private const val ErrNoUser = "request reached authenticated endpoint with no us
 
 fun noUserExcept(): RuntimeException = InternalServerErrorException(ErrNoUser)
 
-fun ContainerRequest.requireUser(): User {
-  return UserProvider.lookupUser(this).orElseThrow(::noUserExcept)
-}
+fun ContainerRequest.requireUser() =
+  UserProvider.lookupUser(this).orElseThrow(::noUserExcept)!!
 
 fun ContainerRequest.requireUserID(): Long = requireUser().userId
 
@@ -22,7 +20,7 @@ fun <T> enforceBody(value: T?): T =
   value ?: throw BadRequestException("Request missing one or more input body fields.")
 
 inline fun <R> errorWrap(fn: () -> R): R = try { fn() }
-  catch (e: Throwable) { throw if (e is WebApplicationException) e else InternalServerErrorException(e) }
+  catch (e: Throwable) { throw e as? WebApplicationException ?: InternalServerErrorException(e) }
 
 fun hashIDorThrow(raw: String, fn: () -> Exception): HashID {
   try {
