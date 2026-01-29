@@ -3,7 +3,7 @@
 #   Build Service & Dependencies
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM veupathdb/alpine-dev-base:jdk-21-gradle-8.7 AS prep
+FROM veupathdb/alpine-dev-base:jdk25-gradle9.2 AS prep
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
@@ -33,7 +33,7 @@ RUN gradle test shadowJar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM amazoncorretto:22-alpine3.20
+FROM amazoncorretto:25-alpine3.23
 
 LABEL service="multi-blast"
 

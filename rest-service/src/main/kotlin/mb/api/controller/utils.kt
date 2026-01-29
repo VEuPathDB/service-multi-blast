@@ -25,7 +25,7 @@ inline fun <R> errorWrap(fn: () -> R): R = try { fn() }
 fun hashIDorThrow(raw: String, fn: () -> Exception): HashID {
   try {
     return HashID(raw)
-  } catch (e: Exception) {
+  } catch (_: Exception) {
     throw fn()
   }
 }
