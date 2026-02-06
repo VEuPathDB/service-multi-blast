@@ -23,7 +23,6 @@ kotlin {
 }
 
 
-// configure VEupathDB container plugin
 containerService {
   service {
     name = "multi-blast"
