@@ -1,0 +1,11 @@
+/.gradle/
+/.kotlin/
+/build/
+/node_modules/
+/schema/
+
+.gitignore
+makefile
+openapi.yml
+package.json
+package-lock.json

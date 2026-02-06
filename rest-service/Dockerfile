@@ -10,23 +10,11 @@ ARG GITHUB_TOKEN
 
 WORKDIR /workspace
 
-RUN apk add --no-cache git sed findutils coreutils make npm \
-    && git config --global advice.detachedHead false
-
 ENV DOCKER=build
 
-COPY [\
-  "build.gradle.kts",\
-  "settings.gradle.kts",\
-  "service.properties",\
-  "package.json",\
-  "package-lock.json",\
-  "./"\
-]
+COPY . .
 
-COPY src/ src/
-
-RUN gradle test shadowJar
+RUN ./gradlew test shadowJar
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #

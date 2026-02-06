@@ -17,10 +17,6 @@ pluginManagement {
   }
 }
 
-plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version("0.8.0")
-}
-
 val buildProps = Properties()
 buildProps.load(FileInputStream(File(rootDir, "service.properties")))
 

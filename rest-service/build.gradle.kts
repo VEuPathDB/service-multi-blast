@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.*
 
@@ -16,8 +17,8 @@ buildProps.load(FileInputStream(File(rootDir, "service.properties")))
 val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.service"]}"
 
 kotlin {
-  jvmToolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_25)
   }
 }
 
