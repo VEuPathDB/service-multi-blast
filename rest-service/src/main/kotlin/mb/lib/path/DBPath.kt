@@ -25,36 +25,40 @@ internal data class SplitDBPath(
 ): DBPath {
 
   override val fullPath
-    get() = "/$root/$site/$build/$organism/$application/$target"
+    get() = "/$root/$site/$build/$organism/genomeAndProteome/$application/$target"
 
   override val exists: Boolean
     get() = with(fullPath) { File("$this.nin").exists() || File("$this.pin").exists() }
 }
 
-internal data class RawDBPath(override val fullPath: String) : DBPath {
-  private val s1 = fullPath.indexOf('/', 1).toUByte()
-  private val s2 = fullPath.indexOf('/', (s1 + 1u).toInt()).toUByte()
-  private val s3 = fullPath.indexOf('/', (s2 + 1u).toInt()).toUByte()
-  private val s4 = fullPath.indexOf('/', (s3 + 1u).toInt()).toUByte()
-  private val s5 = fullPath.indexOf('/', (s4 + 1u).toInt()).toUByte()
+data class RawDBPath(override val fullPath: String): DBPath {
+  private val rootEndIndex     = fullPath.indexOf('/', 1)
+  private val siteEndIndex     = fullPath.indexOf('/', rootEndIndex + 1)
+  private val buildEndIndex    = fullPath.indexOf('/', siteEndIndex + 1)
+  private val organismEndIndex = fullPath.indexOf('/', buildEndIndex + 1)
+
+  // step 1: find next '/' after static text "genomeAndProteome"
+  private val applicationRange = fullPath.indexOf('/', organismEndIndex + 1)
+    // step 2: find next '/' after that
+    .let { staticSegment -> staticSegment+1..<fullPath.indexOf('/', staticSegment+1) }
 
   override val root
-    get() = fullPath.substring(1, s1.toInt())
+    get() = fullPath.substring(1, rootEndIndex)
 
   override val site
-    get() = fullPath.substring(s1.toInt()+1, s2.toInt())
+    get() = fullPath.substring(rootEndIndex + 1, siteEndIndex)
 
   override val build
-    get() = fullPath.substring(s2.toInt()+1, s3.toInt())
+    get() = fullPath.substring(siteEndIndex + 1, buildEndIndex)
 
   override val organism
-    get() = fullPath.substring(s3.toInt()+1, s4.toInt())
+    get() = fullPath.substring(buildEndIndex + 1, organismEndIndex)
 
   override val application
-    get() = fullPath.substring(s4.toInt()+1, s5.toInt())
+    get() = fullPath.substring(applicationRange)
 
   override val target
-    get() = fullPath.substring(s5.toInt()+1)
+    get() = fullPath.substring(applicationRange.last + 2)
 
   override val exists
     get() = when {
