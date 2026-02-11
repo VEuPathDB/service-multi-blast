@@ -1,5 +1,6 @@
 package mb.lib.path
 
+import mb.lib.util.logger
 import java.io.File
 
 interface DBPath {
@@ -23,12 +24,14 @@ internal data class SplitDBPath(
   override val application: String,
   override val target: String,
 ): DBPath {
-
   override val fullPath
     get() = "/$root/$site/$build/$organism/genomeAndProteome/$application/$target"
 
   override val exists: Boolean
-    get() = with(fullPath) { File("$this.nin").exists() || File("$this.pin").exists() }
+    get() = with(fullPath) {
+      logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", this)
+        File("$this.nin").exists() || File("$this.pin").exists()
+    }
 }
 
 data class RawDBPath(override val fullPath: String): DBPath {
@@ -60,10 +63,13 @@ data class RawDBPath(override val fullPath: String): DBPath {
   override val target
     get() = fullPath.substring(applicationRange.last + 2)
 
-  override val exists
-    get() = when {
-      File("$fullPath.nin").exists() -> true
-      File("$fullPath.pin").exists() -> true
-      else                           -> false
+  override val exists: Boolean
+    get() {
+      logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", fullPath)
+      return when {
+        File("$fullPath.nin").exists() -> true
+        File("$fullPath.pin").exists() -> true
+        else -> false
+      }
     }
 }
