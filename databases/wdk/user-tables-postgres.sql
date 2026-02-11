@@ -1,12 +1,15 @@
 -- Version 0 ---------------------------------------------------------------------------------------
-set role COMM_WDK_W; -- TODO: remove GRANTs to COMM_WDK_W
+reset role;
 
-CREATE SCHEMA IF NOT EXISTS multiblast;
+CREATE SCHEMA IF NOT EXISTS multiblast AUTHORIZATION comm_wdk_w;
+
 GRANT USAGE ON SCHEMA multiblast TO comm_wdk_w;
+
+set role COMM_WDK_W;
 
 CREATE TABLE multiblast.multiblast_jobs
 (
-  job_digest UUID
+  job_digest BYTEA
     PRIMARY KEY,
   job_config TEXT
     NOT NULL,
@@ -24,7 +27,7 @@ CREATE TABLE multiblast.multiblast_jobs
 
 CREATE TABLE multiblast.multiblast_job_to_targets
 (
-  job_digest  UUID
+  job_digest  BYTEA
     REFERENCES multiblast.multiblast_jobs (job_digest)
     NOT NULL,
   organism    VARCHAR(256),
@@ -33,10 +36,10 @@ CREATE TABLE multiblast.multiblast_job_to_targets
 
 CREATE TABLE multiblast.multiblast_job_to_jobs
 (
-  job_digest    UUID
+  job_digest    BYTEA
     REFERENCES multiblast.multiblast_jobs (job_digest)
     NOT NULL,
-  parent_digest UUID
+  parent_digest BYTEA
     REFERENCES multiblast.multiblast_jobs (job_digest)
     NOT NULL,
   position      INTEGER
@@ -47,7 +50,7 @@ CREATE TABLE multiblast.multiblast_job_to_jobs
 
 CREATE TABLE multiblast.multiblast_users
 (
-  job_digest        UUID
+  job_digest        BYTEA
     REFERENCES multiblast.multiblast_jobs (job_digest)
     NOT NULL,
   user_id           BIGINT
@@ -65,10 +68,6 @@ CREATE TABLE multiblast.multiblast_users
 
 CREATE INDEX mb_us_job_digest ON multiblast.multiblast_users (job_digest);
 
-GRANT SELECT ON multiblast.multiblast_jobs TO comm_wdk_w;
-GRANT SELECT ON multiblast.multiblast_users TO comm_wdk_w;
-GRANT SELECT ON multiblast.multiblast_job_to_jobs TO comm_wdk_w;
-GRANT SELECT ON multiblast.multiblast_job_to_targets TO comm_wdk_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_jobs TO comm_wdk_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_users TO comm_wdk_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_job_to_jobs TO comm_wdk_w;
@@ -78,8 +77,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_job_to_targets TO 
 
 CREATE TABLE multiblast.multiblast_fmt_jobs
 (
-  report_digest UUID PRIMARY KEY                                            NOT NULL,
-  job_digest    UUID REFERENCES multiblast.multiblast_jobs (job_digest)    NOT NULL,
+  report_digest BYTEA PRIMARY KEY                                            NOT NULL,
+  job_digest    BYTEA REFERENCES multiblast.multiblast_jobs (job_digest)    NOT NULL,
   status        VARCHAR(11)                                                 NOT NULL,
   config        TEXT                                                        NOT NULL,
   queue_id      BIGINT                                                      NOT NULL,
@@ -88,12 +87,10 @@ CREATE TABLE multiblast.multiblast_fmt_jobs
 
 CREATE TABLE multiblast.multiblast_users_to_fmt_jobs
 (
-  report_digest UUID REFERENCES multiblast.multiblast_fmt_jobs (report_digest) NOT NULL,
+  report_digest BYTEA REFERENCES multiblast.multiblast_fmt_jobs (report_digest) NOT NULL,
   user_id       BIGINT                                                          NOT NULL,
   description   VARCHAR(1024)
 );
 
-GRANT SELECT ON multiblast.multiblast_fmt_jobs TO comm_wdk_w;
-GRANT SELECT ON multiblast.multiblast_users_to_fmt_jobs TO comm_wdk_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_fmt_jobs TO comm_wdk_w;
 GRANT SELECT, INSERT, UPDATE, DELETE ON multiblast.multiblast_users_to_fmt_jobs TO comm_wdk_w;
