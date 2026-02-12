@@ -35,7 +35,7 @@ data class InsertBlastJob(private val con: Connection, private val row: BlastRow
 
     ps.setBytes(1, row.jobID.bytes)
     ps.setString(2, json)
-    ps.setAsciiStream(3, query)
+    ps.setCharacterStream(3, query.bufferedReader())
     ps.setInt(4, row.queueID!!)
     ps.setString(5, row.projectID)
     ps.setString(6, row.status!!.value)
