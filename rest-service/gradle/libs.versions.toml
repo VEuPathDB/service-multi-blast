@@ -1,6 +1,6 @@
 [versions]
 jersey = "4.0.1"
-junit = "5.9.2"
+junit = "6.0.3"
 log4j2 = "2.25.3"
 prometheus = "0.16.0"
 
@@ -43,13 +43,13 @@ friendlyId = { module = "com.devskiller.friendly-id:friendly-id", version = "1.1
 pico-lib = { module = "info.picocli:picocli", version = "4.7.7" }
 pico-generator = { module = "info.picocli:picocli-codegen", version = "4.7.7" }
 
-test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version = "junit" }
-test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+test-6.0.3-api = { module = "org.6.0.3.jupiter:6.0.3-jupiter-api", version = "6.0.3" }
+test-6.0.3-params = { module = "org.6.0.3.jupiter:6.0.3-jupiter-params", version.ref = "6.0.3" }
 test-mockito = { module = "org.mockito:mockito-core", version = "5.21.0" }
 
-test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+test-6.0.3-engine = { module = "org.6.0.3.jupiter:6.0.3-jupiter-engine", version.ref = "6.0.3" }
 test-junit-compat = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit" }
-test-junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.2" }
+test-junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.3" }
 
 
 [bundles]
