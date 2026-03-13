@@ -45,7 +45,7 @@ pico-generator = { module = "info.picocli:picocli-codegen", version = "4.7.7" }
 
 test-6.0.3-api = { module = "org.6.0.3.jupiter:6.0.3-jupiter-api", version = "6.0.3" }
 test-6.0.3-params = { module = "org.6.0.3.jupiter:6.0.3-jupiter-params", version.ref = "6.0.3" }
-test-mockito = { module = "org.mockito:mockito-core", version = "5.22.0" }
+test-mockito = { module = "org.mockito:mockito-core", version = "5.23.0" }
 
 test-6.0.3-engine = { module = "org.6.0.3.jupiter:6.0.3-jupiter-engine", version.ref = "6.0.3" }
 test-junit-compat = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit" }
