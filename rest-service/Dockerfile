@@ -21,7 +21,7 @@ RUN ./gradlew test shadowJar
 #   Run the service
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM amazoncorretto:25-alpine3.23
+FROM amazoncorretto:26-alpine3.23
 
 LABEL service="multi-blast"
 
