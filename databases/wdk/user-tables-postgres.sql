@@ -24,7 +24,8 @@ GRANT INSERT, UPDATE, DELETE ON multiblast.multiblast_jobs TO multiblast_w;
 CREATE TABLE multiblast.multiblast_job_to_targets (
   job_digest  BYTEA REFERENCES multiblast.multiblast_jobs(job_digest) NOT NULL,
   organism    VARCHAR(256),
-  target_file VARCHAR(256)
+  target_file VARCHAR(256),
+  CONSTRAINT mb_job_target_pk PRIMARY KEY (job_digest, organism)
 );
 
 ALTER TABLE multiblast.multiblast_job_to_targets OWNER TO userdb_owner;
@@ -37,7 +38,7 @@ CREATE TABLE multiblast.multiblast_job_to_jobs (
   job_digest    BYTEA REFERENCES multiblast.multiblast_jobs(job_digest) NOT NULL,
   parent_digest BYTEA REFERENCES multiblast.multiblast_jobs(job_digest) NOT NULL,
   position      INTEGER                                                 NOT NULL,
-  CONSTRAINT mb_uq_job_job UNIQUE (job_digest, parent_digest)
+  CONSTRAINT mb_job_job_pk PRIMARY KEY (job_digest, parent_digest)
 );
 
 ALTER TABLE multiblast.multiblast_job_to_jobs OWNER TO userdb_owner;
@@ -52,7 +53,7 @@ CREATE TABLE multiblast.multiblast_users (
   description       VARCHAR(1024),
   max_download_size BIGINT DEFAULT 0                                        NOT NULL,
   run_directly      BOOLEAN                                                 NOT NULL,
-  CONSTRAINT mb_uq_user_job UNIQUE (job_digest, user_id)
+  CONSTRAINT mb_us_pk PRIMARY KEY (job_digest, user_id)
 );
 
 CREATE INDEX mb_us_job_digest ON multiblast.multiblast_users(job_digest);
@@ -83,7 +84,8 @@ GRANT INSERT, UPDATE, DELETE ON multiblast.multiblast_fmt_jobs TO multiblast_w;
 CREATE TABLE multiblast.multiblast_users_to_fmt_jobs (
   report_digest BYTEA REFERENCES multiblast.multiblast_fmt_jobs(report_digest) NOT NULL,
   user_id       BIGINT                                                         NOT NULL,
-  description   VARCHAR(1024)
+  description   VARCHAR(1024),
+  CONSTRAINT mutfmj_pk PRIMARY KEY (report_digest, user_id)
 );
 
 ALTER TABLE multiblast.multiblast_users_to_fmt_jobs OWNER TO userdb_owner;
