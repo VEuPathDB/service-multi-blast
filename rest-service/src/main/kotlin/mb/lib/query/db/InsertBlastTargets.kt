@@ -24,9 +24,9 @@ data class InsertBlastTargets(
     con.prepareStatement(Query)!!.use {
       it.setBytes(1, jobID.bytes)
 
-      for (db in dbs) {
-        it.setString(2, db.organism)
-        it.setString(3, db.target)
+      for ((organism, target) in dbs) {
+        it.setString(2, organism ?: "")
+        it.setString(3, target)
         it.addBatch()
       }
 

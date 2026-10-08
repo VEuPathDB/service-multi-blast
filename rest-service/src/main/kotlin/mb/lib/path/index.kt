@@ -7,7 +7,7 @@ import kotlin.io.path.Path
 fun findDBPath(site: String, organism: String?, target: String): String? {
   val root = Config.dbMountPath
 
-  val build = if (organism == null)
+  val build = if (organism.isNullOrBlank())
     Config.orthoBuild
   else
     Config.dbBuild

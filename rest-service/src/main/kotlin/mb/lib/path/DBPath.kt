@@ -31,7 +31,7 @@ internal data class SplitDBPath(
   override val target: String,
 ): DBPath {
   override val fullPath
-    get() = if (organism == null) // OrthoMCL has no organism paths
+    get() = if (organism.isNullOrBlank()) // OrthoMCL has no organism paths
       "/$root/$site/$build/$application/$target"
     else
       "/$root/$site/$build/$organism/genomeAndProteome/$application/$target"
