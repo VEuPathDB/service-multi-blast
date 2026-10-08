@@ -1,9 +1,5 @@
 package mb.lib.util
 
-internal inline val Char.isWhitespace
-  get() = this == ' ' || this == '\t'
-
-
 internal fun Iterable<*>.joinToFriendlyString(): String {
   val it = iterator()
 

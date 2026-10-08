@@ -2,7 +2,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 package mb.lib.util
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import mb.api.model.IOBlastConfigWrapper
@@ -30,14 +29,6 @@ import org.veupathdb.lib.cli.diamond.commands.BlastP as DiamondBlastP
 import org.veupathdb.lib.cli.diamond.commands.BlastX as DiamondBlastX
 
 fun convertReportConfig(json: String) = BlastFormatter(JSONObjectDecoder(Json.parse(json)))
-
-
-fun convertJobConfig(json: JsonNode): BlastConfig =
-  when {
-    json.isArray  -> convertLegacy(json as ArrayNode)
-    json.isObject -> convertJobConfig(json as ObjectNode)
-    else          -> throw RuntimeException("Invalid record JSON configuration.")
-  }
 
 fun convertJobConfig(json: ObjectNode): BlastConfig =
   when {

@@ -40,17 +40,6 @@ internal class BlastDBManager: MBlastDBManager()
   }
 
   /**
-   * Deletes a link from a user to a blast job if such a link exists.
-   *
-   * @param jobID  ID of the job to unlink the user from.
-   * @param userID ID of the user to unlink.
-   */
-  fun unlinkUser(jobID: HashID, userID: Long) {
-    Log.trace("#unlinkUser(jobID={}, userID={})", jobID, userID)
-    DeleteUserLink(connection, jobID, userID).run()
-  }
-
-  /**
    * Creates a link from a user to a blast job.
    *
    * @param row A blast row containing at least the job ID and the user ID.

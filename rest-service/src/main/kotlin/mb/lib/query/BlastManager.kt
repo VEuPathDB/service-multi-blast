@@ -78,10 +78,10 @@ object BlastManager {
       updateLastModified(jobID)
 
       // Link the user to all the child jobs.
-      for (job in tmp.childJobs!!) {
-        if (db.getUserBlastRow(job.childJobID, userID) != null) {
+      for ((childJobID) in tmp.childJobs!!) {
+        if (db.getUserBlastRow(childJobID, userID) != null) {
           db.linkUser(UserBlastRow(
-            jobID       = job.childJobID,
+            jobID       = childJobID,
             userID      = userID,
             runDirectly = false
           ))
@@ -185,8 +185,8 @@ object BlastManager {
       }
 
       // For each child job, do the same
-      for (link in db.getChildJobLinks(jobID)) {
-        val child = db.getBlastRow(link.childJobID) ?: throw IllegalStateException()
+      for ((childJobID) in db.getChildJobLinks(jobID)) {
+        val child = db.getBlastRow(childJobID) ?: throw IllegalStateException()
 
         refreshJobStatus(db, child)
 

@@ -26,7 +26,7 @@ internal fun makeOrthoDBPath(site: String) =
     ?: throw InternalServerErrorException("Target site $site does not have a queryable DIAMOND database.")
 
 @Suppress("NOTHING_TO_INLINE")
-private inline fun appendDBPath(builder: StringBuilder, site: String, organism: String, target: String) {
+private inline fun appendDBPath(builder: StringBuilder, site: String, organism: String?, target: String) {
   val path = findDBPath(site, organism, target)
     .orElseThrow { BadRequestException("Query target: (${organism}, ${target}) is invalid or is no longer available.") }
 

@@ -9,6 +9,7 @@ plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.shadow)
   alias(libs.plugins.vpdb.gradle)
+  kotlin("kapt") version "2.4.20"
 }
 
 // Load Props
@@ -45,7 +46,7 @@ allprojects {
     mavenCentral()
     maven {
       name = "GitHubPackages"
-      url  = uri("https://maven.pkg.github.com/veupathdb/packages")
+      url = uri("https://maven.pkg.github.com/veupathdb/packages")
       credentials {
         username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
         password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
@@ -82,6 +83,7 @@ dependencies {
   testRuntimeOnly(libs.test.junit.engine)
   testRuntimeOnly(libs.test.junit.compat)
   testRuntimeOnly(libs.test.junit.launcher)
+  testImplementation(kotlin("test"))
 }
 
 tasks.compileJava {
@@ -99,19 +101,23 @@ tasks.shadowJar {
 tasks.register("print-container-name") { print(buildProps["container.name"]) }
 
 tasks.withType<Test> {
-    testLogging {
-      events.addAll(listOf(TestLogEvent.FAILED,
+  testLogging {
+    events.addAll(
+      listOf(
+        TestLogEvent.FAILED,
         TestLogEvent.SKIPPED,
         TestLogEvent.STANDARD_OUT,
         TestLogEvent.STANDARD_ERROR,
-        TestLogEvent.PASSED))
+        TestLogEvent.PASSED
+      )
+    )
 
-      exceptionFormat = TestExceptionFormat.FULL
-      showExceptions = true
-      showCauses = true
-      showStackTraces = true
-      showStandardStreams = true
-      enableAssertions = true
+    exceptionFormat = TestExceptionFormat.FULL
+    showExceptions = true
+    showCauses = true
+    showStackTraces = true
+    showStandardStreams = true
+    enableAssertions = true
   }
   ignoreFailures = false
 }
@@ -123,4 +129,7 @@ val test by tasks.getting(Test::class) {
 
 tasks.test {
   exclude("org/veupathdb/service/multiblast/generated")
+}
+repositories {
+  mavenCentral()
 }

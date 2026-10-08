@@ -11,12 +11,8 @@ import mb.lib.util.convertJobConfig
 import mb.lib.util.convertLegacy
 import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
-import java.io.File
-import java.io.FileOutputStream
-import java.sql.Clob
 import java.sql.ResultSet
 import java.time.OffsetDateTime
-import java.util.*
 
 fun parseBlastRow(rs: ResultSet) = BlastRow(
   jobID     = HashID(rs.getBytes(Column.MultiBlastJobs.JobID)),
@@ -47,22 +43,6 @@ fun parseJobLink(rs: ResultSet) = BlastJobLink(
   parentJobID = HashID(rs.getBytes(Column.MultiBlastJobToJobs.ParentDigest)),
   position    = rs.getInt(Column.MultiBlastJobToJobs.Position)
 )
-
-fun queryToFile(queryClob: Clob): File {
-  val queryFile = File("/tmp/" + UUID.randomUUID())
-
-  if (!queryFile.createNewFile()) {
-    queryClob.free()
-    throw Exception("Failed to create tmp file for job query.")
-  }
-
-  queryFile.deleteOnExit()
-
-  queryClob.asciiStream.transferTo(FileOutputStream(queryFile))
-  queryClob.free()
-
-  return queryFile
-}
 
 private fun parseJobConfig(json: String): JobConfig {
   val node = Json.Mapper.readTree(json)
