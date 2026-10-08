@@ -39,6 +39,10 @@ internal data class SplitDBPath(
   override val exists: Boolean
     get() {
       logger<DBPath>().debug("testing for an index or alias file file matching \"{}\"", this)
-      return with(fullPath) { IndexFileExtensions.any { File("$this.$it").exists() } }
+      return with(fullPath) { IndexFileExtensions.any {
+        File("$this.$it")
+          .also { logger<DBPath>().debug("testing for file {}", it) }
+          .exists()
+      } }
     }
 }
