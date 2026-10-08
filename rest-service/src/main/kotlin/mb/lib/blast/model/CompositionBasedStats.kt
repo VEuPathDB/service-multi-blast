@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.TextNode
 import mb.api.service.util.ErrorText
 import org.veupathdb.lib.blast.field.CompBasedStatsLong
-import org.veupathdb.lib.blast.field.CompBasedStatsShort
-import java.lang.IllegalStateException
 
 enum class CompositionBasedStats(val publicValue: String) {
   None("none"),
@@ -30,8 +28,6 @@ enum class CompositionBasedStats(val publicValue: String) {
 
 
   companion object {
-
-
     @JvmStatic
     fun fromValue(value: CompBasedStatsLong) = when (value) {
       CompBasedStatsLong.ScoreAdjustment              -> ConditionalScoreAdjustment

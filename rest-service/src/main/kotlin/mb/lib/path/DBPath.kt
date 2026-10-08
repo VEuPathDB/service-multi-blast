@@ -16,6 +16,14 @@ interface DBPath {
 
 internal fun DBPath.withBuild(build: String): DBPath = SplitDBPath(root, site, build, organism, application, target)
 
+private val IndexFileExtensions = arrayOf(
+  "pin", // protein db index file
+  "nin", // nucleotide db index file
+
+  "pal", // protein db alias file
+  "nal", // protein db alias file
+)
+
 internal data class SplitDBPath(
   override val root: String,
   override val site: String,
@@ -28,10 +36,7 @@ internal data class SplitDBPath(
     get() = "/$root/$site/$build/$organism/genomeAndProteome/$application/$target"
 
   override val exists: Boolean
-    get() = with(fullPath) {
-      logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", this)
-        File("$this.nin").exists() || File("$this.pin").exists()
-    }
+    get() = hasIndex()
 }
 
 data class RawDBPath(override val fullPath: String): DBPath {
@@ -64,12 +69,10 @@ data class RawDBPath(override val fullPath: String): DBPath {
     get() = fullPath.substring(applicationRange.last + 2)
 
   override val exists: Boolean
-    get() {
-      logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", fullPath)
-      return when {
-        File("$fullPath.nin").exists() -> true
-        File("$fullPath.pin").exists() -> true
-        else -> false
-      }
-    }
+    get() = hasIndex()
+}
+
+private fun DBPath.hasIndex(): Boolean {
+  logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", this)
+  return with(fullPath) { IndexFileExtensions.any { File("$this.$it").exists() } }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import mb.api.model.IOJobConfig
 import mb.api.model.blast.impl.IOBlastConfigImpl
 import mb.api.model.io.JsonKeys
 import mb.lib.blast.model.IOHSPSorting
