@@ -24,7 +24,7 @@ import org.veupathdb.lib.hash_id.HashID
 import org.veupathdb.lib.jackson.Json
 
 @Authenticated(allowGuests = true)
-class ReportController(@Context private val request: ContainerRequest): Reports
+class ReportController(@param:Context private val request: ContainerRequest): Reports
 {
   private val logger = logger()
 
