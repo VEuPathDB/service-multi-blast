@@ -73,6 +73,6 @@ data class RawDBPath(override val fullPath: String): DBPath {
 }
 
 private fun DBPath.hasIndex(): Boolean {
-  logger<DBPath>().debug("testing for a .nin or .pin file matching \"{}\"", this)
+  logger<DBPath>().debug("testing for an index or alias file file matching \"{}\"", this)
   return with(fullPath) { IndexFileExtensions.any { File("$this.$it").exists() } }
 }
