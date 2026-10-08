@@ -2,18 +2,20 @@
 package mb.lib.path
 
 import mb.lib.config.Config
-import java.util.*
-import java.util.stream.Stream
 import kotlin.io.path.Path
 
-fun findDBPath(site: String, organism: String?, target: String): Optional<String> {
+fun findDBPath(site: String, organism: String?, target: String): String? {
   val root = Config.dbMountPath
 
-  return findBuildVersionsFor(site)
+  val build = if (organism == null)
+    Config.orthoBuild
+  else
+    Config.dbBuild
+
+  return findBuildVersionsFor(site, build)
     .map { SplitDBPath(root, site, it, organism, "blast", target) }
-    .filter(DBPath::exists)
-    .findFirst()
-    .map(DBPath::fullPath)
+    .firstOrNull(DBPath::exists)
+    ?.fullPath
 }
 
 /**
@@ -24,11 +26,11 @@ fun findDBPath(site: String, organism: String?, target: String): Optional<String
  * @return An array of zero or more builds available for the given [site].  If
  * the site is invalid, or no builds exist, an empty array will be returned.
  */
-fun findBuildVersionsFor(site: String): Stream<String> =
-  Path(Config.dbMountPath, site, "build-${Config.dbBuild}").toFile()
+fun findBuildVersionsFor(site: String, build: String): Sequence<String> =
+  Path(Config.dbMountPath, site, "build-${build}").toFile()
     .let {
       if (it.exists())
-        Stream.of(it.name)
+        sequenceOf(it.name)
       else
-        Stream.empty()
+        emptySequence()
     }

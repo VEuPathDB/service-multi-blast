@@ -28,7 +28,7 @@ internal fun makeOrthoDBPath(site: String) =
 @Suppress("NOTHING_TO_INLINE")
 private inline fun appendDBPath(builder: StringBuilder, site: String, organism: String?, target: String) {
   val path = findDBPath(site, organism, target)
-    .orElseThrow { BadRequestException("Query target: (${organism}, ${target}) is invalid or is no longer available.") }
+    ?: throw BadRequestException("Query target: (${organism}, ${target}) is invalid or is no longer available.")
 
   if (builder.isNotEmpty())
     builder.append(' ')
