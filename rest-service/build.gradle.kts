@@ -9,7 +9,7 @@ plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.shadow)
   alias(libs.plugins.vpdb.gradle)
-  kotlin("kapt") version "2.4.20"
+  kotlin("kapt") version "2.4.21"
 }
 
 // Load Props
