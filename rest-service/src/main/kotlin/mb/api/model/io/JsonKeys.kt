@@ -53,9 +53,8 @@ object JsonKeys {
   const val IsRerunnable = "isRerunnable"
   const val Iterate = "iterate"
 
-  @Deprecated("")
   const val JobId = "jobId"
-  const val JobID = "jobID"
+  const val JobID = "jobId"
   const val Level = "level"
   const val LineLength = "lineLength"
   const val Linker = "linker"
