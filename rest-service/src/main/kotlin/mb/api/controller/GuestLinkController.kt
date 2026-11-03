@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Context
 import org.glassfish.jersey.server.ContainerRequest
 
 @Authenticated
-data class GuestLinkController(@Context val req: ContainerRequest): LinkGuest {
+data class GuestLinkController(@param:Context val req: ContainerRequest): LinkGuest {
 
   override fun convGuestToUser(link: IOGuestLink) {
     val user = UserProvider.lookupUser(req).orElseThrow(::InternalServerErrorException)
