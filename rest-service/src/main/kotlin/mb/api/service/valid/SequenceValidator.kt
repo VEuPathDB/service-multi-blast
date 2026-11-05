@@ -46,13 +46,11 @@ interface SequenceValidator {
     while (scan.hasNextLine()) {
       val line = scan.nextLine()
 
-      if (!line.startsWith(">")) {
-        for (i in line.indices) {
-          size++
-          // skip always numbers and space chars
-          if (!line[i].isDigit() && !line[i].isWhitespace() && !isValid(line[i])) {
-            return SequenceCharacterValidationError(sequence, lineNum, i + 1, seq[i])
-          }
+      for (i in line.indices) {
+        size++
+        // skip always numbers and space chars
+        if (!line[i].isDigit() && !line[i].isWhitespace() && !isValid(line[i])) {
+          return SequenceCharacterValidationError(sequence, lineNum, i + 1, seq[i])
         }
       }
 
