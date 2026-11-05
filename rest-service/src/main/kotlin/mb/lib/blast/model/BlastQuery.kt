@@ -4,8 +4,6 @@ package mb.lib.blast.model
 import mb.api.service.valid.SequenceEmptyValidationError
 import mb.api.service.valid.SequenceMissingDefLineValidationError
 import mb.api.service.valid.SequenceValidationError
-import mb.lib.blast.model.BlastQuery.Companion.fromStream
-import mb.lib.blast.model.BlastQuery.Companion.fromString
 import mb.lib.query.MBlastQuery
 import org.veupathdb.lib.blast.BlastTool
 import java.io.InputStream
@@ -28,9 +26,7 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
    * Concatenates all the sequences in this query into a single query string.
    */
   override fun getFullQuery(): InputStream =
-    sequences.asSequence()
-      .map { it.toStandardString().reader().readText() }
-      .joinToString("\n")
+    sequences.joinToString("\n") { it.toStandardString().reader().readText() }
       .byteInputStream()
 
   /**
@@ -57,6 +53,20 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
   }
 
   companion object {
+    private fun String.resemblesDefLine(): Boolean {
+      for (i in indices) {
+        val c = get(i)
+
+        return when {
+          c.isWhitespace() -> continue
+          c == '>' -> true
+          else -> false
+        }
+      }
+
+      return false
+    }
+
     /**
      * Parses the given input string into a series of sequences and creates a
      * new [BlastQuery] instance with those sequences.
@@ -80,7 +90,7 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
       // Iterate through the lines in the input query text
       for (line in input.lineSequence()) {
         // If the current line is a defline (starts with '>')
-        if (line.startsWith(">")) {
+        if (line.resemblesDefLine()) {
 
           // AND we already had a current defline for the current sequence
           //  OR we did not have a current defline, BUT the buffer has content
@@ -98,7 +108,7 @@ internal data class BlastQuery(val tool: BlastTool, override val sequences: List
           }
 
           // Set the current defline to the one we just encountered.
-          currentHeader = line
+          currentHeader = line.trim()
         }
 
         // else, the line is not a defline
