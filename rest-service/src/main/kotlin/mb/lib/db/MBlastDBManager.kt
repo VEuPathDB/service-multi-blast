@@ -12,11 +12,11 @@ open class MBlastDBManager(
   private val Log = LogManager.getLogger(this::class.java)
 
   init {
-    Log.debug("Opening connection {}", connection)
+    Log.trace("Opening connection {}", connection)
   }
 
   override fun close() {
-    Log.debug("Closing connection {}", connection)
+    Log.trace("Closing connection {}", connection)
     connection.close()
   }
 }
